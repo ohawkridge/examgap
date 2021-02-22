@@ -117,7 +117,7 @@ export default {
   methods: {
     // Try to login user with credentials
     async getUserSecret() {
-      const response = await fetch('/.netlify/functions/auth/getUserSecret', {
+      const response = await fetch('/.netlify/functions/getUserSecret', {
         body: JSON.stringify({
           username: this.username,
           password: this.password,
