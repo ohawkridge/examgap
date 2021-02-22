@@ -3,15 +3,16 @@
     <v-container>
       <v-row class="d-flex justify-center">
         <v-col cols="12" class="text-center">
-          <p id="hero-text" class="text-h4 text-md-h2 mb-0">
-            Improve your Computer Science results.
+          <p id="hero-text" class="text-h4 text-md-h1 mb-0">
+            Improve your
+            <span class="highlight">Computer Science</span> results.
           </p>
         </v-col>
         <v-col cols="12" md="7">
           <p class="summary text-center mb-10">
             Most learning tools focus on multiple-choice and gap fills. Examgap
             is a powerful yet simple system for practising
-            <span class="highlight">written answer</span> exam questions.
+            <span class="font-weight-bold">written answer</span> exam questions.
           </p>
           <div class="d-flex justify-center">
             <v-btn x-large color="primary" elevation="0" nuxt to="/trial">
@@ -24,7 +25,7 @@
                 $icons.mdiCheckboxMarkedCircleOutline
               }}</v-icon>
               No payment info
-              <v-icon small color="secondary">{{
+              <v-icon small color="secondary" class="ml-2">{{
                 $icons.mdiCheckboxMarkedCircleOutline
               }}</v-icon>
               Set up in minutes
@@ -452,7 +453,7 @@ import {
 } from '@mdi/js'
 
 export default {
-  layout: 'default',
+  layout: 'static',
   created() {
     this.$icons = {
       mdiCheckboxMarkedCircleOutline,
@@ -469,7 +470,9 @@ export default {
 <style scoped>
 /* --------- Hero --------- */
 #hero-text {
+  font-size: 72px !important;
   font-weight: 900;
+  line-height: 1.3em;
   padding-top: 0.5em;
 }
 
@@ -499,7 +502,7 @@ export default {
 }
 
 .summary {
-  font-size: 1.25em !important;
+  font-size: 1.3em !important;
   letter-spacing: 0.0125em;
 }
 @media only screen and (max-width: 600px) {

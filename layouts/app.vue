@@ -1,16 +1,22 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="primary" app elevate-on-scroll elevation="2" dense flat>
+    <v-app-bar color="transparent" app dense flat>
       <v-container class="d-flex align-center px-0">
         <!-- <nuxt-link :to="user.teacher ? `/teacher/home` : `/student/home`"> -->
         <Logo />
         <!-- </nuxt-link> -->
-        <v-btn text color="white" nuxt to="/home" class="ml-6 d-none d-sm-flex">
+        <v-btn
+          text
+          color="primary"
+          nuxt
+          to="/home"
+          class="ml-8 d-none d-sm-flex"
+        >
           Home
         </v-btn>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
-            <v-btn color="white" text class="ml-2" v-bind="attrs" v-on="on">
+            <v-btn color="primary" text class="ml-2" v-bind="attrs" v-on="on">
               Classes
               <v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
             </v-btn>
@@ -39,9 +45,9 @@
           </v-list> -->
         </v-menu>
         <v-spacer />
-        <!-- <v-btn
-          v-if="user.teacher"
-          color="white"
+        <v-btn
+          v-if="teacher"
+          color="primary"
           text
           nuxt
           to="/create"
@@ -49,9 +55,7 @@
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Create Question
-        </v-btn> -->
-        <!-- Feedback widget -->
-        <!-- <EgFeedback />
+        </v-btn>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
             <v-btn dark icon v-bind="attrs" v-on="on">
@@ -59,15 +63,6 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item
-              v-if="user.id === '268593709966164485'"
-              nuxt
-              to="/teacher/admin"
-            >
-              <v-list-item-content>
-                <v-list-item-title>Site admin</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
             <v-list-item nuxt to="/profile">
               <v-list-item-content>
                 <v-list-item-title>Profile</v-list-item-title>
@@ -95,7 +90,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-        </v-menu> -->
+        </v-menu>
       </v-container>
     </v-app-bar>
     <v-main>
@@ -114,13 +109,12 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 import Logo from '@/components/default/Logo'
 import Snackbar from '@/components/common/Snackbar'
 // import EgAppFooter from '@/components/EgAppFooter'
 // import EgSuccessDialog from '@/components/EgSuccessDialog'
 // import EgCreateClass from '@/components/EgCreateClass'
-// import EgFeedback from '@/components/EgFeedback'
 import EventBus from '@/plugins/eventBus.client'
 import {
   mdiPlus,
@@ -135,7 +129,6 @@ export default {
     Snackbar,
     // EgAppFooter,
     // EgSuccessDialog,
-    // EgFeedback,
     // EgCreateClass,
   },
   middleware: ['get-user'],
@@ -146,9 +139,9 @@ export default {
     }
   },
   computed: {
-    // ...mapState({
-    //   secret: (state) => state.user.secret,
-    // }),
+    ...mapState({
+      teacher: (state) => state.user.teacher,
+    }),
     // groups() {
     //   // For teachers, return active groups
     //   // For students, return all groups

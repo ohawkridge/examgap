@@ -1,17 +1,13 @@
 <template>
   <v-app>
-    <v-app-bar flat app color="white">
-      <v-container class="d-flex align-center px-0 px-sm-3">
-        <Logo />
-        <v-spacer />
-        <span class="grey--text"
-          >Back to <nuxt-link to="/">home</nuxt-link></span
-        >
-      </v-container>
-    </v-app-bar>
+    <v-container class="d-flex align-center">
+      <Logo />
+      <v-spacer />
+      <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
+    </v-container>
     <v-container class="fill-height">
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="8" md="6" lg="5" xl="4" class="px-4">
+        <v-col id="form" cols="12" sm="8" md="6" lg="5" xl="4" class="px-4">
           <p class="text-h5 font-weight-bold text-center">Sign In</p>
           <!-- Prevent submit btn posting form -->
           <v-form ref="form" @submit.prevent="login()">
@@ -62,7 +58,7 @@
             >
             <div class="mt-3 d-flex justify-space-between">
               <nuxt-link to="/forgot">Reset password</nuxt-link>
-              <nuxt-link to="/trial">Not yet a customer?</nuxt-link>
+              <nuxt-link to="/trial">Free trial</nuxt-link>
             </div>
           </v-form>
         </v-col>
@@ -150,3 +146,11 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* account for app-bar height */
+#form {
+  position: relative;
+  top: -64px;
+}
+</style>

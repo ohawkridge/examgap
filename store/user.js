@@ -7,7 +7,7 @@ export const state = () => ({
   subscriptionExpires: '',
   examMode: false,
   reviseExamMode: false,
-  quote: '',
+  quote: 'Experiment, fail, learn, repeat.—Anonymous',
 })
 
 export const actions = {
