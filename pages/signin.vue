@@ -120,7 +120,7 @@ export default {
       const response = await fetch('/.netlify/functions/getUserSecret', {
         body: JSON.stringify({
           username: this.username,
-          password: this.password,
+          password: this.pw,
         }),
         method: 'POST',
       })
@@ -136,18 +136,13 @@ export default {
         // Using key, try login
         this.getUserSecret()
           .then((res) => {
-            console.log(res)
-            //   // Store token in localStorage *not* Vuex
-            //   // (Vuex unavailable during page refresh)
+            this.$store.commit('user/setSecret', res.secret)
+            this.$router.push('/home')
           })
-          .catch((e) => console.log(e))
-
-        //   localStorage.setItem('secret', token)
-        //   const user = await getUser()
-        //   this.$store.commit('user/setUser', user)
-        //   this.$router.push(`/${user.teacher ? 'teacher' : 'student'}/home`)
-      } else {
-        this.failed = true
+          .catch((e) => {
+            console.error(e)
+            this.failed = true
+          })
         this.loading = false
       }
     },

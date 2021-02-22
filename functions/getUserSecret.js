@@ -8,9 +8,8 @@ const client = new faunadb.Client({
 
 // Try for a secret token with user's credentials
 exports.handler = async (event, context, callback) => {
-  console.log(`Attempting login`)
   const data = JSON.parse(event.body)
-  console.log(`credentials...`, data)
+  console.log(`Attempting login for`, data.username)
   // Use login key to try credentials
   try {
     const { secret } = await client.query(

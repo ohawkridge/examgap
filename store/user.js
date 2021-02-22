@@ -1,18 +1,39 @@
 export const state = () => ({
   state: {
-    user: {},
+    secret: '',
   },
 })
 
 export const actions = {
-  // nuxtServerInit({ commit }, context) {
-  //   //
-  //   // commit('setUser', { username: 'Mr Fuckity' })
-  // },
+  nuxtServerInit(vuexContext, context) {
+    console.log(`-> nuxtServerInit called`)
+  },
+  // Call a function to get user data
+  async getUser({ commit, state }) {
+    console.log('getUser store action was dispatched')
+    try {
+      const response = await fetch('/.netlify/functions/getUserSecret', {
+        body: JSON.stringify({
+          username: this.username,
+          password: this.pw,
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error(`Error fetching user data ${response.status}`)
+      } else {
+        console.log('USER DATA')
+        console.log(response)
+        // Merge values into store
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  },
 }
 
 export const mutations = {
-  setUser(state, user) {
-    state.user = user
+  setSecret(state, secret) {
+    state.secret = secret
   },
 }
