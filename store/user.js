@@ -12,7 +12,7 @@ export const state = () => ({
 
 export const actions = {
   nuxtServerInit(vuexContext, context) {
-    console.log(`-> nuxtServerInit called`)
+    console.log(`-> nuxtServerInit USER`)
   },
   // Call a function to get user data
   async getUser({ commit, state }) {

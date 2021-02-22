@@ -1,10 +1,10 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="transparent" app dense flat>
+    <v-app-bar color="transparent" app flat>
       <v-container class="d-flex align-center px-0">
-        <!-- <nuxt-link :to="user.teacher ? `/teacher/home` : `/student/home`"> -->
-        <Logo />
-        <!-- </nuxt-link> -->
+        <nuxt-link to="/home">
+          <Logo />
+        </nuxt-link>
         <v-btn
           text
           color="primary"
@@ -58,8 +58,8 @@
         </v-btn>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
-            <v-btn dark icon v-bind="attrs" v-on="on">
-              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+            <v-btn color="primary" icon v-bind="attrs" v-on="on">
+              <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
             </v-btn>
           </template>
           <v-list>
@@ -110,7 +110,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import Logo from '@/components/default/Logo'
+import Logo from '@/components/common/Logo'
 import Snackbar from '@/components/common/Snackbar'
 // import EgAppFooter from '@/components/EgAppFooter'
 // import EgSuccessDialog from '@/components/EgSuccessDialog'
@@ -118,7 +118,7 @@ import Snackbar from '@/components/common/Snackbar'
 import EventBus from '@/plugins/eventBus.client'
 import {
   mdiPlus,
-  mdiAccountOutline,
+  mdiAccountCircleOutline,
   mdiChevronDown,
   mdiOpenInNew,
 } from '@mdi/js'
@@ -153,7 +153,7 @@ export default {
   created() {
     this.$icons = {
       mdiPlus,
-      mdiAccountOutline,
+      mdiAccountCircleOutline,
       mdiChevronDown,
       mdiOpenInNew,
     }

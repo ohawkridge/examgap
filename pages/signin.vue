@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import Logo from '@/components/default/Logo'
+import Logo from '@/components/common/Logo'
 import {
   mdiAccountOutline,
   mdiAlertOutline,

@@ -3,7 +3,9 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="6" class="d-flex justify-center justify-md-start">
-          <Logo />
+          <nuxt-link to="/">
+            <Logo />
+          </nuxt-link>
         </v-col>
         <v-col cols="12" md="6" class="d-flex justify-center justify-md-end">
           <v-btn text class="mr-2" nuxt to="/pricing"
@@ -19,7 +21,7 @@
 </template>
 
 <script>
-import Logo from '@/components/default/Logo'
+import Logo from '@/components/common/Logo'
 // import EgFooter from "@/components/EgFooter";
 
 export default {
