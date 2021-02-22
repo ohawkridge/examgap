@@ -1,7 +1,7 @@
 // https://github.com/shortdiv/got-lobstah/blob/master/functions/fauna-user/fauna-user.js
 exports.handler = () => {
   try {
-    // Get LoginKey2 from environment variable at Netlify
+    // Server secret environment var set in Netlify UI
     const faunaSecret = process.env.SECRET_KEY
     return {
       statusCode: 200,
