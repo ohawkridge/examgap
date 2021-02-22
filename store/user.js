@@ -7,6 +7,7 @@ export const state = () => ({
   subscriptionExpires: '',
   examMode: false,
   reviseExamMode: false,
+  quote: '',
 })
 
 export const actions = {
@@ -27,7 +28,7 @@ export const actions = {
       } else {
         // Call mutation to update state
         const userData = await response.json()
-        commit('user/setUser', userData)
+        commit('setUser', userData)
       }
     } catch (e) {
       console.error(e)
@@ -40,11 +41,18 @@ export const mutations = {
     state.secret = secret
   },
   setUser(state, data) {
-    // Merge teacher properties into store
+    // Merge common properties into store
     state.id = data.id
     state.username = data.username
-    state.school = data.school
-    state.teacher = data.teacher
     state.subscriptionExpires = data.subscriptionExpires
+    state.teacher = data.teacher
+    // Teacher-specific properties
+    if (data.teacher) {
+      state.school = data.school
+      // Student-specific properties
+    } else {
+      state.examMode = data.examMode
+      state.quote = data.quote.text
+    }
   },
 }

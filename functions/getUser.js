@@ -170,107 +170,107 @@ exports.handler = async (event, context, callback) => {
                 ]),
               }
             ),
-            groups: q.Select(
-              ['data'],
-              q.Map(
-                q.Paginate(
-                  q.Match(
-                    // New index returns groups in reverse order by
-                    // timestamp so most recent group is first
-                    q.Index('student_groups_2'),
-                    q.Select('ref', q.Var('instance'))
-                  )
-                ),
-                q.Lambda(
-                  // gRef is an array [ts, <group-Ref>]
-                  'gRef',
-                  q.Let(
-                    {
-                      instance: q.Get(q.Select([1], q.Var('gRef'))), // Group
-                    },
-                    {
-                      id: q.Select(['ref', 'id'], q.Var('instance')),
-                      name: q.Select(['data', 'name'], q.Var('instance')),
-                      active: q.Select(['data', 'active'], q.Var('instance')),
-                      course: q.Let(
-                        {
-                          cInstance: q.Get(
-                            q.Select(['data', 'course'], q.Var('instance'))
-                          ),
-                        },
-                        {
-                          id: q.Select(['ref', 'id'], q.Var('cInstance')),
-                          name: q.Select(['data', 'name'], q.Var('cInstance')),
-                          board: q.Select(
-                            ['data', 'board'],
-                            q.Var('cInstance')
-                          ),
-                          colour: q.Select(
-                            ['data', 'colour'],
-                            q.Var('cInstance')
-                          ),
-                        }
-                      ),
-                    }
-                  )
-                )
-              )
-            ),
-            assignments: q.Reverse(
-              q.Select(
-                ['data'],
-                q.Map(
-                  q.Paginate(
-                    q.Match(
-                      q.Index('student_assignments'),
-                      q.Select(['ref'], q.Var('instance')) // User (student)
-                    )
-                  ),
-                  q.Lambda(
-                    'aRef',
-                    q.Let(
-                      {
-                        instance: q.Get(q.Var('aRef')), // Assignment
-                      },
-                      {
-                        id: q.Select(['ref', 'id'], q.Var('instance')),
-                        name: q.Select(['data', 'name'], q.Var('instance')),
-                        start: q.Select(
-                          ['data', 'start'],
-                          q.Var('instance'),
-                          'N/A'
-                        ),
-                        dateDue: q.Select(
-                          ['data', 'dateDue'],
-                          q.Var('instance')
-                        ),
-                        // Is the assignment 'live'?
-                        // How many days until the due date?
-                        live: q.TimeDiff(
-                          q.ToDate(q.Now()),
-                          q.Date(
-                            q.SubString(
-                              q.Select(['data', 'dateDue'], q.Var('instance')),
-                              0,
-                              10
-                            )
-                          ),
-                          'days'
-                        ),
-                        questions: q.Select(
-                          ['data', 'questions'],
-                          q.Var('instance')
-                        ),
-                        group: q.Select(
-                          ['id'],
-                          q.Select(['data', 'group'], q.Var('instance'))
-                        ),
-                      }
-                    )
-                  )
-                )
-              )
-            ),
+            // groups: q.Select(
+            //   ['data'],
+            //   q.Map(
+            //     q.Paginate(
+            //       q.Match(
+            //         // New index returns groups in reverse order by
+            //         // timestamp so most recent group is first
+            //         q.Index('student_groups_2'),
+            //         q.Select('ref', q.Var('instance'))
+            //       )
+            //     ),
+            //     q.Lambda(
+            //       // gRef is an array [ts, <group-Ref>]
+            //       'gRef',
+            //       q.Let(
+            //         {
+            //           instance: q.Get(q.Select([1], q.Var('gRef'))), // Group
+            //         },
+            //         {
+            //           id: q.Select(['ref', 'id'], q.Var('instance')),
+            //           name: q.Select(['data', 'name'], q.Var('instance')),
+            //           active: q.Select(['data', 'active'], q.Var('instance')),
+            //           course: q.Let(
+            //             {
+            //               cInstance: q.Get(
+            //                 q.Select(['data', 'course'], q.Var('instance'))
+            //               ),
+            //             },
+            //             {
+            //               id: q.Select(['ref', 'id'], q.Var('cInstance')),
+            //               name: q.Select(['data', 'name'], q.Var('cInstance')),
+            //               board: q.Select(
+            //                 ['data', 'board'],
+            //                 q.Var('cInstance')
+            //               ),
+            //               colour: q.Select(
+            //                 ['data', 'colour'],
+            //                 q.Var('cInstance')
+            //               ),
+            //             }
+            //           ),
+            //         }
+            //       )
+            //     )
+            //   )
+            // ),
+            // assignments: q.Reverse(
+            //   q.Select(
+            //     ['data'],
+            //     q.Map(
+            //       q.Paginate(
+            //         q.Match(
+            //           q.Index('student_assignments'),
+            //           q.Select(['ref'], q.Var('instance')) // User (student)
+            //         )
+            //       ),
+            //       q.Lambda(
+            //         'aRef',
+            //         q.Let(
+            //           {
+            //             instance: q.Get(q.Var('aRef')), // Assignment
+            //           },
+            //           {
+            //             id: q.Select(['ref', 'id'], q.Var('instance')),
+            //             name: q.Select(['data', 'name'], q.Var('instance')),
+            //             start: q.Select(
+            //               ['data', 'start'],
+            //               q.Var('instance'),
+            //               'N/A'
+            //             ),
+            //             dateDue: q.Select(
+            //               ['data', 'dateDue'],
+            //               q.Var('instance')
+            //             ),
+            //             // Is the assignment 'live'?
+            //             // How many days until the due date?
+            //             live: q.TimeDiff(
+            //               q.ToDate(q.Now()),
+            //               q.Date(
+            //                 q.SubString(
+            //                   q.Select(['data', 'dateDue'], q.Var('instance')),
+            //                   0,
+            //                   10
+            //                 )
+            //               ),
+            //               'days'
+            //             ),
+            //             questions: q.Select(
+            //               ['data', 'questions'],
+            //               q.Var('instance')
+            //             ),
+            //             group: q.Select(
+            //               ['id'],
+            //               q.Select(['data', 'group'], q.Var('instance'))
+            //             ),
+            //           }
+            //         )
+            //       )
+            //     )
+            //   )
+            // ),
           }
         )
       )
