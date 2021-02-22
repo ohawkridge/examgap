@@ -4,7 +4,7 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   // Configure client using user's secret token
-  const client = new faunadb.Client({
+  const keyedClient = new faunadb.Client({
     secret: data.secret,
   })
   try {
@@ -275,7 +275,8 @@ exports.handler = async (event, context, callback) => {
         )
       )
     )
-    const { data } = await client.query(qry)
+    const data = await keyedClient.query(qry)
+    console.log(`Function-side data is`, data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

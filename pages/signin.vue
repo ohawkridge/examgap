@@ -57,7 +57,7 @@
               elevation="0"
               :loading="loading"
               :disabled="loading"
-              type="submit"
+              @click="login"
               >Sign In</v-btn
             >
             <div class="mt-3 d-flex justify-space-between">
@@ -142,8 +142,9 @@ export default {
           .catch((e) => {
             console.error(e)
             this.failed = true
+            this.$refs.form.resetValidation()
+            this.loading = false
           })
-        this.loading = false
       }
     },
   },

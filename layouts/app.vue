@@ -138,6 +138,7 @@ export default {
     // EgFeedback,
     // EgCreateClass,
   },
+  middleware: ['get-user'],
   data() {
     return {
       // keyedClient: {},

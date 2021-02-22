@@ -1,7 +1,12 @@
 <template>
   <div>
     <h1>Home page</h1>
-    <p class="red--text">secret: {{ $store.state.user.secret }}</p>
+    <p>Store:</p>
+    <ul id="v-for-object" class="demo">
+      <li v-for="(value, i) in $store.state.user" :key="i">
+        {{ value }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -19,9 +24,6 @@ export default {
     return {
       title: 'Home',
     }
-  },
-  created() {
-    this.$store.dispatch('user/getUser')
   },
 }
 </script>
