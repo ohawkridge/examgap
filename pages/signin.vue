@@ -97,6 +97,7 @@ export default {
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 2) || 'Password must be at least 2 characters',
       ],
+      loginKey: '',
     }
   },
   head() {
@@ -114,19 +115,33 @@ export default {
     }
   },
   methods: {
-    async login() {
+    // Try to login user with credentials
+    async getUserSecret() {
+      const response = await fetch('/.netlify/functions/auth/getUserSecret', {
+        body: JSON.stringify({
+          username: this.username,
+          password: this.password,
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error(`Invalid credentials! ${response.status}`)
+      } else {
+        return await response.json()
+      }
+    },
+    login() {
       if (this.$refs.form.validate()) {
         this.loading = true
-        // Try for login token with credentials
-        // const token = await getLoginToken(this.username.toLowerCase(), this.pw)
-        const x = await fetch('/.netlify/functions/getServerSecret', {
-          method: 'POST',
-        })
-        const y = await x.json()
-        console.log(`secret`, y)
-        // if (token) {
-        //   // Store token in localStorage *not* Vuex
-        //   // (Vuex unavailable during page refresh)
+        // Using key, try login
+        this.getUserSecret()
+          .then((res) => {
+            console.log(res)
+            //   // Store token in localStorage *not* Vuex
+            //   // (Vuex unavailable during page refresh)
+          })
+          .catch((e) => console.log(e))
+
         //   localStorage.setItem('secret', token)
         //   const user = await getUser()
         //   this.$store.commit('user/setUser', user)
