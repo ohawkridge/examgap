@@ -2,13 +2,17 @@ export const state = () => ({
   groups: [],
 })
 
+export const getters = {
+  activeGroups: (state) => (active = true) =>
+    state.groups.filter((group) => group.active === active),
+}
+
 export const actions = {
-  async nuxtServerInit({ commit }, context) {
-    console.log(`-> nuxtServerInit GROUPS`)
+  async getGroups({ commit, rootState }) {
     try {
       const response = await fetch('/.netlify/functions/getGroups', {
         body: JSON.stringify({
-          secret: context.rootState.instance.user.secret,
+          secret: rootState.user.secret,
         }),
         method: 'POST',
       })
@@ -17,8 +21,7 @@ export const actions = {
       } else {
         // Call mutation to update state
         const groups = await response.json()
-        console.log(`nuxtServerInit got`, groups)
-        commit('setGroups', groups)
+        commit('setGroups', groups.groups)
       }
     } catch (e) {
       console.error(e)

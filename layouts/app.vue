@@ -1,13 +1,13 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="transparent" app flat>
+    <v-app-bar color="background" app elevate-on-scroll elevation="2">
       <v-container class="d-flex align-center px-0">
         <nuxt-link to="/home">
           <Logo />
         </nuxt-link>
         <v-btn
           text
-          color="primary"
+          color="#2e2e3a"
           nuxt
           to="/home"
           class="ml-8 d-none d-sm-flex"
@@ -16,12 +16,12 @@
         </v-btn>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
-            <v-btn color="primary" text class="ml-2" v-bind="attrs" v-on="on">
+            <v-btn color="#2e2e3a" text class="ml-2" v-bind="attrs" v-on="on">
               Classes
               <v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
             </v-btn>
           </template>
-          <!-- <v-list>
+          <v-list>
             <v-list-item
               v-for="(group, i) in groups"
               :key="i"
@@ -36,19 +36,19 @@
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider v-if="user.teacher" class="mx-4" />
-            <v-list-item v-if="user.teacher" @click="createClass()">
+            <v-divider v-if="teacher" class="mx-4" />
+            <v-list-item v-if="teacher" @click="createClass()">
               <v-list-item-content>
                 <v-list-item-title> Create class&hellip; </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-          </v-list> -->
+          </v-list>
         </v-menu>
         <v-spacer />
         <v-btn
           v-if="teacher"
-          color="primary"
-          text
+          color="#2e2e3a"
+          outlined
           nuxt
           to="/create"
           class="mr-4 d-none d-sm-flex"
@@ -58,7 +58,7 @@
         </v-btn>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
-            <v-btn color="primary" icon v-bind="attrs" v-on="on">
+            <v-btn color="#2e2e3a" icon v-bind="attrs" v-on="on">
               <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
             </v-btn>
           </template>
@@ -142,13 +142,10 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
     }),
-    // groups() {
-    //   // For teachers, return active groups
-    //   // For students, return all groups
-    //   return this.user.teacher
-    //     ? this.$store.getters['user/activeGroups'](true)
-    //     : this.user.groups
-    // },
+    // Get active/archive groups from store
+    groups() {
+      return this.$store.getters['groups/activeGroups'](this.tab)
+    },
   },
   created() {
     this.$icons = {

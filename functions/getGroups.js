@@ -56,10 +56,6 @@ exports.handler = async (event, context, callback) => {
                           name: q.Select(['data', 'name'], q.Var('instance')),
                           board: q.Select(['data', 'board'], q.Var('instance')),
                           qan: q.Select(['data', 'qan'], q.Var('instance')),
-                          colour: q.Select(
-                            ['data', 'colour'],
-                            q.Var('instance')
-                          ),
                           boundaries: q.Select(
                             ['data', 'boundaries'],
                             q.Var('instance'),
@@ -115,10 +111,6 @@ exports.handler = async (event, context, callback) => {
                             ['data', 'board'],
                             q.Var('cInstance')
                           ),
-                          colour: q.Select(
-                            ['data', 'colour'],
-                            q.Var('cInstance')
-                          ),
                         }
                       ),
                     }
@@ -131,7 +123,6 @@ exports.handler = async (event, context, callback) => {
       )
     )
     const data = await keyedClient.query(qry)
-    console.log(`Function-side data is`, data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

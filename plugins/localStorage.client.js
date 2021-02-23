@@ -4,7 +4,7 @@ export default ({ store }) => {
   window.onNuxtReady(() => {
     createPersistedState({
       key: 'examgap',
-      paths: ['user', 'groups'],
+      paths: ['user', 'groups', 'app'],
     })(store)
   })
 }
