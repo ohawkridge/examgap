@@ -1,10 +1,14 @@
 export const state = () => ({
   groups: [],
+  activeGroupIndex: 0,
 })
 
 export const getters = {
   activeGroups: (state) => (active = true) =>
     state.groups.filter((group) => group.active === active),
+  activeGroup: (state) => {
+    return state.groups[state.activeGroupIndex]
+  },
 }
 
 export const actions = {

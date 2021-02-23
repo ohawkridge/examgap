@@ -55,4 +55,18 @@ export const mutations = {
       state.quote = data.quote.text
     }
   },
+  // N.B. Clearing localStorage isn't enough
+  // Vue will still live in memory
+  logout(state) {
+    console.log(`Logging you out...`)
+    state.id = ''
+    state.username = ''
+    state.secret = ''
+    state.school = ''
+    state.teacher = false
+    state.subscriptionExpires = ''
+    state.examMode = false
+    state.reviseExamMode = false
+    state.quote = 'Experiment, fail, learn, repeat.—Anonymous'
+  },
 }

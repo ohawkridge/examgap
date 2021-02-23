@@ -78,42 +78,47 @@ exports.handler = async (event, context, callback) => {
           {
             groups: q.Select(
               ['data'],
-              q.Map(
-                q.Paginate(
-                  q.Match(
-                    // New index returns groups in reverse order by
-                    // timestamp so most recent group is first
-                    q.Index('student_groups_2'),
-                    q.Select('ref', q.Var('instance'))
-                  )
-                ),
-                q.Lambda(
-                  // gRef is an array [ts, <group-Ref>]
-                  'gRef',
-                  q.Let(
-                    {
-                      instance: q.Get(q.Select([1], q.Var('gRef'))), // Group
-                    },
-                    {
-                      id: q.Select(['ref', 'id'], q.Var('instance')),
-                      name: q.Select(['data', 'name'], q.Var('instance')),
-                      active: q.Select(['data', 'active'], q.Var('instance')),
-                      course: q.Let(
-                        {
-                          cInstance: q.Get(
-                            q.Select(['data', 'course'], q.Var('instance'))
-                          ),
-                        },
-                        {
-                          id: q.Select(['ref', 'id'], q.Var('cInstance')),
-                          name: q.Select(['data', 'name'], q.Var('cInstance')),
-                          board: q.Select(
-                            ['data', 'board'],
-                            q.Var('cInstance')
-                          ),
-                        }
-                      ),
-                    }
+              q.Reverse(
+                q.Map(
+                  q.Paginate(
+                    q.Match(
+                      // New index returns groups in reverse order by
+                      // timestamp so most recent group is first
+                      q.Index('student_groups_2'),
+                      q.Select('ref', q.Var('instance'))
+                    )
+                  ),
+                  q.Lambda(
+                    // gRef is an array [ts, <group-Ref>]
+                    'gRef',
+                    q.Let(
+                      {
+                        instance: q.Get(q.Select([1], q.Var('gRef'))), // Group
+                      },
+                      {
+                        id: q.Select(['ref', 'id'], q.Var('instance')),
+                        name: q.Select(['data', 'name'], q.Var('instance')),
+                        active: q.Select(['data', 'active'], q.Var('instance')),
+                        course: q.Let(
+                          {
+                            cInstance: q.Get(
+                              q.Select(['data', 'course'], q.Var('instance'))
+                            ),
+                          },
+                          {
+                            id: q.Select(['ref', 'id'], q.Var('cInstance')),
+                            name: q.Select(
+                              ['data', 'name'],
+                              q.Var('cInstance')
+                            ),
+                            board: q.Select(
+                              ['data', 'board'],
+                              q.Var('cInstance')
+                            ),
+                          }
+                        ),
+                      }
+                    )
                   )
                 )
               )

@@ -142,9 +142,11 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
     }),
-    // Get active/archive groups from store
+    // TODO Move this logic into store
     groups() {
-      return this.$store.getters['groups/activeGroups'](this.tab)
+      return this.teacher
+        ? this.$store.getters['groups/activeGroups'](this.tab)
+        : this.$store.state.groups.groups
     },
   },
   created() {
@@ -207,16 +209,9 @@ export default {
       }
     },
     logout() {
-      // // Close document stream
-      // if (!this.user.teacher) this.stream.close()
-      // // Expire secret token
-      // await this.keyedClient.query(q.Logout(true))
-      // // Empty localStorage
-      // localStorage.removeItem('examgap')
-      // localStorage.removeItem('secret')
       this.$router.push('/')
-      // Reset store
-      // this.$store.commit('user/logout')
+      localStorage.removeItem('examgap')
+      this.$store.commit('user/logout')
     },
   },
 }
