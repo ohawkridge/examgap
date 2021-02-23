@@ -32,19 +32,16 @@
     <v-row v-if="!teacher" class="d-flex justify-center">
       <v-col cols="12" md="7">
         <v-card>
-          <v-card-title class="text-h6"> Assignments () </v-card-title>
-          <v-card-subtitle>{{
-            $fetchState.pending ? 'Fetching...' : '...'
-          }}</v-card-subtitle>
+          <v-card-title class="text-h6">
+            Assignments ({{
+              group.assignments ? group.assignments.length : '-'
+            }})
+          </v-card-title>
           <v-card-text>
-            <Assignments :assignments="[]" />
-            <p>
-              <v-btn text @click="$fetch()">Re-fetch</v-btn>
-            </p>
-            <p>Assignments</p>
-            <p v-for="(ass, i) in group.assignments" :key="i" class="red--text">
-              {{ ass }}
-            </p>
+            <Assignments
+              v-if="group.assignments"
+              :assignments="group.assignments"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -72,8 +69,12 @@ export default {
   layout: 'app',
   // Call fetch (must be at page level) to dispatch
   // a store action to get all data for the page
+  // Only needed for teachers (student groups are
+  // part of getUser.js data structure
   async fetch() {
-    await this.$store.dispatch('groups/getGroups')
+    if (this.teacher) {
+      await this.$store.dispatch('groups/getGroups')
+    }
   },
   head() {
     return {

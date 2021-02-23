@@ -204,79 +204,73 @@ exports.handler = async (event, context, callback) => {
                           board: q.Select(['data', 'board'], q.Var('instance')),
                         }
                       ),
-                      assignments: q.Paginate(
-                        q.Match(
-                          q.Index('group_assignments'),
-                          q.Select('ref', q.Var('instance'))
-                        )
-                      ),
-                      fakeProp: 'FUUUCKKK',
+                      // Empty array we'll push assignments into client-side
+                      assignments: [],
                     }
                   )
                 )
               )
             ),
-            // assignments: q.Reverse(
-            //   q.Select(
-            //     ['data'],
-            //     q.Map(
-            //       q.Paginate(
-            //         q.Match(
-            //           q.Index('student_assignments'),
-            //           q.Select(['ref'], q.Var('instance')) // User (student)
-            //         )
-            //       ),
-            //       q.Lambda(
-            //         'aRef',
-            //         q.Let(
-            //           {
-            //             instance: q.Get(q.Var('aRef')), // Assignment
-            //           },
-            //           {
-            //             id: q.Select(['ref', 'id'], q.Var('instance')),
-            //             name: q.Select(['data', 'name'], q.Var('instance')),
-            //             start: q.Select(
-            //               ['data', 'start'],
-            //               q.Var('instance'),
-            //               'N/A'
-            //             ),
-            //             dateDue: q.Select(
-            //               ['data', 'dateDue'],
-            //               q.Var('instance')
-            //             ),
-            //             // Is the assignment 'live'?
-            //             // How many days until the due date?
-            //             live: q.TimeDiff(
-            //               q.ToDate(q.Now()),
-            //               q.Date(
-            //                 q.SubString(
-            //                   q.Select(['data', 'dateDue'], q.Var('instance')),
-            //                   0,
-            //                   10
-            //                 )
-            //               ),
-            //               'days'
-            //             ),
-            //             questions: q.Select(
-            //               ['data', 'questions'],
-            //               q.Var('instance')
-            //             ),
-            //             group: q.Select(
-            //               ['id'],
-            //               q.Select(['data', 'group'], q.Var('instance'))
-            //             ),
-            //           }
-            //         )
-            //       )
-            //     )
-            //   )
-            // ),
+            assignments: q.Reverse(
+              q.Select(
+                ['data'],
+                q.Map(
+                  q.Paginate(
+                    q.Match(
+                      q.Index('student_assignments'),
+                      q.Select(['ref'], q.Var('instance')) // User (student)
+                    )
+                  ),
+                  q.Lambda(
+                    'aRef',
+                    q.Let(
+                      {
+                        instance: q.Get(q.Var('aRef')), // Assignment
+                      },
+                      {
+                        id: q.Select(['ref', 'id'], q.Var('instance')),
+                        name: q.Select(['data', 'name'], q.Var('instance')),
+                        start: q.Select(
+                          ['data', 'start'],
+                          q.Var('instance'),
+                          'N/A'
+                        ),
+                        dateDue: q.Select(
+                          ['data', 'dateDue'],
+                          q.Var('instance')
+                        ),
+                        // Is the assignment 'live'?
+                        // How many days until the due date?
+                        live: q.TimeDiff(
+                          q.ToDate(q.Now()),
+                          q.Date(
+                            q.SubString(
+                              q.Select(['data', 'dateDue'], q.Var('instance')),
+                              0,
+                              10
+                            )
+                          ),
+                          'days'
+                        ),
+                        questions: q.Select(
+                          ['data', 'questions'],
+                          q.Var('instance')
+                        ),
+                        group: q.Select(
+                          ['id'],
+                          q.Select(['data', 'group'], q.Var('instance'))
+                        ),
+                      }
+                    )
+                  )
+                )
+              )
+            ),
           }
         )
       )
     )
     const data = await keyedClient.query(qry)
-    console.log(`DEBUG => Function-side data is`, data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

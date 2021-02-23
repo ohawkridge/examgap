@@ -13,3 +13,8 @@ $font-size-root: 18px;
 .text-h6 {
   color: #2e2e3a;
 }
+
+button,
+a.v-btn {
+  text-transform: capitalize !important;
+}

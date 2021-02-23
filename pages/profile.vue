@@ -15,12 +15,12 @@
           <v-checkbox
             v-if="!teacher"
             v-model="examMode"
-            label="Exam mode"
+            label="Exam mode*"
             disabled
             hide-details
           >
           </v-checkbox>
-          <small v-if="!teacher" id="small">Set by your teacher</small>
+          <small v-if="!teacher" id="small">*Set by your teacher</small>
           <v-text-field
             :value="school"
             label="School name"

@@ -26,8 +26,22 @@ export const actions = {
       if (!response.ok) {
         throw new Error(`Error fetching user data ${response.status}`)
       } else {
-        // Call mutation to update state
         const userData = await response.json()
+        // For students we need to do some 'post processing'
+        // to put all the assignments into the right groups
+        if (!userData.teacher) {
+          for (const assignment of userData.assignments) {
+            for (const group of userData.groups) {
+              if (group.id === assignment.group) {
+                group.assignments.push(assignment)
+              }
+            }
+          }
+          // Commit to groups store
+          commit('groups/setGroups', userData.groups, { root: true })
+          console.log(`Committed to other store`)
+        }
+        // Call mutation to commit data in *this* store
         commit('setUser', userData)
       }
     } catch (e) {

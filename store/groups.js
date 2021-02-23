@@ -13,21 +13,22 @@ export const getters = {
 
 export const actions = {
   async getGroups({ commit, rootState }) {
-    console.log('getGroups')
     try {
-      const response = await fetch('/.netlify/functions/getGroups', {
-        body: JSON.stringify({
-          secret: rootState.user.secret,
-        }),
-        method: 'POST',
-      })
+      // TODO Use environment variable
+      const response = await fetch(
+        'http://localhost:3000/.netlify/functions/getGroups',
+        {
+          body: JSON.stringify({
+            secret: rootState.user.secret,
+          }),
+          method: 'POST',
+        }
+      )
       if (!response.ok) {
         throw new Error(`Error fetching groups ${response.status}`)
       } else {
         // Call mutation to update state
         const groups = await response.json()
-        console.log(`committing...`)
-        console.log(groups)
         commit('setGroups', groups.groups)
       }
     } catch (e) {
