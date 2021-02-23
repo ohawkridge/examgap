@@ -25,6 +25,7 @@ import Logo from '@/components/common/Logo'
 // import EgFooter from "@/components/EgFooter";
 
 export default {
+  name: 'Static',
   components: {
     Logo,
     // EgFooter,

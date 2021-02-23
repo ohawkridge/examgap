@@ -1,5 +1,6 @@
 <template>
-  <!-- <v-list>
+  <div>
+    <!-- <v-list>
     <template v-for="(assignment, i) in assignments">
       <v-list-item :key="i" nuxt :to="`/student/assignment/${assignment.id}`">
         <v-list-item-content>
@@ -33,21 +34,17 @@
       </v-list-item-content>
     </v-list-item>
   </v-list> -->
-  <p class="red--text">a: {{ assignments }}</p>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
-  // Dispatch an action to get group's assignments
-  async fetch({ store }) {
-    await store.dispatch('assignments/getAssignments', this.group.id)
-  },
-  computed: {
-    ...mapGetters({
-      group: 'groups/activeGroup',
-    }),
+  name: 'AssignmentList',
+  props: {
+    assignments: {
+      type: Array,
+      required: true,
+    },
   },
 }
 </script>

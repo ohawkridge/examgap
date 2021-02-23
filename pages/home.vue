@@ -21,19 +21,30 @@
     </v-row>
     <v-row v-if="!teacher">
       <v-col id="nav" cols="12">
-        <div class="text-h6 font-weight-bold">
+        <div v-if="group" class="text-h6 font-weight-bold">
           {{ group.name }}
         </div>
-        <div>{{ group.course.name }} ({{ group.course.board }})</div>
+        <div v-if="group">
+          {{ group.course.name }} ({{ group.course.board }})
+        </div>
       </v-col>
     </v-row>
     <v-row v-if="!teacher" class="d-flex justify-center">
       <v-col cols="12" md="7">
         <v-card>
           <v-card-title class="text-h6"> Assignments () </v-card-title>
-          <v-card-subtitle> </v-card-subtitle>
+          <v-card-subtitle>{{
+            $fetchState.pending ? 'Fetching...' : '...'
+          }}</v-card-subtitle>
           <v-card-text>
-            <Assignments :group-id="group.id" />
+            <Assignments :assignments="[]" />
+            <p>
+              <v-btn text @click="$fetch()">Re-fetch</v-btn>
+            </p>
+            <p>Assignments</p>
+            <p v-for="(ass, i) in group.assignments" :key="i" class="red--text">
+              {{ ass }}
+            </p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -48,18 +59,21 @@
 import { mapState, mapGetters } from 'vuex'
 import EventBus from '@/plugins/eventBus.client'
 import GroupCard from '@/components/teacher/GroupCard'
+import Assignments from '@/components/student/assignments'
+import Quote from '@/components/student/quote'
 import { mdiPlus } from '@mdi/js'
-import Quote from '@/components/student/quote.vue'
 
 export default {
   components: {
     GroupCard,
+    Assignments,
     Quote,
   },
   layout: 'app',
-  // Call an action on the store to fetch user's groups
-  async fetch({ store }) {
-    await store.dispatch('groups/getGroups')
+  // Call fetch (must be at page level) to dispatch
+  // a store action to get all data for the page
+  async fetch() {
+    await this.$store.dispatch('groups/getGroups')
   },
   head() {
     return {
@@ -69,6 +83,7 @@ export default {
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
+      assignments: (state) => state.assignments.assignments,
     }),
     // For students, get the active group
     ...mapGetters({

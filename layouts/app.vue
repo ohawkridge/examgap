@@ -124,6 +124,7 @@ import {
 } from '@mdi/js'
 
 export default {
+  name: 'App',
   components: {
     Logo,
     Snackbar,

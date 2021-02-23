@@ -160,7 +160,7 @@ exports.handler = async (event, context, callback) => {
                       ),
                     })
                   )
-                ), // Quote
+                ),
               },
               {
                 text: q.Concat([
@@ -170,52 +170,52 @@ exports.handler = async (event, context, callback) => {
                 ]),
               }
             ),
-            // groups: q.Select(
-            //   ['data'],
-            //   q.Map(
-            //     q.Paginate(
-            //       q.Match(
-            //         // New index returns groups in reverse order by
-            //         // timestamp so most recent group is first
-            //         q.Index('student_groups_2'),
-            //         q.Select('ref', q.Var('instance'))
-            //       )
-            //     ),
-            //     q.Lambda(
-            //       // gRef is an array [ts, <group-Ref>]
-            //       'gRef',
-            //       q.Let(
-            //         {
-            //           instance: q.Get(q.Select([1], q.Var('gRef'))), // Group
-            //         },
-            //         {
-            //           id: q.Select(['ref', 'id'], q.Var('instance')),
-            //           name: q.Select(['data', 'name'], q.Var('instance')),
-            //           active: q.Select(['data', 'active'], q.Var('instance')),
-            //           course: q.Let(
-            //             {
-            //               cInstance: q.Get(
-            //                 q.Select(['data', 'course'], q.Var('instance'))
-            //               ),
-            //             },
-            //             {
-            //               id: q.Select(['ref', 'id'], q.Var('cInstance')),
-            //               name: q.Select(['data', 'name'], q.Var('cInstance')),
-            //               board: q.Select(
-            //                 ['data', 'board'],
-            //                 q.Var('cInstance')
-            //               ),
-            //               colour: q.Select(
-            //                 ['data', 'colour'],
-            //                 q.Var('cInstance')
-            //               ),
-            //             }
-            //           ),
-            //         }
-            //       )
-            //     )
-            //   )
-            // ),
+            groups: q.Select(
+              ['data'],
+              q.Map(
+                q.Paginate(
+                  q.Match(
+                    // New index returns groups in reverse order by
+                    // timestamp so most recent group is first
+                    q.Index('student_groups_2'),
+                    q.Select('ref', q.Var('instance'))
+                  )
+                ),
+                q.Lambda(
+                  // gRef is an array [ts, <group-Ref>]
+                  'gRef',
+                  q.Let(
+                    {
+                      instance: q.Get(q.Select([1], q.Var('gRef'))), // Group
+                    },
+                    {
+                      id: q.Select(['ref', 'id'], q.Var('instance')),
+                      name: q.Select(['data', 'name'], q.Var('instance')),
+                      active: q.Select(['data', 'active'], q.Var('instance')),
+                      course: q.Let(
+                        {
+                          instance: q.Get(
+                            q.Select(['data', 'course'], q.Var('instance'))
+                          ), // Course
+                        },
+                        {
+                          id: q.Select(['ref', 'id'], q.Var('instance')),
+                          name: q.Select(['data', 'name'], q.Var('instance')),
+                          board: q.Select(['data', 'board'], q.Var('instance')),
+                        }
+                      ),
+                      assignments: q.Paginate(
+                        q.Match(
+                          q.Index('group_assignments'),
+                          q.Select('ref', q.Var('instance'))
+                        )
+                      ),
+                      fakeProp: 'FUUUCKKK',
+                    }
+                  )
+                )
+              )
+            ),
             // assignments: q.Reverse(
             //   q.Select(
             //     ['data'],
@@ -276,12 +276,12 @@ exports.handler = async (event, context, callback) => {
       )
     )
     const data = await keyedClient.query(qry)
-    console.log(`Function-side data is`, data)
+    console.log(`DEBUG => Function-side data is`, data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     }
-  } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+  } catch (e) {
+    return { statusCode: 500, body: e.toString() }
   }
 }
