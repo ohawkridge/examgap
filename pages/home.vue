@@ -117,6 +117,6 @@ export default {
 
 <style scoped>
 #nav {
-  border-bottom: 1px solid #0078a0 !important;
+  border-bottom: 2px solid #0078a0 !important;
 }
 </style>

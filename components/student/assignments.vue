@@ -10,11 +10,11 @@
       v-else
       :key="i"
       nuxt
-      :to="`/student/assignment/${assignment.id}`"
+      :to="`/assignment/${assignment.id}`"
     >
       <v-list-item-content>
         <v-list-item-title
-          :class="assignment.live > 0 ? 'font-weight-medium' : ''"
+          :class="assignment.live > 0 ? 'font-weight-bold' : ''"
           >{{ assignment.name }}
         </v-list-item-title>
         <v-list-item-subtitle>
@@ -30,9 +30,11 @@
       </v-list-item-content>
       <v-list-item-action>
         <v-list-item-action-text>
-          {{ assignment.questions.length }} question{{
-            assignment.questions.length | pluralize
-          }}
+          <v-chip label outlined>
+            {{ assignment.questions.length }} question{{
+              assignment.questions.length | pluralize
+            }}</v-chip
+          >
         </v-list-item-action-text>
       </v-list-item-action>
     </v-list-item>
@@ -41,7 +43,7 @@
 
 <script>
 export default {
-  name: 'AssignmentList',
+  name: 'Assignments',
   props: {
     assignments: {
       type: Array,
