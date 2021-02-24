@@ -20,7 +20,7 @@
       </v-col>
     </v-row>
     <v-row v-if="!teacher">
-      <v-col id="nav" cols="12">
+      <v-col id="div" cols="12">
         <div v-if="group" class="text-h6 font-weight-bold">
           {{ group.name }}
         </div>
@@ -32,17 +32,11 @@
     <v-row v-if="!teacher" class="d-flex justify-center">
       <v-col cols="12" md="7">
         <v-card>
-          <!-- Causing errors on hard refresh -->
-          <!-- <v-card-title v-if="group.assignments" class="text-h6">
-            Assignments ({{
-              group.assignments ? group.assignments.length : '-'
-            }})
-          </v-card-title> -->
+          <v-card-title>
+            Assignments ({{ group ? group.assignments.length : '-' }})
+          </v-card-title>
           <v-card-text>
-            <!-- <Assignments
-              v-if="group.assignments"
-              :assignments="group.assignments"
-            /> -->
+            <Assignments v-if="group" :assignments="group.assignments" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -57,14 +51,14 @@
 import { mapState, mapGetters } from 'vuex'
 import EventBus from '@/plugins/eventBus.client'
 import GroupCard from '@/components/teacher/GroupCard'
-// import Assignments from '@/components/student/assignments'
+import Assignments from '@/components/student/assignments'
 import Quote from '@/components/student/quote'
 import { mdiPlus } from '@mdi/js'
 
 export default {
   components: {
     GroupCard,
-    // Assignments,
+    Assignments,
     Quote,
   },
   layout: 'app',
@@ -87,11 +81,11 @@ export default {
       teacher: (state) => state.user.teacher,
       assignments: (state) => state.assignments.assignments,
     }),
-    // For students, get the active group
+    // For students, just get the active group
     ...mapGetters({
       group: 'groups/activeGroup',
     }),
-    // For teachers, get groups based on tab value
+    // For teachers, get all groups based on tab value
     groups() {
       return this.$store.getters['groups/activeGroups'](this.tab)
     },
@@ -115,3 +109,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+#div {
+  border-bottom: 1px solid #0078a0 !important;
+}
+</style>

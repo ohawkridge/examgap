@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="text-h6">
+    <v-card-title>
       <v-menu offset-x open-on-hover>
         <template #activator="{ on, attrs }">
           <v-hover v-slot="{ hover }">
