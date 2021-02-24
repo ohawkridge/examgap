@@ -1,6 +1,6 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="background" app elevate-on-scroll elevation="2">
+    <v-app-bar id="nav" color="#f1eeee" app elevate-on-scroll elevation="2">
       <v-container class="d-flex align-center px-0">
         <nuxt-link to="/home">
           <Logo />
@@ -48,7 +48,7 @@
         <v-btn
           v-if="teacher"
           color="#2e2e3a"
-          outlined
+          text
           nuxt
           to="/create"
           class="mr-4 d-none d-sm-flex"
@@ -103,7 +103,7 @@
         subtitle="Thanks for helping make Examgap better."
       /> -->
     </v-main>
-    <!-- <EgAppFooter /> -->
+    <AppFooter />
     <!-- <EgCreateClass v-if="user.teacher" /> -->
   </v-app>
 </template>
@@ -112,7 +112,7 @@
 import { mapState } from 'vuex'
 import Logo from '@/components/common/Logo'
 import Snackbar from '@/components/common/Snackbar'
-// import EgAppFooter from '@/components/EgAppFooter'
+import AppFooter from '@/components/common/AppFooter'
 // import EgSuccessDialog from '@/components/EgSuccessDialog'
 // import EgCreateClass from '@/components/EgCreateClass'
 import EventBus from '@/plugins/eventBus.client'
@@ -128,7 +128,7 @@ export default {
   components: {
     Logo,
     Snackbar,
-    // EgAppFooter,
+    AppFooter,
     // EgSuccessDialog,
     // EgCreateClass,
   },

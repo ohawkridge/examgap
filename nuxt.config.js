@@ -64,7 +64,7 @@ export default {
           primary: '#0078a0',
           accent: '#ef7a85',
           secondary: '#b7d1da',
-          background: '#faf9f9',
+          background: '#f1eeee',
         },
         dark: {
           primary: colors.blue.darken2,

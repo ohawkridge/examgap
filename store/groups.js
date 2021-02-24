@@ -15,15 +15,12 @@ export const actions = {
   async getGroups({ commit, rootState }) {
     try {
       // TODO Use environment variable
-      const response = await fetch(
-        'http://localhost:3000/.netlify/functions/getGroups',
-        {
-          body: JSON.stringify({
-            secret: rootState.user.secret,
-          }),
-          method: 'POST',
-        }
-      )
+      const response = await fetch('/.netlify/functions/getGroups', {
+        body: JSON.stringify({
+          secret: rootState.user.secret,
+        }),
+        method: 'POST',
+      })
       if (!response.ok) {
         throw new Error(`Error fetching groups ${response.status}`)
       } else {

@@ -37,9 +37,8 @@ export const actions = {
               }
             }
           }
-          // Commit to groups store
+          // Commit result to groups store
           commit('groups/setGroups', userData.groups, { root: true })
-          console.log(`Committed to other store`)
         }
         // Call mutation to commit data in *this* store
         commit('setUser', userData)

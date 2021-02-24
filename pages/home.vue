@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-row v-if="teacher">
-      <v-col id="nav" cols="12">
+      <v-col cols="12">
         <div class="d-flex justify-space-between align-center">
           <v-btn-toggle v-model="tab" color="primary" group mandatory>
             <v-btn :value="true" class="rounded"> Classes </v-btn>
             <v-btn :value="false" class="rounded"> Archive </v-btn>
           </v-btn-toggle>
-          <v-btn color="primary" text @click="emitNew">
+          <v-btn color="primary" outlined @click="emitNew">
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
             {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
           </v-btn>
@@ -32,16 +32,17 @@
     <v-row v-if="!teacher" class="d-flex justify-center">
       <v-col cols="12" md="7">
         <v-card>
-          <v-card-title class="text-h6">
+          <!-- Causing errors on hard refresh -->
+          <!-- <v-card-title v-if="group.assignments" class="text-h6">
             Assignments ({{
               group.assignments ? group.assignments.length : '-'
             }})
-          </v-card-title>
+          </v-card-title> -->
           <v-card-text>
-            <Assignments
+            <!-- <Assignments
               v-if="group.assignments"
               :assignments="group.assignments"
-            />
+            /> -->
           </v-card-text>
         </v-card>
       </v-col>
@@ -56,14 +57,14 @@
 import { mapState, mapGetters } from 'vuex'
 import EventBus from '@/plugins/eventBus.client'
 import GroupCard from '@/components/teacher/GroupCard'
-import Assignments from '@/components/student/assignments'
+// import Assignments from '@/components/student/assignments'
 import Quote from '@/components/student/quote'
 import { mdiPlus } from '@mdi/js'
 
 export default {
   components: {
     GroupCard,
-    Assignments,
+    // Assignments,
     Quote,
   },
   layout: 'app',
@@ -114,9 +115,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-#nav {
-  border-bottom: 2px solid #0078a0 !important;
-}
-</style>

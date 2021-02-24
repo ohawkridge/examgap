@@ -1,8 +1,8 @@
 <template>
   <v-row class="justify-center">
-    <v-col cols="12" sm="9" md="8">
-      <v-card>
-        <v-card-title class="text-h5 font-weight-bold"> Profile </v-card-title>
+    <v-col cols="12" sm="9" md="8" class="pt-md-10">
+      <v-card class="pa-md-4">
+        <v-card-title class="text-h6 font-weight-bold"> Profile </v-card-title>
         <v-card-text>
           <v-text-field
             :value="username"
@@ -28,7 +28,7 @@
             readonly
           ></v-text-field>
           <v-text-field
-            :value="`${expires} ${days}`"
+            :value="`${expiresx} ${days}`"
             label="Subscription expires"
             outlined
             readonly
@@ -55,14 +55,15 @@ export default {
       teacher: (state) => state.user.teacher,
       examMode: (state) => state.user.examMode,
       school: (state) => state.user.school,
+      expires: (state) => state.user.subscriptionExpires,
     }),
-    expires() {
+    expiresx() {
       // This has been so buggy
-      if (this.user && this.user.teacher) {
-        if ('value' in this.user.subscriptionExpires) {
-          return this.user.subscriptionExpires.value.substring(0, 10)
-        } else if ('@date' in this.user.subscriptionExpires) {
-          return this.user.subscriptionExpires['@date'].substring(0, 10)
+      if (this.teacher) {
+        if ('value' in this.expires) {
+          return this.expires.value.substring(0, 10)
+        } else if ('@date' in this.expires) {
+          return this.expires['@date'].substring(0, 10)
         } else {
           return 'N/A'
         }
@@ -71,8 +72,8 @@ export default {
       }
     },
     days() {
-      if (this.expires !== 'N/A') {
-        const expires = new Date(this.expires)
+      if (this.expiresx !== 'N/A') {
+        const expires = new Date(this.expiresx)
         const n = Math.ceil(
           (expires.getTime() - new Date().getTime()) / (1000 * 3600 * 24)
         )

@@ -1,6 +1,6 @@
 <template>
-  <v-card class="bordered" hover nuxt :to="`/group/${group.id}`">
-    <v-card-title class="text-h6 font-weight-bold">
+  <v-card class="bordered" hover nuxt to="/">
+    <v-card-title>
       {{ group.name }}
     </v-card-title>
     <v-card-subtitle>

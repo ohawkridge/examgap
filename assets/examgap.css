@@ -20,6 +20,17 @@ a:link {
   background: #f7eabb;
 }
 
+/* thin divider under app-bar */
+#nav {
+  border-bottom: 1px solid #e3dede !important;
+}
+
+/* --------- Teacher home --------- */
+
+.bordered {
+  border-top: 4px solid #b7d1da !important;
+}
+
 /* --------- Misc. classes -------- */
 
 .debug {
@@ -62,17 +73,6 @@ a:link {
 /* extend static pages clear of footer */
 .static-page-container {
   margin-bottom: 8em;
-}
-
-/* --------- Teacher home --------- */
-
-.bordered::before {
-  background-color: #b7d1da;
-  content: '';
-  display: block;
-  height: 4px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
 }
 
 /* -------- Modal dialogs --------- */
