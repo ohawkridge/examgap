@@ -2,7 +2,7 @@
   <v-row class="justify-center">
     <v-col cols="12" sm="9" md="8" class="pt-md-10">
       <v-card class="pa-md-4">
-        <v-card-title class="text-h6 font-weight-bold"> Profile </v-card-title>
+        <v-card-title> Profile </v-card-title>
         <v-card-text>
           <v-text-field
             :value="username"
