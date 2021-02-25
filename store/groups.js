@@ -9,6 +9,21 @@ export const getters = {
   activeGroup: (state) => {
     return state.groups[state.activeGroupIndex]
   },
+  groupById: (state) => (id) => {
+    return state.groups.find((group) => group.id === id)
+  },
+  groupByAssignmentId: (state) => (assignmentId) => {
+    // Prevent error when groups is reset on logout
+    if (state.groups) {
+      for (const group of state.user.groups) {
+        for (const assignment of group.assignments) {
+          if (assignment.id === assignmentId) {
+            return group
+          }
+        }
+      }
+    }
+  },
 }
 
 export const actions = {
@@ -37,5 +52,9 @@ export const actions = {
 export const mutations = {
   setGroups(state, groups) {
     state.groups = groups
+  },
+  logout(state) {
+    state.groups = []
+    state.activeGroupIndex = 0
   },
 }

@@ -212,6 +212,8 @@ export default {
     logout() {
       this.$router.push('/')
       localStorage.removeItem('examgap')
+      this.$store.commit('groups/logout')
+      this.$store.commit('assignments/logout')
       this.$store.commit('user/logout')
     },
   },

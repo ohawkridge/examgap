@@ -21,8 +21,12 @@ a:link {
 }
 
 /* thin divider under app-bar */
-#nav {
+#div2 {
   border-bottom: 1px solid #e3dede !important;
+}
+
+#div1 {
+  border-bottom: 1px solid #0078a0 !important;
 }
 
 /* accessible RAG chips */

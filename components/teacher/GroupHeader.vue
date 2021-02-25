@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12">
+    <v-col id="div1" cols="12">
       <div class="text-h6 font-weight-bold">
         {{ group.name }}
       </div>

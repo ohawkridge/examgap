@@ -1,5 +1,5 @@
 <template>
-  <v-card class="bordered" hover nuxt to="/">
+  <v-card class="bordered" hover nuxt :to="`/group/${group.id}`">
     <v-card-title>
       {{ group.name }}
     </v-card-title>

@@ -20,7 +20,7 @@
       </v-col>
     </v-row>
     <v-row v-if="!teacher">
-      <v-col id="div" cols="12">
+      <v-col id="div1" cols="12">
         <div v-if="group" class="text-h6 font-weight-bold">
           {{ group.name }}
         </div>
@@ -109,9 +109,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-#div {
-  border-bottom: 1px solid #0078a0 !important;
-}
-</style>

@@ -2,6 +2,7 @@ export const state = () => ({
   assignmentId: '',
   questionId: '',
   topicId: '',
+  groupId: '',
 })
 
 export const mutations = {
@@ -14,5 +15,14 @@ export const mutations = {
   // Remember the topic if revising
   setCurrentTopic(state, topicId) {
     state.topicId = topicId
+  },
+  setGroup(state, groupId) {
+    state.groupId = groupId
+  },
+  logout(state) {
+    state.assignmentId = ''
+    state.questionId = ''
+    state.topicId = ''
+    state.groupId = ''
   },
 }
