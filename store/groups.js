@@ -47,8 +47,16 @@ export const mutations = {
   setGroup(state, group) {
     state.group = group
   },
+  updateGroupName(state, { id, name }) {
+    for (let i = 0; i < state.groups.length; i++) {
+      if (state.groups[i].id === id) {
+        state.groups[i].name = name
+      }
+    }
+  },
   logout(state) {
     state.groups = []
+    state.group = {}
     state.activeGroupIndex = 0
   },
 }

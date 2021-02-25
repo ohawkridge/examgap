@@ -10,19 +10,19 @@
         <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
             {{ data.name }}
+            <v-chip color="primary" outlined label>
+              Due {{ data.dateDue | date }}
+            </v-chip>
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col class="d-flex justify-space-between">
+              <v-col class="d-flex justify-end">
                 <DeleteAssignment
                   v-if="group"
                   :assignment-id="data.id"
                   :group-id="group.id"
                   type="btn"
                 />
-                <v-chip color="primary" outlined label>
-                  Due {{ data.dateDue | date }}
-                </v-chip>
               </v-col>
             </v-row>
             <v-row>
