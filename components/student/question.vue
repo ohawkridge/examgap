@@ -9,7 +9,9 @@
               {{ question.text | strip }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
+              {{ question.maxMark }} mark{{ question.maxMark | pluralize }} ({{
+                assignmentId
+              }})
             </v-list-item-subtitle>
           </v-col>
           <v-col cols="12" md="3" class="d-flex justify-space-around">
@@ -40,11 +42,11 @@
         v-if="
           i == question.responses.length - 1 && question.responses[i].repeat
         "
-        :key="i"
+        :key="i + 1"
         @click="answer(question.id)"
       >
         <v-list-item-content>
-          <v-col cols="12" md="8">
+          <v-col cols="12" md="9">
             <v-list-item-title>
               {{ question.text | strip }}
             </v-list-item-title>
@@ -52,11 +54,8 @@
               {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-list-item-subtitle>
           </v-col>
-          <v-col cols="12" md="4" class="d-flex justify-end">
-            <v-btn text color="primary">
-              Reassigned
-              <v-icon right>{{ $icons.mdiBoomerang }}</v-icon>
-            </v-btn>
+          <v-col cols="12" md="3" class="d-flex justify-center">
+            <v-btn text color="primary"> Reassigned </v-btn>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -67,7 +66,7 @@
       @click="answer(question.id)"
     >
       <v-list-item-content>
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="9">
           <v-list-item-title>
             {{ question.text | strip }}
           </v-list-item-title>
@@ -75,7 +74,7 @@
             {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
           </v-list-item-subtitle>
         </v-col>
-        <v-col cols="12" md="4" class="d-flex justify-end">
+        <v-col cols="12" md="3" class="d-flex justify-center">
           <v-btn text color="primary"> Answer </v-btn>
         </v-col>
       </v-list-item-content>
@@ -84,7 +83,7 @@
 </template>
 
 <script>
-import { mdiAccountOutline, mdiSchoolOutline, mdiBoomerang } from '@mdi/js'
+import { mdiAccountOutline, mdiSchoolOutline } from '@mdi/js'
 
 export default {
   name: 'Question',
@@ -102,7 +101,6 @@ export default {
     this.$icons = {
       mdiAccountOutline,
       mdiSchoolOutline,
-      mdiBoomerang,
     }
   },
   methods: {
@@ -110,7 +108,7 @@ export default {
       // Store assignment and question ids to associate
       // later with the student's saved response
       console.log(`Saving ${this.assignmentId} & ${questionId} for later`)
-      this.$store.commit(`user/setAnswerData`, {
+      this.$store.commit(`assignments/setAnswerData`, {
         assignmentId: this.assignmentId,
         questionId,
       })

@@ -14,6 +14,7 @@ exports.handler = async (event, context, callback) => {
         instance: q.Get(q.Ref(q.Collection('Assignment'), assignmentId)), // Assignment
       },
       {
+        id: q.Select(['ref', 'id'], q.Var('instance')),
         name: q.Select(['data', 'name'], q.Var('instance')),
         start: q.Select(['data', 'start'], q.Var('instance'), 'N/A'),
         dateDue: q.Select(['data', 'dateDue'], q.Var('instance')),
