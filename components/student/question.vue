@@ -106,15 +106,16 @@ export default {
     }
   },
   methods: {
-    // answer(questionId) {
-    //   // Store assignment and question ids to associate
-    //   // later with the student's saved response
-    //   this.$store.commit(`user/setAnswerData`, {
-    //     assignmentId: this.assignmentId,
-    //     questionId,
-    //   })
-    //   this.$router.push(`/student/answer`)
-    // },
+    answer(questionId) {
+      // Store assignment and question ids to associate
+      // later with the student's saved response
+      console.log(`Saving ${this.assignmentId} & ${questionId} for later`)
+      this.$store.commit(`user/setAnswerData`, {
+        assignmentId: this.assignmentId,
+        questionId,
+      })
+      this.$router.push(`/answer`)
+    },
     color(n, max) {
       if (n / max <= 1 / 3) {
         return 'red'
@@ -128,24 +129,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-span.v-chip.theme--light.red {
-  background-color: rgb(254, 216, 216) !important;
-  color: rgb(95, 28, 30) !important;
-}
-
-span.v-chip.theme--light.orange {
-  background-color: rgb(247, 234, 187) !important;
-  color: rgb(80, 37, 22) !important;
-}
-
-span.v-chip.theme--light.green {
-  background-color: rgb(201, 237, 194) !important;
-  color: rgb(18, 39, 14) !important;
-}
-
-/* .spacer {
-  width: 80px;
-} */
-</style>

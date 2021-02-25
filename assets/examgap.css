@@ -25,6 +25,22 @@ a:link {
   border-bottom: 1px solid #e3dede !important;
 }
 
+/* accessible RAG chips */
+span.v-chip.theme--light.red {
+  background-color: rgb(254, 216, 216) !important;
+  color: rgb(95, 28, 30) !important;
+}
+
+span.v-chip.theme--light.orange {
+  background-color: rgb(247, 234, 187) !important;
+  color: rgb(80, 37, 22) !important;
+}
+
+span.v-chip.theme--light.green {
+  background-color: rgb(201, 237, 194) !important;
+  color: rgb(18, 39, 14) !important;
+}
+
 /* --------- Teacher home --------- */
 
 .bordered {

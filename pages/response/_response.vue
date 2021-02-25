@@ -10,44 +10,46 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-card class="pa-md-6">
-          <v-card-title
-            class="text-h5 font-weight-bold d-flex justify-space-between"
-          >
+        <v-card class="pa-md-4">
+          <v-card-title class="d-flex justify-space-between">
             Question
             <div class="d-flex justify-end">
-              <v-chip color="primary" outlined class="mr-2" label>
+              <v-chip
+                :color="color(response.tm.length, response.question.maxMark)"
+                class="mr-4"
+              >
                 <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
-                <span
-                  v-if="response && !$fetchState.pending"
-                  class="font-weight-black"
-                  >{{ response.tm.length }}/{{
-                    response.question.maxMark
-                  }}</span
-                >
-                <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+                <span class="font-weight-black">{{ response.tm.length }}</span>
+                <!-- <v-icon right>{{ $icons.mdiCheck }}</v-icon> -->
               </v-chip>
-              <v-chip color="green darken-1" outlined label>
+              <v-chip
+                :color="color(response.sm.length, response.question.maxMark)"
+              >
                 <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
-                <span
-                  v-if="response && !$fetchState.pending"
-                  class="font-weight-black"
-                  >{{ response.sm.length }}/{{
-                    response.question.maxMark
-                  }}</span
-                >
-                <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+                <span class="font-weight-black">{{ response.sm.length }}</span>
+                <!-- <v-icon right>{{ $icons.mdiCheck }}</v-icon> -->
               </v-chip>
             </div>
           </v-card-title>
-          <v-card-text v-if="!$fetchState.pending">
+          <v-card-text>
             <v-row>
               <v-col cols="12" md="6">
-                <div>{{ response.question.text }}</div>
+                <div v-html="response.question.text"></div>
+                <div class="d-flex justify-end">
+                  <v-chip outlined
+                    >{{ response.question.maxMark }} mark{{
+                      response.question.maxMark | pluralize
+                    }}
+                  </v-chip>
+                </div>
                 <p class="text-subtitle-1 font-weight-medium">Your answer</p>
                 <p id="ans" class="pa-4 breaks" v-text="response.text"></p>
-                <p class="text-subtitle-1 font-weight-medium">Model answer</p>
-                <div>{{ response.question.modelAnswer }}</div>
+                <p
+                  class="text-subtitle-1"
+                  v-html="response.question.modelAnswer"
+                >
+                  Model answer
+                </p>
               </v-col>
               <v-col cols="12" md="6">
                 <p class="text-subtitle-1 font-weight-medium">Mark scheme</p>
@@ -94,10 +96,13 @@
                   class="pa-4 mb-4"
                   v-text="response.feedback"
                 ></div>
-                <p class="text-subtitle-1 font-weight-medium">Guidance</p>
-                <div v-if="response.question.guidance">
-                  {{ response.question.guidance }}
-                </div>
+                <p class="text-subtitle-1 font-weight-medium mt-4">
+                  Marking guidance
+                </p>
+                <div
+                  v-if="response.question.guidance"
+                  v-html="response.question.guidance"
+                ></div>
                 <p v-else>None</p>
               </v-col>
             </v-row>
@@ -133,7 +138,7 @@ export default {
       method: 'POST',
     })
     if (!data.ok) {
-      throw new Error(`Error fetching assignment ${data.status}`)
+      throw new Error(`Error fetching response ${data.status}`)
     }
     const response = await data.json()
     return { response }
@@ -147,6 +152,18 @@ export default {
       mdiArrowLeft,
       mdiCheck,
     }
+  },
+  methods: {
+    color(n, max) {
+      if (n / max <= 1 / 3) {
+        return 'red'
+      }
+      if (n / max > 2 / 3) {
+        return 'green'
+      } else {
+        return 'orange'
+      }
+    },
   },
 }
 </script>

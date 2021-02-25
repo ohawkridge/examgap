@@ -1,10 +1,8 @@
 <template>
-  <v-row class="justify-center mt-md-6">
-    <v-col cols="12" sm="9" md="8">
-      <v-card>
-        <v-card-title class="text-h5 font-weight-bold">
-          Change password
-        </v-card-title>
+  <v-row class="justify-center">
+    <v-col cols="12" sm="9" md="8" lg="7" class="mt-md-10">
+      <v-card class="pa-md-4">
+        <v-card-title> Change password </v-card-title>
         <v-card-text>
           <v-form ref="form">
             <v-text-field
@@ -52,7 +50,7 @@
 
 <script>
 export default {
-  layout: 'EgApp',
+  layout: 'app',
   data() {
     return {
       loading: false,
@@ -77,32 +75,49 @@ export default {
     },
   },
   methods: {
-    // async updatePass() {
-    //   if (this.$refs.form.validate()) {
-    //     this.loading = true
-    //     try {
-    //       const res = await updatePass(this.oldPw, this.pass1)
-    //       if (!res) {
-    //         this.oldErrMsg.push(`Old password incorrect`)
-    //       } else {
-    //         this.$refs.form.reset()
-    //         this.$snack.showMessage({
-    //           msg: 'Success. Password updated',
-    //           type: 'success',
-    //         })
-    //       }
-    //     } catch (e) {
-    //       console.error(e)
-    //       this.$snack.showMessage({
-    //         msg: 'Error changing password',
-    //         type: 'error',
-    //       })
-    //     } finally {
-    //       this.$refs.form.reset()
-    //       this.loading = false
-    //     }
-    //   }
-    // },
+    async updatePass() {
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        try {
+          const url = new URL(
+            '/.netlify/functions/updatePassword',
+            'http://localhost:8888'
+          )
+          const response = await fetch(url, {
+            body: JSON.stringify({
+              secret: this.$store.state.user.secret,
+              oldPass: this.oldPw,
+              newPass: this.pass1,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error updating password ${response.status}`)
+          }
+          console(`Password changed!`)
+          const data = await response.json()
+          console.dir(data)
+          // if (!res) {
+          //   this.oldErrMsg.push(`Old password incorrect`)
+          // } else {
+          //   this.$refs.form.reset()
+          //   this.$snack.showMessage({
+          //     msg: 'Success. Password updated',
+          //     type: 'success',
+          //   })
+          // }
+        } catch (e) {
+          console.error(e)
+          this.$snack.showMessage({
+            msg: 'Error changing password',
+            type: 'error',
+          })
+        } finally {
+          this.$refs.form.reset()
+          this.loading = false
+        }
+      }
+    },
   },
 }
 </script>
