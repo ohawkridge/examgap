@@ -58,7 +58,7 @@
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import ArchiveGroup from '@/components/teacher/ArchiveGroup'
-import CourseSelect from '@/components/CourseSelect'
+import CourseSelect from '@/components/teacher/CourseSelect'
 import { mdiInformationOutline } from '@mdi/js'
 
 export default {
