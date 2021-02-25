@@ -9,9 +9,7 @@
               {{ question.text | strip }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              {{ question.maxMark }} mark{{ question.maxMark | pluralize }} ({{
-                assignmentId
-              }})
+              {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-list-item-subtitle>
           </v-col>
           <v-col cols="12" md="3" class="d-flex justify-space-around">
@@ -107,7 +105,6 @@ export default {
     answer(questionId) {
       // Store assignment and question ids to associate
       // later with the student's saved response
-      console.log(`Saving ${this.assignmentId} & ${questionId} for later`)
       this.$store.commit(`assignments/setAnswerData`, {
         assignmentId: this.assignmentId,
         questionId,

@@ -7,41 +7,52 @@ exports.handler = async (event, context, callback) => {
   const questionId = data.questionId
   const text = data.text
   const topicId = data.topicId
+  const responseId = data.responseId
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
   })
   try {
-    const qry = q.Create(q.Collection('Response'), {
-      data: {
-        text,
-        feedback: '',
-        marked: false,
-        repeat: false,
-        flagged: false,
-        student: q.CurrentIdentity(),
-        question: q.Ref(q.Collection('Question'), questionId),
-        // Save topic for independent revision questions
-        topic: q.Ref(q.Collection('Topic'), topicId),
-        // Independent revision has no assignment id
-        assignment:
-          assignmentId === 0
-            ? ''
-            : q.Ref(q.Collection('Assignment'), assignmentId),
-        // Need group to filter data by class later on
-        group:
-          assignmentId === 0
-            ? ''
-            : q.Select(
-                ['data', 'group'],
-                q.Get(q.Ref(q.Collection('Assignment'), assignmentId))
-              ),
-      },
-    })
+    const qry = q.If(
+      // If no responseId is provided, create a new response
+      q.Equals(responseId, ''),
+      q.Create(q.Collection('Response'), {
+        data: {
+          text,
+          feedback: '',
+          marked: false,
+          repeat: false,
+          flagged: false,
+          student: q.CurrentIdentity(),
+          question: q.Ref(q.Collection('Question'), questionId),
+          // Save topic for independent revision questions
+          topic: topicId === '' ? 0 : q.Ref(q.Collection('Topic'), topicId),
+          // Independent revision has no assignment id
+          assignment:
+            assignmentId === 0
+              ? ''
+              : q.Ref(q.Collection('Assignment'), assignmentId),
+          // Need group to filter data by class later on
+          group:
+            assignmentId === 0
+              ? ''
+              : q.Select(
+                  ['data', 'group'],
+                  q.Get(q.Ref(q.Collection('Assignment'), assignmentId))
+                ),
+        },
+      }),
+      // Otherwise, update text of existing response
+      q.Update(q.Ref(q.Collection('Response'), responseId), {
+        data: {
+          text,
+        },
+      })
+    )
     const data = await keyedClient.query(qry)
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify(data.ref.id),
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }

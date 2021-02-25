@@ -53,7 +53,7 @@
               elevation="0"
               :loading="loading"
               :disabled="loading"
-              @click="login"
+              type="submit"
               >Sign In</v-btn
             >
             <div class="mt-3 d-flex justify-space-between">

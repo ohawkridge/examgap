@@ -1,6 +1,7 @@
 export const state = () => ({
   assignmentId: '',
   questionId: '',
+  topicId: '',
 })
 
 export const mutations = {
@@ -9,5 +10,9 @@ export const mutations = {
   setAnswerData(state, { assignmentId, questionId }) {
     state.assignmentId = assignmentId
     state.questionId = questionId
+  },
+  // Remember the topic if revising
+  setCurrentTopic(state, topicId) {
+    state.topicId = topicId
   },
 }

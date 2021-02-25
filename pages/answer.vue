@@ -1,7 +1,7 @@
 <template>
-  <v-row class="justify-center mt-md-10">
+  <v-row class="justify-center mt-md-3">
     <v-col cols="12" md="10">
-      <v-card v-if="!marking" class="pa-md-4">
+      <v-card class="pa-md-4">
         <v-card-title class="d-flex justify-space-between">
           Question
           <v-tooltip bottom>
@@ -19,7 +19,7 @@
             <span>Speak question</span>
           </v-tooltip>
         </v-card-title>
-        <v-container class="pa-4">
+        <v-card-text>
           <v-row>
             <v-col cols="12">
               <div v-html="question.text"></div>
@@ -33,10 +33,11 @@
               <v-textarea
                 v-model="answer"
                 outlined
-                hide-details
                 color="primary"
                 auto-grow
+                :messages="saveStatus"
                 label="Your answer"
+                @input="update()"
               ></v-textarea>
             </v-col>
             <v-col
@@ -66,16 +67,17 @@
                 elevation="0"
                 @click="save()"
               >
-                Mark
+                <v-icon left>{{ $icons.mdiCheckboxMarkedOutline }}</v-icon>
+                Self-mark
               </v-btn>
             </v-col>
           </v-row>
-        </v-container>
+        </v-card-text>
       </v-card>
       <!-- Marking dialog -->
-      <v-card v-if="marking">
+      <!-- <v-card v-if="marking">
         <v-card-title> Marking </v-card-title>
-        <v-container class="pa-4">
+        <v-card-text>
           <v-row>
             <v-col cols="12">
               <div id="ans" class="pa-4 breaks" v-text="answer"></div>
@@ -101,15 +103,16 @@
               </div>
             </v-col>
           </v-row>
-        </v-container>
-      </v-card>
+        </v-card-text>
+      </v-card> -->
     </v-col>
   </v-row>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { mdiTextToSpeech, mdiPause } from '@mdi/js'
+import { debounce } from 'lodash'
+import { mdiTextToSpeech, mdiPause, mdiCheckboxMarkedOutline } from '@mdi/js'
 
 export default {
   // Cancel speaking on page exit
@@ -119,15 +122,15 @@ export default {
     next()
   },
   layout: 'app',
-  async asyncData({ store, params }) {
+  async asyncData(context) {
     const url = new URL(
       '/.netlify/functions/getQuestion',
       'http://localhost:8888'
     )
     const response = await fetch(url, {
       body: JSON.stringify({
-        secret: store.state.user.secret,
-        questionId: store.state.assignments.questionId,
+        secret: context.store.state.user.secret,
+        questionId: context.store.state.assignments.questionId,
       }),
       method: 'POST',
     })
@@ -135,7 +138,6 @@ export default {
       throw new Error(`Error fetching question ${response.status}`)
     }
     const question = await response.json()
-    console.dir(question)
     return { question }
   },
   data() {
@@ -145,14 +147,13 @@ export default {
       marking: false,
       loading: false,
       marks: [],
-      // Copy mode from store so it doesn't change
-      // while the student is answering a question
-      // (user doc is streamed in near real time!)
-      examMode: this.$store.state.user.user.examMode,
+      examMode: false,
       synth: null,
       voices: [],
       speakDisabled: false,
       prefVoice: false,
+      saveStatus: '',
+      responseId: '',
     }
   },
   computed: {
@@ -195,6 +196,7 @@ export default {
     this.$icons = {
       mdiTextToSpeech,
       mdiPause,
+      mdiCheckboxMarkedOutline,
     }
   },
   mounted() {
@@ -207,8 +209,15 @@ export default {
     }
     // Call one
     this.synth.getVoices()
+    // Copy mode from store so it doesn't change
+    // while the student is answering a question
+    this.examMode = this.$store.state.user.examMode
   },
   methods: {
+    // Debounce answer area
+    update: debounce(function () {
+      this.save()
+    }, 1500),
     // Get SpeechSynthesisVoice objects if supported
     // https://wicg.github.io/speech-api/#utterance-attributes
     getVoices() {
@@ -244,12 +253,9 @@ export default {
     },
     done() {
       this.marking = false
-      // If revising, go home otherwise back to assignment
-      if (this.revising) {
-        this.$router.push(`/home`)
-      } else {
-        this.$router.push(`/assignment/${this.assignmentId}`)
-      }
+      // If revising, go home otherwise go to assignment
+      const rt = this.revising ? `/home` : `/assignment/${this.assignmentId}`
+      this.$router.push(rt)
     },
     toggleMark(id) {
       // Don't exceed max mark, but always allow unticking
@@ -273,36 +279,42 @@ export default {
         }
       }
     },
-    // Save on 'Mark' click to reduce chance of student losing answer
-    // async save() {
-    //   this.loading = true
-    //   try {
-    //     // Save response while we add self marks
-    //     this.saved = await saveAnswer(
-    //       this.assignmentId,
-    //       this.questionId,
-    //       this.answer,
-    //       this.revising ? this.currentTopic.id : 0
-    //     )
-    //     // If revising, increment count for this topic
-    //     if (this.revising) this.$store.commit('user/incrementTopic')
-    //   } catch (e) {
-    //     console.error(e)
-    //     this.$snack.showMessage({
-    //       msg: 'Error saving answer',
-    //       type: 'error',
-    //     })
-    //   } finally {
-    //     this.marking = true
-    //     this.loading = false
-    //     this.speaking = undefined
-    //     this.synth.cancel()
-    //     this.$snack.showMessage({
-    //       msg: 'Mark yourself',
-    //       type: '',
-    //     })
-    //   }
-    // },
+    // Kids don't save shit, so save automatically
+    // This also enabled document streaming teacher-side
+    async save() {
+      try {
+        this.saveStatus = `Saving...`
+        const url = new URL(
+          '/.netlify/functions/saveAnswer',
+          'http://localhost:8888'
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            assignmentId: this.$store.state.assignments.assignmentId,
+            questionId: this.$store.state.assignments.questionId,
+            text: this.answer,
+            topicId: this.$store.state.assignments.topicId,
+            responseId: this.responseId,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error saving answer ${response.status}`)
+        }
+        const docId = await response.json()
+        console.log(`Saved/updated response ${docId}`)
+        // Save response id to update just response text
+        this.responseId = docId
+        this.saveStatus = `Saved ✓`
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          msg: 'Error saving answer',
+          type: 'error',
+        })
+      }
+    },
     // Check if keyword used in answer
     used(word) {
       return this.parse(this.answer).split(' ').includes(word.toLowerCase())

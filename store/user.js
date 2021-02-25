@@ -31,24 +31,23 @@ export const actions = {
       })
       if (!response.ok) {
         throw new Error(`Error fetching user data ${response.status}`)
-      } else {
-        const userData = await response.json()
-        // For students we need to do some 'post processing'
-        // to put all the assignments into the right groups
-        if (!userData.teacher) {
-          for (const assignment of userData.assignments) {
-            for (const group of userData.groups) {
-              if (group.id === assignment.group) {
-                group.assignments.push(assignment)
-              }
+      }
+      const userData = await response.json()
+      // For students we need to do some 'post processing'
+      // to put all the assignments into the right groups
+      if (!userData.teacher) {
+        for (const assignment of userData.assignments) {
+          for (const group of userData.groups) {
+            if (group.id === assignment.group) {
+              group.assignments.push(assignment)
             }
           }
-          // Commit result to groups store
-          commit('groups/setGroups', userData.groups, { root: true })
         }
-        // Call mutation to commit data in *this* store
-        commit('setUser', userData)
+        // Commit result to groups store
+        commit('groups/setGroups', userData.groups, { root: true })
       }
+      // Commit rest of data in *this* store
+      commit('setUser', userData)
     } catch (e) {
       console.error(e)
     }
