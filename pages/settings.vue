@@ -9,7 +9,7 @@
               v-model="oldPw"
               type="password"
               label="Old password*"
-              :error-messages="oldErrMsg"
+              :error-messages="fieldError"
               required
               outlined
             ></v-text-field>
@@ -57,7 +57,7 @@ export default {
       oldPw: '',
       pass1: '',
       pass2: '',
-      oldErrMsg: [],
+      fieldError: [],
       passwordRules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 6) || 'Password must be at least 6 characters',
@@ -94,18 +94,15 @@ export default {
           if (!response.ok) {
             throw new Error(`Error updating password ${response.status}`)
           }
-          console(`Password changed!`)
           const data = await response.json()
-          console.dir(data)
-          // if (!res) {
-          //   this.oldErrMsg.push(`Old password incorrect`)
-          // } else {
-          //   this.$refs.form.reset()
-          //   this.$snack.showMessage({
-          //     msg: 'Success. Password updated',
-          //     type: 'success',
-          //   })
-          // }
+          if (!data) {
+            this.fieldError.push(`Old password incorrect`)
+          } else {
+            this.$snack.showMessage({
+              msg: 'Success. Password updated',
+              type: 'success',
+            })
+          }
         } catch (e) {
           console.error(e)
           this.$snack.showMessage({
