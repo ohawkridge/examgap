@@ -4,6 +4,7 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const assignmentId = data.assignmentId
+  console.log(`assignmentId was`, assignmentId)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
@@ -14,22 +15,26 @@ exports.handler = async (event, context, callback) => {
         instance: q.Get(q.Ref(q.Collection('Assignment'), assignmentId)), // Assignment
       },
       {
+        id: q.Select(['ref', 'id'], q.Var('instance')),
+        name: q.Select(['data', 'name'], q.Var('instance')),
+        start: q.Select(['data', 'start'], q.Var('instance'), 'N/A'),
+        dateDue: q.Select(['data', 'dateDue'], q.Var('instance')),
         headers: q.Prepend(
           { text: 'Username', align: 'start', value: 'name', tip: 'Username' },
           q.Map(
             q.Select(['data', 'questions'], q.Var('instance')),
             q.Lambda(
-              'qId',
+              'ref',
               q.Let(
                 {
                   instance: q.Get(
-                    q.Ref(q.Collection('Question'), q.Var('qId'))
-                  ), // A question
+                    q.Ref(q.Collection('Question'), q.Var('ref'))
+                  ), // Question
                 },
                 {
+                  value: q.ToString(q.Var('ref')),
                   text: q.Select(['data', 'text'], q.Var('instance')),
                   maxMark: q.Select(['data', 'maxMark'], q.Var('instance')),
-                  value: q.ToString(q.Var('qId')),
                   markScheme: q.Select(
                     ['data'],
                     q.Paginate(

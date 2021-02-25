@@ -6,17 +6,13 @@
         <GroupNav :group-id="group.id" />
       </v-col>
       <v-col cols="12" md="9">
-        <v-card class="mt-n8 mt-sm-0 pa-md-4">
-          <v-card-title
-            v-if="group.assignments"
-            class="d-flex justify-space-between align-center"
-          >
-            Assignment{{ group.assignments.length | pluralize }} ({{
-              group.assignments.length
+        <v-card class="mt-n6 mt-sm-0 pa-md-4">
+          <v-card-title class="d-flex justify-space-between">
+            Assignment{{ assignments.length | pluralize }} ({{
+              assignments.length
             }})
-            <v-btn outlined color="primary" @click="createAssignment()">
+            <v-btn elevation="0" color="primary" @click="createAssignment()">
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              <!-- Shorten button on mobile -->
               {{
                 $vuetify.breakpoint.name == 'xs'
                   ? 'Create'
@@ -26,40 +22,41 @@
           </v-card-title>
           <v-card-text>
             <v-list>
-              <v-list-item
-                v-for="(assignment, i) in assignments"
-                :key="i"
-                nuxt
-                :to="`/report/${assignment.id}`"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{ assignment.name }}</v-list-item-title>
-                  <v-list-item-subtitle>
-                    Due {{ assignment.dateDue | date }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-menu offset-y>
-                    <template #activator="{ on }">
-                      <v-btn
-                        icon
-                        v-on="on"
-                        @click.prevent
-                        @mousedown.stop
-                        @touchstart.native.stop
-                      >
-                        <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <!-- <EgDeleteAssignment
-                        :assignment-id="assignment.id"
-                        :group-id="group.id"
-                      /> -->
-                    </v-list>
-                  </v-menu>
-                </v-list-item-action>
-              </v-list-item>
+              <template v-for="(assignment, i) in assignments">
+                <v-list-item :key="i" nuxt :to="`/report/${assignment.id}`">
+                  <v-list-item-content>
+                    <v-list-item-title>{{ assignment.name }}</v-list-item-title>
+                    <v-list-item-subtitle>
+                      Due {{ assignment.dateDue | date }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-menu offset-y>
+                      <template #activator="{ on }">
+                        <v-btn
+                          icon
+                          v-on="on"
+                          @click.prevent
+                          @mousedown.stop
+                          @touchstart.native.stop
+                        >
+                          <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <DeleteAssignment
+                          :assignment-id="assignment.id"
+                          :group-id="group.id"
+                        />
+                      </v-list>
+                    </v-menu>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-divider
+                  v-if="i < assignments.length - 1"
+                  :key="assignment.id"
+                />
+              </template>
               <v-list-item v-if="assignments.length === 0">
                 <v-list-item-icon>
                   {{ $icons.mdiInformationOutline }}
@@ -79,14 +76,14 @@
 <script>
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
-// import EgDeleteAssignment from "@/components/EgDeleteAssignment";
+import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import { mdiDotsVertical, mdiInformationOutline, mdiPlus } from '@mdi/js'
 
 export default {
   components: {
     GroupNav,
     GroupHeader,
-    // EgDeleteAssignment,
+    DeleteAssignment,
   },
   layout: 'app',
   async asyncData({ store, params }) {
@@ -109,12 +106,12 @@ export default {
   },
   head() {
     return {
-      title: this.group ? this.group.name : 'Group',
+      title: this.group.name,
     }
   },
   computed: {
     group() {
-      return this.$store.getters['groups/groupById'](this.$route.params.group)
+      return this.$store.state.groups.group
     },
   },
   created() {

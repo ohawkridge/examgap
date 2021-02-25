@@ -1,5 +1,5 @@
 <template>
-  <v-card class="bordered" hover nuxt :to="`/group/${group.id}`">
+  <v-card class="bordered" hover @click="open(group.id)">
     <v-card-title>
       {{ group.name }}
     </v-card-title>
@@ -10,6 +10,7 @@
       <v-chip small label outlined color="primary">
         {{ group.num_students }} student{{ group.num_students | pluralize }}
       </v-chip>
+      <!-- TODO -->
       <!-- <v-alert
         v-if="group.num_students === 0"
         text
@@ -42,18 +43,6 @@
         </v-list-item>
       </v-list> -->
     </v-card-text>
-    <!-- <v-card-actions>
-      <v-btn
-        text
-        block
-        color="primary"
-        elevation="0"
-        @click="createAssign(group)"
-      >
-        <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-        Create assignment
-      </v-btn>
-    </v-card-actions> -->
   </v-card>
 </template>
 
@@ -76,10 +65,11 @@ export default {
     }
   },
   methods: {
-    createAssign(group) {
-      // Store group id for when assignment is actually created
-      this.$store.commit('user/setGroup', group.id)
-      this.$router.push(`/course/${group.course.id}`)
+    // Remember group so, for example, on _report.vue
+    // we don't have to re-fetch the group's info
+    open(id) {
+      this.$store.commit('groups/setGroup', this.group)
+      this.$router.push(`/group/${this.group.id}`)
     },
   },
 }

@@ -1,28 +1,18 @@
 export const state = () => ({
   groups: [],
+  group: {},
   activeGroupIndex: 0,
 })
 
 export const getters = {
-  activeGroups: (state) => (active = true) =>
-    state.groups.filter((group) => group.active === active),
+  activeGroups: (state) => (active = true) => {
+    return state.groups.filter((group) => group.active === active)
+  },
   activeGroup: (state) => {
     return state.groups[state.activeGroupIndex]
   },
   groupById: (state) => (id) => {
     return state.groups.find((group) => group.id === id)
-  },
-  groupByAssignmentId: (state) => (assignmentId) => {
-    // Prevent error when groups is reset on logout
-    if (state.groups) {
-      for (const group of state.user.groups) {
-        for (const assignment of group.assignments) {
-          if (assignment.id === assignmentId) {
-            return group
-          }
-        }
-      }
-    }
   },
 }
 
@@ -52,6 +42,10 @@ export const actions = {
 export const mutations = {
   setGroups(state, groups) {
     state.groups = groups
+  },
+  // Remember !! This means create assignment will receive a group object
+  setGroup(state, group) {
+    state.group = group
   },
   logout(state) {
     state.groups = []

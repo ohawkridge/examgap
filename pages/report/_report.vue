@@ -1,93 +1,88 @@
 <template>
   <div>
-    <GroupHeader v-if="group" :group="group" />
+    <GroupHeader :group="group" />
     <v-row>
       <v-col cols="12" md="3">
-        <GroupNav v-if="group" :group-id="group.id" />
+        <GroupNav :group-id="group.id" />
       </v-col>
       <v-col cols="12" md="9">
         <!-- n8 accounts for hidden bottom-nav -->
-        <v-card class="mt-n8 mt-sm-0">
+        <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
-            {{ assignment.name }}
-            <div>
-              <!-- TODO -->
-              <!-- <EgDeleteAssignment
-                v-if="group"
-                :assignment-id="assignment.id"
-                :group-id="group.id"
-                type="btn"
-              /> -->
-            </div>
+            {{ data.name }}
           </v-card-title>
-          <v-card-subtitle v-if="!$fetchState.pending" class="text-subtitle-1">
-            <v-icon class="pb-1">{{ $icons.mdiCalendarRangeOutline }}</v-icon>
-            {{ assignment.start | date }}
-            <v-icon small class="pb-1">{{ $icons.mdiArrowRight }}</v-icon>
-            {{ assignment.dateDue | date }}
-          </v-card-subtitle>
           <v-card-text>
             <v-row>
+              <v-col class="d-flex justify-space-between">
+                <DeleteAssignment
+                  v-if="group"
+                  :assignment-id="data.id"
+                  :group-id="group.id"
+                  type="btn"
+                />
+                <v-chip color="primary" outlined label>
+                  Due {{ data.dateDue | date }}
+                </v-chip>
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col id="table" cols="12">
-                <v-skeleton-loader :loading="$fetchState.pending" type="table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th
-                          v-for="(q, i) in data.headers"
-                          :key="i"
-                          :class="i === 0 ? 'left' : ''"
-                        >
-                          <span v-if="i === 0">Username</span>
-                          <v-menu v-else offset-x open-on-hover>
-                            <template #activator="{ on, attrs }">
-                              <span v-bind="attrs" v-on="on">{{
-                                `Q${i} [${q.maxMark}]`
-                              }}</span>
-                            </template>
-                            <v-card max-width="460">
-                              <v-card-text class="text-body-2">
-                                <div v-html="data.headers[i].text"></div>
-                                <div class="font-weight-bold text-right">
-                                  [{{ q.maxMark }}]
-                                </div>
-                              </v-card-text>
-                            </v-card>
-                          </v-menu>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(student, i) in data.students" :key="i">
-                        <td>
-                          {{ student.name }}
-                        </td>
-                        <td
-                          v-for="(item, j) in student.data"
-                          :key="j"
-                          class="text-center"
-                        >
-                          <!-- TODO -->
-                          <!-- <EgMarkChip
-                            :student-index="i"
-                            :question-index="j"
-                            :data="item"
-                            @clicked="mark"
-                          /> -->
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </v-skeleton-loader>
+                <table>
+                  <thead>
+                    <tr>
+                      <th
+                        v-for="(q, i) in data.headers"
+                        :key="i"
+                        :class="i === 0 ? 'left' : ''"
+                      >
+                        <span v-if="i === 0">Username</span>
+                        <v-menu v-else offset-x open-on-hover>
+                          <template #activator="{ on, attrs }">
+                            <span v-bind="attrs" v-on="on">{{
+                              `Q${i} [${q.maxMark}]`
+                            }}</span>
+                          </template>
+                          <v-card max-width="460">
+                            <v-card-text class="text-body-2">
+                              <div v-html="data.headers[i].text"></div>
+                              <div class="font-weight-bold text-right">
+                                [{{ q.maxMark }}]
+                              </div>
+                            </v-card-text>
+                          </v-card>
+                        </v-menu>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(student, i) in data.students" :key="i">
+                      <td>
+                        {{ student.name }}
+                      </td>
+                      <td
+                        v-for="(item, j) in student.data"
+                        :key="j"
+                        class="text-center"
+                      >
+                        <MarkChip
+                          :student-index="i"
+                          :question-index="j"
+                          :data="item"
+                          @clicked="mark"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </v-col>
             </v-row>
             <v-row>
               <v-col class="d-flex justify-end">
                 <span class="mr-2"> N/A&mdash;Not answered </span>
                 <v-icon>{{ $icons.mdiCheck }}</v-icon>
-                <span class="mr-2"> &mdash;Self marked </span>
+                <span class="mr-2"> &mdash;Self-marked </span>
                 <v-icon>{{ $icons.mdiCheckAll }}</v-icon>
-                &mdash;Teacher marked
+                &mdash;Teacher-marked
               </v-col>
             </v-row>
           </v-card-text>
@@ -277,16 +272,17 @@ import {
   mdiCommentTextOutline,
 } from '@mdi/js'
 import { debounce, cloneDeep } from 'lodash'
+import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import GroupNav from '@/components/teacher/GroupNav'
-// import MarkChip from '@/components/MarkChip'
+import MarkChip from '@/components/teacher/MarkChip'
 
 export default {
   components: {
-    // EgDeleteAssignment,
+    DeleteAssignment,
     GroupHeader,
     GroupNav,
-    // EgMarkChip,
+    MarkChip,
   },
   layout: 'app',
   async asyncData({ store, params }) {
@@ -297,7 +293,7 @@ export default {
     const response = await fetch(url, {
       body: JSON.stringify({
         secret: store.state.user.secret,
-        questionId: params.report,
+        assignmentId: params.report,
       }),
       method: 'POST',
     })
@@ -321,34 +317,18 @@ export default {
       unsorted: [],
     }
   },
-  // async fetch() {
-  //   this.data = await getAssignmentDetail(this.$route.params.assignment)
-  // },
   head() {
     return {
-      // Title undefined if assignment is deleted
-      title:
-        this.$fetchState.pending || !this.assignment.name
-          ? 'Loading...'
-          : this.assignment.name,
+      title: this.data ? this.data.name : '',
     }
   },
   computed: {
     // Question is included in header data (for hover preview)
     question() {
-      return this.$fetchState.pending
-        ? {}
-        : this.data.headers[this.questionIndex + 1]
+      return this.data.headers[this.questionIndex + 1]
     },
     group() {
-      return this.$store.getters['user/groupByAssignmentId'](
-        this.$route.params.assignment
-      )
-    },
-    assignment() {
-      return this.$store.getters['user/assignmentById'](
-        this.$route.params.assignment
-      )
+      return this.$store.state.groups.group
     },
     response() {
       // data is the object we get back from getAssignmentDetails
@@ -365,7 +345,7 @@ export default {
       // the database will return responses in the same order
       // This finally gives you an array of objects where each
       // object is one complete student response including marks
-      if (!this.$fetchState.pending && this.marking) {
+      if (this.marking) {
         return this.data.students[this.studentIndex].data[this.questionIndex][
           this.data.headers[this.questionIndex + 1].value
         ][this.responseIndex]
@@ -431,6 +411,8 @@ export default {
       this.bank = [...new Set(bank)] // Remove dupes
     },
     mark(obj) {
+      console.log(`MARKING...(obj?)`)
+      console.dir(obj)
       // Index into student responses data structure
       this.studentIndex = obj.studentIndex
       this.questionIndex = obj.questionIndex
@@ -602,9 +584,10 @@ export default {
 </script>
 
 <style scoped>
-#table {
+/* TODO Weird artifact */
+/* #table {
   overflow-x: scroll;
-}
+} */
 
 table {
   border-collapse: collapse;
@@ -617,6 +600,7 @@ th {
   padding: 12px;
 }
 
+/* no border on last row */
 tr:last-child > td {
   border-bottom: none;
 }
