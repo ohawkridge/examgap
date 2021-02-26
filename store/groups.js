@@ -2,6 +2,7 @@ export const state = () => ({
   groups: [],
   group: {},
   activeGroupIndex: 0,
+  revisionTopics: [],
 })
 
 export const getters = {
@@ -17,22 +18,26 @@ export const getters = {
 }
 
 export const actions = {
-  async getGroups({ commit, rootState }) {
+  // Get student revision topics
+  async getRevisionTopics({ commit, state }, courseId) {
     try {
-      // TODO Use environment variable
-      const response = await fetch('/.netlify/functions/getGroups', {
+      const url = new URL(
+        '/.netlify/functions/getTopics',
+        'http://localhost:8888'
+      )
+      const response = await fetch(url, {
         body: JSON.stringify({
-          secret: rootState.user.secret,
+          secret: state.secret,
+          courseId,
         }),
         method: 'POST',
       })
       if (!response.ok) {
-        throw new Error(`Error fetching groups ${response.status}`)
-      } else {
-        // Call mutation to update state
-        const groups = await response.json()
-        commit('setGroups', groups.groups)
+        throw new Error(`Error fetching revision topics ${response.status}`)
       }
+      const data = await response.json()
+      console.dir(data)
+      commit('setRevisionTopics', data)
     } catch (e) {
       console.error(e)
     }
@@ -43,7 +48,6 @@ export const mutations = {
   setGroups(state, groups) {
     state.groups = groups
   },
-  // Remember !! This means create assignment will receive a group object
   setGroup(state, group) {
     state.group = group
   },
@@ -54,9 +58,13 @@ export const mutations = {
       }
     }
   },
+  setRevisionTopics(state, topics) {
+    state.topics = topics
+  },
   logout(state) {
     state.groups = []
     state.group = {}
     state.activeGroupIndex = 0
+    state.revisionTopics = []
   },
 }

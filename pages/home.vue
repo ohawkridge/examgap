@@ -41,7 +41,42 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="5">
-        <Quote />
+        <v-row>
+          <v-col cols="12">
+            <Quote />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <div>
+              <v-btn text @click="$fetch">Fetch</v-btn>
+            </div>
+            <v-card>
+              <v-card-title> Revise {{ group.course.name }} </v-card-title>
+              <v-card-text>
+                <v-list>
+                  <v-list-item
+                    v-for="(topic, i) in topics"
+                    :key="i"
+                    :title="`Revise ${topic.name}`"
+                    class="rev-item"
+                    :disabled="topic.count === 0"
+                    @click="revise(topic)"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>{{ topic.name }}</v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-chip :color="topic.answered > 0 ? 'green-chip' : ''">{{
+                        topic.answered
+                      }}</v-chip>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
@@ -62,13 +97,14 @@ export default {
     Quote,
   },
   layout: 'app',
-  // Call fetch (must be at page level) to dispatch
-  // a store action to get all data for the page
-  // Only needed for teachers (student groups are
-  // part of getUser.js data structure
   async fetch() {
-    if (this.teacher) {
-      await this.$store.dispatch('groups/getGroups')
+    // For students, fetch revision topics to store
+    if (!this.teacher) {
+      console.log(`getRevisionTopics...`)
+      await this.$store.dispatch(
+        'groups/getRevisionTopics',
+        this.group.course.id
+      )
     }
   },
   head() {
@@ -80,6 +116,7 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
       assignments: (state) => state.assignments.assignments,
+      topics: (state) => state.groups.revisionTopics,
     }),
     // For students, just get the active group
     ...mapGetters({
@@ -99,6 +136,14 @@ export default {
       },
     },
   },
+  watch: {
+    // Update topics if class is changed (except on logout)
+    group() {
+      if (Object.entries(this.user).length > 0) {
+        this.$fetch()
+      }
+    },
+  },
   created() {
     this.$icons = { mdiPlus }
   },
@@ -109,3 +154,11 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* style student revision counts */
+span.v-chip.theme--light.green-chip {
+  background-color: rgb(201, 237, 194) !important;
+  color: rgb(18, 39, 14) !important;
+}
+</style>

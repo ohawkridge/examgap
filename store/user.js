@@ -43,10 +43,10 @@ export const actions = {
             }
           }
         }
-        // Commit result to groups store
-        commit('groups/setGroups', userData.groups, { root: true })
       }
-      // Commit rest of data in *this* store
+      // Commit group data to the groups store
+      commit('groups/setGroups', userData.groups, { root: true })
+      // Commit the rest to this store
       commit('setUser', userData)
     } catch (e) {
       console.error(e)
@@ -59,15 +59,14 @@ export const mutations = {
     state.secret = secret
   },
   setUser(state, data) {
-    // Merge common properties into store
+    // Store common properties
     state.id = data.id
     state.username = data.username
     state.subscriptionExpires = data.subscriptionExpires
     state.teacher = data.teacher
-    // Teacher-specific properties
+    // Store user-specific properties
     if (data.teacher) {
       state.school = data.school
-      // Student-specific properties
     } else {
       state.examMode = data.examMode
       state.quote = data.quote.text
@@ -76,7 +75,6 @@ export const mutations = {
   // N.B. Clearing localStorage isn't enough
   // Vue will still live in memory
   logout(state) {
-    console.log(`Logging you out...`)
     state.id = ''
     state.username = ''
     state.secret = ''

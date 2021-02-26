@@ -38,98 +38,98 @@ exports.handler = async (event, context, callback) => {
               ['data', 'subscriptionExpires'],
               q.Var('instance')
             ),
-            // groups: q.Select(
-            //   ['data'],
-            //   q.Map(
-            //     q.Paginate(
-            //       q.Match(
-            //         q.Index('teacher_groups_2'),
-            //         q.Select(['ref'], q.Var('instance'))
-            //       )
-            //     ),
-            //     q.Lambda(
-            //       'ref',
-            //       q.Let(
-            //         {
-            //           instance: q.Get(q.Var('ref')), // A group
-            //         },
-            //         {
-            //           id: q.Select(['id'], q.Var('ref')),
-            //           name: q.Select(['data', 'name'], q.Var('instance')),
-            //           active: q.Select(['data', 'active'], q.Var('instance')),
-            //           num_students: q.Count(
-            //             q.Match(
-            //               q.Index('group_students'),
-            //               q.Select('ref', q.Var('instance'))
-            //             )
-            //           ),
-            //           course: q.Let(
-            //             {
-            //               instance: q.Get(
-            //                 q.Select(['data', 'course'], q.Var('instance'))
-            //               ),
-            //             },
-            //             {
-            //               id: q.Select(['ref', 'id'], q.Var('instance')),
-            //               name: q.Select(['data', 'name'], q.Var('instance')),
-            //               board: q.Select(['data', 'board'], q.Var('instance')),
-            //               qan: q.Select(['data', 'qan'], q.Var('instance')),
-            //               colour: q.Select(
-            //                 ['data', 'colour'],
-            //                 q.Var('instance')
-            //               ),
-            //               boundaries: q.Select(
-            //                 ['data', 'boundaries'],
-            //                 q.Var('instance'),
-            //                 {}
-            //               ),
-            //             }
-            //           ),
-            //           assignments: q.Select(
-            //             'data',
-            //             q.Reverse(
-            //               q.Map(
-            //                 q.Paginate(
-            //                   q.Match(
-            //                     q.Index('group_assignments'),
-            //                     q.Var('ref')
-            //                   )
-            //                 ),
-            //                 q.Lambda(
-            //                   'aRef',
-            //                   q.Let(
-            //                     {
-            //                       instance: q.Get(q.Var('aRef')), // Assignment
-            //                     },
-            //                     {
-            //                       id: q.Select(
-            //                         ['ref', 'id'],
-            //                         q.Var('instance')
-            //                       ),
-            //                       name: q.Select(
-            //                         ['data', 'name'],
-            //                         q.Var('instance')
-            //                       ),
-            //                       start: q.Select(
-            //                         ['data', 'start'],
-            //                         q.Var('instance'),
-            //                         'N/A'
-            //                       ),
-            //                       dateDue: q.Select(
-            //                         ['data', 'dateDue'],
-            //                         q.Var('instance')
-            //                       ),
-            //                     }
-            //                   )
-            //                 )
-            //               )
-            //             )
-            //           ),
-            //         }
-            //       )
-            //     )
-            //   )
-            // ),
+            groups: q.Select(
+              ['data'],
+              q.Map(
+                q.Paginate(
+                  q.Match(
+                    q.Index('teacher_groups_2'),
+                    q.Select(['ref'], q.Var('instance'))
+                  )
+                ),
+                q.Lambda(
+                  'ref',
+                  q.Let(
+                    {
+                      instance: q.Get(q.Var('ref')), // A group
+                    },
+                    {
+                      id: q.Select(['id'], q.Var('ref')),
+                      name: q.Select(['data', 'name'], q.Var('instance')),
+                      active: q.Select(['data', 'active'], q.Var('instance')),
+                      num_students: q.Count(
+                        q.Match(
+                          q.Index('group_students'),
+                          q.Select('ref', q.Var('instance'))
+                        )
+                      ),
+                      course: q.Let(
+                        {
+                          instance: q.Get(
+                            q.Select(['data', 'course'], q.Var('instance'))
+                          ),
+                        },
+                        {
+                          id: q.Select(['ref', 'id'], q.Var('instance')),
+                          name: q.Select(['data', 'name'], q.Var('instance')),
+                          board: q.Select(['data', 'board'], q.Var('instance')),
+                          qan: q.Select(['data', 'qan'], q.Var('instance')),
+                          colour: q.Select(
+                            ['data', 'colour'],
+                            q.Var('instance')
+                          ),
+                          boundaries: q.Select(
+                            ['data', 'boundaries'],
+                            q.Var('instance'),
+                            {}
+                          ),
+                        }
+                      ),
+                      assignments: q.Select(
+                        'data',
+                        q.Reverse(
+                          q.Map(
+                            q.Paginate(
+                              q.Match(
+                                q.Index('group_assignments'),
+                                q.Var('ref')
+                              )
+                            ),
+                            q.Lambda(
+                              'ref',
+                              q.Let(
+                                {
+                                  instance: q.Get(q.Var('ref')), // Assignment
+                                },
+                                {
+                                  id: q.Select(
+                                    ['ref', 'id'],
+                                    q.Var('instance')
+                                  ),
+                                  name: q.Select(
+                                    ['data', 'name'],
+                                    q.Var('instance')
+                                  ),
+                                  start: q.Select(
+                                    ['data', 'start'],
+                                    q.Var('instance'),
+                                    'N/A'
+                                  ),
+                                  dateDue: q.Select(
+                                    ['data', 'dateDue'],
+                                    q.Var('instance')
+                                  ),
+                                }
+                              )
+                            )
+                          )
+                        )
+                      ),
+                    }
+                  )
+                )
+              )
+            ),
           }
         ),
         // If Student
@@ -222,10 +222,10 @@ exports.handler = async (event, context, callback) => {
                     )
                   ),
                   q.Lambda(
-                    'aRef',
+                    'ref',
                     q.Let(
                       {
-                        instance: q.Get(q.Var('aRef')), // Assignment
+                        instance: q.Get(q.Var('ref')), // Assignment
                       },
                       {
                         id: q.Select(['ref', 'id'], q.Var('instance')),
