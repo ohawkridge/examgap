@@ -48,33 +48,35 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <div>
-              <v-btn text @click="$fetch">Fetch</v-btn>
-            </div>
-            <v-card>
-              <v-card-title> Revise {{ group.course.name }} </v-card-title>
-              <v-card-text>
-                <v-list>
-                  <v-list-item
-                    v-for="(topic, i) in topics"
-                    :key="i"
-                    :title="`Revise ${topic.name}`"
-                    class="rev-item"
-                    :disabled="topic.count === 0"
-                    @click="revise(topic)"
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title>{{ topic.name }}</v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-chip :color="topic.answered > 0 ? 'green-chip' : ''">{{
-                        topic.answered
-                      }}</v-chip>
-                    </v-list-item-action>
-                  </v-list-item>
-                </v-list>
-              </v-card-text>
-            </v-card>
+            <v-skeleton-loader :loading="$fetchState.pending" type="card">
+              <v-card>
+                <v-card-title>
+                  Revision topics ({{ topics.length }})
+                </v-card-title>
+                <v-card-text>
+                  <v-list>
+                    <v-list-item
+                      v-for="(topic, i) in topics"
+                      :key="i"
+                      :title="`Revise ${topic.name}`"
+                      class="rev-item"
+                      :disabled="topic.count === 0"
+                      @click="revise(topic)"
+                    >
+                      <v-list-item-content>
+                        <v-list-item-title>{{ topic.name }}</v-list-item-title>
+                      </v-list-item-content>
+                      <v-list-item-action>
+                        <v-chip
+                          :color="topic.answered > 0 ? 'green-chip' : ''"
+                          >{{ topic.answered }}</v-chip
+                        >
+                      </v-list-item-action>
+                    </v-list-item>
+                  </v-list>
+                </v-card-text>
+              </v-card>
+            </v-skeleton-loader>
           </v-col>
         </v-row>
       </v-col>
@@ -97,14 +99,20 @@ export default {
     Quote,
   },
   layout: 'app',
+  data() {
+    return {
+      forceFetch: false,
+    }
+  },
   async fetch() {
     // For students, fetch revision topics to store
-    if (!this.teacher) {
-      console.log(`getRevisionTopics...`)
+    // (if not stored already)
+    if (this.forceFetch || (!this.teacher && this.topics.length === 0)) {
       await this.$store.dispatch(
         'groups/getRevisionTopics',
         this.group.course.id
       )
+      this.forceFetch = false
     }
   },
   head() {
@@ -137,9 +145,11 @@ export default {
     },
   },
   watch: {
-    // Update topics if class is changed (except on logout)
+    // Update revision topics if class is changed
+    // (Except if currently logging out)
     group() {
-      if (Object.entries(this.user).length > 0) {
+      if (Object.entries(this.group).length > 0) {
+        this.forceFetch = true
         this.$fetch()
       }
     },
