@@ -72,6 +72,9 @@ export const mutations = {
       state.quote = data.quote.text
     }
   },
+  setRevisionExamMode(state, val) {
+    state.reviseExamMode = val
+  },
   // N.B. Clearing localStorage isn't enough
   // Vue will still live in memory
   logout(state) {

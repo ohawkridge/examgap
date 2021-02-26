@@ -81,15 +81,16 @@
         </v-row>
       </v-col>
     </v-row>
+    <RevisionDialog v-if="!teacher" />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import EventBus from '@/plugins/eventBus.client'
 import GroupCard from '@/components/teacher/GroupCard'
-import Assignments from '@/components/student/assignments'
-import Quote from '@/components/student/quote'
+import Assignments from '@/components/student/Assignments'
+import RevisionDialog from '@/components/student/RevisionDialog'
+import Quote from '@/components/student/Quote'
 import { mdiPlus } from '@mdi/js'
 
 export default {
@@ -97,6 +98,7 @@ export default {
     GroupCard,
     Assignments,
     Quote,
+    RevisionDialog,
   },
   layout: 'app',
   data() {
@@ -137,10 +139,10 @@ export default {
     // Remember which tab is active
     tab: {
       get() {
-        return this.$store.state.app.tab
+        return this.$store.state.groups.tab
       },
       set(value) {
-        this.$store.commit('app/setTab', value)
+        this.$store.commit('groups/setTab', value)
       },
     },
   },
@@ -148,7 +150,7 @@ export default {
     // Update revision topics if class is changed
     // (Except if currently logging out)
     group() {
-      if (Object.entries(this.group).length > 0) {
+      if (this.group !== undefined && Object.entries(this.group).length > 0) {
         this.forceFetch = true
         this.$fetch()
       }
@@ -158,8 +160,16 @@ export default {
     this.$icons = { mdiPlus }
   },
   methods: {
+    // Remember topic being revised
+    revise(topic) {
+      this.$store.commit('groups/setCurrentRevisionTopic', topic)
+      // Event bus using Nuxt
+      // https://aneesshameed.medium.com/event-bus-in-nuxt-7728315e81b6
+      this.$nuxt.$emit('show-revise')
+    },
+    // Trigger event to show create class dialog
     emitNew() {
-      EventBus.$emit('new-class')
+      this.$bus.$emit('show-create')
     },
   },
 }

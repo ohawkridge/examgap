@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import Question from '@/components/student/question'
+import Question from '@/components/student/Question'
 import { mdiArrowLeft } from '@mdi/js'
 
 export default {

@@ -23,7 +23,7 @@
           </template>
           <v-list>
             <v-list-item
-              v-for="(group, i) in groups"
+              v-for="(group, i) in activeGroups"
               :key="i"
               @click="nav(i, group.id)"
             >
@@ -31,7 +31,7 @@
                 <v-list-item-title>{{ group.name }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item v-if="groups && groups.length === 0" disabled>
+            <v-list-item v-if="activeGroups.length === 0" disabled>
               <v-list-item-content>
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
@@ -109,13 +109,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Logo from '@/components/common/Logo'
 import Snackbar from '@/components/common/Snackbar'
 import AppFooter from '@/components/common/AppFooter'
 // import EgSuccessDialog from '@/components/EgSuccessDialog'
 // import EgCreateClass from '@/components/EgCreateClass'
-import EventBus from '@/plugins/eventBus.client'
 import {
   mdiPlus,
   mdiAccountCircleOutline,
@@ -143,12 +142,7 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
     }),
-    // TODO Move this logic into store
-    groups() {
-      return this.teacher
-        ? this.$store.getters['groups/activeGroups'](this.tab)
-        : this.$store.state.groups.groups
-    },
+    ...mapGetters({ activeGroups: 'groups/activeGroups' }),
   },
   created() {
     this.$icons = {
@@ -158,6 +152,7 @@ export default {
       mdiOpenInNew,
     }
   },
+  // TODO
   // async mounted() {
   //   this.keyedClient = await createClient(localStorage.getItem('secret'))
   //   // For students, open a document stream
@@ -196,25 +191,26 @@ export default {
   // },
   methods: {
     createClass() {
-      EventBus.$emit('new-class')
+      // EventBus.$emit('new-class')
     },
     // Students and teachers have the same 'Classes' menu
-    // For teachers, we go to _group.vue
-    // For students, we change the activeGroupIndex store property
+    // so we need to customise how menu items links behave
+    // For students, we navigate by changing the
+    // activeGroupIndex store property
     nav(i, id) {
-      if (this.user.teacher) {
+      if (this.teacher) {
         this.$router.push(`/group/${id}`)
       } else {
-        this.$store.commit('user/setActiveGroupIndex', i)
-        this.$router.push(`/student/home`)
+        this.$store.commit('groups/setActiveGroupIndex', i)
+        this.$router.push(`/home`)
       }
     },
     logout() {
       this.$router.push('/')
-      localStorage.removeItem('examgap')
-      this.$store.commit('groups/logout')
       this.$store.commit('assignments/logout')
+      this.$store.commit('groups/logout')
       this.$store.commit('user/logout')
+      localStorage.removeItem('examgap')
     },
   },
 }

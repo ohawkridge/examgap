@@ -26,11 +26,10 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '@/plugins/filters.client.js' },
-    { src: '@/plugins/eventBus.client.js' },
-    { src: '@/plugins/snack.client.js' },
-    { src: '@/plugins/localStorage.client.js' },
-    { src: '@/plugins/tiptapVuetify.client.js' },
+    { src: '@/plugins/filters.js' },
+    { src: '@/plugins/snack.js' },
+    { src: '@/plugins/localStorage.js', mode: 'client' },
+    { src: '@/plugins/tiptapVuetify.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

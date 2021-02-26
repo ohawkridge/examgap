@@ -1,8 +1,10 @@
 export const state = () => ({
   groups: [],
+  tab: true,
   group: {},
   activeGroupIndex: 0,
   revisionTopics: [],
+  currentRevisionTopic: {},
 })
 
 export const getters = {
@@ -19,7 +21,7 @@ export const getters = {
 
 export const actions = {
   // Get student revision topics
-  async getRevisionTopics({ commit, state }, courseId) {
+  async getRevisionTopics({ commit, rootState }, courseId) {
     try {
       const url = new URL(
         '/.netlify/functions/getTopics',
@@ -27,7 +29,7 @@ export const actions = {
       )
       const response = await fetch(url, {
         body: JSON.stringify({
-          secret: state.secret,
+          secret: rootState.user.secret,
           courseId,
         }),
         method: 'POST',
@@ -36,7 +38,6 @@ export const actions = {
         throw new Error(`Error fetching revision topics ${response.status}`)
       }
       const data = await response.json()
-      console.dir(data)
       commit('setRevisionTopics', data)
     } catch (e) {
       console.error(e)
@@ -47,6 +48,9 @@ export const actions = {
 export const mutations = {
   setGroups(state, groups) {
     state.groups = groups
+  },
+  setTab(state, val) {
+    state.tab = val
   },
   setGroup(state, group) {
     state.group = group
@@ -59,12 +63,19 @@ export const mutations = {
     }
   },
   setRevisionTopics(state, topics) {
-    state.topics = topics
+    state.revisionTopics = topics
+  },
+  setCurrentRevisionTopic(state, topic) {
+    state.currentRevisionTopic = topic
+  },
+  setActiveGroupIndex(state, i) {
+    state.activeGroupIndex = i
   },
   logout(state) {
     state.groups = []
     state.group = {}
     state.activeGroupIndex = 0
     state.revisionTopics = []
+    state.currentRevisionTopic = {}
   },
 }
