@@ -71,6 +71,13 @@ export const mutations = {
   setActiveGroupIndex(state, i) {
     state.activeGroupIndex = i
   },
+  incrementTopicCount(state) {
+    for (let i = 0; i < state.revisionTopics.length; i++) {
+      if (state.revisionTopics[i].id === state.currentRevisionTopic.id) {
+        state.revisionTopics[i].answered += 1
+      }
+    }
+  },
   logout(state) {
     state.groups = []
     state.group = {}

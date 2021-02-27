@@ -69,7 +69,7 @@
         </v-card-text>
       </v-card>
       <!-- Marking dialog -->
-      <v-card v-if="marking">
+      <v-card v-if="marking" class="pa-md-4">
         <v-card-title> Self-marking </v-card-title>
         <v-card-text>
           <v-row>
@@ -87,9 +87,11 @@
               </v-checkbox>
               <p class="font-weight-bold">Max. {{ question.maxMark }}</p>
               <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
-              <p>
-                {{ question.guidance ? question.guidance : 'None' }}
-              </p>
+              <div
+                v-if="question.guidance !== ''"
+                v-html="question.guidance"
+              ></div>
+              <p v-else>None</p>
               <div class="d-flex justify-end">
                 <v-btn color="primary" elevation="0" @click="done()">
                   Finish
@@ -115,10 +117,12 @@ export default {
     this.synth.cancel()
     // Warn if not self-marked yet
     if (!this.marking) {
-      if (alert(`Really leave without self-marking?`)) {
+      if (confirm(`Really leave without self-marking?`)) {
+        this.marking = false
         next()
       }
     } else {
+      this.marking = false
       next()
     }
   },
@@ -252,6 +256,8 @@ export default {
       }
     },
     done() {
+      // Increment count of questions answered
+      this.$store.commit('groups/incrementTopicCount')
       // If revising go home, otherwise go back to assignment
       this.$router.push(
         this.revising ? `/home` : `/assignment/${this.assignmentId}`
