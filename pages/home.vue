@@ -94,6 +94,7 @@ import Quote from '@/components/student/Quote'
 import { mdiPlus } from '@mdi/js'
 
 export default {
+  name: 'Home',
   components: {
     GroupCard,
     Assignments,

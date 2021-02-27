@@ -114,7 +114,6 @@ export default {
           throw new Error(`Error getting random question ${response.status}`)
         }
         const questionId = await response.json()
-        console.log(`Here's your id`, questionId)
         if (questionId !== '') {
           this.$store.commit('assignments/setAnswerData', {
             assignmentId: 0,

@@ -1,7 +1,7 @@
 <template>
   <v-row class="justify-center mt-md-3">
     <v-col cols="12" md="10">
-      <v-card class="pa-md-4">
+      <v-card v-if="!marking" class="pa-md-4">
         <v-card-title class="d-flex justify-space-between">
           Question
           <v-tooltip bottom>
@@ -60,13 +60,7 @@
               </v-progress-circular>
             </v-col>
             <v-col cols="12" class="d-flex justify-end">
-              <v-btn
-                color="primary"
-                :loading="loading"
-                :disabled="loading"
-                elevation="0"
-                @click="save()"
-              >
+              <v-btn color="primary" elevation="0" @click="marking = true">
                 <v-icon left>{{ $icons.mdiCheckboxMarkedOutline }}</v-icon>
                 Self-mark
               </v-btn>
@@ -75,8 +69,8 @@
         </v-card-text>
       </v-card>
       <!-- Marking dialog -->
-      <!-- <v-card v-if="marking">
-        <v-card-title> Marking </v-card-title>
+      <v-card v-if="marking">
+        <v-card-title> Self-marking </v-card-title>
         <v-card-text>
           <v-row>
             <v-col cols="12">
@@ -91,20 +85,20 @@
                 @change="toggleMark(m.id)"
               >
               </v-checkbox>
+              <p class="font-weight-bold">Max. {{ question.maxMark }}</p>
+              <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
+              <p>
+                {{ question.guidance ? question.guidance : 'None' }}
+              </p>
               <div class="d-flex justify-end">
-                <v-btn
-                  color="primary"
-                  :loading="loading"
-                  elevation="0"
-                  @click="done()"
-                >
-                  Done
+                <v-btn color="primary" elevation="0" @click="done()">
+                  Finish
                 </v-btn>
               </div>
             </v-col>
           </v-row>
         </v-card-text>
-      </v-card> -->
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -115,11 +109,18 @@ import { debounce } from 'lodash'
 import { mdiTextToSpeech, mdiPause, mdiCheckboxMarkedOutline } from '@mdi/js'
 
 export default {
-  // Cancel speaking on page exit
   beforeRouteLeave(to, from, next) {
+    // Cancel speaking on page exit
     this.speaking = undefined
     this.synth.cancel()
-    next()
+    // Warn if not self-marked yet
+    if (!this.marking) {
+      if (alert(`Really leave without self-marking?`)) {
+        next()
+      }
+    } else {
+      next()
+    }
   },
   layout: 'app',
   async asyncData(context) {
@@ -158,12 +159,11 @@ export default {
   },
   computed: {
     ...mapState({
-      assignmentId: (state) => state.user.assignmentId,
-      questionId: (state) => state.user.questionId,
-      revisionExamMode: (state) => state.user.revisionExamMode,
-      currentTopic: (state) => state.user.currentTopic,
+      assignmentId: (state) => state.assignments.assignmentId,
+      questionId: (state) => state.assignments.questionId,
+      reviseExamMode: (state) => state.user.reviseExamMode,
     }),
-    // Revising or completing assignment?
+    // Set assignment or independent revision?
     revising() {
       return this.assignmentId === 0
     },
@@ -178,7 +178,7 @@ export default {
     // Show keywords & min. word count?
     showHelp() {
       return (
-        (this.revising && !this.revisionExamMode) ||
+        (this.revising && !this.reviseExamMode) ||
         (!this.revising && !this.examMode)
       )
     },
@@ -252,35 +252,49 @@ export default {
       }
     },
     done() {
-      this.marking = false
-      // If revising, go home otherwise go to assignment
-      const rt = this.revising ? `/home` : `/assignment/${this.assignmentId}`
-      this.$router.push(rt)
+      // If revising go home, otherwise go back to assignment
+      this.$router.push(
+        this.revising ? `/home` : `/assignment/${this.assignmentId}`
+      )
     },
-    toggleMark(id) {
+    async toggleMark(id) {
       // Don't exceed max mark, but always allow unticking
       const checked = this.marks.includes(id)
       if (checked && this.marks.length > this.question.maxMark) {
         this.$snack.showMessage({
-          msg: `Maximum mark is ${this.question.maxMark}`,
+          msg: `Max. mark is ${this.question.maxMark}`,
           type: 'error',
         })
         this.marks.splice(-1, 1) // Uncheck
       } else {
         try {
-          console.log(`TODO send to function`, id)
-          // await toggleMark(id, this.saved.ref.id, checked, 0)
+          const url = new URL(
+            '/.netlify/functions/toggleMark',
+            'http://localhost:8888'
+          )
+          const response = await fetch(url, {
+            body: JSON.stringify({
+              secret: this.$store.state.user.secret,
+              responseId: this.responseId,
+              markId: id,
+              add: checked,
+              teacher: false,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error marking ${response.status}`)
+          }
         } catch (e) {
           console.error(e)
           this.$snack.showMessage({
             type: 'error',
-            msg: 'Error saving mark',
+            msg: 'Error marking',
           })
         }
       }
     },
     // Kids don't save shit, so save automatically
-    // This also enabled document streaming teacher-side
     async save() {
       try {
         this.saveStatus = `Saving...`
@@ -303,7 +317,7 @@ export default {
           throw new Error(`Error saving answer ${response.status}`)
         }
         const docId = await response.json()
-        console.log(`Saved/updated response ${docId}`)
+        console.log(`Saved response ${docId}`)
         // Save response id to update just response text
         this.responseId = docId
         this.saveStatus = `Saved ✓`
