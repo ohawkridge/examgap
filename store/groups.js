@@ -8,8 +8,12 @@ export const state = () => ({
 })
 
 export const getters = {
-  activeGroups: (state) => (active = true) => {
-    return state.groups.filter((group) => group.active === active)
+  activeGroups: (state, getters, rootState) => {
+    if (rootState.user.teacher) {
+      return state.groups.filter((group) => group.active === state.tab)
+    } else {
+      return state.groups
+    }
   },
   activeGroup: (state) => {
     return state.groups[state.activeGroupIndex]
@@ -77,6 +81,9 @@ export const mutations = {
         state.revisionTopics[i].answered += 1
       }
     }
+  },
+  addGroup(state, group) {
+    state.groups.push(group)
   },
   logout(state) {
     state.groups = []

@@ -98,13 +98,9 @@
         <nuxt />
       </v-container>
       <Snackbar />
-      <!-- <EgSuccessDialog
-        title="Success. Feedback sent"
-        subtitle="Thanks for helping make Examgap better."
-      /> -->
     </v-main>
     <AppFooter />
-    <!-- <EgCreateClass v-if="user.teacher" /> -->
+    <CreateClass v-if="teacher" />
   </v-app>
 </template>
 
@@ -113,8 +109,7 @@ import { mapState, mapGetters } from 'vuex'
 import Logo from '@/components/common/Logo'
 import Snackbar from '@/components/common/Snackbar'
 import AppFooter from '@/components/common/AppFooter'
-// import EgSuccessDialog from '@/components/EgSuccessDialog'
-// import EgCreateClass from '@/components/EgCreateClass'
+import CreateClass from '@/components/teacher/CreateClass'
 import {
   mdiPlus,
   mdiAccountCircleOutline,
@@ -128,8 +123,7 @@ export default {
     Logo,
     Snackbar,
     AppFooter,
-    // EgSuccessDialog,
-    // EgCreateClass,
+    CreateClass,
   },
   middleware: ['get-user'],
   data() {
@@ -191,7 +185,7 @@ export default {
   // },
   methods: {
     createClass() {
-      // EventBus.$emit('new-class')
+      this.$nuxt.$emit('new-class')
     },
     // Students and teachers have the same 'Classes' menu
     // so we need to customise how menu items links behave

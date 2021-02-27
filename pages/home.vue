@@ -110,7 +110,10 @@ export default {
   async fetch() {
     // For students, fetch revision topics to store
     // (if not stored already)
-    if (this.forceFetch || (!this.teacher && this.topics.length === 0)) {
+    if (
+      this.forceFetch ||
+      (!this.teacher && this.topics.length === 0 && this.group)
+    ) {
       await this.$store.dispatch(
         'groups/getRevisionTopics',
         this.group.course.id
@@ -129,14 +132,12 @@ export default {
       assignments: (state) => state.assignments.assignments,
       topics: (state) => state.groups.revisionTopics,
     }),
-    // For students, just get the active group
+    // For students, we need the active group to display assignments
+    // For teachers, we need active/archive groups depending on tab
     ...mapGetters({
       group: 'groups/activeGroup',
+      groups: 'groups/activeGroups',
     }),
-    // For teachers, get all groups based on tab value
-    groups() {
-      return this.$store.getters['groups/activeGroups'](this.tab)
-    },
     // Remember which tab is active
     tab: {
       get() {

@@ -111,7 +111,7 @@
         <v-divider dark class="py-2 mt-4" />
         <v-row>
           <v-col class="grey--text">
-            Examgap&mdash;{{ new Date().getFullYear() }}. All rights reserved.
+            Examgap&mdash;{{ new Date().getFullYear() }}. All rights reserved
           </v-col>
         </v-row>
       </v-container>
@@ -125,10 +125,10 @@
 
 <script>
 import { mdiEmailOutline, mdiTwitter, mdiSendOutline } from '@mdi/js'
-import SuccessDialog from '@/components/SuccessDialog'
+import SuccessDialog from '@/components/common/SuccessDialog'
 
 export default {
-  name: 'EgFooter',
+  name: 'StaticFooter',
   components: {
     SuccessDialog,
   },

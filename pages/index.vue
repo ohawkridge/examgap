@@ -53,7 +53,7 @@
       </svg>
     </v-container>
     <v-container id="why">
-      <v-row class="d-flex align-center justify-center pad-vert">
+      <v-row class="d-flex align-center justify-center">
         <v-col cols="12" md="6" class="pad-r">
           <p class="text-h5 text-md-h4 font-weight-bold">
             Spend less time marking
@@ -120,7 +120,7 @@
                 width="42"
                 viewBox="0 0 24 24"
                 role="img"
-                fill="#3A86FF"
+                fill="#b7d1da"
                 class="mr-2"
               >
                 <path :d="$icons.mdiNumeric1Circle"></path></svg
@@ -142,7 +142,7 @@
                 width="42"
                 viewBox="0 0 24 24"
                 role="img"
-                fill="#3A86FF"
+                fill="#b7d1da"
                 class="mr-2"
               >
                 <path :d="$icons.mdiNumeric2Circle"></path>
@@ -165,12 +165,12 @@
                 width="42"
                 viewBox="0 0 24 24"
                 role="img"
-                fill="#3A86FF"
+                fill="#b7d1da"
                 class="mr-2"
               >
                 <path :d="$icons.mdiNumeric3Circle"></path>
               </svg>
-              Mark + feedback
+              Mark & feedback
             </v-card-title>
             <v-card-text class="text-body-1">
               <p>
@@ -186,7 +186,8 @@
       <v-row>
         <v-col cols="12">
           <p class="sub-hero-text text-center">
-            Assessment with a positive impact on learning and teaching
+            Assessment with a <span class="highlight">positive impact</span> on
+            learning and teaching
           </p>
         </v-col>
       </v-row>
@@ -260,7 +261,7 @@
                 $icons.mdiCheckBold
               }}</v-icon>
             </div>
-            Use Examgap's detailed grade book to inform your planning and target
+            Examgap's detailed grade book helps inform your planning and target
             intervention effectively.
           </div>
         </v-col>
@@ -488,7 +489,7 @@ export default {
 }
 .highlight:before {
   content: '';
-  background-color: #f56476;
+  background-color: #ef7a85;
   opacity: 0.35;
   width: 108%;
   height: 1em;
@@ -538,7 +539,7 @@ export default {
 
 /* --------- How ---------- */
 #how {
-  background-color: #3a86ff !important;
+  background-color: #0078a0 !important;
   padding-top: 4em;
   padding-bottom: 6em;
 }
@@ -546,6 +547,7 @@ export default {
 #how-text {
   color: #f1f3f8;
   line-height: 1.375em;
+  font-weight: 800;
 }
 
 .how-card {
@@ -571,7 +573,7 @@ export default {
 .sub-hero-text {
   line-height: 1.375em;
   font-size: 2.125em;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 /* ------- Research ------- */
@@ -617,7 +619,7 @@ export default {
   display: inline-flex;
   padding: 5px;
   border-radius: 50%;
-  background-color: #3a86ff;
+  background-color: #0078a0;
 }
 
 #owen {

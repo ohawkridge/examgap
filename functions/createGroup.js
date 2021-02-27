@@ -35,7 +35,6 @@ exports.handler = async (event, context, callback) => {
           },
           {
             board: q.Select(['data', 'board'], q.Var('instance')),
-            colour: q.Select(['data', 'colour'], q.Var('instance')),
             id: q.Select(['ref', 'id'], q.Var('instance')),
             name: q.Select(['data', 'name'], q.Var('instance')),
             qan: q.Select(['data', 'qan'], q.Var('instance')),
