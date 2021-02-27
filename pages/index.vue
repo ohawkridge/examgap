@@ -545,7 +545,6 @@ export default {
 
 #how-text {
   color: #f1f3f8;
-  font-family: 'Cosmica-heavy' !important;
   line-height: 1.375em;
 }
 
@@ -570,9 +569,9 @@ export default {
 }
 
 .sub-hero-text {
-  font-family: 'Cosmica-heavy' !important;
   line-height: 1.375em;
   font-size: 2.125em;
+  font-weight: 700;
 }
 
 /* ------- Research ------- */

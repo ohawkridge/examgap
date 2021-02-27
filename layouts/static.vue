@@ -16,19 +16,19 @@
       </v-row>
     </v-container>
     <nuxt />
-    <!-- <EgFooter /> -->
+    <StaticFooter />
   </v-app>
 </template>
 
 <script>
 import Logo from '@/components/common/Logo'
-// import EgFooter from "@/components/EgFooter";
+import StaticFooter from '@/components/common/StaticFooter'
 
 export default {
   name: 'Static',
   components: {
     Logo,
-    // EgFooter,
+    StaticFooter,
   },
 }
 </script>
