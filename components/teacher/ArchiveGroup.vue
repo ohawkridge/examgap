@@ -22,7 +22,7 @@
           @click="archive()"
         >
           <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
-          Archive
+          Archive class
         </v-btn>
       </v-card-actions>
     </v-card>

@@ -136,10 +136,10 @@ exports.handler = async (event, context, callback) => {
                       )
                     ),
                     q.Lambda(
-                      'ref',
+                      'aRef',
                       q.ToObject([
                         [
-                          q.Select(['id'], q.Var('ref')), // Assignment
+                          q.Select(['id'], q.Var('aRef')), // Assignment
                           // If statement uses student_for_assignment index to
                           // determine if the student was part of the assignment
                           q.If(
@@ -151,7 +151,7 @@ exports.handler = async (event, context, callback) => {
                                   q.Match(
                                     q.Index('student_for_assignment'),
                                     q.Var('stuRef'),
-                                    q.Var('ref')
+                                    q.Var('aRef')
                                   )
                                 ),
                                 0
@@ -162,7 +162,7 @@ exports.handler = async (event, context, callback) => {
                                 q.Count(
                                   q.Match(
                                     q.Index('student_assignment_responses'),
-                                    q.Var('ref'),
+                                    q.Var('aRef'),
                                     q.Var('stuRef')
                                   )
                                 ),
@@ -182,7 +182,7 @@ exports.handler = async (event, context, callback) => {
                                 // The assignment's array of questions
                                 q.Select(
                                   ['data', 'questions'],
-                                  q.Get(q.Var('ref'))
+                                  q.Get(q.Var('aRef'))
                                 ),
                                 q.Lambda(
                                   'qId',
@@ -200,7 +200,7 @@ exports.handler = async (event, context, callback) => {
                                               q.Collection('Question'),
                                               q.Var('qId')
                                             ), // Question
-                                            q.Var('ref') // Assignment
+                                            q.Var('aRef') // Assignment
                                           )
                                         ),
                                         q.Lambda(
@@ -235,6 +235,7 @@ exports.handler = async (event, context, callback) => {
     const data = await keyedClient.query(qry)
     // Sort by username descending
     data.sort(compare)
+    console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

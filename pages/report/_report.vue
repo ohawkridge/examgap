@@ -42,7 +42,7 @@
                               `Q${i} [${q.maxMark}]`
                             }}</span>
                           </template>
-                          <v-card max-width="460">
+                          <v-card max-width="440">
                             <v-card-text class="text-body-2">
                               <div v-html="data.headers[i].text"></div>
                               <div class="font-weight-bold text-right">

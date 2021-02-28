@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="400">
+  <v-dialog v-model="dialog" max-width="440">
     <template #activator="{ on }">
       <v-list-item v-if="type === 'item'" v-on="on">
         <v-list-item-content>

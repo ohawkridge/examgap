@@ -21,6 +21,15 @@ export const getters = {
   groupById: (state) => (id) => {
     return state.groups.find((group) => group.id === id)
   },
+  groupsForSelect: (state) => {
+    return state.groups.map((group) => {
+      const obj = {
+        text: group.name,
+        value: group.id,
+      }
+      return obj
+    })
+  },
 }
 
 export const actions = {
@@ -84,6 +93,13 @@ export const mutations = {
   },
   addGroup(state, group) {
     state.groups.push(group)
+  },
+  incrementStudentCount(state, groupId) {
+    for (let i = 0; i < state.groups.length; i++) {
+      if (state.groups[i].id === groupId) {
+        state.groups[i].num_students += 1
+      }
+    }
   },
   logout(state) {
     state.groups = []

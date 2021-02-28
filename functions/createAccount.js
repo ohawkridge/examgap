@@ -22,6 +22,7 @@ exports.handler = async (event, context, callback) => {
         },
       })
     )
+    // TODO Map student to group
     const data = await keyedClient.query(qry)
     return {
       statusCode: 200,
