@@ -26,7 +26,7 @@ a:link {
 }
 
 #div1 {
-  border-bottom: 2px solid #0078a0 !important;
+  border-bottom: 1px solid #0078a0 !important;
 }
 
 /* accessible RAG chips */
@@ -47,8 +47,13 @@ span.v-chip.theme--light.green {
 
 /* --------- Teacher home --------- */
 
-.bordered {
-  border-top: 4px solid #b7d1da !important;
+.same-height {
+  height: 80px;
+}
+
+#create-card {
+  background: #f1eeee !important;
+  border: 1px dashed #0078a0 !important;
 }
 
 /* --------- Misc. classes -------- */

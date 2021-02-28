@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-row v-if="teacher">
-      <v-col cols="12">
+      <v-col id="div1" cols="12">
         <div class="d-flex justify-space-between align-center">
           <v-btn-toggle v-model="tab" color="primary" group mandatory>
             <v-btn :value="true" class="rounded"> Classes </v-btn>
             <v-btn :value="false" class="rounded"> Archive </v-btn>
           </v-btn-toggle>
-          <v-btn color="primary" outlined @click="emitNew">
+          <v-btn color="primary" text @click="emitNew">
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
             {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
           </v-btn>
@@ -17,6 +17,21 @@
     <v-row v-if="teacher">
       <v-col v-for="(group, i) in groups" :key="i" cols="12" md="6" lg="4">
         <GroupCard :group="group" />
+      </v-col>
+      <v-col v-if="tab">
+        <v-card
+          id="create-card"
+          hover
+          class="d-flex align-center justify-center"
+          outlined
+          height="172"
+          @click="emitNew"
+        >
+          <v-btn color="primary" text>
+            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+            Create class
+          </v-btn>
+        </v-card>
       </v-col>
     </v-row>
     <v-row v-if="!teacher">

@@ -2,7 +2,9 @@
   <v-app>
     <v-app-bar flat app color="white">
       <v-container class="d-flex align-center px-0 px-sm-3">
-        <EgLogoIndex />
+        <nuxt-link to="/">
+          <Logo />
+        </nuxt-link>
         <v-spacer />
         <span class="grey--text"
           >Back to <nuxt-link to="/">home</nuxt-link></span
@@ -60,7 +62,7 @@
           </v-form>
         </v-col>
       </v-row>
-      <EgSuccessDialog
+      <SuccessDialog
         title="Success. Password reset"
         subtitle="A new password has been sent to your email."
       />
@@ -69,16 +71,14 @@
 </template>
 
 <script>
-// import EgLogoIndex from '@/components/EgLogoIndex'
-// import EgSuccessDialog from '@/components/EgSuccessDialog'
-// import { resetPassword } from '@/api'
-// import EventBus from '@/plugins/eventBus.client'
+import Logo from '@/components/common/Logo'
+import SuccessDialog from '@/components/common/SuccessDialog'
 import { mdiAlertOutline, mdiInformationOutline } from '@mdi/js'
 
 export default {
   components: {
-    // EgLogoIndex,
-    // EgSuccessDialog,
+    Logo,
+    SuccessDialog,
   },
   data() {
     return {

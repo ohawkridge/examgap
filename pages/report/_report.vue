@@ -108,7 +108,7 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-container>
-          <v-row>
+          <v-row id="div2">
             <v-col cols="12" class="d-flex align-center">
               <v-tooltip bottom>
                 <template #activator="{ on, attrs }">
@@ -166,19 +166,25 @@
                 }}</span>
                 <v-icon right>{{ $icons.mdiCheck }}</v-icon>
               </v-chip>
-              <v-chip color="green darken-1" outlined label>
-                <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
-                <span v-if="marking" class="font-weight-black">{{
-                  response.sm.length
-                }}</span>
-                <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+              <v-chip color="green darken-3" outlined label>
+                <v-icon left color="green darken-3">{{
+                  $icons.mdiAccountOutline
+                }}</v-icon>
+                <span
+                  v-if="marking"
+                  class="green--text text--darken-3 font-weight-black"
+                  >{{ response.sm.length }}</span
+                >
+                <v-icon right color="green darken-3">{{
+                  $icons.mdiCheck
+                }}</v-icon>
               </v-chip>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" md="4">
-              <p class="text-subtitle-1 font-weight-medium">Question</p>
-              <p v-if="marking" v-html="question.text"></p>
+              <p class="text-subtitle-1">Question</p>
+              <p v-if="marking" class="text-body-2" v-html="question.text"></p>
               <div class="d-flex justify-end">
                 <v-chip outlined
                   >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
@@ -190,7 +196,7 @@
                 {{ response.username }}
               </p>
               <p v-if="marking" class="breaks" v-text="response.text"></p>
-              <p class="text-subtitle-1 font-weight-medium">Feedback</p>
+              <p class="text-subtitle-1">Feedback</p>
               <v-textarea
                 v-model="feedback"
                 outlined
@@ -215,21 +221,21 @@
               </v-list>
             </v-col>
             <v-col v-if="marking" cols="12" md="4">
-              <p class="text-subtitle-1 font-weight-medium">Mark Scheme</p>
+              <p class="text-subtitle-1">Mark Scheme</p>
               <v-checkbox
-                v-for="point in markScheme"
-                :key="point[2].value.id"
+                v-for="(point, i) in markScheme"
+                :key="i"
                 v-model="response.tm"
-                :value="point[2].value.id"
+                :value="point[2]['@ref'].id"
                 class="mt-0"
-                @change="addRemoveMark(point[2].value.id)"
+                @change="addRemoveMark(point[2]['@ref'].id)"
               >
                 <template #label>
                   <span
                     v-if="response"
                     :class="
-                      response.sm.includes(point[2].value.id)
-                        ? 'green--text text--darken-3 font-weight-medium'
+                      response.sm.includes(point[2]['@ref'].id)
+                        ? 'green--text text--darken-3'
                         : ''
                     "
                   >
@@ -241,11 +247,20 @@
                 <v-switch
                   v-model="smartSort"
                   inset
-                  label="Sort"
+                  hide-details
                   @change="sortMarks()"
-                ></v-switch>
+                >
+                  <template #label>
+                    <v-tooltip bottom>
+                      <template #activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">Smart sort</span>
+                      </template>
+                      <span>Self-marks first</span>
+                    </v-tooltip>
+                  </template>
+                </v-switch>
               </div>
-              <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
+              <p class="text-subtitle-1">Guidance</p>
               <p>
                 {{ question.guidance ? question.guidance : 'None' }}
               </p>
@@ -259,7 +274,6 @@
 
 <script>
 import {
-  mdiCalendarRangeOutline,
   mdiCheck,
   mdiCheckAll,
   mdiArrowRight,
@@ -319,7 +333,7 @@ export default {
   },
   head() {
     return {
-      title: this.data ? this.data.name : '',
+      title: this.data.name,
     }
   },
   computed: {
@@ -362,9 +376,14 @@ export default {
       },
     },
   },
+  watch: {
+    response() {
+      // If smartSort is on, re-sort mark scheme when response changes
+      if (this.smartSort) this.markScheme.sort(this.selfSort)
+    },
+  },
   created() {
     this.$icons = {
-      mdiCalendarRangeOutline,
       mdiCheck,
       mdiCheckAll,
       mdiArrowRight,
@@ -378,18 +397,11 @@ export default {
     }
   },
   methods: {
+    // Active or deactivate smart sort
     sortMarks() {
-      if (this.smartSort) {
-        this.markScheme = this.question.markScheme.sort(this.selfSort)
-      } else {
-        this.markScheme = this.unsorted
-      }
-    },
-    // If smartSort is on, resort mark scheme when changing response
-    resort() {
-      if (this.smartSort) {
-        this.markScheme.sort(this.selfSort)
-      }
+      this.markScheme = this.smartSort
+        ? this.question.markScheme.sort(this.selfSort)
+        : this.unsorted
     },
     // Build comment bank from existing responses
     updateBank() {
@@ -408,11 +420,10 @@ export default {
           }
         }
       }
-      this.bank = [...new Set(bank)] // Remove dupes
+      // Remove duplicates
+      this.bank = [...new Set(bank)]
     },
     mark(obj) {
-      console.log(`MARKING...(obj?)`)
-      console.dir(obj)
       // Index into student responses data structure
       this.studentIndex = obj.studentIndex
       this.questionIndex = obj.questionIndex
@@ -431,22 +442,37 @@ export default {
       this.marked(this.response.id)
     },
     flagColor(val) {
-      return !val || this.response === undefined ? '' : 'secondary'
+      return !val || this.response === undefined ? '' : 'accent'
     },
     // Set response as 'marked'
-    // async marked() {
-    //   try {
-    //     await setAsMarked(this.response.id)
-    //     // Update local data structure
-    //     this.response.marked = true
-    //   } catch (e) {
-    //     console.error(e)
-    //     this.$snack.showMessage({
-    //       type: 'error',
-    //       msg: 'Error marking',
-    //     })
-    //   }
-    // },
+    async marked() {
+      if (!this.response.marked) {
+        try {
+          const url = new URL(
+            '/.netlify/functions/setAsMarked',
+            'http://localhost:8888'
+          )
+          const response = await fetch(url, {
+            body: JSON.stringify({
+              secret: this.$store.state.user.secret,
+              responseId: this.response.id,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error setting as 'marked' ${response.status}`)
+          }
+          // Set as marked in local data structure
+          this.response.marked = true
+        } catch (e) {
+          console.error(e)
+          this.$snack.showMessage({
+            type: 'error',
+            msg: 'Error marking',
+          })
+        }
+      }
+    },
     next() {
       this.updateBank()
       // Loop back to start
@@ -462,7 +488,6 @@ export default {
         // Set response as marked as soon as it's been seen
         this.marked(this.response.id)
       }
-      this.resort()
     },
     previous() {
       this.updateBank()
@@ -479,7 +504,6 @@ export default {
         // Set response as marked as soon as it's been seen
         this.marked(this.response.id)
       }
-      this.resort()
     },
     addRemoveMark(id) {
       // Don't exceed max mark
@@ -495,69 +519,144 @@ export default {
           }
         }
       } else if (this.response.tm.find((x) => x === id)) {
-        // TODO
-        // toggleMark(id, this.response.id)
+        // Adding mark
+        this.toggleMark(id, true)
       } else {
-        // TODO
-        // toggleMark(id, this.response.id, false)
+        // Removing mark
+        this.toggleMark(id, false)
       }
     },
-    // async flag() {
-    //   try {
-    //     const { data } = await flagResponse(
-    //       this.response.id,
-    //       !this.response.flagged
-    //     )
-    //     // Update local data
-    //     this.response.flagged = !this.response.flagged
-    //     this.$snack.showMessage({
-    //       type: '',
-    //       msg: `${data.flagged ? 'Response flagged' : 'Flag removed'}`,
-    //     })
-    //   } catch (e) {
-    //     console.error(e)
-    //     this.$snack.showMessage({
-    //       type: 'error',
-    //       msg: 'An error occurred',
-    //     })
-    //   }
-    // },
-    // async boomerang() {
-    //   try {
-    //     const res = await repeatQuestion(
-    //       this.response.id,
-    //       !this.response.repeat
-    //     )
-    //     this.response.repeat = res.data.repeat // Update local data structure
-    //     if (res.data.repeat) {
-    //       this.$snack.showMessage({
-    //         msg: `Reassigned to ${this.response.username}`,
-    //         type: '',
-    //       })
-    //     }
-    //   } catch (e) {
-    //     console.error(e)
-    //     this.$snack.showMessage({
-    //       type: 'error',
-    //       msg: 'Error reassigning question',
-    //     })
-    //   }
-    // },
+    async toggleMark(markId, addOrRemove) {
+      try {
+        const url = new URL(
+          '/.netlify/functions/toggleMark',
+          'http://localhost:8888'
+        )
+        let response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            responseId: this.response.id,
+            markId,
+            add: addOrRemove,
+            teacher: true,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error saving mark ${response.status}`)
+        }
+        response = await response.json()
+        console.log(response)
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error saving mark',
+        })
+      }
+    },
+    async flag() {
+      try {
+        const url = new URL(
+          '/.netlify/functions/flagResponse',
+          'http://localhost:8888'
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            responseId: this.response.id,
+            flagged: !this.response.flagged,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error setting flag ${response.status}`)
+        }
+        const state = await response.json()
+        // Update local data
+        this.response.flagged = !this.response.flagged
+        this.$snack.showMessage({
+          type: '',
+          msg: `${state.data.flagged ? 'Response flagged' : 'Flag removed'}`,
+        })
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'An error occurred',
+        })
+      }
+    },
+    async boomerang() {
+      try {
+        const url = new URL(
+          '/.netlify/functions/reassignQuestion',
+          'http://localhost:8888'
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            repeat: !this.response.repeat,
+            responseId: this.response.id,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error reassigning question ${response.status}`)
+        }
+        const state = await response.json()
+        // Update local data structure
+        this.response.repeat = state.data.repeat
+        if (state.data.repeat) {
+          this.$snack.showMessage({
+            msg: `Reassigned to ${this.response.username}`,
+            type: '',
+          })
+        } else {
+          this.$snack.showMessage({
+            msg: `Assignment cancelled`,
+            type: '',
+          })
+        }
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error reassigning question',
+        })
+      }
+    },
     // Debounce feedback area
     update: debounce(function () {
       this.save()
     }, 1500),
-    save() {
+    async save() {
       this.feedbackStatus = 'Saving...'
-      // saveFeedback(this.response.id, this.feedback)
-      //   .then(() => {
-      //     this.feedbackStatus = 'Feedback saved'
-      //     this.updateBank()
-      //   })
-      //   .catch((e) => {
-      //     console.error(e)
-      //     this.feedbackStatus = 'Error saving feedback'
-      //   })
+      try {
+        const url = new URL(
+          '/.netlify/functions/reassignQuestion',
+          'http://localhost:8888'
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            responseId: this.response.id,
+            feedback: this.feedback,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error saving feedback ${response.status}`)
+        }
+        this.feedbackStatus = `Saved ✓`
+      } catch (e) {
+        console.error(e)
+        this.feedbackStatus = 'Error saving'
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error saving feedback',
+        })
+      }
     },
     // Copy an existing comment onto response
     reuse(text) {
@@ -569,11 +668,11 @@ export default {
       // Watch out!! Nexting over empty responses
       if (!this.response) return 0
       if (
-        this.response.sm.includes(m1[2].value.id) ===
-        this.response.sm.includes(m2[2].value.id)
+        this.response.sm.includes(m1[2]['@ref'].id) ===
+        this.response.sm.includes(m2[2]['@ref'].id)
       ) {
         return 0
-      } else if (this.response.sm.includes(m1[2].value.id)) {
+      } else if (this.response.sm.includes(m1[2]['@ref'].id)) {
         return -1
       } else {
         return 1

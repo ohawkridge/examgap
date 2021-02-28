@@ -1,5 +1,5 @@
 <template>
-  <v-card class="bordered" hover @click="open(group.id)">
+  <v-card hover @click="open(group.id)">
     <v-card-title>
       {{ group.name }}
     </v-card-title>
@@ -74,9 +74,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.same-height {
-  height: 80px;
-}
-</style>

@@ -2,7 +2,9 @@
   <v-app>
     <v-app-bar flat app color="white">
       <v-container class="d-flex align-center px-0 px-sm-3">
-        <!-- <EgLogoIndex /> -->
+        <nuxt-link to="/">
+          <Logo />
+        </nuxt-link>
         <v-spacer />
         <span class="grey--text"
           >Back to <nuxt-link to="/">home</nuxt-link></span
@@ -10,11 +12,11 @@
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container id="trial" class="fill-height">
+      <v-container class="fill-height mt-md-n6">
         <v-row class="d-flex justify-center">
           <v-col cols="12" sm="10" md="6">
             <p class="text-h4 text-center font-weight-bold mb-8">
-              Register for your 30-day free trial
+              Register for your free trial
             </p>
             <v-form ref="form" @submit.prevent="register()">
               <p class="font-weight-bold">Your school</p>
@@ -57,7 +59,7 @@
                   >
                   </v-text-field>
                 </v-col>
-                <v-col class="pb-0" cols="12" md="6">
+                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="pass2"
                     outlined
@@ -71,7 +73,7 @@
                 </v-col>
               </v-row>
               <small> *Indicates required field </small>
-              <p>
+              <p class="mt-2">
                 By registering you accept our
                 <a href="/terms" target="_blank">terms of service</a>
                 <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
@@ -96,13 +98,11 @@
 </template>
 
 <script>
-// import EgLogoIndex from '@/components/EgLogoIndex'
-// import registerTeacher from '@/api/teacher/registerTeacher'
-// import { getUser, getLoginToken } from '@/api'
+import Logo from '@/components/common/Logo'
 import { mdiOpenInNew, mdiAlertOutline } from '@mdi/js'
 export default {
   components: {
-    // EgLogoIndex,
+    Logo,
   },
   data() {
     return {

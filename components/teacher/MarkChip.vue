@@ -19,7 +19,7 @@
             response.repeat ? $icons.mdiBoomerang : $icons.mdiCheckAll
           }}</v-icon>
         </v-chip>
-        <v-icon v-if="response.flagged" color="secondary" class="ff">{{
+        <v-icon v-if="response.flagged" color="accent" class="ff">{{
           $icons.mdiFlagOutline
         }}</v-icon>
       </div>
@@ -83,7 +83,9 @@ export default {
         questionIndex: this.questionIndex,
         responseIndex,
       }
-      this.$emit('Marking', obj)
+      // NOT a Nuxt event
+      // This is picked up by @clicked in the parent
+      this.$emit('clicked', obj)
     },
   },
 }
