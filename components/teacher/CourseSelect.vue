@@ -17,7 +17,7 @@
     <!-- Display chips in list -->
     <template #item="data">
       {{ data.item.name }}
-      <v-chip small outlined color="black" class="ml-2">{{
+      <v-chip small outlined color="primary" class="ml-2">{{
         data.item.board
       }}</v-chip>
     </template>
@@ -54,7 +54,7 @@ export default {
       if (!response.ok) {
         throw new Error(`Error fetching user data ${response.status}`)
       }
-      this.couses = await response.json()
+      this.courses = await response.json()
     } catch (e) {
       console.error(e)
       this.$snack.showMessage({
@@ -65,6 +65,7 @@ export default {
   },
   methods: {
     updateCourse() {
+      // NOT a Nuxt event
       this.$emit('clicked', this.selectedCourse)
     },
   },

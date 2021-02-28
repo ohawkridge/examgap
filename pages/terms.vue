@@ -121,11 +121,11 @@
 
 <script>
 export default {
-  layout: "EgIndex",
+  layout: 'static',
   head() {
     return {
-      title: "Terms of Service",
-    };
+      title: 'Terms of Service',
+    }
   },
-};
+}
 </script>

@@ -171,7 +171,7 @@ export default {
     },
     // Trigger event to show create class dialog
     emitNew() {
-      this.$bus.$emit('show-create')
+      this.$nuxt.$emit('show-create')
     },
   },
 }

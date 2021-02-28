@@ -3,13 +3,15 @@
     <div id="hero">
       <v-container class="pa-4">
         <v-row id="choose">
-          <v-col cols="12" class="text-center">
-            <p class="text-h4">Choose your Computing package</p>
+          <v-col cols="12">
+            <p class="text-h4 text-h5 text-md-h4 font-weight-bold text-center">
+              Choose your Computing package
+            </p>
           </v-col>
         </v-row>
         <v-row class="d-flex justify-center align-end">
           <v-col cols="12" md="4" order="1" order-md="1">
-            <v-card class="pa-6" outlined rounded="lg" disabled>
+            <v-card class="pa-3" outlined rounded="lg" disabled>
               <v-card-title class="font-weight-black text-h6">
                 A Level
               </v-card-title>
@@ -33,7 +35,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="4" order="0" order-md="2">
-            <v-card class="gcse pa-6" outlined rounded="lg">
+            <v-card class="gcse pa-3" outlined rounded="lg">
               <v-card-title class="text-h6 font-weight-black">
                 GCSE
               </v-card-title>
@@ -43,7 +45,7 @@
                   £89 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
-                  <v-icon color="primary" class="mr-2">{{
+                  <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   <b>AQA</b> GCSE<v-chip small outlined class="ml-1"
@@ -51,14 +53,14 @@
                   >
                 </p>
                 <p class="mb-2">
-                  <v-icon color="primary" class="mr-2">{{
+                  <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   <b>OCR</b> GCSE
                   <v-chip small outlined class="ml-1">J276</v-chip>
                 </p>
                 <p class="mb-2">
-                  <v-icon color="primary" class="mr-2">{{
+                  <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   <b>Pearson Edexcel</b> GCSE
@@ -73,7 +75,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="4" order="2" order-md="2">
-            <v-card class="pa-6" outlined rounded="lg" disabled>
+            <v-card class="pa-3" outlined rounded="lg" disabled>
               <v-card-title class="font-weight-black text-h6">
                 Information Technology
               </v-card-title>
@@ -104,13 +106,13 @@
       <v-row class="d-flex justify-center md-pad">
         <v-col cols="12" md="9">
           <p class="text-h5 text-md-h4 font-weight-bold text-center mb-10">
-            <span class="zap">A</span>ll packages include:
+            All packages include:
           </p>
         </v-col>
       </v-row>
       <v-row class="d-flex justify-center text-center">
         <v-col cols="12" md="3">
-          <v-card class="rounded-lg pa-6" outlined>
+          <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
               <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
             </div>
@@ -124,7 +126,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="3">
-          <v-card class="rounded-lg pa-6" outlined>
+          <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
               <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
             </div>
@@ -140,7 +142,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="3">
-          <v-card class="rounded-lg pa-6" outlined>
+          <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
               <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
             </div>
@@ -156,7 +158,7 @@
       </v-row>
       <v-row class="d-flex justify-center text-center mt-4">
         <v-col cols="12" md="3">
-          <v-card class="pa-6 rounded-lg" outlined>
+          <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
               <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
             </div>
@@ -170,7 +172,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="3">
-          <v-card class="pa-6 rounded-lg" outlined>
+          <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
               <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
             </div>
@@ -184,7 +186,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="3">
-          <v-card class="pa-6 rounded-lg" outlined>
+          <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
               <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
             </div>
@@ -204,16 +206,20 @@
         <v-row class="d-flex justify-center text-center">
           <v-col class="12" md="8">
             <p class="text-h5 text-md-h4 font-weight-bold text-center mb-8">
-              <span class="zap">T</span>ry Examgap for free
+              Try Examgap for free
             </p>
             <v-btn x-large color="primary" elevation="0" nuxt to="/trial">
               Get a 30-day free trial
             </v-btn>
             <div class="mt-2">
               <small class="d-flex justify-center">
-                <v-icon small color="secondary">{{ $icons.mdiCheck }}</v-icon>
-                No payment info&nbsp;
-                <v-icon small color="secondary">{{ $icons.mdiCheck }}</v-icon>
+                <v-icon small color="secondary">{{
+                  $icons.mdiCheckboxMarkedCircleOutline
+                }}</v-icon>
+                No payment info
+                <v-icon small color="secondary" class="ml-2">{{
+                  $icons.mdiCheckboxMarkedCircleOutline
+                }}</v-icon>
                 Improve your results
               </small>
             </div>
@@ -225,7 +231,7 @@
       <v-row class="d-flex justify-center">
         <v-col cols="12" md="6">
           <p class="text-h5 text-md-h4 font-weight-bold text-center mb-8">
-            <span class="zap">C</span>ommon Questions
+            Common Questions
           </p>
         </v-col>
       </v-row>
@@ -292,22 +298,22 @@
 </template>
 
 <script>
-import { mdiCheck, mdiCheckboxMarkedCircleOutline } from "@mdi/js";
+import { mdiCheck, mdiCheckboxMarkedCircleOutline } from '@mdi/js'
 
 export default {
-  layout: "EgIndex",
+  layout: 'static',
   head() {
     return {
-      title: "Pricing",
-    };
+      title: 'Pricing',
+    }
   },
   created() {
     this.$icons = {
       mdiCheck,
       mdiCheckboxMarkedCircleOutline,
-    };
+    }
   },
-};
+}
 </script>
 
 <style scoped>
@@ -318,43 +324,23 @@ export default {
 }
 
 .gcse {
-  border: 2px solid #4869f2;
+  border: 2px solid #0078a0;
 }
 
-#hero {
-  background-color: #f1f3f8;
-  position: relative;
-  z-index: 1; /* cover up box shadow under app-bar */
-}
 @media only screen and (min-width: 600px) {
   #hero {
     padding-top: 4em;
-    padding-bottom: 5em;
+    padding-bottom: 3em;
   }
-}
-
-/* dark blue headings */
-.text-h3,
-.text-h4,
-.text-h5,
-.text-h6,
-.text-md-h3,
-.text-md-h4,
-.text-md-h5 {
-  color: #000537;
-}
-
-.zap {
-  border-bottom: 5px solid #4869f2;
 }
 
 .ico-bg {
   position: relative;
-  top: -34px;
+  top: -28px;
   display: inline-flex;
   padding: 2px;
   border-radius: 50%;
-  background-color: #4869f2;
+  background-color: #0078a0;
 }
 
 #features {
@@ -372,6 +358,6 @@ export default {
 
 #common {
   margin-bottom: 4em;
-  padding-bottom: 6em;
+  padding-bottom: 3em;
 }
 </style>

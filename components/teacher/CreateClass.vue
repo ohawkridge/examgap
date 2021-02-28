@@ -50,7 +50,7 @@ export default {
     }
   },
   mounted() {
-    this.$nuxt.$on('show-revise', () => {
+    this.$nuxt.$on('show-create', () => {
       this.dialog = true
     })
   },

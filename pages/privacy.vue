@@ -144,19 +144,19 @@
 </template>
 
 <script>
-import { mdiOpenInNew } from "@mdi/js";
+import { mdiOpenInNew } from '@mdi/js'
 
 export default {
-  layout: "EgIndex",
+  layout: 'static',
   head() {
     return {
-      title: "Privacy Policy",
-    };
+      title: 'Privacy Policy',
+    }
   },
   created() {
     this.$icons = {
       mdiOpenInNew,
-    };
+    }
   },
-};
+}
 </script>

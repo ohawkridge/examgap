@@ -70,19 +70,19 @@
 </template>
 
 <script>
-import { mdiOpenInNew } from "@mdi/js";
+import { mdiOpenInNew } from '@mdi/js'
 
 export default {
-  layout: "EgIndex",
+  layout: 'static',
   head() {
     return {
-      title: "GDPR Compliance",
-    };
+      title: 'GDPR Compliance',
+    }
   },
   created() {
     this.$icons = {
       mdiOpenInNew,
-    };
+    }
   },
-};
+}
 </script>
