@@ -91,9 +91,7 @@ exports.handler = async (event, context, callback) => {
                   target: q.Select(
                     ['data', 'target', groupId],
                     q.Get(q.Var('stuRef')),
-                    {
-                      [groupId]: '-',
-                    }
+                    '-'
                   ),
                 },
                 // Below must retrun an array of objects where the key is the

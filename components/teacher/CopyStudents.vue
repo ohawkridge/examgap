@@ -6,7 +6,7 @@
       </v-card-title>
       <v-card-text>
         <ul class="mb-4">
-          <li v-for="(user, i) in selected" :key="i">{{ user.name }}</li>
+          <li v-for="(user, i) in selected" :key="i">{{ user.username }}</li>
         </ul>
         <v-select
           v-model="selectedClass"
@@ -14,6 +14,7 @@
           :items="groups"
           label="To class*"
         ></v-select>
+        <p class="red--text">s: {{ selected }}</p>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     selected: {
@@ -48,8 +50,8 @@ export default {
     }
   },
   computed: {
-    // Getter re-formats groups for Vuetify select
-    groups: (state) => state.groups.groupsForSelect,
+    // Re-format groups for Vuetify select
+    ...mapGetters({ groups: 'groups/groupsForSelect' }),
   },
   mounted() {
     this.$nuxt.$on('open-copy', () => {
@@ -92,9 +94,10 @@ export default {
           type: 'error',
           msg: `Error copying student${this.selected.length === 1 ? '' : 's'}`,
         })
+      } finally {
+        this.dialog = false
+        this.loading = false
       }
-      this.dialog = false
-      this.loading = false
     },
   },
 }

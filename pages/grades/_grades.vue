@@ -32,12 +32,12 @@
                 <div>
                   <v-btn-toggle
                     v-model="toggle"
-                    :color="toggle"
+                    color="primary"
                     group
                     mandatory
                   >
                     <v-btn value="green"> Secure </v-btn>
-                    <v-btn value="orange"> Middle </v-btn>
+                    <v-btn value="yellow"> Middle </v-btn>
                     <v-btn value="red"> Vulnerable </v-btn>
                   </v-btn-toggle>
                 </div>
@@ -142,7 +142,7 @@ export default {
   data() {
     return {
       data: [],
-      toggle: 'orange',
+      toggle: 'yellow',
       interval: false, // Scroll right
       csv: [],
     }
@@ -214,20 +214,17 @@ export default {
         // Target not set ∴ RAG with percentages
         if (this.toggle === 'red') {
           if (z <= this.boundaries.rag[0]) {
-            console.log(`RED`)
-            return 'red--text text--darken-1 font-weight-black'
+            return 'red'
           }
         }
-        if (this.toggle === 'orange') {
+        if (this.toggle === 'yellow') {
           if (z > this.boundaries.rag[0] && z < this.boundaries.rag[1]) {
-            console.log(`ORANGE`)
-            return 'orange--text text--darken-1 font-weight-black'
+            return 'orange'
           }
         }
         if (this.toggle === 'green') {
           if (z >= this.boundaries.rag[1]) {
-            console.log(`GREEN`)
-            return 'green--text text--darken-1 font-weight-black'
+            return 'green'
           }
         }
       } else {
@@ -237,7 +234,7 @@ export default {
             return 'red'
           }
         }
-        if (this.toggle === 'orange') {
+        if (this.toggle === 'yellow') {
           if (
             z >= this.boundaries.actual[target] - 0.15 &&
             z < this.boundaries.actual[target]

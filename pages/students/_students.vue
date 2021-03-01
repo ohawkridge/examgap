@@ -29,7 +29,11 @@
                     :disabled="selected.length === 0"
                     @click="reset()"
                   >
-                    <v-list-item-title>Reset password</v-list-item-title>
+                    <v-list-item-title
+                      >Reset password{{
+                        selected.length !== 1 ? 's' : ''
+                      }}</v-list-item-title
+                    >
                   </v-list-item>
                   <v-list-item @click="send('open-add')">
                     <v-list-item-title>Add students</v-list-item-title>
@@ -46,7 +50,7 @@
                   </v-list-item>
                   <v-list-item
                     :disabled="selected.length === 0"
-                    @click="removeModal = true"
+                    @click="send('open-remove')"
                   >
                     <v-list-item-title
                       >Remove student{{
@@ -58,6 +62,7 @@
               </v-menu>
               <AddStudents :group-id="group.id" />
               <CopyStudents :selected="selected" />
+              <RemoveStudents :selected="selected" :group-id="group.id" />
               <v-btn
                 color="primary"
                 nuxt
@@ -105,7 +110,7 @@
                         @click="send('open-add')"
                       >
                         <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                        Add students</v-btn
+                        Add student(s)</v-btn
                       >
                     </p>
                   </template>
@@ -134,7 +139,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <RemoveStudents />
   </div>
 </template>
 
@@ -144,12 +148,7 @@ import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
 import CopyStudents from '@/components/teacher/CopyStudents'
 import RemoveStudents from '@/components/teacher/RemoveStudents'
-import {
-  mdiChevronDown,
-  mdiDownloadOutline,
-  mdiMinusCircleOutline,
-  mdiPlus,
-} from '@mdi/js'
+import { mdiChevronDown, mdiDownloadOutline, mdiPlus } from '@mdi/js'
 
 export default {
   components: {
@@ -159,7 +158,7 @@ export default {
     CopyStudents,
     RemoveStudents,
   },
-  layout: 'EgApp',
+  layout: 'app',
   data() {
     return {
       csv: '',
@@ -171,7 +170,7 @@ export default {
         {
           text: 'Username',
           align: 'start',
-          value: 'name',
+          value: 'username',
         },
         {
           text: 'Assignment Questions',
@@ -234,7 +233,6 @@ export default {
     this.$icons = {
       mdiChevronDown,
       mdiDownloadOutline,
-      mdiMinusCircleOutline,
       mdiPlus,
     }
   },
@@ -288,7 +286,7 @@ export default {
       }
       this.csv += '\n'
       for (const obj of this.students) {
-        this.csv += obj.name + ','
+        this.csv += obj.username + ','
         for (const key in obj.data) {
           this.csv += obj.data[key] + ','
         }

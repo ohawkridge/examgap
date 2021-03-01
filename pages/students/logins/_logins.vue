@@ -2,13 +2,7 @@
   <div>
     <v-row class="justify-center">
       <v-col cols="12" md="10" class="d-flex justify-space-between">
-        <p class="text-h6">
-          {{
-            $fetchState.pending || !group
-              ? 'Loading...'
-              : `${group.name} logins`
-          }}
-        </p>
+        <p class="text-h6">{{ group.name }} logins</p>
         <div>
           <v-btn
             color="primary"
@@ -31,15 +25,34 @@
         </div>
       </v-col>
     </v-row>
-    <v-row v-if="!$fetchState.pending" class="justify-center">
+    <v-row class="justify-center">
+      <v-col cols="12" md="10">
+        <v-alert
+          :icon="$icons.mdiInformationOutline"
+          border="left"
+          type="info"
+          text
+        >
+          Note: '<b>pw</b>' is the default password for new accounts. Students
+          may have changed their passwords. You can reset passwords on the
+          '<nuxt-link
+            nuxt
+            :to="`/students/${group.id}`"
+            title="Back to students"
+            >Students</nuxt-link
+          >' screen.
+        </v-alert>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
       <template v-for="(user, i) in usernames">
         <v-col :key="i" cols="6" md="5" class="border">
           <p>Examgap.com</p>
           <p>
             Username:
-            <span class="font-weight-bold">{{ user.name }}</span
-            >&nbsp;&nbsp;Default pass:
-            <span class="font-weight-bold">pw</span>
+            <span class="font-weight-medium">{{ user.username }}</span
+            >&nbsp;&nbsp;Password:
+            <span class="font-weight-medium">pw</span>
           </p>
         </v-col>
         <v-col
@@ -63,37 +76,29 @@
 </template>
 
 <script>
-import { mdiArrowRight } from '@mdi/js'
+import { mdiArrowRight, mdiInformationOutline } from '@mdi/js'
 
 export default {
   layout: 'print',
-  async asyncData(context) {
+  async asyncData({ store, params }) {
     const url = new URL(
       '/.netlify/functions/getStudents',
       'http://localhost:8888'
     )
-    const response = await fetch(url, {
+    let usernames = await fetch(url, {
       body: JSON.stringify({
-        secret: context.store.state.user.secret,
-        groupId: this.$route.params.logins,
+        secret: store.state.user.secret,
+        groupId: params.logins,
         namesOnly: true,
       }),
       method: 'POST',
     })
-    if (!response.ok) {
-      throw new Error(`Error fetching question ${response.status}`)
+    if (!usernames.ok) {
+      throw new Error(`Error fetching logins ${usernames.status}`)
     }
-    const question = await response.json()
-    return { question }
+    usernames = await usernames.json()
+    return { usernames }
   },
-  data() {
-    return {
-      usernames: [],
-    }
-  },
-  // async fetch() {
-  //   this.usernames = await getStudents(this.$route.params.logins, true)
-  // },
   head() {
     return {
       title: `${this.group.name} logins`,
@@ -107,9 +112,10 @@ export default {
   created() {
     this.$icons = {
       mdiArrowRight,
+      mdiInformationOutline,
     }
   },
-  updated() {
+  mounted() {
     window.print()
   },
   methods: {

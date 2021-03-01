@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440px">
+  <v-dialog v-model="dialog" max-width="500px">
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Add students </v-card-title>
       <v-card-text>
@@ -28,7 +28,7 @@
         >
           <template #append>
             <v-btn id="apply" text color="primary" @click="append()">
-              Apply
+              Append
             </v-btn>
           </template>
         </v-text-field>

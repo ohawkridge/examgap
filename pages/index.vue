@@ -64,7 +64,7 @@
             so students know how to improve.
           </p>
         </v-col>
-        <v-col id="mark" cols="12" md="6">
+        <v-col cols="12" md="6">
           <v-img src="/mark.png" alt="Marking"></v-img>
         </v-col>
       </v-row>
@@ -516,13 +516,6 @@ export default {
 #why {
   margin-top: 3em;
   margin-bottom: 3em;
-}
-
-/* reduce image size */
-@media only screen and (min-width: 960px) {
-  #mark {
-    padding: 4em;
-  }
 }
 
 @media only screen and (min-width: 600px) {

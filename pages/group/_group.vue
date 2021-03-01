@@ -24,7 +24,7 @@
             <v-skeleton-loader
               :loading="$fetchState.pending"
               type="list"
-              width="50%"
+              width="66%"
               :types="{ list: 'list-item-two-line@5' }"
             >
               <v-list>
