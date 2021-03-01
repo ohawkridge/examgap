@@ -21,51 +21,60 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <v-list>
-              <template v-for="(assignment, i) in assignments">
-                <v-list-item :key="i" nuxt :to="`/report/${assignment.id}`">
+            <v-skeleton-loader
+              :loading="$fetchState.pending"
+              type="list"
+              width="50%"
+              :types="{ list: 'list-item-two-line@5' }"
+            >
+              <v-list>
+                <template v-for="(assignment, i) in assignments">
+                  <v-list-item :key="i" nuxt :to="`/report/${assignment.id}`">
+                    <v-list-item-content>
+                      <v-list-item-title>{{
+                        assignment.name
+                      }}</v-list-item-title>
+                      <v-list-item-subtitle>
+                        Due {{ assignment.dateDue | date }}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-menu offset-y>
+                        <template #activator="{ on }">
+                          <v-btn
+                            icon
+                            v-on="on"
+                            @click.prevent
+                            @mousedown.stop
+                            @touchstart.native.stop
+                          >
+                            <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
+                          </v-btn>
+                        </template>
+                        <v-list>
+                          <DeleteAssignment
+                            :assignment-id="assignment.id"
+                            :group-id="group.id"
+                          />
+                        </v-list>
+                      </v-menu>
+                    </v-list-item-action>
+                  </v-list-item>
+                  <v-divider
+                    v-if="i < assignments.length - 1"
+                    :key="assignment.id"
+                  />
+                </template>
+                <v-list-item v-if="assignments.length === 0">
+                  <v-list-item-icon>
+                    {{ $icons.mdiInformationOutline }}
+                  </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title>{{ assignment.name }}</v-list-item-title>
-                    <v-list-item-subtitle>
-                      Due {{ assignment.dateDue | date }}
-                    </v-list-item-subtitle>
+                    <v-list-item-title> No assignments yet</v-list-item-title>
                   </v-list-item-content>
-                  <v-list-item-action>
-                    <v-menu offset-y>
-                      <template #activator="{ on }">
-                        <v-btn
-                          icon
-                          v-on="on"
-                          @click.prevent
-                          @mousedown.stop
-                          @touchstart.native.stop
-                        >
-                          <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <DeleteAssignment
-                          :assignment-id="assignment.id"
-                          :group-id="group.id"
-                        />
-                      </v-list>
-                    </v-menu>
-                  </v-list-item-action>
                 </v-list-item>
-                <v-divider
-                  v-if="i < assignments.length - 1"
-                  :key="assignment.id"
-                />
-              </template>
-              <v-list-item v-if="assignments.length === 0">
-                <v-list-item-icon>
-                  {{ $icons.mdiInformationOutline }}
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title> No assignments yet</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
+              </v-list>
+            </v-skeleton-loader>
           </v-card-text>
         </v-card>
       </v-col>
@@ -86,23 +95,27 @@ export default {
     DeleteAssignment,
   },
   layout: 'app',
-  async asyncData({ store, params }) {
+  data() {
+    return {
+      assignments: [],
+    }
+  },
+  async fetch() {
     const url = new URL(
       '/.netlify/functions/getAssignments',
       'http://localhost:8888'
     )
     const data = await fetch(url, {
       body: JSON.stringify({
-        secret: store.state.user.secret,
-        groupId: params.group,
+        secret: this.$store.state.user.secret,
+        groupId: this.$route.params.group,
       }),
       method: 'POST',
     })
     if (!data.ok) {
       throw new Error(`Error fetching assignments ${data.status}`)
     }
-    const assignments = await data.json()
-    return { assignments }
+    this.assignments = await data.json()
   },
   head() {
     return {
