@@ -11,68 +11,29 @@ exports.handler = async (event, context, callback) => {
   try {
     const qry = q.Let(
       {
-        instance: groupId,
+        instance: q.Get(q.Ref(q.Collection('Group'), groupId)), // Group
       },
       {
         headers: q.Prepend(
-          { text: 'Username', value: 'name', align: 'start' },
+          [
+            { text: 'Username', value: 'username', align: 'start' },
+            { text: 'Target', value: 'target', align: 'center' },
+          ],
           q.Select(
-            ['data'],
+            'data',
             q.Map(
-              // Array of Assignment refs in chronological order
               q.Paginate(
                 q.Match(
                   q.Index('group_assignments_gradebook'),
-                  q.Ref(q.Collection('Group'), groupId)
+                  q.Select('ref', q.Var('instance'))
                 )
               ),
               q.Lambda(
-                'ref',
+                'aRef',
                 q.Let(
                   {
-                    instance: q.Get(q.Var('ref')), // Assignment
-                  },
-                  {
-                    // Fields required for Vuetify data-table
-                    // N.B. 'value' is numeric portion of assignment ref
-                    // and is used as a key in 'grades' object later on
-                    text: q.Concat(
-                      [
-                        q.Select(['data', 'name'], q.Var('instance')),
-                        ' (',
-                        q.ToString(
-                          // Duplicating the max mark code here to show
-                          // assignment maximum in table header
-                          q.Sum(
-                            q.Map(
-                              q.Select(
-                                ['data', 'questions'],
-                                q.Var('instance')
-                              ),
-                              q.Lambda(
-                                'qId',
-                                q.ToInteger(
-                                  q.Select(
-                                    ['data', 'maxMark'],
-                                    q.Get(
-                                      q.Ref(
-                                        q.Collection('Question'),
-                                        q.Var('qId')
-                                      )
-                                    )
-                                  )
-                                )
-                              )
-                            )
-                          )
-                        ),
-                        ')',
-                      ],
-                      ''
-                    ),
-                    value: q.Select(['ref', 'id'], q.Var('instance')),
-                    align: 'center',
-                    max: q.Sum(
+                    instance: q.Get(q.Var('aRef')), // Assignment
+                    assMax: q.Sum(
                       q.Map(
                         q.Select(['data', 'questions'], q.Var('instance')),
                         q.Lambda(
@@ -88,6 +49,19 @@ exports.handler = async (event, context, callback) => {
                         )
                       )
                     ),
+                  },
+                  {
+                    // Add assignment total mark after name
+                    // E.g., Algorithms questions [12]
+                    text: q.Concat([
+                      q.Select(['data', 'name'], q.Var('instance')),
+                      ' [',
+                      q.ToString(q.Var('assMax')),
+                      ']',
+                    ]),
+                    value: q.Select(['ref', 'id'], q.Var('instance')),
+                    align: 'center',
+                    max: q.Var('assMax'),
                   }
                 )
               )
@@ -100,7 +74,7 @@ exports.handler = async (event, context, callback) => {
             q.Paginate(
               q.Match(
                 q.Index('group_students'),
-                q.Ref(q.Collection('Group'), groupId)
+                q.Select('ref', q.Var('instance'))
               )
             ),
             q.Lambda(
@@ -110,19 +84,17 @@ exports.handler = async (event, context, callback) => {
                   // This is a bit of a hack. Marge takes an object and an array of
                   // objects. Adding a second top-level key for target messes up
                   // _grades.vue. So does adding it to the 2D array below.
-                  name: {
-                    username: q.Select(
-                      ['data', 'username'],
-                      q.Get(q.Var('stuRef'))
-                    ),
-                    target: q.Select(
-                      ['data', 'target'],
-                      q.Get(q.Var('stuRef')),
-                      {
-                        [groupId]: '-',
-                      }
-                    ),
-                  },
+                  username: q.Select(
+                    ['data', 'username'],
+                    q.Get(q.Var('stuRef'))
+                  ),
+                  target: q.Select(
+                    ['data', 'target', groupId],
+                    q.Get(q.Var('stuRef')),
+                    {
+                      [groupId]: '-',
+                    }
+                  ),
                 },
                 // Below must retrun an array of objects where the key is the
                 // assignment ID and the value is the student's score
@@ -233,24 +205,11 @@ exports.handler = async (event, context, callback) => {
       }
     )
     const data = await keyedClient.query(qry)
-    // Sort by username descending
-    data.sort(compare)
-    console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }
-  }
-}
-
-function compare(a, b) {
-  if (a.name.username < b.name.username) {
-    return -1
-  } else if (a.name.username > b.name.username) {
-    return 1
-  } else {
-    return 0
   }
 }

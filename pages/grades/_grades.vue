@@ -57,66 +57,60 @@
             </v-row>
             <v-row>
               <v-col cols="12">
-                <v-data-table
-                  :headers="data.headers"
-                  :items="data.grades"
-                  hide-default-footer
-                  disable-pagination
-                >
-                  <template #body="{ items }">
-                    <!-- Because we're using custom slots to render table body
-                         we need to implement loading and no data ourselves -->
-                    <!-- Loading -->
-                    <tr class="v-data-table__progress">
-                      <th :colspan="data.headers.length" class="px-0">
-                        <v-progress-linear indeterminate></v-progress-linear>
-                      </th>
-                    </tr>
-                    <!-- No data -->
-                    <tbody>
-                      <tr
-                        v-if="items.length === 0"
-                        class="v-data-table__empty-wrapper"
-                      >
-                        <td :colspan="data.headers.length">
-                          {{ `No data for ${group.name}` }}
-                        </td>
-                      </tr>
-                      <!-- Iterate over rows -->
-                      <!-- 'item' is one 'grades' object or one table row -->
-                      <tr v-for="(row, i) in items" v-else :key="i">
-                        <!-- Within a row iterate over cells -->
-                        <td
-                          v-for="(field, j) in Object.keys(row)"
-                          :key="j"
-                          :class="
-                            j > 0
-                              ? color(
-                                  row[data.headers[j].value],
-                                  data.headers[j].max,
-                                  row[data.headers[0].value].target[group.id]
-                                )
-                              : ''
-                          "
+                <v-skeleton-loader :loading="$fetchState.pending" type="table">
+                  <v-data-table
+                    :headers="data.headers"
+                    :items="data.data"
+                    hide-default-footer
+                    disable-pagination
+                    sort-by="username"
+                  >
+                    <template #body="{ items }">
+                      <tbody>
+                        <!-- No data -->
+                        <tr
+                          v-if="items.length === 0"
+                          class="v-data-table__empty-wrapper"
                         >
-                          <span>{{
-                            j === 0 ? uname(row, j) : row[data.headers[j].value]
-                          }}</span>
-                          <v-icon v-if="j > 0">
-                            {{
-                              color(
-                                row[data.headers[j].value],
-                                data.headers[j].max,
-                                row[data.headers[0].value].target[group.id],
-                                true
-                              )
-                            }}
-                          </v-icon>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-data-table>
+                          <td :colspan="data.headers.length">
+                            {{ `No data for ${group.name}` }}
+                          </td>
+                        </tr>
+                        <!-- Iterate over rows -->
+                        <!-- 'item' is one 'grades' object or one table row -->
+                        <tr v-for="(row, i) in items" v-else :key="i">
+                          <!-- Within a row iterate over cells -->
+                          <td v-for="(field, j) in Object.keys(row)" :key="j">
+                            <!-- Student can have more than one group, so target is an object -->
+                            <span v-if="j === 0">
+                              {{ row['username'] }}
+                            </span>
+                            <span v-else-if="j === 1">
+                              {{ row['target'] }}
+                            </span>
+                            <!-- Use header value as key into data object -->
+                            <div v-else>
+                              <span v-if="row[data.headers[j].value] === 'n/a'"
+                                >N/A</span
+                              >
+                              <v-chip
+                                v-else
+                                :color="
+                                  rag(
+                                    row[data.headers[j].value],
+                                    data.headers[j].max,
+                                    row['target']
+                                  )
+                                "
+                                >{{ row[data.headers[j].value] }}</v-chip
+                              >
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-data-table>
+                </v-skeleton-loader>
               </v-col>
             </v-row>
           </v-container>
@@ -145,15 +139,23 @@ export default {
     BoundariesDialog,
   },
   layout: 'app',
-  async asyncData({ store, params }) {
+  data() {
+    return {
+      data: [],
+      toggle: 'orange',
+      interval: false, // Scroll right
+      csv: [],
+    }
+  },
+  async fetch() {
     const url = new URL(
       '/.netlify/functions/getGrades',
       'http://localhost:8888'
     )
     let data = await fetch(url, {
       body: JSON.stringify({
-        secret: store.state.user.secret,
-        groupId: params.grades,
+        secret: this.$store.state.user.secret,
+        groupId: this.$route.params.grades,
       }),
       method: 'POST',
     })
@@ -161,14 +163,8 @@ export default {
       throw new Error(`Error fetching grades ${data.status}`)
     }
     data = await data.json()
-    return { data }
-  },
-  data() {
-    return {
-      toggle: 'orange',
-      interval: false, // Scroll right
-      csv: [],
-    }
+    // console.log(JSON.stringify(data, null, '\t'))
+    this.data = data
   },
   head() {
     return {
@@ -180,11 +176,7 @@ export default {
       return this.$store.getters['groups/groupById'](this.$route.params.grades)
     },
     boundaries() {
-      if (Object.entries(this.group).length > 0) {
-        return this.group.course.boundaries
-      } else {
-        return {}
-      }
+      return this.group.course.boundaries
     },
   },
   created() {
@@ -197,12 +189,7 @@ export default {
     }
   },
   methods: {
-    uname(row, j) {
-      const x = row[this.data.headers[0].value].target[this.group.id]
-      const t = x === undefined ? `-` : x
-      return `${row[this.data.headers[j].value].username} (${t})`
-    },
-    // Start scroll right https://jsfiddle.net/Herteby/x53494ef/
+    // Scroll right https://jsfiddle.net/Herteby/x53494ef/
     scroll() {
       if (!this.interval) {
         this.interval = setInterval(
@@ -219,65 +206,60 @@ export default {
       clearInterval(this.interval)
       this.interval = false
     },
-    // TODO Fix this ugly SHIT !!
-    // And check color coding plan
-
-    // Ugly code to RAG mark and icon and set icon type
-    // If ico is true, this function returns the icon type
-    color(n, max, target, ico = false) {
-      // if (this.$fetchState.pending || !this.boundaries) {
+    rag(n, max, target) {
+      // Don't RAG username
+      if (typeof n !== 'number') return ''
+      const z = n / max
+      if (target === '-') {
+        // Target not set ∴ RAG with percentages
+        if (this.toggle === 'red') {
+          if (z <= this.boundaries.rag[0]) {
+            console.log(`RED`)
+            return 'red--text text--darken-1 font-weight-black'
+          }
+        }
+        if (this.toggle === 'orange') {
+          if (z > this.boundaries.rag[0] && z < this.boundaries.rag[1]) {
+            console.log(`ORANGE`)
+            return 'orange--text text--darken-1 font-weight-black'
+          }
+        }
+        if (this.toggle === 'green') {
+          if (z >= this.boundaries.rag[1]) {
+            console.log(`GREEN`)
+            return 'green--text text--darken-1 font-weight-black'
+          }
+        }
+      } else {
+        // RAG against target grades
+        if (this.toggle === 'red') {
+          if (z < this.boundaries.actual[target] - 0.15) {
+            return 'red'
+          }
+        }
+        if (this.toggle === 'orange') {
+          if (
+            z >= this.boundaries.actual[target] - 0.15 &&
+            z < this.boundaries.actual[target]
+          ) {
+            return 'orange'
+          }
+        }
+        if (this.toggle === 'green') {
+          if (z >= this.boundaries.actual[target]) {
+            return 'green'
+          }
+        }
+      }
       return ''
-      // }
-      // return ''
-      // const z = n / max
-      // switch (this.toggle) {
-      //   case 'red':
-      //     // Use default RAG or student's target?
-      //     if (target === '-') {
-      //       if (z <= this.boundaries.rag[0])
-      //         return ico
-      //           ? this.$icons.mdiMenuDown
-      //           : 'red--text text--darken-2 font-weight-black'
-      //     } else if (z < this.boundaries.actual[target] - 0.1)
-      //       return ico
-      //         ? this.$icons.mdiMenuDown
-      //         : 'red--text text--darken-2 font-weight-black'
-      //     break
-      //   case 'green':
-      //     if (target === '-') {
-      //       if (z >= this.boundaries.rag[1])
-      //         return ico
-      //           ? this.$icons.mdiMenuUp
-      //           : 'green--text text--darken-2 font-weight-black'
-      //     } else if (z >= this.boundaries.actual[target])
-      //       return ico
-      //         ? this.$icons.mdiMenuUp
-      //         : 'green--text text--darken-2 font-weight-black'
-      //     break
-      //   case 'orange':
-      //     if (target === '-') {
-      //       if (z > this.boundaries.rag[0] && z < this.boundaries.rag[1])
-      //         return ico
-      //           ? this.$icons.mdiMenuSwap
-      //           : 'orange--text text--darken-3 font-weight-black'
-      //     } else
-      //       if (
-      //         z >= this.boundaries.actual[target] - 0.1 &&
-      //         z < this.boundaries.actual[target]
-      //       )
-      //         return ico
-      //           ? this.$icons.mdiMenuSwap
-      //           : 'orange--text text--darken-3 font-weight-black'
-      //     }
-      // }
     },
     exportTableToCSV() {
       for (const obj of this.data.headers) {
         this.csv += obj.text + ','
       }
       this.csv += '\n'
-      for (const obj of this.data.grades) {
-        this.csv += obj.name + ',' // Username
+      for (const obj of this.data.data) {
+        this.csv += obj.username + ',' // Username
         for (let i = 1; i < Object.keys(this.data.headers).length; i++) {
           this.csv += obj[this.data.headers[i].value] + ','
         }
@@ -318,26 +300,12 @@ export default {
 /* center all cells except username */
 td:not(:first-child) {
   text-align: center;
-  font-size: 1.2rem !important;
 }
 
-/* use css to colour code icons */
-td.red--text span.v-icon.notranslate.theme--light {
-  color: #d32f2f !important;
-}
-
-td.orange--text span.v-icon.notranslate.theme--light {
-  color: #ef6c00 !important;
-}
-
-td.green--text span.v-icon.notranslate.theme--light {
-  color: #388e3c !important;
-}
-
-/* replicate header style */
-.mob-th {
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 0.75rem;
-  font-weight: bold;
+/* bold active chip text */
+span.v-chip.theme--light.red,
+span.v-chip.theme--light.orange,
+span.v-chip.theme--light.green {
+  font-weight: 900;
 }
 </style>
