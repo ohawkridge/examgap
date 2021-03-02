@@ -64,18 +64,31 @@ export default {
     }
   },
   methods: {
-    deleteAssignment() {
+    async deleteAssignment() {
       this.loading = true
       try {
-        // await deleteAssignment(this.assignmentId)
-        // If on assignment detail go to /group/xxx
-        // If already on /group/xxx we can stay put
-        // TODO - what route name?
-        if (this.$route.name === 'teacher-assignment-assignment') {
+        const url = new URL(
+          '/.netlify/functions/deleteAssignment',
+          'http://localhost:8888'
+        )
+        let response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            assignmentId: this.assignmentId,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error deleting assignment ${response.status}`)
+        }
+        response = await response.json()
+        console.log(response)
+        // If on assignment detail, go to /group/xxx, else stay put
+        if (this.$route.name !== 'group-group') {
           this.$router.push(`/group/${this.groupId}`)
         }
-        // Update local data NOT NEEDED?
-        // this.$store.commit('user/deleteAssignment', this.assignmentId)
+        // Trigger fetch in parent
+        this.$nuxt.$emit('refresh')
         this.$snack.showMessage({
           msg: 'Success. Assignment deleted',
           type: 'success',

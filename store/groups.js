@@ -103,6 +103,7 @@ export const mutations = {
   },
   logout(state) {
     state.groups = []
+    state.tab = true
     state.group = {}
     state.activeGroupIndex = 0
     state.revisionTopics = []

@@ -134,10 +134,17 @@ export default {
       mdiPlus,
     }
   },
+  mounted() {
+    this.$nuxt.$on('refresh', () => {
+      this.$fetch()
+    })
+  },
   methods: {
     createAssignment() {
       // Remember group when creating assignments
       this.$store.commit('assignments/setGroup', this.group.id)
+      // Clear any questions selected for a previous group
+      this.$store.commit('assignments/clearSelectedQuestions')
       this.$router.push(`/course/${this.group.course.id}`)
     },
   },

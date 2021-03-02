@@ -3,6 +3,8 @@ export const state = () => ({
   questionId: '',
   topicId: '',
   groupId: '',
+  selectedQuestions: [],
+  currentTopic: 0,
 })
 
 export const mutations = {
@@ -16,10 +18,28 @@ export const mutations = {
   setGroup(state, groupId) {
     state.groupId = groupId
   },
+  setCurrentTopic(state, index) {
+    state.currentTopic = index
+  },
+  updateSelectedQuestions(state, questionId) {
+    // Add or remove questionId from selectedQuestions
+    if (state.selectedQuestions.includes(questionId)) {
+      state.selectedQuestions = state.selectedQuestions.filter(
+        (id) => id !== questionId
+      )
+    } else {
+      state.selectedQuestions.push(questionId)
+    }
+  },
+  clearSelectedQuestions(state) {
+    state.selectedQuestions = []
+  },
   logout(state) {
     state.assignmentId = ''
     state.questionId = ''
     state.topicId = ''
     state.groupId = ''
+    state.selectedQuestions = []
+    state.currentTopic = 0
   },
 }
