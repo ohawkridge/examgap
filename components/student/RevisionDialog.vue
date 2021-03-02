@@ -98,18 +98,17 @@ export default {
     async start() {
       this.loading = true
       try {
-        const url = new URL(
+        const response = await fetch(
           '/.netlify/functions/getRandomQuestionId',
-          'http://localhost:8888'
+          {
+            body: JSON.stringify({
+              secret: this.$store.state.user.secret,
+              topicId: this.$store.state.groups.currentRevisionTopic.id,
+              answered: this.$store.state.groups.currentRevisionTopic.answered,
+            }),
+            method: 'POST',
+          }
         )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            topicId: this.$store.state.groups.currentRevisionTopic.id,
-            answered: this.$store.state.groups.currentRevisionTopic.answered,
-          }),
-          method: 'POST',
-        })
         if (!response.ok) {
           throw new Error(`Error getting random question ${response.status}`)
         }

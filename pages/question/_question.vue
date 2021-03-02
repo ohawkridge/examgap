@@ -51,11 +51,7 @@ export default {
   },
   async fetch() {
     try {
-      const url = new URL(
-        '/.netlify/functions/getQuestion',
-        'http://localhost:8888'
-      )
-      const response = await fetch(url, {
+      const response = await fetch('/.netlify/functions/getQuestion', {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
           questionId: this.$route.params.question,

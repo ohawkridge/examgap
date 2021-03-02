@@ -17,13 +17,7 @@ export const actions = {
   // Call a function to get user data
   async getUser({ commit, state }) {
     try {
-      // Avoid 'only absolute URLs are supported' error
-      // https://github.com/node-fetch/node-fetch/issues/481
-      const url = new URL(
-        '/.netlify/functions/getUser',
-        'http://localhost:8888'
-      )
-      const response = await fetch(url, {
+      const response = await fetch('/.netlify/functions/getUser', {
         body: JSON.stringify({
           secret: state.secret,
         }),
@@ -54,11 +48,7 @@ export const actions = {
   },
   // Start a document stream on user doc
   async startStream({ state }) {
-    const url = new URL(
-      '/.netlify/functions/startStream',
-      'http://localhost:8888'
-    )
-    let response = await fetch(url, {
+    let response = await fetch('/.netlify/functions/startStream', {
       body: JSON.stringify({
         secret: state.secret,
       }),

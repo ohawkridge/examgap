@@ -48,11 +48,7 @@ export default {
   },
   layout: 'app',
   async asyncData({ store, params }) {
-    const url = new URL(
-      '/.netlify/functions/getAssignment',
-      'http://localhost:8888'
-    )
-    const response = await fetch(url, {
+    const response = await fetch('/.netlify/functions/getAssignment', {
       body: JSON.stringify({
         secret: store.state.user.secret,
         assignmentId: params.assignment,

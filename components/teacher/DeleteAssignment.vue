@@ -67,11 +67,7 @@ export default {
     async deleteAssignment() {
       this.loading = true
       try {
-        const url = new URL(
-          '/.netlify/functions/deleteAssignment',
-          'http://localhost:8888'
-        )
-        let response = await fetch(url, {
+        let response = await fetch('/.netlify/functions/deleteAssignment', {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             assignmentId: this.assignmentId,

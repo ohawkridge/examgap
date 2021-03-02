@@ -126,11 +126,7 @@ import {
 export default {
   layout: 'app',
   async asyncData({ store, params }) {
-    const url = new URL(
-      '/.netlify/functions/getResponse',
-      'http://localhost:8888'
-    )
-    const data = await fetch(url, {
+    const data = await fetch('/.netlify/functions/getResponse', {
       body: JSON.stringify({
         secret: store.state.user.secret,
         responseId: params.response,

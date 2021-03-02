@@ -36,11 +36,7 @@ export const actions = {
   // Get student revision topics
   async getRevisionTopics({ commit, rootState }, courseId) {
     try {
-      const url = new URL(
-        '/.netlify/functions/getTopics',
-        'http://localhost:8888'
-      )
-      const response = await fetch(url, {
+      const response = await fetch('/.netlify/functions/getTopics', {
         body: JSON.stringify({
           secret: rootState.user.secret,
           courseId,

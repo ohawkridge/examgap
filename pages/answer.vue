@@ -128,11 +128,7 @@ export default {
   },
   layout: 'app',
   async asyncData(context) {
-    const url = new URL(
-      '/.netlify/functions/getQuestion',
-      'http://localhost:8888'
-    )
-    const response = await fetch(url, {
+    const response = await fetch('/.netlify/functions/getQuestion', {
       body: JSON.stringify({
         secret: context.store.state.user.secret,
         questionId: context.store.state.assignments.questionId,
@@ -274,11 +270,7 @@ export default {
         this.marks.splice(-1, 1) // Uncheck
       } else {
         try {
-          const url = new URL(
-            '/.netlify/functions/toggleMark',
-            'http://localhost:8888'
-          )
-          const response = await fetch(url, {
+          const response = await fetch('/.netlify/functions/toggleMark', {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               responseId: this.responseId,
@@ -304,11 +296,7 @@ export default {
     async save() {
       try {
         this.saveStatus = `Saving...`
-        const url = new URL(
-          '/.netlify/functions/saveAnswer',
-          'http://localhost:8888'
-        )
-        const response = await fetch(url, {
+        const response = await fetch('/.netlify/functions/saveAnswer', {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             assignmentId: this.$store.state.assignments.assignmentId,

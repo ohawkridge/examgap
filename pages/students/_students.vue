@@ -193,11 +193,7 @@ export default {
   },
   async fetch() {
     try {
-      const url = new URL(
-        '/.netlify/functions/getStudents',
-        'http://localhost:8888'
-      )
-      const response = await fetch(url, {
+      const response = await fetch('/.netlify/functions/getStudents', {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
           groupId: this.group.id,

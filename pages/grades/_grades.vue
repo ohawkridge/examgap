@@ -148,11 +148,7 @@ export default {
     }
   },
   async fetch() {
-    const url = new URL(
-      '/.netlify/functions/getGrades',
-      'http://localhost:8888'
-    )
-    let data = await fetch(url, {
+    let data = await fetch('/.netlify/functions/getGrades', {
       body: JSON.stringify({
         secret: this.$store.state.user.secret,
         groupId: this.$route.params.grades,

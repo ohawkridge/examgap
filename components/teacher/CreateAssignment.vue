@@ -265,11 +265,7 @@ export default {
   async fetch() {
     // Get students for this group
     try {
-      const url = new URL(
-        '/.netlify/functions/getStudents',
-        'http://localhost:8888'
-      )
-      const response = await fetch(url, {
+      const response = await fetch('/.netlify/functions/getStudents', {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
           groupId: this.groupId,
@@ -376,11 +372,7 @@ export default {
     },
     async setMode(studentId, examMode) {
       try {
-        const url = new URL(
-          '/.netlify/functions/updateExamMode',
-          'http://localhost:8888'
-        )
-        const response = await fetch(url, {
+        const response = await fetch('/.netlify/functions/updateExamMode', {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             studentId,
@@ -404,12 +396,8 @@ export default {
     async create() {
       if (this.$refs.form.validate() && this.selectedStudents.length > 0) {
         try {
-          const url = new URL(
-            '/.netlify/functions/createAssignment',
-            'http://localhost:8888'
-          )
           this.loading = true
-          let response = await fetch(url, {
+          let response = await fetch('/.netlify/functions/createAssignment', {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               name: this.name,

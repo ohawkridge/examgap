@@ -300,11 +300,7 @@ export default {
   },
   layout: 'app',
   async asyncData({ store, params }) {
-    const url = new URL(
-      '/.netlify/functions/getReport',
-      'http://localhost:8888'
-    )
-    const response = await fetch(url, {
+    const response = await fetch('/.netlify/functions/getReport', {
       body: JSON.stringify({
         secret: store.state.user.secret,
         assignmentId: params.report,
@@ -448,11 +444,7 @@ export default {
     async marked() {
       if (!this.response.marked) {
         try {
-          const url = new URL(
-            '/.netlify/functions/setAsMarked',
-            'http://localhost:8888'
-          )
-          const response = await fetch(url, {
+          const response = await fetch('/.netlify/functions/setAsMarked', {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               responseId: this.response.id,
@@ -528,11 +520,7 @@ export default {
     },
     async toggleMark(markId, addOrRemove) {
       try {
-        const url = new URL(
-          '/.netlify/functions/toggleMark',
-          'http://localhost:8888'
-        )
-        let response = await fetch(url, {
+        let response = await fetch('/.netlify/functions/toggleMark', {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             responseId: this.response.id,
@@ -557,11 +545,7 @@ export default {
     },
     async flag() {
       try {
-        const url = new URL(
-          '/.netlify/functions/flagResponse',
-          'http://localhost:8888'
-        )
-        const response = await fetch(url, {
+        const response = await fetch('/.netlify/functions/flagResponse', {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             responseId: this.response.id,
@@ -589,11 +573,7 @@ export default {
     },
     async boomerang() {
       try {
-        const url = new URL(
-          '/.netlify/functions/reassignQuestion',
-          'http://localhost:8888'
-        )
-        const response = await fetch(url, {
+        const response = await fetch('/.netlify/functions/reassignQuestion', {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             repeat: !this.response.repeat,
@@ -633,11 +613,7 @@ export default {
     async save() {
       this.feedbackStatus = 'Saving...'
       try {
-        const url = new URL(
-          '/.netlify/functions/reassignQuestion',
-          'http://localhost:8888'
-        )
-        const response = await fetch(url, {
+        const response = await fetch('/.netlify/functions/reassignQuestion', {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             responseId: this.response.id,
