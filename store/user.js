@@ -52,6 +52,39 @@ export const actions = {
       console.error(e)
     }
   },
+  // Start a document stream on user doc
+  async startStream({ state }) {
+    const url = new URL(
+      '/.netlify/functions/startStream',
+      'http://localhost:8888'
+    )
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: state.secret,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error starting stream ${response.status}`)
+    }
+    response = await response.json()
+    console.log(response)
+    // if ('newAssignment' in data.document.data) {
+    //   try {
+    //     const assignment = await getNewAssignment(
+    //       data.document.data.newAssignment
+    //     )
+    //     this.$snack.showMessage({
+    //       type: '',
+    //       msg: 'New assignment added',
+    //     })
+    //     this.$store.commit('user/newAssignment', assignment)
+    //   } catch (e) {
+    //     console.error(e)
+    //   }
+    // }
+    // this.$store.commit('user/setExamMode', data.document.data.examMode)
+  },
 }
 
 export const mutations = {

@@ -50,7 +50,7 @@
           color="#2e2e3a"
           text
           nuxt
-          to="/create"
+          to="/author"
           class="mr-4 d-none d-sm-flex"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -126,12 +126,6 @@ export default {
     CreateClass,
   },
   middleware: ['get-user'],
-  data() {
-    return {
-      // keyedClient: {},
-      // stream: {},
-    }
-  },
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
@@ -146,49 +140,16 @@ export default {
       mdiOpenInNew,
     }
   },
-  // TODO
-  // async mounted() {
-  //   this.keyedClient = await createClient(localStorage.getItem('secret'))
-  //   // For students, open a document stream
-  //   // This mirrors examMode and receives new assignments
-  //   if (!this.user.teacher) {
-  //     this.stream = this.keyedClient.stream
-  //       .document(q.Ref(q.Collection('User'), this.user.id))
-  //       .on('start', () => {
-  //         console.log(`%c Stream started`, 'color:orange')
-  //       })
-  //       .on('version', async (data, event) => {
-  //         console.log(`Received ${event.type} event`)
-  //         if ('newAssignment' in data.document.data) {
-  //           try {
-  //             const assignment = await getNewAssignment(
-  //               data.document.data.newAssignment
-  //             )
-  //             this.$snack.showMessage({
-  //               type: '',
-  //               msg: 'New assignment added',
-  //             })
-  //             this.$store.commit('user/newAssignment', assignment)
-  //           } catch (e) {
-  //             console.error(e)
-  //           }
-  //         }
-  //         this.$store.commit('user/setExamMode', data.document.data.examMode)
-  //       })
-  //       .on('error', (data, event) => {
-  //         console.error(data, event)
-  //         // N.B. Do not manually restart stream
-  //         // (it automatically retries?)
-  //       })
-  //     this.stream.start()
-  //   }
-  // },
+  mounted() {
+    // For students, dispatch action to start document stream
+    if (!this.teacher) this.$store.dispatch('user/startStream')
+  },
   methods: {
     createClass() {
       this.$nuxt.$emit('new-class')
     },
     // Students and teachers have the same 'Classes' menu
-    // so we need to customise how menu items links behave
+    // so we need to customise how menu item links behave
     // For students, we navigate by changing the
     // activeGroupIndex store property
     nav(i, id) {

@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-card class="text-body-2 pa-md-4 modal">
-      <v-skeleton-loader :loading="$fetchState.loading">
+      <v-skeleton-loader :loading="$fetchState.pending" type="card">
         <v-card-title> Question </v-card-title>
         <v-card-subtitle>
           {{ questionId }}
@@ -32,7 +32,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn text nuxt :to="`/create/${question.id}`">
+          <v-btn text nuxt :to="`/author/${question.id}`">
             Edit Question
           </v-btn>
           <v-btn
@@ -95,7 +95,6 @@ export default {
   },
   watch: {
     dialog() {
-      console.log(`--DIALOG--`, this.questionId)
       this.$fetch()
     },
   },
