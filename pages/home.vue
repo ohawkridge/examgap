@@ -101,15 +101,14 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import GroupCard from '@/components/teacher/GroupCard'
-import Assignments from '@/components/student/Assignments'
-import RevisionDialog from '@/components/student/RevisionDialog'
-import Quote from '@/components/student/Quote'
 import { mdiPlus } from '@mdi/js'
+import { mapState, mapGetters } from 'vuex'
+import GroupCard from '../components/teacher/GroupCard'
+import Assignments from '../components/student/Assignments'
+import RevisionDialog from '../components/student/RevisionDialog'
+import Quote from '../components/student/Quote'
 
 export default {
-  name: 'Home',
   components: {
     GroupCard,
     Assignments,
