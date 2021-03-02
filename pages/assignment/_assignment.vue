@@ -24,12 +24,12 @@
               }})
             </div>
             <v-list>
-              <Question
+              <!-- <Question
                 v-for="(question, i) in assignment.questions"
                 :key="i"
                 :assignment-id="assignment.id"
                 :question="question"
-              />
+              /> -->
             </v-list>
           </v-card-text>
         </v-card>
@@ -39,12 +39,12 @@
 </template>
 
 <script>
-import Question from '@/components/student/Question'
+// import Question from '@/components/student/Question'
 import { mdiArrowLeft } from '@mdi/js'
 
 export default {
   components: {
-    Question,
+    // Question,
   },
   layout: 'app',
   async asyncData({ store, params }) {
