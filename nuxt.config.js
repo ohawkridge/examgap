@@ -8,7 +8,7 @@ export default {
   // https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-generate#exclude
   generate: {
     exclude: [
-      /^\/home/, // path starts with /admin
+      /^\/home/,
       /^\/assignment/,
       /^\/course/,
       /^\/grades/,
@@ -16,6 +16,8 @@ export default {
       /^\/report/,
       /^\/response/,
       /^\/answer/,
+      /^\/profile/,
+      /^\/settings/,
     ],
   },
 
