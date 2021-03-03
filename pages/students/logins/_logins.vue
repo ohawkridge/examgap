@@ -25,7 +25,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row class="justify-center">
+    <v-row v-if="usernames.length > 0" class="justify-center">
       <v-col cols="12" md="10">
         <v-alert
           :icon="$icons.mdiInformationOutline"
@@ -65,7 +65,7 @@
           <div></div>
         </v-col>
       </template>
-      <p v-if="usernames.length === 0" class="text-center">
+      <p v-if="usernames.length === 0" class="text-center mt-3">
         No students added yet. Go to the <b>'Students'</b> screen and click
         'Actions'
         <v-icon small>{{ $icons.mdiArrowRight }}</v-icon>

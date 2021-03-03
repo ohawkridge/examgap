@@ -168,7 +168,7 @@
                           <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
                         </v-list-item-icon>
                         <v-list-item-title>
-                          No {{ topics[currentTopic].name }} questions yet
+                          No questions yet
                         </v-list-item-title>
                       </v-list-item>
                     </v-list-item-group>
@@ -178,7 +178,10 @@
               <v-col cols="12" md="4">
                 <div class="d-flex justify-space-between">
                   <p class="text-h6">Preview</p>
-                  <QuestionDetailDialog :question-id="questionId" />
+                  <QuestionDetailDialog
+                    :question-id="questionId"
+                    :disabled="questions.length === 0"
+                  />
                 </div>
                 <div v-if="preview" class="pt-2" v-html="preview.text"></div>
                 <div v-if="preview" class="d-flex justify-end">
@@ -256,6 +259,7 @@ export default {
     ...mapState({
       groupId: (state) => state.assignments.groupId,
       selectedQuestions: (state) => state.assignments.selectedQuestions,
+      group: (state) => state.groups.group,
     }),
     // Get the id of the current question
     questionId() {
@@ -265,11 +269,6 @@ export default {
     },
     preview() {
       return this.questions[this.selectedQuestion]
-    },
-    // Use the group id stored when 'Create Assignment'
-    // was clicked to get the full group object
-    group() {
-      return this.$store.getters['groups/groupById'](this.groupId)
     },
     // Remember which topic we were on last
     currentTopic: {

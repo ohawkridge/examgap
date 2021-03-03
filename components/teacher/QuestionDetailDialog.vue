@@ -1,11 +1,17 @@
 <template>
   <v-dialog v-model="dialog" max-width="900px">
     <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" outlined color="primary" v-on="on">
+      <v-btn
+        v-bind="attrs"
+        :disabled="disabled"
+        outlined
+        color="primary"
+        v-on="on"
+      >
         Show Question
       </v-btn>
     </template>
-    <v-card class="text-body-2 pa-md-4 modal">
+    <v-card class="text-body-2 pa-md-4">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
         <v-card-title> Question </v-card-title>
         <v-card-subtitle>
@@ -57,6 +63,10 @@ export default {
       type: String,
       required: true,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -70,7 +80,7 @@ export default {
     if (this.questionId !== '') {
       try {
         const url = new URL(
-          '/.netlify/functions/getQuestions',
+          '/.netlify/functions/getQuestion',
           this.$config.baseURL
         )
         const response = await fetch(url, {

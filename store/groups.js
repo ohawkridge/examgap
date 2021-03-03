@@ -35,6 +35,7 @@ export const getters = {
 export const actions = {
   // Get student revision topics
   async getRevisionTopics({ commit, rootState }, courseId) {
+    console.log(`SHOULD I HAVE FIRED?`)
     try {
       const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
       const response = await fetch(url, {

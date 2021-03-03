@@ -109,8 +109,7 @@
                         elevation="0"
                         @click="send('open-add')"
                       >
-                        <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                        Add student(s)</v-btn
+                        Add students</v-btn
                       >
                     </p>
                   </template>
@@ -148,7 +147,7 @@ import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
 import CopyStudents from '@/components/teacher/CopyStudents'
 import RemoveStudents from '@/components/teacher/RemoveStudents'
-import { mdiChevronDown, mdiDownloadOutline, mdiPlus } from '@mdi/js'
+import { mdiChevronDown, mdiDownloadOutline } from '@mdi/js'
 
 export default {
   components: {
@@ -233,7 +232,6 @@ export default {
     this.$icons = {
       mdiChevronDown,
       mdiDownloadOutline,
-      mdiPlus,
     }
   },
   methods: {
