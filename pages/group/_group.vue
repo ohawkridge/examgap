@@ -27,7 +27,7 @@
               width="66%"
               :types="{ list: 'list-item-two-line@5' }"
             >
-              <v-list>
+              <v-list v-if="assignments.length > 0">
                 <template v-for="(assignment, i) in assignments">
                   <v-list-item :key="i" nuxt :to="`/report/${assignment.id}`">
                     <v-list-item-content>
@@ -65,15 +65,29 @@
                     :key="assignment.id"
                   />
                 </template>
-                <v-list-item v-if="assignments.length === 0">
-                  <v-list-item-icon>
-                    {{ $icons.mdiInformationOutline }}
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title> No assignments yet</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
               </v-list>
+              <!-- Empty state -->
+              <div v-else>
+                <div id="empty" class="d-flex justify-center">
+                  <v-img src="/no-assign.svg" max-width="100" />
+                </div>
+                <p class="text-body-1 font-weight-bold text-center mb-0">
+                  No assignments yet
+                </p>
+                <p class="text-subtitle text-center">
+                  Click create assignment to browse questions
+                </p>
+                <div class="d-flex justify-center">
+                  <v-btn
+                    elevation="0"
+                    color="primary"
+                    class="mb-10"
+                    @click="createAssignment()"
+                  >
+                    Create assignment
+                  </v-btn>
+                </div>
+              </div>
             </v-skeleton-loader>
           </v-card-text>
         </v-card>
@@ -86,7 +100,12 @@
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
-import { mdiDotsVertical, mdiInformationOutline, mdiPlus } from '@mdi/js'
+import {
+  mdiDotsVertical,
+  mdiInformationOutline,
+  mdiPlus,
+  mdiBookOpenOutline,
+} from '@mdi/js'
 
 export default {
   components: {
@@ -132,6 +151,7 @@ export default {
       mdiDotsVertical,
       mdiInformationOutline,
       mdiPlus,
+      mdiBookOpenOutline,
     }
   },
   mounted() {
@@ -150,3 +170,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+#empty {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+</style>

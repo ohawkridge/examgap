@@ -8,7 +8,7 @@
     :rules="courseRules"
     label="Select course*"
     outlined
-    @input="updateCourse"
+    @input="$nuxt.$emit('select-course', selectedCourse)"
   >
     <!-- Custom selection appearance -->
     <template #selection="data">
@@ -26,6 +26,7 @@
 
 <script>
 export default {
+  name: 'CourseSelect',
   props: {
     course: {
       type: String,
@@ -52,7 +53,7 @@ export default {
         method: 'POST',
       })
       if (!response.ok) {
-        throw new Error(`Error fetching user data ${response.status}`)
+        throw new Error(`Error fetching courses ${response.status}`)
       }
       this.courses = await response.json()
     } catch (e) {
@@ -62,12 +63,6 @@ export default {
         msg: 'Error fetching courses',
       })
     }
-  },
-  methods: {
-    updateCourse() {
-      // NOT a Nuxt event
-      this.$emit('clicked', this.selectedCourse)
-    },
   },
 }
 </script>

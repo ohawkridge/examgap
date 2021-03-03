@@ -73,7 +73,7 @@
       >
         <v-col cols="12" md="6" class="pad-l">
           <p class="text-h5 text-md-h4 font-weight-bold">
-            Diagnose strengths + weaknesses
+            Diagnose strengths & weaknesses
           </p>
           <p class="text-body-1">
             Marks are automatically recorded in a detailed grade book. This

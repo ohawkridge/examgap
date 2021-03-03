@@ -5,13 +5,13 @@
       <v-card-text>
         <v-form ref="form">
           <v-text-field
-            v-model="name"
+            v-model="groupName"
             :rules="nameRules"
             label="Class name*"
             outlined
             autofocus
           ></v-text-field>
-          <CourseSelect @clicked="updateCourse" />
+          <CourseSelect />
         </v-form>
         <small>*Indicates required field</small>
       </v-card-text>
@@ -43,15 +43,18 @@ export default {
   data() {
     return {
       dialog: false,
-      name: '',
-      course: '',
-      nameRules: [(v) => !!v || 'Name is required'],
       loading: false,
+      groupName: '',
+      nameRules: [(v) => !!v || 'Name is required'],
+      course: '',
     }
   },
   mounted() {
     this.$nuxt.$on('show-create', () => {
       this.dialog = true
+    })
+    this.$nuxt.$on('select-course', (courseId) => {
+      this.updateCourse(courseId)
     })
   },
   methods: {
@@ -69,7 +72,7 @@ export default {
           const response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
-              name: this.name,
+              groupName: this.groupName,
               courseId: this.course,
             }),
             method: 'POST',
@@ -81,7 +84,7 @@ export default {
           this.$store.commit('groups/addGroup', data)
           this.$snack.showMessage({
             type: 'success',
-            msg: `Success. Class created`,
+            msg: `Class created`,
           })
         } catch (e) {
           console.error(e)
@@ -90,7 +93,7 @@ export default {
             msg: `Error creating class`,
           })
         } finally {
-          // Close dialog and clear form
+          // Close dialog; clear form
           this.dialog = false
           this.loading = false
           this.$refs.form.reset()

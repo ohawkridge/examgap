@@ -18,12 +18,13 @@
       <v-col v-for="(group, i) in groups" :key="i" cols="12" md="6" lg="4">
         <GroupCard :group="group" />
       </v-col>
-      <v-col v-if="tab">
+      <!-- Create class card button -->
+      <v-col v-if="tab" cols="12" md="6" lg="4">
         <v-card
           id="create-card"
-          hover
           class="d-flex align-center justify-center"
           outlined
+          hover
           height="172"
           @click="emitNew"
         >
@@ -192,9 +193,15 @@ export default {
 </script>
 
 <style scoped>
-/* style student revision counts */
+/* student revision counts */
 span.v-chip.theme--light.green-chip {
   background-color: rgb(201, 237, 194) !important;
   color: rgb(18, 39, 14) !important;
+}
+
+/* create class card */
+#create-card {
+  background: #f1eeee !important;
+  border: 1px dashed #0078a0 !important;
 }
 </style>
