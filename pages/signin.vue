@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container class="d-flex align-center">
-      <Logo />
+      <TheLogo />
       <v-spacer />
       <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
     </v-container>
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import Logo from '@/components/common/Logo'
+import TheLogo from '@/components/common/TheLogo'
 import {
   mdiAccountOutline,
   mdiAlertOutline,
@@ -79,7 +79,7 @@ import {
 
 export default {
   components: {
-    Logo,
+    TheLogo,
   },
   data() {
     return {

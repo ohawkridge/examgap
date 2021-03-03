@@ -4,6 +4,21 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
+  // Exclude most pages
+  // https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-generate#exclude
+  generate: {
+    exclude: [
+      /^\/home/, // path starts with /admin
+      /^\/assignment/,
+      /^\/course/,
+      /^\/grades/,
+      /^\/question/,
+      /^\/report/,
+      /^\/response/,
+      /^\/answer/,
+    ],
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s' + ' — Examgap',

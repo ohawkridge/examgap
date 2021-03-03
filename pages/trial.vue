@@ -3,7 +3,7 @@
     <v-app-bar flat app color="white">
       <v-container class="d-flex align-center px-0 px-sm-3">
         <nuxt-link to="/">
-          <Logo />
+          <TheLogo />
         </nuxt-link>
         <v-spacer />
         <span class="grey--text"
@@ -98,11 +98,11 @@
 </template>
 
 <script>
-import Logo from '@/components/common/Logo'
+import TheLogo from '@/components/common/TheLogo'
 import { mdiOpenInNew, mdiAlertOutline } from '@mdi/js'
 export default {
   components: {
-    Logo,
+    TheLogo,
   },
   data() {
     return {

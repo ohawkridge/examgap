@@ -116,7 +116,7 @@
         </v-row>
       </v-container>
     </v-card>
-    <SuccessDialog
+    <TheSuccessDialog
       title="Success. Message sent"
       subtitle="You should receive a response within 24 hours."
     />
@@ -125,12 +125,12 @@
 
 <script>
 import { mdiEmailOutline, mdiTwitter, mdiSendOutline } from '@mdi/js'
-import SuccessDialog from '@/components/common/SuccessDialog'
+import TheSuccessDialog from '@/components/common/TheSuccessDialog'
 
 export default {
   name: 'StaticFooter',
   components: {
-    SuccessDialog,
+    TheSuccessDialog,
   },
   data() {
     return {
