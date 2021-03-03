@@ -24,12 +24,12 @@
               }})
             </div>
             <v-list>
-              <!-- <Question
+              <AssignmentQuestion
                 v-for="(question, i) in assignment.questions"
                 :key="i"
                 :assignment-id="assignment.id"
                 :question="question"
-              /> -->
+              />
             </v-list>
           </v-card-text>
         </v-card>
@@ -39,16 +39,17 @@
 </template>
 
 <script>
-// import Question from '@/components/student/Question'
+import AssignmentQuestion from '@/components/student/AssignmentQuestion'
 import { mdiArrowLeft } from '@mdi/js'
 
 export default {
   components: {
-    // Question,
+    AssignmentQuestion,
   },
   layout: 'app',
-  async asyncData({ store, params }) {
-    const response = await fetch('/.netlify/functions/getAssignment', {
+  async asyncData({ store, params, $config: { baseURL } }) {
+    const url = new URL('/.netlify/functions/getAssignment', baseURL)
+    const response = await fetch(url, {
       body: JSON.stringify({
         secret: store.state.user.secret,
         assignmentId: params.assignment,

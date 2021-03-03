@@ -225,7 +225,8 @@ export default {
   async fetch() {
     // First get course topics
     try {
-      const response = await fetch('/.netlify/functions/getTopics', {
+      const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
+      const response = await fetch(url, {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
           courseId: this.$route.params.course,
@@ -293,7 +294,11 @@ export default {
       // Now get questions for current topic
       try {
         this.loading = true
-        const response = await fetch('/.netlify/functions/getQuestions', {
+        const url = new URL(
+          '/.netlify/functions/getQuestions',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             topicId: this.topics[this.currentTopic].id,

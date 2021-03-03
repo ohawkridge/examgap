@@ -17,7 +17,8 @@ export const actions = {
   // Call a function to get user data
   async getUser({ commit, state }) {
     try {
-      const response = await fetch('/.netlify/functions/getUser', {
+      const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
+      const response = await fetch(url, {
         body: JSON.stringify({
           secret: state.secret,
         }),
@@ -47,34 +48,35 @@ export const actions = {
     }
   },
   // Start a document stream on user doc
-  async startStream({ state }) {
-    let response = await fetch('/.netlify/functions/startStream', {
-      body: JSON.stringify({
-        secret: state.secret,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error(`Error starting stream ${response.status}`)
-    }
-    response = await response.json()
-    console.log(response)
-    // if ('newAssignment' in data.document.data) {
-    //   try {
-    //     const assignment = await getNewAssignment(
-    //       data.document.data.newAssignment
-    //     )
-    //     this.$snack.showMessage({
-    //       type: '',
-    //       msg: 'New assignment added',
-    //     })
-    //     this.$store.commit('user/newAssignment', assignment)
-    //   } catch (e) {
-    //     console.error(e)
-    //   }
-    // }
-    // this.$store.commit('user/setExamMode', data.document.data.examMode)
-  },
+  // async startStream({ state }) {
+  //   const url = new URL('/.netlify/functions/startStream', this.$config.baseURL)
+  //   let response = await fetch(url, {
+  //     body: JSON.stringify({
+  //       secret: state.secret,
+  //     }),
+  //     method: 'POST',
+  //   })
+  //   if (!response.ok) {
+  //     throw new Error(`Error starting stream ${response.status}`)
+  //   }
+  //   response = await response.json()
+  //   console.log(response)
+  // if ('newAssignment' in data.document.data) {
+  //   try {
+  //     const assignment = await getNewAssignment(
+  //       data.document.data.newAssignment
+  //     )
+  //     this.$snack.showMessage({
+  //       type: '',
+  //       msg: 'New assignment added',
+  //     })
+  //     this.$store.commit('user/newAssignment', assignment)
+  //   } catch (e) {
+  //     console.error(e)
+  //   }
+  // }
+  // this.$store.commit('user/setExamMode', data.document.data.examMode)
+  // },
 }
 
 export const mutations = {

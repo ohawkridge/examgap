@@ -125,8 +125,9 @@ import {
 
 export default {
   layout: 'app',
-  async asyncData({ store, params }) {
-    const data = await fetch('/.netlify/functions/getResponse', {
+  async asyncData({ store, params, $config: { baseURL } }) {
+    const url = new URL('/.netlify/functions/getResponse', baseURL)
+    const data = await fetch(url, {
       body: JSON.stringify({
         secret: store.state.user.secret,
         responseId: params.response,

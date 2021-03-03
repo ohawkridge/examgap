@@ -62,7 +62,11 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true
         try {
-          const response = await fetch('/.netlify/functions/createGroup', {
+          const url = new URL(
+            '/.netlify/functions/createGroup',
+            this.$config.baseURL
+          )
+          const response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               name: this.name,

@@ -78,6 +78,15 @@ export default {
     },
   },
 
+  // Inject config variables into Nuxt
+  // https://nuxtjs.org/blog/moving-from-nuxtjs-dotenv-to-runtime-config
+  publicRuntimeConfig: {
+    baseURL:
+      process.env.NODE_ENV === 'production'
+        ? 'https://egserverless.netlify.app'
+        : 'http://localhost:8888',
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     // https://github.com/iliyaZelenko/tiptap-vuetify-nuxt

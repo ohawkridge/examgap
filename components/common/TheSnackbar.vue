@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'Snackbar',
+  name: 'TheSnackbar',
   data() {
     return {
       show: false,

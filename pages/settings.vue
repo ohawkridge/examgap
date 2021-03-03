@@ -79,7 +79,11 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true
         try {
-          const response = await fetch('/.netlify/functions/updatePassword', {
+          const url = new URL(
+            '/.netlify/functions/updatePassword',
+            this.$config.baseURL
+          )
+          const response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               oldPass: this.oldPw,

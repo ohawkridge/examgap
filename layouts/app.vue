@@ -3,7 +3,7 @@
     <v-app-bar id="nav" color="#f1eeee" app elevate-on-scroll elevation="2">
       <v-container class="d-flex align-center px-0">
         <nuxt-link to="/home">
-          <Logo />
+          <TheLogo />
         </nuxt-link>
         <v-btn
           text
@@ -97,18 +97,18 @@
       <v-container>
         <nuxt />
       </v-container>
-      <Snackbar />
+      <TheSnackbar />
     </v-main>
-    <AppFooter />
+    <TheFooter />
     <CreateClass v-if="teacher" />
   </v-app>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Logo from '@/components/common/Logo'
-import Snackbar from '@/components/common/Snackbar'
-import AppFooter from '@/components/common/AppFooter'
+import TheLogo from '@/components/common/TheLogo'
+import TheSnackbar from '@/components/common/TheSnackbar'
+import TheFooter from '@/components/common/TheFooter'
 import CreateClass from '@/components/teacher/CreateClass'
 import {
   mdiPlus,
@@ -120,9 +120,9 @@ import {
 export default {
   name: 'App',
   components: {
-    Logo,
-    Snackbar,
-    AppFooter,
+    TheLogo,
+    TheSnackbar,
+    TheFooter,
     CreateClass,
   },
   middleware: ['get-user'],
@@ -142,7 +142,7 @@ export default {
   },
   mounted() {
     // For students, dispatch action to start document stream
-    if (!this.teacher) this.$store.dispatch('user/startStream')
+    // if (!this.teacher) this.$store.dispatch('user/startStream')
   },
   methods: {
     createClass() {

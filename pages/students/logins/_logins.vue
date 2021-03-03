@@ -80,8 +80,9 @@ import { mdiArrowRight, mdiInformationOutline } from '@mdi/js'
 
 export default {
   layout: 'print',
-  async asyncData({ store, params }) {
-    let usernames = await fetch('/.netlify/functions/getStudents', {
+  async asyncData({ store, params, $config: { baseURL } }) {
+    const url = new URL('/.netlify/functions/getStudents', baseURL)
+    let usernames = await fetch(url, {
       body: JSON.stringify({
         secret: store.state.user.secret,
         groupId: params.logins,

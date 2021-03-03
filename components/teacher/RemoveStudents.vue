@@ -59,7 +59,11 @@ export default {
     async remove() {
       try {
         for (const student of this.selected) {
-          const response = await fetch('/.netlify/functions/removeStudent', {
+          const url = new URL(
+            '/.netlify/functions/removeStudent',
+            this.$config.baseURL
+          )
+          const response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               studentId: student.id,

@@ -101,7 +101,11 @@ export default {
       try {
         // TODO Deal with username taken errors
         for (const username of this.namesArray) {
-          let response = await fetch('/.netlify/functions/createAccount', {
+          const url = new URL(
+            '/.netlify/functions/createAccount',
+            this.$config.baseURL
+          )
+          let response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               username,

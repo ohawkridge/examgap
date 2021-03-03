@@ -1,10 +1,12 @@
 <template>
   <v-row>
     <v-col id="div1" cols="12">
-      <div class="text-h6 font-weight-bold">
+      <div v-if="group.name !== undefined" class="text-h6 font-weight-bold">
         {{ group.name }}
       </div>
-      <div>{{ group.course.name }} ({{ group.course.board }})</div>
+      <div v-if="group.course.name !== undefined">
+        {{ group.course.name }} ({{ group.course.board }})
+      </div>
     </v-col>
   </v-row>
 </template>

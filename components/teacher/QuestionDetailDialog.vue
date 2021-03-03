@@ -69,7 +69,11 @@ export default {
     // exist until questions have finished fetching in _course.vue
     if (this.questionId !== '') {
       try {
-        const response = await fetch('/.netlify/functions/getQuestion', {
+        const url = new URL(
+          '/.netlify/functions/getQuestions',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             questionId: this.questionId,

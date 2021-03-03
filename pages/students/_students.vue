@@ -193,7 +193,11 @@ export default {
   },
   async fetch() {
     try {
-      const response = await fetch('/.netlify/functions/getStudents', {
+      const url = new URL(
+        '/.netlify/functions/getStudents',
+        this.$config.baseURL
+      )
+      const response = await fetch(url, {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
           groupId: this.group.id,

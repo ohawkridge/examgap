@@ -41,7 +41,11 @@ export default {
   },
   async fetch() {
     try {
-      const response = await fetch('/.netlify/functions/getCourses', {
+      const url = new URL(
+        '/.netlify/functions/getCourses',
+        this.$config.baseURL
+      )
+      const response = await fetch(url, {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
         }),

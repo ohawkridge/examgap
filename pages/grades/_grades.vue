@@ -148,7 +148,8 @@ export default {
     }
   },
   async fetch() {
-    let data = await fetch('/.netlify/functions/getGrades', {
+    const url = new URL('/.netlify/functions/getGrades', this.$config.baseURL)
+    let data = await fetch(url, {
       body: JSON.stringify({
         secret: this.$store.state.user.secret,
         groupId: this.$route.params.grades,

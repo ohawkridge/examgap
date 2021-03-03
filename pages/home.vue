@@ -51,14 +51,14 @@
             Assignments ({{ group ? group.assignments.length : '-' }})
           </v-card-title>
           <v-card-text>
-            <!-- <Assignments v-if="group" :assignments="group.assignments" /> -->
+            <HomeAssignments v-if="group" :assignments="group.assignments" />
           </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" md="5">
         <v-row>
           <v-col cols="12">
-            <!-- <Quote /> -->
+            <HomeQuote />
           </v-col>
         </v-row>
         <v-row>
@@ -96,24 +96,24 @@
         </v-row>
       </v-col>
     </v-row>
-    <!-- <RevisionDialog v-if="!teacher" /> -->
+    <HomeRevisionDialog v-if="!teacher" />
   </div>
 </template>
 
 <script>
 import { mdiPlus } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
-import GroupCard from '../components/teacher/GroupCard'
-// import Assignments from '../components/student/Assignments'
-// import RevisionDialog from '../components/student/RevisionDialog'
-// import Quote from '../components/student/Quote'
+import GroupCard from '@/components/teacher/GroupCard'
+import HomeAssignments from '@/components/student/HomeAssignments'
+import HomeRevisionDialog from '@/components/student/HomeRevisionDialog'
+import HomeQuote from '@/components/student/HomeQuote'
 
 export default {
   components: {
     GroupCard,
-    // Assignments,
-    // Quote,
-    // RevisionDialog,
+    HomeAssignments,
+    HomeQuote,
+    HomeRevisionDialog,
   },
   layout: 'app',
   data() {

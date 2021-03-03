@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="12" md="6" class="d-flex justify-center justify-md-start">
           <nuxt-link to="/">
-            <Logo />
+            <TheLogo />
           </nuxt-link>
         </v-col>
         <v-col cols="12" md="6" class="d-flex justify-center justify-md-end">
@@ -16,19 +16,19 @@
       </v-row>
     </v-container>
     <nuxt />
-    <StaticFooter />
+    <TheStaticFooter />
   </v-app>
 </template>
 
 <script>
-import Logo from '@/components/common/Logo'
-import StaticFooter from '@/components/common/StaticFooter'
+import TheLogo from '@/components/common/TheLogo'
+import TheStaticFooter from '@/components/common/TheStaticFooter'
 
 export default {
   name: 'Static',
   components: {
-    Logo,
-    StaticFooter,
+    TheLogo,
+    TheStaticFooter,
   },
 }
 </script>

@@ -65,18 +65,19 @@ export default {
       this.loading = true
       try {
         for (const user of this.selected) {
-          const response = await fetch(
+          const url = new URL(
             '/.netlify/functions/createGroupStudent',
-            {
-              body: JSON.stringify({
-                secret: this.$store.state.user.secret,
-                studentId: user.id,
-                groupId: this.selectedClass,
-                addStudent: true,
-              }),
-              method: 'POST',
-            }
+            this.$config.baseURL
           )
+          const response = await fetch(url, {
+            body: JSON.stringify({
+              secret: this.$store.state.user.secret,
+              studentId: user.id,
+              groupId: this.selectedClass,
+              addStudent: true,
+            }),
+            method: 'POST',
+          })
           if (!response.ok) {
             throw new Error(`Error copying student(s) ${response.status}`)
           }

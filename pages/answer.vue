@@ -127,11 +127,12 @@ export default {
     }
   },
   layout: 'app',
-  async asyncData(context) {
-    const response = await fetch('/.netlify/functions/getQuestion', {
+  async asyncData({ $config: { baseURL }, store }) {
+    const url = new URL('/.netlify/functions/getQuestion', baseURL)
+    const response = await fetch(url, {
       body: JSON.stringify({
-        secret: context.store.state.user.secret,
-        questionId: context.store.state.assignments.questionId,
+        secret: store.state.user.secret,
+        questionId: store.state.assignments.questionId,
       }),
       method: 'POST',
     })
@@ -270,7 +271,11 @@ export default {
         this.marks.splice(-1, 1) // Uncheck
       } else {
         try {
-          const response = await fetch('/.netlify/functions/toggleMark', {
+          const url = new URL(
+            '/.netlify/functions/toggleMark',
+            this.$config.baseURL
+          )
+          const response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               responseId: this.responseId,
@@ -296,7 +301,11 @@ export default {
     async save() {
       try {
         this.saveStatus = `Saving...`
-        const response = await fetch('/.netlify/functions/saveAnswer', {
+        const url = new URL(
+          '/.netlify/functions/saveAnswer',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             assignmentId: this.$store.state.assignments.assignmentId,

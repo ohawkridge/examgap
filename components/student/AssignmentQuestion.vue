@@ -84,7 +84,7 @@
 import { mdiAccountOutline, mdiSchoolOutline } from '@mdi/js'
 
 export default {
-  name: 'Question',
+  name: 'AssignmentQuestion',
   props: {
     question: {
       type: Object,

@@ -12,6 +12,7 @@
 import { mdiArrowExpandHorizontal } from '@mdi/js'
 
 export default {
+  name: 'TheFooter',
   created() {
     this.$icons = { mdiArrowExpandHorizontal }
   },

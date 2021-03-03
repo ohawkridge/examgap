@@ -113,7 +113,11 @@ export default {
   methods: {
     // Try to login user with credentials
     async getUserSecret() {
-      const response = await fetch('/.netlify/functions/getUserSecret', {
+      const url = new URL(
+        '/.netlify/functions/getUserSecret',
+        this.$config.baseURL
+      )
+      const response = await fetch(url, {
         body: JSON.stringify({
           username: this.username,
           password: this.pw,

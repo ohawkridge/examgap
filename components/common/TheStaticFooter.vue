@@ -158,22 +158,23 @@ export default {
     async send() {
       if (this.$refs.form.validate()) {
         this.loading = true
-        const response = await fetch(
-          'https://examgap.com/.netlify/functions/sendEmail',
-          {
-            mode: 'cors',
-            credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: this.email,
-              message: this.message,
-              name: this.name,
-            }),
-            method: 'POST',
-          }
+        const url = new URL(
+          '/.netlify/functions/sendEmail',
+          this.$config.baseURL
         )
+        const response = await fetch(url, {
+          mode: 'cors',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: this.email,
+            message: this.message,
+            name: this.name,
+          }),
+          method: 'POST',
+        })
         if (!response.ok) {
           throw new Error(`Error sending email ${response.status}`)
         }
