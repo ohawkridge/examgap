@@ -136,9 +136,8 @@ export default {
         // Using key, try to login
         this.getUserSecret()
           .then((res) => {
-            console.dir(res)
-            // this.$store.commit('user/setSecret', res.secret)
-            // this.$router.push(res.data.teacher ? `/classes` : `/home`)
+            this.$store.commit('user/setSecret', res.secret)
+            this.$router.push(res.teacher ? `/classes` : `/home`)
           })
           .catch((e) => {
             console.error(e)

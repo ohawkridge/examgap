@@ -10,7 +10,9 @@
         </p>
         <p>
           Try going
-          <NuxtLink to="/home"> back home </NuxtLink>
+          <NuxtLink :to="$store.state.user.teacher ? '/classes' : '/home'">
+            home
+          </NuxtLink>
         </p>
       </v-container>
     </v-main>

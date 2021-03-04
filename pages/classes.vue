@@ -26,7 +26,7 @@
           outlined
           hover
           height="172"
-          @click="emitNew"
+          @click="$nuxt.$emit('show-create')"
         >
           <v-btn color="primary" text>
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>

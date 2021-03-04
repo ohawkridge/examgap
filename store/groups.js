@@ -63,7 +63,13 @@ export const mutations = {
     state.tab = val
   },
   setGroup(state, group) {
-    state.group = group
+    // If 'Classes' menu is clicked, all we get is groupId
+    // so use this to find and store the whole group obj
+    if (typeof group === 'string') {
+      state.group = state.groups.find((g) => g.id === group)
+    } else {
+      state.group = group
+    }
   },
   updateGroupName(state, { id, name }) {
     for (let i = 0; i < state.groups.length; i++) {

@@ -35,9 +35,9 @@
                     group
                     mandatory
                   >
-                    <v-btn value="green"> Secure </v-btn>
-                    <v-btn value="yellow"> Middle </v-btn>
-                    <v-btn value="red"> Vulnerable </v-btn>
+                    <v-btn value="green" class="rounded"> Secure </v-btn>
+                    <v-btn value="yellow" class="rounded"> Middle </v-btn>
+                    <v-btn value="red" class="rounded"> Vulnerable </v-btn>
                   </v-btn-toggle>
                 </div>
                 <v-btn

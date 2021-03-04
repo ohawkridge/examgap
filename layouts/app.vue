@@ -9,7 +9,7 @@
           text
           color="#2e2e3a"
           nuxt
-          to="/home"
+          :to="teacher ? '/classes' : '/home'"
           class="ml-8 d-none d-sm-flex"
         >
           Home
@@ -149,9 +149,10 @@ export default {
     // Students and teachers have the same 'Classes' menu
     // so we need to customise how menu item links behave
     // For students, navigate by changing activeGroupIndex
-    nav(i, id) {
+    nav(i, groupId) {
       if (this.teacher) {
-        this.$router.push(`/group/${id}`)
+        this.$store.commit('groups/setGroup', groupId)
+        this.$router.push(`/group/${groupId}`)
       } else {
         this.$store.commit('groups/setActiveGroupIndex', i)
         this.$router.push(`/home`)
