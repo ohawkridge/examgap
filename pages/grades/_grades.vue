@@ -10,7 +10,6 @@
           <v-card-title class="d-flex justify-space-between">
             Grade book
             <div>
-              <BoundariesDialog :boundaries="boundaries" :group-id="group.id" />
               <v-btn
                 color="primary"
                 elevation="0"
@@ -123,7 +122,6 @@
 <script>
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
-import BoundariesDialog from '@/components/teacher/BoundariesDialog'
 import {
   mdiArrowRight,
   mdiMenuUp,
@@ -136,7 +134,6 @@ export default {
   components: {
     GroupNav,
     GroupHeader,
-    BoundariesDialog,
   },
   layout: 'app',
   data() {

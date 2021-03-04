@@ -1,8 +1,8 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar id="nav" color="#f1eeee" app elevate-on-scroll elevation="2">
+    <v-app-bar color="#f1eeee" app elevate-on-scroll elevation="2">
       <v-container class="d-flex align-center px-0">
-        <nuxt-link to="/home">
+        <nuxt-link :to="teacher ? '/classes' : '/home'">
           <TheLogo />
         </nuxt-link>
         <v-btn
@@ -37,7 +37,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-divider v-if="teacher" class="mx-4" />
-            <v-list-item v-if="teacher" @click="createClass()">
+            <v-list-item v-if="teacher" @click="$nuxt.$emit('new-class')">
               <v-list-item-content>
                 <v-list-item-title> Create class&hellip; </v-list-item-title>
               </v-list-item-content>
@@ -141,17 +141,14 @@ export default {
     }
   },
   mounted() {
+    // TODO
     // For students, dispatch action to start document stream
     // if (!this.teacher) this.$store.dispatch('user/startStream')
   },
   methods: {
-    createClass() {
-      this.$nuxt.$emit('new-class')
-    },
     // Students and teachers have the same 'Classes' menu
     // so we need to customise how menu item links behave
-    // For students, we navigate by changing the
-    // activeGroupIndex store property
+    // For students, navigate by changing activeGroupIndex
     nav(i, id) {
       if (this.teacher) {
         this.$router.push(`/group/${id}`)

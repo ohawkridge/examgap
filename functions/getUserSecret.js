@@ -12,10 +12,22 @@ exports.handler = async (event, context, callback) => {
   // Use login key to try credentials
   try {
     const { secret } = await client.query(
-      q.Login(q.Match(q.Index('user_by_username'), data.username), {
-        password: data.password,
-        ttl: q.TimeAdd(q.Now(), 7, 'days'),
-      })
+      q.Let(
+        {
+          obj: q.Login(q.Match(q.Index('user_by_username'), data.username), {
+            password: data.password,
+            ttl: q.TimeAdd(q.Now(), 7, 'days'),
+          }),
+        },
+        {
+          secret: q.Select('secret', q.Var('obj')),
+          teacher: q.Select(
+            ['data', 'teacher'],
+            q.Get(q.Select('instance', q.Var('obj')))
+          ),
+          test: 'djkdjfkjdk',
+        }
+      )
     )
     return {
       statusCode: 200,

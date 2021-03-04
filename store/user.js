@@ -11,9 +11,6 @@ export const state = () => ({
 })
 
 export const actions = {
-  nuxtServerInit(vuexContext, context) {
-    console.log(`-> nuxtServerInit USER`)
-  },
   // Call a function to get user data
   async getUser({ commit, state }) {
     try {
@@ -39,9 +36,9 @@ export const actions = {
           }
         }
       }
-      // Commit group data to the groups store
+      // Commit group data to groups store
       commit('groups/setGroups', userData.groups, { root: true })
-      // Commit the rest to this store
+      // Commit user data to user store
       commit('setUser', userData)
     } catch (e) {
       console.error(e)

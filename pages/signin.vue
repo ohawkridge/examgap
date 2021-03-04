@@ -133,11 +133,12 @@ export default {
     login() {
       if (this.$refs.form.validate()) {
         this.loading = true
-        // Using key, try login
+        // Using key, try to login
         this.getUserSecret()
           .then((res) => {
-            this.$store.commit('user/setSecret', res.secret)
-            this.$router.push('/home')
+            console.dir(res)
+            // this.$store.commit('user/setSecret', res.secret)
+            // this.$router.push(res.data.teacher ? `/classes` : `/home`)
           })
           .catch((e) => {
             console.error(e)

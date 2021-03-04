@@ -1,58 +1,31 @@
 <template>
+  <!-- Student home page -->
   <div>
-    <v-row v-if="teacher">
+    <v-row>
       <v-col id="div1" cols="12">
-        <div class="d-flex justify-space-between align-center">
-          <v-btn-toggle v-model="tab" color="primary" group mandatory>
-            <v-btn :value="true" class="rounded"> Classes </v-btn>
-            <v-btn :value="false" class="rounded"> Archive </v-btn>
-          </v-btn-toggle>
-          <v-btn color="primary" text @click="emitNew">
-            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-            {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
-          </v-btn>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row v-if="teacher">
-      <v-col v-for="(group, i) in groups" :key="i" cols="12" md="6" lg="4">
-        <GroupCard :group="group" />
-      </v-col>
-      <!-- Create class card button -->
-      <v-col v-if="tab" cols="12" md="6" lg="4">
-        <v-card
-          id="create-card"
-          class="d-flex align-center justify-center"
-          outlined
-          hover
-          height="172"
-          @click="emitNew"
-        >
-          <v-btn color="primary" text>
-            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-            Create class
-          </v-btn>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row v-if="!teacher">
-      <v-col id="div1" cols="12">
-        <div v-if="group" class="text-h6 font-weight-bold">
+        <div v-if="group !== undefined" class="text-h6 font-weight-bold">
           {{ group.name }}
         </div>
-        <div v-if="group">
+        <div v-if="group !== undefined">
           {{ group.course.name }} ({{ group.course.board }})
         </div>
       </v-col>
     </v-row>
-    <v-row v-if="!teacher" class="d-flex justify-center">
+    <v-row class="d-flex justify-center">
       <v-col cols="12" md="7">
         <v-card>
           <v-card-title>
-            Assignments ({{ group ? group.assignments.length : '-' }})
+            Assignments ({{
+              group !== undefined && group.assignments
+                ? group.assignments.length
+                : '-'
+            }})
           </v-card-title>
           <v-card-text>
-            <HomeAssignments v-if="group" :assignments="group.assignments" />
+            <HomeAssignments
+              v-if="group !== undefined"
+              :assignments="group.assignments"
+            />
           </v-card-text>
         </v-card>
       </v-col>
@@ -97,21 +70,18 @@
         </v-row>
       </v-col>
     </v-row>
-    <HomeRevisionDialog v-if="!teacher" />
+    <HomeRevisionDialog />
   </div>
 </template>
 
 <script>
-import { mdiPlus } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
-import GroupCard from '@/components/teacher/GroupCard'
 import HomeAssignments from '@/components/student/HomeAssignments'
 import HomeRevisionDialog from '@/components/student/HomeRevisionDialog'
 import HomeQuote from '@/components/student/HomeQuote'
 
 export default {
   components: {
-    GroupCard,
     HomeAssignments,
     HomeQuote,
     HomeRevisionDialog,
@@ -123,16 +93,9 @@ export default {
     }
   },
   async fetch() {
-    // For students, fetch revision topics to store
-    // (if not stored already)
-    if (
-      this.forceFetch ||
-      (!this.teacher && this.topics.length === 0 && this.group)
-    ) {
-      await this.$store.dispatch(
-        'groups/getRevisionTopics',
-        this.group.course.id
-      )
+    // Dispatch action to fetch + store revision topics
+    if (this.forceFetch || this.topics.length === 0) {
+      await this.$store.dispatch('groups/getRevisionTopics')
       this.forceFetch = false
     }
   },
@@ -143,38 +106,25 @@ export default {
   },
   computed: {
     ...mapState({
-      teacher: (state) => state.user.teacher,
       assignments: (state) => state.assignments.assignments,
       topics: (state) => state.groups.revisionTopics,
     }),
-    // For students, we need the active group to display assignments
-    // For teachers, we need active/archive groups depending on tab
+    // Get the current active group
+    // Get groups for 'Classes' menu
     ...mapGetters({
       group: 'groups/activeGroup',
       groups: 'groups/activeGroups',
     }),
-    // Remember which tab is active
-    tab: {
-      get() {
-        return this.$store.state.groups.tab
-      },
-      set(value) {
-        this.$store.commit('groups/setTab', value)
-      },
-    },
   },
   watch: {
     // Update revision topics if class is changed
-    // (Except if currently logging out)
+    // (Except if logging out)
     group() {
       if (this.group !== undefined && Object.entries(this.group).length > 0) {
         this.forceFetch = true
         this.$fetch()
       }
     },
-  },
-  created() {
-    this.$icons = { mdiPlus }
   },
   methods: {
     // Remember topic being revised
@@ -184,24 +134,14 @@ export default {
       // https://aneesshameed.medium.com/event-bus-in-nuxt-7728315e81b6
       this.$nuxt.$emit('show-revise')
     },
-    // Trigger event to show create class dialog
-    emitNew() {
-      this.$nuxt.$emit('show-create')
-    },
   },
 }
 </script>
 
 <style scoped>
-/* student revision counts */
+/* revision count chips */
 span.v-chip.theme--light.green-chip {
   background-color: rgb(201, 237, 194) !important;
   color: rgb(18, 39, 14) !important;
-}
-
-/* create class card */
-#create-card {
-  background: #f1eeee !important;
-  border: 1px dashed #0078a0 !important;
 }
 </style>

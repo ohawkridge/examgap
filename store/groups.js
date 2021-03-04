@@ -34,14 +34,13 @@ export const getters = {
 
 export const actions = {
   // Get student revision topics
-  async getRevisionTopics({ commit, rootState }, courseId) {
-    console.log(`SHOULD I HAVE FIRED?`)
+  async getRevisionTopics({ commit, rootState, state }) {
     try {
       const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
       const response = await fetch(url, {
         body: JSON.stringify({
           secret: rootState.user.secret,
-          courseId,
+          courseId: state.groups[state.activeGroupIndex].course.id,
         }),
         method: 'POST',
       })
