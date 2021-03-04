@@ -1,6 +1,6 @@
 <template>
   <v-row class="d-flex justify-center mt-md-3">
-    <v-col cols="12" md="9">
+    <v-col cols="12" md="10" lg="9">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
         <v-card class="pa-md-4">
           <v-card-title>
@@ -124,7 +124,9 @@ export default {
   layout: 'app',
   data() {
     return {
-      // Default new question values
+      loading: false,
+      topics: [],
+      // Default values for new question
       question: {
         id: '',
         text: '',
@@ -135,11 +137,10 @@ export default {
         marks: [{ id: '', text: '' }],
         selectedTopics: [],
       },
-      topics: [],
-      loading: false,
     }
   },
   async fetch() {
+    // Get all topics for all courses for autocomplete
     try {
       const url = new URL(
         '/.netlify/functions/getAllTopics',
@@ -162,14 +163,36 @@ export default {
         msg: 'Error fetching topics',
       })
     }
-    // If editing, fetch existing question
-    // if (this.editing) {
-    // this.question = await getQuestionDetail(this.$route.params.question)
-    // For most questions, keywords is an array
-    // But for questions without keywords it might be "" (empty string)
-    // if (this.question.keywords !== '')
-    // this.question.keywords = this.question.keywords.join(', ')
-    // }
+    // For existing questions, get the question
+    if (this.editing) {
+      try {
+        const url = new URL(
+          '/.netlify/functions/getQuestion',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            questionId: this.$route.params.question,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error fetching question ${response.status}`)
+        }
+        this.question = await response.json()
+        // Turn keywords array, if it exists, into a string
+        if (Array.isArray(this.question.keywords)) {
+          this.question.keywords = this.question.keywords.join(', ')
+        }
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error fetching question',
+        })
+      }
+    }
   },
   head() {
     return {
@@ -240,12 +263,12 @@ export default {
 
 <style scoped>
 .num-field {
-  width: 40%;
+  width: 34%;
 }
 
 @media only screen and (min-width: 960px) {
   .num-field {
-    width: 20%;
+    width: 16%;
   }
 }
 
