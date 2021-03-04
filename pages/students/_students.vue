@@ -100,7 +100,7 @@
                   loading-text="Fetching student data..."
                 >
                   <template #no-data>
-                    <p class="text-body-1 font-weight-medium mt-4">
+                    <p class="text-body-1 mt-4">
                       {{ `No students in ${group.name}` }}
                     </p>
                     <p>
