@@ -1,112 +1,114 @@
 <template>
   <v-row class="d-flex justify-center mt-md-3">
     <v-col cols="12" md="9">
-      <v-card class="pa-md-4">
-        <v-card-title>
-          {{ $route.params.question ? 'Edit' : 'Create' }} question
-        </v-card-title>
-        <v-card-text>
-          <p class="text-subtitle-1 font-weight-bold">Question</p>
-          <TextEditor ref="question" :initial="question.text" class="mb-6" />
-          <v-text-field
-            v-model="question.maxMark"
-            :suffix="question.maxMark == 1 ? 'mark' : 'marks'"
-            type="number"
-            outlined
-            min="1"
-            persistent-hint
-            hint="Maximum mark"
-            class="num-field mb-6"
-            required
-          ></v-text-field>
-          <p class="text-subtitle-1 font-weight-bold">Model answer</p>
-          <TextEditor
-            ref="model"
-            :initial="question.modelAnswer"
-            class="mb-6"
-          />
-          <p class="text-subtitle-1 font-weight-bold">Keywords</p>
-          <v-text-field
-            v-model="question.keywords"
-            outlined
-            hint="Separate words with commas or spaces"
-            persistent-hint
-            placeholder="E.g. RAM, instructions, processor"
-          ></v-text-field>
-          <div v-if="!$fetchState.pending && question.marks">
-            <p class="text-subtitle-1 font-weight-bold">Mark scheme</p>
+      <v-skeleton-loader :loading="$fetchState.pending" type="card">
+        <v-card class="pa-md-4">
+          <v-card-title>
+            {{ $route.params.question ? 'Edit' : 'Create' }} question
+          </v-card-title>
+          <v-card-text>
+            <p class="text-subtitle-1 font-weight-bold">Question</p>
+            <TextEditor ref="question" :initial="question.text" class="mb-6" />
             <v-text-field
-              v-for="i in question.marks.length"
-              :key="i"
-              v-model="question.marks[i - 1].text"
+              v-model="question.maxMark"
+              :suffix="question.maxMark == 1 ? 'mark' : 'marks'"
+              type="number"
               outlined
-              placeholder="One mark for..."
+              min="1"
+              persistent-hint
+              hint="Maximum mark"
+              class="num-field mb-6"
+              required
+            ></v-text-field>
+            <p class="text-subtitle-1 font-weight-bold">Model answer</p>
+            <TextEditor
+              ref="model"
+              :initial="question.modelAnswer"
+              class="mb-6"
+            />
+            <p class="text-subtitle-1 font-weight-bold">Keywords</p>
+            <v-text-field
+              v-model="question.keywords"
+              outlined
+              hint="Separate words with commas or spaces"
+              persistent-hint
+              placeholder="E.g. RAM, instructions, processor"
+            ></v-text-field>
+            <div v-if="!$fetchState.pending && question.marks">
+              <p class="text-subtitle-1 font-weight-bold">Mark scheme</p>
+              <v-text-field
+                v-for="i in question.marks.length"
+                :key="i"
+                v-model="question.marks[i - 1].text"
+                outlined
+                placeholder="One mark for..."
+              >
+                <template #append>
+                  <v-tooltip top>
+                    <template #activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        class="mr-1"
+                        :disabled="question.marks.length === 13"
+                        v-on="on"
+                        @click="question.marks.push({ id: '', text: '' })"
+                        >{{ $icons.mdiPlus }}</v-icon
+                      >
+                    </template>
+                    <span>Add mark</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <template #activator="{ on, attrs }">
+                      <v-icon
+                        v-bind="attrs"
+                        :disabled="question.marks.length === 1"
+                        v-on="on"
+                        @click="remove(question.marks[i - 1].id)"
+                        >{{ $icons.mdiMinus }}</v-icon
+                      >
+                    </template>
+                    <span>Remove mark</span>
+                  </v-tooltip>
+                </template>
+              </v-text-field>
+            </div>
+            <p class="text-subtitle-1 font-weight-bold">Marking guidance</p>
+            <TextEditor
+              ref="guidance"
+              :initial="question.guidance"
+              class="mb-6"
+            />
+            <p class="text-subtitle-1 font-weight-bold">Topics</p>
+            <v-autocomplete
+              v-model="question.selectedTopics"
+              :loading="$fetchState.pending"
+              :items="topics"
+              item-value="id"
+              item-text="name"
+              outlined
+              chips
+              small-chips
+              deletable-chips
+              hint="Map to course topics"
+              persistent-hint
+              multiple
             >
-              <template #append>
-                <v-tooltip top>
-                  <template #activator="{ on, attrs }">
-                    <v-icon
-                      v-bind="attrs"
-                      class="mr-1"
-                      :disabled="question.marks.length === 13"
-                      v-on="on"
-                      @click="question.marks.push({ id: '', text: '' })"
-                      >{{ $icons.mdiPlus }}</v-icon
-                    >
-                  </template>
-                  <span>Add mark</span>
-                </v-tooltip>
-                <v-tooltip top>
-                  <template #activator="{ on, attrs }">
-                    <v-icon
-                      v-bind="attrs"
-                      :disabled="question.marks.length === 1"
-                      v-on="on"
-                      @click="remove(question.marks[i - 1].id)"
-                      >{{ $icons.mdiMinus }}</v-icon
-                    >
-                  </template>
-                  <span>Remove mark</span>
-                </v-tooltip>
-              </template>
-            </v-text-field>
-          </div>
-          <p class="text-subtitle-1 font-weight-bold">Marking guidance</p>
-          <TextEditor
-            ref="guidance"
-            :initial="question.guidance"
-            class="mb-6"
-          />
-          <p class="text-subtitle-1 font-weight-bold">Topics</p>
-          <v-autocomplete
-            v-model="question.selectedTopics"
-            :loading="$fetchState.pending"
-            :items="topics"
-            item-value="id"
-            item-text="name"
-            outlined
-            chips
-            small-chips
-            deletable-chips
-            hint="Map to course topics"
-            persistent-hint
-            multiple
-          >
-          </v-autocomplete>
-          <div class="d-flex justify-end">
-            <v-btn text class="mr-2" @click="$router.go(-1)"> Cancel </v-btn>
-            <v-btn
-              color="primary"
-              :disabled="loading"
-              :loading="loading"
-              elevation="0"
-              @click="save()"
-            >
-              {{ editing ? 'Save' : 'Create' }} question
-            </v-btn>
-          </div>
-        </v-card-text>
-      </v-card>
+            </v-autocomplete>
+            <div class="d-flex justify-end">
+              <v-btn text class="mr-2" @click="$router.go(-1)"> Cancel </v-btn>
+              <v-btn
+                color="primary"
+                :disabled="loading"
+                :loading="loading"
+                elevation="0"
+                @click="save()"
+              >
+                Save question
+              </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-skeleton-loader>
     </v-col>
   </v-row>
 </template>
@@ -130,24 +132,44 @@ export default {
         modelAnswer: '',
         guidance: '',
         keywords: '',
-        // No new (unsaved) marks have IDs
         marks: [{ id: '', text: '' }],
         selectedTopics: [],
       },
-      loading: false,
       topics: [],
+      loading: false,
     }
   },
-  fetch() {
-    // If editing, fetch existing question
-    if (this.editing) {
-      // this.question = await getQuestionDetail(this.$route.params.question)
-      // For most questions, keywords is an array
-      // But for questions without keywords it might be "" (empty string)
-      if (this.question.keywords !== '')
-        this.question.keywords = this.question.keywords.join(', ')
+  async fetch() {
+    try {
+      const url = new URL(
+        '/.netlify/functions/getAllTopics',
+        this.$config.baseURL
+      )
+      const response = await fetch(url, {
+        body: JSON.stringify({
+          secret: this.$store.state.user.secret,
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error(`Error fetching topics ${response.status}`)
+      }
+      this.topics = await response.json()
+    } catch (e) {
+      console.error(e)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching topics',
+      })
     }
-    // this.topics = await getAllTopics()
+    // If editing, fetch existing question
+    // if (this.editing) {
+    // this.question = await getQuestionDetail(this.$route.params.question)
+    // For most questions, keywords is an array
+    // But for questions without keywords it might be "" (empty string)
+    // if (this.question.keywords !== '')
+    // this.question.keywords = this.question.keywords.join(', ')
+    // }
   },
   head() {
     return {
@@ -227,7 +249,7 @@ export default {
   }
 }
 
-/* round corners to match */
+/* round editor corners */
 .tiptap-vuetify-editor {
   border: 1px solid rgba(0, 0, 0, 0.42);
   border-top-left-radius: 4px !important;
