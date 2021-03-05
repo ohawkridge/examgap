@@ -84,9 +84,7 @@ export default {
         }
         this.$snack.showMessage({
           type: 'success',
-          msg: `Success. Student${
-            this.selected.length === 1 ? '' : 's'
-          } copied`,
+          msg: `Student${this.selected.length === 1 ? '' : 's'} copied`,
         })
       } catch (e) {
         console.error(e)

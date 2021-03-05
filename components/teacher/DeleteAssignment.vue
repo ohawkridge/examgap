@@ -71,7 +71,7 @@ export default {
           '/.netlify/functions/deleteAssignment',
           this.$config.baseURL
         )
-        let response = await fetch(url, {
+        const response = await fetch(url, {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             assignmentId: this.assignmentId,
@@ -81,8 +81,6 @@ export default {
         if (!response.ok) {
           throw new Error(`Error deleting assignment ${response.status}`)
         }
-        response = await response.json()
-        console.log(response)
         // If on assignment detail, go to /group/xxx, else stay put
         if (this.$route.name !== 'group-group') {
           this.$router.push(`/group/${this.groupId}`)
@@ -90,7 +88,7 @@ export default {
         // Trigger fetch in parent
         this.$nuxt.$emit('refresh')
         this.$snack.showMessage({
-          msg: 'Success. Assignment deleted',
+          msg: 'Assignment deleted',
           type: 'success',
         })
       } catch (e) {

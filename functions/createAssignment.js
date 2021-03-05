@@ -51,10 +51,10 @@ exports.handler = async (event, context, callback) => {
         )
       )
     )
-    const data = await keyedClient.query(qry)
+    await keyedClient.query(qry)
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify(assignment.ref.id),
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }

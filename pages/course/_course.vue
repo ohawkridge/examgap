@@ -85,12 +85,7 @@
                     </v-list-item-group>
                   </v-skeleton-loader>
                 </v-list>
-                <p class="red--text">
-                  {{
-                    `ct: ${currentTopic} id:
-                  ${questions[selectedQuestion]}`
-                  }}
-                </p>
+                <p v-if="!$fetchState.pending">{{ topics[currentTopic].id }}</p>
               </v-col>
               <v-col cols="12" md="5">
                 <p class="text-h6">Questions ({{ questions.length }})</p>

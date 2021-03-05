@@ -203,13 +203,6 @@ export default {
     editing() {
       return this.$route.params.question !== undefined
     },
-    // Make array from keywords ready for db
-    keywordArray() {
-      return this.question.keywords
-        .split(',')
-        .map((word) => word.trim())
-        .filter((e) => e !== '')
-    },
   },
   created() {
     this.$icons = {
@@ -232,21 +225,43 @@ export default {
         }
       }
     },
-    save() {
+    async save() {
       this.loading = true
       // Get HTML from editors
       this.question.text = this.$refs.question.content
       this.question.modelAnswer = this.$refs.model.content
       this.question.guidance = this.$refs.guidance.content
-      // Swap csv string for array before saving
-      this.question.keywords = this.keywordArray
       try {
-        // const savedQuestion = await saveQuestion(this.question, this.editing)
-        // this.$router.push(`/question/${savedQuestion.ref.id}`)
+        const url = new URL(
+          '/.netlify/functions/saveQuestion',
+          this.$config.baseURL
+        )
+        // Turn list of keywords back into an array
+        // (Makes things easier on answer.vue)
+        if (this.question.keywords !== '') {
+          this.question.keywords
+            .split(',')
+            .map((word) => word.trim())
+            .filter((e) => e !== '')
+        }
+        let response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            edit: this.editing,
+            question: this.question,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error saving question ${response.status}`)
+        }
+        response = await response.json()
+        console.log(response)
         this.$snack.showMessage({
           type: 'success',
-          msg: `Success. Question ${this.editing ? 'saved' : 'created'}`,
+          msg: `Question ${this.editing ? 'saved' : 'created'}`,
         })
+        this.$router.push(`/question/${response.ref.id}`)
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
@@ -262,13 +277,13 @@ export default {
 </script>
 
 <style scoped>
+/* reduce max. mark field width */
 .num-field {
   width: 34%;
 }
-
 @media only screen and (min-width: 960px) {
   .num-field {
-    width: 16%;
+    width: 18%;
   }
 }
 

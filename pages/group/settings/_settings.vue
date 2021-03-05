@@ -122,7 +122,7 @@ export default {
         // await updateGroup(this.group.id, this.name, this.courseId)
         this.$snack.showMessage({
           type: 'success',
-          msg: `Success. Class updated`,
+          msg: `Class updated`,
         })
       } catch (e) {
         console.error(e)

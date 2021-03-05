@@ -280,7 +280,7 @@ export default {
         console.log(`Reset pw`, student)
         this.$snack.showMessage({
           type: 'success',
-          msg: `Success. ${
+          msg: `${
             this.selected.length > 1 ? 'Passwords' : 'Password'
           } reset to 'pw'`,
         })

@@ -124,6 +124,7 @@ export default {
       '/.netlify/functions/getAssignments',
       this.$config.baseURL
     )
+    console.log(`Fetching ass for ${this.$route.params.group}`)
     const data = await fetch(url, {
       body: JSON.stringify({
         secret: this.$store.state.user.secret,
@@ -155,6 +156,8 @@ export default {
     }
   },
   mounted() {
+    // Listen for refresh event
+    // For example, when an assignment is deleted
     this.$nuxt.$on('refresh', () => {
       this.$fetch()
     })

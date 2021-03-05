@@ -99,7 +99,7 @@ export default {
             this.fieldError.push(`Old password incorrect`)
           } else {
             this.$snack.showMessage({
-              msg: 'Success. Password updated',
+              msg: 'Password updated',
               type: 'success',
             })
           }

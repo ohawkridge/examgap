@@ -79,9 +79,7 @@ export default {
         }
         this.$snack.showMessage({
           type: 'success',
-          msg: `Success. Student${
-            this.selected.length !== 1 ? 's' : ''
-          } removed`,
+          msg: `Student${this.selected.length !== 1 ? 's' : ''} removed`,
         })
         // Trigger re-fetch in parent to update data
         this.$nuxt.$emit('user-added')

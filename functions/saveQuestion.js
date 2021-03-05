@@ -4,92 +4,85 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const edit = data.edit
-  const questionId = data.questionId
-  const selectedTopics = data.selectedTopics
-  const marks = data.marks
-  const newObj = {
-    marks: data.marks,
-    text: data.text,
-    modelAnswer: data.modelAnswer,
-    keywords: data.keywords,
-    maxMark: data.maxMark,
-    minWords: minWords(data.minWords),
-    guidance: data.guidance,
+  const questionId = data.question.id
+  const selectedTopics = data.question.selectedTopics
+  const marks = data.question.marks
+  const questionObj = {
+    text: data.question.text,
+    modelAnswer: data.question.modelAnswer,
+    keywords: data.question.keywords,
+    maxMark: data.question.maxMark,
+    minWords: minWords(data.question.text),
+    guidance: data.question.guidance,
   }
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
   })
   try {
-    let qry = q.Do(
-      q.If(
-        edit,
-        q.Do(
-          // Update existing question document
-          q.Update(q.Ref(q.Collection('Question'), questionId), {
-            data: newObj,
-          }),
-          // Delete TopicQuestion mappings
-          // (will be recreated below)
-          q.Map(
-            q.Paginate(
-              q.Match(
-                q.Index('question_topics_maps'),
-                q.Ref(q.Collection('Question'), questionId)
-              )
-            ),
-            q.Lambda('ref', q.Delete(q.Var('ref')))
-          )
-        ),
-        // Create new question
-        q.Create(q.Collection('Question'), {
-          data: newObj,
-        })
-      )
+    // First create/update the question
+    let qry = q.If(
+      q.Equals(edit, true),
+      // Update existing question document
+      q.Update(q.Ref(q.Collection('Question'), questionId), {
+        data: questionObj,
+      }),
+      // Create new question docment
+      q.Create(q.Collection('Question'), {
+        data: questionObj,
+      })
     )
-    let data = await keyedClient.query(qry)
+    const data = await keyedClient.query(qry)
 
+    // Second query to handle everything else
     qry = q.Do(
-      // Create new mappings in TopicQuestion
+      // Delete existing topic mappings
+      q.Map(
+        q.Paginate(q.Match(q.Index('question_topics_maps'), data.ref)),
+        q.Lambda('ref', q.Delete(q.Var('ref')))
+      ),
+      // Create new mappings
       q.Map(
         selectedTopics,
         q.Lambda(
           'ref',
           q.Create(q.Collection('TopicQuestion'), {
             data: {
-              question: data.ref.id,
+              question: data.ref,
               topic: q.Ref(q.Collection('Topic'), q.Var('ref')),
             },
           })
         )
       ),
-      // Update text for marks and create any new marks
-      // N.B. NEVER delete marks!! (They could be
-      // awarded to existing responses)
+      // Update text for marks + create any new marks
+      // NEVER delete marks!! (could be awarded to existing responses)
       q.Foreach(
         marks,
         q.Lambda(
-          'ref',
+          'ref2',
           q.If(
-            q.Equals(q.Var('ref').id, ''),
+            q.Equals(q.Var('ref2').id, ''),
             // Create a new mark
             q.Create(q.Collection('Mark'), {
               data: {
-                text: q.Var('ref').text,
-                question: data.ref.id,
+                text: q.Select('text', q.Var('ref2')),
+                question: data.ref,
               },
             }),
             // Update an existing mark
-            q.Update(q.Ref(q.Collection('Mark'), q.Var('ref').id), {
-              data: {
-                text: q.Var('ref').text,
-              },
-            })
+            q.Update(
+              q.Ref(q.Collection('Mark'), q.Select('id', q.Var('ref2'))),
+              {
+                data: {
+                  text: q.Select('text', q.Var('ref2')),
+                },
+              }
+            )
           )
         )
       )
     )
-    data = await keyedClient.query(qry)
+    await keyedClient.query(qry)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
@@ -99,9 +92,9 @@ exports.handler = async (event, context, callback) => {
   }
 }
 
-// Calculate 12% less than the word count of model answer
+// Calculate 10% less than the word count of model answer
 function minWords(text) {
   return String(
-    Math.round(text.trim().replace(/\s+/gi, ' ').split(' ').length * 0.88)
+    Math.round(text.trim().replace(/\s+/gi, ' ').split(' ').length * 0.9)
   )
 }
