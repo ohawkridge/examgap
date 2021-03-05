@@ -8,13 +8,11 @@
       >
         <div>
           <div class="text-h6">Create assignment</div>
-          <v-skeleton-loader :loading="$fetchState.pending" type="text">
-            <div v-if="group.course" class="text-subtitle-1">
-              {{ group.name }}
-              <v-icon small class="pb-1">{{ $icons.mdiArrowRight }}</v-icon>
-              {{ group.course.name }} ({{ group.course.board }})
-            </div>
-          </v-skeleton-loader>
+          <div v-if="group.course" class="text-subtitle-1">
+            {{ group.name }}
+            <v-icon small class="pb-1">{{ $icons.mdiArrowRight }}</v-icon>
+            {{ group.course.name }} ({{ group.course.board }})
+          </div>
         </div>
         <div class="d-flex justify-end">
           <v-tooltip bottom>
@@ -70,11 +68,10 @@
                   >
                     <v-list-item-group v-model="currentTopic" color="primary">
                       <v-list-item
-                        v-for="(topic, i) in topics"
-                        :key="i"
+                        v-for="topic in topics"
+                        :key="topic.id"
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
-                        @click="loadQuestions(topic.id)"
                       >
                         <v-list-item-content>
                           <v-list-item-title>
@@ -88,6 +85,7 @@
                     </v-list-item-group>
                   </v-skeleton-loader>
                 </v-list>
+                <p v-if="!$fetchState.pending">{{ topics[currentTopic].id }}</p>
               </v-col>
               <v-col cols="12" md="5">
                 <p class="text-h6">Questions ({{ questions.length }})</p>
@@ -219,14 +217,14 @@ export default {
   data() {
     return {
       topics: [],
-      selectedQuestion: 0,
       questions: [],
-      loading: false,
       question: {},
+      selectedQuestion: 0, // questions list v-model
+      loading: false,
     }
   },
   async fetch() {
-    // First get course topics
+    // Get course topics
     try {
       const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
       const response = await fetch(url, {
@@ -247,7 +245,7 @@ export default {
         msg: 'Error fetching topics',
       })
     }
-    // Separate function as needed when topic is changed
+    // Get topic questions
     this.loadQuestions()
   },
   head() {
@@ -257,7 +255,6 @@ export default {
   },
   computed: {
     ...mapState({
-      groupId: (state) => state.assignments.groupId,
       selectedQuestions: (state) => state.assignments.selectedQuestions,
       group: (state) => state.groups.group,
     }),
@@ -280,6 +277,12 @@ export default {
       },
     },
   },
+  watch: {
+    // Load questions when topic changes
+    currentTopic() {
+      this.loadQuestions()
+    },
+  },
   created() {
     this.$icons = {
       mdiPlus,
@@ -289,8 +292,8 @@ export default {
     }
   },
   methods: {
-    async loadQuestions(topicId) {
-      // Now get questions for current topic
+    // Get questions for topic
+    async loadQuestions() {
       try {
         this.loading = true
         const url = new URL(
@@ -301,7 +304,7 @@ export default {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             topicId: this.topics[this.currentTopic].id,
-            groupId: this.groupId,
+            groupId: this.group.id,
           }),
           method: 'POST',
         })

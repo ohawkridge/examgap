@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="dialog" width="800" transition="scroll-x-transition">
-      <v-card class="pa-md-4">
+      <v-card>
         <v-card-title class="d-flex justify-center">
           Create assignment
         </v-card-title>
@@ -90,24 +90,25 @@
               </v-alert>
             </v-col>
           </v-row>
+          <v-row>
+            <v-col cols="12" class="d-flex justify-end">
+              <v-btn text @click="dialog = false">Cancel</v-btn>
+              <v-btn
+                color="primary"
+                :disabled="students.length === 0"
+                elevation="0"
+                width="80"
+                @click="next()"
+                >Next</v-btn
+              >
+            </v-col>
+          </v-row>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn text @click="dialog = false">Cancel</v-btn>
-          <v-btn
-            color="primary"
-            :disabled="students.length === 0"
-            elevation="0"
-            width="80"
-            @click="next()"
-            >Next</v-btn
-          >
-        </v-card-actions>
       </v-card>
     </v-dialog>
     <!-- Assignment name & date -->
-    <v-dialog v-model="dialog2" width="700" transition="scroll-x-transition">
-      <v-card class="pa-md-4">
+    <v-dialog v-model="dialog2" width="800" transition="scroll-x-transition">
+      <v-card>
         <v-card-title class="d-flex justify-center">
           Create assignment
         </v-card-title>
@@ -199,27 +200,28 @@
                 </div>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="12" class="d-flex justify-end">
+                <v-btn
+                  text
+                  @click="
+                    dialog2 = false
+                    dialog = true
+                  "
+                  >Back</v-btn
+                >
+                <v-btn
+                  color="primary"
+                  elevation="0"
+                  :loading="loading"
+                  :disabled="loading"
+                  @click="create()"
+                  >Create assignment</v-btn
+                >
+              </v-col>
+            </v-row>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            text
-            @click="
-              dialog2 = false
-              dialog = true
-            "
-            >Back</v-btn
-          >
-          <v-btn
-            color="primary"
-            elevation="0"
-            :loading="loading"
-            :disabled="loading"
-            @click="create()"
-            >Create assignment</v-btn
-          >
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -427,10 +429,12 @@ export default {
           response = await response.json()
           // Clear selected questions
           this.$store.commit('assignments/clearSelectedQuestions')
-          this.$router.push(`/report/${response.ref.id}`)
+          // Response from createAssignment.js is the new
+          // assignment's id. Can't access @ref in response?
+          this.$router.push(`/report/${response}`)
           this.$snack.showMessage({
             type: 'success',
-            msg: 'Success. Assignment created',
+            msg: 'Assignment created',
           })
         } catch (e) {
           console.error(e)

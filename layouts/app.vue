@@ -37,7 +37,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-divider v-if="teacher" class="mx-4" />
-            <v-list-item v-if="teacher" @click="$nuxt.$emit('new-class')">
+            <v-list-item v-if="teacher" @click="$nuxt.$emit('show-create')">
               <v-list-item-content>
                 <v-list-item-title> Create class&hellip; </v-list-item-title>
               </v-list-item-content>

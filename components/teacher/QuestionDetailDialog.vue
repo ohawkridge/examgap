@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="900px">
+  <v-dialog v-model="dialog" max-width="860px">
     <template #activator="{ on, attrs }">
       <v-btn
         v-bind="attrs"
@@ -11,13 +11,13 @@
         Show Question
       </v-btn>
     </template>
-    <v-card class="text-body-2 pa-md-4">
+    <v-card class="modal pa-md-4">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
         <v-card-title> Question </v-card-title>
         <v-card-subtitle>
           {{ questionId }}
         </v-card-subtitle>
-        <v-card-text class="text-body-1">
+        <v-card-text class="text-body-2">
           <div v-html="question.text"></div>
           <div class="d-flex justify-end">
             <v-chip outlined

@@ -23,14 +23,14 @@ import {
   ListItem,
   Blockquote,
   History,
-} from "tiptap-vuetify";
+} from 'tiptap-vuetify'
 export default {
   // specify TiptapVuetify component in "components"
   components: { TiptapVuetify },
   props: {
     initial: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   data() {
@@ -48,14 +48,14 @@ export default {
         History,
       ],
       content: this.initial,
-    };
+    }
   },
   // Initial value comes only *after* parent fetch completes
   // Watch for this so when prop changes content is updated
   watch: {
     initial() {
-      this.content = this.initial;
+      this.content = this.initial
     },
   },
-};
+}
 </script>

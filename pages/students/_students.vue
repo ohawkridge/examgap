@@ -100,7 +100,7 @@
                   loading-text="Fetching student data..."
                 >
                   <template #no-data>
-                    <p class="text-body-1 font-weight-medium mt-4">
+                    <p class="text-body-1 mt-4">
                       {{ `No students in ${group.name}` }}
                     </p>
                     <p>
@@ -219,9 +219,7 @@ export default {
   },
   computed: {
     group() {
-      return this.$store.getters['groups/groupById'](
-        this.$route.params.students
-      )
+      return this.$store.state.groups.group
     },
   },
   mounted() {
@@ -235,32 +233,43 @@ export default {
     }
   },
   methods: {
-    // Save change to target grade
+    // Save target grade
     // (row is the full v-data-table object)
-    save(row) {
-      console.log(`Save row`, row)
+    async save(row) {
       // For iMedia allow 2 characters, for everyone else just
-      // take the first character even if input is longer
-      // row.target[`${this.group.id}`] = row.target[`${this.group.id}`].substring(
-      //   0,
-      //   this.group.course.id === '263317987221570048' ? 2 : 1
-      // )
-      // try {
-      //   // TODO
-      //   // await updateTarget(row)
-      //   this.$snack.showMessage({
-      //     type: 'success',
-      //     msg: 'Success. Target saved',
-      //   })
-      // } catch (e) {
-      //   console.error(e)
-      //   this.$snack.showMessage({
-      //     type: 'error',
-      //     msg: 'Error saving target',
-      //   })
-      // }
+      // take the first character even if the input is longer
+      row.target[`${this.group.id}`] = row.target[`${this.group.id}`].substring(
+        0,
+        this.group.course.id === '263317987221570048' ? 2 : 1
+      )
+      try {
+        const url = new URL(
+          '/.netlify/functions/updateTarget',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            row,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error saving target ${response.status}`)
+        }
+        this.$snack.showMessage({
+          type: 'success',
+          msg: 'Target saved',
+        })
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error saving target',
+        })
+      }
     },
-    // Send an event to open a dialog
+    // Send an event to open a dialog (e.g., add students)
     send(evtStr) {
       this.$nuxt.$emit(evtStr)
     },
@@ -271,7 +280,7 @@ export default {
         console.log(`Reset pw`, student)
         this.$snack.showMessage({
           type: 'success',
-          msg: `Success. ${
+          msg: `${
             this.selected.length > 1 ? 'Passwords' : 'Password'
           } reset to 'pw'`,
         })

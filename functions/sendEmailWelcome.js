@@ -1,17 +1,17 @@
 // eslint-disable-next-line require-await
 exports.handler = async (event) => {
-  const AWS = require("aws-sdk");
+  const AWS = require('aws-sdk')
 
-  const requestParams = JSON.parse(event.body);
-  const username = requestParams.username;
+  const requestParams = JSON.parse(event.body)
+  const username = requestParams.username
 
   AWS.config.update({
-    accessKeyId: "AKIAJTQG3TNUQDRGXZOA",
-    secretAccessKey: "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",
-    region: "eu-west-2",
-  });
+    accessKeyId: 'AKIAJTQG3TNUQDRGXZOA',
+    secretAccessKey: '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',
+    region: 'eu-west-2',
+  })
 
-  const ses = new AWS.SES({ apiVersion: "2010-12-01" });
+  const ses = new AWS.SES({ apiVersion: '2010-12-01' })
   const params = {
     Destination: {
       ToAddresses: [username], // Must be array
@@ -21,7 +21,7 @@ exports.handler = async (event) => {
       Body: {
         Html: {
           // HTML Format of the email
-          Charset: "UTF-8",
+          Charset: 'UTF-8',
           Data: `<html>
                   <body>
                   <p>Hello 👋,</p>
@@ -35,33 +35,33 @@ exports.handler = async (event) => {
               </html>`,
         },
         Text: {
-          Charset: "UTF-8",
-          Data: "",
+          Charset: 'UTF-8',
+          Data: '',
         },
       },
       Subject: {
-        Charset: "UTF-8",
-        Data: "Welcome to Examgap",
+        Charset: 'UTF-8',
+        Data: 'Welcome to Examgap',
       },
     },
-    Source: "support@examgap.com",
-  };
+    Source: 'support@examgap.com',
+  }
 
   return ses
     .sendEmail(params)
     .promise()
     .then((data) => {
-      console.log("email submitted to SES", data);
+      console.log('email submitted to SES', data)
       return {
         statusCode: 200,
         body: `Message sent`,
-      };
+      }
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error)
       return {
         statusCode: 500,
         body: `Message unsuccesfully sent, error: ${error}`,
-      };
-    });
-};
+      }
+    })
+}

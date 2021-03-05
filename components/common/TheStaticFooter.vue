@@ -117,7 +117,7 @@
       </v-container>
     </v-card>
     <TheSuccessDialog
-      title="Success. Message sent"
+      title="Message sent"
       subtitle="You should receive a response within 24 hours."
     />
   </v-footer>
