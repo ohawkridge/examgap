@@ -24,7 +24,7 @@
           <v-list>
             <template v-for="(group, i) in groups">
               <v-list-item
-                v-if="group.active === tab"
+                v-if="group.active"
                 :key="i"
                 @click="nav(i, group.id)"
               >
@@ -142,11 +142,6 @@ export default {
       mdiChevronDown,
       mdiOpenInNew,
     }
-  },
-  mounted() {
-    // TODO
-    // For students, dispatch action to start document stream
-    // if (!this.teacher) this.$store.dispatch('user/startStream')
   },
   methods: {
     nav(index, groupId) {

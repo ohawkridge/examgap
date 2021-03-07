@@ -132,6 +132,9 @@
                     </v-edit-dialog>
                   </template>
                 </v-data-table>
+                <p class="red-text">
+                  {{ selected }}
+                </p>
               </v-col>
             </v-row>
           </v-container>
@@ -275,19 +278,38 @@ export default {
     send(evtStr) {
       this.$nuxt.$emit(evtStr)
     },
-    reset() {
-      for (const student of this.selected) {
-        // TODO
-        // const res = await updatePass(student.id, 'pw')
-        console.log(`Reset pw`, student)
+    async reset() {
+      try {
+        const url = new URL(
+          '/.netlify/functions/resetStudentPass',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            students: this.selected,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error resetting passwords ${response.status}`)
+        }
+        console.log(await response.json())
         this.$snack.showMessage({
           type: 'success',
           msg: `${
-            this.selected.length > 1 ? 'Passwords' : 'Password'
+            this.selected.length === 1 ? 'Password' : 'Passwords'
           } reset to 'pw'`,
         })
+      } catch (e) {
+        console.warn(e)
+        this.$snack.showMessage({
+          msg: 'Error resetting passwords',
+          type: 'error',
+        })
+      } finally {
+        this.selected = []
       }
-      this.selected = []
     },
     exportTableToCSV() {
       for (const obj of this.headers) {

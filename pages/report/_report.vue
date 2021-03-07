@@ -679,10 +679,10 @@ export default {
 </script>
 
 <style scoped>
-/* TODO Weird artifact */
-/* #table {
+/* hey dipshit, you showing scrollbars? */
+#table {
   overflow-x: scroll;
-} */
+}
 
 table {
   border-collapse: collapse;
