@@ -103,7 +103,8 @@ export default {
   },
   computed: {
     group() {
-      return this.$store.getters['groups/groupById'](this.$route.params.logins)
+      return this.$store.state.groups.group
+      // return this.$store.getters['groups/groupById'](this.$route.params.logins)
     },
   },
   created() {

@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
@@ -124,7 +125,6 @@ export default {
       '/.netlify/functions/getAssignments',
       this.$config.baseURL
     )
-    console.log(`Fetching ass for ${this.$route.params.group}`)
     const data = await fetch(url, {
       body: JSON.stringify({
         secret: this.$store.state.user.secret,
@@ -143,9 +143,7 @@ export default {
     }
   },
   computed: {
-    group() {
-      return this.$store.state.groups.group
-    },
+    ...mapGetters({ group: 'groups/activeGroup' }),
   },
   created() {
     this.$icons = {

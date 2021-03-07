@@ -2,7 +2,7 @@
   <div>
     <v-bottom-navigation
       v-if="$vuetify.breakpoint.name == 'xs'"
-      v-model="botNav"
+      v-model="nav"
       color="primary"
       app
       mandatory
@@ -40,7 +40,7 @@
     <v-card v-else>
       <v-list nav>
         <v-list-item-group v-model="nav" color="primary">
-          <v-list-item nuxt :to="`/group/${groupId}`">
+          <v-list-item value="group-group" nuxt :to="`/group/${groupId}`">
             <v-list-item-icon>
               <v-icon>
                 {{ $icons.mdiBookOpenOutline }}
@@ -50,7 +50,11 @@
               <v-list-item-title>Assignments</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item nuxt :to="`/students/${groupId}`">
+          <v-list-item
+            value="students-students"
+            nuxt
+            :to="`/students/${groupId}`"
+          >
             <v-list-item-icon>
               <v-icon>
                 {{ $icons.mdiAccountGroupOutline }}
@@ -60,7 +64,7 @@
               <v-list-item-title>Students</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item nuxt :to="`/grades/${groupId}`">
+          <v-list-item value="grades-grades" nuxt :to="`/grades/${groupId}`">
             <v-list-item-icon>
               <v-icon>
                 {{ $icons.mdiFinance }}
@@ -70,7 +74,7 @@
               <v-list-item-title>Grade book</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item nuxt :to="`/group/settings/${groupId}`">
+          <v-list-item value="edit-edit" nuxt :to="`/edit/${groupId}`">
             <v-list-item-icon>
               <v-icon>
                 {{ $icons.mdiCogOutline }}
@@ -103,8 +107,7 @@ export default {
   },
   data() {
     return {
-      nav: 0,
-      botNav: this.$route.name,
+      nav: this.$route.name,
     }
   },
   created() {

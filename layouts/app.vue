@@ -22,16 +22,18 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item
-              v-for="(group, i) in activeGroups"
-              :key="i"
-              @click="nav(i, group.id)"
-            >
-              <v-list-item-content>
-                <v-list-item-title>{{ group.name }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item v-if="activeGroups.length === 0" disabled>
+            <template v-for="(group, i) in groups">
+              <v-list-item
+                v-if="group.active === tab"
+                :key="i"
+                @click="nav(i, group.id)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ group.name }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+            <v-list-item v-if="groups.length === 0" disabled>
               <v-list-item-content>
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
@@ -105,7 +107,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
@@ -129,8 +131,9 @@ export default {
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
+      groups: (state) => state.groups.groups,
+      tab: (state) => state.groups.tab,
     }),
-    ...mapGetters({ activeGroups: 'groups/activeGroups' }),
   },
   created() {
     this.$icons = {
@@ -146,17 +149,10 @@ export default {
     // if (!this.teacher) this.$store.dispatch('user/startStream')
   },
   methods: {
-    // Students and teachers have the same 'Classes' menu
-    // so we need to customise how menu item links behave
-    // For students, navigate by changing activeGroupIndex
-    nav(i, groupId) {
-      if (this.teacher) {
-        this.$store.commit('groups/setGroup', groupId)
-        this.$router.push(`/group/${groupId}`)
-      } else {
-        this.$store.commit('groups/setActiveGroupIndex', i)
-        this.$router.push(`/home`)
-      }
+    nav(index, groupId) {
+      // Store the index of the current group
+      this.$store.commit('groups/setActiveGroupIndex', index)
+      this.$router.push(this.teacher ? `/group/${groupId}` : `/home`)
     },
     logout() {
       this.$router.push('/')

@@ -1,25 +1,14 @@
 export const state = () => ({
   groups: [],
   tab: true,
-  group: {},
   activeGroupIndex: 0,
   revisionTopics: [],
   currentRevisionTopic: {},
 })
 
 export const getters = {
-  activeGroups: (state, getters, rootState) => {
-    if (rootState.user.teacher) {
-      return state.groups.filter((group) => group.active === state.tab)
-    } else {
-      return state.groups
-    }
-  },
   activeGroup: (state) => {
     return state.groups[state.activeGroupIndex]
-  },
-  groupById: (state) => (id) => {
-    return state.groups.find((group) => group.id === id)
   },
   groupsForSelect: (state) => {
     return state.groups.map((group) => {
@@ -33,7 +22,6 @@ export const getters = {
 }
 
 export const actions = {
-  // Get student revision topics
   async getRevisionTopics({ commit, rootState, state }) {
     try {
       const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
@@ -69,32 +57,59 @@ export const actions = {
       if (!response.ok) {
         throw new Error(`Error archiving class ${response.status}`)
       }
-      // Remove from local data
+      // Update local data
       commit('setArchived', state.group.id)
     } catch (e) {
       console.error(`Error archiving group`, e)
     }
   },
+  async updateGroup({ commit, rootState, getters }, { courseId, groupName }) {
+    try {
+      const url = new URL(
+        '/.netlify/functions/updateGroup',
+        this.$config.baseURL
+      )
+      const response = await fetch(url, {
+        body: JSON.stringify({
+          secret: rootState.user.secret,
+          groupId: getters.activeGroup.id,
+          courseId,
+          groupName,
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error(`Error updating class ${response.status}`)
+      }
+      // Update local data
+      commit('setNameAndCourse', {
+        id: getters.activeGroup.id,
+        name: groupName,
+        course: await response.json(),
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  },
 }
 
 export const mutations = {
+  // N.B. Use slice in mutations for reactivity
   setGroups(state, groups) {
     state.groups = groups
   },
   setTab(state, val) {
     state.tab = val
   },
-  setGroup(state, group) {
-    // If 'Classes' menu is clicked, all we get is groupId
-    // so use this to find and store the whole group obj
-    if (typeof group === 'string') {
-      state.group = state.groups.find((g) => g.id === group)
-    } else {
-      state.group = group
+  setNameAndCourse(state, { id, name, course }) {
+    for (let i = 0; i < state.groups.length; i++) {
+      if (state.groups[i].id === id) {
+        state.groups[i].name = name
+        state.groups[i].course = { ...course }
+      }
     }
   },
   setArchived(state, groupId) {
-    // N.B. Best use slice to maintain reactivity
     for (let i = 0; i < state.groups.length; i++) {
       if (state.groups[i].id === groupId) {
         state.groups[i].active = false

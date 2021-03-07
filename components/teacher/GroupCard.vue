@@ -1,18 +1,20 @@
 <template>
-  <v-card hover @click="open(group.id)">
-    <v-card-title>
-      {{ group.name }}
-    </v-card-title>
-    <v-card-subtitle>
-      {{ group.course.name }} ({{ group.course.board }})
-    </v-card-subtitle>
-    <!-- N.B. min-height must be in-line -->
-    <v-card-text class="d-flex align-end" style="min-height: 80px">
-      <v-chip small label outlined color="primary">
-        {{ group.num_students }} student{{ group.num_students | pluralize }}
-      </v-chip>
-    </v-card-text>
-  </v-card>
+  <v-col cols="12" md="6" lg="4">
+    <v-card hover @click="open()">
+      <v-card-title>
+        {{ group.name }}
+      </v-card-title>
+      <v-card-subtitle>
+        {{ group.course.name }} ({{ group.course.board }})
+      </v-card-subtitle>
+      <!-- N.B. min-height must be in-line -->
+      <v-card-text class="d-flex align-end" style="min-height: 80px">
+        <v-chip small label outlined color="primary">
+          {{ group.num_students }} student{{ group.num_students | pluralize }}
+        </v-chip>
+      </v-card-text>
+    </v-card>
+  </v-col>
 </template>
 
 <script>
@@ -25,6 +27,10 @@ export default {
       type: Object,
       required: true,
     },
+    groupIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   created() {
     this.$icons = {
@@ -34,9 +40,10 @@ export default {
     }
   },
   methods: {
-    // Remember group so we don't have to re-fetch
-    open(id) {
-      this.$store.commit('groups/setGroup', this.group)
+    // Remember the active group so we don't
+    // have to re-fetch it each time
+    open() {
+      this.$store.commit('groups/setActiveGroupIndex', this.groupIndex)
       this.$router.push(`/group/${this.group.id}`)
     },
   },

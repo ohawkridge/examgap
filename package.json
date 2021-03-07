@@ -11,9 +11,9 @@
     "lint": "yarn lint:js"
   },
   "dependencies": {
-    "core-js": "^3.8.3",
-    "faunadb": "^4.1.0",
-    "nuxt": "^2.14.12",
+    "core-js": "^3.9.1",
+    "faunadb": "^4.1.1",
+    "nuxt": "^2.15.2",
     "tiptap-vuetify": "^2.24.0",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },

@@ -25,16 +25,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="8">
-              <CourseSelect :course="group.course.id" @clicked="updateCourse" />
-              <v-alert
-                v-if="alert"
-                border="left"
-                text
-                type="info"
-                :icon="$icons.mdiInformationOutline"
-              >
-                Change will take effect the next time you log in
-              </v-alert>
+              <CourseSelect :course="group.course.id" />
             </v-col>
             <v-col cols="12" class="px-0">
               <v-btn
@@ -55,6 +46,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import ArchiveGroup from '@/components/teacher/ArchiveGroup'
@@ -72,7 +64,6 @@ export default {
   data() {
     return {
       loading: false,
-      alert: false,
       courseId: '',
       nameRules: [(v) => !!v || 'Class name is required'],
     }
@@ -83,11 +74,7 @@ export default {
     }
   },
   computed: {
-    group() {
-      return this.$store.getters['groups/groupById'](
-        this.$route.params.settings
-      )
-    },
+    ...mapGetters({ group: 'groups/activeGroup' }),
     name: {
       get() {
         return this.group.name
@@ -101,35 +88,28 @@ export default {
     },
   },
   created() {
-    this.$icons = {
-      mdiInformationOutline,
-    }
+    this.$icons = { mdiInformationOutline }
+    // Remember your Vue lifecycle !!
+    // If you try and set this on data it won't be ready
+    this.courseId = this.group.course.id
+  },
+  mounted() {
+    // Listen for select change event
+    this.$nuxt.$on('select-course', (id) => {
+      this.courseId = id
+    })
   },
   methods: {
-    updateCourse(courseId) {
-      // N.B. This function is called without params,
-      // but still receives the value courseId
-      // emitted from the CourseSelect component
-      // https://stackoverflow.com/questions/53738919/emit-event-with-parameters-in-vue
-      this.courseId = courseId
-      this.alert = true
-    },
     save() {
       this.loading = true
       try {
-        // If course hasn't been changed, courseId will be ""
-        if (this.courseId === '') this.courseId = this.group.course.id
-        // await updateGroup(this.group.id, this.name, this.courseId)
-        this.$snack.showMessage({
-          type: 'success',
-          msg: `Class updated`,
+        // Dispatch store action to update group
+        this.$store.dispatch('groups/updateGroup', {
+          courseId: this.courseId,
+          groupName: this.name,
         })
       } catch (e) {
-        console.error(e)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: `Error updating class`,
-        })
+        console.error('Error dispatching updateGroup')
       } finally {
         this.loading = false
       }

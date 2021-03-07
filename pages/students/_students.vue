@@ -142,6 +142,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
@@ -218,9 +219,7 @@ export default {
     }
   },
   computed: {
-    group() {
-      return this.$store.state.groups.group
-    },
+    ...mapGetters({ group: 'groups/activeGroup' }),
   },
   mounted() {
     // Re-fetch data when students added

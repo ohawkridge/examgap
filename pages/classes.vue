@@ -15,9 +15,14 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col v-for="(group, i) in groups" :key="i" cols="12" md="6" lg="4">
-        <GroupCard :group="group" />
-      </v-col>
+      <template v-for="(group, i) in groups">
+        <GroupCard
+          v-if="group.active === tab"
+          :key="i"
+          :group="group"
+          :group-index="i"
+        />
+      </template>
       <!-- Create class card button -->
       <v-col v-if="tab" cols="12" md="6" lg="4">
         <v-card
@@ -39,8 +44,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { mdiPlus } from '@mdi/js'
-import { mapGetters } from 'vuex'
 import GroupCard from '@/components/teacher/GroupCard'
 
 export default {
@@ -54,9 +59,8 @@ export default {
     }
   },
   computed: {
-    // Get groups for 'Classes' menu
-    ...mapGetters({
-      groups: 'groups/activeGroups',
+    ...mapState({
+      groups: (state) => state.groups.groups,
     }),
     // Remember which tab is active
     tab: {

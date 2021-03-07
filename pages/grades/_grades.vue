@@ -120,6 +120,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import {
@@ -162,13 +163,11 @@ export default {
   },
   head() {
     return {
-      title: `${this.group.name} grade book`,
+      title: this.group ? `${this.group.name} grade book` : ``,
     }
   },
   computed: {
-    group() {
-      return this.$store.getters['groups/groupById'](this.$route.params.grades)
-    },
+    ...mapGetters({ group: 'groups/activeGroup' }),
     boundaries() {
       return this.group.course.boundaries
     },
