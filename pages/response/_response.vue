@@ -14,21 +14,41 @@
           <v-card-title class="d-flex justify-space-between">
             Question
             <div class="d-flex justify-end">
-              <v-chip
-                :color="color(response.tm.length, response.question.maxMark)"
-                class="mr-4"
-              >
-                <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
-                <span class="font-weight-black">{{ response.tm.length }}</span>
-                <!-- <v-icon right>{{ $icons.mdiCheck }}</v-icon> -->
-              </v-chip>
-              <v-chip
-                :color="color(response.sm.length, response.question.maxMark)"
-              >
-                <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
-                <span class="font-weight-black">{{ response.sm.length }}</span>
-                <!-- <v-icon right>{{ $icons.mdiCheck }}</v-icon> -->
-              </v-chip>
+              <v-tooltip bottom>
+                <template #activator="{ on, attrs }">
+                  <v-chip
+                    v-bind="attrs"
+                    :color="
+                      color(response.tm.length, response.question.maxMark)
+                    "
+                    class="mr-4"
+                    v-on="on"
+                  >
+                    <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                    <span class="font-weight-black">{{
+                      response.tm.length
+                    }}</span>
+                  </v-chip>
+                </template>
+                <span>Teacher mark</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template #activator="{ on, attrs }">
+                  <v-chip
+                    v-bind="attrs"
+                    :color="
+                      color(response.sm.length, response.question.maxMark)
+                    "
+                    v-on="on"
+                  >
+                    <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                    <span class="font-weight-black">{{
+                      response.sm.length
+                    }}</span>
+                  </v-chip>
+                </template>
+                <span>Self mark</span>
+              </v-tooltip>
             </div>
           </v-card-title>
           <v-card-text>
@@ -120,7 +140,6 @@ import {
   mdiAccountOutline,
   mdiCheckboxMarked,
   mdiArrowLeft,
-  mdiCheck,
 } from '@mdi/js'
 
 export default {
@@ -147,7 +166,6 @@ export default {
       mdiAccountOutline,
       mdiCheckboxMarked,
       mdiArrowLeft,
-      mdiCheck,
     }
   },
   methods: {

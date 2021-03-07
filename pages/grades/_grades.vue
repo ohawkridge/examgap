@@ -71,9 +71,7 @@
                           v-if="items.length === 0"
                           class="v-data-table__empty-wrapper"
                         >
-                          <td :colspan="data.headers.length">
-                            {{ `No data for ${group.name}` }}
-                          </td>
+                          <td :colspan="data.headers.length">No data yet</td>
                         </tr>
                         <!-- Iterate over rows -->
                         <!-- 'item' is one 'grades' object or one table row -->

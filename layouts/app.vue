@@ -24,7 +24,7 @@
           <v-list>
             <template v-for="(group, i) in groups">
               <v-list-item
-                v-if="group.active"
+                v-if="!teacher || group.active"
                 :key="i"
                 @click="nav(i, group.id)"
               >

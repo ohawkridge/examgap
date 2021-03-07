@@ -100,9 +100,7 @@
                   loading-text="Fetching student data..."
                 >
                   <template #no-data>
-                    <p class="text-body-1 mt-4">
-                      {{ `No students in ${group.name}` }}
-                    </p>
+                    <p class="text-body-1 mt-4">No students yet</p>
                     <p>
                       <v-btn
                         color="primary"

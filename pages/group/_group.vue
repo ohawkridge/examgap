@@ -3,7 +3,7 @@
     <GroupHeader :group="group" />
     <v-row>
       <v-col cols="12" md="3">
-        <GroupNav :group-id="group.id" />
+        <GroupNav v-if="group" :group-id="group.id" />
       </v-col>
       <v-col cols="12" md="9">
         <v-card class="mt-n6 mt-sm-0">

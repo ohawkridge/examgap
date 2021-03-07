@@ -10,7 +10,7 @@
           <v-card-title v-if="group" class="d-flex justify-space-between">
             Settings
             <!-- Hide archive button for archived groups -->
-            <!-- TODO Add un-archive feature -->
+            <!-- Add un-archive feature -->
             <ArchiveGroup v-if="group.active" :group-id="group.id" />
           </v-card-title>
           <v-card-text>
