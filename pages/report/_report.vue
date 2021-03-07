@@ -285,6 +285,7 @@ import {
   mdiBoomerang,
   mdiCommentTextOutline,
 } from '@mdi/js'
+import { mapGetters } from 'vuex'
 import { debounce, cloneDeep } from 'lodash'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'
@@ -334,12 +335,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({ group: 'groups/activeGroup' }),
     // Question is included in header data (for hover preview)
     question() {
       return this.data.headers[this.questionIndex + 1]
-    },
-    group() {
-      return this.$store.state.groups.group
     },
     response() {
       // data is the object we get back from getAssignmentDetails

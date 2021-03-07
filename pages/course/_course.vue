@@ -85,7 +85,6 @@
                     </v-list-item-group>
                   </v-skeleton-loader>
                 </v-list>
-                <p v-if="!$fetchState.pending">{{ topics[currentTopic].id }}</p>
               </v-col>
               <v-col cols="12" md="5">
                 <p class="text-h6">Questions ({{ questions.length }})</p>
@@ -198,7 +197,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   mdiPlus,
   mdiMinus,
@@ -256,8 +255,8 @@ export default {
   computed: {
     ...mapState({
       selectedQuestions: (state) => state.assignments.selectedQuestions,
-      group: (state) => state.groups.group,
     }),
+    ...mapGetters({ group: 'groups/activeGroup' }),
     // Get the id of the current question
     questionId() {
       return this.$fetchState.loading || this.questions.length === 0

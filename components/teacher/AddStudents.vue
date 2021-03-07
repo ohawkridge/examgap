@@ -3,14 +3,6 @@
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Add students </v-card-title>
       <v-card-text>
-        <v-alert
-          :icon="$icons.mdiInformationOutline"
-          border="left"
-          type="info"
-          text
-        >
-          Enter student email addresses. <b>One email per line</b>
-        </v-alert>
         <v-textarea
           v-model="usernames"
           outlined
@@ -19,6 +11,14 @@
           :error-messages="errors"
           autofocus
         ></v-textarea>
+        <v-alert
+          :icon="$icons.mdiInformationOutline"
+          border="left"
+          type="info"
+          text
+        >
+          Enter student email addresses. <b>One email per line</b>
+        </v-alert>
         <v-text-field
           v-model="domain"
           label="Append email domain"
@@ -87,10 +87,17 @@ export default {
       this.dialog = true
     })
   },
+  beforeDestroy() {
+    this.$nuxt.$off('open-add')
+  },
   methods: {
     append() {
       let out = ''
-      for (const name of this.namesArray) {
+      for (let name of this.namesArray) {
+        // Remove any old appendings
+        if (name.includes('@')) {
+          name = name.substring(0, name.indexOf('@'))
+        }
         out = out + name + '@' + this.domain + '\n'
       }
       this.usernames = out
@@ -99,7 +106,6 @@ export default {
       this.loading = true
       // Create new student accounts
       try {
-        // TODO Deal with username taken errors
         for (const username of this.namesArray) {
           const url = new URL(
             '/.netlify/functions/createAccount',
@@ -109,17 +115,17 @@ export default {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               username,
-              // TODO Pass in groupId
+              groupId: this.groupId,
             }),
             method: 'POST',
           })
           if (!response.ok) {
             throw new Error(`Error adding ${username} ${response.status}`)
           }
+          response = await response.json()
+          // console.log(response)
           // Increment num_students on group in store
           this.$store.commit('groups/incrementStudentCount', this.groupId)
-          response = await response.json()
-          console.log(response)
           // Emit event to re-fetch student data in parent
           this.$nuxt.$emit('user-added')
         }
@@ -132,6 +138,7 @@ export default {
       } finally {
         this.dialog = false
         this.loading = false
+        this.usernames = ''
       }
     },
   },

@@ -231,6 +231,9 @@ export default {
       mdiDownloadOutline,
     }
   },
+  beforeDestroy() {
+    this.$nuxt.$off('user-added')
+  },
   methods: {
     // Save target grade
     // (row is the full v-data-table object)
