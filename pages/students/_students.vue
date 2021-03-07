@@ -132,9 +132,6 @@
                     </v-edit-dialog>
                   </template>
                 </v-data-table>
-                <p class="red-text">
-                  {{ selected }}
-                </p>
               </v-col>
             </v-row>
           </v-container>
@@ -294,7 +291,6 @@ export default {
         if (!response.ok) {
           throw new Error(`Error resetting passwords ${response.status}`)
         }
-        console.log(await response.json())
         this.$snack.showMessage({
           type: 'success',
           msg: `${

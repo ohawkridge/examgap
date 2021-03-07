@@ -4,6 +4,7 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const students = data.students
+  console.log(`function received`, students)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
@@ -13,13 +14,11 @@ exports.handler = async (event, context, callback) => {
       students,
       q.Lambda(
         'obj',
-        q.Update(
-          q.Ref(q.Collection('User'), q.Select('id', q.Var('obj')), {
-            credentials: {
-              password: 'pw',
-            },
-          })
-        )
+        q.Update(q.Ref(q.Collection('User'), q.Select('id', q.Var('obj'))), {
+          credentials: {
+            password: 'pw',
+          },
+        })
       )
     )
     const data = await keyedClient.query(qry)
