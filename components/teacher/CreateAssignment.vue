@@ -34,22 +34,18 @@
                     <template #activator="{ on, attrs }">
                       <a
                         :class="`exam-chip ${
-                          notExamMode.includes(student.id)
-                            ? 'disabled-chip'
-                            : ''
+                          student.examMode ? '' : 'disabled-chip'
                         }`"
                         href="#"
                         v-bind="attrs"
                         v-on="on"
-                        @click.stop="toggleMode(student.id)"
+                        @click.stop="toggleMode(student)"
                         >EXAM</a
                       >
                     </template>
                     <span
                       >Turn exam mode
-                      {{
-                        notExamMode.includes(student.id) ? 'on' : 'off'
-                      }}</span
+                      {{ student.examMode ? 'off' : 'on' }}</span
                     >
                   </v-tooltip>
                 </template>
@@ -250,7 +246,6 @@ export default {
       loading: false,
       students: [],
       selectedStudents: [],
-      notExamMode: [],
       name: this.defaultName(),
       startDate: new Date().toISOString().substr(0, 10),
       endDate: new Date().toISOString().substr(0, 10),
@@ -284,11 +279,11 @@ export default {
       }
       this.students = await response.json()
       // Find students not in exam mode
-      for (const student of this.students) {
-        if (!student.examMode) {
-          this.notExamMode.push(student.id)
-        }
-      }
+      // for (const student of this.students) {
+      //   if (!student.examMode) {
+      //     this.notExamMode.push(student.id)
+      //   }
+      // }
     } catch (e) {
       console.error(e)
     }
@@ -359,24 +354,7 @@ export default {
       this.dialog = false
       this.dialog2 = true
     },
-    toggleMode(studentId) {
-      // TODO If function call below fails, don't update mode locally
-      if (this.notExamMode.includes(studentId)) {
-        // Remove student from notExamMode list
-        for (let i = 0; i < this.notExamMode.length; i++) {
-          if (this.notExamMode[i] === studentId) {
-            this.notExamMode.splice(i, 1)
-          }
-        }
-        // Put student back into examMode
-        this.setMode(studentId, true)
-      } else {
-        // Add student to notExamMode list
-        this.notExamMode.push(studentId)
-        this.setMode(studentId, false)
-      }
-    },
-    async setMode(studentId, examMode) {
+    async toggleMode(student) {
       try {
         const url = new URL(
           '/.netlify/functions/updateExamMode',
@@ -385,16 +363,16 @@ export default {
         const response = await fetch(url, {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
-            studentId,
-            examMode,
+            studentId: student.id,
+            examMode: !student.examMode,
           }),
           method: 'POST',
         })
         if (!response.ok) {
           throw new Error(`Error updating examMode ${response.status}`)
         }
-        const x = await response.json()
-        console.log(x)
+        // Update local data if call succeeds
+        student.examMode = !student.examMode
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
