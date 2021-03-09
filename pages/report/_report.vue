@@ -159,23 +159,23 @@
                 <span>Reassign</span>
               </v-tooltip>
               <v-spacer />
-              <v-chip color="primary" outlined label class="mr-2">
+              <v-chip color="primary" outlined class="mr-2">
                 <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
                 <span v-if="marking" class="font-weight-black">{{
                   response.tm.length
                 }}</span>
                 <v-icon right>{{ $icons.mdiCheck }}</v-icon>
               </v-chip>
-              <v-chip color="green darken-3" outlined label>
-                <v-icon left color="green darken-3">{{
+              <v-chip color="green darken-2" outlined>
+                <v-icon left color="green darken-2">{{
                   $icons.mdiAccountOutline
                 }}</v-icon>
                 <span
                   v-if="marking"
-                  class="green--text text--darken-3 font-weight-black"
+                  class="green--text text--darken-2 font-weight-black"
                   >{{ response.sm.length }}</span
                 >
-                <v-icon right color="green darken-3">{{
+                <v-icon right color="green darken-2">{{
                   $icons.mdiCheck
                 }}</v-icon>
               </v-chip>
@@ -195,7 +195,11 @@
               <p v-if="marking" class="text-subtitle-1 font-weight-medium">
                 {{ response.username }}
               </p>
-              <p v-if="marking" class="breaks" v-text="response.text"></p>
+              <p
+                v-if="marking"
+                class="breaks text-body-2"
+                v-text="response.text"
+              ></p>
               <p class="text-subtitle-1">Feedback</p>
               <v-textarea
                 v-model="feedback"
@@ -222,34 +226,30 @@
             </v-col>
             <v-col v-if="marking" cols="12" md="4">
               <p class="text-subtitle-1">Mark Scheme</p>
+              <!-- N.B. We need v-model + value for this to work -->
               <v-checkbox
-                v-for="(point, i) in markScheme"
-                :key="i"
+                v-for="mp in markScheme"
+                :key="mp.id"
                 v-model="response.tm"
-                :value="point[2]['@ref'].id"
-                class="mt-0"
-                @change="addRemoveMark(point[2]['@ref'].id)"
+                :value="mp.id"
+                hide-details
+                @change="addRemoveMark(mp.id)"
               >
                 <template #label>
                   <span
                     v-if="response"
                     :class="
-                      response.sm.includes(point[2]['@ref'].id)
-                        ? 'green--text text--darken-3'
+                      response.sm.includes(mp.id)
+                        ? 'green--text text--darken-2'
                         : ''
                     "
                   >
-                    {{ point[1] }}</span
+                    {{ mp.text }}</span
                   >
                 </template>
               </v-checkbox>
               <div class="d-flex justify-end">
-                <v-switch
-                  v-model="smartSort"
-                  inset
-                  hide-details
-                  @change="sortMarks()"
-                >
+                <v-switch v-model="smartSort" inset hide-details>
                   <template #label>
                     <v-tooltip bottom>
                       <template #activator="{ on, attrs }">
@@ -261,7 +261,7 @@
                 </v-switch>
               </div>
               <p class="text-subtitle-1">Guidance</p>
-              <p>
+              <p class="text-body-2">
                 {{ question.guidance ? question.guidance : 'None' }}
               </p>
             </v-col>
@@ -310,23 +310,23 @@ export default {
       method: 'POST',
     })
     if (!response.ok) {
-      throw new Error(`Error fetching report ${response.status}`)
+      throw new Error(`Error fetching assignment data ${response.status}`)
     }
     const data = await response.json()
+    // console.log(JSON.stringify(data, null, 2))
     return { data }
   },
   data() {
     return {
-      marking: false,
-      feedbackStatus: '',
-      bank: [],
-      data: {},
+      // These 3 values let us index into big hairy data structure
       studentIndex: 0,
       questionIndex: 0,
       responseIndex: 0,
+      marking: false,
+      bank: [],
+      feedbackStatus: '',
       smartSort: false,
       markScheme: [],
-      unsorted: [],
     }
   },
   head() {
@@ -373,9 +373,18 @@ export default {
     },
   },
   watch: {
+    // If smartSort is on, re-sort mark scheme when response changes
     response() {
-      // If smartSort is on, re-sort mark scheme when response changes
-      if (this.smartSort) this.markScheme.sort(this.selfSort)
+      if (this.smartSort) this.markScheme.sort(this.selfMarksFirst)
+    },
+    smartSort() {
+      if (this.smartSort) {
+        // Turn on smartSort by calling sorting function
+        this.markScheme.sort(this.selfMarksFirst)
+      } else {
+        // When smartSort is turned off, restore normal mark scheme
+        this.markScheme = cloneDeep(this.question.markScheme)
+      }
     },
   },
   created() {
@@ -393,12 +402,6 @@ export default {
     }
   },
   methods: {
-    // Active or deactivate smart sort
-    sortMarks() {
-      this.markScheme = this.smartSort
-        ? this.question.markScheme.sort(this.selfSort)
-        : this.unsorted
-    },
     // Build comment bank from existing responses
     updateBank() {
       const bank = []
@@ -424,13 +427,9 @@ export default {
       this.studentIndex = obj.studentIndex
       this.questionIndex = obj.questionIndex
       this.responseIndex = obj.responseIndex
-      // Copy the unsorted mark scheme
-      // so we can switch back later
-      this.markScheme = this.question.markScheme
-      // Watch out!! Don't just copy by reference
-      // Otherwise, sorting one will sort both
-      this.unsorted = cloneDeep(this.question.markScheme)
       this.marking = true
+      // *Actually copy* (not just reference) original mark scheme
+      this.markScheme = cloneDeep(this.question.markScheme)
       // Must be *after* marking = true
       this.updateBank()
       // You could open a response and close it without clicking
@@ -522,6 +521,7 @@ export default {
         this.toggleMark(id, false)
       }
     },
+    // Actually write mark to database
     async toggleMark(markId, addOrRemove) {
       try {
         const url = new URL(
@@ -654,21 +654,20 @@ export default {
         })
       }
     },
-    // Copy an existing comment onto response
+    // Reuse an existing comment
     reuse(text) {
       this.response.feedback = text
       this.save() // Trigger save
     },
     // Comparison function so student self marks are first
-    selfSort(m1, m2) {
-      // Watch out!! Nexting over empty responses
+    selfMarksFirst(m1, m2) {
+      // Watch out nexting over empty responses
       if (!this.response) return 0
       if (
-        this.response.sm.includes(m1[2]['@ref'].id) ===
-        this.response.sm.includes(m2[2]['@ref'].id)
+        this.response.sm.includes(m1.id) === this.response.sm.includes(m2.id)
       ) {
         return 0
-      } else if (this.response.sm.includes(m1[2]['@ref'].id)) {
+      } else if (this.response.sm.includes(m1.id)) {
         return -1
       } else {
         return 1

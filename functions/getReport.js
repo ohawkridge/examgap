@@ -4,7 +4,6 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const assignmentId = data.assignmentId
-  console.log(`assignmentId was`, assignmentId)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
@@ -35,12 +34,30 @@ exports.handler = async (event, context, callback) => {
                   value: q.ToString(q.Var('ref')),
                   text: q.Select(['data', 'text'], q.Var('instance')),
                   maxMark: q.Select(['data', 'maxMark'], q.Var('instance')),
-                  markScheme: q.Select(
-                    ['data'],
-                    q.Paginate(
-                      q.Match(
-                        q.Index('marks_for_question_2'),
-                        q.Select('ref', q.Var('instance'))
+                  markScheme: q.Map(
+                    q.Select(
+                      ['data'],
+                      q.Paginate(
+                        q.Match(
+                          q.Index('marks_for_question_2'),
+                          q.Select('ref', q.Var('instance'))
+                        )
+                      )
+                    ),
+                    // marks_for_question_2 returns an array:
+                    // [data.order, data.text, Mark ref]
+                    q.Lambda(
+                      'mArr',
+                      q.Let(
+                        // Turn array into proper object
+                        {
+                          obj: q.Var('mArr'),
+                        },
+                        {
+                          order: q.Select([0], q.Var('obj')),
+                          text: q.Select([1], q.Var('obj')),
+                          id: q.Select('id', q.Select([2], q.Var('obj'))),
+                        }
                       )
                     )
                   ),
@@ -194,6 +211,7 @@ exports.handler = async (event, context, callback) => {
     )
     const data = await keyedClient.query(qry)
     data.students.sort(compare)
+    // console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
