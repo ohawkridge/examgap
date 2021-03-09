@@ -47,11 +47,13 @@
     <v-row class="justify-center">
       <template v-for="(user, i) in usernames">
         <v-col :key="i" cols="6" md="5" class="border">
-          <p>Examgap.com</p>
-          <p>
+          <p class="mb-1">https://examgap.com</p>
+          <p class="mb-0">
             Username:
-            <span class="font-weight-medium">{{ user.username }}</span
-            >&nbsp;&nbsp;Password:
+            <span class="font-weight-medium">{{ user.username }}</span>
+          </p>
+          <p class="mb-0">
+            Password (unless you changed it):
             <span class="font-weight-medium">pw</span>
           </p>
         </v-col>
@@ -76,6 +78,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { mdiArrowRight, mdiInformationOutline } from '@mdi/js'
 
 export default {
@@ -102,10 +105,7 @@ export default {
     }
   },
   computed: {
-    group() {
-      return this.$store.state.groups.group
-      // return this.$store.getters['groups/groupById'](this.$route.params.logins)
-    },
+    ...mapGetters({ group: 'groups/activeGroup' }),
   },
   created() {
     this.$icons = {
