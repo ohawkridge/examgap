@@ -130,21 +130,21 @@ export default {
         return await response.json()
       }
     },
-    login() {
+    async login() {
       if (this.$refs.form.validate()) {
-        this.loading = true
-        // Using key, try to login
-        this.getUserSecret()
-          .then((res) => {
-            this.$store.commit('user/setSecret', res.secret)
-            this.$router.push(res.teacher ? `/classes` : `/home`)
-          })
-          .catch((e) => {
-            console.error(e)
-            this.failed = true
-            this.$refs.form.resetValidation()
-            this.loading = false
-          })
+        try {
+          this.loading = true
+          // Using key, try to login
+          const res = await this.getUserSecret()
+          this.$store.commit('user/setSecret', res.secret)
+          this.$router.push(res.teacher ? `/classes` : `/home`)
+        } catch (e) {
+          console.error(e)
+          this.failed = true
+        } finally {
+          this.$refs.form.resetValidation()
+          this.loading = false
+        }
       }
     },
   },

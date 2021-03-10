@@ -1,3 +1,7 @@
+import FaunaStream from '../fauna/faunaStream'
+const faunadb = require('faunadb')
+const q = faunadb.query
+
 export const state = () => ({
   id: '',
   username: '',
@@ -12,7 +16,7 @@ export const state = () => ({
 
 export const actions = {
   // Call a function to get user data
-  async getUser({ commit, state }) {
+  async getUser({ commit, state, dispatch }) {
     try {
       const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
       const response = await fetch(url, {
@@ -25,6 +29,8 @@ export const actions = {
         throw new Error(`Error fetching user data ${response.status}`)
       }
       const userData = await response.json()
+      // Commit user data to store
+      commit('setUser', userData)
       // For students we need to do some 'post processing'
       // to put all the assignments into the right groups
       if (!userData.teacher) {
@@ -35,45 +41,29 @@ export const actions = {
             }
           }
         }
+        // Open doc stream
+        dispatch('openStream', userData)
       }
       // Commit group data to groups store
       commit('groups/setGroups', userData.groups, { root: true })
-      // Commit user data to user store
-      commit('setUser', userData)
     } catch (e) {
       console.error(e)
     }
   },
-  // Start a document stream on user doc
-  // async startStream({ state }) {
-  //   const url = new URL('/.netlify/functions/startStream', this.$config.baseURL)
-  //   let response = await fetch(url, {
-  //     body: JSON.stringify({
-  //       secret: state.secret,
-  //     }),
-  //     method: 'POST',
-  //   })
-  //   if (!response.ok) {
-  //     throw new Error(`Error starting stream ${response.status}`)
-  //   }
-  //   response = await response.json()
-  //   console.log(response)
-  // if ('newAssignment' in data.document.data) {
-  //   try {
-  //     const assignment = await getNewAssignment(
-  //       data.document.data.newAssignment
-  //     )
-  //     this.$snack.showMessage({
-  //       type: '',
-  //       msg: 'New assignment added',
-  //     })
-  //     this.$store.commit('user/newAssignment', assignment)
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-  // }
-  // this.$store.commit('user/setExamMode', data.document.data.examMode)
-  // },
+  // Don't forget first argument is the context
+  openStream({ state, commit }, { id }) {
+    const keyedClient = new faunadb.Client({
+      secret: state.secret,
+    })
+    // Create a Fauna stream object
+    const fso = new FaunaStream(
+      keyedClient,
+      q.Ref(q.Collection('User'), id),
+      commit
+    )
+    fso.initStream()
+    // TODO Destroy on logout
+  },
 }
 
 export const mutations = {
@@ -94,11 +84,14 @@ export const mutations = {
       state.quote = data.quote.text
     }
   },
+  setExamMode(state, val) {
+    state.examMode = val
+  },
   setRevisionExamMode(state, val) {
     state.reviseExamMode = val
   },
   // N.B. Clearing localStorage isn't enough
-  // Vue will still live in memory
+  // TODO Vue still in memory
   logout(state) {
     state.id = ''
     state.username = ''

@@ -93,7 +93,7 @@ export default {
     }
   },
   async fetch() {
-    // Dispatch action to fetch + store revision topics
+    // Dispatch an action to fetch + store revision topics
     if (this.forceFetch || this.topics.length === 0) {
       await this.$store.dispatch('groups/getRevisionTopics')
       this.forceFetch = false

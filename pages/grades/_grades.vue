@@ -4,6 +4,34 @@
     <v-row>
       <v-col cols="12" md="3">
         <GroupNav :group-id="group.id" />
+        <v-card class="mt-4 pa-3">
+          <v-simple-table dense>
+            <template #default>
+              <thead>
+                <tr>
+                  <th class="text-left text-center">Grade</th>
+                  <th class="text-left text-center">
+                    <v-tooltip bottom>
+                      <template #activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">Boundary (%)</span>
+                      </template>
+                      <span>Highest boundary across series</span>
+                    </v-tooltip>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- TODO Update when database docs updated -->
+                <tr v-for="(item, i) in actual" :key="i">
+                  <td class="text-center">{{ item[0] }}</td>
+                  <td class="text-center">
+                    {{ Math.round(item[1] * 100, 0) }}
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-card>
       </v-col>
       <v-col cols="12" md="9">
         <v-card class="mt-n8 mt-sm-0">
@@ -35,9 +63,9 @@
                     group
                     mandatory
                   >
-                    <v-btn value="green" class="rounded"> Secure </v-btn>
-                    <v-btn value="yellow" class="rounded"> Middle </v-btn>
-                    <v-btn value="red" class="rounded"> Vulnerable </v-btn>
+                    <v-btn value="green" class="rounded"> Above target </v-btn>
+                    <v-btn value="yellow" class="rounded"> Close </v-btn>
+                    <v-btn value="red" class="rounded"> Below target </v-btn>
                   </v-btn-toggle>
                 </div>
                 <v-btn
@@ -168,6 +196,13 @@ export default {
     ...mapGetters({ group: 'groups/activeGroup' }),
     boundaries() {
       return this.group.course.boundaries
+    },
+    // TODO Not needed once database field updated
+    actual() {
+      return Object.keys(this.boundaries.actual).map((key) => [
+        key,
+        this.boundaries.actual[key],
+      ])
     },
   },
   created() {
