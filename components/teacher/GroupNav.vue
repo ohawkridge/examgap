@@ -25,12 +25,7 @@
         </v-icon>
         <span>Grade book</span>
       </v-btn>
-      <v-btn
-        value="group-settings-settings"
-        nuxt
-        :to="`/group/settings/${group.id}`"
-        exact
-      >
+      <v-btn value="edit-edit" nuxt :to="`/edit/${group.id}`" exact>
         <v-icon>
           {{ $icons.mdiCogOutline }}
         </v-icon>

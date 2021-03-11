@@ -9,7 +9,7 @@
         />
       </v-col>
       <v-col cols="12" md="9">
-        <v-card v-if="group.course" rounded="lg" class="mt-n8 mt-sm-0">
+        <v-card v-if="group.course" rounded="lg" class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
             Student{{ students.length | pluralize }} ({{ students.length }})
             <div>

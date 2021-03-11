@@ -20,11 +20,7 @@ a:link {
   background: #f7eabb;
 }
 
-/* thin divider under app-bar */
-#div2 {
-  border-bottom: 1px solid #e3dede !important;
-}
-
+/* blue divider */
 #div1 {
   border-bottom: 1px solid #0078a0 !important;
 }

@@ -3,41 +3,46 @@
     <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
     <v-row>
       <v-col cols="12" md="3">
-        <GroupNav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-        <v-card class="mt-4 pa-3">
-          <v-simple-table dense>
-            <template #default>
-              <thead>
-                <tr>
-                  <th class="text-left text-center">Grade</th>
-                  <th class="text-left text-center">
-                    <v-tooltip bottom>
-                      <template #activator="{ on, attrs }">
-                        <span v-bind="attrs" v-on="on">Boundary (%)</span>
-                      </template>
-                      <span>Highest boundary across series</span>
-                    </v-tooltip>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- TODO Update when database docs updated -->
-                <!-- <tr v-for="(item, i) in actual" :key="i">
-                  <td class="text-center">{{ item[0] }}</td>
-                  <td class="text-center">
-                    {{ Math.round(item[1] * 100, 0) }}
-                  </td>
-                </tr> -->
-              </tbody>
-            </template>
-          </v-simple-table>
-        </v-card>
+        <v-row>
+          <v-col>
+            <GroupNav
+              v-if="group && Object.keys(group).length > 0"
+              :group="group"
+            />
+          </v-col>
+          <v-col class="d-none d-sm-flex">
+            <v-card class="pa-3 flex-grow-1">
+              <v-simple-table dense>
+                <template #default>
+                  <thead>
+                    <tr>
+                      <th class="text-left text-center">Grade</th>
+                      <th class="text-left text-center">
+                        <v-tooltip bottom>
+                          <template #activator="{ on, attrs }">
+                            <span v-bind="attrs" v-on="on">Boundary (%)</span>
+                          </template>
+                          <span>Highest boundary across series</span>
+                        </v-tooltip>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(row, i) in group.course.rag" :key="i">
+                      <td class="text-center">{{ row[0] }}</td>
+                      <td class="text-center">
+                        {{ Math.round(row[1] * 100, 0) }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
       <v-col cols="12" md="9">
-        <v-card class="mt-n8 mt-sm-0">
+        <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
             Grade book
             <div class="d-flex">
@@ -106,7 +111,7 @@
                               <v-chip
                                 v-else
                                 :color="
-                                  rag(
+                                  ragMark(
                                     row[data.headers[j].value],
                                     data.headers[j].max,
                                     row['target']
@@ -121,6 +126,13 @@
                     </template>
                   </v-data-table>
                 </v-skeleton-loader>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col class="d-flex justify-end">
+                <v-chip class="green">On target</v-chip>
+                <v-chip class="orange ml-2">Near target</v-chip>
+                <v-chip class="red ml-2">Below target</v-chip>
               </v-col>
             </v-row>
           </v-container>
@@ -178,8 +190,14 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
-    boundaries() {
-      return this.group ? this.group.course.rag : []
+    // Convert the 2d array from the db -> [["A*", 0.90], ["A", 0.82], ..]]
+    // into an object so we can look up the target grade
+    rag() {
+      const out = {}
+      for (const arr of this.group.course.rag) {
+        out[arr[0]] = arr[1]
+      }
+      return out
     },
   },
   created() {
@@ -209,49 +227,14 @@ export default {
       clearInterval(this.interval)
       this.interval = false
     },
-    rag(n, max, target) {
-      // Don't RAG username
-      if (typeof n !== 'number') return ''
+    ragMark(n, max, target) {
+      // Don't RAG username or if target not set
+      if (typeof n !== 'number' || target === '-') return ''
+      // Don't RAG if we can't find target
+      if (!(target in this.rag)) return ''
       const z = n / max
-      if (target === '-') {
-        // Target not set ∴ RAG with percentages
-        if (this.toggle === 'red') {
-          if (z <= this.boundaries.rag[0]) {
-            return 'red'
-          }
-        }
-        if (this.toggle === 'yellow') {
-          if (z > this.boundaries.rag[0] && z < this.boundaries.rag[1]) {
-            return 'orange'
-          }
-        }
-        if (this.toggle === 'green') {
-          if (z >= this.boundaries.rag[1]) {
-            return 'green'
-          }
-        }
-      } else {
-        // RAG against target grades
-        if (this.toggle === 'red') {
-          if (z < this.boundaries.actual[target] - 0.15) {
-            return 'red'
-          }
-        }
-        if (this.toggle === 'yellow') {
-          if (
-            z >= this.boundaries.actual[target] - 0.15 &&
-            z < this.boundaries.actual[target]
-          ) {
-            return 'orange'
-          }
-        }
-        if (this.toggle === 'green') {
-          if (z >= this.boundaries.actual[target]) {
-            return 'green'
-          }
-        }
-      }
-      return ''
+      const t = this.rag[target]
+      return z > t ? 'green' : z < t - 0.2 ? 'red' : 'orange'
     },
     exportTableToCSV() {
       for (const obj of this.data.headers) {
