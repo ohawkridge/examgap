@@ -3,12 +3,12 @@
     <v-container>
       <v-row class="d-flex justify-center">
         <v-col cols="12" class="text-center">
-          <p id="hero-text" class="text-h4 text-md-h1 mb-0">
+          <p id="hero-text" class="text-h4 text-md-h2">
             Improve your Computer Science results.
           </p>
         </v-col>
         <v-col cols="12" md="7">
-          <p class="summary text-center mb-10">
+          <p class="summary text-center mb-8">
             Most learning tools focus on multiple-choice and gap fills. Examgap
             is a powerful yet simple system for practising
             <span class="highlight">written answer</span> exam questions.
@@ -470,9 +470,8 @@ export default {
 <style scoped>
 /* --------- Hero --------- */
 #hero-text {
-  font-size: 72px !important;
   font-weight: 900;
-  line-height: 1.3em;
+  line-height: 1.25em;
   padding-top: 0.5em;
 }
 
