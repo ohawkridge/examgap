@@ -1,0 +1,11 @@
+{
+  "name": "Examgap",
+  "short_name": "Examgap",
+  "icons": [
+    { "src": "/192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "theme_color": "#f1eeee",
+  "background_color": "#f1eeee",
+  "display": "standalone"
+}

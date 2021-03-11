@@ -157,18 +157,19 @@ export const mutations = {
   },
   // Teacher creates a new assignment
   addAssignment(state, assignment) {
-    // TODO
+    console.log(`Incoming assignment`)
+    console.log(assignment)
     // Find index of group
-    // const groupIndex = state.user.groups.findIndex(
-    //   (group) => group.id === assignment.data.group.id
-    // )
-    // // Add assignment to front of assignments array
-    // state.user.groups[groupIndex].assignments.unshift({
-    //   dateDue: assignment.data.dateDue,
-    //   start: assignment.data.start,
-    //   id: assignment.ref.id,
-    //   name: assignment.data.name,
-    // })
+    const groupIndex = state.groups.findIndex(
+      (group) => group.id === assignment.data.group.id
+    )
+    // Add assignment to front of assignments array
+    state.groups[groupIndex].assignments.unshift({
+      dateDue: assignment.data.dateDue,
+      start: assignment.data.start,
+      id: assignment.ref.id,
+      name: assignment.data.name,
+    })
   },
   // Student gets new assignment in doc stream
   newAssignment(state, assignment) {

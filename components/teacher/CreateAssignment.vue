@@ -93,6 +93,7 @@
                 color="primary"
                 :disabled="students.length === 0"
                 elevation="0"
+                class="ml-2"
                 width="80"
                 @click="next()"
                 >Next</v-btn
@@ -209,6 +210,7 @@
                 <v-btn
                   color="primary"
                   elevation="0"
+                  class="ml-2"
                   :loading="loading"
                   :disabled="loading"
                   @click="create()"
@@ -278,12 +280,6 @@ export default {
         throw new Error(`Error fetching students ${response.status}`)
       }
       this.students = await response.json()
-      // Find students not in exam mode
-      // for (const student of this.students) {
-      //   if (!student.examMode) {
-      //     this.notExamMode.push(student.id)
-      //   }
-      // }
     } catch (e) {
       console.error(e)
     }
