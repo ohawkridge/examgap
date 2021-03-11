@@ -25,12 +25,12 @@
               </thead>
               <tbody>
                 <!-- TODO Update when database docs updated -->
-                <tr v-for="(item, i) in actual" :key="i">
+                <!-- <tr v-for="(item, i) in actual" :key="i">
                   <td class="text-center">{{ item[0] }}</td>
                   <td class="text-center">
                     {{ Math.round(item[1] * 100, 0) }}
                   </td>
-                </tr>
+                </tr> -->
               </tbody>
             </template>
           </v-simple-table>
@@ -40,7 +40,7 @@
         <v-card class="mt-n8 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
             Grade book
-            <div>
+            <div class="d-flex">
               <v-btn
                 color="primary"
                 elevation="0"
@@ -51,40 +51,22 @@
                 <v-icon left>{{ $icons.mdiDownloadOutline }}</v-icon>
                 Csv
               </v-btn>
+              <v-btn
+                class="d-none d-sm-flex ml-2"
+                color="primary"
+                outlined
+                @mouseover="scroll"
+                @mouseleave="stop"
+                @mouseup="stop"
+              >
+                Scroll
+                <v-icon right>
+                  {{ $icons.mdiArrowRight }}
+                </v-icon>
+              </v-btn>
             </div>
           </v-card-title>
           <v-container>
-            <v-row>
-              <v-col
-                cols="12"
-                class="d-flex justify-center justify-md-space-between align-center"
-              >
-                <div>
-                  <v-btn-toggle
-                    v-model="toggle"
-                    color="primary"
-                    group
-                    mandatory
-                  >
-                    <v-btn value="green" class="rounded"> Above target </v-btn>
-                    <v-btn value="yellow" class="rounded"> Close </v-btn>
-                    <v-btn value="red" class="rounded"> Below target </v-btn>
-                  </v-btn-toggle>
-                </div>
-                <v-btn
-                  class="d-none d-sm-flex"
-                  text
-                  @mouseover="scroll"
-                  @mouseleave="stop"
-                  @mouseup="stop"
-                >
-                  Scroll right
-                  <v-icon right>
-                    {{ $icons.mdiArrowRight }}
-                  </v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
             <v-row>
               <v-col cols="12">
                 <v-skeleton-loader :loading="$fetchState.pending" type="table">
@@ -169,7 +151,6 @@ export default {
   data() {
     return {
       data: [],
-      toggle: 'yellow',
       interval: false, // Scroll right
       csv: [],
     }
@@ -198,18 +179,7 @@ export default {
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
     boundaries() {
-      return this.group ? this.group.course.boundaries : {}
-    },
-    // TODO Not needed once database field updated
-    actual() {
-      if (this.boundaries.actual) {
-        return Object.keys(this.boundaries.actual).map((key) => [
-          key,
-          this.boundaries.actual[key],
-        ])
-      } else {
-        return []
-      }
+      return this.group ? this.group.course.rag : []
     },
   },
   created() {
