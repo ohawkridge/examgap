@@ -129,10 +129,18 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col class="d-flex justify-end">
-                <v-chip class="green">On target</v-chip>
-                <v-chip class="orange ml-2">Near target</v-chip>
-                <v-chip class="red ml-2">Below target</v-chip>
+              <v-col class="d-flex">
+                <v-alert
+                  :icon="$icons.mdiInformationOutline"
+                  border="left"
+                  type="info"
+                  dense
+                  text
+                >
+                  For colour-coding, enter target grades on the
+                  <nuxt-link :to="`/students/${group.id}`"> Students</nuxt-link>
+                  screen.
+                </v-alert>
               </v-col>
             </v-row>
           </v-container>
@@ -148,10 +156,8 @@ import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import {
   mdiArrowRight,
-  mdiMenuUp,
-  mdiMenuDown,
-  mdiMenuSwap,
   mdiDownloadOutline,
+  mdiInformationOutline,
 } from '@mdi/js'
 
 export default {
@@ -203,10 +209,8 @@ export default {
   created() {
     this.$icons = {
       mdiArrowRight,
-      mdiMenuDown,
-      mdiMenuUp,
-      mdiMenuSwap,
       mdiDownloadOutline,
+      mdiInformationOutline,
     }
   },
   methods: {
