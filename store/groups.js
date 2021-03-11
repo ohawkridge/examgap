@@ -22,23 +22,29 @@ export const getters = {
 }
 
 export const actions = {
-  async getRevisionTopics({ commit, rootState, state }) {
-    try {
-      const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
-      const response = await fetch(url, {
-        body: JSON.stringify({
-          secret: rootState.user.secret,
-          courseId: state.groups[state.activeGroupIndex].course.id,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Error fetching revision topics ${response.status}`)
+  async getRevisionTopics({ commit, getters, rootState }) {
+    // group is undefined during hard refresh
+    if (getters.activeGroup !== undefined) {
+      try {
+        const url = new URL(
+          '/.netlify/functions/getTopics',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: rootState.user.secret,
+            courseId: getters.activeGroup.course.id,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error fetching revision topics ${response.status}`)
+        }
+        const data = await response.json()
+        commit('setRevisionTopics', data)
+      } catch (e) {
+        console.error(e)
       }
-      const data = await response.json()
-      commit('setRevisionTopics', data)
-    } catch (e) {
-      console.error(e)
     }
   },
   async archiveGroup({ commit, rootState, state }) {
@@ -148,6 +154,29 @@ export const mutations = {
         state.groups[i].num_students += 1
       }
     }
+  },
+  // Teacher creates a new assignment
+  addAssignment(state, assignment) {
+    // TODO
+    // Find index of group
+    // const groupIndex = state.user.groups.findIndex(
+    //   (group) => group.id === assignment.data.group.id
+    // )
+    // // Add assignment to front of assignments array
+    // state.user.groups[groupIndex].assignments.unshift({
+    //   dateDue: assignment.data.dateDue,
+    //   start: assignment.data.start,
+    //   id: assignment.ref.id,
+    //   name: assignment.data.name,
+    // })
+  },
+  // Student gets new assignment in doc stream
+  newAssignment(state, assignment) {
+    // Find index of group
+    // Might not be current active group!
+    const groupIndex = state.groups.findIndex((g) => g.id === assignment.group)
+    // Add assignment to front of assignments array
+    state.groups[groupIndex].assignments.unshift(assignment)
   },
   logout(state) {
     state.groups = []

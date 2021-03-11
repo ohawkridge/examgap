@@ -106,15 +106,12 @@ export default {
   },
   computed: {
     ...mapState({
+      groups: (state) => state.groups.groups,
       assignments: (state) => state.assignments.assignments,
       topics: (state) => state.groups.revisionTopics,
     }),
-    // Get the current active group
-    // Get groups for 'Classes' menu
-    ...mapGetters({
-      group: 'groups/activeGroup',
-      groups: 'groups/activeGroups',
-    }),
+    // Get current active group for home page
+    ...mapGetters({ group: 'groups/activeGroup' }),
   },
   watch: {
     // Update revision topics if class is changed
@@ -125,10 +122,17 @@ export default {
         this.$fetch()
       }
     },
+    // Show a snack for new streamed assignments
+    'group.assignments'() {
+      this.$snack.showMessage({
+        type: '',
+        msg: 'New assignment set',
+      })
+    },
   },
   methods: {
-    // Remember topic being revised
     revise(topic) {
+      // Remember topic being revised
       this.$store.commit('groups/setCurrentRevisionTopic', topic)
       // Event bus using Nuxt
       // https://aneesshameed.medium.com/event-bus-in-nuxt-7728315e81b6

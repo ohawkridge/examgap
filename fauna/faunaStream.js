@@ -1,29 +1,31 @@
 // Utility class for managing document stream
 // https://fauna.com/blog/using-faunas-streaming-feature-to-build-a-chat-with-svelte
 export default class FaunaStream {
-  constructor(client, documentRef, commit) {
+  constructor(client, documentRef, commit, dispatch) {
     this.documentRef = documentRef
     this.client = client
     this.commit = commit
+    this.dispatch = dispatch
   }
 
   initStream() {
-    this.stream = this.client.stream.document(this.documentRef)
+    this.stream = this.client.stream.document(this.documentRef, {
+      fields: ['diff'],
+    })
 
     this.stream.on('start', (data, event) => {
       console.log(`🏁 Stream started`)
     })
 
-    this.stream.on('version', ({ document: { data } }, event) => {
-      console.log(`🆕 Version`, data)
+    this.stream.on('version', ({ diff: { data } }, event) => {
+      // console.log(`🆕 Version`, data)
       if ('examMode' in data) {
         // N.B. Can't manipulate state outside mutations
         this.commit('setExamMode', data.examMode)
       }
-      // TODO commit new ass
-      // But, old 'new' ass triggers this...
       if ('newAssignment' in data) {
-        console.log(`NEW ASSIGNMENT`)
+        // Dispatch an action to get assignment details
+        this.dispatch('getAssignment', data.newAssignment)
       }
     })
 

@@ -16,7 +16,7 @@ exports.handler = async (event, context, callback) => {
       {
         id: q.Select(['ref', 'id'], q.Var('instance')),
         name: q.Select(['data', 'name'], q.Var('instance')),
-        start: q.Select(['data', 'start'], q.Var('instance')),
+        start: q.Select(['data', 'start'], q.Var('instance'), 'N/A'),
         dateDue: q.Select(['data', 'dateDue'], q.Var('instance')),
         questions: q.Select(['data', 'questions'], q.Var('instance')),
         group: q.Select('id', q.Select(['data', 'group'], q.Var('instance'))),
