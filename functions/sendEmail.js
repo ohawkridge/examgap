@@ -18,7 +18,6 @@ exports.handler = async (event) => {
     Destination: {
       ToAddresses: ['owen@examgap.com'], // Must be array
     },
-    // ConfigurationSetName: <<ConfigurationSetName>>,
     Message: {
       Body: {
         Html: {

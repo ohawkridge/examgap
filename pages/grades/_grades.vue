@@ -1,9 +1,12 @@
 <template>
   <div>
-    <GroupHeader :group="group" />
+    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
     <v-row>
       <v-col cols="12" md="3">
-        <GroupNav :group-id="group.id" />
+        <GroupNav
+          v-if="group && Object.keys(group).length > 0"
+          :group="group"
+        />
         <v-card class="mt-4 pa-3">
           <v-simple-table dense>
             <template #default>
@@ -195,14 +198,18 @@ export default {
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
     boundaries() {
-      return this.group.course.boundaries
+      return this.group ? this.group.course.boundaries : {}
     },
     // TODO Not needed once database field updated
     actual() {
-      return Object.keys(this.boundaries.actual).map((key) => [
-        key,
-        this.boundaries.actual[key],
-      ])
+      if (this.boundaries.actual) {
+        return Object.keys(this.boundaries.actual).map((key) => [
+          key,
+          this.boundaries.actual[key],
+        ])
+      } else {
+        return []
+      }
     },
   },
   created() {

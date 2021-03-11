@@ -7,19 +7,19 @@
       app
       mandatory
     >
-      <v-btn value="group-group" nuxt :to="`/group/${groupId}`" exact>
+      <v-btn value="group-group" nuxt :to="`/group/${group.id}`" exact>
         <v-icon>
           {{ $icons.mdiBookOpenOutline }}
         </v-icon>
         <span>Assignments</span>
       </v-btn>
-      <v-btn value="students-students" nuxt :to="`/students/${groupId}`" exact>
+      <v-btn value="students-students" nuxt :to="`/students/${group.id}`" exact>
         <v-icon>
           {{ $icons.mdiAccountGroupOutline }}
         </v-icon>
         <span>Students</span>
       </v-btn>
-      <v-btn value="grades-grades" nuxt :to="`/grades/${groupId}`" exact>
+      <v-btn value="grades-grades" nuxt :to="`/grades/${group.id}`" exact>
         <v-icon>
           {{ $icons.mdiFinance }}
         </v-icon>
@@ -28,7 +28,7 @@
       <v-btn
         value="group-settings-settings"
         nuxt
-        :to="`/group/settings/${groupId}`"
+        :to="`/group/settings/${group.id}`"
         exact
       >
         <v-icon>
@@ -40,7 +40,7 @@
     <v-card v-else>
       <v-list nav>
         <v-list-item-group v-model="nav" color="primary">
-          <v-list-item value="group-group" nuxt :to="`/group/${groupId}`">
+          <v-list-item value="group-group" nuxt :to="`/group/${group.id}`">
             <v-list-item-icon>
               <v-icon>
                 {{ $icons.mdiBookOpenOutline }}
@@ -53,7 +53,7 @@
           <v-list-item
             value="students-students"
             nuxt
-            :to="`/students/${groupId}`"
+            :to="`/students/${group.id}`"
           >
             <v-list-item-icon>
               <v-icon>
@@ -64,7 +64,7 @@
               <v-list-item-title>Students</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item value="grades-grades" nuxt :to="`/grades/${groupId}`">
+          <v-list-item value="grades-grades" nuxt :to="`/grades/${group.id}`">
             <v-list-item-icon>
               <v-icon>
                 {{ $icons.mdiFinance }}
@@ -74,7 +74,7 @@
               <v-list-item-title>Grade book</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item value="edit-edit" nuxt :to="`/edit/${groupId}`">
+          <v-list-item value="edit-edit" nuxt :to="`/edit/${group.id}`">
             <v-list-item-icon>
               <v-icon>
                 {{ $icons.mdiCogOutline }}
@@ -100,9 +100,9 @@ import {
 
 export default {
   props: {
-    groupId: {
-      type: String,
-      default: '',
+    group: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {

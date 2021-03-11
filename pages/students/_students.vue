@@ -1,9 +1,12 @@
 <template>
   <div>
-    <GroupHeader :group="group" />
+    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
     <v-row>
       <v-col cols="12" md="3">
-        <GroupNav :group-id="group.id" />
+        <GroupNav
+          v-if="group && Object.keys(group).length > 0"
+          :group="group"
+        />
       </v-col>
       <v-col cols="12" md="9">
         <v-card v-if="group.course" rounded="lg" class="mt-n8 mt-sm-0">
