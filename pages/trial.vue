@@ -15,7 +15,7 @@
       <v-container class="fill-height mt-md-n6">
         <v-row class="d-flex justify-center">
           <v-col cols="12" sm="10" md="6">
-            <p class="text-h4 text-center font-weight-bold mb-8">
+            <p class="text-h4 text-center font-weight-bold mb-md-8">
               Register for your free trial
             </p>
             <v-form ref="form" @submit.prevent="register()">

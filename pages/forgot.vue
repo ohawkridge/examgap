@@ -13,7 +13,7 @@
     </v-app-bar>
     <v-container class="fill-height">
       <v-row class="d-flex align-center justify-center">
-        <v-col cols="12" sm="8" md="6" lg="5" xl="4">
+        <v-col id="form" cols="12" sm="8" md="6" lg="5" xl="4">
           <p class="text-h5 font-weight-bold text-center">
             Reset your password
           </p>
@@ -37,7 +37,7 @@
               type="info"
               :icon="$icons.mdiInformationOutline"
             >
-              Student? Ask your teacher to reset your password
+              Students—your teacher can reset your password
             </v-alert>
             <v-alert
               v-if="failed"
@@ -124,3 +124,11 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* adjust for app-bar height */
+#form {
+  position: relative;
+  top: -58px;
+}
+</style>

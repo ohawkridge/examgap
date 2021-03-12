@@ -2,30 +2,24 @@
   <!-- Student home page -->
   <div>
     <v-row>
-      <v-col id="div1" cols="12">
+      <v-col cols="12">
         <div v-if="group !== undefined" class="text-h6 font-weight-bold">
           {{ group.name }}
         </div>
         <div v-if="group !== undefined">
           {{ group.course.name }} ({{ group.course.board }})
         </div>
+        <v-divider class="primary" />
       </v-col>
     </v-row>
     <v-row class="d-flex justify-center">
       <v-col cols="12" md="7">
         <v-card>
-          <v-card-title>
-            Assignments ({{
-              group !== undefined && group.assignments
-                ? group.assignments.length
-                : '-'
-            }})
+          <v-card-title v-if="assignments">
+            Assignments ({{ assignments.length }})
           </v-card-title>
           <v-card-text>
-            <HomeAssignments
-              v-if="group !== undefined"
-              :assignments="group.assignments"
-            />
+            <HomeAssignments v-if="assignments" :assignments="assignments" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -107,11 +101,18 @@ export default {
   computed: {
     ...mapState({
       groups: (state) => state.groups.groups,
-      assignments: (state) => state.assignments.assignments,
+      // assignments: (state) => state.assignments.assignments,
       topics: (state) => state.groups.revisionTopics,
     }),
     // Get current active group for home page
     ...mapGetters({ group: 'groups/activeGroup' }),
+    // Filter out assignments that haven't started yet
+    assignments() {
+      if (this.group === undefined) return false
+      return this.group.assignments.filter(
+        (ass) => ass.start === 'N/A' || new Date(ass.start) <= new Date()
+      )
+    },
   },
   watch: {
     // Update revision topics if class is changed
@@ -121,13 +122,6 @@ export default {
         this.forceFetch = true
         this.$fetch()
       }
-    },
-    // Show a snack for new streamed assignments
-    'group.assignments'() {
-      this.$snack.showMessage({
-        type: '',
-        msg: 'New assignment set',
-      })
     },
   },
   methods: {

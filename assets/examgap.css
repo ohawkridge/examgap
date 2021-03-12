@@ -20,17 +20,10 @@ a:link {
   background: #f7eabb;
 }
 
-/* blue divider */
-#div1 {
-  border-bottom: 1px solid #0078a0 !important;
+/* blue v-divider */
+hr.primary {
+  border-color: #0078a0;
 }
-/* @media only screen and (max-width: 600px) {
-  #div1 {
-    border-bottom: 1px solid #0078a0 !important;
-    margin-left: 12px;
-    margin-right: 12px;
-  }
-} */
 
 /* accessible RAG chips */
 span.v-chip.theme--light.red {

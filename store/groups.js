@@ -174,7 +174,7 @@ export const mutations = {
   // Student gets new assignment in doc stream
   newAssignment(state, assignment) {
     // Find index of group
-    // Might not be current active group!
+    // (Might not be current active group!)
     const groupIndex = state.groups.findIndex((g) => g.id === assignment.group)
     // Add assignment to front of assignments array
     state.groups[groupIndex].assignments.unshift(assignment)

@@ -152,9 +152,9 @@ export default {
 </script>
 
 <style scoped>
-/* account for app-bar height */
+/* adjust for app-bar height */
 #form {
   position: relative;
-  top: -64px;
+  top: -58px;
 }
 </style>

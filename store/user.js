@@ -89,6 +89,12 @@ export const actions = {
       response = await response.json()
       // Commit mutation in groups store to add assignment
       commit('groups/newAssignment', response, { root: true })
+      // Trigger snackbar
+      commit(
+        'snackbar/showSnack',
+        { type: '', msg: 'New assignment set' },
+        { root: true }
+      )
     } catch (e) {
       console.error(e)
     }
