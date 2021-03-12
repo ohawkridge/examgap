@@ -105,7 +105,7 @@ export default {
   publicRuntimeConfig: {
     baseURL:
       process.env.NODE_ENV === 'production'
-        ? 'https://examgap.com'
+        ? 'https://www.examgap.com'
         : 'http://localhost:8888',
   },
 
