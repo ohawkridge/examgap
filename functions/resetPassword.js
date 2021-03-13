@@ -9,6 +9,8 @@ exports.handler = async (event, context, callback) => {
   const client = new faunadb.Client({
     secret: process.env.SECRET_KEY,
   })
+  console.log(`*** DEBUG ***`)
+  console.log(`Key is`, process.env.SECRET_KEY)
   console.log(`Function received`, email)
   // Cofigure AWS SES
   AWS.config.update({
@@ -35,6 +37,7 @@ exports.handler = async (event, context, callback) => {
     const data = await client.query(qry)
     // If success, send new password in email
     if (data) {
+      console.log(`Sending email...`)
       const params = {
         Destination: {
           ToAddresses: [email], // Must be array
@@ -46,14 +49,12 @@ exports.handler = async (event, context, callback) => {
               Charset: 'UTF-8',
               Data: `<html>
                       <body>
-                        <p>Your password for Examgap was successfully reset.</p>
+                        <p>Here are your new login details:</p>
                         <p>-=-=-=-=-=-=-=-=-=-=-=-=-</p>
                         <p>Username: ${email}</p>
                         <p>New password: ${newPass}</p>
-                        <br />
+                        <p>-=-=-=-=-=-=-=-=-=-=-=-=-</p>
                         <p><a href="https://examgap.com/signin">Login to Examgap</a></p>
-                        <br />
-                        <br />
                         <p>If you're still having problems, email support@examgap.com.</p>
                       </body>
                   </html>`,

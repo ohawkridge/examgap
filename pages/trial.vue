@@ -142,47 +142,86 @@ export default {
     }
   },
   methods: {
-    // async register() {
-    //   if (this.$refs.form.validate()) {
-    //     this.loading = true
-    //     const res = await registerTeacher(this.school, this.email, this.pass1)
-    //     if (res) {
-    //       // Notify me via email
-    //       fetch('https://examgap.com/.netlify/functions/sendEmailSignup', {
-    //         method: 'POST',
-    //         mode: 'cors',
-    //         credentials: 'same-origin',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //           id: res.ref.id,
-    //           username: res.data.username,
-    //           school: res.data.school,
-    //         }),
-    //       })
-    //       // Send welcome email
-    //       fetch('https://examgap.com/.netlify/functions/sendEmailWelcome', {
-    //         method: 'POST',
-    //         mode: 'cors',
-    //         credentials: 'same-origin',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ username: res.data.username }),
-    //       })
-    //       // Complete the login process
-    //       const token = await getLoginToken(res.data.username, this.pass1)
-    //       localStorage.setItem('secret', token)
-    //       const user = await getUser()
-    //       this.$store.commit('user/setUser', user)
-    //       this.$router.push('/teacher/home')
-    //     } else {
-    //       this.emailInUse = true
-    //     }
-    //     this.loading = false
-    //   }
-    // },
+    async getUserSecret() {
+      const url = new URL(
+        '/.netlify/functions/getUserSecret',
+        this.$config.baseURL
+      )
+      let response = await fetch(url, {
+        body: JSON.stringify({
+          username: this.email,
+          password: this.pass1,
+        }),
+        method: 'POST',
+      })
+      response = await response.json()
+      if (!response.ok) {
+        throw new Error(`Invalid credentials! ${response.status}`)
+      } else {
+        return await response.json()
+      }
+    },
+    async register() {
+      if (this.$refs.form.validate()) {
+        this.loading = true
+        try {
+          const url = new URL(
+            '/.netlify/functions/registerTeacher',
+            this.$config.baseURL
+          )
+          let response = await fetch(url, {
+            body: JSON.stringify({
+              email: this.username,
+              school: this.school,
+              password: this.pass1,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error registering for trial ${response.status}`)
+          }
+          response = await response.json()
+          if (response === false) {
+            this.emailInUse = true
+          } else {
+            // Notify me via email
+            fetch('https://examgap.com/.netlify/functions/sendEmailSignup', {
+              method: 'POST',
+              mode: 'cors',
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id: response.ref.id,
+                username: response.data.username,
+                school: response.data.school,
+              }),
+            })
+            // Send welcome email
+            fetch('https://examgap.com/.netlify/functions/sendEmailWelcome', {
+              method: 'POST',
+              mode: 'cors',
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ username: response.data.username }),
+            })
+            // Complete the login process
+            const res = await this.getUserSecret()
+            console.log(`Back from getUserSecret()`, res)
+            this.$store.commit('user/setSecret', res.secret)
+            this.$router.push(res.teacher ? `/classes` : `/home`)
+          }
+        } catch (e) {
+          console.error(e)
+        } finally {
+          this.$refs.form.resetValidation()
+          this.loading = false
+        }
+      }
+    },
   },
 }
 </script>

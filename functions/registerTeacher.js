@@ -8,8 +8,9 @@ exports.handler = async (event, context, callback) => {
   const password = data.password
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret: process.env.SECRET_KEY,
   })
+  console.log(`Trying to register teacher`)
   try {
     const qry = q.If(
       q.Exists(q.Match(q.Index('user_by_username'), email)),

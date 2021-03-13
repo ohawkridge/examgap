@@ -124,7 +124,6 @@ export default {
             throw new Error(`Error resetting password ${response.status}`)
           }
           response = await response.json()
-          console.log(response)
           if (response === false) {
             this.failed = true
           } else {
@@ -140,6 +139,7 @@ export default {
           })
         } finally {
           this.loading = false
+          this.username = ''
           this.$refs.form.resetValidation()
         }
       }
