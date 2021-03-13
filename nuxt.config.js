@@ -9,6 +9,7 @@ export default {
   generate: {
     exclude: [
       /^\/home/,
+      /^\/classes/,
       /^\/assignment/,
       /^\/course/,
       /^\/grades/,

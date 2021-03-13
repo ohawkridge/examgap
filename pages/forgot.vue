@@ -62,8 +62,8 @@
         </v-col>
       </v-row>
       <TheSuccessDialog
-        title="Password reset"
-        :subtitle="`New password sent to ${username}.`"
+        title="Success. Password was reset"
+        :subtitle="`A new password has been sent to your email.`"
       />
     </v-container>
   </v-app>
@@ -125,9 +125,10 @@ export default {
           }
           response = await response.json()
           console.log(response)
-          if (!response) {
+          if (response === false) {
             this.failed = true
           } else {
+            this.failed = false
             // Show big success modal
             this.$nuxt.$emit('show-success')
           }
@@ -138,9 +139,7 @@ export default {
             msg: 'Error resetting password',
           })
         } finally {
-          this.failed = false
           this.loading = false
-          this.username = ''
           this.$refs.form.resetValidation()
         }
       }

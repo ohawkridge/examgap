@@ -41,7 +41,6 @@ export default {
     }
   },
   async fetch() {
-    console.log(`Fetching courses info`)
     try {
       const url = new URL(
         '/.netlify/functions/getCourses',
@@ -57,7 +56,6 @@ export default {
         throw new Error(`Error fetching courses ${response.status}`)
       }
       response = await response.json()
-      console.log(`Got back`, response)
       this.courses = response
     } catch (e) {
       console.error(e)
