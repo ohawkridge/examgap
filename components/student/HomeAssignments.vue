@@ -34,11 +34,10 @@
       </v-list-item-content>
       <v-list-item-action>
         <v-list-item-action-text>
-          <v-chip label outlined>
-            {{ assignment.questions.length }} question{{
-              assignment.questions.length | pluralize
-            }}</v-chip
-          >
+          <v-chip outlined>
+            {{ assignment.questions.length }}
+            {{ chipText(assignment.questions.length) }}
+          </v-chip>
         </v-list-item-action-text>
       </v-list-item-action>
     </v-list-item>
@@ -60,6 +59,12 @@ export default {
     this.$icons = {
       mdiInformationOutline,
     }
+  },
+  methods: {
+    chipText(l) {
+      if (this.$vuetify.breakpoint.name === 'xs') return ''
+      return l === 1 ? 'question' : 'questions'
+    },
   },
 }
 </script>

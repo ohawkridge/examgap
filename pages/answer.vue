@@ -43,13 +43,13 @@
             <v-col
               v-if="showHelp"
               cols="12"
-              class="d-flex justify-space-between align-center pt-0"
+              class="d-flex justify-space-between pt-0"
             >
-              <div class="d-flex align-center">
+              <div class="pr-2">
                 <v-chip
                   v-for="(word, i) in question.keywords"
                   :key="i"
-                  class="mr-2"
+                  class="mr-2 mb-2"
                   :color="used(word) ? 'green' : 'red'"
                 >
                   {{ word }}
