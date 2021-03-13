@@ -51,7 +51,7 @@ export default {
     }
   },
   mounted() {
-    this.$nuxt.$on('show-modal', () => {
+    this.$nuxt.$on('show-success', () => {
       this.dialog = true
     })
   },

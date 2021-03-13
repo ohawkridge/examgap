@@ -178,7 +178,7 @@ export default {
         if (!response.ok) {
           throw new Error(`Error sending email ${response.status}`)
         }
-        this.$nuxt.$emit('show-modal')
+        this.$nuxt.$emit('show-success')
         this.email = ''
         this.message = ''
         this.name = ''

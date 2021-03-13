@@ -89,11 +89,22 @@
                           v-if="items.length === 0"
                           class="v-data-table__empty-wrapper"
                         >
-                          <td :colspan="data.headers.length">No data yet</td>
+                          <td :colspan="data.headers.length">
+                            <p class="text-body-2 mt-4">No data yet</p>
+                            <p>
+                              <v-btn
+                                color="primary"
+                                elevation="0"
+                                @click="createAssignment()"
+                              >
+                                Create assignment</v-btn
+                              >
+                            </p>
+                          </td>
                         </tr>
                         <!-- Iterate over rows -->
                         <!-- 'item' is one 'grades' object or one table row -->
-                        <tr v-for="(row, i) in items" v-else :key="i">
+                        <tr v-for="(row, i) in items" :key="i">
                           <!-- Within a row iterate over cells -->
                           <td v-for="(field, j) in Object.keys(row)" :key="j">
                             <!-- Student can have more than one group, so target is an object -->
@@ -137,9 +148,11 @@
                   dense
                   text
                 >
-                  For colour-coding, enter target grades on the
-                  <nuxt-link :to="`/students/${group.id}`"> Students</nuxt-link>
-                  screen.
+                  To enable colour-coding, enter target grades on the
+                  <nuxt-link :to="`/students/${group ? group.id : ''}`">
+                    Students</nuxt-link
+                  >
+                  screen
                 </v-alert>
               </v-col>
             </v-row>
@@ -164,6 +177,10 @@ export default {
   components: {
     GroupNav,
     GroupHeader,
+  },
+  beforeRouteLeave(to, from, next) {
+    this.stop() // Stop scrolling
+    next()
   },
   layout: 'app',
   data() {
@@ -196,10 +213,11 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
-    // Convert the 2d array from the db -> [["A*", 0.90], ["A", 0.82], ..]]
-    // into an object so we can look up the target grade
+    // Convert 2d array from db: [["A*", 0.90], ["A", 0.82], ..]]
+    // into an object so we can look up target grades
     rag() {
       const out = {}
+      if (!this.group.course) return out
       for (const arr of this.group.course.rag) {
         out[arr[0]] = arr[1]
       }
@@ -214,6 +232,13 @@ export default {
     }
   },
   methods: {
+    createAssignment() {
+      // Remember group when creating assignments
+      this.$store.commit('assignments/setGroup', this.group.id)
+      // Clear any questions selected for a previous group
+      this.$store.commit('assignments/clearSelectedQuestions')
+      this.$router.push(`/course/${this.group.course.id}`)
+    },
     // Scroll right https://jsfiddle.net/Herteby/x53494ef/
     scroll() {
       if (!this.interval) {

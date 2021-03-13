@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col id="div1" cols="12">
+      <v-col cols="12">
         <div class="d-flex justify-space-between align-center">
           <v-btn-toggle v-model="tab" color="primary" group mandatory>
             <v-btn :value="true" class="rounded"> Classes </v-btn>
@@ -12,6 +12,7 @@
             {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
           </v-btn>
         </div>
+        <v-divider class="primary" />
       </v-col>
     </v-row>
     <v-row>
@@ -40,6 +41,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <CreateClass />
   </div>
 </template>
 
@@ -47,10 +49,12 @@
 import { mapState } from 'vuex'
 import { mdiPlus } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
+import CreateClass from '@/components/teacher/CreateClass'
 
 export default {
   components: {
     GroupCard,
+    CreateClass,
   },
   layout: 'app',
   head() {

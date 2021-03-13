@@ -18,7 +18,7 @@
             Reset your password
           </p>
           <!-- Prevent submit btn posting form -->
-          <v-form v-model="valid" @submit.prevent="reset()">
+          <v-form ref="form" @submit.prevent="reset()">
             <v-text-field
               v-model="username"
               :prepend-inner-icon="$icons.mdiAccountOutline"
@@ -43,11 +43,10 @@
               v-if="failed"
               border="left"
               text
-              dense
               type="error"
               :icon="$icons.mdiAlertOutline"
             >
-              Username not found
+              Username not found. Please try again
             </v-alert>
             <v-btn
               color="primary"
@@ -55,7 +54,7 @@
               block
               large
               :loading="loading"
-              :disabled="!valid || loading"
+              :disabled="loading"
               type="submit"
               >Reset password</v-btn
             >
@@ -63,8 +62,8 @@
         </v-col>
       </v-row>
       <TheSuccessDialog
-        title="Success. Password reset"
-        subtitle="A new password has been sent to your email."
+        title="Password reset"
+        :subtitle="`New password sent to ${username}.`"
       />
     </v-container>
   </v-app>
@@ -86,7 +85,6 @@ export default {
       failed: false,
       username: '',
       valid: null,
-      show: false,
       userRules: [
         (v) => !!v || 'Email is required',
         (v) => {
@@ -108,19 +106,45 @@ export default {
     }
   },
   methods: {
-    // async reset() {
-    //   this.loading = true
-    //   const res = await resetPassword(this.username)
-    //   console.log(res)
-    //   if (res.name == 'NotFound') {
-    //     this.failed = true
-    //   } else {
-    //     EventBus.$emit('show-modal')
-    //     this.failed = false
-    //     this.username = ''
-    //   }
-    //   this.loading = false
-    // },
+    async reset() {
+      if (this.$refs.form.validate()) {
+        try {
+          this.loading = true
+          const url = new URL(
+            '/.netlify/functions/resetPassword',
+            this.$config.baseURL
+          )
+          let response = await fetch(url, {
+            body: JSON.stringify({
+              email: this.username,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error resetting password ${response.status}`)
+          }
+          response = await response.json()
+          console.log(response)
+          if (!response) {
+            this.failed = true
+          } else {
+            // Show big success modal
+            this.$nuxt.$emit('show-success')
+          }
+        } catch (e) {
+          console.error(e)
+          this.$snack.showMessage({
+            type: 'error',
+            msg: 'Error resetting password',
+          })
+        } finally {
+          this.failed = false
+          this.loading = false
+          this.username = ''
+          this.$refs.form.resetValidation()
+        }
+      }
+    },
   },
 }
 </script>

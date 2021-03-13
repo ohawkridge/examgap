@@ -38,12 +38,6 @@
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider v-if="teacher" class="mx-4" />
-            <v-list-item v-if="teacher" @click="$nuxt.$emit('show-create')">
-              <v-list-item-content>
-                <v-list-item-title> Create class&hellip; </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
           </v-list>
         </v-menu>
         <v-spacer />
@@ -102,7 +96,6 @@
       <TheSnackbar />
     </v-main>
     <TheFooter />
-    <CreateClass v-if="teacher" />
   </v-app>
 </template>
 
@@ -111,7 +104,6 @@ import { mapState } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
-import CreateClass from '@/components/teacher/CreateClass'
 import {
   mdiPlus,
   mdiAccountCircleOutline,
@@ -125,7 +117,6 @@ export default {
     TheLogo,
     TheSnackbar,
     TheFooter,
-    CreateClass,
   },
   middleware: ['get-user'],
   computed: {
