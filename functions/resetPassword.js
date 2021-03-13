@@ -9,9 +9,6 @@ exports.handler = async (event, context, callback) => {
   const client = new faunadb.Client({
     secret: process.env.SECRET_KEY,
   })
-  console.log(`*** DEBUG ***`)
-  console.log(`Key is`, process.env.SECRET_KEY)
-  console.log(`Function received`, email)
   // Cofigure AWS SES
   AWS.config.update({
     accessKeyId: 'AKIAJTQG3TNUQDRGXZOA',

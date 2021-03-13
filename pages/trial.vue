@@ -154,12 +154,11 @@ export default {
         }),
         method: 'POST',
       })
-      response = await response.json()
       if (!response.ok) {
         throw new Error(`Invalid credentials! ${response.status}`)
-      } else {
-        return await response.json()
       }
+      response = await response.json()
+      return response
     },
     async register() {
       if (this.$refs.form.validate()) {
@@ -171,9 +170,9 @@ export default {
           )
           let response = await fetch(url, {
             body: JSON.stringify({
-              email: this.username,
               school: this.school,
               password: this.pass1,
+              username: this.email,
             }),
             method: 'POST',
           })
@@ -185,7 +184,11 @@ export default {
             this.emailInUse = true
           } else {
             // Notify me via email
-            fetch('https://examgap.com/.netlify/functions/sendEmailSignup', {
+            const url = new URL(
+              '/.netlify/functions/sendEmailSignup',
+              this.$config.baseURL
+            )
+            fetch(url, {
               method: 'POST',
               mode: 'cors',
               credentials: 'same-origin',
@@ -199,7 +202,11 @@ export default {
               }),
             })
             // Send welcome email
-            fetch('https://examgap.com/.netlify/functions/sendEmailWelcome', {
+            const url2 = new URL(
+              '/.netlify/functions/sendEmailWelcome',
+              this.$config.baseURL
+            )
+            fetch(url2, {
               method: 'POST',
               mode: 'cors',
               credentials: 'same-origin',
@@ -210,7 +217,6 @@ export default {
             })
             // Complete the login process
             const res = await this.getUserSecret()
-            console.log(`Back from getUserSecret()`, res)
             this.$store.commit('user/setSecret', res.secret)
             this.$router.push(res.teacher ? `/classes` : `/home`)
           }
