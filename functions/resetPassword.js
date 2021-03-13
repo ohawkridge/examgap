@@ -16,7 +16,7 @@ exports.handler = async (event, context, callback) => {
     secretAccessKey: '4JfiG7hjkDX3cp9yj8zeD8xJuWG0yz2uCBiTfNVB',
     region: 'eu-west-2',
   })
-  const ses = new AWS.SES({ apiVersion: '2010-12-01' })
+  const ses = new AWS.SES()
   try {
     const newPass = createPassword()
     const qry = q.If(
@@ -70,7 +70,15 @@ exports.handler = async (event, context, callback) => {
         },
         Source: 'support@examgap.com',
       }
-      ses.sendEmail(params)
+      // Try to send the email
+      ses.sendEmail(params, function (err, data) {
+        // If something goes wrong, print an error message.
+        if (err) {
+          console.log(err.message)
+        } else {
+          console.log('Email sent! Message ID: ', data.MessageId)
+        }
+      })
     }
     return {
       statusCode: 200,

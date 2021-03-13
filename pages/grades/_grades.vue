@@ -27,7 +27,7 @@
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody v-if="group.course.rag">
                     <tr v-for="(row, i) in group.course.rag" :key="i">
                       <td class="text-center">{{ row[0] }}</td>
                       <td class="text-center">
@@ -217,7 +217,6 @@ export default {
     // into an object so we can look up target grades
     rag() {
       const out = {}
-      if (!this.group.course) return out
       for (const arr of this.group.course.rag) {
         out[arr[0]] = arr[1]
       }

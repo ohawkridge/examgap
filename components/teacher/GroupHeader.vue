@@ -7,6 +7,7 @@
       <div v-if="group.course.name !== undefined">
         {{ group.course.name }} ({{ group.course.board }})
       </div>
+      <v-divider class="primary" />
     </v-col>
   </v-row>
 </template>

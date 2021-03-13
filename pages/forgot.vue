@@ -62,7 +62,7 @@
         </v-col>
       </v-row>
       <TheSuccessDialog
-        title="Success. Password was reset"
+        title="Password was reset"
         :subtitle="`A new password has been sent to your email.`"
       />
     </v-container>

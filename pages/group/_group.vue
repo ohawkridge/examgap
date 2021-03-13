@@ -142,7 +142,7 @@ export default {
   },
   head() {
     return {
-      title: this.group.name,
+      title: this.group ? this.group.name : `Group`,
     }
   },
   computed: {
