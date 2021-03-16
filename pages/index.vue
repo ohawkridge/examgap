@@ -3,7 +3,7 @@
     <v-container>
       <v-row class="d-flex justify-center">
         <v-col cols="12" class="text-center">
-          <p id="hero-text" class="text-h4 text-md-h2">
+          <p id="hero-text" class="text-h4 text-md-h2 mb-0">
             Improve your Computer Science results.
           </p>
         </v-col>
@@ -100,7 +100,25 @@
           <v-img src="/diff.png" alt="Differentiation"></v-img>
         </v-col>
       </v-row>
+      <v-row
+        class="d-flex align-center justify-center flex-md-row-reverse pad-vert"
+      >
+        <v-col cols="12" md="6" class="pad-l">
+          <p class="text-h5 text-md-h4 font-weight-bold">
+            Independent revision
+          </p>
+          <p class="text-body-1">
+            Students can use Examgap for unlimited independent revision. It
+            makes a great supplement to paper-based revision guides and needs no
+            intervention from you.
+          </p>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-img src="/revision.png" alt="Independent revision"></v-img>
+        </v-col>
+      </v-row>
     </v-container>
+    <!-- How it works -->
     <div id="how">
       <v-container>
         <v-row>
@@ -110,7 +128,7 @@
         </v-row>
       </v-container>
     </div>
-    <v-container>
+    <v-container id="how-cont">
       <v-row class="justify-center">
         <v-col cols="12" md="4">
           <v-card id="card1" rounded="lg" elevation="6" class="pa-6 how-card">
@@ -345,16 +363,6 @@
             an automated comment bank, and detailed grade book.
           </p>
           <p class="text-body-1">
-            In my experience,
-            <span class="font-weight-bold"
-              >students with good subject knowledge can still underachieve</span
-            >. Examiners are trained to apply mark schemes consistently—without
-            much leeway. Students can misinterpret the question, be imprecise or
-            forget keywords. Examgap gives your students valuable insight into
-            how exam questions are marked. It lets them practise exam technique
-            and increase their confidence.
-          </p>
-          <p class="text-body-1">
             If you’re a Computing teacher, please give Examgap a try. You can
             <nuxt-link to="/trial"
               ><span class="font-weight-bold">try it for free</span></nuxt-link
@@ -472,7 +480,7 @@ export default {
 #hero-text {
   font-weight: 900;
   line-height: 1.25em;
-  padding-top: 0.5em;
+  padding-top: 0.6em;
 }
 
 /* more padding on desktop */
@@ -542,7 +550,8 @@ export default {
   font-weight: 800;
 }
 
-.how-card {
+/* move cards up to overlap */
+#how-cont {
   position: relative;
   top: -5em;
 }

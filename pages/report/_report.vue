@@ -665,7 +665,7 @@ export default {
     // Comparison function so student self marks are first
     selfMarksFirst(m1, m2) {
       // Watch out nexting over empty responses
-      if (!this.response) return 0
+      if (!this.response || !('sm' in this.response)) return 0
       if (
         this.response.sm.includes(m1.id) === this.response.sm.includes(m2.id)
       ) {

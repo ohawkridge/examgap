@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-container class="d-flex align-center">
-      <TheLogo />
+      <nuxt-link to="/">
+        <TheLogo />
+      </nuxt-link>
       <v-spacer />
       <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
     </v-container>
@@ -9,7 +11,6 @@
       <v-row align="center" justify="center">
         <v-col id="form" cols="12" sm="8" md="6" lg="5" xl="4" class="px-4">
           <p class="text-h5 font-weight-bold text-center">Sign In</p>
-          <!-- Prevent submit btn posting form -->
           <v-form ref="form" @submit.prevent="login()">
             <v-text-field
               v-model="username"
