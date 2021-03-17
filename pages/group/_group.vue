@@ -56,6 +56,7 @@
                         </template>
                         <v-list>
                           <DeleteAssignment
+                            v-if="group"
                             :assignment-id="assignment.id"
                             :group-id="group.id"
                           />

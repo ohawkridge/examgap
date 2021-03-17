@@ -57,6 +57,7 @@ exports.handler = async (event, context, callback) => {
                       id: q.Select(['id'], q.Var('ref')),
                       name: q.Select(['data', 'name'], q.Var('instance')),
                       active: q.Select(['data', 'active'], q.Var('instance')),
+                      code: q.Select(['data', 'code'], q.Var('instance')),
                       num_students: q.Count(
                         q.Match(
                           q.Index('group_students'),

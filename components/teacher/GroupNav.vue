@@ -1,38 +1,6 @@
 <template>
   <div>
-    <v-bottom-navigation
-      v-if="$vuetify.breakpoint.name == 'xs'"
-      v-model="nav"
-      color="primary"
-      app
-      mandatory
-    >
-      <v-btn value="group-group" nuxt :to="`/group/${group.id}`" exact>
-        <v-icon>
-          {{ $icons.mdiBookOpenOutline }}
-        </v-icon>
-        <span>Assignments</span>
-      </v-btn>
-      <v-btn value="students-students" nuxt :to="`/students/${group.id}`" exact>
-        <v-icon>
-          {{ $icons.mdiAccountGroupOutline }}
-        </v-icon>
-        <span>Students</span>
-      </v-btn>
-      <v-btn value="grades-grades" nuxt :to="`/grades/${group.id}`" exact>
-        <v-icon>
-          {{ $icons.mdiFinance }}
-        </v-icon>
-        <span>Grade book</span>
-      </v-btn>
-      <v-btn value="edit-edit" nuxt :to="`/edit/${group.id}`" exact>
-        <v-icon>
-          {{ $icons.mdiCogOutline }}
-        </v-icon>
-        <span>Settings</span>
-      </v-btn>
-    </v-bottom-navigation>
-    <v-card v-else>
+    <v-card v-if="$vuetify.breakpoint.name !== 'xs'">
       <v-list nav>
         <v-list-item-group v-model="nav" color="primary">
           <v-list-item value="group-group" nuxt :to="`/group/${group.id}`">
@@ -82,6 +50,33 @@
         </v-list-item-group>
       </v-list>
     </v-card>
+    <!-- Switch to bottom-nav on mobile -->
+    <v-bottom-navigation v-else v-model="nav" color="primary" app mandatory>
+      <v-btn value="group-group" nuxt :to="`/group/${group.id}`" exact>
+        <v-icon>
+          {{ $icons.mdiBookOpenOutline }}
+        </v-icon>
+        <span>Assignments</span>
+      </v-btn>
+      <v-btn value="students-students" nuxt :to="`/students/${group.id}`" exact>
+        <v-icon>
+          {{ $icons.mdiAccountGroupOutline }}
+        </v-icon>
+        <span>Students</span>
+      </v-btn>
+      <v-btn value="grades-grades" nuxt :to="`/grades/${group.id}`" exact>
+        <v-icon>
+          {{ $icons.mdiFinance }}
+        </v-icon>
+        <span>Grade book</span>
+      </v-btn>
+      <v-btn value="edit-edit" nuxt :to="`/edit/${group.id}`" exact>
+        <v-icon>
+          {{ $icons.mdiCogOutline }}
+        </v-icon>
+        <span>Settings</span>
+      </v-btn>
+    </v-bottom-navigation>
   </div>
 </template>
 
