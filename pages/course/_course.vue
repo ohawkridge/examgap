@@ -8,7 +8,7 @@
       >
         <div>
           <div class="text-h6">Create assignment</div>
-          <div v-if="group.course" class="text-subtitle-1">
+          <div v-if="group && 'course' in group" class="text-subtitle-1">
             {{ group.name }}
             <v-icon small class="pb-1">{{ $icons.mdiArrowRight }}</v-icon>
             {{ group.course.name }} ({{ group.course.board }})
