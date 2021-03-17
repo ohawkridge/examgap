@@ -257,9 +257,10 @@ export default {
       selectedQuestions: (state) => state.assignments.selectedQuestions,
     }),
     ...mapGetters({ group: 'groups/activeGroup' }),
-    // Get the id of the current question
+    // Since selectedQuestion is only an index of v-list of questions
+    // Get the actual id of the currently selected question
     questionId() {
-      return this.$fetchState.loading || this.questions.length === 0
+      return this.$fetchState.pending || this.questions.length === 0
         ? ''
         : this.questions[this.selectedQuestion].id
     },
@@ -280,6 +281,8 @@ export default {
     // Load questions when topic changes
     currentTopic() {
       this.loadQuestions()
+      // Reset selected question
+      this.selectedQuestion = 0
     },
   },
   created() {
