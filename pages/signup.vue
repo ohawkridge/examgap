@@ -1,41 +1,37 @@
 <template>
   <v-app>
-    <v-container class="d-flex align-center px-0 px-sm-3">
-      <v-row>
-        <v-col cols="12" class="d-flex justify-space-between">
-          <nuxt-link to="/">
-            <TheLogo />
-          </nuxt-link>
-
-          <span class="grey--text"
-            >Back to <nuxt-link to="/">home</nuxt-link></span
-          >
-        </v-col>
-      </v-row>
+    <v-container class="d-flex align-center">
+      <nuxt-link to="/">
+        <TheLogo />
+      </nuxt-link>
+      <v-spacer />
+      <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
     </v-container>
     <v-main>
       <v-container class="fill-height mt-md-n6">
         <v-row class="d-flex justify-center">
           <v-col cols="12" sm="10" md="6">
-            <p class="text-h4 text-center font-weight-bold mb-md-8">
-              Register for your free trial
-            </p>
-            <v-form ref="form" @submit.prevent="register()">
-              <p class="font-weight-bold">Your school</p>
-              <v-text-field
-                v-model="school"
-                label="School name"
-                color="primary"
-                type="text"
-                outlined
-                autofocus
-              ></v-text-field>
+            <p class="text-h4 text-center font-weight-bold mb-md-8">Sign up</p>
+            <v-form ref="form" @submit.prevent="signup()">
+              <p class="font-weight-bold">Your class</p>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="code"
+                    outlined
+                    :rules="codeRules"
+                    label="Class code"
+                    placeholder="E.g., 456-789"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
               <p class="font-weight-bold">Your account</p>
               <v-text-field
                 v-model="email"
                 outlined
                 :rules="emailRules"
-                label="Email*"
+                label="School email*"
                 required
               >
               </v-text-field>
@@ -47,7 +43,8 @@
                 type="error"
                 :icon="$icons.mdiAlertOutline"
               >
-                Email is already registered
+                Email already registered.
+                <nuxt-link to="/signin">Sign in</nuxt-link> instead
               </v-alert>
               <v-row>
                 <v-col class="pb-0" cols="12" md="6">
@@ -89,7 +86,7 @@
                 :loading="loading"
                 :disabled="loading"
                 type="submit"
-                >Register</v-btn
+                >Sign up</v-btn
               >
             </v-form>
           </v-col>
@@ -117,19 +114,23 @@ export default {
       ],
       passwordRules: [
         (v) => !!v || 'Password is required',
-        (v) => (v && v.length >= 6) || 'Password must be at least 6 characters',
+        (v) => (v && v.length >= 4) || 'Password must be at least 4 characters',
+      ],
+      codeRules: [
+        (v) => (v && v.length === 6) || 'Code must be six digits',
+        (v) => /^\d+$/.test(v) || 'Code must be numbers only',
       ],
       loading: false,
-      school: '',
       email: '',
       emailInUse: false,
+      code: '',
       pass1: '',
       pass2: '',
     }
   },
   head() {
     return {
-      title: 'Register',
+      title: 'Sign up',
     }
   },
   computed: {
@@ -137,90 +138,66 @@ export default {
       return this.pass1 === this.pass2 ? [] : 'Passwords do not match'
     },
   },
+  // watch: {
+  //   // Automatically add dash
+  //   code(nc) {
+  //     if (nc.length === 3) this.code = this.code + '-'
+  //   },
+  // },
   created() {
     this.$icons = {
       mdiOpenInNew,
       mdiAlertOutline,
     }
   },
+  mounted() {
+    // Fill in code from query string
+    if (this.$route.query.code) this.code = this.$route.query.code
+  },
   methods: {
-    async getUserSecret() {
-      const url = new URL(
-        '/.netlify/functions/getUserSecret',
-        this.$config.baseURL
-      )
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          username: this.email,
-          password: this.pass1,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Invalid credentials! ${response.status}`)
-      }
-      response = await response.json()
-      return response
-    },
-    async register() {
+    async signup() {
       if (this.$refs.form.validate()) {
         this.loading = true
         try {
           const url = new URL(
-            '/.netlify/functions/registerTeacher',
+            '/.netlify/functions/registerStudent',
             this.$config.baseURL
           )
           let response = await fetch(url, {
             body: JSON.stringify({
-              school: this.school,
+              email: this.email,
               password: this.pass1,
-              username: this.email,
+              code: this.code,
             }),
             method: 'POST',
           })
           if (!response.ok) {
-            throw new Error(`Error registering for trial ${response.status}`)
+            throw new Error(`Error signing up ${response.status}`)
           }
           response = await response.json()
+          console.dir(response)
           if (response === false) {
             this.emailInUse = true
           } else {
-            // Notify me via email
-            const url = new URL(
-              '/.netlify/functions/sendEmailSignup',
-              this.$config.baseURL
-            )
-            fetch(url, {
-              method: 'POST',
-              mode: 'cors',
-              credentials: 'same-origin',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                id: response.ref.id,
-                username: response.data.username,
-                school: response.data.school,
-              }),
-            })
-            // Send welcome email
-            const url2 = new URL(
-              '/.netlify/functions/sendEmailWelcome',
-              this.$config.baseURL
-            )
-            fetch(url2, {
-              method: 'POST',
-              mode: 'cors',
-              credentials: 'same-origin',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ username: response.data.username }),
-            })
+            // TODO Welcome email students
+            // const url2 = new URL(
+            //   '/.netlify/functions/sendEmailWelcome',
+            //   this.$config.baseURL
+            // )
+            // fetch(url2, {
+            //   method: 'POST',
+            //   mode: 'cors',
+            //   credentials: 'same-origin',
+            //   headers: {
+            //     'Content-Type': 'application/json',
+            //   },
+            //   body: JSON.stringify({ username: response.data.username }),
+            // })
+
             // Complete the login process
             const res = await this.getUserSecret()
             this.$store.commit('user/setSecret', res.secret)
-            this.$router.push(res.teacher ? `/classes` : `/home`)
+            this.$router.push(`/home`)
           }
         } catch (e) {
           console.error(e)

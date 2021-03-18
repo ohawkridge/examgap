@@ -6,7 +6,7 @@ exports.handler = async (event, context, callback) => {
   const username = data.username
   const school = data.school
   const password = data.password
-  // Configure client using user's secret token
+  // Configure client using login token
   const keyedClient = new faunadb.Client({
     secret: process.env.SECRET_KEY,
   })

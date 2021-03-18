@@ -9,10 +9,8 @@
           {{ otherError }}
         </p>
         <p>
-          Try going
-          <NuxtLink :to="$store.state.user.teacher ? '/classes' : '/home'">
-            home
-          </NuxtLink>
+          Go back
+          <NuxtLink :to="home()"> home </NuxtLink>
         </p>
       </v-container>
     </v-main>
@@ -40,6 +38,12 @@ export default {
     return {
       title,
     }
+  },
+  methods: {
+    home() {
+      if (this.$store.state.user.id === '') return '/'
+      return this.$store.state.user.teacher ? '/classes' : '/home'
+    },
   },
 }
 </script>

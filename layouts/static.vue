@@ -10,7 +10,10 @@
             <v-btn text class="mr-2" nuxt to="/pricing"
               ><span>Pricing</span></v-btn
             >
-            <v-btn text nuxt to="/signin"><span>Sign in</span></v-btn>
+            <v-btn text nuxt to="/signup" class="mr-2"
+              ><span>Join class</span></v-btn
+            >
+            <v-btn outlined nuxt to="/signin"><span>Sign in</span></v-btn>
           </div>
         </v-col>
       </v-row>
