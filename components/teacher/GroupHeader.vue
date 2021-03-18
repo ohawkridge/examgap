@@ -17,6 +17,7 @@
                 v-bind="attrs"
                 color="primary"
                 outlined
+                label
                 v-on="on"
                 @click="overlay = !overlay"
               >

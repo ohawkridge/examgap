@@ -99,7 +99,7 @@
       hide-overlay
       transition="dialog-bottom-transition"
     >
-      <v-card>
+      <v-card tile>
         <v-toolbar dark dense color="primary">
           <v-btn icon dark @click="marking = false">
             <v-icon>{{ $icons.mdiClose }}</v-icon>
