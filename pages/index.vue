@@ -227,7 +227,7 @@
           <div class="d-flex research-item">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
-                $icons.mdiCheckBold
+                $icons.mdiCheck
               }}</v-icon>
             </div>
             Examgap facilitates frequent low stakes testing. It lets students
@@ -251,7 +251,7 @@
           <div class="d-flex">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
-                $icons.mdiCheckBold
+                $icons.mdiCheck
               }}</v-icon>
             </div>
             Examgap makes it easy to set exam questions for your students giving
@@ -276,7 +276,7 @@
           <div class="d-flex">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
-                $icons.mdiCheckBold
+                $icons.mdiCheck
               }}</v-icon>
             </div>
             Examgap's detailed grade book helps inform your planning and target
@@ -456,7 +456,7 @@ import {
   mdiNumeric1Circle,
   mdiNumeric2Circle,
   mdiNumeric3Circle,
-  mdiCheckBold,
+  mdiCheck,
   mdiMicroscope,
 } from '@mdi/js'
 
@@ -469,7 +469,7 @@ export default {
       mdiNumeric2Circle,
       mdiNumeric3Circle,
       mdiMicroscope,
-      mdiCheckBold,
+      mdiCheck,
     }
   },
 }

@@ -4,7 +4,7 @@
       <v-container class="pa-4">
         <v-row id="choose">
           <v-col cols="12">
-            <p class="text-h4 text-h5 text-md-h4 font-weight-bold text-center">
+            <p class="text-h5 text-md-h3 font-weight-black text-center">
               Choose your Computing package
             </p>
           </v-col>
@@ -205,19 +205,28 @@
       <v-container>
         <v-row class="d-flex justify-center text-center">
           <v-col class="12" md="8">
-            <p class="text-h5 text-md-h4 font-weight-bold text-center mb-8">
+            <p
+              class="text-h5 text-md-h4 font-weight-bold white--text text-center mb-8"
+            >
               Try Examgap for free
             </p>
-            <v-btn x-large color="primary" elevation="0" nuxt to="/trial">
+            <v-btn
+              x-large
+              color="white"
+              outlined
+              elevation="0"
+              nuxt
+              to="/trial"
+            >
               Get a 30-day free trial
             </v-btn>
-            <div class="mt-2">
-              <small class="d-flex justify-center">
-                <v-icon small color="secondary">{{
+            <div class="mt-4 white--text d-flex justify-center">
+              <small>
+                <v-icon small color="accent">{{
                   $icons.mdiCheckboxMarkedCircleOutline
                 }}</v-icon>
                 No payment info
-                <v-icon small color="secondary" class="ml-2">{{
+                <v-icon small color="accent" class="ml-2">{{
                   $icons.mdiCheckboxMarkedCircleOutline
                 }}</v-icon>
                 Improve your results
@@ -349,7 +358,7 @@ export default {
 }
 
 #try {
-  background-color: #f1f3f8;
+  background-color: #0078a0;
   margin-top: 4em;
   margin-bottom: 4em;
   padding-top: 4em;
