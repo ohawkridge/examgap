@@ -14,10 +14,13 @@ exports.handler = async (event, context, callback) => {
       q.Let(
         {
           // Use login key to try for credentials
-          obj: q.Login(q.Match(q.Index('user_by_username'), data.username), {
-            password: data.password,
-            ttl: q.TimeAdd(q.Now(), 7, 'days'),
-          }),
+          obj: q.Login(
+            q.Match(q.Index('user_by_username'), q.LowerCase(data.username)),
+            {
+              password: data.password,
+              ttl: q.TimeAdd(q.Now(), 7, 'days'),
+            }
+          ),
         },
         {
           // We need to know whether the user is a teacher
