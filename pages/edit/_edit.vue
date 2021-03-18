@@ -92,15 +92,15 @@ export default {
   },
   created() {
     this.$icons = { mdiInformationOutline }
-    // Remember your Vue lifecycle !!
-    // If you try and set this on data it won't be ready
-    this.courseId = this.group.course.id
   },
   mounted() {
     // Listen for select change event
     this.$nuxt.$on('select-course', (id) => {
       this.courseId = id
     })
+    // Remember your Vue lifecycle !!
+    // If you try and set this on data it won't be ready
+    this.courseId = this.group.course.id
   },
   methods: {
     save() {

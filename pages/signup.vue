@@ -20,8 +20,9 @@
                     v-model="code"
                     outlined
                     :rules="codeRules"
-                    label="Class code"
-                    placeholder="E.g., 456-789"
+                    label="Class code*"
+                    placeholder="123-456"
+                    @input="formatCode"
                   >
                   </v-text-field>
                 </v-col>
@@ -32,20 +33,10 @@
                 outlined
                 :rules="emailRules"
                 label="School email*"
+                placeholder="17bloggsj@yourschool.org.uk"
                 required
               >
               </v-text-field>
-              <v-alert
-                v-if="emailInUse"
-                border="left"
-                text
-                dense
-                type="error"
-                :icon="$icons.mdiAlertOutline"
-              >
-                Email already registered.
-                <nuxt-link to="/signin">Sign in</nuxt-link> instead
-              </v-alert>
               <v-row>
                 <v-col class="pb-0" cols="12" md="6">
                   <v-text-field
@@ -78,6 +69,17 @@
                 <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
                 >.
               </p>
+              <v-alert
+                v-if="emailInUse"
+                border="left"
+                text
+                dense
+                type="error"
+                :icon="$icons.mdiAlertOutline"
+              >
+                Email already registered.
+                <nuxt-link to="/signin">Sign in</nuxt-link> instead
+              </v-alert>
               <v-btn
                 color="primary"
                 block
@@ -117,8 +119,8 @@ export default {
         (v) => (v && v.length >= 4) || 'Password must be at least 4 characters',
       ],
       codeRules: [
-        (v) => (v && v.length === 6) || 'Code must be six digits',
-        (v) => /^\d+$/.test(v) || 'Code must be numbers only',
+        (v) => (v && v.length === 7) || 'Code must be six digits',
+        (v) => /\d{3}-\d{3}/gm.test(v) || 'Invalid class code',
       ],
       loading: false,
       email: '',
@@ -138,12 +140,6 @@ export default {
       return this.pass1 === this.pass2 ? [] : 'Passwords do not match'
     },
   },
-  // watch: {
-  //   // Automatically add dash
-  //   code(nc) {
-  //     if (nc.length === 3) this.code = this.code + '-'
-  //   },
-  // },
   created() {
     this.$icons = {
       mdiOpenInNew,
@@ -155,6 +151,12 @@ export default {
     if (this.$route.query.code) this.code = this.$route.query.code
   },
   methods: {
+    formatCode() {
+      if (this.code.length > 3) {
+        const newStr = this.code.replace('-', '')
+        this.code = `${newStr.slice(0, 3)}-${newStr.slice(3)}`
+      }
+    },
     async signup() {
       if (this.$refs.form.validate()) {
         this.loading = true
@@ -195,6 +197,7 @@ export default {
             // })
 
             // Complete the login process
+            // Use email and password to try for secret
             const res = await this.getUserSecret()
             this.$store.commit('user/setSecret', res.secret)
             this.$router.push(`/home`)
@@ -206,6 +209,24 @@ export default {
           this.loading = false
         }
       }
+    },
+    async getUserSecret() {
+      const url = new URL(
+        '/.netlify/functions/getUserSecret',
+        this.$config.baseURL
+      )
+      let response = await fetch(url, {
+        body: JSON.stringify({
+          username: this.email,
+          password: this.pass1,
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error(`Invalid credentials! ${response.status}`)
+      }
+      response = await response.json()
+      return response
     },
   },
 }

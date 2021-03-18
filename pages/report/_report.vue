@@ -9,74 +9,86 @@
         />
       </v-col>
       <v-col cols="12" md="9">
-        <!-- n8 accounts for hidden bottom-nav -->
+        <!-- mt-n6 accounts for bottom-nav space when hidden on desktop -->
         <v-card class="mt-n6 mt-sm-0">
-          <v-card-title class="d-flex justify-space-between">
-            {{ data.name }}
-            <v-chip color="primary" outlined label>
-              Due {{ data.dateDue | date }}
-            </v-chip>
-          </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col class="d-flex justify-end">
+              <v-col cols="12" md="10">
+                <p class="text-h6">
+                  {{ data.name }}
+                </p>
+                <div class="text-subtitle-1">
+                  <span class="fix-width font-weight-medium">Start:</span>
+                  {{ data.start | date }}
+                </div>
+                <div class="text-subtitle-1">
+                  <span class="fix-width font-weight-medium">Due:</span>
+                  {{ data.dateDue | date }}
+                </div>
+              </v-col>
+              <v-col cols="12" md="2" class="d-flex justify-end">
                 <DeleteAssignment
                   v-if="group"
                   :assignment-id="data.id"
                   :group-id="group.id"
                   type="btn"
                 />
+                <v-btn color="primary" outlined class="ml-2" @click="refresh()">
+                  Refresh
+                </v-btn>
               </v-col>
             </v-row>
             <v-row>
               <v-col id="table" cols="12">
-                <table>
-                  <thead>
-                    <tr>
-                      <th
-                        v-for="(q, i) in data.headers"
-                        :key="i"
-                        :class="i === 0 ? 'left' : ''"
-                      >
-                        <span v-if="i === 0">Username</span>
-                        <v-menu v-else offset-x open-on-hover>
-                          <template #activator="{ on, attrs }">
-                            <span v-bind="attrs" v-on="on">{{
-                              `Q${i} [${q.maxMark}]`
-                            }}</span>
-                          </template>
-                          <v-card max-width="440">
-                            <v-card-text class="text-body-2">
-                              <div v-html="data.headers[i].text"></div>
-                              <div class="font-weight-bold text-right">
-                                [{{ q.maxMark }}]
-                              </div>
-                            </v-card-text>
-                          </v-card>
-                        </v-menu>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(student, i) in data.students" :key="i">
-                      <td>
-                        {{ student.name }}
-                      </td>
-                      <td
-                        v-for="(item, j) in student.data"
-                        :key="j"
-                        class="text-center"
-                      >
-                        <MarkChip
-                          :student-index="i"
-                          :question-index="j"
-                          :data="item"
-                          @clicked="mark"
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <V-skeleton-loader :loading="loading" type="table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th
+                          v-for="(q, i) in data.headers"
+                          :key="i"
+                          :class="i === 0 ? 'left' : ''"
+                        >
+                          <span v-if="i === 0">Username</span>
+                          <v-menu v-else offset-x open-on-hover>
+                            <template #activator="{ on, attrs }">
+                              <span v-bind="attrs" v-on="on">{{
+                                `Q${i} [${q.maxMark}]`
+                              }}</span>
+                            </template>
+                            <v-card max-width="440">
+                              <v-card-text class="text-body-2">
+                                <div v-html="data.headers[i].text"></div>
+                                <div class="font-weight-bold text-right">
+                                  [{{ q.maxMark }}]
+                                </div>
+                              </v-card-text>
+                            </v-card>
+                          </v-menu>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(student, i) in data.students" :key="i">
+                        <td>
+                          {{ student.name }}
+                        </td>
+                        <td
+                          v-for="(item, j) in student.data"
+                          :key="j"
+                          class="text-center"
+                        >
+                          <MarkChip
+                            :student-index="i"
+                            :question-index="j"
+                            :data="item"
+                            @clicked="mark"
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </V-skeleton-loader>
               </v-col>
             </v-row>
             <v-row>
@@ -321,8 +333,7 @@ export default {
   },
   data() {
     return {
-      // These 3 values let us index into big hairy data structure
-      studentIndex: 0,
+      studentIndex: 0, // These 3 values let us index into data structure
       questionIndex: 0,
       responseIndex: 0,
       marking: false,
@@ -330,6 +341,7 @@ export default {
       feedbackStatus: '',
       smartSort: false,
       markScheme: [],
+      loading: false,
     }
   },
   head() {
@@ -405,6 +417,34 @@ export default {
     }
   },
   methods: {
+    async refresh() {
+      try {
+        this.loading = true
+        const url = new URL(
+          '/.netlify/functions/getReport',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            assignmentId: this.$route.params.report,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error refreshing data ${response.status}`)
+        }
+        this.data = await response.json()
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error refreshing data',
+        })
+      } finally {
+        this.loading = false
+      }
+    },
     // Build comment bank from existing responses
     updateBank() {
       const bank = []
@@ -715,5 +755,10 @@ div.v-list {
 /* thin divider under app-bar */
 #div2 {
   border-bottom: 1px solid #e3dede !important;
+}
+
+.fix-width {
+  display: inline-block;
+  width: 60px;
 }
 </style>

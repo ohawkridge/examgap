@@ -4,12 +4,14 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const username = data.email
-  const code = data.code
+  let code = data.code
+  code = code.replace('-', '') // Remove dash if present
   const password = data.password
   // Configure client using login token
   const keyedClient = new faunadb.Client({
     secret: process.env.SECRET_KEY,
   })
+  console.log(`code`, code)
   try {
     const qry = q.If(
       q.Exists(q.Match(q.Index('user_by_username'), username)),
@@ -20,7 +22,6 @@ exports.handler = async (event, context, callback) => {
           data: {
             username: q.LowerCase(username),
             created: q.Now(),
-            subscriptionExpires: 'N/A',
             teacher: false,
           },
           credentials: {
