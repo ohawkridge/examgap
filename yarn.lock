@@ -2034,9 +2034,9 @@ autoprefixer@^9.6.1:
     postcss-value-parser "^4.1.0"
 
 aws-sdk@^2.863.0:
-  version "2.866.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.866.0.tgz#8150fb2e0cfecd281968edee7cad84598d8d7a09"
-  integrity sha512-6Z581Ek2Yfm78NpeEFMNuSoyiYG7tipEaqfWNFR1AGyYheZwql4ajhzzlpWn91LBpdm7qcFldSNY9U0tKpKWNw==
+  version "2.869.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.869.0.tgz#f0fc6945979b7f675103424e1fe81688b90e67cf"
+  integrity sha512-Sj9H+OH1sizBJt6WyTFBvCthZ1hRNUi4qRFO922agf+cOfmq1r+PYLOcG/0qgLMe2aelRwfT2qE2AZ97mADiOw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -2215,13 +2215,6 @@ brorand@^1.0.1, brorand@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
-
-browser-detect@^0.2.28:
-  version "0.2.28"
-  resolved "https://registry.yarnpkg.com/browser-detect/-/browser-detect-0.2.28.tgz#5688fc22f638390614ebea4646483403fb20ebfb"
-  integrity sha512-KeWGHqYQmHDkCFG2dIiX/2wFUgqevbw/rd6wNi9N6rZbaSJFtG5kel0HtprRwCGp8sqpQP79LzDJXf/WCx4WAw==
-  dependencies:
-    core-js "^2.5.7"
 
 browserify-aes@^1.0.0, browserify-aes@^1.0.4:
   version "1.2.0"
@@ -2835,7 +2828,7 @@ core-js-compat@^3.8.1, core-js-compat@^3.9.0, core-js-compat@^3.9.1:
     browserslist "^4.16.3"
     semver "7.0.0"
 
-core-js@^2.5.7, core-js@^2.6.5:
+core-js@^2.6.5:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
@@ -2904,9 +2897,9 @@ create-require@^1.1.1:
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
 
 cross-fetch@^3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.0.6.tgz#3a4040bc8941e653e0e9cf17f29ebcd177d3365c"
-  integrity sha512-KBPUbqgFjzWlVcURG+Svp9TlhA5uliYtiNx/0r8nv0pdypeQCRJ9IaSIc3q/x3q8t3F75cHuwxVql1HFGHCNJQ==
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.2.tgz#ee0c2f18844c4fde36150c2a4ddc068d20c1bc41"
+  integrity sha512-+JhD65rDNqLbGmB3Gzs3HrEKC0aQnD+XA3SY6RjgkF88jV2q5cTc5+CwxlS3sdmLk98gpPt5CF9XRnPdlxZe6w==
   dependencies:
     node-fetch "2.6.1"
 
@@ -3648,9 +3641,9 @@ eslint-plugin-vue@^7.1.0:
     vue-eslint-parser "^7.5.0"
 
 eslint-plugin-vue@^7.5.0:
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-7.7.0.tgz#a90df4595e670821bf243bd2750ededdb74948b8"
-  integrity sha512-mYz4bpLGv5jx6YG/GvKkqbGSfV7uma2u1P3mLA41Q5vQl8W1MeuTneB8tfsLq6xxxesFubcrOC0BZBJ5R+eaCQ==
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-7.8.0.tgz#cb0e85d65b65fa8d15e783fbb03c049d2c4cfdae"
+  integrity sha512-OGrnPz+PuYL2HmVyBHxm4mRjxW2kfFCQE6Hw9G6qOHs/Pcu0srOlCCW0FMa8SLzIEqxl8WuKoBSPcMnrjUG2vw==
   dependencies:
     eslint-utils "^2.1.0"
     natural-compare "^1.4.0"
@@ -3976,13 +3969,12 @@ fault@^1.0.0:
     format "^0.2.0"
 
 faunadb@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/faunadb/-/faunadb-4.1.1.tgz#c505aae1171abb18b7e8bf98bfe6b7bc1785e446"
-  integrity sha512-ekHtUgt+heYbaZXMWMB00Q7+DCiPKAubs2zbpNc4oMKamRxbL39MyzdNQNnCcSGOAJcLHPJbgOlDHK4y0Rkwrw==
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/faunadb/-/faunadb-4.1.2.tgz#af0e71195510f9ff4abe0395c8faef9ec6d53457"
+  integrity sha512-NJn9LBf/63ZD3i9bPAz8uBMvEXmnkfsPHn5AGMD8WBvKfJ4NaQ0AXadTK0NItVHvcZPIIqyc5BlgskveTNB+bA==
   dependencies:
     abort-controller "^3.0.0"
     base64-js "^1.2.0"
-    browser-detect "^0.2.28"
     btoa-lite "^1.0.0"
     cross-fetch "^3.0.6"
     dotenv "^8.2.0"

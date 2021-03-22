@@ -6,26 +6,57 @@
           <nuxt-link to="/">
             <TheLogo />
           </nuxt-link>
-          <div>
-            <v-btn text class="mr-2" nuxt to="/pricing"
-              ><span>Pricing</span></v-btn
+          <div class="d-flex">
+            <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/pricing"
+              >Pricing</v-btn
             >
-            <v-btn text nuxt to="/signup" class="mr-2"
-              ><span>Join class</span></v-btn
+            <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/signup"
+              >Join class</v-btn
             >
-            <v-btn outlined nuxt to="/signin"><span>Sign in</span></v-btn>
+            <v-btn outlined class="d-none d-sm-flex" nuxt to="/signin"
+              >Sign in</v-btn
+            >
+            <v-btn
+              v-if="!menu"
+              outlined
+              class="d-flex d-sm-none"
+              @click="menu = !menu"
+            >
+              <v-icon left>{{ $icons.mdiMenu }}</v-icon>
+              Menu
+            </v-btn>
           </div>
         </v-col>
       </v-row>
     </v-container>
     <nuxt />
     <TheStaticFooter />
+    <v-overlay :value="menu" opacity="0.8">
+      <v-btn
+        v-if="menu"
+        id="close"
+        outlined
+        class="d-flex d-sm-none"
+        @click="menu = !menu"
+      >
+        <v-icon left>{{ $icons.mdiClose }}</v-icon>
+        Close
+      </v-btn>
+      <div class="d-flex flex-column">
+        <v-btn text large class="mb-6" nuxt to="/">Home</v-btn>
+        <v-btn text large class="mb-6" nuxt to="/#how">How it works</v-btn>
+        <v-btn text large class="mb-6" nuxt to="/pricing">Pricing</v-btn>
+        <v-btn text large class="mb-6" nuxt to="/signup">Join class</v-btn>
+        <v-btn outlined large nuxt to="/signin">Sign in</v-btn>
+      </div>
+    </v-overlay>
   </v-app>
 </template>
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
 import TheStaticFooter from '@/components/common/TheStaticFooter'
+import { mdiMenu, mdiClose } from '@mdi/js'
 
 export default {
   name: 'Static',
@@ -33,5 +64,29 @@ export default {
     TheLogo,
     TheStaticFooter,
   },
+  data() {
+    return {
+      menu: false,
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.menu = false
+    },
+  },
+  created() {
+    this.$icons = {
+      mdiMenu,
+      mdiClose,
+    }
+  },
 }
 </script>
+
+<style scoped>
+#close {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+}
+</style>
