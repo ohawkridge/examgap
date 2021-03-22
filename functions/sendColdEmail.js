@@ -6,8 +6,8 @@ exports.handler = async (event) => {
   const email = requestParams.email
 
   AWS.config.update({
-    accessKeyId: 'AKIAJTQG3TNUQDRGXZOA',
-    secretAccessKey: '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',
+    accessKeyId: process.env.SES_KEY,
+    secretAccessKey: process.env.SES_SECRET,
     region: 'eu-west-2',
   })
 
