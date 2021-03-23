@@ -1,17 +1,11 @@
 <template>
   <v-app>
-    <v-container class="d-flex align-center px-0 px-sm-3">
-      <v-row>
-        <v-col cols="12" class="d-flex justify-space-between">
-          <nuxt-link to="/">
-            <TheLogo />
-          </nuxt-link>
-
-          <span class="grey--text"
-            >Back to <nuxt-link to="/">home</nuxt-link></span
-          >
-        </v-col>
-      </v-row>
+    <v-container class="d-flex align-center">
+      <nuxt-link to="/">
+        <TheLogo />
+      </nuxt-link>
+      <v-spacer />
+      <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
     </v-container>
     <v-main>
       <v-container class="fill-height mt-md-n6">

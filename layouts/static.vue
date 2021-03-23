@@ -13,8 +13,16 @@
             <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/signup"
               >Join class</v-btn
             >
-            <v-btn outlined class="d-none d-sm-flex" nuxt to="/signin"
+            <v-btn outlined class="mr-2 d-none d-sm-flex" nuxt to="/signin"
               >Sign in</v-btn
+            >
+            <v-btn
+              color="primary"
+              elevation="0"
+              class="d-none d-sm-flex"
+              nuxt
+              to="/trial"
+              >Free trial</v-btn
             >
             <v-btn
               v-if="!menu"
@@ -31,7 +39,7 @@
     </v-container>
     <nuxt />
     <TheStaticFooter />
-    <v-overlay :value="menu" opacity="0.8">
+    <v-overlay :value="menu" opacity="0.86" @click.native="menu = !menu">
       <v-btn
         v-if="menu"
         id="close"
@@ -44,10 +52,12 @@
       </v-btn>
       <div class="d-flex flex-column">
         <v-btn text large class="mb-6" nuxt to="/">Home</v-btn>
-        <v-btn text large class="mb-6" nuxt to="/#how">How it works</v-btn>
         <v-btn text large class="mb-6" nuxt to="/pricing">Pricing</v-btn>
         <v-btn text large class="mb-6" nuxt to="/signup">Join class</v-btn>
-        <v-btn outlined large nuxt to="/signin">Sign in</v-btn>
+        <v-btn outlined large class="mb-6" nuxt to="/signin">Sign in</v-btn>
+        <v-btn large color="primary" elevation="0" nuxt to="/trial"
+          >Free trial</v-btn
+        >
       </div>
     </v-overlay>
   </v-app>
