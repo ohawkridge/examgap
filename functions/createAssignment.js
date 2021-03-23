@@ -5,7 +5,7 @@ exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const name = data.name
   const start = data.start
-  const end = data.end
+  const dateDue = data.end
   const group = data.group
   const students = data.students
   const questions = data.questions
@@ -19,7 +19,7 @@ exports.handler = async (event, context, callback) => {
       data: {
         name,
         start,
-        dateDue: end,
+        dateDue,
         questions,
         group: q.Ref(q.Collection('Group'), group),
         teacher: q.CurrentIdentity(),
@@ -54,7 +54,7 @@ exports.handler = async (event, context, callback) => {
     await keyedClient.query(qry)
     return {
       statusCode: 200,
-      body: JSON.stringify(assignment.ref.id),
+      body: JSON.stringify(assignment),
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }

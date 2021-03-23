@@ -133,17 +133,6 @@ export default {
       mdiBookOpenOutline,
     }
   },
-  mounted() {
-    // Listen for refresh event
-    this.$nuxt.$on('refresh', () => {
-      this.$fetch()
-    })
-  },
-  // Don't forget to destroy listener
-  // https://aneesshameed.medium.com/event-bus-in-nuxt-7728315e81b6
-  beforeDestroy() {
-    this.$nuxt.$off('refresh')
-  },
   methods: {
     createAssignment() {
       // Remember group when creating assignments

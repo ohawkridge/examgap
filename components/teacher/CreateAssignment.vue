@@ -401,11 +401,12 @@ export default {
             throw new Error(`Error creating assignment ${response.status}`)
           }
           response = await response.json()
-          // Clear selected questions
+          // console.dir(response)
+          // Clear any previously selected questions
           this.$store.commit('assignments/clearSelectedQuestions')
-          // Response from createAssignment.js is the new
-          // assignment's id. Can't access @ref in response?
-          this.$router.push(`/report/${response}`)
+          // Update local data
+          this.$store.commit('groups/addAssignment', response)
+          this.$router.push(`/report/${response.ref['@ref'].id}`)
           this.$snack.showMessage({
             type: 'success',
             msg: 'Assignment created',

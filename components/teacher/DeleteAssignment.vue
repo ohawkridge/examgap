@@ -81,12 +81,15 @@ export default {
         if (!response.ok) {
           throw new Error(`Error deleting assignment ${response.status}`)
         }
+        // Update local data
+        this.$store.commit('groups/deleteAssignment', {
+          groupId: this.groupId,
+          assignmentId: this.assignmentId,
+        })
         // If on assignment detail, go to /group/xxx, else stay put
         if (this.$route.name !== 'group-group') {
           this.$router.push(`/group/${this.groupId}`)
         }
-        // Trigger fetch in parent
-        this.$nuxt.$emit('refresh')
         this.$snack.showMessage({
           msg: 'Assignment deleted',
           type: 'success',

@@ -157,19 +157,23 @@ export const mutations = {
   },
   // Teacher creates a new assignment
   addAssignment(state, assignment) {
-    console.log(`Incoming assignment`)
-    console.log(assignment)
-    // Find index of group
-    const groupIndex = state.groups.findIndex(
-      (group) => group.id === assignment.data.group.id
-    )
     // Add assignment to front of assignments array
-    state.groups[groupIndex].assignments.unshift({
+    state.groups[state.activeGroupIndex].assignments.unshift({
       dateDue: assignment.data.dateDue,
-      start: assignment.data.start,
-      id: assignment.ref.id,
+      id: assignment.ref['@ref'].id,
       name: assignment.data.name,
+      start: assignment.data.start,
     })
+  },
+  deleteAssignment(state, { groupId, assignmentId }) {
+    const groupIndex = state.groups.findIndex((g) => g.id === groupId)
+    const assignments = state.groups[groupIndex].assignments
+    // Let's prefer splice for now to maintain reactivity
+    for (let i = 0; i < assignments.length; i++) {
+      if (assignments[i].id === assignmentId) {
+        assignments.splice(i, 1)
+      }
+    }
   },
   // Student gets new assignment in doc stream
   newAssignment(state, assignment) {
