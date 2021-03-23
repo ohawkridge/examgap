@@ -2,9 +2,14 @@
   <div>
     <!-- Create as many list items as there are responses -->
     <template v-for="(response, i) in question.responses">
-      <v-list-item :key="i" nuxt :to="`/response/${response.id}`">
+      <v-list-item
+        :key="i"
+        nuxt
+        :to="`/response/${response.id}`"
+        class="px-0 px-md-3"
+      >
         <v-list-item-content>
-          <v-col cols="12" md="9">
+          <v-col cols="12" md="9" class="pa-0 pa-md-3 mb-2">
             <v-list-item-title>
               {{ question.text | strip }}
             </v-list-item-title>
@@ -12,7 +17,11 @@
               {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-list-item-subtitle>
           </v-col>
-          <v-col cols="12" md="3" class="d-flex justify-space-around">
+          <v-col
+            cols="12"
+            md="3"
+            class="pa-0 pa-md-3 d-flex justify-space-around"
+          >
             <!-- Teacher mark -->
             <v-chip
               v-if="response.marked"
@@ -53,7 +62,7 @@
             </v-list-item-subtitle>
           </v-col>
           <v-col cols="12" md="3" class="d-flex justify-center">
-            <v-btn text color="primary"> Reassigned </v-btn>
+            <v-btn outlined color="primary"> Reassigned </v-btn>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -73,7 +82,7 @@
           </v-list-item-subtitle>
         </v-col>
         <v-col cols="12" md="3" class="d-flex justify-center">
-          <v-btn text color="primary"> Answer </v-btn>
+          <v-btn elevation="0" color="primary"> Answer </v-btn>
         </v-col>
       </v-list-item-content>
     </v-list-item>

@@ -2,9 +2,9 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <v-btn text nuxt :to="`/assignment/${response.assignment}`">
+        <v-btn text nuxt :to="`/assignment/${response.assignmentId}`">
           <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
-          Back
+          {{ response.assignmentName }}
         </v-btn>
       </v-col>
     </v-row>

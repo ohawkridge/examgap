@@ -16,9 +16,13 @@ exports.handler = async (event, context, callback) => {
       {
         text: q.Select(['data', 'text'], q.Var('instance')),
         feedback: q.Select(['data', 'feedback'], q.Var('instance')),
-        assignment: q.Select(
+        assignmentId: q.Select(
           'id',
           q.Select(['data', 'assignment'], q.Var('instance'))
+        ),
+        assignmentName: q.Select(
+          ['data', 'name'],
+          q.Get(q.Select(['data', 'assignment'], q.Var('instance')))
         ),
         question: q.Let(
           {

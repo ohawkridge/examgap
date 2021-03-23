@@ -1,41 +1,33 @@
 <template>
-  <div>
-    <v-row class="justify-center">
-      <v-col cols="12" md="10">
-        <v-btn text nuxt to="/home">
-          <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
-          Back
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row class="justify-center">
-      <v-col cols="12" md="10">
-        <v-card class="pa-md-4">
-          <v-card-title class="d-flex justify-space-between">
-            {{ assignment.name }}
-            <v-chip outlined color="primary" label>
-              Due {{ assignment.dateDue | date }}
-            </v-chip>
-          </v-card-title>
-          <v-card-text class="mt-6">
-            <div class="text-body-1 font-weight-medium">
-              Question{{ assignment.questions.length | pluralize }} ({{
-                assignment.questions.length
-              }})
-            </div>
-            <v-list>
-              <AssignmentQuestion
-                v-for="(question, i) in assignment.questions"
-                :key="i"
-                :assignment-id="assignment.id"
-                :question="question"
-              />
-            </v-list>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </div>
+  <v-row class="justify-center">
+    <v-col cols="12" md="10">
+      <v-card class="pa-md-4 mt-md-3">
+        <v-card-text>
+          <v-row>
+            <v-col>
+              <p class="text-h6">{{ assignment.name }}</p>
+              <div class="text-subtitle-1">
+                <span class="fix-width font-weight-medium">Start:</span>
+                {{ assignment.start | date }}
+              </div>
+              <div class="text-subtitle-1">
+                <span class="fix-width font-weight-medium">Due:</span>
+                {{ assignment.dateDue | date }}
+              </div>
+              <v-list>
+                <AssignmentQuestion
+                  v-for="(question, i) in assignment.questions"
+                  :key="i"
+                  :assignment-id="assignment.id"
+                  :question="question"
+                />
+              </v-list>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -67,3 +59,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.fix-width {
+  display: inline-block;
+  width: 60px;
+}
+</style>

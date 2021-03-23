@@ -156,34 +156,37 @@ export default {
   },
   methods: {
     async send() {
-      if (this.$refs.form.validate()) {
-        this.loading = true
-        const url = new URL(
-          '/.netlify/functions/sendEmail',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          mode: 'cors',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: this.email,
-            message: this.message,
-            name: this.name,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error sending email ${response.status}`)
+      try {
+        if (this.$refs.form.validate()) {
+          this.loading = true
+          const url = new URL(
+            '/.netlify/functions/sendEmail',
+            this.$config.baseURL
+          )
+          const response = await fetch(url, {
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: this.email,
+              message: this.message,
+              name: this.name,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error sending email ${response.status}`)
+          }
+          this.$nuxt.$emit('show-success')
+          this.$refs.form.reset()
         }
-        this.$nuxt.$emit('show-success')
-        this.email = ''
-        this.message = ''
-        this.name = ''
-        this.$refs.form.reset()
+      } catch (e) {
+        console.error(e)
+      } finally {
         this.loading = false
+        this.$refs.form.resetValidation()
       }
     },
   },
