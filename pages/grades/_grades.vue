@@ -74,69 +74,22 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-skeleton-loader :loading="$fetchState.pending" type="table">
-                  <v-data-table
-                    :headers="data.headers"
-                    :items="data.data"
-                    hide-default-footer
-                    disable-pagination
-                    sort-by="username"
-                  >
-                    <template #body="{ items }">
-                      <tbody>
-                        <!-- No data -->
-                        <tr
-                          v-if="items.length === 0"
-                          class="v-data-table__empty-wrapper"
-                        >
-                          <td :colspan="data.headers.length">
-                            <p class="text-body-2 mt-4">No data yet</p>
-                            <p>
-                              <v-btn
-                                color="primary"
-                                elevation="0"
-                                @click="createAssignment()"
-                              >
-                                Create assignment</v-btn
-                              >
-                            </p>
-                          </td>
-                        </tr>
-                        <!-- Iterate over rows -->
-                        <!-- 'item' is one 'grades' object or one table row -->
-                        <tr v-for="(row, i) in items" :key="i">
-                          <!-- Within a row iterate over cells -->
-                          <td v-for="(field, j) in Object.keys(row)" :key="j">
-                            <!-- Student can have more than one group, so target is an object -->
-                            <span v-if="j === 0">
-                              {{ row['username'] }}
-                            </span>
-                            <span v-else-if="j === 1">
-                              {{ row['target'] }}
-                            </span>
-                            <!-- Use header value as key into data object -->
-                            <div v-else>
-                              <span v-if="row[data.headers[j].value] === 'n/a'"
-                                >N/A</span
-                              >
-                              <v-chip
-                                v-else
-                                :color="
-                                  ragMark(
-                                    row[data.headers[j].value],
-                                    data.headers[j].max,
-                                    row['target']
-                                  )
-                                "
-                                >{{ row[data.headers[j].value] }}</v-chip
-                              >
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-data-table>
-                </v-skeleton-loader>
+                <v-data-table
+                  :headers="data.headers"
+                  :items="data.data"
+                  :loading="$fetchState.pending"
+                  loading-text="Loading grades..."
+                  hide-default-footer
+                  disable-pagination
+                  sort-by="username"
+                >
+                  <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
+                    <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
+                    <v-chip v-else :key="i" :color="ragX(item)">
+                      {{ item[obj] }}
+                    </v-chip>
+                  </template>
+                </v-data-table>
               </v-col>
             </v-row>
             <v-row>
@@ -145,14 +98,13 @@
                   :icon="$icons.mdiInformationOutline"
                   border="left"
                   type="info"
-                  dense
                   text
                 >
                   To enable colour-coding, enter target grades on the
                   <nuxt-link :to="`/students/${group ? group.id : ''}`">
                     Students</nuxt-link
                   >
-                  screen
+                  screen.
                 </v-alert>
               </v-col>
             </v-row>
@@ -222,6 +174,12 @@ export default {
       }
       return out
     },
+    // Create an array containing just assignment IDs
+    // These IDs are used in dynamic slot names
+    assIds() {
+      if (this.$fetchState.pending) return []
+      return this.data.headers.map((o) => o.value).slice(2)
+    },
   },
   created() {
     this.$icons = {
@@ -231,6 +189,11 @@ export default {
     }
   },
   methods: {
+    // Helper function due to dynamic argument expression constraints
+    // https://vuejs.org/v2/guide/syntax.html#Dynamic-Argument-Expression-Constraints
+    gk(val) {
+      return `item.${val}`
+    },
     createAssignment() {
       // Remember group when creating assignments
       this.$store.commit('assignments/setGroup', this.group.id)
@@ -255,14 +218,18 @@ export default {
       clearInterval(this.interval)
       this.interval = false
     },
-    ragMark(n, max, target) {
-      // Don't RAG username or if target not set
-      if (typeof n !== 'number' || target === '-') return ''
-      // Don't RAG if we can't find target
-      if (!(target in this.rag)) return ''
-      const z = n / max
-      const t = this.rag[target]
-      return z > t ? 'green' : z < t - 0.2 ? 'red' : 'orange'
+    ragX(item) {
+      // Can't rag if target not set or not found
+      if (item.target === '-' || !(item.target in this.rag)) return ''
+      // TODO Is the assignmentId always key 2 in object!?
+      const key = Object.keys(item)[2]
+      // Use assignment id as key into header objects
+      const x = this.data.headers.find((o) => o.value === key)
+      // Pcnt on this assignment
+      const z = item[key] / x.max
+      // Boundary pcnt
+      const t = this.rag[item.target]
+      return z >= t ? 'green' : z <= t - 0.2 ? 'red' : 'orange'
     },
     exportTableToCSV() {
       for (const obj of this.data.headers) {

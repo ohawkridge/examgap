@@ -139,7 +139,7 @@ exports.handler = async (event, context, callback) => {
                                 0
                               )
                             ),
-                            'n/a', // Student not part of assignment (n/a = not assigned)
+                            'N/A', // Student not part of assignment (n/a = not assigned)
                             // Total teacher marks for this assignment
                             // Map over the assignment's questions Array
                             // For each question get this student's responses
