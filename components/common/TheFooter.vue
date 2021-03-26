@@ -1,5 +1,8 @@
 <template>
-  <v-footer :style="{ background: $vuetify.theme.themes['light'].background }">
+  <v-footer
+    :style="{ background: $vuetify.theme.themes['light'].background }"
+    class="mt-md-6"
+  >
     <v-container class="grey--text text--darken-1 text-caption">
       Examgap&mdash;{{ new Date().getFullYear() }} | support@examgap.com |
       <v-icon small>{{ $icons.mdiArrowExpandHorizontal }}</v-icon>

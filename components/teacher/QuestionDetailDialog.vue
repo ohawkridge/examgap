@@ -13,9 +13,26 @@
     </template>
     <v-card class="modal pa-md-4">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
-        <v-card-title> Question </v-card-title>
+        <v-card-title class="d-flex justify-space-between">
+          Question
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                icon
+                @click="$nuxt.$emit('add-rem', questionId)"
+                v-on="on"
+              >
+                <v-icon>{{ $icons.mdiPlus }}</v-icon>
+              </v-btn>
+            </template>
+            <span>Add to assignment</span>
+          </v-tooltip>
+        </v-card-title>
         <v-card-subtitle>
-          {{ questionId }}
+          <nuxt-link nuxt :to="`/question/${questionId}`">{{
+            questionId
+          }}</nuxt-link>
         </v-card-subtitle>
         <v-card-text class="text-body-2">
           <div v-html="question.text"></div>
@@ -56,6 +73,8 @@
 </template>
 
 <script>
+import { mdiPlus, mdiMinus } from '@mdi/js'
+
 export default {
   name: 'QuestionDetailDialog',
   props: {
@@ -107,6 +126,12 @@ export default {
     dialog() {
       this.$fetch()
     },
+  },
+  created() {
+    this.$icons = {
+      mdiPlus,
+      mdiMinus,
+    }
   },
 }
 </script>

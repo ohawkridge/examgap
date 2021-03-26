@@ -261,7 +261,7 @@ export default {
           type: 'success',
           msg: `Question ${this.editing ? 'saved' : 'created'}`,
         })
-        this.$router.push(`/question/${response.ref.id}`)
+        this.$router.push(`/question/${response.ref['@ref'].id}`)
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({

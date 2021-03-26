@@ -12,7 +12,7 @@
           <v-card-subtitle>
             {{ question.id }}
           </v-card-subtitle>
-          <v-card-text class="text-body-1">
+          <v-card-text>
             <div class="mt-4" v-html="question.text"></div>
             <div class="d-flex justify-end">
               <v-chip outlined
@@ -31,9 +31,7 @@
             <p class="text-subtitle-1 font-weight-medium mt-4">Model Answer</p>
             <div v-html="question.modelAnswer"></div>
             <p class="text-subtitle-1 font-weight-medium mt-4">Keywords</p>
-            <!-- <p v-if="!$fetchState.pending && question.keywords.length > 0">
-              {{ question.keywords.join(', ') }}
-            </p> -->
+            <p>{{ keywords }}</p>
           </v-card-text>
         </v-card>
       </v-skeleton-loader>
@@ -52,7 +50,7 @@ export default {
   async fetch() {
     try {
       const url = new URL(
-        '/.netlify/functions/getQuestions',
+        '/.netlify/functions/getQuestion',
         this.$config.baseURL
       )
       const response = await fetch(url, {
@@ -73,6 +71,15 @@ export default {
         msg: 'Error loading question',
       })
     }
+  },
+  computed: {
+    keywords() {
+      if (!this.$fetchState.pending && this.question.keywords) {
+        return this.question.keywords.join(', ')
+      } else {
+        return ''
+      }
+    },
   },
 }
 </script>

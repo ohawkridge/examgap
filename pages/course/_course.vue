@@ -145,13 +145,13 @@
                                   >
                                 </v-btn>
                               </template>
-                              <span
-                                >Click to
+                              <span>
                                 {{
                                   selectedQuestions.includes(q.id)
-                                    ? 'remove'
-                                    : 'add'
-                                }}</span
+                                    ? 'Remove from'
+                                    : 'Add to'
+                                }}
+                                assignment</span
                               >
                             </v-tooltip>
                           </v-list-item-action>
@@ -280,9 +280,13 @@ export default {
   watch: {
     // Load questions when topic changes
     currentTopic() {
-      this.loadQuestions()
-      // Reset selected question
-      this.selectedQuestion = 0
+      // TODO TEST ME
+      // Don't load questions if logging out
+      if (this.currentTopic !== 0) {
+        this.loadQuestions()
+        // Select first question of topic by default
+        this.selectedQuestion = 0
+      }
     },
   },
   created() {
@@ -292,6 +296,12 @@ export default {
       mdiArrowRight,
       mdiInformationOutline,
     }
+  },
+  mounted() {
+    // Listen for event from detail dialog
+    this.$nuxt.$on('add-rem', (questionId) => {
+      this.select(questionId)
+    })
   },
   methods: {
     // Get questions for topic
