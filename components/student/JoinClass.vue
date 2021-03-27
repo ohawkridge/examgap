@@ -82,6 +82,7 @@ export default {
           response = await response.json()
           console.log(`response`, response)
           // Dispatch getUser action again?
+          this.$store.dispatch('user/getUser')
           this.$snack.showMessage({
             type: 'success',
             msg: `Class joined`,
