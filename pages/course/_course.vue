@@ -178,6 +178,7 @@
                   <QuestionDetailDialog
                     :question-id="questionId"
                     :disabled="questions.length === 0"
+                    :included="selectedQuestions.includes(questionId)"
                   />
                 </div>
                 <div v-if="preview" class="pt-2" v-html="preview.text"></div>
@@ -280,7 +281,6 @@ export default {
   watch: {
     // Load questions when topic changes
     currentTopic() {
-      // TODO TEST ME
       // Don't load questions if logging out
       if (this.currentTopic !== 0) {
         this.loadQuestions()

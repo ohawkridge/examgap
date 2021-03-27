@@ -19,14 +19,19 @@
             <template #activator="{ on, attrs }">
               <v-btn
                 v-bind="attrs"
-                icon
+                elevation="0"
+                :color="included ? 'accent' : 'primary'"
+                outlined
                 @click="$nuxt.$emit('add-rem', questionId)"
                 v-on="on"
               >
-                <v-icon>{{ $icons.mdiPlus }}</v-icon>
+                <v-icon left>{{
+                  included ? $icons.mdiMinus : $icons.mdiPlus
+                }}</v-icon>
+                {{ included ? 'Remove' : 'Add' }}
               </v-btn>
             </template>
-            <span>Add to assignment</span>
+            <span>{{ included ? 'Remove from' : 'Add to' }} assignment</span>
           </v-tooltip>
         </v-card-title>
         <v-card-subtitle>
@@ -83,6 +88,10 @@ export default {
       required: true,
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    included: {
       type: Boolean,
       default: false,
     },
