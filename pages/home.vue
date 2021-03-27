@@ -101,7 +101,6 @@ export default {
   computed: {
     ...mapState({
       groups: (state) => state.groups.groups,
-      // assignments: (state) => state.assignments.assignments,
       topics: (state) => state.groups.revisionTopics,
     }),
     // Get current active group for home page

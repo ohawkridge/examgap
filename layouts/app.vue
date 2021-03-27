@@ -38,6 +38,14 @@
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
+            <template v-if="!teacher">
+              <v-divider />
+              <v-list-item @click="$nuxt.$emit('join-class')">
+                <v-list-item-content>
+                  <v-list-item-title> Join class&hellip; </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
           </v-list>
         </v-menu>
         <v-spacer />
@@ -94,6 +102,7 @@
         <nuxt />
       </v-container>
       <TheSnackbar />
+      <JoinClass v-if="!teacher" />
     </v-main>
     <TheFooter />
   </v-app>
@@ -104,6 +113,8 @@ import { mapState } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
+import JoinClass from '@/components/student/JoinClass'
+
 import {
   mdiPlus,
   mdiAccountCircleOutline,
@@ -117,6 +128,7 @@ export default {
     TheLogo,
     TheSnackbar,
     TheFooter,
+    JoinClass,
   },
   middleware: ['get-user'],
   computed: {
