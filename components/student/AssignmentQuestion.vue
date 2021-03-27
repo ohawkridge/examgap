@@ -62,7 +62,7 @@
             </v-list-item-subtitle>
           </v-col>
           <v-col cols="12" md="3" class="d-flex justify-center">
-            <v-btn outlined color="primary"> Reassigned </v-btn>
+            <v-btn elevation="0" color="primary"> Reassigned </v-btn>
           </v-col>
         </v-list-item-content>
       </v-list-item>

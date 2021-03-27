@@ -40,12 +40,22 @@ exports.handler = async (event, context, callback) => {
                   ['data', 'group'],
                   q.Get(q.Ref(q.Collection('Assignment'), assignmentId))
                 ),
+          startTime: q.Now(),
+          timeTaken: 0,
         },
       }),
       // Otherwise, update text of existing response
       q.Update(q.Ref(q.Collection('Response'), responseId), {
         data: {
           text,
+          timeTaken: q.TimeDiff(
+            q.Select(
+              ['data', 'startTime'],
+              q.Get(q.Ref(q.Collection('Response'), responseId))
+            ),
+            q.Now(),
+            'seconds'
+          ),
         },
       })
     )

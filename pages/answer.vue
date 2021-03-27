@@ -115,16 +115,11 @@ export default {
     // Cancel speaking on page exit
     this.speaking = undefined
     this.synth.cancel()
-    // Warn if not self-marked yet
+    // Warn if not yet marked
     if (!this.marking) {
-      if (confirm(`Really leave without self-marking?`)) {
-        this.marking = false
-        next()
-      }
-    } else {
-      this.marking = false
-      next()
+      if (confirm(`Really leave without marking?`)) next()
     }
+    next()
   },
   layout: 'app',
   async asyncData({ $config: { baseURL }, store }) {
@@ -253,12 +248,15 @@ export default {
       }
     },
     done() {
-      // Increment count of questions answered
-      this.$store.commit('groups/incrementTopicCount')
-      // If revising go home, otherwise go back to assignment
-      this.$router.push(
-        this.revising ? `/home` : `/assignment/${this.assignmentId}`
-      )
+      if (this.revising) {
+        // Increment count of questions answered
+        this.$store.commit('groups/incrementTopicCount')
+        // Go home
+        this.$router.push(`/home`)
+      } else {
+        // Go to assignment
+        this.$router.push(`/assignment/${this.assignmentId}`)
+      }
     },
     async toggleMark(id) {
       // Don't exceed max mark, but always allow unticking
@@ -320,7 +318,11 @@ export default {
           throw new Error(`Error saving answer ${response.status}`)
         }
         const docId = await response.json()
-        console.log(`Saved response ${docId}`)
+        console.log(
+          '%c' + 'Response',
+          'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+        )
+        console.log(docId)
         // Save response id to update just response text
         this.responseId = docId
         this.saveStatus = `Saved ✓`
