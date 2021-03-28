@@ -10,7 +10,7 @@ exports.handler = async (event) => {
     secretAccessKey: process.env.SES_SECRET,
     region: 'eu-west-2',
   })
-
+  console.log(`Send email to`, email)
   const ses = new AWS.SES({ apiVersion: '2010-12-01' })
   const params = {
     Destination: {
@@ -30,6 +30,8 @@ exports.handler = async (event) => {
                   <p>Your username is ${email}. If you forget your password, you will need to ask your teacher to reset it.</p>
                   <p>If you encounter problems you can email <a href="mailto:support@examgap.com">support@examgap.com</a>.</p>
                   <p>Click <a href="https://examgap.com/signin">here</a> to sign in</p>
+                  <br />
+                  <p>—Cheers, the Examgap team</p>
                   </body>
               </html>`,
         },

@@ -30,8 +30,8 @@
                 type="info"
                 text
               >
-                Don't know the code? You can still create your account and join
-                classes later.
+                No code? You can still create your account and join a class
+                later.
               </v-alert>
               <v-btn color="primary" block large elevation="0" type="submit"
                 >Next
@@ -211,12 +211,16 @@ export default {
             throw new Error(`Error signing up ${response.status}`)
           }
           response = await response.json()
+          console.log(
+            '%c' + 'Register',
+            'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+          )
           console.dir(response)
           if (response === false) {
             this.emailInUse = true
           } else {
             const url2 = new URL(
-              '/.netlify/functions/sendEmailWelcome',
+              '/.netlify/functions/sendEmailWelcomeStudent',
               this.$config.baseURL
             )
             fetch(url2, {
@@ -226,9 +230,8 @@ export default {
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ username: response.data.username }),
+              body: JSON.stringify({ email: response.data.username }),
             })
-
             // Complete the login process
             // Use email and password to try for secret
             const res = await this.getUserSecret()
