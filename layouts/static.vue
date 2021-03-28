@@ -3,13 +3,18 @@
     <v-container>
       <v-row>
         <v-col cols="12" class="d-flex justify-space-between">
-          <nuxt-link to="/">
-            <TheLogo />
-          </nuxt-link>
           <div class="d-flex">
-            <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/pricing"
+            <nuxt-link to="/">
+              <TheLogo />
+            </nuxt-link>
+            <v-btn text class="ml-8 d-none d-sm-flex" nuxt to="/pricing"
               >Pricing</v-btn
             >
+            <v-btn text class="ml-2 d-none d-sm-flex" nuxt to="/#how"
+              >How it works</v-btn
+            >
+          </div>
+          <div class="d-flex">
             <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/signup"
               >Join class</v-btn
             >

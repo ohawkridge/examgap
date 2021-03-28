@@ -56,8 +56,8 @@ export default {
   },
   methods: {
     formatCode() {
-      if (this.code.length > 3) {
-        const newStr = this.code.replace('-', '')
+      if (this.code && this.code.length > 3) {
+        const newStr = this.code.replace(/-/g, '')
         this.code = `${newStr.slice(0, 3)}-${newStr.slice(3)}`
       }
     },
@@ -80,8 +80,12 @@ export default {
             throw new Error(`Error joining class ${response.status}`)
           }
           response = await response.json()
-          console.log(`response`, response)
-          // Dispatch getUser action again?
+          // console.log(
+          //   '%c' + 'Data',
+          //   'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+          // )
+          // console.log(response)
+          // Dispatch getUser action again
           this.$store.dispatch('user/getUser')
           this.$snack.showMessage({
             type: 'success',

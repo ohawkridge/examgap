@@ -2,7 +2,7 @@
   <v-row class="justify-center mt-md-3">
     <v-col cols="12" md="10">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
-        <v-card class="pa-md-4">
+        <v-card class="pa-md-3">
           <v-card-title class="d-flex justify-space-between">
             Question
             <v-btn text nuxt :to="`/author/${question.id}`">

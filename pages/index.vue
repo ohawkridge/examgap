@@ -582,6 +582,12 @@ export default {
   padding-top: 4em;
   padding-bottom: 4em;
 }
+@media only screen and (max-width: 600px) {
+  #research {
+    padding-top: 2em;
+    padding-bottom: 2em;
+  }
+}
 
 /* -------- Boards -------- */
 #boards {

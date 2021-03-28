@@ -1,7 +1,7 @@
 <template>
   <v-row class="justify-center mt-md-3">
     <v-col cols="12" md="10">
-      <v-card v-if="!marking" class="pa-md-4">
+      <v-card v-if="!marking" class="pa-md-3">
         <v-card-title class="d-flex justify-space-between">
           Question
           <v-tooltip bottom>
@@ -69,7 +69,7 @@
         </v-card-text>
       </v-card>
       <!-- Marking dialog -->
-      <v-card v-if="marking" class="pa-md-4">
+      <v-card v-if="marking" class="pa-md-3">
         <v-card-title> Self-marking </v-card-title>
         <v-card-text>
           <v-row>

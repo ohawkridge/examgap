@@ -8,26 +8,50 @@
       <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
     </v-container>
     <v-main>
-      <v-container class="fill-height mt-md-n6">
-        <v-row class="d-flex justify-center">
-          <v-col cols="12" sm="10" md="6">
-            <p class="text-h4 text-center font-weight-bold mb-md-8">Sign up</p>
-            <v-form ref="form" @submit.prevent="signup()">
-              <p class="font-weight-bold">Your class</p>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="code"
-                    outlined
-                    :rules="codeRules"
-                    label="Class code*"
-                    placeholder="123-456"
-                    @input="formatCode"
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
-              <p class="font-weight-bold">Your account</p>
+      <v-container class="fill-height mt-md-n15">
+        <v-row v-if="step === 1" class="d-flex justify-center">
+          <v-col cols="12" sm="10" md="5">
+            <p class="text-h4 text-center font-weight-bold">Join class</p>
+            <v-form ref="form1" @submit.prevent="step = 2">
+              <v-text-field
+                v-model="code"
+                outlined
+                :rules="codeRules"
+                label="Class code"
+                placeholder="123-456"
+                autofocus
+                @input="formatCode"
+              >
+              </v-text-field>
+              <v-alert
+                :icon="$icons.mdiInformationOutline"
+                border="left"
+                dense
+                type="info"
+                text
+              >
+                Don't know the code? You can still create your account and join
+                classes later.
+              </v-alert>
+              <v-btn color="primary" block large elevation="0" type="submit"
+                >Next
+                <v-icon right>
+                  {{ $icons.mdiArrowRight }}
+                </v-icon>
+              </v-btn>
+            </v-form>
+          </v-col>
+        </v-row>
+        <v-row v-if="step === 2" class="d-flex justify-center">
+          <v-col cols="12" sm="10" md="5">
+            <div>
+              <v-btn text @click="step = 1">
+                <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
+                Back</v-btn
+              >
+            </div>
+            <p class="text-h4 text-center font-weight-bold">Join class</p>
+            <v-form ref="form2" @submit.prevent="signup()">
               <v-text-field
                 v-model="email"
                 outlined
@@ -100,7 +124,13 @@
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
-import { mdiOpenInNew, mdiAlertOutline } from '@mdi/js'
+import {
+  mdiOpenInNew,
+  mdiAlertOutline,
+  mdiArrowRight,
+  mdiArrowLeft,
+  mdiInformationOutline,
+} from '@mdi/js'
 export default {
   components: {
     TheLogo,
@@ -128,6 +158,7 @@ export default {
       code: '',
       pass1: '',
       pass2: '',
+      step: 1,
     }
   },
   head() {
@@ -144,6 +175,9 @@ export default {
     this.$icons = {
       mdiOpenInNew,
       mdiAlertOutline,
+      mdiArrowRight,
+      mdiArrowLeft,
+      mdiInformationOutline,
     }
   },
   mounted() {
@@ -153,12 +187,12 @@ export default {
   methods: {
     formatCode() {
       if (this.code.length > 3) {
-        const newStr = this.code.replace('-', '')
+        const newStr = this.code.replace(/-/g, '')
         this.code = `${newStr.slice(0, 3)}-${newStr.slice(3)}`
       }
     },
     async signup() {
-      if (this.$refs.form.validate()) {
+      if (this.$refs.form2.validate()) {
         this.loading = true
         try {
           const url = new URL(
@@ -181,20 +215,19 @@ export default {
           if (response === false) {
             this.emailInUse = true
           } else {
-            // TODO Welcome email students
-            // const url2 = new URL(
-            //   '/.netlify/functions/sendEmailWelcome',
-            //   this.$config.baseURL
-            // )
-            // fetch(url2, {
-            //   method: 'POST',
-            //   mode: 'cors',
-            //   credentials: 'same-origin',
-            //   headers: {
-            //     'Content-Type': 'application/json',
-            //   },
-            //   body: JSON.stringify({ username: response.data.username }),
-            // })
+            const url2 = new URL(
+              '/.netlify/functions/sendEmailWelcome',
+              this.$config.baseURL
+            )
+            fetch(url2, {
+              method: 'POST',
+              mode: 'cors',
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ username: response.data.username }),
+            })
 
             // Complete the login process
             // Use email and password to try for secret

@@ -50,10 +50,11 @@
           i == question.responses.length - 1 && question.responses[i].repeat
         "
         :key="i + 1"
+        class="px-0 px-md-3"
         @click="answer(question.id)"
       >
         <v-list-item-content>
-          <v-col cols="12" md="9">
+          <v-col cols="12" md="9" class="pa-0 pa-md-3 mb-2">
             <v-list-item-title>
               {{ question.text | strip }}
             </v-list-item-title>
@@ -70,10 +71,11 @@
     <!-- If no responses, question is unanswered -->
     <v-list-item
       v-if="question.responses.length === 0"
+      class="px-0 px-md-3"
       @click="answer(question.id)"
     >
       <v-list-item-content>
-        <v-col cols="12" md="9">
+        <v-col cols="12" md="9" class="pa-0 pa-md-3 mb-2">
           <v-list-item-title>
             {{ question.text | strip }}
           </v-list-item-title>

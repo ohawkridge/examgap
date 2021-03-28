@@ -82,7 +82,9 @@
                 elevation="0"
                 @click="exportTableToCSV()"
               >
-                <v-icon left>{{ $icons.mdiDownloadOutline }}</v-icon>
+                <v-icon v-if="$vuetify.breakpoint.name !== 'xs'" left>{{
+                  $icons.mdiDownloadOutline
+                }}</v-icon>
                 Csv
               </v-btn>
             </div>

@@ -1,7 +1,7 @@
 <template>
   <v-row class="justify-center">
     <v-col cols="12" sm="9" md="8" lg="7" class="mt-md-3">
-      <v-card class="pa-md-4">
+      <v-card class="pa-md-3">
         <v-card-title> Change password </v-card-title>
         <v-card-text>
           <v-form ref="form">

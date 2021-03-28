@@ -11,7 +11,7 @@
         Show Question
       </v-btn>
     </template>
-    <v-card class="modal pa-md-4">
+    <v-card class="modal pa-md-3">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
         <v-card-title class="d-flex justify-space-between">
           Question

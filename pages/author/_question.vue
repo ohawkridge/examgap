@@ -2,7 +2,7 @@
   <v-row class="d-flex justify-center mt-md-3">
     <v-col cols="12" md="10" lg="9">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
-        <v-card class="pa-md-4">
+        <v-card class="pa-md-3">
           <v-card-title>
             {{ $route.params.question ? 'Edit' : 'Create' }} question
           </v-card-title>

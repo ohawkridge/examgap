@@ -1,7 +1,7 @@
 <template>
   <v-row class="justify-center">
     <v-col cols="12" md="10">
-      <v-card class="pa-md-4 mt-md-3">
+      <v-card class="pa-md-3 mt-md-3">
         <v-card-text>
           <v-row>
             <v-col>

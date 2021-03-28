@@ -4,19 +4,45 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const code = data.code
-  console.log(`Join w/ code: ${code}`)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
   })
   try {
-    const qry = q.Create(
-      q.Ref(q.Collection('GroupStudent'), {
-        data: {
-          student: q.CurrentIdentity(),
-          group: q.Get(q.Match(q.Index('group_by_code'), code)),
-        },
-      })
+    const qry = q.Let(
+      {
+        group: q.Select(
+          'ref',
+          q.Get(q.Match(q.Index('group_by_code'), q.ReplaceStr(code, '-', '')))
+        ),
+      },
+      {
+        res: q.Do(
+          // Create mapping doc in GroupStudent
+          q.Create(q.Collection('GroupStudent'), {
+            data: {
+              student: q.CurrentIdentity(),
+              group: q.Var('group'),
+            },
+          }),
+          // For each existing assignment for group
+          // create mapping in AssignmentStudent
+          q.Foreach(
+            q.Paginate(q.Match(q.Index('group_assignments'), q.Var('group')), {
+              size: 999,
+            }),
+            q.Lambda(
+              'ref',
+              q.Create(q.Collection('AssignmentStudent'), {
+                data: {
+                  assignment: q.Var('ref'),
+                  student: q.CurrentIdentity(),
+                },
+              })
+            )
+          )
+        ),
+      }
     )
     const data = await keyedClient.query(qry)
     console.log(data)

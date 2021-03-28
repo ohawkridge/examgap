@@ -110,7 +110,7 @@
         </v-row>
         <v-divider dark class="py-2 mt-4" />
         <v-row>
-          <v-col class="grey--text">
+          <v-col class="grey--text text-body-2">
             Examgap&mdash;{{ new Date().getFullYear() }}. All rights reserved
           </v-col>
         </v-row>

@@ -10,7 +10,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-card class="pa-md-4">
+        <v-card class="pa-md-3">
           <v-card-title class="d-flex justify-space-between">
             Question
             <div class="d-flex justify-end">

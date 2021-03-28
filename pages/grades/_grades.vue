@@ -93,14 +93,22 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col class="d-flex">
+              <v-col cols="12" class="d-flex justify-center justify-md-start">
+                <v-chip color="green" class="mr-2">On target</v-chip>
+                <v-chip color="orange" class="mr-2">Within 10%</v-chip>
+                <v-chip color="red">&gt;10% below</v-chip>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="d-flex">
                 <v-alert
                   :icon="$icons.mdiInformationOutline"
                   border="left"
+                  dense
                   type="info"
                   text
                 >
-                  To enable colour-coding, enter target grades on the
+                  To enable colour-coding, enter targets on the
                   <nuxt-link :to="`/students/${group ? group.id : ''}`">
                     Students</nuxt-link
                   >
@@ -229,7 +237,7 @@ export default {
       const z = item[key] / x.max
       // Boundary pcnt
       const t = this.rag[item.target]
-      return z >= t ? 'green' : z <= t - 0.2 ? 'red' : 'orange'
+      return z >= t ? 'green' : z <= t - 0.1 ? 'red' : 'orange'
     },
     exportTableToCSV() {
       for (const obj of this.data.headers) {
