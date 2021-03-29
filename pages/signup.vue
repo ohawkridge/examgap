@@ -8,7 +8,7 @@
       <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
     </v-container>
     <v-main>
-      <v-container class="fill-height mt-md-n15">
+      <v-container class="fill-height">
         <v-row v-if="step === 1" class="d-flex justify-center">
           <v-col cols="12" sm="10" md="5">
             <p class="text-h4 text-center font-weight-bold">Join class</p>
@@ -223,7 +223,7 @@ export default {
               '/.netlify/functions/sendEmailWelcomeStudent',
               this.$config.baseURL
             )
-            fetch(url2, {
+            const mailResponse = await fetch(url2, {
               method: 'POST',
               mode: 'cors',
               credentials: 'same-origin',
@@ -232,6 +232,9 @@ export default {
               },
               body: JSON.stringify({ email: response.data.username }),
             })
+            if (!mailResponse.ok) {
+              throw new Error(`Error sending email ${mailResponse.status}`)
+            }
             // Complete the login process
             // Use email and password to try for secret
             const res = await this.getUserSecret()

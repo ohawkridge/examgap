@@ -44,13 +44,13 @@
     </v-container>
     <nuxt />
     <TheStaticFooter />
-    <v-overlay :value="menu" opacity="0.86" @click.native="menu = !menu">
+    <v-overlay :value="menu" opacity="0.86" @click.native="menu = false">
       <v-btn
         v-if="menu"
         id="close"
         outlined
         class="d-flex d-sm-none"
-        @click="menu = !menu"
+        @click="menu = false"
       >
         <v-icon left>{{ $icons.mdiClose }}</v-icon>
         Close
@@ -58,6 +58,7 @@
       <div class="d-flex flex-column">
         <v-btn text large class="mb-6" nuxt to="/">Home</v-btn>
         <v-btn text large class="mb-6" nuxt to="/pricing">Pricing</v-btn>
+        <v-btn text large class="mb-6" nuxt to="/#how">How it works</v-btn>
         <v-btn text large class="mb-6" nuxt to="/signup">Join class</v-btn>
         <v-btn outlined large class="mb-6" nuxt to="/signin">Sign in</v-btn>
         <v-btn large color="primary" elevation="0" nuxt to="/trial"
@@ -85,7 +86,7 @@ export default {
     }
   },
   watch: {
-    $route(to, from) {
+    $route() {
       this.menu = false
     },
   },
