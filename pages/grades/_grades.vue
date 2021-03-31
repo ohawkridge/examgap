@@ -85,7 +85,13 @@
                 >
                   <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
                     <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
-                    <v-chip v-else :key="i" :color="ragX(item)">
+                    <v-chip
+                      v-else
+                      :key="i"
+                      :color="
+                        ragX(item[obj], data.headers[i + 2].max, item.target)
+                      "
+                    >
                       {{ item[obj] }}
                     </v-chip>
                   </template>
@@ -226,18 +232,15 @@ export default {
       clearInterval(this.interval)
       this.interval = false
     },
-    ragX(item) {
-      // Can't rag if target not set or not found
-      if (item.target === '-' || !(item.target in this.rag)) return ''
-      // TODO Is the assignmentId always key 2 in object!?
-      const key = Object.keys(item)[2]
-      // Use assignment id as key into header objects
-      const x = this.data.headers.find((o) => o.value === key)
-      // Pcnt on this assignment
-      const z = item[key] / x.max
-      // Boundary pcnt
-      const t = this.rag[item.target]
-      return z >= t ? 'green' : z <= t - 0.1 ? 'red' : 'orange'
+    ragX(mark, assMax, t) {
+      // console.log(`Got ${mark} out of ${assMax}. Target ${this.rag[t]}`)
+      // Can't rag if target not set or not found in lookup table
+      if (t === '-' || !(t in this.rag)) return ''
+      return mark / assMax >= this.rag[t]
+        ? 'green'
+        : mark / assMax < this.rag[t] - 0.1
+        ? 'red'
+        : 'orange'
     },
     exportTableToCSV() {
       for (const obj of this.data.headers) {
