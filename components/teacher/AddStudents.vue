@@ -102,6 +102,8 @@ export default {
       }
       this.usernames = out
     },
+    // N.B. When you add students like this, they *don't*
+    // automatically get all existing assignments added
     async addStudents() {
       this.loading = true
       // Create new student accounts
@@ -123,11 +125,24 @@ export default {
             throw new Error(`Error adding ${username} ${response.status}`)
           }
           response = await response.json()
-          console.log(
-            '%c' + 'User',
-            'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+          // N.B. If you want to access student here use data.student
+          // Send intro email to student
+          const url2 = new URL(
+            '/.netlify/functions/sendEmailWelcomeStudent',
+            this.$config.baseURL
           )
-          console.log(response)
+          const mailResponse = await fetch(url2, {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: username }),
+          })
+          if (!mailResponse.ok) {
+            throw new Error(`Error sending email ${mailResponse.status}`)
+          }
           // Increment num_students on group in store
           this.$store.commit('groups/incrementStudentCount', this.groupId)
           // Emit event to re-fetch student data in parent
