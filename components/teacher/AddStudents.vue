@@ -123,7 +123,11 @@ export default {
             throw new Error(`Error adding ${username} ${response.status}`)
           }
           response = await response.json()
-          // console.log(response)
+          console.log(
+            '%c' + 'User',
+            'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+          )
+          console.log(response)
           // Increment num_students on group in store
           this.$store.commit('groups/incrementStudentCount', this.groupId)
           // Emit event to re-fetch student data in parent

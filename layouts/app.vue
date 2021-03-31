@@ -104,7 +104,7 @@
       <TheSnackbar />
       <JoinClass v-if="!teacher" />
     </v-main>
-    <TheFooter />
+    <TheFooter v-if="showFooter" />
   </v-app>
 </template>
 
@@ -137,6 +137,20 @@ export default {
       groups: (state) => state.groups.groups,
       tab: (state) => state.groups.tab,
     }),
+    // Hide app footer on pages with bottom-navigation
+    showFooter() {
+      if (
+        (this.$route.name === 'group-group' ||
+          this.$route.name === 'students-students' ||
+          this.$route.name === 'grades-grades' ||
+          this.$route.name === 'edit-edit') &&
+        this.$vuetify.breakpoint.name === 'xs'
+      ) {
+        return false
+      } else {
+        return true
+      }
+    },
   },
   created() {
     this.$icons = {

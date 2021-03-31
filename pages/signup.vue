@@ -244,8 +244,6 @@ export default {
         } catch (e) {
           console.error(e)
         } finally {
-          this.$refs.form1.resetValidation()
-          this.$refs.form2.resetValidation()
           this.loading = false
         }
       }
