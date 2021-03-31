@@ -40,7 +40,7 @@
             </v-row>
             <v-row>
               <v-col id="table" cols="12">
-                <V-skeleton-loader :loading="loading" type="table">
+                <v-skeleton-loader :loading="loading" type="table">
                   <table>
                     <thead>
                       <tr>
@@ -88,7 +88,7 @@
                       </tr>
                     </tbody>
                   </table>
-                </V-skeleton-loader>
+                </v-skeleton-loader>
               </v-col>
             </v-row>
             <v-row>
@@ -220,7 +220,6 @@
                 v-model="feedback"
                 outlined
                 :append-icon="$icons.mdiCommentTextOutline"
-                class="mb-n4"
                 rows="4"
                 auto-grow
                 :messages="feedbackStatus"
