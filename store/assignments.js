@@ -5,6 +5,7 @@ export const state = () => ({
   groupId: '',
   selectedQuestions: [],
   currentTopic: 0,
+  loggingOut: false,
 })
 
 export const mutations = {
@@ -35,6 +36,7 @@ export const mutations = {
     state.selectedQuestions = []
   },
   logout(state) {
+    state.loggingOut = true
     state.assignmentId = ''
     state.questionId = ''
     state.topicId = ''

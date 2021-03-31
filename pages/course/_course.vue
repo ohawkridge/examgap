@@ -181,7 +181,11 @@
                     :included="selectedQuestions.includes(questionId)"
                   />
                 </div>
-                <div v-if="preview" class="pt-2" v-html="preview.text"></div>
+                <div
+                  v-if="preview"
+                  class="pt-2 text-body-2"
+                  v-html="preview.text"
+                ></div>
                 <div v-if="preview" class="d-flex justify-end">
                   <v-chip outlined
                     >{{ preview.maxMark }} mark{{ preview.maxMark | pluralize }}
@@ -256,6 +260,7 @@ export default {
   computed: {
     ...mapState({
       selectedQuestions: (state) => state.assignments.selectedQuestions,
+      loggingOut: (state) => state.assignments.loggingOut,
     }),
     ...mapGetters({ group: 'groups/activeGroup' }),
     // Since selectedQuestion is only an index of v-list of questions
@@ -279,10 +284,9 @@ export default {
     },
   },
   watch: {
-    // Load questions when topic changes
+    // Load questions when topic changes (unless logging out)
     currentTopic() {
-      // Don't load questions if logging out
-      if (this.currentTopic !== 0) {
+      if (!this.loggingOut) {
         this.loadQuestions()
         // Select first question of topic by default
         this.selectedQuestion = 0
