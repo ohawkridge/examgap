@@ -45,7 +45,7 @@ exports.handler = async (event) => {
         Data: 'Your Examgap account',
       },
     },
-    Source: 'support@examgap.com',
+    Source: 'Examgap <support@examgap.com>',
   }
 
   return ses

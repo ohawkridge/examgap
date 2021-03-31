@@ -212,7 +212,7 @@ export default {
           }
           response = await response.json()
           console.log(
-            '%c' + 'Register',
+            '%c' + 'User',
             'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
           )
           console.dir(response)
@@ -244,7 +244,8 @@ export default {
         } catch (e) {
           console.error(e)
         } finally {
-          this.$refs.form.resetValidation()
+          this.$refs.form1.resetValidation()
+          this.$refs.form2.resetValidation()
           this.loading = false
         }
       }
