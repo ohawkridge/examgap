@@ -192,7 +192,7 @@ export default {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                id: response.ref.id,
+                id: response.ref['@ref'].id,
                 username: response.data.username,
                 school: response.data.school,
               }),

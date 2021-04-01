@@ -42,7 +42,7 @@ exports.handler = async (event) => {
         Data: '>> New Signup',
       },
     },
-    Source: 'support@examgap.com',
+    Source: 'System <no-reply@examgap.com>',
   }
 
   return ses

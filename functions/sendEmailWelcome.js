@@ -24,13 +24,16 @@ exports.handler = async (event) => {
           Charset: 'UTF-8',
           Data: `<html>
                   <body>
-                  <p>Hello 👋,</p>
-                  <p>I’m Owen from Examgap. Thanks for registering for a trial—I hope you find our service valuable.</p>
-                  <p>Once you’ve created your first class, you can add students by going to ‘Students’ -> Actions -> Add students.</p>
-                  <p>Alternatively, I’d be happy to set up your classes for you. Simply reply with a list of student email addresses for each class and I’ll add them to your account. The same goes for additional teacher accounts for your department.</p>
+                  <p>Hello there&mdash;I’m Owen.
+                  <p>I created Examgap myself. Thanks for registering&mdash;I hope you find it useful.</p>
+                  <p>-=-=-=-=-=-=-=-=-=-=-=-=</p>
+                  <p>Getting Started</p>
+                  <p>The first thing to do is to create a class. Then you can create an assignment and share the link with your students.</p>
+                  <p>Students can use the link or class code to create their own accounts. Alternatively, I can setup your classes for you. Simply reply to this email with a list of your student's email addresses and I'll take care of it.</p>
+                  <p>-=-=-=-=-=-=-=-=-=-=-=-=</p>
                   <p>Thanks again for your interest.</p>
-                  <p><a href="https://examgap.com/signin">Sign in to Examgap</a></p>
                   <p>—Cheers, Owen</p>
+                  <p><a href="https://examgap.com/signin">Sign in to Examgap</a></p>
                   </body>
               </html>`,
         },
@@ -44,7 +47,7 @@ exports.handler = async (event) => {
         Data: 'Welcome to Examgap',
       },
     },
-    Source: 'support@examgap.com',
+    Source: 'Owen <owen@examgap.com>',
   }
 
   return ses
