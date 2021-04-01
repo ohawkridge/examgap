@@ -9,112 +9,119 @@
     </v-container>
     <v-main>
       <v-container class="fill-height">
-        <v-row v-if="step === 1" class="d-flex justify-center">
+        <v-row class="d-flex justify-center">
           <v-col cols="12" sm="10" md="5">
-            <p class="text-h4 text-center font-weight-bold">Join class</p>
-            <v-form ref="form1" @submit.prevent="step = 2">
-              <v-text-field
-                v-model="code"
-                outlined
-                :rules="codeRules"
-                label="Class code"
-                placeholder="123-456"
-                autofocus
-                @input="formatCode"
+            <v-card id="join" elevation="0">
+              <v-card-title
+                class="text-h5 font-weight-bold d-flex justify-center"
               >
-              </v-text-field>
-              <v-alert
-                :icon="$icons.mdiInformationOutline"
-                border="left"
-                dense
-                type="info"
-                text
-              >
-                No code? You can still create your account and join a class
-                later.
-              </v-alert>
-              <v-btn color="primary" block large elevation="0" type="submit"
-                >Next
-                <v-icon right>
-                  {{ $icons.mdiArrowRight }}
-                </v-icon>
-              </v-btn>
-            </v-form>
-          </v-col>
-        </v-row>
-        <v-row v-if="step === 2" class="d-flex justify-center">
-          <v-col cols="12" sm="10" md="5">
-            <div>
-              <v-btn text @click="step = 1">
-                <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
-                Back</v-btn
-              >
-            </div>
-            <p class="text-h4 text-center font-weight-bold">Join class</p>
-            <v-form ref="form2" @submit.prevent="signup()">
-              <v-text-field
-                v-model="email"
-                outlined
-                :rules="emailRules"
-                label="School email*"
-                placeholder="17bloggsj@yourschool.org.uk"
-                required
-              >
-              </v-text-field>
-              <v-row>
-                <v-col class="pb-0" cols="12" md="6">
-                  <v-text-field
-                    v-model="pass1"
-                    outlined
-                    :rules="passwordRules"
-                    type="password"
-                    label="Create password*"
-                    required
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="pass2"
-                    outlined
-                    :rules="passwordRules"
-                    type="password"
-                    label="Confirm password*"
-                    :error-messages="match"
-                    required
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
-              <small> *Indicates required field </small>
-              <p class="mt-2">
-                By registering you accept our
-                <a href="/terms" target="_blank">terms of service</a>
-                <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
-                >.
-              </p>
-              <v-alert
-                v-if="emailInUse"
-                border="left"
-                text
-                dense
-                type="error"
-                :icon="$icons.mdiAlertOutline"
-              >
-                Email already registered.
-                <nuxt-link to="/signin">Sign in</nuxt-link> instead
-              </v-alert>
-              <v-btn
-                color="primary"
-                block
-                large
-                elevation="0"
-                :loading="loading"
-                :disabled="loading"
-                type="submit"
-                >Sign up</v-btn
-              >
-            </v-form>
+                Join class
+              </v-card-title>
+              <v-window v-model="step">
+                <v-window-item :value="1">
+                  <v-card-text>
+                    <v-text-field
+                      v-model="code"
+                      filled
+                      :rules="codeRules"
+                      label="Class code"
+                      placeholder="123-456"
+                      autofocus
+                      @input="formatCode"
+                    >
+                    </v-text-field>
+                    <v-alert
+                      :icon="$icons.mdiInformationOutline"
+                      border="left"
+                      type="info"
+                      text
+                      class="mb-0"
+                    >
+                      No code? You can still
+                      <a @click="step++">create your account</a>.
+                    </v-alert>
+                  </v-card-text>
+                </v-window-item>
+                <v-window-item :value="2">
+                  <v-card-text>
+                    <v-text-field
+                      v-model="email"
+                      filled
+                      :rules="emailRules"
+                      label="School email*"
+                      placeholder="17bloggsj@yourschool.org.uk"
+                      required
+                    >
+                    </v-text-field>
+                    <v-row>
+                      <v-col class="pb-0" cols="12" md="6">
+                        <v-text-field
+                          v-model="pass1"
+                          filled
+                          :rules="passwordRules"
+                          type="password"
+                          label="Create password*"
+                          required
+                        >
+                        </v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="pass2"
+                          filled
+                          :rules="passwordRules"
+                          type="password"
+                          label="Confirm password*"
+                          :error-messages="match"
+                          required
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <small> *Indicates required field </small>
+                    <p class="mt-2 mb-0">
+                      By registering you accept our
+                      <a href="/terms" target="_blank">terms of service</a>
+                      <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
+                      >.
+                    </p>
+                    <v-alert
+                      v-if="emailInUse"
+                      border="left"
+                      text
+                      dense
+                      type="error"
+                      :icon="$icons.mdiAlertOutline"
+                    >
+                      Email already registered.
+                      <nuxt-link to="/signin">Sign in</nuxt-link> instead
+                    </v-alert>
+                  </v-card-text>
+                </v-window-item>
+              </v-window>
+              <v-card-actions>
+                <v-btn :disabled="step === 1" text @click="step--">
+                  Back
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn
+                  v-if="step === 1"
+                  elevation="0"
+                  color="primary"
+                  @click="step++"
+                >
+                  Next
+                </v-btn>
+                <v-btn
+                  v-if="step === 2"
+                  elevation="0"
+                  color="primary"
+                  @click="signup()"
+                >
+                  Sign up
+                </v-btn>
+              </v-card-actions>
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -124,13 +131,7 @@
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
-import {
-  mdiOpenInNew,
-  mdiAlertOutline,
-  mdiArrowRight,
-  mdiArrowLeft,
-  mdiInformationOutline,
-} from '@mdi/js'
+import { mdiOpenInNew, mdiAlertOutline, mdiInformationOutline } from '@mdi/js'
 export default {
   components: {
     TheLogo,
@@ -175,8 +176,6 @@ export default {
     this.$icons = {
       mdiOpenInNew,
       mdiAlertOutline,
-      mdiArrowRight,
-      mdiArrowLeft,
       mdiInformationOutline,
     }
   },
@@ -269,3 +268,11 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* adjust for app-bar height */
+#join {
+  position: relative;
+  top: -58px;
+}
+</style>
