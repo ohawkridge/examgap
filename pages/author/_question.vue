@@ -15,6 +15,7 @@
               type="number"
               outlined
               min="1"
+              :rules="rules.maxMark"
               persistent-hint
               hint="Maximum mark"
               class="num-field mb-6"
@@ -30,7 +31,7 @@
             <v-text-field
               v-model="question.keywords"
               outlined
-              hint="Separate words with commas or spaces"
+              hint="Separate words with commas"
               persistent-hint
               placeholder="E.g. RAM, instructions, processor"
             ></v-text-field>
@@ -114,6 +115,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import TextEditor from '@/components/teacher/TextEditor'
 import { mdiPlus, mdiMinus } from '@mdi/js'
 
@@ -126,6 +128,9 @@ export default {
     return {
       loading: false,
       topics: [],
+      rules: {
+        maxMark: [(v) => (v && v < 13) || 'Max. 12 marks'],
+      },
       // Default values for new question
       question: {
         id: '',
@@ -148,7 +153,7 @@ export default {
       )
       const response = await fetch(url, {
         body: JSON.stringify({
-          secret: this.$store.state.user.secret,
+          secret: this.secret,
         }),
         method: 'POST',
       })
@@ -172,7 +177,7 @@ export default {
         )
         const response = await fetch(url, {
           body: JSON.stringify({
-            secret: this.$store.state.user.secret,
+            secret: this.secret,
             questionId: this.$route.params.question,
           }),
           method: 'POST',
@@ -181,10 +186,6 @@ export default {
           throw new Error(`Error fetching question ${response.status}`)
         }
         this.question = await response.json()
-        // Turn keywords array, if it exists, into a string
-        if (Array.isArray(this.question.keywords)) {
-          this.question.keywords = this.question.keywords.join(', ')
-        }
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
@@ -203,6 +204,9 @@ export default {
     editing() {
       return this.$route.params.question !== undefined
     },
+    ...mapState({
+      secret: (state) => state.user.secret,
+    }),
   },
   created() {
     this.$icons = {
@@ -236,17 +240,9 @@ export default {
           '/.netlify/functions/saveQuestion',
           this.$config.baseURL
         )
-        // Turn list of keywords back into an array
-        // (Makes things easier on answer.vue)
-        if (this.question.keywords !== '') {
-          this.question.keywords
-            .split(',')
-            .map((word) => word.trim())
-            .filter((e) => e !== '')
-        }
         let response = await fetch(url, {
           body: JSON.stringify({
-            secret: this.$store.state.user.secret,
+            secret: this.secret,
             edit: this.editing,
             question: this.question,
           }),
@@ -256,12 +252,16 @@ export default {
           throw new Error(`Error saving question ${response.status}`)
         }
         response = await response.json()
-        console.log(response)
+        // console.log(
+        //   '%c' + 'Question',
+        //   'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+        // )
+        // console.log(response)
         this.$snack.showMessage({
           type: 'success',
           msg: `Question ${this.editing ? 'saved' : 'created'}`,
         })
-        this.$router.push(`/question/${response.ref['@ref'].id}`)
+        this.$router.push(`/question/${response.id}`)
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
