@@ -81,11 +81,6 @@ export default {
             throw new Error(`Error creating class ${response.status}`)
           }
           const data = await response.json()
-          console.log(
-            '%c' + 'Group',
-            'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
-          )
-          console.log(data)
           this.$store.commit('groups/addGroup', data)
           this.$snack.showMessage({
             type: 'success',
