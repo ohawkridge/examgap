@@ -7,7 +7,11 @@
             <v-btn :value="true" class="rounded"> Classes </v-btn>
             <v-btn :value="false" class="rounded"> Archive </v-btn>
           </v-btn-toggle>
-          <v-btn color="primary" text @click="$nuxt.$emit('show-create')">
+          <v-btn
+            color="primary"
+            elevation="0"
+            @click="$nuxt.$emit('show-create')"
+          >
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
             {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
           </v-btn>
@@ -42,6 +46,69 @@
       </v-col>
     </v-row>
     <CreateClass />
+    <!-- Onboarding tips -->
+    <v-snackbar
+      v-if="groups.length === 0"
+      v-model="snackbar"
+      :vertical="true"
+      timeout="-1"
+    >
+      To get started, create a class.
+      <template #action="{ attrs }">
+        <v-btn
+          color="accent"
+          text
+          class="upper mr-2"
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+        <v-btn
+          color="accent"
+          text
+          class="upper"
+          v-bind="attrs"
+          @click="
+            $nuxt.$emit('show-create')
+            snackbar = false
+          "
+        >
+          Show me how
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-snackbar
+      v-if="groups.length === 1"
+      v-model="snackbar"
+      :vertical="true"
+      timeout="-1"
+    >
+      Click on ? to create an assignment.
+      <template #action="{ attrs }">
+        <v-btn
+          color="accent"
+          text
+          class="upper mr-2"
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+        <v-btn
+          color="accent"
+          text
+          class="upper"
+          v-bind="attrs"
+          @click="
+            $nuxt.$emit('show-create')
+            snackbar = false
+          "
+        >
+          Show me
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -57,6 +124,11 @@ export default {
     CreateClass,
   },
   layout: 'app',
+  data() {
+    return {
+      snackbar: true,
+    }
+  },
   head() {
     return {
       title: 'Home',
@@ -87,5 +159,9 @@ export default {
 #create-card {
   background: #f1eeee !important;
   border: 1px dashed #0078a0 !important;
+}
+
+.upper {
+  text-transform: uppercase !important;
 }
 </style>
