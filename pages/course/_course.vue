@@ -68,8 +68,9 @@
                   >
                     <v-list-item-group v-model="currentTopic" color="primary">
                       <v-list-item
-                        v-for="topic in topics"
-                        :key="topic.id"
+                        v-for="(topic, i) in topics"
+                        :key="i"
+                        :class="onboard && i === 1 ? 'point-out' : ''"
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
                       >
@@ -198,11 +199,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <onboarding-snackbar
-      n="4"
-      text="Change topics to view questions."
-      evt="change-topic"
-    />
+    <onboarding-snackbar n="4" text="Change topic to view more questions." />
   </div>
 </template>
 
@@ -232,6 +229,7 @@ export default {
       question: {},
       selectedQuestion: 0, // questions list v-model
       loading: false,
+      onboard: true,
     }
   },
   async fetch() {
@@ -267,7 +265,6 @@ export default {
   computed: {
     ...mapState({
       selectedQuestions: (state) => state.assignments.selectedQuestions,
-      loggingOut: (state) => state.assignments.loggingOut,
     }),
     ...mapGetters({ group: 'groups/activeGroup' }),
     // Since selectedQuestion is only an index of v-list of questions
@@ -291,9 +288,10 @@ export default {
     },
   },
   watch: {
-    // Load questions when topic changes (unless logging out)
+    // Load questions when topic changes
+    // TODO Can cause errors on logout
     currentTopic() {
-      if (!this.loggingOut) {
+      if (this.group) {
         this.loadQuestions()
         // Select first question of topic by default
         this.selectedQuestion = 0
@@ -309,13 +307,8 @@ export default {
     }
   },
   mounted() {
-    // Add/remove questions from QuestionDetailDialog
-    this.$nuxt.$on('add-rem', (questionId) => {
-      this.select(questionId)
-    })
-    // Onboarding action
-    this.$nuxt.$on('change-topic', () => {
-      this.currentTopic = Math.floor(Math.random() * this.topics.length) + 1
+    this.$nuxt.$on('close', () => {
+      this.onboard = false
     })
   },
   methods: {

@@ -169,7 +169,7 @@
           </v-row> -->
         <v-card-actions>
           <v-btn
-            v-if="group.num_students > 0"
+            v-if="group && group.num_students > 0"
             :disabled="step === 1"
             text
             @click="step--"
