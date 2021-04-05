@@ -86,6 +86,12 @@
                           />
                         </td>
                       </tr>
+                      <tr v-if="data.students.length === 0">
+                        <td class="text-center" :colspan="data.headers.length">
+                          <p class="text-body-2 mt-4">No students yet</p>
+                          <p>col: {{ data.headers.length }}</p>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </v-skeleton-loader>

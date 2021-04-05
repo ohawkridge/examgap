@@ -65,10 +65,9 @@
         </v-col>
       </template>
       <p v-if="usernames.length === 0" class="text-center mt-3">
-        No students added yet. Go to the <b>'Students'</b> screen and click
-        'Actions'
-        <v-icon small>{{ $icons.mdiArrowRight }}</v-icon>
-        'Add students'.
+        No students yet. Go to the
+        <nuxt-link :to="`/students/${group.id}`">Students</nuxt-link> screen and
+        click Students, Add students&hellip;
       </p>
     </v-row>
   </div>
@@ -76,7 +75,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { mdiArrowRight, mdiInformationOutline } from '@mdi/js'
+import { mdiInformationOutline } from '@mdi/js'
 
 export default {
   layout: 'print',
@@ -106,7 +105,6 @@ export default {
   },
   created() {
     this.$icons = {
-      mdiArrowRight,
       mdiInformationOutline,
     }
   },

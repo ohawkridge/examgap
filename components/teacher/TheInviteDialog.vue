@@ -46,7 +46,8 @@
         <p class="mb-0">
           On the
           <nuxt-link :to="`/students/${group.id}`">Students</nuxt-link>
-          screen, click Add students. Enter a list of student email addresses.
+          screen, click Students, Add students&hellip; Enter a list of student
+          email addresses.
         </p>
       </v-card-text>
       <v-card-actions>
@@ -105,6 +106,11 @@ export default {
       mdiFullscreen,
       mdiContentCopy,
     }
+  },
+  mounted() {
+    this.$nuxt.$on('open-invite', () => {
+      this.dialog = true
+    })
   },
   methods: {
     async copy() {

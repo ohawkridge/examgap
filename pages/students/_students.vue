@@ -41,12 +41,12 @@
                       }}</v-list-item-title
                     >
                   </v-list-item>
-                  <v-list-item @click="send('open-add')">
+                  <v-list-item @click="$nuxt.$emit('open-add')">
                     <v-list-item-title>Add students</v-list-item-title>
                   </v-list-item>
                   <v-list-item
                     :disabled="selected.length === 0"
-                    @click="send('open-copy')"
+                    @click="$nuxt.$emit('open-copy')"
                   >
                     <v-list-item-title
                       >Copy student{{
@@ -56,7 +56,7 @@
                   </v-list-item>
                   <v-list-item
                     :disabled="selected.length === 0"
-                    @click="send('open-remove')"
+                    @click="$nuxt.$emit('open-remove')"
                   >
                     <v-list-item-title
                       >Remove student{{
@@ -112,10 +112,9 @@
                       <v-btn
                         color="primary"
                         elevation="0"
-                        @click="send('open-add')"
+                        @click="$nuxt.$emit('open-invite')"
                       >
-                        <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                        Add students</v-btn
+                        Invite students</v-btn
                       >
                     </p>
                   </template>
@@ -278,10 +277,6 @@ export default {
           msg: 'Error saving target',
         })
       }
-    },
-    // Send an event to open a dialog (e.g., add students)
-    send(evtStr) {
-      this.$nuxt.$emit(evtStr)
     },
     async reset() {
       try {

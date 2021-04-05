@@ -88,6 +88,7 @@
                     <v-chip
                       v-else
                       :key="i"
+                      class="font-weight-black"
                       :color="
                         ragX(item[obj], data.headers[i + 2].max, item.target)
                       "
@@ -289,12 +290,5 @@ export default {
 /* center all cells except username */
 td:not(:first-child) {
   text-align: center;
-}
-
-/* bold active chip text */
-span.v-chip.theme--light.red,
-span.v-chip.theme--light.orange,
-span.v-chip.theme--light.green {
-  font-weight: 900;
 }
 </style>
