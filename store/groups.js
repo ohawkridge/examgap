@@ -47,7 +47,7 @@ export const actions = {
       }
     }
   },
-  async archiveGroup({ commit, rootState, state }) {
+  async archiveGroup({ commit, rootState, getters }) {
     try {
       const url = new URL(
         '/.netlify/functions/archiveClass',
@@ -56,7 +56,7 @@ export const actions = {
       const response = await fetch(url, {
         body: JSON.stringify({
           secret: rootState.user.secret,
-          groupId: state.group.id,
+          groupId: getters.activeGroup.id,
         }),
         method: 'POST',
       })
@@ -64,7 +64,7 @@ export const actions = {
         throw new Error(`Error archiving class ${response.status}`)
       }
       // Update local data
-      commit('setArchived', state.group.id)
+      commit('setArchived')
     } catch (e) {
       console.error(`Error archiving group`, e)
     }
@@ -115,12 +115,8 @@ export const mutations = {
       }
     }
   },
-  setArchived(state, groupId) {
-    for (let i = 0; i < state.groups.length; i++) {
-      if (state.groups[i].id === groupId) {
-        state.groups[i].active = false
-      }
-    }
+  setArchived(state) {
+    state.groups[state.activeGroupIndex].active = false
   },
   updateGroupName(state, { id, name }) {
     for (let i = 0; i < state.groups.length; i++) {

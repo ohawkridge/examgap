@@ -15,7 +15,13 @@
       <v-card-actions>
         <v-spacer />
         <v-btn text @click="dialog = false"> Cancel </v-btn>
-        <v-btn color="error" elevation="0" @click="archive()">
+        <v-btn
+          color="red"
+          :loading="loading"
+          :disabled="disabled"
+          elevation="0"
+          @click="archive()"
+        >
           <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
           Archive class
         </v-btn>
@@ -37,6 +43,7 @@ export default {
   data() {
     return {
       dialog: false,
+      loading: false,
     }
   },
   created() {
@@ -46,12 +53,24 @@ export default {
   },
   methods: {
     archive() {
-      this.$store.dispatch('groups/archiveGroup')
-      this.$snack.showMessage({
-        type: 'success',
-        msg: 'Class archived',
-      })
-      this.$router.push('/classes')
+      this.loading = true
+      try {
+        this.$store.dispatch('groups/archiveGroup')
+        this.$snack.showMessage({
+          type: 'success',
+          msg: 'Class archived',
+        })
+        this.$router.push('/classes')
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: `Error archiving class`,
+        })
+      } finally {
+        this.dialog = false
+        this.loading = false
+      }
     },
   },
 }
