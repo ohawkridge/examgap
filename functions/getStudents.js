@@ -58,17 +58,17 @@ exports.handler = async (event, context, callback) => {
                 [],
                 q.Let(
                   {
+                    // Get all responses for all questions by this student
                     responses: q.Paginate(
                       q.Match(
                         q.Index('student_responses_by_group'),
-                        q.Select(['ref'], q.Var('instance')),
-                        q.Ref(q.Collection('Group'), groupId)
-                      )
+                        q.Select('ref', q.Var('instance')), // Student
+                        q.Ref(q.Collection('Group'), groupId) // Group
+                      ),
+                      { size: 999 }
                     ),
-                  },
-                  {
-                    // Count responses filtered where this is/is not an assignment ref
-                    assignment: q.Select(
+                    // Count responses for *assignments*
+                    ass_count: q.Select(
                       ['data', 0],
                       q.Count(
                         q.Filter(
@@ -81,32 +81,21 @@ exports.handler = async (event, context, callback) => {
                                   ['data', 'assignment'],
                                   q.Get(q.Var('ref'))
                                 ),
-                                '' // Independent revision questions have no assignment
+                                '' // Empty for ndependent revision
                               )
                             )
                           )
                         )
                       )
                     ),
-                    revision: q.Select(
-                      ['data', 0],
-                      q.Count(
-                        q.Filter(
-                          q.Var('responses'),
-                          q.Lambda(
-                            'ref',
-                            q.Equals(
-                              q.Select(
-                                ['data', 'assignment'],
-                                q.Get(q.Var('ref'))
-                              ),
-                              ''
-                            )
-                          )
-                        )
-                      )
+                  },
+                  {
+                    assignment: q.Var('ass_count'),
+                    // Calculate responses for *revision*
+                    revision: q.Subtract(
+                      q.Select(['data', 0], q.Count(q.Var('responses'))),
+                      q.Var('ass_count')
                     ),
-                    // q.Var('responses') is a Page of all the student's responses
                     average: q.Format(
                       '%.0f',
                       q.Multiply(
@@ -236,8 +225,8 @@ exports.handler = async (event, context, callback) => {
   }
 }
 
-// GroupStudents is unsorted
-// ∴ sort by username descending
+// Sort by username descending
+// N.B. Can't be done out of db as GroupStudent docs are unsorted
 function compare(a, b) {
   if (a.username < b.username) {
     return -1

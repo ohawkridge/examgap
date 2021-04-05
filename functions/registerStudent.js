@@ -20,6 +20,7 @@ exports.handler = async (event, context, callback) => {
           username: q.LowerCase(username),
           created: q.Now(),
           teacher: false,
+          examMode: true,
         },
         credentials: {
           password,

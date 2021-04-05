@@ -9,7 +9,10 @@
         />
       </v-col>
       <v-col cols="12" md="9">
-        <v-card v-if="group.course" class="mt-n6 mt-sm-0">
+        <v-card
+          v-if="group !== undefined && group.course"
+          class="mt-n6 mt-sm-0"
+        >
           <v-card-title class="d-flex justify-space-between">
             Student{{ students.length | pluralize }} ({{ students.length }})
             <div>
@@ -93,7 +96,6 @@
             <v-row>
               <v-col cols="12">
                 <v-data-table
-                  ref="table"
                   v-model="selected"
                   :headers="headers"
                   :items="students"
@@ -119,6 +121,7 @@
                   </template>
                   <template #[`item.target`]="props">
                     <v-edit-dialog
+                      v-if="group"
                       :return-value.sync="props.item.target[`${group.id}`]"
                       large
                       @save="save(props.item)"
@@ -128,7 +131,7 @@
                       <template #input>
                         <v-text-field
                           v-model="props.item.target[`${group.id}`]"
-                          :rules="[max1char]"
+                          :rules="targetRules"
                           label="Edit target"
                           single-line
                         ></v-text-field>
@@ -169,7 +172,7 @@ export default {
       students: [],
       selected: [],
       removeModal: false,
-      max1char: (v) => v.length === 1 || 'Target must be one character',
+      targetRules: [(v) => v.length === 1 || 'Target must be one character'],
       headers: [
         {
           text: 'Username',
@@ -183,7 +186,7 @@ export default {
         },
         { text: 'Revision Questions', align: 'center', value: 'data.revision' },
         {
-          text: 'Average Score (%)',
+          text: 'Average (%)',
           align: 'center',
           value: 'data.average',
         },
