@@ -13,8 +13,8 @@
         Delete assignment?
       </v-card-title>
       <v-card-text>
-        Are you sure? This ssignment and all the responses that go with it will
-        be deleted. This action cannot be undone.
+        Are you sure? This assignment and all the responses that go with it will
+        be deleted. This action <em>cannot</em> be undone.
       </v-card-text>
       <v-card-actions>
         <v-spacer />

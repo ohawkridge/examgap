@@ -9,7 +9,8 @@
       </v-card-title>
       <v-card-text>
         Are you sure? Archived classes are moved to the
-        <span class="font-weight-medium">ARCHIVE</span> tab on the home page.
+        <span class="font-weight-medium">Archive</span> section on the home
+        page.
       </v-card-text>
       <v-card-actions>
         <v-spacer />
