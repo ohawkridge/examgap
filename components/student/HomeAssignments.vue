@@ -12,6 +12,7 @@
       v-for="(assignment, i) in assignments"
       v-else
       :key="i"
+      class="px-0 px-md-3"
       nuxt
       :to="`/assignment/${assignment.id}`"
     >

@@ -20,7 +20,7 @@
             <span class="font-weight-medium">{{ greeting.country }}.</span>
           </v-card-text>
         </v-card> </v-menu
-      >{{ greeting.text }}, {{ username }}
+      >{{ greeting.text }}, {{ shortName }}
     </v-card-title>
     <v-card-text class="text-body-2">
       <p class="text-subtitle-1">Quote of the day</p>
@@ -69,6 +69,11 @@ export default {
         { country: 'Zulu', text: 'Ngiyakwemukela' },
       ]
       return greetings[Math.floor(Math.random() * greetings.length)]
+    },
+    shortName() {
+      return this.username.includes('@')
+        ? this.username.substring(0, this.username.indexOf('@'))
+        : this.username
     },
   },
   created() {

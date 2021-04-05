@@ -42,7 +42,7 @@
                       v-for="(topic, i) in topics"
                       :key="i"
                       :title="`Revise ${topic.name}`"
-                      class="rev-item"
+                      class="px-0 px-md-3"
                       :disabled="topic.count === 0"
                       @click="revise(topic)"
                     >
