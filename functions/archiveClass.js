@@ -4,8 +4,6 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const groupId = data.groupId
-  console.log(`♦︎ secret`, data.secret)
-  console.log(`♦︎ groupId`, groupId)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
