@@ -1,11 +1,115 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" width="800" transition="scroll-x-transition">
-      <v-card>
+    <v-dialog v-model="dialog" width="700" transition="scroll-x-transition">
+      <v-card class="pa-md-3">
         <v-card-title class="d-flex justify-center">
           Create assignment
         </v-card-title>
-        <v-card-text>
+        <v-card-subtitle class="mt-0"> {{ subtitle }} </v-card-subtitle>
+        <v-window v-model="step">
+          <v-window-item :value="1">
+            <v-row>
+              <v-col cols="12">
+                <v-checkbox v-model="selectAll" class="mb-n3">
+                  <template #label>
+                    <strong>Select all</strong>
+                  </template>
+                </v-checkbox>
+              </v-col>
+            </v-row>
+          </v-window-item>
+          <v-window-item :value="2">
+            <v-card-text>
+              <v-form ref="form">
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="name"
+                      label="Assignment name*"
+                      required
+                      :rules="nameRules"
+                      outlined
+                      @focus="$event.target.select()"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" md="6" class="pb-0">
+                    <v-menu
+                      v-model="menu"
+                      min-width="290px"
+                      offset-y
+                      transition="scale-transition"
+                    >
+                      <template #activator="{ on }">
+                        <v-text-field
+                          v-model="startDate"
+                          label="Start date*"
+                          :append-icon="$icons.mdiCalendarOutline"
+                          placeholder="YYYY-MM-DD"
+                          :rules="startDateRules"
+                          outlined
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="startDate"
+                        color="primary"
+                        :min="new Date().toISOString().substr(0, 10)"
+                        no-title
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                  <v-col cols="12" md="6" class="pb-0">
+                    <v-menu
+                      v-model="menu2"
+                      min-width="290px"
+                      offset-y
+                      transition="scale-transition"
+                    >
+                      <template #activator="{ on }">
+                        <v-text-field
+                          v-model="endDate"
+                          label="End date*"
+                          outlined
+                          :append-icon="$icons.mdiCalendarOutline"
+                          placeholder="YYYY-MM-DD"
+                          :rules="endDateRules"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="endDate"
+                        color="primary"
+                        :min="startDate"
+                        no-title
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    class="d-flex justify-space-between align-center"
+                  >
+                    <small>*Indicates required field</small>
+                    <div>
+                      <v-chip outlined class="mr-1 ml-1" @click="setStart(0)">
+                        Today
+                      </v-chip>
+                      <v-chip outlined class="mr-1" @click="setStart(7)">
+                        1 week
+                      </v-chip>
+                      <v-chip outlined @click="setStart(14)"> 2 weeks </v-chip>
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-card-text>
+          </v-window-item>
+        </v-window>
+
+        <!-- <v-card-text>
           <v-row v-if="students.length > 0">
             <v-col cols="12">
               <p class="text-body-1">Select students for this assignment</p>
@@ -62,173 +166,46 @@
                 students when answering questions
               </v-alert>
             </v-col>
-          </v-row>
-          <!-- No students -->
-          <v-row v-else>
-            <v-col cols="12">
-              <v-alert
-                border="left"
-                text
-                class="mb-0"
-                type="info"
-                :icon="$icons.mdiInformationOutline"
-              >
-                <p class="mb-0">
-                  No students added yet. Go to the '<nuxt-link
-                    :to="`/students/${groupId}`"
-                    ><b>Students</b></nuxt-link
-                  >'' screen and click 'Actions'
-                  <v-icon small color="primary">{{
-                    $icons.mdiArrowRight
-                  }}</v-icon>
-                  'Add students'.
-                </p>
-              </v-alert>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" class="d-flex justify-end">
-              <v-btn text @click="dialog = false">Cancel</v-btn>
-              <v-btn
-                color="primary"
-                :disabled="students.length === 0"
-                elevation="0"
-                class="ml-2"
-                width="80"
-                @click="next()"
-                >Next</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <!-- Assignment name & date -->
-    <v-dialog v-model="dialog2" width="800" transition="scroll-x-transition">
-      <v-card>
-        <v-card-title class="d-flex justify-center">
-          Create assignment
-        </v-card-title>
-        <v-card-text>
-          <v-form ref="form" v-model="valid">
-            <v-row>
-              <v-col cols="12">
-                <p class="text-body-1">
-                  Name your assignment and set start/end dates
-                </p>
-                <v-text-field
-                  v-model="name"
-                  label="Assignment name*"
-                  required
-                  :rules="[rules.required]"
-                  outlined
-                  @focus="$event.target.select()"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="6" class="pb-0">
-                <v-menu
-                  v-model="menu"
-                  min-width="290px"
-                  offset-y
-                  transition="scale-transition"
-                >
-                  <template #activator="{ on }">
-                    <v-text-field
-                      v-model="startDate"
-                      label="Start date*"
-                      :append-icon="$icons.mdiCalendarMonthOutline"
-                      placeholder="YYYY-MM-DD"
-                      :rules="[rules.required]"
-                      outlined
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="startDate"
-                    color="primary"
-                    :min="new Date().toISOString().substr(0, 10)"
-                    no-title
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="12" md="6" class="pb-0">
-                <v-menu
-                  v-model="menu2"
-                  min-width="290px"
-                  offset-y
-                  transition="scale-transition"
-                >
-                  <template #activator="{ on }">
-                    <v-text-field
-                      v-model="endDate"
-                      label="End date*"
-                      outlined
-                      :append-icon="$icons.mdiCalendarMonthOutline"
-                      placeholder="YYYY-MM-DD"
-                      :rules="[rules.required, rules.date]"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="endDate"
-                    color="primary"
-                    :min="new Date().toISOString().substr(0, 10)"
-                    no-title
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-                class="d-flex justify-space-between align-center pt-0"
-              >
-                <small>*Indicates required field</small>
-                <div>
-                  <v-chip outlined class="mr-1 ml-1" @click="setStart(0)">
-                    Today
-                  </v-chip>
-                  <v-chip outlined class="mr-1" @click="setStart(7)">
-                    1 week
-                  </v-chip>
-                  <v-chip outlined @click="setStart(14)"> 2 weeks </v-chip>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" class="d-flex justify-end">
-                <v-btn
-                  text
-                  @click="
-                    dialog2 = false
-                    dialog = true
-                  "
-                  >Back</v-btn
-                >
-                <v-btn
-                  color="primary"
-                  elevation="0"
-                  class="ml-2"
-                  :loading="loading"
-                  :disabled="loading"
-                  @click="create()"
-                  >Create assignment</v-btn
-                >
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-card-text>
+          </v-row> -->
+        <v-card-actions>
+          <v-btn
+            v-if="group.num_students > 0"
+            :disabled="step === 1"
+            text
+            @click="step--"
+          >
+            Back
+          </v-btn>
+          <v-btn v-else text @click="dialog = false"> Cancel </v-btn>
+          <v-spacer />
+          <v-btn
+            v-if="step === 1"
+            elevation="0"
+            color="primary"
+            @click="step++"
+          >
+            Next
+          </v-btn>
+          <v-btn
+            v-if="step === 2"
+            elevation="0"
+            :loading="loading"
+            :disabled="loading"
+            color="primary"
+            @click="create()"
+          >
+            Create assignment
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import {
-  mdiCalendarMonthOutline,
+  mdiCalendarOutline,
   mdiInformationOutline,
   mdiArrowRight,
 } from '@mdi/js'
@@ -242,8 +219,8 @@ export default {
   },
   data() {
     return {
+      step: 1,
       dialog: false,
-      dialog2: false,
       valid: true,
       loading: false,
       students: [],
@@ -253,12 +230,19 @@ export default {
       endDate: new Date().toISOString().substr(0, 10),
       menu: null,
       menu2: false,
-      rules: {
-        required: (value) => !!value || 'This field is required.',
-        date: (date) =>
-          !(date < new Date().toISOString().substr(0, 10)) ||
-          'End date cannot be in the past.',
-      },
+      nameRules: [(v) => !!v || 'Assignment name is required'],
+      startDateRules: [
+        (d) =>
+          d >= new Date().toISOString().substr(0, 10) ||
+          'Start date cannot be in the past',
+      ],
+      endDateRules: [
+        (d) => !!d || 'Date is required',
+        (d) =>
+          d >= new Date().toISOString().substr(0, 10) ||
+          'End date cannot be in the past',
+        (d) => d >= this.startDate || 'End date must be after start date',
+      ],
     }
   },
   async fetch() {
@@ -271,7 +255,7 @@ export default {
       const response = await fetch(url, {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
-          groupId: this.groupId,
+          groupId: this.group.id,
           namesOnly: true,
         }),
         method: 'POST',
@@ -285,9 +269,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      groupId: (state) => state.assignments.groupId,
-    }),
+    ...mapGetters({ group: 'groups/activeGroup' }),
     selectAll: {
       get() {
         return (
@@ -304,6 +286,11 @@ export default {
         }
       },
     },
+    subtitle() {
+      return this.step === 1
+        ? 'Select students for this assignment.'
+        : 'Name your assignment and set start/end dates.'
+    },
   },
   watch: {
     // If fetch hasn't loaded students (e.g. page refreshed) try and load them
@@ -315,7 +302,7 @@ export default {
   },
   created() {
     this.$icons = {
-      mdiCalendarMonthOutline,
+      mdiCalendarOutline,
       mdiInformationOutline,
       mdiArrowRight,
     }
@@ -325,6 +312,8 @@ export default {
       this.selectAll = true // Select all by default
       this.dialog = true
     })
+    // If group has no students, skip step 1
+    if (this.group.num_students === 0) this.step = 2
   },
   methods: {
     // Default assignment name like "Week X Assignment"
@@ -378,7 +367,7 @@ export default {
       }
     },
     async create() {
-      if (this.$refs.form.validate() && this.selectedStudents.length > 0) {
+      if (this.$refs.form.validate()) {
         try {
           this.loading = true
           const url = new URL(
@@ -391,7 +380,7 @@ export default {
               name: this.name,
               start: this.startDate,
               end: this.endDate,
-              group: this.groupId, // From store
+              group: this.group.id,
               students: this.selectedStudents,
               questions: this.questions,
             }),
@@ -401,7 +390,7 @@ export default {
             throw new Error(`Error creating assignment ${response.status}`)
           }
           response = await response.json()
-          // console.dir(response)
+          console.dir(response)
           // Clear any previously selected questions
           this.$store.commit('assignments/clearSelectedQuestions')
           // Update local data

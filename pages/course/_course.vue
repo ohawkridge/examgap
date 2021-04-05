@@ -198,6 +198,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <onboarding-snackbar
+      n="4"
+      text="Change topics to view questions."
+      evt="change-topic"
+    />
   </div>
 </template>
 
@@ -211,11 +216,13 @@ import {
 } from '@mdi/js'
 import CreateAssignment from '@/components/teacher/CreateAssignment'
 import QuestionDetailDialog from '@/components/teacher/QuestionDetailDialog'
+import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
 
 export default {
   components: {
     CreateAssignment,
     QuestionDetailDialog,
+    OnboardingSnackbar,
   },
   layout: 'app',
   data() {
@@ -302,9 +309,13 @@ export default {
     }
   },
   mounted() {
-    // Listen for event from detail dialog
+    // Add/remove questions from QuestionDetailDialog
     this.$nuxt.$on('add-rem', (questionId) => {
       this.select(questionId)
+    })
+    // Onboarding action
+    this.$nuxt.$on('change-topic', () => {
+      this.currentTopic = Math.floor(Math.random() * this.topics.length) + 1
     })
   },
   methods: {

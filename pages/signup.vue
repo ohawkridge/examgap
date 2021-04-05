@@ -22,7 +22,7 @@
                   <v-card-text>
                     <v-text-field
                       v-model="code"
-                      filled
+                      outlined
                       :rules="codeRules"
                       label="Class code"
                       placeholder="123-456"
@@ -46,7 +46,7 @@
                   <v-card-text>
                     <v-text-field
                       v-model="email"
-                      filled
+                      outlined
                       :rules="emailRules"
                       label="School email*"
                       placeholder="17bloggsj@yourschool.org.uk"
@@ -57,7 +57,7 @@
                       <v-col class="pb-0" cols="12" md="6">
                         <v-text-field
                           v-model="pass1"
-                          filled
+                          outlined
                           :rules="passwordRules"
                           type="password"
                           label="Create password*"
@@ -68,7 +68,7 @@
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="pass2"
-                          filled
+                          outlined
                           :rules="passwordRules"
                           type="password"
                           label="Confirm password*"

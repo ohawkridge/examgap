@@ -111,6 +111,10 @@ export default {
           courseId: this.courseId,
           groupName: this.name,
         })
+        this.$snack.showMessage({
+          type: 'success',
+          msg: 'Changes saved',
+        })
       } catch (e) {
         console.error('Error dispatching updateGroup')
       } finally {

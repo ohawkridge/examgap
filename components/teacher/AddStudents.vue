@@ -167,5 +167,6 @@ export default {
 <style scoped>
 #apply {
   margin-top: -7px;
+  margin-right: -2px;
 }
 </style>

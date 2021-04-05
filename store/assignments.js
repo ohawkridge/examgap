@@ -2,7 +2,6 @@ export const state = () => ({
   assignmentId: '',
   questionId: '',
   topicId: '',
-  groupId: '',
   selectedQuestions: [],
   currentTopic: 0,
   loggingOut: false,
@@ -15,9 +14,6 @@ export const mutations = {
   },
   setCurrentTopicId(state, topicId) {
     state.topicId = topicId
-  },
-  setGroup(state, groupId) {
-    state.groupId = groupId
   },
   setCurrentTopic(state, index) {
     state.currentTopic = index

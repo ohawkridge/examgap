@@ -1,9 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="440">
     <template #activator="{ on, attrs }">
-      <v-btn outlined color="primary" v-bind="attrs" v-on="on">
-        Archive class
-      </v-btn>
+      <v-btn text v-bind="attrs" v-on="on"> Archive class </v-btn>
     </template>
     <v-card class="modal danger">
       <v-card-title class="d-flex justify-center">

@@ -9,7 +9,7 @@
         />
       </v-col>
       <v-col cols="12" md="9">
-        <v-card v-if="group.course" rounded="lg" class="mt-n6 mt-sm-0">
+        <v-card v-if="group.course" class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
             Student{{ students.length | pluralize }} ({{ students.length }})
             <div>
@@ -112,6 +112,7 @@
                         elevation="0"
                         @click="send('open-add')"
                       >
+                        <v-icon left>{{ $icons.mdiPlus }}</v-icon>
                         Add students</v-btn
                       >
                     </p>
@@ -151,7 +152,7 @@ import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
 import CopyStudents from '@/components/teacher/CopyStudents'
 import RemoveStudents from '@/components/teacher/RemoveStudents'
-import { mdiChevronDown, mdiDownloadOutline } from '@mdi/js'
+import { mdiChevronDown, mdiDownloadOutline, mdiPlus } from '@mdi/js'
 
 export default {
   components: {
@@ -232,6 +233,7 @@ export default {
     this.$icons = {
       mdiChevronDown,
       mdiDownloadOutline,
+      mdiPlus,
     }
   },
   beforeDestroy() {

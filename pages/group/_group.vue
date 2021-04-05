@@ -65,21 +65,24 @@
             <!-- Empty state -->
             <div v-else>
               <div id="empty" class="d-flex justify-center">
-                <v-img src="/no-assign.svg" max-width="200" />
+                <v-img
+                  src="/no-assign.svg"
+                  :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
+                />
               </div>
               <p class="text-body-1 font-weight-bold text-center mb-0">
                 No assignments yet
               </p>
               <p class="text-subtitle text-center">
-                Click create assignment to browse questions
+                Click '+ Create Assignment' to browse questions
               </p>
               <div class="d-flex justify-center">
                 <v-btn
                   elevation="0"
                   color="primary"
-                  class="mb-10"
                   @click="createAssignment()"
                 >
+                  <v-icon left>{{ $icons.mdiPlus }}</v-icon>
                   Create assignment
                 </v-btn>
               </div>
@@ -88,6 +91,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <onboarding-snackbar
+      n="3"
+      text="Click '+ Create assignment' to browse questions."
+      evt="create-ass"
+    />
   </div>
 </template>
 
@@ -96,6 +104,7 @@ import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
+import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
 import {
   mdiDotsVertical,
   mdiInformationOutline,
@@ -108,8 +117,14 @@ export default {
     GroupNav,
     GroupHeader,
     DeleteAssignment,
+    OnboardingSnackbar,
   },
   layout: 'app',
+  data() {
+    return {
+      onboard: true,
+    }
+  },
   head() {
     return {
       title: this.group ? this.group.name : `Group`,
@@ -133,11 +148,14 @@ export default {
       mdiBookOpenOutline,
     }
   },
+  mounted() {
+    this.$nuxt.$on('create-ass', () => {
+      this.createAssignment()
+    })
+  },
   methods: {
     createAssignment() {
-      // Remember group when creating assignments
-      this.$store.commit('assignments/setGroup', this.group.id)
-      // Clear any questions selected for a previous group
+      // Clear any previously selected questions
       this.$store.commit('assignments/clearSelectedQuestions')
       this.$router.push(`/course/${this.group.course.id}`)
     },
@@ -146,8 +164,10 @@ export default {
 </script>
 
 <style scoped>
-#empty {
-  padding-top: 2em;
-  padding-bottom: 2em;
+@media only screen and (min-width: 600px) {
+  #empty {
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+  }
 }
 </style>
