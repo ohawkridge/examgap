@@ -14,7 +14,12 @@
             Assignment{{ assignments.length | pluralize }} ({{
               assignments.length
             }})
-            <v-btn elevation="0" color="primary" @click="createAssignment()">
+            <v-btn
+              :class="onboard ? 'point-out' : ''"
+              elevation="0"
+              color="primary"
+              @click="createAssignment()"
+            >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
               {{
                 $vuetify.breakpoint.name == 'xs'
@@ -67,14 +72,16 @@
               <div id="empty" class="d-flex justify-center">
                 <v-img
                   src="/no-assign.svg"
-                  :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
+                  :max-width="$vuetify.breakpoint.name === 'xs' ? 100 : 160"
                 />
               </div>
-              <p class="text-body-1 font-weight-bold text-center mb-0">
-                No assignments yet
-              </p>
+              <p class="text-body-2 text-center mb-2">No assignments yet</p>
               <p class="text-subtitle text-center">
-                Click '+ Create Assignment' to browse questions
+                {{
+                  `Click + Create ${
+                    $vuetify.breakpoint.name !== 'xs' ? 'Assignment' : ''
+                  } to browse questions.`
+                }}
               </p>
               <div class="d-flex justify-center">
                 <v-btn
@@ -93,8 +100,9 @@
     </v-row>
     <onboarding-snackbar
       n="3"
-      text="Click '+ Create assignment' to browse questions."
-      evt="create-ass"
+      :text="`Click + Create ${
+        $vuetify.breakpoint.name !== 'xs' ? 'Assignment' : ''
+      } to browse questions.`"
     />
   </div>
 </template>
@@ -149,9 +157,10 @@ export default {
     }
   },
   mounted() {
-    this.$nuxt.$on('create-ass', () => {
-      this.createAssignment()
+    this.$nuxt.$on('close', () => {
+      this.onboard = false
     })
+    if (this.assignments.length < 2) this.onboard = true
   },
   methods: {
     createAssignment() {

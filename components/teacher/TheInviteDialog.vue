@@ -1,7 +1,13 @@
 <template>
   <v-dialog v-model="dialog" width="500">
     <template #activator="{ on, attrs }">
-      <v-btn color="primary" outlined v-bind="attrs" v-on="on">
+      <v-btn
+        color="primary"
+        :block="$vuetify.breakpoint.name === 'xs'"
+        outlined
+        v-bind="attrs"
+        v-on="on"
+      >
         Invite students
       </v-btn>
     </template>

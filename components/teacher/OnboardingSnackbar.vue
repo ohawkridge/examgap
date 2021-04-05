@@ -1,18 +1,17 @@
 <template>
-  <v-snackbar v-model="onboard" :vertical="true" timeout="-1">
-    <span class="font-weight-bold">({{ n }}/X)</span> {{ text }}
+  <v-snackbar v-model="snack" :vertical="true" timeout="-1">
+    <span class="font-weight-bold">({{ n }}/6)</span> {{ text }}
     <template #action="{ attrs }">
       <v-btn
         color="accent"
         plain
-        class="mr-2"
         v-bind="attrs"
-        @click="onboard = false"
+        @click="
+          $nuxt.$emit('close')
+          snack = false
+        "
       >
         <span class="text-uppercase">Close</span>
-      </v-btn>
-      <v-btn color="accent" plain v-bind="attrs" @click="$nuxt.$emit(evt)">
-        <span class="text-uppercase">Show me how</span>
       </v-btn>
     </template>
   </v-snackbar>
@@ -29,14 +28,10 @@ export default {
       type: String,
       default: '',
     },
-    evt: {
-      type: String,
-      default: '',
-    },
   },
   data() {
     return {
-      onboard: true,
+      snack: true,
     }
   },
 }

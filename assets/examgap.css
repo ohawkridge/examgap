@@ -20,9 +20,15 @@ a:link {
   background: #f7eabb;
 }
 
-/* blue v-divider */
+/* underline header */
 hr.primary {
   border-color: #0078a0;
+}
+
+/* highlight elements for onboarding */
+.point-out {
+  outline: #ef7a85 solid 5px !important;
+  outline-offset: 4px !important;
 }
 
 /* accessible RAG chips */

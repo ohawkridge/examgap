@@ -1,7 +1,12 @@
 <template>
   <v-col cols="12" md="6" lg="4">
     <v-hover v-slot="{ hover }">
-      <v-card hover :color="hover ? 'primary' : ''" @click="open()">
+      <v-card
+        hover
+        :class="`${onboard ? 'point-out' : ''}`"
+        :color="hover ? 'primary' : ''"
+        @click="open()"
+      >
         <v-card-title :class="hover ? 'white--text' : ''">
           {{ group.name }}
         </v-card-title>
@@ -32,6 +37,10 @@ export default {
     groupIndex: {
       type: Number,
       default: 0,
+    },
+    onboard: {
+      type: Boolean,
+      default: false,
     },
   },
   created() {

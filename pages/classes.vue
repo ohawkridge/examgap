@@ -10,12 +10,17 @@
           <v-btn
             color="primary"
             elevation="0"
+            :class="onboard && n === 1 ? 'point-out' : ''"
             @click="$nuxt.$emit('show-create')"
           >
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
             {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
           </v-btn>
         </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
         <v-divider class="primary" />
       </v-col>
     </v-row>
@@ -26,12 +31,13 @@
           :key="i"
           :group="group"
           :group-index="i"
+          :onboard="n === '2' && onboard"
         />
       </template>
-      <!-- Create class card button -->
+      <!-- Create class card -->
       <v-col v-if="tab" cols="12" md="6" lg="4">
         <v-card
-          id="create-card"
+          id="create-class"
           class="d-flex align-center justify-center"
           outlined
           hover
@@ -46,12 +52,12 @@
       </v-col>
     </v-row>
     <create-class />
-    <onboarding-snackbar :n="n" :text="text" :evt="evt" />
+    <onboarding-snackbar :n="n" :text="text" />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { mdiPlus } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
 import CreateClass from '@/components/teacher/CreateClass'
@@ -64,16 +70,19 @@ export default {
     OnboardingSnackbar,
   },
   layout: 'app',
+  data() {
+    return {
+      onboard: false,
+    }
+  },
   head() {
     return {
       title: 'Home',
     }
   },
   computed: {
-    ...mapState({
-      groups: (state) => state.groups.groups,
-    }),
-    // Remember which tab is active
+    ...mapGetters({ groups: 'groups/activeGroups' }),
+    // Remember active tab
     tab: {
       get() {
         return this.$store.state.groups.tab
@@ -88,27 +97,27 @@ export default {
     },
     text() {
       return this.groups.length === 0
-        ? "To get started, click '+ Create Class'."
-        : 'Click a class to set an assignment for.'
-    },
-    evt() {
-      return this.groups.length === 0 ? 'show-create' : 'go-group'
+        ? `To get started, click + ${
+            this.$vuetify.breakpoint.name === 'xs' ? 'Class' : 'Create Class'
+          }.`
+        : 'Click on the class you created.'
     },
   },
   created() {
     this.$icons = { mdiPlus }
   },
   mounted() {
-    this.$nuxt.$on('go-group', () => {
-      this.$router.push(`/group/${this.groups[0].id}`)
+    this.$nuxt.$on('close', () => {
+      this.onboard = false
     })
+    if (this.groups.length < 2) this.onboard = true
   },
 }
 </script>
 
 <style scoped>
 /* create class card */
-#create-card {
+#create-class {
   background: #f1eeee !important;
   border: 1px dashed #0078a0 !important;
 }
