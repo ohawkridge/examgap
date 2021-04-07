@@ -24,16 +24,17 @@ exports.handler = async (event) => {
           Charset: 'UTF-8',
           Data: `<html>
                   <body>
-                  <p>Hello there&mdash;I’m Owen.
-                  <p>I created Examgap myself. Thanks for registering&mdash;I hope you find it useful.</p>
-                  <p>-=-=-=-=-=-=-=-=-=-=-=-=</p>
-                  <p>Getting Started</p>
-                  <p>The first thing to do is to create a class. Then you can create an assignment and share the link with your students.</p>
-                  <p>Students can use the link or class code to create their own accounts. Alternatively, I can setup your classes for you. Simply reply to this email with a list of your student's email addresses and I'll take care of it.</p>
-                  <p>-=-=-=-=-=-=-=-=-=-=-=-=</p>
-                  <p>Thanks again for your interest.</p>
-                  <p>—Cheers, Owen</p>
-                  <p><a href="https://examgap.com/signin">Sign in to Examgap</a></p>
+                  <p>Hello there&mdash;I’m Owen.</p>
+                  <p>Thanks for your interest in Examgap. Here’s a few things you should know:</p>
+                  <ol>
+                  <li>I’ve been a teacher for fourteen years. I created Examgap to use in my department.</li>
+                  <li>I can set up your classes for you. Reply to this email with a list of your student's email addresses and I'll take care of everything.</li>
+                  <li>To get started yourself, first create a class. Then students can use the link or class code under ‘Invite Students’ to create their own accounts.</li>
+                  <li>A level and IT courses aren’t complete yet, but you’ve got access to everything during your trial if you want to check out what’s there.</li>
+                  <li>There’s no team behind Examgap—just me. If you encounter a problem, please let me know.</li>
+                  </ol>
+                  <p>That’s it. I hope you find it useful. If you have questions or feedback, you can reply to this email. Your reply will go straight to me.</p>
+                  <p>—Cheers, Owen<br /><a href="https://www.examgap.com">Examgap</a></p>
                   </body>
               </html>`,
         },
@@ -44,7 +45,7 @@ exports.handler = async (event) => {
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: 'Welcome to Examgap',
+        Data: '5 Important things to know about Examgap',
       },
     },
     Source: 'Owen <owen@examgap.com>',
