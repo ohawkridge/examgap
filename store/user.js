@@ -12,6 +12,7 @@ export const state = () => ({
   examMode: false,
   reviseExamMode: false,
   quote: 'Experiment, fail, learn, repeat.—Anonymous',
+  onboardStep: 1,
 })
 
 export const actions = {
@@ -102,6 +103,9 @@ export const actions = {
 }
 
 export const mutations = {
+  setOnboardStep(state, n) {
+    state.onboardStep = n
+  },
   setSecret(state, secret) {
     state.secret = secret
   },

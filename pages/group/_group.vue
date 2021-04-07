@@ -15,7 +15,7 @@
               assignments.length
             }})
             <v-btn
-              :class="onboard ? 'point-out' : ''"
+              :class="outline && n === 4 ? 'point-out' : ''"
               elevation="0"
               color="primary"
               @click="createAssignment()"
@@ -98,17 +98,12 @@
         </v-card>
       </v-col>
     </v-row>
-    <onboarding-snackbar
-      n="3"
-      :text="`Click + Create ${
-        $vuetify.breakpoint.name !== 'xs' ? 'Assignment' : ''
-      } to browse questions.`"
-    />
+    <onboarding-snackbar />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
@@ -130,7 +125,7 @@ export default {
   layout: 'app',
   data() {
     return {
-      onboard: true,
+      outline: true,
     }
   },
   head() {
@@ -140,12 +135,12 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapState({ n: (state) => state.user.onboardStep }),
+    // Defend against logout, refresh etc.
     assignments() {
-      if (this.group && 'assignments' in this.group) {
-        return this.group.assignments
-      } else {
-        return []
-      }
+      return this.group && 'assignments' in this.group
+        ? this.group.assignments
+        : []
     },
   },
   created() {
@@ -158,9 +153,9 @@ export default {
   },
   mounted() {
     this.$nuxt.$on('close', () => {
-      this.onboard = false
+      this.outline = false
     })
-    if (this.assignments.length < 2) this.onboard = true
+    if (this.assignments.length < 2) this.outline = true
   },
   methods: {
     createAssignment() {

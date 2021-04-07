@@ -22,9 +22,9 @@
             </v-btn>
           </template>
           <v-list>
-            <template v-for="(group, i) in groups">
+            <template v-for="(group, i) in activeGroups">
               <v-list-item
-                v-if="!teacher || group.active"
+                v-if="group.active"
                 :key="i"
                 @click="nav(i, group.id)"
               >
@@ -33,7 +33,7 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-            <v-list-item v-if="groups.length === 0" disabled>
+            <v-list-item v-if="activeGroups.length === 0" disabled>
               <v-list-item-content>
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
@@ -43,6 +43,14 @@
               <v-list-item @click="$nuxt.$emit('join-class')">
                 <v-list-item-content>
                   <v-list-item-title> Join class&hellip; </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+            <template v-else>
+              <v-divider />
+              <v-list-item @click="$nuxt.$emit('show-create')">
+                <v-list-item-content>
+                  <v-list-item-title> Create class&hellip; </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </template>
@@ -109,7 +117,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
@@ -134,22 +142,20 @@ export default {
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
-      groups: (state) => state.groups.groups,
-      tab: (state) => state.groups.tab,
     }),
-    // Hide app footer on pages with bottom-navigation
+    ...mapGetters({
+      tabGroups: 'groups/tabGroups',
+      activeGroups: 'groups/activeGroups',
+    }),
+    // Hide footer on pages with bottom-navigation
     showFooter() {
-      if (
+      return !(
+        this.$vuetify.breakpoint.name === 'xs' &&
         (this.$route.name === 'group-group' ||
           this.$route.name === 'students-students' ||
           this.$route.name === 'grades-grades' ||
-          this.$route.name === 'edit-edit') &&
-        this.$vuetify.breakpoint.name === 'xs'
-      ) {
-        return false
-      } else {
-        return true
-      }
+          this.$route.name === 'edit-edit')
+      )
     },
   },
   created() {

@@ -6,7 +6,12 @@
         :block="$vuetify.breakpoint.name === 'xs'"
         outlined
         v-bind="attrs"
+        :class="outline && n === 3 ? 'point-out' : ''"
         v-on="on"
+        @click="
+          $store.commit('user/setOnboardStep', 4)
+          outline = false
+        "
       >
         Invite students
       </v-btn>
@@ -81,6 +86,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { mdiFullscreen, mdiContentCopy } from '@mdi/js'
 
 export default {
@@ -94,9 +100,11 @@ export default {
     return {
       dialog: false,
       overlay: false,
+      outline: false,
     }
   },
   computed: {
+    ...mapState({ n: (state) => state.user.onboardStep }),
     link() {
       return `https://examgap.com/signup?code=${this.formattedCode}`
     },
@@ -114,8 +122,15 @@ export default {
     }
   },
   mounted() {
+    if (this.group.num_students === 0) {
+      this.outline = true
+      this.$store.commit('user/setOnboardStep', 3)
+    }
     this.$nuxt.$on('open-invite', () => {
       this.dialog = true
+    })
+    this.$nuxt.$on('close', () => {
+      this.outline = false
     })
   },
   methods: {

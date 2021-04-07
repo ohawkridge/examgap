@@ -3,7 +3,7 @@
     <v-hover v-slot="{ hover }">
       <v-card
         hover
-        :class="`${onboard ? 'point-out' : ''}`"
+        :class="`${outline ? 'point-out' : ''}`"
         :color="hover ? 'primary' : ''"
         @click="open()"
       >
@@ -38,7 +38,7 @@ export default {
       type: Number,
       default: 0,
     },
-    onboard: {
+    outline: {
       type: Boolean,
       default: false,
     },
@@ -51,10 +51,11 @@ export default {
     }
   },
   methods: {
-    // Remember the active group so we don't
-    // have to re-fetch it each time
     open() {
+      // Remember active group
       this.$store.commit('groups/setActiveGroupIndex', this.groupIndex)
+      // Set onboarding step
+      this.$store.commit('user/setOnboardStep', 3)
       this.$router.push(`/group/${this.group.id}`)
     },
   },

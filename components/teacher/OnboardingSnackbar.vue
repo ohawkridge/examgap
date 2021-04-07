@@ -1,16 +1,9 @@
 <template>
-  <v-snackbar v-model="snack" :vertical="true" timeout="-1">
-    <span class="font-weight-bold">({{ n }}/6)</span> {{ text }}
+  <v-snackbar v-model="onboardSnack" :vertical="true" timeout="-1">
+    <span class="font-weight-bold">({{ n }}/7)</span>
+    {{ stringsForSteps[n] }}
     <template #action="{ attrs }">
-      <v-btn
-        color="accent"
-        plain
-        v-bind="attrs"
-        @click="
-          $nuxt.$emit('close')
-          snack = false
-        "
-      >
+      <v-btn color="secondary" plain v-bind="attrs" @click="close()">
         <span class="text-uppercase">Close</span>
       </v-btn>
     </template>
@@ -18,21 +11,36 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  props: {
-    n: {
-      type: String,
-      default: '1',
-    },
-    text: {
-      type: String,
-      default: '',
-    },
-  },
   data() {
     return {
-      snack: true,
+      onboardSnack: true,
+      stringsForSteps: {
+        1: `To get started, click +${
+          this.$vuetify.breakpoint.name !== 'xs' ? 'Create ' : ''
+        } Class.`,
+        2: 'Click on the class you created.',
+        3: 'To add students, click Invite Students.',
+        4: 'Step 4 message.',
+        5: 'Step 5 message.',
+        6: 'Step 6 message.',
+        7: 'Step 7 message.',
+      },
     }
+  },
+  computed: {
+    ...mapState({
+      n: (state) => state.user.onboardStep,
+    }),
+  },
+  methods: {
+    close() {
+      this.onboardSnack = false
+      // Emit event to turn off red outline
+      $nuxt.$emit('close')
+    },
   },
 }
 </script>

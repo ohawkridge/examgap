@@ -34,6 +34,7 @@
                   :disabled="selectedQuestions.length == 0"
                   v-bind="attrs"
                   elevation="0"
+                  :class="`${n === 6 && onboard ? 'point-out' : ''}`"
                   @click="assign()"
                   v-on="on"
                 >
@@ -70,7 +71,9 @@
                       <v-list-item
                         v-for="(topic, i) in topics"
                         :key="i"
-                        :class="onboard && i === 1 ? 'point-out' : ''"
+                        :class="
+                          onboard && i === 1 && n === 4 ? 'point-out' : ''
+                        "
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
                       >
@@ -128,6 +131,11 @@
                               <template #activator="{ on, attrs }">
                                 <v-btn
                                   icon
+                                  :class="`${
+                                    n === 5 && onboard && i === 0
+                                      ? 'point-out'
+                                      : ''
+                                  }`"
                                   v-bind="attrs"
                                   v-on="on"
                                   @click.stop="select(q.id)"
@@ -199,7 +207,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <onboarding-snackbar n="4" text="Change topic to view more questions." />
+    <onboarding-snackbar :n="n" :text="text" />
   </div>
 </template>
 
@@ -230,6 +238,8 @@ export default {
       selectedQuestion: 0, // questions list v-model
       loading: false,
       onboard: true,
+      n: 4,
+      text: 'Change topic to view more questions.',
     }
   },
   async fetch() {
@@ -295,6 +305,14 @@ export default {
         this.loadQuestions()
         // Select first question of topic by default
         this.selectedQuestion = 0
+      }
+      this.n = 5
+      this.text = 'Click + to add questions to assignment.'
+    },
+    selectedQuestions() {
+      if (this.selectedQuestions.length > 0) {
+        this.n = 6
+        this.text = "Click Assign once you've chosen all your questions."
       }
     },
   },

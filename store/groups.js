@@ -10,8 +10,13 @@ export const getters = {
   activeGroup: (state) => {
     return state.groups[state.activeGroupIndex]
   },
-  activeGroups: (state) => {
-    return state.groups.filter((g) => g.active)
+  tabGroups: (state) => {
+    return state.groups.filter((group) => group.active === state.tab)
+  },
+  activeGroups: (state, getters, rootState) => {
+    return rootState.user.teacher
+      ? state.groups.filter((group) => group.active)
+      : state.groups
   },
   groupsForSelect: (state) => {
     return state.groups.map((group) => {

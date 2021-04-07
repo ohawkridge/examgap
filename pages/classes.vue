@@ -10,7 +10,7 @@
           <v-btn
             color="primary"
             elevation="0"
-            :class="onboard && n === 1 ? 'point-out' : ''"
+            :class="outline && n === 1 ? 'point-out' : ''"
             @click="$nuxt.$emit('show-create')"
           >
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -31,7 +31,7 @@
           :key="i"
           :group="group"
           :group-index="i"
-          :onboard="n === '2' && onboard"
+          :outline="outline && n === 2"
         />
       </template>
       <!-- Create class card -->
@@ -52,12 +52,12 @@
       </v-col>
     </v-row>
     <create-class />
-    <onboarding-snackbar :n="n" :text="text" />
+    <onboarding-snackbar />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { mdiPlus } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
 import CreateClass from '@/components/teacher/CreateClass'
@@ -72,7 +72,7 @@ export default {
   layout: 'app',
   data() {
     return {
-      onboard: false,
+      outline: false,
     }
   },
   head() {
@@ -82,6 +82,7 @@ export default {
   },
   computed: {
     ...mapGetters({ groups: 'groups/activeGroups' }),
+    ...mapState({ n: (state) => state.user.onboardStep }),
     // Remember active tab
     tab: {
       get() {
@@ -91,26 +92,20 @@ export default {
         this.$store.commit('groups/setTab', value)
       },
     },
-    // Onboarding info
-    n() {
-      return this.groups.length === 0 ? '1' : '2'
-    },
-    text() {
-      return this.groups.length === 0
-        ? `To get started, click + ${
-            this.$vuetify.breakpoint.name === 'xs' ? 'Class' : 'Create Class'
-          }.`
-        : 'Click on the class you created.'
-    },
   },
   created() {
     this.$icons = { mdiPlus }
   },
   mounted() {
+    // Hide outline when snackbar closed
     this.$nuxt.$on('close', () => {
-      this.onboard = false
+      this.outline = false
     })
-    if (this.groups.length < 2) this.onboard = true
+    // Show onboarding? Which step?
+    if (this.groups.length === 0 || this.groups.length === 1) {
+      this.outline = true
+      this.$store.commit('user/setOnboardStep', this.groups.length + 1)
+    }
   },
 }
 </script>
