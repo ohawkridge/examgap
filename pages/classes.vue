@@ -25,7 +25,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <template v-for="(group, i) in groups">
+      <template v-for="(group, i) in tabGroups">
         <GroupCard
           v-if="group.active === tab"
           :key="i"
@@ -81,7 +81,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ groups: 'groups/activeGroups' }),
+    ...mapGetters({
+      tabGroups: 'groups/tabGroups',
+      activeGroups: 'groups/activeGroups',
+    }),
     ...mapState({ n: (state) => state.user.onboardStep }),
     // Remember active tab
     tab: {
@@ -102,9 +105,9 @@ export default {
       this.outline = false
     })
     // Show onboarding? Which step?
-    if (this.groups.length === 0 || this.groups.length === 1) {
+    if (this.activeGroups.length === 0 || this.activeGroups.length === 1) {
       this.outline = true
-      this.$store.commit('user/setOnboardStep', this.groups.length + 1)
+      this.$store.commit('user/setOnboardStep', this.activeGroups.length + 1)
     }
   },
 }

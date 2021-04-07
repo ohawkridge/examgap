@@ -18,15 +18,15 @@ export default {
     return {
       onboardSnack: true,
       stringsForSteps: {
-        1: `To get started, click +${
+        1: `To get started, click + ${
           this.$vuetify.breakpoint.name !== 'xs' ? 'Create ' : ''
         } Class.`,
         2: 'Click on the class you created.',
         3: 'To add students, click Invite Students.',
-        4: 'Step 4 message.',
-        5: 'Step 5 message.',
-        6: 'Step 6 message.',
-        7: 'Step 7 message.',
+        4: 'Click + Create Assignment to browse questions.',
+        5: 'Change topic to see more questions.',
+        6: 'Click + to select questions to assign.',
+        7: "When you're ready, click + Assign.",
       },
     }
   },
@@ -34,6 +34,11 @@ export default {
     ...mapState({
       n: (state) => state.user.onboardStep,
     }),
+  },
+  mounted() {
+    this.$nuxt.$on('stop-onoarding', () => {
+      this.onboardSnack = false
+    })
   },
   methods: {
     close() {

@@ -156,11 +156,15 @@ export default {
       this.outline = false
     })
     if (this.assignments.length < 2) this.outline = true
+    const step = this.group.num_students === 0 ? 4 : 5
+    this.$store.commit('user/setOnboardStep', step)
   },
   methods: {
     createAssignment() {
       // Clear any previously selected questions
       this.$store.commit('assignments/clearSelectedQuestions')
+      // Advance onboarding
+      this.$store.commit('user/setOnboardStep', 5)
       this.$router.push(`/course/${this.group.course.id}`)
     },
   },

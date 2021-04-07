@@ -34,7 +34,7 @@
                   :disabled="selectedQuestions.length == 0"
                   v-bind="attrs"
                   elevation="0"
-                  :class="`${n === 6 && onboard ? 'point-out' : ''}`"
+                  :class="`${n === 7 && outline ? 'point-out' : ''}`"
                   @click="assign()"
                   v-on="on"
                 >
@@ -72,7 +72,7 @@
                         v-for="(topic, i) in topics"
                         :key="i"
                         :class="
-                          onboard && i === 1 && n === 4 ? 'point-out' : ''
+                          outline && i === 1 && n === 5 ? 'point-out' : ''
                         "
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
@@ -132,7 +132,7 @@
                                 <v-btn
                                   icon
                                   :class="`${
-                                    n === 5 && onboard && i === 0
+                                    n === 6 && outline && i === 0
                                       ? 'point-out'
                                       : ''
                                   }`"
@@ -207,7 +207,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <onboarding-snackbar :n="n" :text="text" />
+    <onboarding-snackbar />
   </div>
 </template>
 
@@ -237,9 +237,7 @@ export default {
       question: {},
       selectedQuestion: 0, // questions list v-model
       loading: false,
-      onboard: true,
-      n: 4,
-      text: 'Change topic to view more questions.',
+      outline: true,
     }
   },
   async fetch() {
@@ -275,6 +273,7 @@ export default {
   computed: {
     ...mapState({
       selectedQuestions: (state) => state.assignments.selectedQuestions,
+      n: (state) => state.user.onboardStep,
     }),
     ...mapGetters({ group: 'groups/activeGroup' }),
     // Since selectedQuestion is only an index of v-list of questions
@@ -306,13 +305,13 @@ export default {
         // Select first question of topic by default
         this.selectedQuestion = 0
       }
-      this.n = 5
-      this.text = 'Click + to add questions to assignment.'
+      // Advance onboarding
+      this.$store.commit('user/setOnboardStep', 6)
     },
     selectedQuestions() {
+      // Advance onboarding
       if (this.selectedQuestions.length > 0) {
-        this.n = 6
-        this.text = "Click Assign once you've chosen all your questions."
+        this.$store.commit('user/setOnboardStep', 7)
       }
     },
   },
@@ -326,7 +325,7 @@ export default {
   },
   mounted() {
     this.$nuxt.$on('close', () => {
-      this.onboard = false
+      this.outline = false
     })
   },
   methods: {
@@ -367,6 +366,8 @@ export default {
     // Show create assignment dialog
     assign() {
       this.$nuxt.$emit('show-assign')
+      this.$nuxt.$emit('stop-onboarding')
+      this.outline = false
     },
   },
 }

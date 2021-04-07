@@ -27,7 +27,7 @@ hr.primary {
 
 /* highlight elements for onboarding */
 .point-out {
-  outline: #ef7a85 solid 5px !important;
+  outline: #ef7a85 solid 4px !important;
   outline-offset: 4px !important;
 }
 
