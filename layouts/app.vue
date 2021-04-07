@@ -46,14 +46,6 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-            <template v-else>
-              <v-divider />
-              <v-list-item @click="$nuxt.$emit('show-create')">
-                <v-list-item-content>
-                  <v-list-item-title> Create class&hellip; </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
           </v-list>
         </v-menu>
         <v-spacer />
