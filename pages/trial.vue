@@ -10,7 +10,7 @@
     <v-main>
       <v-container class="fill-height mt-md-n6">
         <v-row class="d-flex justify-center">
-          <v-col cols="12" sm="10" md="6">
+          <v-col cols="12" sm="10" md="7" lg="6">
             <p class="text-h4 text-center font-weight-bold mb-md-8">
               Register for your free trial
             </p>
@@ -33,16 +33,6 @@
                 required
               >
               </v-text-field>
-              <v-alert
-                v-if="emailInUse"
-                border="left"
-                text
-                dense
-                type="error"
-                :icon="$icons.mdiAlertOutline"
-              >
-                Email is already registered
-              </v-alert>
               <v-row>
                 <v-col class="pb-0" cols="12" md="6">
                   <v-text-field
@@ -68,6 +58,16 @@
                   </v-text-field>
                 </v-col>
               </v-row>
+              <v-alert
+                v-if="emailInUse"
+                border="left"
+                text
+                dense
+                type="error"
+                :icon="$icons.mdiAlertOutline"
+              >
+                Email is already registered
+              </v-alert>
               <small> *Indicates required field </small>
               <p class="mt-2">
                 By registering you accept our
