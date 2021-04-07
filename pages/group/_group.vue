@@ -155,9 +155,9 @@ export default {
     this.$nuxt.$on('close', () => {
       this.outline = false
     })
-    if (this.assignments.length < 2) this.outline = true
-    const step = this.group.num_students === 0 ? 4 : 5
-    this.$store.commit('user/setOnboardStep', step)
+    // if (this.assignments.length < 2) this.outline = true
+    // const step = this.group.num_students === 0 ? 4 : 5
+    // this.$store.commit('user/setOnboardStep', step)
   },
   methods: {
     createAssignment() {
