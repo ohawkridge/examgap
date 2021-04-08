@@ -79,6 +79,7 @@
                   :items="data.data"
                   :loading="$fetchState.pending"
                   loading-text="Loading grades..."
+                  no-data-text="No data yet"
                   hide-default-footer
                   disable-pagination
                   sort-by="username"
