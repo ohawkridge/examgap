@@ -2,21 +2,69 @@
   <div>
     <v-dialog v-model="dialog" width="700" transition="scroll-x-transition">
       <v-card class="pa-md-3">
-        <v-card-title class="d-flex justify-center">
-          Create assignment
-        </v-card-title>
-        <v-card-subtitle class="mt-0"> {{ subtitle }} </v-card-subtitle>
+        <v-card-title> Create assignment </v-card-title>
+        <v-card-subtitle> {{ subtitle }} </v-card-subtitle>
         <v-window v-model="step">
           <v-window-item :value="1">
-            <v-row>
-              <v-col cols="12">
-                <v-checkbox v-model="selectAll" class="mb-n3">
-                  <template #label>
-                    <strong>Select all</strong>
-                  </template>
-                </v-checkbox>
-              </v-col>
-            </v-row>
+            <v-card-text>
+              <v-row v-if="students.length > 0">
+                <v-col cols="12">
+                  <v-checkbox v-model="selectAll" class="mt-0" hide-details>
+                    <template #label>
+                      <strong>Select all</strong>
+                    </template>
+                  </v-checkbox>
+                </v-col>
+                <v-col
+                  v-for="(student, i) in students"
+                  :key="i"
+                  class="py-0"
+                  cols="12"
+                  md="6"
+                >
+                  <v-checkbox
+                    v-model="selectedStudents"
+                    :value="student.id"
+                    class="mb-n2"
+                    multiple
+                  >
+                    <template #label>
+                      {{ student.username }}&nbsp;
+                      <v-tooltip bottom>
+                        <template #activator="{ on, attrs }">
+                          <a
+                            :class="`exam-chip ${
+                              student.examMode ? '' : 'disabled-chip'
+                            }`"
+                            href="#"
+                            v-bind="attrs"
+                            v-on="on"
+                            @click.stop="toggleMode(student)"
+                            >EXAM</a
+                          >
+                        </template>
+                        <span
+                          >Turn exam mode
+                          {{ student.examMode ? 'off' : 'on' }}</span
+                        >
+                      </v-tooltip>
+                    </template>
+                  </v-checkbox>
+                </v-col>
+                <v-col cols="12">
+                  <v-alert
+                    border="left"
+                    text
+                    type="info"
+                    dense
+                    :icon="$icons.mdiInformationOutline"
+                  >
+                    Turn off exam mode to show keywords and a minimum word count
+                    when answering questions.
+                  </v-alert>
+                </v-col>
+              </v-row>
+            </v-card-text>
           </v-window-item>
           <v-window-item :value="2">
             <v-card-text>
@@ -108,65 +156,6 @@
             </v-card-text>
           </v-window-item>
         </v-window>
-
-        <!-- <v-card-text>
-          <v-row v-if="students.length > 0">
-            <v-col cols="12">
-              <p class="text-body-1">Select students for this assignment</p>
-              <v-checkbox v-model="selectAll" class="mb-n3">
-                <template #label>
-                  <strong>Select all</strong>
-                </template>
-              </v-checkbox>
-            </v-col>
-            <v-col
-              v-for="(student, i) in students"
-              :key="i"
-              class="py-0"
-              cols="12"
-              md="4"
-            >
-              <v-checkbox
-                v-model="selectedStudents"
-                :value="student.id"
-                class="mb-n2"
-                multiple
-              >
-                <template #label>
-                  {{ student.username }}&nbsp;
-                  <v-tooltip bottom>
-                    <template #activator="{ on, attrs }">
-                      <a
-                        :class="`exam-chip ${
-                          student.examMode ? '' : 'disabled-chip'
-                        }`"
-                        href="#"
-                        v-bind="attrs"
-                        v-on="on"
-                        @click.stop="toggleMode(student)"
-                        >EXAM</a
-                      >
-                    </template>
-                    <span
-                      >Turn exam mode
-                      {{ student.examMode ? 'off' : 'on' }}</span
-                    >
-                  </v-tooltip>
-                </template>
-              </v-checkbox>
-            </v-col>
-            <v-col cols="12">
-              <v-alert
-                border="left"
-                text
-                type="info"
-                :icon="$icons.mdiInformationOutline"
-              >
-                Turn exam mode off to show keywords and a minimum word count for
-                students when answering questions
-              </v-alert>
-            </v-col>
-          </v-row> -->
         <v-card-actions>
           <v-btn
             v-if="group && group.num_students > 0"
@@ -252,7 +241,7 @@ export default {
         '/.netlify/functions/getStudents',
         this.$config.baseURL
       )
-      const response = await fetch(url, {
+      let response = await fetch(url, {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
           groupId: this.group.id,
@@ -263,7 +252,8 @@ export default {
       if (!response.ok) {
         throw new Error(`Error fetching students ${response.status}`)
       }
-      this.students = await response.json()
+      response = await response.json()
+      this.students = response
     } catch (e) {
       console.error(e)
     }
