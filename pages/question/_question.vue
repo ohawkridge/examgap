@@ -5,7 +5,7 @@
         <v-card class="pa-md-3">
           <v-card-title class="d-flex justify-space-between">
             Question
-            <v-btn text nuxt :to="`/author/${question.id}`">
+            <v-btn outlined color="primary" nuxt :to="`/author/${question.id}`">
               Edit Question
             </v-btn>
           </v-card-title>
@@ -31,7 +31,8 @@
             <p class="text-subtitle-1 font-weight-medium mt-4">Model Answer</p>
             <div v-html="question.modelAnswer"></div>
             <p class="text-subtitle-1 font-weight-medium mt-4">Keywords</p>
-            <p>{{ keywords }}</p>
+            <p v-if="question.keywords !== ''">{{ question.keywords }}</p>
+            <p v-else>None</p>
           </v-card-text>
         </v-card>
       </v-skeleton-loader>
@@ -45,6 +46,7 @@ export default {
   data() {
     return {
       question: {},
+      overlay: false,
     }
   },
   async fetch() {
@@ -72,14 +74,13 @@ export default {
       })
     }
   },
-  computed: {
-    keywords() {
-      if (!this.$fetchState.pending && this.question.keywords) {
-        return this.question.keywords.join(', ')
-      } else {
-        return ''
-      }
-    },
+  mounted() {
+    // Extract secret from local storage during hard refresh
+    if (this.$store.state.user.secret === '') {
+      const localObj = JSON.parse(window.localStorage.getItem('examgap'))
+      this.$store.commit('user/setSecret', localObj.user.secret)
+      this.$fetch()
+    }
   },
 }
 </script>
