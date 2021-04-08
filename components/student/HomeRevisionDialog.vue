@@ -96,8 +96,10 @@ export default {
   },
   methods: {
     async start() {
-      this.loading = true
       try {
+        this.loading = true
+        // Remember which topic we're revising
+        this.$store.commit('assignments/setCurrentTopicId', this.topic.id)
         const url = new URL(
           '/.netlify/functions/getRandomQuestionId',
           this.$config.baseURL
