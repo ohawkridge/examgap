@@ -366,7 +366,7 @@ export default {
     // Show create assignment dialog
     assign() {
       this.$nuxt.$emit('show-assign')
-      this.$nuxt.$emit('stop-onboarding')
+      this.$nuxt.$emit('onboarding', false)
       this.outline = false
     },
   },

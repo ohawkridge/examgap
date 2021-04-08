@@ -16,7 +16,7 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      onboardSnack: true,
+      onboardSnack: false,
       stringsForSteps: {
         1: `To get started, click + ${
           this.$vuetify.breakpoint.name !== 'xs' ? 'Create ' : ''
@@ -31,20 +31,19 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      n: (state) => state.user.onboardStep,
-    }),
+    ...mapState({ n: (state) => state.user.onboardStep }),
   },
   mounted() {
-    this.$nuxt.$on('stop-onoarding', () => {
-      this.onboardSnack = false
+    this.$nuxt.$on('onoarding', (val) => {
+      console.log(`Received onboarding event`, val)
+      this.onboardSnack = val
     })
   },
   methods: {
     close() {
-      this.onboardSnack = false
       // Emit event to turn off red outline
       $nuxt.$emit('close')
+      this.onboardSnack = false
     },
   },
 }

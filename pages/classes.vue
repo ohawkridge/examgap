@@ -106,8 +106,9 @@ export default {
     })
     // Show onboarding? Which step?
     if (this.activeGroups.length === 0 || this.activeGroups.length === 1) {
-      this.outline = true
       this.$store.commit('user/setOnboardStep', this.activeGroups.length + 1)
+      this.outline = true
+      this.$nuxt.$emit('onboarding', true)
     }
   },
 }
