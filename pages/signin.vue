@@ -9,7 +9,7 @@
     </v-container>
     <v-container class="fill-height">
       <v-row align="center" justify="center">
-        <v-col id="form" cols="12" sm="8" md="6" lg="5" xl="4" class="px-4">
+        <v-col cols="12" sm="8" md="6" lg="5" xl="4" class="px-4">
           <p class="text-h5 font-weight-bold text-center">Sign In</p>
           <v-form ref="form" @submit.prevent="login()">
             <v-text-field
@@ -151,11 +151,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-/* adjust for app-bar height */
-#form {
-  position: relative;
-  top: -58px;
-}
-</style>

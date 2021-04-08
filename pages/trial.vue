@@ -5,7 +5,9 @@
         <TheLogo />
       </nuxt-link>
       <v-spacer />
-      <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
+      <span class="grey--text"
+        >Student? <nuxt-link to="/signup">Join class</nuxt-link></span
+      >
     </v-container>
     <v-main>
       <v-container class="fill-height mt-md-n6">

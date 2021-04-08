@@ -34,8 +34,8 @@
           text
         >
           If you created student accounts by inputting their email addresses,
-          the default password is <b>pw</b>. Otherwise, students chose their own
-          passwords. You can reset student passwords on the
+          the default password is <b>password</b>. Otherwise, students chose
+          their own passwords. You can reset student passwords on the
           <nuxt-link nuxt :to="`/students/${group.id}`">Students</nuxt-link>
           screen.
         </v-alert>
@@ -49,10 +49,6 @@
             Username:
             <span class="font-weight-medium">{{ user.username }}</span>
           </p>
-          <!-- <p class="mb-0">
-            Password (unless you changed it):
-            <span class="font-weight-medium">pw</span>
-          </p> -->
         </v-col>
         <v-col
           v-if="i % 13 === 0 && i > 0 && i < usernames.length - 1"

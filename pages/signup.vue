@@ -10,14 +10,14 @@
     <v-main>
       <v-container class="fill-height">
         <v-row class="d-flex justify-center">
-          <v-col cols="12" sm="10" md="5">
-            <v-card id="join" elevation="0">
-              <v-card-title
-                class="text-h5 font-weight-bold d-flex justify-center"
-              >
-                Join class
-              </v-card-title>
-              <v-form ref="form">
+          <v-col cols="12" sm="8" md="6" lg="5">
+            <v-card elevation="0">
+              <v-form ref="form" @submit.prevent="signup">
+                <v-card-title
+                  class="text-h5 font-weight-bold d-flex justify-center"
+                >
+                  Join class
+                </v-card-title>
                 <v-window v-model="step">
                   <v-window-item :value="1">
                     <v-card-text>
@@ -32,28 +32,31 @@
                       >
                       </v-text-field>
                       <v-alert
-                        :icon="$icons.mdiInformationOutline"
+                        v-if="invalidCode"
                         border="left"
-                        type="info"
                         text
-                        class="mb-0"
+                        dense
+                        type="error"
+                        :icon="$icons.mdiAlertOutline"
                       >
-                        No code? You can still
-                        <a @click="step++">create your account</a>.
+                        Invalid code. Please try again
                       </v-alert>
                     </v-card-text>
                   </v-window-item>
                   <v-window-item :value="2">
                     <v-card-text>
-                      <v-text-field
-                        v-model="email"
-                        outlined
-                        :rules="emailRules"
-                        label="School email*"
-                        placeholder="17bloggsj@yourschool.org.uk"
-                        required
-                      >
-                      </v-text-field>
+                      <v-row>
+                        <v-col class="pb-0" cols="12">
+                          <v-text-field
+                            v-model="email"
+                            outlined
+                            :rules="emailRules"
+                            label="School email*"
+                            placeholder="17bloggsj@yourschool.org.uk"
+                            required
+                          >
+                          </v-text-field> </v-col
+                      ></v-row>
                       <v-row>
                         <v-col class="pb-0" cols="12" md="6">
                           <v-text-field
@@ -100,31 +103,31 @@
                     </v-card-text>
                   </v-window-item>
                 </v-window>
+                <v-card-actions>
+                  <v-btn :disabled="step === 1" text @click="step--">
+                    Back
+                  </v-btn>
+                  <v-spacer />
+                  <v-btn
+                    v-if="step === 1"
+                    elevation="0"
+                    color="primary"
+                    @click="next()"
+                  >
+                    Next
+                  </v-btn>
+                  <v-btn
+                    v-if="step === 2"
+                    elevation="0"
+                    :loading="loading"
+                    :disabled="loading"
+                    color="primary"
+                    type="submit"
+                  >
+                    Sign up
+                  </v-btn>
+                </v-card-actions>
               </v-form>
-              <v-card-actions>
-                <v-btn :disabled="step === 1" text @click="step--">
-                  Back
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn
-                  v-if="step === 1"
-                  elevation="0"
-                  color="primary"
-                  @click="step++"
-                >
-                  Next
-                </v-btn>
-                <v-btn
-                  v-if="step === 2"
-                  elevation="0"
-                  :loading="loading"
-                  :disabled="loading"
-                  color="primary"
-                  @click="signup()"
-                >
-                  Sign up
-                </v-btn>
-              </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
@@ -164,6 +167,7 @@ export default {
       pass1: '',
       pass2: '',
       step: 1,
+      invalidCode: false,
     }
   },
   head() {
@@ -188,6 +192,14 @@ export default {
     if (this.$route.query.code) this.code = this.$route.query.code
   },
   methods: {
+    next() {
+      if (this.code.length === 7 && /\d{3}-\d{3}/gm.test(this.code)) {
+        this.step++
+        this.invalidCode = false
+      } else {
+        this.invalidCode = true
+      }
+    },
     formatCode() {
       if (this.code.length > 3) {
         const newStr = this.code.replace(/-/g, '')
@@ -195,7 +207,7 @@ export default {
       }
     },
     async signup() {
-      if (this.$refs.form.validate()) {
+      if (this.step === 2 && this.$refs.form.validate()) {
         this.loading = true
         try {
           const url = new URL(
@@ -250,6 +262,9 @@ export default {
           this.loading = false
         }
       }
+      if (this.step === 1) {
+        this.step = 2
+      }
     },
     async getUserSecret() {
       const url = new URL(
@@ -272,11 +287,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-/* adjust for app-bar height */
-#join {
-  position: relative;
-  top: -58px;
-}
-</style>

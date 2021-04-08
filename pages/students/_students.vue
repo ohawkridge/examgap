@@ -298,7 +298,7 @@ export default {
           type: 'success',
           msg: `${
             this.selected.length === 1 ? 'Password' : 'Passwords'
-          } reset to 'pw'`,
+          } reset to 'password'`,
         })
       } catch (e) {
         console.warn(e)

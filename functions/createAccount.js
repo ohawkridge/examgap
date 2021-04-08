@@ -17,7 +17,7 @@ exports.handler = async (event, context, callback) => {
       q.Let(
         {
           instance: q.Create(q.Collection('User'), {
-            credentials: { password: 'pw' },
+            credentials: { password: 'password' },
             data: {
               username,
               examMode: true,

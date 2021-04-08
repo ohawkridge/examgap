@@ -1,6 +1,6 @@
 <template>
   <v-list>
-    <v-list-item v-if="assignments.length === 0">
+    <v-list-item v-if="assignments.length === 0" class="px-0 px-md-3">
       <v-list-item-icon>
         <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
       </v-list-item-icon>
