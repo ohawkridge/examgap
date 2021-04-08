@@ -19,6 +19,7 @@
           color="red"
           :loading="loading"
           :disabled="loading"
+          dark
           elevation="0"
           @click="archive()"
         >
