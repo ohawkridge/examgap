@@ -125,7 +125,7 @@ export default {
   layout: 'app',
   data() {
     return {
-      outline: true,
+      outline: false,
     }
   },
   head() {
@@ -155,9 +155,16 @@ export default {
     this.$nuxt.$on('close', () => {
       this.outline = false
     })
-    // if (this.assignments.length < 2) this.outline = true
-    // const step = this.group.num_students === 0 ? 4 : 5
-    // this.$store.commit('user/setOnboardStep', step)
+    // No students? Onboard -> Invite
+    if (this.group.num_students === 0) {
+      this.$store.commit('user/setOnboardStep', 3)
+      this.outline = true
+    }
+    // Few assignments? Onboard -> + Create Assignment
+    if (this.group.num_students > 0 && this.assignments.length < 3) {
+      this.$store.commit('user/setOnboardStep', 4)
+      this.outline = true
+    }
   },
   methods: {
     createAssignment() {
