@@ -72,7 +72,7 @@ export default {
   computed: {
     namesArray() {
       return this.usernames
-        .split(/[\r\n]+/)
+        .split(/[\r\n|,]+/)
         .map((name) => name.trim().replace(',', '').toLowerCase())
         .filter((name) => name !== '')
     },
