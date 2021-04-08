@@ -18,7 +18,7 @@
         <v-btn
           color="red"
           :loading="loading"
-          :disabled="disabled"
+          :disabled="loading"
           elevation="0"
           @click="archive()"
         >
