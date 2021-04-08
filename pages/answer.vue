@@ -47,7 +47,7 @@
             >
               <div class="pr-2">
                 <v-chip
-                  v-for="(word, i) in question.keywords"
+                  v-for="(word, i) in keywords"
                   :key="i"
                   class="mr-2 mb-2"
                   :color="used(word) ? 'green' : 'red'"
@@ -186,6 +186,11 @@ export default {
       } else {
         return 'orange'
       }
+    },
+    // Separate keywords String into individual words
+    keywords() {
+      if (this.question.keywords === '') return ''
+      return this.question.keywords.split(',').map((kw) => kw.trim())
     },
   },
   created() {
