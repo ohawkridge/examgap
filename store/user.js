@@ -108,7 +108,6 @@ export const actions = {
 
 export const mutations = {
   setOnboard(state, val) {
-    console.log(`setOnboard`, val)
     state.onboard = val
   },
   setOnboardStep(state, n) {

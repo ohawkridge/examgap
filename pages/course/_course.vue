@@ -34,7 +34,7 @@
                   :disabled="selectedQuestions.length == 0"
                   v-bind="attrs"
                   elevation="0"
-                  :class="`${n === 7 && outline ? 'red-outline' : ''}`"
+                  :class="`${onboard && n === 7 ? 'red-outline' : ''}`"
                   @click="assign()"
                   v-on="on"
                 >
@@ -72,7 +72,7 @@
                         v-for="(topic, i) in topics"
                         :key="i"
                         :class="
-                          outline && i === 1 && n === 5 ? 'red-outline' : ''
+                          onboard && i === 1 && n === 5 ? 'red-outline' : ''
                         "
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
@@ -132,7 +132,7 @@
                                 <v-btn
                                   icon
                                   :class="`${
-                                    n === 6 && outline && i === 0
+                                    n === 6 && onboard && i === 0
                                       ? 'red-outline'
                                       : ''
                                   }`"
@@ -274,6 +274,7 @@ export default {
     ...mapState({
       selectedQuestions: (state) => state.assignments.selectedQuestions,
       n: (state) => state.user.onboardStep,
+      onboard: (state) => state.user.onboard,
     }),
     ...mapGetters({ group: 'groups/activeGroup' }),
     // Since selectedQuestion is only an index of v-list of questions
@@ -323,11 +324,6 @@ export default {
       mdiInformationOutline,
     }
   },
-  mounted() {
-    this.$nuxt.$on('close', () => {
-      this.outline = false
-    })
-  },
   methods: {
     // Get questions for topic
     async loadQuestions() {
@@ -363,11 +359,10 @@ export default {
     select(questionid) {
       this.$store.commit('assignments/updateSelectedQuestions', questionid)
     },
-    // Show create assignment dialog
     assign() {
       this.$nuxt.$emit('show-assign')
-      this.$nuxt.$emit('onboarding', false)
-      this.outline = false
+      // Onboarding complete
+      this.$tore.commit('user/setOnboard', false)
     },
   },
 }

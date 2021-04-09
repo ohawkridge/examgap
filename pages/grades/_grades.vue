@@ -17,14 +17,7 @@
                   <thead>
                     <tr>
                       <th class="text-left text-center">Grade</th>
-                      <th class="text-left text-center">
-                        <v-tooltip bottom>
-                          <template #activator="{ on, attrs }">
-                            <span v-bind="attrs" v-on="on">Boundary (%)</span>
-                          </template>
-                          <span>Highest boundary across series</span>
-                        </v-tooltip>
-                      </th>
+                      <th class="text-left text-center">Boundary (%)</th>
                     </tr>
                   </thead>
                   <tbody v-if="group.course.rag">

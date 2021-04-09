@@ -15,7 +15,7 @@
               assignments.length
             }})
             <v-btn
-              :class="outline && n === 4 ? 'red-outline' : ''"
+              :class="onboard && n === 4 ? 'red-outline' : ''"
               elevation="0"
               color="primary"
               @click="createAssignment()"
@@ -123,11 +123,6 @@ export default {
     OnboardingSnackbar,
   },
   layout: 'app',
-  data() {
-    return {
-      outline: false,
-    }
-  },
   head() {
     return {
       title: this.group ? this.group.name : `Group`,
@@ -135,7 +130,10 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
-    ...mapState({ n: (state) => state.user.onboardStep }),
+    ...mapState({
+      n: (state) => state.user.onboardStep,
+      onboard: (state) => state.user.onboard,
+    }),
     // Defend against logout, refresh etc.
     assignments() {
       return this.group && 'assignments' in this.group
@@ -152,18 +150,15 @@ export default {
     }
   },
   mounted() {
-    this.$nuxt.$on('close', () => {
-      this.outline = false
-    })
-    // No students? Onboard -> Invite
+    // No students? Onboard @step 3
     if (this.group.num_students === 0) {
       this.$store.commit('user/setOnboardStep', 3)
-      this.outline = true
+      this.$store.commit('user/setOnboard', true)
     }
-    // Few assignments? Onboard -> + Create Assignment
+    // No assignments? Onboard @step 4
     if (this.group.num_students > 0 && this.assignments.length < 3) {
       this.$store.commit('user/setOnboardStep', 4)
-      this.outline = true
+      this.$store.commit('user/setOnboard', true)
     }
   },
   methods: {

@@ -6,7 +6,7 @@
         :block="$vuetify.breakpoint.name === 'xs'"
         outlined
         v-bind="attrs"
-        :class="outline && n === 3 ? 'red-outline' : ''"
+        :class="onboard && n === 3 ? 'red-outline' : ''"
         v-on="on"
         @click="
           $store.commit('user/setOnboardStep', 4)
@@ -27,7 +27,7 @@
           <template #append>
             <v-btn class="btn-slot" text color="primary" @click="copy()">
               <v-icon left>{{ $icons.mdiContentCopy }}</v-icon>
-              Copy
+              {{ copyBtn }}
             </v-btn>
           </template>
         </v-text-field>
@@ -100,11 +100,14 @@ export default {
     return {
       dialog: false,
       overlay: false,
-      outline: false,
+      copyBtn: 'Copy',
     }
   },
   computed: {
-    ...mapState({ n: (state) => state.user.onboardStep }),
+    ...mapState({
+      n: (state) => state.user.onboardStep,
+      onboard: (state) => state.user.onboard,
+    }),
     link() {
       return `https://examgap.com/signup?code=${this.formattedCode}`
     },
@@ -115,6 +118,11 @@ export default {
       )}`
     },
   },
+  watch: {
+    dialog() {
+      if (!this.dialog) this.copyBtn = 'Copy'
+    },
+  },
   created() {
     this.$icons = {
       mdiFullscreen,
@@ -123,19 +131,17 @@ export default {
   },
   mounted() {
     if (this.group.num_students === 0) {
-      this.outline = true
       this.$store.commit('user/setOnboardStep', 3)
+      this.$store.commit('user/setOnboard', true)
     }
     this.$nuxt.$on('open-invite', () => {
       this.dialog = true
-    })
-    this.$nuxt.$on('close', () => {
-      this.outline = false
     })
   },
   methods: {
     async copy() {
       await navigator.clipboard.writeText(this.link)
+      this.copyBtn = 'Copied'
       this.$snack.showMessage({
         type: '',
         msg: 'Copied to clipboard',
