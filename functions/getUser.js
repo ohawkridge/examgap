@@ -33,10 +33,12 @@ exports.handler = async (event, context, callback) => {
               q.Select(['data', 'school'], q.Var('instance'))
             ),
             teacher: true,
-            // This is now based on Fauna Time + TimeAdd
-            subscriptionExpires: q.Select(
-              ['data', 'subscriptionExpires'],
-              q.Var('instance')
+            subscriptionExpires: q.ToString(
+              q.TimeDiff(
+                q.Now(),
+                q.Select(['data', 'subscriptionExpires'], q.Var('instance')),
+                'days'
+              )
             ),
             groups: q.Select(
               ['data'],

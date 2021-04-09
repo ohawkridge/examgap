@@ -20,7 +20,7 @@
             hide-details
           >
           </v-checkbox>
-          <small v-if="!teacher" id="small">*Set by your teacher</small>
+          <p v-if="!teacher" class="text-caption">*Set by your teacher</p>
           <v-text-field
             :value="school"
             label="School name"
@@ -28,12 +28,16 @@
             readonly
           ></v-text-field>
           <v-text-field
-            :value="`${expiresx} ${days}`"
+            :value="expires <= 0 ? 'Expired' : `${expires} days`"
             label="Subscription expires"
+            :error="expires <= 0"
             outlined
             readonly
           ></v-text-field>
         </v-card-text>
+        <v-card-actions v-if="teacher">
+          <the-subscribe-dialog :expired="expires <= 0" />
+        </v-card-actions>
       </v-card>
     </v-col>
   </v-row>
@@ -41,8 +45,12 @@
 
 <script>
 import { mapState } from 'vuex'
+import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 
 export default {
+  components: {
+    TheSubscribeDialog,
+  },
   layout: 'app',
   head() {
     return {
@@ -57,42 +65,6 @@ export default {
       school: (state) => state.user.school,
       expires: (state) => state.user.subscriptionExpires,
     }),
-    expiresx() {
-      // This has been so buggy
-      if (this.teacher) {
-        if ('value' in this.expires) {
-          return this.expires.value.substring(0, 10)
-        } else if ('@date' in this.expires) {
-          return this.expires['@date'].substring(0, 10)
-        } else {
-          return 'N/A'
-        }
-      } else {
-        return 'N/A'
-      }
-    },
-    days() {
-      if (this.expiresx !== 'N/A') {
-        const expires = new Date(this.expiresx)
-        const n = Math.ceil(
-          (expires.getTime() - new Date().getTime()) / (1000 * 3600 * 24)
-        )
-        if (n <= 0) {
-          return '(Expired)'
-        } else {
-          return `(${n} day${n !== 1 ? 's' : ''})`
-        }
-      } else {
-        return ''
-      }
-    },
   },
 }
 </script>
-
-<style scoped>
-#small {
-  display: inline-block;
-  margin-bottom: 16px;
-}
-</style>

@@ -46,9 +46,7 @@ export default {
     }
   },
   created() {
-    this.$icons = {
-      mdiCheckCircleOutline,
-    }
+    this.$icons = { mdiCheckCircleOutline }
   },
   mounted() {
     this.$nuxt.$on('show-success', () => {
