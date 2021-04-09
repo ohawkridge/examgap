@@ -12,12 +12,13 @@ export const state = () => ({
   examMode: false,
   reviseExamMode: false,
   quote: 'Experiment, fail, learn, repeat.—Anonymous',
+  onboard: false,
   onboardStep: 1,
 })
 
 export const actions = {
   // Call a function to get user data
-  async getUser({ commit, state, dispatch }) {
+  async getUser({ commit, state, dispatch, rootGetters }) {
     // secret is empty string during hard refresh
     if (state.secret !== '') {
       try {
@@ -49,6 +50,9 @@ export const actions = {
         }
         // Commit group data to groups store
         commit('groups/setGroups', userData.groups, { root: true })
+        // Activate onboarding?
+        const count = rootGetters['groups/activeGroups'].length
+        if (count === 0) commit('setOnboard', true)
       } catch (e) {
         console.error(e)
       }
@@ -103,6 +107,10 @@ export const actions = {
 }
 
 export const mutations = {
+  setOnboard(state, val) {
+    console.log(`setOnboard`, val)
+    state.onboard = val
+  },
   setOnboardStep(state, n) {
     state.onboardStep = n
   },
@@ -141,5 +149,7 @@ export const mutations = {
     state.examMode = false
     state.reviseExamMode = false
     state.quote = 'Experiment, fail, learn, repeat.—Anonymous'
+    state.onboard = false
+    state.onboardStep = 1
   },
 }

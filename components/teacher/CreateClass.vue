@@ -83,9 +83,7 @@ export default {
           const data = await response.json()
           this.$store.commit('groups/addGroup', data)
           // Progress with onboarding
-          if (this.$store.state.user.onboardStep === 1) {
-            this.$store.commit('user/setOnboardStep', 2)
-          }
+          this.$store.commit('user/setOnboardStep', 2)
           this.$snack.showMessage({
             type: 'success',
             msg: `Class created`,

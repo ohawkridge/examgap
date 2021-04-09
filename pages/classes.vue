@@ -10,7 +10,7 @@
           <v-btn
             color="primary"
             elevation="0"
-            :class="outline && n === 1 ? 'point-out' : ''"
+            :class="onboard && n === 1 ? 'red-outline' : ''"
             @click="$nuxt.$emit('show-create')"
           >
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -31,7 +31,7 @@
           :key="i"
           :group="group"
           :group-index="i"
-          :outline="outline && n === 2"
+          :outline="onboard && n === 2"
         />
       </template>
       <!-- Create class card -->
@@ -85,7 +85,10 @@ export default {
       tabGroups: 'groups/tabGroups',
       activeGroups: 'groups/activeGroups',
     }),
-    ...mapState({ n: (state) => state.user.onboardStep }),
+    ...mapState({
+      onboard: (state) => state.user.onboard,
+      n: (state) => state.user.onboardStep,
+    }),
     // Remember active tab
     tab: {
       get() {
@@ -98,24 +101,15 @@ export default {
   },
   created() {
     this.$icons = { mdiPlus }
-  },
-  mounted() {
-    // Hide outline when snackbar closed
-    this.$nuxt.$on('close', () => {
-      this.outline = false
-    })
-    // Show onboarding? Which step?
-    if (this.activeGroups.length === 0 || this.activeGroups.length === 1) {
-      this.$store.commit('user/setOnboardStep', this.activeGroups.length + 1)
-      this.outline = true
-      this.$nuxt.$emit('onboarding', true)
+    // TODO Am I called on subsequent nav?
+    if (this.activeGroups.length === 0) {
+      this.$store.commit('user/setOnboard', true)
     }
   },
 }
 </script>
 
 <style scoped>
-/* create class card */
 #create-class {
   background: #f1eeee !important;
   border: 1px dashed #0078a0 !important;

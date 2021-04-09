@@ -34,7 +34,7 @@
                   :disabled="selectedQuestions.length == 0"
                   v-bind="attrs"
                   elevation="0"
-                  :class="`${n === 7 && outline ? 'point-out' : ''}`"
+                  :class="`${n === 7 && outline ? 'red-outline' : ''}`"
                   @click="assign()"
                   v-on="on"
                 >
@@ -72,7 +72,7 @@
                         v-for="(topic, i) in topics"
                         :key="i"
                         :class="
-                          outline && i === 1 && n === 5 ? 'point-out' : ''
+                          outline && i === 1 && n === 5 ? 'red-outline' : ''
                         "
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
@@ -133,7 +133,7 @@
                                   icon
                                   :class="`${
                                     n === 6 && outline && i === 0
-                                      ? 'point-out'
+                                      ? 'red-outline'
                                       : ''
                                   }`"
                                   v-bind="attrs"

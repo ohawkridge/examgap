@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="onboardSnack" :vertical="true" timeout="-1">
+  <v-snackbar v-model="snack" :vertical="true" timeout="-1">
     <span class="font-weight-bold">({{ n }}/7)</span>
     {{ stringsForSteps[n] }}
     <template #action="{ attrs }">
@@ -16,7 +16,6 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      onboardSnack: false,
       stringsForSteps: {
         1: `To get started, click + ${
           this.$vuetify.breakpoint.name !== 'xs' ? 'Create ' : ''
@@ -31,19 +30,14 @@ export default {
     }
   },
   computed: {
-    ...mapState({ n: (state) => state.user.onboardStep }),
-  },
-  mounted() {
-    this.$nuxt.$on('onoarding', (val) => {
-      console.log(`Received onboarding event`, val)
-      this.onboardSnack = val
-    })
+    ...mapState({
+      n: (state) => state.user.onboardStep,
+      snack: (state) => state.user.onboard,
+    }),
   },
   methods: {
     close() {
-      // Emit event to turn off red outline
-      $nuxt.$emit('close')
-      this.onboardSnack = false
+      this.$store.commit('user/setOnboard', false)
     },
   },
 }
