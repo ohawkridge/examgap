@@ -25,7 +25,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <template v-for="(group, i) in tabGroups">
+      <template v-for="(group, i) in groups">
         <GroupCard
           v-if="group.active === tab"
           :key="i"
@@ -83,9 +83,12 @@ export default {
   computed: {
     ...mapGetters({
       tabGroups: 'groups/tabGroups',
+      // N.B. You *cannot* use this for GroupCards
+      // The filter will throw off activeGroupIndex
       activeGroups: 'groups/activeGroups',
     }),
     ...mapState({
+      groups: (state) => state.groups.groups,
       onboard: (state) => state.user.onboard,
       n: (state) => state.user.onboardStep,
     }),
@@ -101,7 +104,6 @@ export default {
   },
   created() {
     this.$icons = { mdiPlus }
-    // TODO Am I called on subsequent nav?
     if (this.activeGroups.length === 0) {
       this.$store.commit('user/setOnboard', true)
     }

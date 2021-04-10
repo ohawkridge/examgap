@@ -22,9 +22,9 @@
             </v-btn>
           </template>
           <v-list>
-            <template v-for="(group, i) in activeGroups">
+            <template v-for="(group, i) in groups">
               <v-list-item
-                v-if="group.active"
+                v-if="!teacher || group.active"
                 :key="i"
                 @click="nav(i, group.id)"
               >
@@ -134,6 +134,7 @@ export default {
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
+      groups: (state) => state.groups.groups,
     }),
     ...mapGetters({
       tabGroups: 'groups/tabGroups',

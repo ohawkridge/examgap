@@ -67,22 +67,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // Testing Rollbar
-    // [
-    //   'nuxt-rollbar-module',
-    //   {
-    //     serverAccessToken: '1754195e30464ca98e529aa95362fcaa',
-    //     clientAccessToken: '8624c964a1734c7c957c9d5020f40905',
-    //     config: {
-    //       // Addtional config
-    //       payload: {
-    //         environment: 'production',
-    //       },
-    //     },
-    //   },
-    // ],
-  ],
+  modules: [],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
