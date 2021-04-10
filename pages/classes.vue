@@ -102,19 +102,27 @@ export default {
     },
   },
   watch: {
-    activeGroupCount() {
-      this.setOnboarding()
+    tab() {
+      this.isOnboarding()
     },
+  },
+  mounted() {
+    console.log(
+      '%c' + 'Mounted',
+      'padding:2px 4px;background-color:orange;color:white;border-radius:3px'
+    )
+    this.isOnboarding()
   },
   created() {
     this.$icons = { mdiPlus }
-    this.setOnboarding()
   },
   methods: {
-    setOnboarding() {
-      if (this.activeGroupCount === 0) {
+    isOnboarding() {
+      if (this.activeGroupCount === 0 && this.tab) {
         this.$store.commit('user/setOnboard', true)
         this.$store.commit('user/setOnboardStep', 1)
+      } else {
+        this.$store.commit('user/setOnboard', false)
       }
     },
   },

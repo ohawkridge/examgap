@@ -1,3 +1,4 @@
+import { execSync } from 'child_process'
 import colors from 'vuetify/es5/util/colors'
 
 export default {
@@ -67,7 +68,27 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: [
+    [
+      'nuxt-rollbar-module',
+      {
+        serverAccessToken: process.env.ROLLBAR_SERVER_TOKEN,
+        clientAccessToken: process.env.ROLLBAR_CLIENT_TOKEN,
+        config: {
+          payload: {
+            environment: process.env.NODE_ENV,
+            client: {
+              javascript: {
+                source_map_enabled: true, // true by default
+                code_version: JSON.stringify(codeVersion()),
+                guess_uncaught_frames: true,
+              },
+            },
+          },
+        },
+      },
+    ],
+  ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -112,8 +133,19 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend(config, { isClient }) {
+      if (isClient) {
+        config.devtool = '#source-map'
+      }
+    },
     // https://github.com/iliyaZelenko/tiptap-vuetify-nuxt
     transpile: ['vuetify/lib', 'tiptap-vuetify'],
+    terser: {
+      sourceMap: true,
+    },
   },
-  sourceMap: true,
+}
+
+function codeVersion() {
+  return execSync('git rev-parse --short HEAD').toString().trim()
 }

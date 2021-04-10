@@ -4,7 +4,7 @@
       <v-col cols="12">
         <div class="d-md-flex justify-space-between align-center">
           <div>
-            <div class="text-h6">Create assignment</div>
+            <div class="text-h6">Create assignment cT: {{ currentTopic }}</div>
             <div v-if="group && 'course' in group" class="text-subtitle-1">
               {{ group.name }}
               <v-icon small class="pb-1">{{ $icons.mdiArrowRight }}</v-icon>
@@ -290,7 +290,9 @@ export default {
     // Remember which topic we were on last
     currentTopic: {
       get() {
-        return this.$store.state.assignments.currentTopic
+        // In some circumstances, currentTopic may become undefined
+        const ct = this.$store.state.assignments.currentTopic
+        return ct === undefined ? 0 : ct
       },
       set(value) {
         this.$store.commit('assignments/setCurrentTopic', value)
