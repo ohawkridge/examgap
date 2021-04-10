@@ -6,7 +6,7 @@
         :block="$vuetify.breakpoint.name === 'xs'"
         outlined
         v-bind="attrs"
-        :class="onboard && n === 3 ? 'red-outline' : ''"
+        :class="onboard && n === 3 ? 'red-out' : ''"
         v-on="on"
         @click="
           $store.commit('user/setOnboardStep', 4)

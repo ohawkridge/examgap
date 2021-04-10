@@ -1,6 +1,6 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#f1eeee" app elevate-on-scroll elevation="2">
+    <v-app-bar color="#f1eeee" app elevation="0">
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
           <TheLogo />
@@ -8,21 +8,19 @@
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container class="mt-md-10">
+      <v-container>
         <v-row class="d-flex justify-center">
-          <v-col cols="12" md="5">
-            <div class="d-flex justify-center">
-              <svg
-                height="92"
-                width="92"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#f44336"
-              >
-                <path :d="$icons.mdiAlertCircleOutline"></path>
-              </svg>
-            </div>
-            <p class="text-h6 text-center">
+          <v-col cols="12" md="5" class="d-flex align-center">
+            <svg
+              height="92"
+              width="92"
+              viewBox="0 0 24 24"
+              role="img"
+              fill="#f44336"
+            >
+              <path :d="$icons.mdiAlertCircleOutline"></path>
+            </svg>
+            <p class="text-h6 text-center mb-0 ml-2">
               {{ error.statusCode === 404 ? pageNotFound : otherError }}
             </p>
           </v-col>
@@ -30,9 +28,10 @@
             <p>
               Sorry, an error has occurred. This will automatically be reported.
             </p>
+            <p><NuxtLink :to="home">Try going home</NuxtLink>.</p>
             <p>
-              In the meantime, try
-              <NuxtLink :to="home">going back home</NuxtLink>.
+              If the problem persists, contact
+              <a href="mailto:support@examgap.com">support@examgap.com</a>.
             </p>
           </v-col>
         </v-row>

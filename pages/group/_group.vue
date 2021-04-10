@@ -15,7 +15,7 @@
               assignments.length
             }})
             <v-btn
-              :class="onboard && n === 4 ? 'red-outline' : ''"
+              :class="onboard && n === 4 ? 'red-out' : ''"
               elevation="0"
               color="primary"
               @click="createAssignment()"

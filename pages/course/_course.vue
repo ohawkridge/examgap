@@ -31,21 +31,20 @@
               <template #activator="{ on, attrs }">
                 <v-btn
                   color="primary"
-                  :disabled="selectedQuestions.length == 0"
+                  :disabled="selected.length == 0"
                   v-bind="attrs"
                   elevation="0"
-                  :class="`${onboard && n === 7 ? 'red-outline' : ''}`"
+                  :class="`${onboard && n === 7 ? 'red-out' : ''}`"
                   @click="assign()"
                   v-on="on"
                 >
                   <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                  Assign ({{ selectedQuestions.length }})</v-btn
+                  Assign ({{ selected.length }})</v-btn
                 >
               </template>
               <span
-                >Create assignment with
-                {{ selectedQuestions.length }} question{{
-                  selectedQuestions.length | pluralize
+                >Create assignment with {{ selected.length }} question{{
+                  selected.length | pluralize
                 }}
               </span>
             </v-tooltip>
@@ -71,9 +70,7 @@
                       <v-list-item
                         v-for="(topic, i) in topics"
                         :key="i"
-                        :class="
-                          onboard && i === 1 && n === 5 ? 'red-outline' : ''
-                        "
+                        :class="onboard && i === 1 && n === 5 ? 'red-out' : ''"
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
                       >
@@ -133,7 +130,7 @@
                                   icon
                                   :class="`${
                                     n === 6 && onboard && i === 0
-                                      ? 'red-outline'
+                                      ? 'red-out'
                                       : ''
                                   }`"
                                   v-bind="attrs"
@@ -142,12 +139,10 @@
                                 >
                                   <v-icon
                                     :color="
-                                      selectedQuestions.includes(q.id)
-                                        ? 'accent'
-                                        : ''
+                                      selected.includes(q.id) ? 'accent' : ''
                                     "
                                     >{{
-                                      selectedQuestions.includes(q.id)
+                                      selected.includes(q.id)
                                         ? $icons.mdiMinus
                                         : $icons.mdiPlus
                                     }}</v-icon
@@ -156,7 +151,7 @@
                               </template>
                               <span>
                                 {{
-                                  selectedQuestions.includes(q.id)
+                                  selected.includes(q.id)
                                     ? 'Remove from'
                                     : 'Add to'
                                 }}
@@ -187,7 +182,6 @@
                   <QuestionDetailDialog
                     :question-id="questionId"
                     :disabled="questions.length === 0"
-                    :included="selectedQuestions.includes(questionId)"
                   />
                 </div>
                 <div
@@ -203,7 +197,7 @@
               </v-col>
             </v-row>
           </v-container>
-          <CreateAssignment :questions="selectedQuestions" />
+          <CreateAssignment :questions="selected" />
         </v-card>
       </v-col>
     </v-row>
@@ -272,7 +266,7 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedQuestions: (state) => state.assignments.selectedQuestions,
+      selected: (state) => state.assignments.selected,
       n: (state) => state.user.onboardStep,
       onboard: (state) => state.user.onboard,
     }),
@@ -311,9 +305,9 @@ export default {
       // Advance onboarding
       this.$store.commit('user/setOnboardStep', 6)
     },
-    selectedQuestions() {
+    selected() {
       // Advance onboarding
-      if (this.selectedQuestions.length > 0) {
+      if (this.selected.length > 0) {
         this.$store.commit('user/setOnboardStep', 7)
       }
     },
@@ -359,7 +353,7 @@ export default {
     },
     // Add/remove questions from selection
     select(questionid) {
-      this.$store.commit('assignments/updateSelectedQuestions', questionid)
+      this.$store.commit('assignments/updateselected', questionid)
     },
     assign() {
       this.$nuxt.$emit('show-assign')

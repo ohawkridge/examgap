@@ -3,7 +3,7 @@
     <v-hover v-slot="{ hover }">
       <v-card
         hover
-        :class="`${outline ? 'red-outline' : ''}`"
+        :class="`${outline ? 'red-out' : ''}`"
         :color="hover ? 'primary' : ''"
         @click="open()"
       >

@@ -22,7 +22,7 @@
                 elevation="0"
                 :color="included ? 'accent' : 'primary'"
                 outlined
-                @click="$nuxt.$emit('add-rem', questionId)"
+                @click="select(questionId)"
                 v-on="on"
               >
                 <v-icon left>{{
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { mdiPlus, mdiMinus } from '@mdi/js'
 
 export default {
@@ -88,10 +89,6 @@ export default {
       required: true,
     },
     disabled: {
-      type: Boolean,
-      default: false,
-    },
-    included: {
       type: Boolean,
       default: false,
     },
@@ -131,6 +128,14 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      selected: (state) => state.assignments.selected,
+    }),
+    included() {
+      return this.selected.includes(this.questionId)
+    },
+  },
   watch: {
     dialog() {
       this.$fetch()
@@ -141,6 +146,11 @@ export default {
       mdiPlus,
       mdiMinus,
     }
+  },
+  methods: {
+    select(questionid) {
+      this.$store.commit('assignments/updateSelectedQuestions', questionid)
+    },
   },
 }
 </script>

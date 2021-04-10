@@ -10,7 +10,7 @@
           <v-btn
             color="primary"
             elevation="0"
-            :class="onboard && n === 1 ? 'red-outline' : ''"
+            :class="onboard && n === 1 ? 'red-out' : ''"
             @click="$nuxt.$emit('show-create')"
           >
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>

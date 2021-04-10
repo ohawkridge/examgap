@@ -2,7 +2,7 @@ export const state = () => ({
   assignmentId: '',
   questionId: '',
   topicId: '',
-  selectedQuestions: [],
+  selected: [],
   currentTopic: 0,
 })
 
@@ -18,23 +18,21 @@ export const mutations = {
     state.currentTopic = index
   },
   updateSelectedQuestions(state, questionId) {
-    // Add or remove questionId from selectedQuestions
-    if (state.selectedQuestions.includes(questionId)) {
-      state.selectedQuestions = state.selectedQuestions.filter(
-        (id) => id !== questionId
-      )
+    // Add or remove questionId from selected questions
+    if (state.selected.includes(questionId)) {
+      state.selected = state.selected.filter((id) => id !== questionId)
     } else {
-      state.selectedQuestions.push(questionId)
+      state.selected.push(questionId)
     }
   },
   clearSelectedQuestions(state) {
-    state.selectedQuestions = []
+    state.selected = []
   },
   logout(state) {
     state.assignmentId = ''
     state.questionId = ''
     state.topicId = ''
-    state.selectedQuestions = []
+    state.selected = []
     state.currentTopic = 0
   },
 }
