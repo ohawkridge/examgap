@@ -22,13 +22,15 @@ export default class FaunaStream {
     })
 
     this.stream.on('version', ({ diff: { data } }, event) => {
-      if ('examMode' in data) {
-        // N.B. Can't manipulate state outside mutations
-        this.commit('setExamMode', data.examMode)
-      }
-      if ('newAssignment' in data) {
-        // Dispatch an action to get assignment details
-        this.dispatch('getAssignment', data.newAssignment)
+      if (data !== undefined) {
+        if ('examMode' in data) {
+          // N.B. Can't manipulate state outside mutations
+          this.commit('setExamMode', data.examMode)
+        }
+        if ('newAssignment' in data) {
+          // Dispatch an action to get assignment details
+          this.dispatch('getAssignment', data.newAssignment)
+        }
       }
     })
 

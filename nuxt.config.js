@@ -115,4 +115,5 @@ export default {
     // https://github.com/iliyaZelenko/tiptap-vuetify-nuxt
     transpile: ['vuetify/lib', 'tiptap-vuetify'],
   },
+  sourceMap: true,
 }
