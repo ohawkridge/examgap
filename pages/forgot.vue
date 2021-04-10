@@ -37,7 +37,7 @@
               type="info"
               :icon="$icons.mdiInformationOutline"
             >
-              Students—your teacher can reset your password
+              Student? Your teacher can reset your password
             </v-alert>
             <v-alert
               v-if="failed"
@@ -62,8 +62,8 @@
         </v-col>
       </v-row>
       <TheSuccessDialog
-        title="Password was reset"
-        :subtitle="`A new password has been sent to your email.`"
+        title="Password reset"
+        :subtitle="`A new password has been sent to ${username}.`"
       />
     </v-container>
   </v-app>
@@ -132,7 +132,8 @@ export default {
             this.$nuxt.$emit('show-success')
           }
         } catch (e) {
-          console.error(e)
+          // console.error(e)
+          this.$rollbar.debug('Error resetting password')
           this.$snack.showMessage({
             type: 'error',
             msg: 'Error resetting password',
@@ -147,11 +148,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-/* adjust for app-bar height */
-#form {
-  position: relative;
-  top: -58px;
-}
-</style>

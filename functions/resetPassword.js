@@ -9,6 +9,8 @@ exports.handler = async (event, context, callback) => {
   const client = new faunadb.Client({
     secret: process.env.SECRET_KEY,
   })
+  console.log(process.env.SECRET_KEY)
+  console.log(data.email)
   // Cofigure AWS SES
   AWS.config.update({
     accessKeyId: process.env.SES_KEY,
@@ -22,7 +24,7 @@ exports.handler = async (event, context, callback) => {
       // Update password if username exists
       q.Equals(q.Exists(q.Match(q.Index('user_by_username'), email)), true),
       q.Update(
-        q.Select(['ref'], q.Get(q.Match(q.Index('user_by_username'), email))),
+        q.Select('ref', q.Get(q.Match(q.Index('user_by_username'), email))),
         {
           credentials: {
             password: newPass,
@@ -34,7 +36,6 @@ exports.handler = async (event, context, callback) => {
     const data = await client.query(qry)
     // If success, send new password in email
     if (data) {
-      console.log(`Sending email...`)
       const params = {
         Destination: {
           ToAddresses: [email], // Must be array
@@ -66,7 +67,7 @@ exports.handler = async (event, context, callback) => {
             Data: '>> Examgap new password',
           },
         },
-        Source: 'support@examgap.com',
+        Source: 'Examgap <support@examgap.com>',
       }
       // Try to send the email
       ses.sendEmail(params, function (err, data) {

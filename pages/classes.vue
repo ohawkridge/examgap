@@ -107,10 +107,6 @@ export default {
     },
   },
   mounted() {
-    console.log(
-      '%c' + 'Mounted',
-      'padding:2px 4px;background-color:orange;color:white;border-radius:3px'
-    )
     this.isOnboarding()
   },
   created() {

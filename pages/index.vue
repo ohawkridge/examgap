@@ -378,7 +378,7 @@
       </v-row>
     </v-container>
     <!-- Testamonials -->
-    <!-- <v-container fluid>
+    <v-container fluid>
       <v-row class="d-flex justify-center">
         <v-col cols="12" md="9">
           <p class="text-h5 font-weight-bold text-md-h4 text-center">
@@ -386,7 +386,7 @@
           </p>
         </v-col>
       </v-row>
-      <v-row class="testamonial-one">
+      <!-- <v-row class="testamonial-one">
         <v-col cols="12" md="6" class="testamonial d-flex align-center">
           <div>
             <p class="text-h6 font-weight-medium text-center">
@@ -418,13 +418,13 @@
             </p>
           </div>
         </v-col>
-      </v-row>
+      </v-row> -->
       <v-row class="testamonial-border">
         <v-col cols="12" class="testamonial d-flex align-center justify-center">
           <div>
             <p class="text-h6 font-weight-medium text-center">
-              "Testamonial THREE blah blah blah blah blah blah blah blah blah
-              blah blah blah."
+              "Examgap supports my teaching at GCSE. It's especially good for
+              high achievers."
             </p>
             <p class="text-body-1 text-center">
               <span class="font-weight-medium">Alan</span>&mdash;<i
@@ -435,7 +435,7 @@
           </div>
         </v-col>
       </v-row>
-    </v-container> -->
+    </v-container>
     <v-container>
       <v-row class="d-flex justify-center">
         <v-col cols="12" md="3">
@@ -605,6 +605,11 @@ export default {
 /* ----- Testamonials ----- */
 .testamonial {
   height: 240px;
+}
+
+.testamonial-border {
+  border-top: 1px solid rgb(224, 224, 224) !important;
+  border-bottom: 1px solid rgb(224, 224, 224) !important;
 }
 
 /* --------- Misc --------- */

@@ -150,10 +150,6 @@ export default {
     }
   },
   mounted() {
-    console.log(
-      '%c' + 'Mounted',
-      'padding:2px 4px;background-color:orange;color:white;border-radius:3px'
-    )
     // No students? Onboard @step 3
     if (this.group.num_students === 0) {
       this.$store.commit('user/setOnboardStep', 3)
