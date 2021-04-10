@@ -51,8 +51,8 @@ export const actions = {
         // Commit group data to groups store
         commit('groups/setGroups', userData.groups, { root: true })
         // Activate onboarding?
-        const count = rootGetters['groups/activeGroups'].length
-        if (count === 0) commit('setOnboard', true)
+        if (rootGetters['groups/activeGroupCount'] === 0)
+          commit('setOnboard', true)
       } catch (e) {
         console.error(e)
       }

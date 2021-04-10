@@ -33,7 +33,7 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-            <v-list-item v-if="activeGroups.length === 0" disabled>
+            <v-list-item v-if="activeGroupCount === 0" disabled>
               <v-list-item-content>
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
@@ -137,7 +137,7 @@ export default {
       groups: (state) => state.groups.groups,
     }),
     ...mapGetters({
-      activeGroups: 'groups/activeGroups',
+      activeGroupCount: 'groups/activeGroupCount',
     }),
     // Hide footer on pages with bottom-navigation
     showFooter() {

@@ -84,7 +84,7 @@ export default {
     ...mapGetters({
       // N.B. You *cannot* use this for GroupCards
       // The filter will throw off activeGroupIndex
-      activeGroups: 'groups/activeGroups',
+      activeGroupCount: 'groups/activeGroupCount',
     }),
     ...mapState({
       groups: (state) => state.groups.groups,
@@ -102,7 +102,7 @@ export default {
     },
   },
   watch: {
-    activeGroups() {
+    activeGroupCount() {
       this.setOnboarding()
     },
   },
@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     setOnboarding() {
-      if (this.activeGroups.length === 0) {
+      if (this.activeGroupCount === 0) {
         this.$store.commit('user/setOnboard', true)
         this.$store.commit('user/setOnboardStep', 1)
       }
