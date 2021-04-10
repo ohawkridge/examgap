@@ -1,6 +1,6 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#f1eeee" app elevate-on-scroll elevation="2">
+    <v-app-bar color="#f1eeee" app elevate-on-scroll>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
           <TheLogo />
@@ -137,7 +137,6 @@ export default {
       groups: (state) => state.groups.groups,
     }),
     ...mapGetters({
-      tabGroups: 'groups/tabGroups',
       activeGroups: 'groups/activeGroups',
     }),
     // Hide footer on pages with bottom-navigation

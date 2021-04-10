@@ -82,7 +82,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tabGroups: 'groups/tabGroups',
       // N.B. You *cannot* use this for GroupCards
       // The filter will throw off activeGroupIndex
       activeGroups: 'groups/activeGroups',
@@ -102,11 +101,22 @@ export default {
       },
     },
   },
+  watch: {
+    activeGroups() {
+      this.setOnboarding()
+    },
+  },
   created() {
     this.$icons = { mdiPlus }
-    if (this.activeGroups.length === 0) {
-      this.$store.commit('user/setOnboard', true)
-    }
+    this.setOnboarding()
+  },
+  methods: {
+    setOnboarding() {
+      if (this.activeGroups.length === 0) {
+        this.$store.commit('user/setOnboard', true)
+        this.$store.commit('user/setOnboardStep', 1)
+      }
+    },
   },
 }
 </script>

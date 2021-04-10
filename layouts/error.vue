@@ -1,25 +1,56 @@
 <template>
-  <v-app>
+  <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
+    <v-app-bar color="#f1eeee" app elevate-on-scroll elevation="2">
+      <v-container class="d-flex align-center px-0">
+        <nuxt-link :to="teacher ? '/classes' : '/home'">
+          <TheLogo />
+        </nuxt-link>
+      </v-container>
+    </v-app-bar>
     <v-main>
-      <v-container>
-        <p v-if="error.statusCode === 404" class="text-h6">
-          {{ pageNotFound }}
-        </p>
-        <p v-else class="text-h6">
-          {{ otherError }}
-        </p>
-        <p>
-          Go back
-          <NuxtLink :to="home()"> home </NuxtLink>
-        </p>
+      <v-container class="mt-md-10">
+        <v-row class="d-flex justify-center">
+          <v-col cols="12" md="5">
+            <div class="d-flex justify-center">
+              <svg
+                height="92"
+                width="92"
+                viewBox="0 0 24 24"
+                role="img"
+                fill="#f44336"
+              >
+                <path :d="$icons.mdiAlertCircleOutline"></path>
+              </svg>
+            </div>
+            <p class="text-h6 text-center">
+              {{ error.statusCode === 404 ? pageNotFound : otherError }}
+            </p>
+          </v-col>
+          <v-col cols="12" md="5">
+            <p>
+              Sorry, an error has occurred. This will automatically be reported.
+            </p>
+            <p>
+              In the meantime, try
+              <NuxtLink :to="home">going back home</NuxtLink>.
+            </p>
+          </v-col>
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { mdiAlertCircleOutline } from '@mdi/js'
+import TheLogo from '@/components/common/TheLogo'
+
 export default {
-  layout: 'empty',
+  name: 'Error',
+  components: {
+    TheLogo,
+  },
   props: {
     error: {
       type: Object,
@@ -32,18 +63,22 @@ export default {
       otherError: 'An error occurred',
     }
   },
-  head() {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
-    return {
-      title,
-    }
-  },
-  methods: {
+  computed: {
+    ...mapState({
+      teacher: (state) => state.user.teacher,
+    }),
     home() {
       if (this.$store.state.user.id === '') return '/'
-      return this.$store.state.user.teacher ? '/classes' : '/home'
+      return this.teacher ? '/classes' : '/home'
     },
+    head() {
+      return this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+    },
+  },
+  created() {
+    this.$icons = {
+      mdiAlertCircleOutline,
+    }
   },
 }
 </script>
