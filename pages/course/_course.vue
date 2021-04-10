@@ -4,7 +4,7 @@
       <v-col cols="12">
         <div class="d-md-flex justify-space-between align-center">
           <div>
-            <div class="text-h6">Create assignment cT: {{ currentTopic }}</div>
+            <div class="text-h6">Create assignment</div>
             <div v-if="group && 'course' in group" class="text-subtitle-1">
               {{ group.name }}
               <v-icon small class="pb-1">{{ $icons.mdiArrowRight }}</v-icon>
