@@ -20,7 +20,7 @@
                       <th class="text-left text-center">Boundary (%)</th>
                     </tr>
                   </thead>
-                  <tbody v-if="group.course.rag">
+                  <tbody v-if="group && group.course.rag">
                     <tr v-for="(row, i) in group.course.rag" :key="i">
                       <td class="text-center">{{ row[0] }}</td>
                       <td class="text-center">

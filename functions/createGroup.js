@@ -50,6 +50,7 @@ exports.handler = async (event, context, callback) => {
             id: q.Select(['ref', 'id'], q.Var('instance')),
             name: q.Select(['data', 'name'], q.Var('instance')),
             qan: q.Select(['data', 'qan'], q.Var('instance')),
+            rag: q.Select(['data', 'rag'], q.Var('instance')),
           }
         ),
         assignments: [],

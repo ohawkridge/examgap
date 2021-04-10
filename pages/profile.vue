@@ -15,12 +15,12 @@
           <v-checkbox
             v-if="!teacher"
             v-model="examMode"
-            label="Exam mode*"
+            label="Exam mode"
             disabled
             hide-details
           >
           </v-checkbox>
-          <p v-if="!teacher" class="text-caption">*Set by your teacher</p>
+          <p v-if="!teacher" class="text-caption">Set by your teacher</p>
           <v-text-field
             :value="school"
             label="School name"
@@ -28,9 +28,9 @@
             readonly
           ></v-text-field>
           <v-text-field
-            :value="expires <= 0 ? 'Expired' : `${expires} days`"
+            :value="expiry"
             label="Subscription expires"
-            :error="expires <= 0"
+            :error="teacher && expires <= 0"
             outlined
             readonly
           ></v-text-field>
@@ -65,6 +65,10 @@ export default {
       school: (state) => state.user.school,
       expires: (state) => state.user.subscriptionExpires,
     }),
+    expiry() {
+      if (!this.teacher) return `N/A`
+      return this.expires <= 0 ? 'Expired' : `${this.expires} days`
+    },
   },
 }
 </script>

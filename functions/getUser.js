@@ -33,12 +33,10 @@ exports.handler = async (event, context, callback) => {
               q.Select(['data', 'school'], q.Var('instance'))
             ),
             teacher: true,
-            subscriptionExpires: q.ToString(
-              q.TimeDiff(
-                q.Now(),
-                q.Select(['data', 'subscriptionExpires'], q.Var('instance')),
-                'days'
-              )
+            subscriptionExpires: q.TimeDiff(
+              q.Now(),
+              q.Select(['data', 'subscriptionExpires'], q.Var('instance')),
+              'days'
             ),
             groups: q.Select(
               ['data'],

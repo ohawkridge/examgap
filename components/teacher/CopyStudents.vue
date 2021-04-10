@@ -14,7 +14,6 @@
           :items="groups"
           label="To class*"
         ></v-select>
-        <p class="red--text">s: {{ selected }}</p>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
