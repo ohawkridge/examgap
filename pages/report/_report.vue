@@ -79,6 +79,11 @@
                           class="text-center"
                         >
                           <MarkChip
+                            :class="`${
+                              onboard && n === 8 && i === 0 && j === 0
+                                ? 'red-out'
+                                : ''
+                            }`"
                             :student-index="i"
                             :question-index="j"
                             :data="item"
@@ -297,6 +302,7 @@
         </v-container>
       </v-card>
     </v-dialog>
+    <onboarding-snackbar />
   </div>
 </template>
 
@@ -313,12 +319,13 @@ import {
   mdiBoomerang,
   mdiCommentTextOutline,
 } from '@mdi/js'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { debounce, cloneDeep } from 'lodash'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import GroupNav from '@/components/teacher/GroupNav'
 import MarkChip from '@/components/teacher/MarkChip'
+import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
 
 export default {
   components: {
@@ -326,6 +333,7 @@ export default {
     GroupHeader,
     GroupNav,
     MarkChip,
+    OnboardingSnackbar,
   },
   layout: 'app',
   async asyncData({ store, params, $config: { baseURL } }) {
@@ -364,6 +372,10 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapState({
+      n: (state) => state.user.onboardStep,
+      onboard: (state) => state.user.onboard,
+    }),
     // Question is included in header data (for hover preview)
     question() {
       return this.data.headers[this.questionIndex + 1]
@@ -429,6 +441,12 @@ export default {
       mdiCommentTextOutline,
     }
   },
+  mounted() {
+    if (this.group.assignments.length < 3) {
+      this.$store.commit('user/setOnboardStep', 8)
+      this.$store.commit('user/setOnboard', true)
+    }
+  },
   methods: {
     async refresh() {
       try {
@@ -488,6 +506,8 @@ export default {
       this.markScheme = cloneDeep(this.question.markScheme)
       // Must be *after* marking = true
       this.updateBank()
+      // Hide onboarding
+      this.$store.commit('user/setOnboard', false)
       // You could open a response and close it without clicking
       // next or previous, so set it as 'marked' on open
       this.marked(this.response.id)

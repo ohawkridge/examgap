@@ -1,6 +1,6 @@
 <template>
   <v-snackbar v-model="snack" :vertical="true" timeout="-1">
-    <span class="font-weight-bold">({{ n }}/7)</span>
+    <span class="font-weight-bold">({{ n }}/8)</span>
     {{ stringsForSteps[n] }}
     <template #action="{ attrs }">
       <v-btn color="secondary" plain v-bind="attrs" @click="close()">
@@ -26,6 +26,7 @@ export default {
         5: 'Change topic to see more questions.',
         6: 'Click + to select questions to assign.',
         7: "When you're ready, click + Assign.",
+        8: 'Click on a self-mark to enter marking view.',
       },
     }
   },
