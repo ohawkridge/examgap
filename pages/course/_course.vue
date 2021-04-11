@@ -353,12 +353,12 @@ export default {
     },
     // Add/remove questions from selection
     select(questionid) {
-      this.$store.commit('assignments/updateselected', questionid)
+      this.$store.commit('assignments/updateSelectedQuestions', questionid)
     },
     assign() {
       this.$nuxt.$emit('show-assign')
       // Onboarding complete
-      this.$tore.commit('user/setOnboard', false)
+      this.$store.commit('user/setOnboard', false)
     },
   },
 }
