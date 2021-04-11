@@ -203,7 +203,7 @@ export default {
         '/.netlify/functions/getStudents',
         this.$config.baseURL
       )
-      const response = await fetch(url, {
+      let response = await fetch(url, {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
           groupId: this.group.id,
@@ -214,7 +214,11 @@ export default {
       if (!response.ok) {
         throw new Error(`Error fetching student data ${response.status}`)
       }
-      this.students = await response.json()
+      response = await response.json()
+      // console.log(response)
+      // Update student count for group
+      this.$store.commit('groups/updateStudentCount', response.length)
+      this.students = response
     } catch (e) {
       console.error(e)
     }

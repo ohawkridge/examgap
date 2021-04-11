@@ -149,12 +149,13 @@ export const mutations = {
   addGroup(state, group) {
     state.groups.push(group)
   },
-  incrementStudentCount(state, groupId) {
-    for (let i = 0; i < state.groups.length; i++) {
-      if (state.groups[i].id === groupId) {
-        state.groups[i].num_students += 1
-      }
-    }
+  // Called by _students.vue (in case new students have joined)
+  updateStudentCount(state, n) {
+    state.groups[state.activeGroupIndex].num_students = n
+  },
+  // Called after manually adding a student
+  incrementStudentCount(state) {
+    state.groups[state.activeGroupIndex].num_students++
   },
   // Teacher creates a new assignment
   addAssignment(state, assignment) {
