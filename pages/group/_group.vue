@@ -31,11 +31,21 @@
           <v-card-text>
             <v-list v-if="assignments.length > 0">
               <template v-for="(assignment, i) in assignments">
-                <v-list-item :key="i" nuxt :to="`/report/${assignment.id}`">
+                <v-list-item
+                  :key="i"
+                  class="px-0 px-md-3"
+                  nuxt
+                  :to="`/report/${assignment.id}`"
+                >
                   <v-list-item-content>
                     <v-list-item-title>{{ assignment.name }}</v-list-item-title>
                     <v-list-item-subtitle>
-                      Due {{ assignment.dateDue | date }}
+                      <span class="font-weight-medium">Start:</span>
+                      {{ assignment.start | date }}&nbsp;&nbsp;&nbsp;<span
+                        class="font-weight-medium"
+                        >Due:</span
+                      >
+                      {{ assignment.dateDue | date }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                   <v-list-item-action>
