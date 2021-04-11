@@ -80,11 +80,6 @@ export default {
             throw new Error(`Error joining class ${response.status}`)
           }
           response = await response.json()
-          // console.log(
-          //   '%c' + 'Data',
-          //   'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
-          // )
-          // console.log(response)
           // Dispatch getUser action again
           this.$store.dispatch('user/getUser')
           this.$snack.showMessage({

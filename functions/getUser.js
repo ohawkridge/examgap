@@ -211,7 +211,7 @@ exports.handler = async (event, context, callback) => {
                   q.Paginate(
                     q.Match(
                       q.Index('student_assignments'),
-                      q.Select(['ref'], q.Var('instance')) // User (student)
+                      q.Select('ref', q.Var('instance')) // User (student)
                     )
                   ),
                   q.Lambda(
