@@ -59,7 +59,7 @@
       </v-row>
       <TheSuccessDialog
         title="Password reset"
-        :subtitle="`A new password has been sent to ${username}.`"
+        subtitle="A new password has been sent to your email."
       />
     </v-container>
   </v-app>
@@ -117,6 +117,8 @@ export default {
             method: 'POST',
           })
           if (!response.ok) {
+            this.$rollbar.debug('Error resetting password')
+            // TODO Is this also needed?
             throw new Error(`Error resetting password ${response.status}`)
           }
           response = await response.json()
@@ -124,12 +126,10 @@ export default {
             this.failed = true
           } else {
             this.failed = false
-            // Show big success modal
             this.$nuxt.$emit('show-success')
           }
         } catch (e) {
-          // console.error(e)
-          this.$rollbar.debug('Error resetting password')
+          console.error(e)
           this.$snack.showMessage({
             type: 'error',
             msg: 'Error resetting password',

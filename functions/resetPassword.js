@@ -9,8 +9,6 @@ exports.handler = async (event, context, callback) => {
   const client = new faunadb.Client({
     secret: process.env.SECRET_KEY,
   })
-  console.log(process.env.SECRET_KEY)
-  console.log(data.email)
   // Cofigure AWS SES
   AWS.config.update({
     accessKeyId: process.env.SES_KEY,
@@ -33,6 +31,7 @@ exports.handler = async (event, context, callback) => {
       ),
       false
     )
+    console.log(`Pw reset to`, newPass)
     const data = await client.query(qry)
     // If success, send new password in email
     if (data) {
@@ -48,10 +47,10 @@ exports.handler = async (event, context, callback) => {
               Data: `<html>
                       <body>
                         <p>Here are your new login details:</p>
-                        <p>-=-=-=-=-=-=-=-=-=-=-=-=-</p>
-                        <p>Username: ${email}</p>
-                        <p>New password: ${newPass}</p>
-                        <p>-=-=-=-=-=-=-=-=-=-=-=-=-</p>
+                        <p>-------------------------</p>
+                        Username: ${email}<br />
+                        New password: ${newPass}
+                        <p>-------------------------</p>
                         <p><a href="https://examgap.com/signin">Login to Examgap</a></p>
                         <p>If you're still having problems, email support@examgap.com.</p>
                       </body>
