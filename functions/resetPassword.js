@@ -9,15 +9,15 @@ exports.handler = async (event, context, callback) => {
   const client = new faunadb.Client({
     secret: process.env.SECRET_KEY,
   })
-  // Cofigure AWS SES
+  // Configure SES
   AWS.config.update({
     accessKeyId: process.env.SES_KEY,
     secretAccessKey: process.env.SES_SECRET,
     region: 'eu-west-2',
   })
-  const ses = new AWS.SES()
+  const ses = new AWS.SES({ apiVersion: '2010-12-01' })
+  const newPass = createPassword()
   try {
-    const newPass = createPassword()
     const qry = q.If(
       // Update password if username exists
       q.Exists(q.Match(q.Index('user_by_username'), email)),
@@ -31,30 +31,31 @@ exports.handler = async (event, context, callback) => {
       ),
       false
     )
-    console.log(`Pw reset to`, newPass)
+    // Execute query
     const data = await client.query(qry)
-    // If success, send new password in email
     if (data) {
+      // Send password in email
       const params = {
         Destination: {
           ToAddresses: [email], // Must be array
         },
+        // ConfigurationSetName: <<ConfigurationSetName>>,
         Message: {
           Body: {
             Html: {
-              // HTML format of the email
+              // HTML Format of the email
               Charset: 'UTF-8',
               Data: `<html>
-                      <body>
-                        <p>Here are your new login details:</p>
-                        <p>-------------------------</p>
-                        Username: ${email}<br />
-                        New password: ${newPass}
-                        <p>-------------------------</p>
-                        <p><a href="https://examgap.com/signin">Login to Examgap</a></p>
-                        <p>If you're still having problems, email support@examgap.com.</p>
-                      </body>
-                  </html>`,
+                  <body>
+                  <p>Here are your new login details:</p>
+                  <p>-------------------------</p>
+                  Username: ${email}<br />
+                  New password: ${newPass}
+                  <p>-------------------------</p>
+                  <p><a href="https://examgap.com/signin">Login to Examgap</a></p>
+                  <p>If you're still having problems, <a href="mailto:support@examgap.com">email support@examgap.com</a>.</p>
+                </body>
+                </html>`,
             },
             Text: {
               Charset: 'UTF-8',
@@ -68,19 +69,25 @@ exports.handler = async (event, context, callback) => {
         },
         Source: 'Examgap <support@examgap.com>',
       }
-      // Try to send the email
-      ses.sendEmail(params, function (err, data) {
-        // If something goes wrong, print an error message.
-        if (err) {
-          console.log(err.message)
-        } else {
-          console.log('Email sent! Message ID: ', data.MessageId)
-        }
-      })
-    }
-    return {
-      statusCode: 200,
-      body: JSON.stringify(data),
+      return ses
+        .sendEmail(params)
+        .promise()
+        .then((data) => {
+          console.log('email submitted to SES', data)
+          return {
+            statusCode: 200,
+            body: `Message sent`,
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          return {
+            statusCode: 500,
+            body: `Message unsuccesfully sent, error: ${error}`,
+          }
+        })
+    } else {
+      return { statusCode: 400, body: 'Email not found' }
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }

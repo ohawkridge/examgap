@@ -14,7 +14,7 @@
             Reset your password
           </p>
           <!-- Prevent submit btn posting form -->
-          <v-form ref="form" @submit.prevent="reset()">
+          <v-form ref="form" @submit.prevent="reset">
             <v-text-field
               v-model="username"
               :prepend-inner-icon="$icons.mdiAccountOutline"
@@ -105,29 +105,30 @@ export default {
   methods: {
     async reset() {
       if (this.$refs.form.validate()) {
+        console.log(`reset()`)
         try {
           this.loading = true
           const url = new URL(
             '/.netlify/functions/resetPassword',
             this.$config.baseURL
           )
-          let response = await fetch(url, {
+          const response = await fetch(url, {
             body: JSON.stringify({
               email: this.username,
             }),
             method: 'POST',
           })
-          if (!response.ok) {
+          // console.log(
+          //   '%c' + 'Response',
+          //   'padding:2px 4px;background-color:green;color:white;border-radius:3px'
+          // )
+          // console.log(response)
+          if (response.status === 400) {
             this.$rollbar.debug('Error resetting password')
-            // TODO Is this also needed?
-            throw new Error(`Error resetting password ${response.status}`)
-          }
-          response = await response.json()
-          if (response === false) {
             this.failed = true
           } else {
-            this.failed = false
             this.$nuxt.$emit('show-success')
+            this.failed = false
           }
         } catch (e) {
           console.error(e)

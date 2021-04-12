@@ -13,9 +13,6 @@ exports.handler = async (event) => {
     region: 'eu-west-2',
   })
 
-  console.log(`accessKey`, process.env.SES_KEY)
-  console.log(`secretKey`, process.env.SES_SECRET)
-
   const ses = new AWS.SES({ apiVersion: '2010-12-01' })
   const params = {
     Destination: {
