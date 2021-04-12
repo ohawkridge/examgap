@@ -618,7 +618,7 @@ export default {
           throw new Error(`Error saving mark ${response.status}`)
         }
         response = await response.json()
-        console.log(response)
+        // console.log(response)
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
