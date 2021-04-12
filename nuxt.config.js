@@ -135,7 +135,7 @@ export default {
   build: {
     extend(config, { isClient }) {
       if (isClient) {
-        config.devtool = '#source-map'
+        config.devtool = 'source-map'
       }
     },
     // https://github.com/iliyaZelenko/tiptap-vuetify-nuxt

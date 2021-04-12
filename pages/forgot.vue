@@ -1,16 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar flat app color="white">
-      <v-container class="d-flex align-center px-0 px-sm-3">
-        <nuxt-link to="/">
-          <TheLogo />
-        </nuxt-link>
-        <v-spacer />
-        <span class="grey--text"
-          >Back to <nuxt-link to="/">home</nuxt-link></span
-        >
-      </v-container>
-    </v-app-bar>
+    <v-container class="d-flex align-center">
+      <nuxt-link to="/">
+        <TheLogo />
+      </nuxt-link>
+      <v-spacer />
+      <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
+    </v-container>
     <v-container class="fill-height">
       <v-row class="d-flex align-center justify-center">
         <v-col id="form" cols="12" sm="8" md="6" lg="5" xl="4">
