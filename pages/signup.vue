@@ -12,7 +12,7 @@
         <v-row class="d-flex justify-center">
           <v-col cols="12" sm="8" md="6" lg="5">
             <v-card elevation="0">
-              <v-form ref="form" @submit.prevent="signup">
+              <v-form ref="form" @submit.prevent="signup()">
                 <v-card-title
                   class="text-h5 font-weight-bold d-flex justify-center"
                 >

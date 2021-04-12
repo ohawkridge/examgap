@@ -21,6 +21,7 @@
               label="Email"
               color="primary"
               type="text"
+              validate-on-blur
               required
               outlined
               :rules="userRules"

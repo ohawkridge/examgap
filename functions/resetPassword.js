@@ -20,7 +20,7 @@ exports.handler = async (event, context, callback) => {
     const newPass = createPassword()
     const qry = q.If(
       // Update password if username exists
-      q.Equals(q.Exists(q.Match(q.Index('user_by_username'), email)), true),
+      q.Exists(q.Match(q.Index('user_by_username'), email)),
       q.Update(
         q.Select('ref', q.Get(q.Match(q.Index('user_by_username'), email))),
         {
