@@ -107,16 +107,20 @@
                   loading-text="Fetching student data..."
                 >
                   <template #no-data>
+                    <v-img
+                      id="grad"
+                      src="/no-student.svg"
+                      alt="Graduation gap illustration"
+                      :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
+                    />
                     <p class="text-body-2 mt-4">No students yet</p>
-                    <p>
-                      <v-btn
-                        color="primary"
-                        elevation="0"
-                        @click="$nuxt.$emit('open-invite')"
-                      >
-                        Invite students</v-btn
-                      >
-                    </p>
+                    <v-btn
+                      color="primary"
+                      elevation="0"
+                      @click="$nuxt.$emit('open-invite')"
+                    >
+                      Invite students
+                    </v-btn>
                   </template>
                   <template #[`item.target`]="props">
                     <v-edit-dialog
@@ -341,3 +345,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+#grad {
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>

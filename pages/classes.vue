@@ -35,7 +35,7 @@
         />
       </template>
       <!-- Create class card -->
-      <v-col v-if="tab" cols="12" md="6" lg="4">
+      <v-col v-if="tab && activeGroupCount > 0" cols="12" md="6" lg="4">
         <v-card
           id="create-class"
           class="d-flex align-center justify-center"
@@ -50,6 +50,23 @@
           </v-btn>
         </v-card>
       </v-col>
+      <!-- Empty state -->
+      <template v-if="activeGroupCount === 0 && tab">
+        <v-col id="empty" cols="12">
+          <v-img src="/no-class.svg" alt="Empty chair illustration" />
+        </v-col>
+        <v-col cols="12" class="text-center">
+          <p class="text-body-2 mt-4">No classes yet</p>
+          <v-btn
+            elevation="0"
+            color="primary"
+            @click="$nuxt.$emit('show-create')"
+          >
+            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+            Create class
+          </v-btn>
+        </v-col>
+      </template>
     </v-row>
     <create-class />
     <onboarding-snackbar />
@@ -129,5 +146,16 @@ export default {
 #create-class {
   background: #f1eeee !important;
   border: 1px dashed #0078a0 !important;
+}
+
+#empty {
+  padding-left: 3em;
+  padding-right: 3em;
+}
+@media only screen and (min-width: 600px) {
+  #empty {
+    padding-left: 38%;
+    padding-right: 38%;
+  }
 }
 </style>

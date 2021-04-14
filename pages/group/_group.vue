@@ -1,7 +1,8 @@
 <template>
   <div>
     <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
-    <v-row>
+    <!-- TODO Don't know why mt-3 needed here -->
+    <v-row class="mt-3">
       <v-col cols="12" md="3">
         <GroupNav
           v-if="group && Object.keys(group).length > 0"
@@ -79,20 +80,14 @@
             </v-list>
             <!-- Empty state -->
             <div v-else>
-              <div id="empty" class="d-flex justify-center">
+              <div class="d-flex justify-center">
                 <v-img
                   src="/no-assign.svg"
-                  :max-width="$vuetify.breakpoint.name === 'xs' ? 100 : 160"
+                  alt="Books and pens illustrations"
+                  :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
                 />
               </div>
-              <p class="text-body-2 text-center mb-2">No assignments yet</p>
-              <p class="text-subtitle text-center">
-                {{
-                  `Click + Create ${
-                    $vuetify.breakpoint.name !== 'xs' ? 'Assignment' : ''
-                  } to browse questions.`
-                }}
-              </p>
+              <p class="text-body-2 text-center mt-4">No assignments yet</p>
               <div class="d-flex justify-center">
                 <v-btn
                   elevation="0"
@@ -160,15 +155,17 @@ export default {
     }
   },
   mounted() {
-    // No students? Onboard @step 3
-    if (this.group.num_students === 0) {
-      this.$store.commit('user/setOnboardStep', 3)
-      this.$store.commit('user/setOnboard', true)
-    }
-    // No assignments? Onboard @step 4
-    if (this.group.num_students > 0 && this.assignments.length < 3) {
-      this.$store.commit('user/setOnboardStep', 4)
-      this.$store.commit('user/setOnboard', true)
+    if (this.group !== undefined) {
+      // No students? Onboard @step 3
+      if (this.group.num_students === 0) {
+        this.$store.commit('user/setOnboardStep', 3)
+        this.$store.commit('user/setOnboard', true)
+      }
+      // No assignments? Onboard @step 4
+      if (this.group.num_students > 0 && this.assignments.length < 3) {
+        this.$store.commit('user/setOnboardStep', 4)
+        this.$store.commit('user/setOnboard', true)
+      }
     }
   },
   methods: {
@@ -182,12 +179,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-@media only screen and (min-width: 600px) {
-  #empty {
-    padding-top: 1.5em;
-    padding-bottom: 1.5em;
-  }
-}
-</style>

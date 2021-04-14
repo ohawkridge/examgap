@@ -72,7 +72,6 @@
     <v-overlay
       opacity="0.86"
       :value="overlay"
-      z-index="999"
       @click.native="overlay = !overlay"
     >
       <div class="font-weight-bold white--text text-center big">

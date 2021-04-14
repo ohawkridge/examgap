@@ -1,55 +1,55 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12">
-        <div class="d-md-flex justify-space-between align-center">
-          <div>
-            <div class="text-h6">Create assignment</div>
-            <div v-if="group && 'course' in group" class="text-subtitle-1">
-              {{ group.name }}
-              <v-icon small class="pb-1">{{ $icons.mdiArrowRight }}</v-icon>
-              {{ group.course.name }} ({{ group.course.board }})
-            </div>
-          </div>
-          <div class="d-flex justify-end">
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn
-                  button
-                  text
-                  v-bind="attrs"
-                  class="mr-2"
-                  v-on="on"
-                  @click="$store.commit('assignments/clearSelectedQuestions')"
-                >
-                  Clear
-                </v-btn>
-              </template>
-              <span>Clear selected questions</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn
-                  color="primary"
-                  :disabled="selected.length == 0"
-                  v-bind="attrs"
-                  elevation="0"
-                  :class="`${onboard && n === 7 ? 'red-out' : ''}`"
-                  @click="assign()"
-                  v-on="on"
-                >
-                  <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                  Assign ({{ selected.length }})</v-btn
-                >
-              </template>
-              <span
-                >Create assignment with {{ selected.length }} question{{
-                  selected.length | pluralize
-                }}
-              </span>
-            </v-tooltip>
-          </div>
+      <v-col cols="12" md="8">
+        <div class="text-h6">Create assignment</div>
+        <div v-if="group && 'course' in group" class="text-subtitle-1">
+          {{ group.name }}
+          <v-icon small class="pb-1">{{ $icons.mdiArrowRight }}</v-icon>
+          {{ group.course.name }} ({{ group.course.board }})
         </div>
+      </v-col>
+      <v-col cols="12" md="4" class="d-flex justify-end align-center">
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <v-btn
+              button
+              text
+              v-bind="attrs"
+              class="mr-2"
+              v-on="on"
+              @click="$store.commit('assignments/clearSelectedQuestions')"
+            >
+              Clear
+            </v-btn>
+          </template>
+          <span>Clear selected questions</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              :disabled="selected.length == 0"
+              v-bind="attrs"
+              elevation="0"
+              :class="`${onboard && n === 7 ? 'red-out' : ''}`"
+              @click="assign()"
+              v-on="on"
+            >
+              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+              Assign ({{ selected.length }})</v-btn
+            >
+          </template>
+          <span
+            >Create assignment with {{ selected.length }} question{{
+              selected.length | pluralize
+            }}
+          </span>
+        </v-tooltip>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
         <v-divider class="primary" />
       </v-col>
     </v-row>
