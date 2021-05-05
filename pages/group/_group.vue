@@ -1,8 +1,7 @@
 <template>
   <div>
     <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
-    <!-- TODO Don't know why mt-3 needed here -->
-    <v-row class="mt-3">
+    <v-row>
       <v-col cols="12" md="3">
         <GroupNav
           v-if="group && Object.keys(group).length > 0"
