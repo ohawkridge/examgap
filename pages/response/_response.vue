@@ -64,6 +64,7 @@
                 </div>
                 <p class="text-subtitle-1 font-weight-medium">Your answer</p>
                 <p id="ans" class="pa-4 breaks" v-text="response.text"></p>
+                <p class="text-subtitle-1 font-weight-medium">Model answer</p>
                 <p
                   class="text-subtitle-1"
                   v-html="response.question.modelAnswer"
