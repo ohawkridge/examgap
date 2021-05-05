@@ -20,7 +20,14 @@ exports.handler = async (event, context, callback) => {
             },
             {
               id: q.Select(['ref', 'id'], q.Var('instance')),
-              name: q.Select(['data', 'name'], q.Var('instance')),
+              name: q.If(
+                q.ContainsField(
+                  'shortName',
+                  q.Select('data', q.Var('instance'))
+                ),
+                q.Select(['data', 'shortName'], q.Var('instance')),
+                q.Select(['data', 'name'], q.Var('instance'))
+              ),
               board: q.Select(['data', 'board'], q.Var('instance')),
               cat: q.Select(['data', 'cat'], q.Var('instance')),
             }
@@ -38,7 +45,6 @@ exports.handler = async (event, context, callback) => {
     ]
     for (const course of data) {
       if (course.cat === 'GCSE') {
-        course.name = course.name.slice(5)
         out.push(course)
       }
     }
