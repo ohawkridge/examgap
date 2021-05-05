@@ -30,6 +30,14 @@
                   </tbody>
                 </template>
               </v-simple-table>
+              <small>
+                <a
+                  href="https://drive.google.com/file/d/1bJXevmNAUcLfpRv3OEliSRlVWrIZEDCw/view?usp=sharing"
+                  target="_blank"
+                  >Series data</a
+                >
+                <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon>
+              </small>
             </v-card>
           </v-col>
         </v-row>
@@ -132,6 +140,7 @@ import {
   mdiArrowRight,
   mdiDownloadOutline,
   mdiInformationOutline,
+  mdiOpenInNew,
 } from '@mdi/js'
 
 export default {
@@ -195,6 +204,7 @@ export default {
       mdiArrowRight,
       mdiDownloadOutline,
       mdiInformationOutline,
+      mdiOpenInNew,
     }
   },
   methods: {
