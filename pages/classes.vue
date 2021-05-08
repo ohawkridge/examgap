@@ -14,14 +14,23 @@
               Archive
             </v-btn>
           </v-btn-toggle>
-          <v-btn
-            elevation="0"
-            :class="onboard && n === 1 ? 'red-out' : ''"
-            @click="$nuxt.$emit('show-create')"
-          >
-            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-            {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
-          </v-btn>
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                elevation="0"
+                :class="clss"
+                @click="$nuxt.$emit('show-create')"
+                v-on="on"
+              >
+                <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+                {{
+                  $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class'
+                }}
+              </v-btn>
+            </template>
+            <span>Create new class</span>
+          </v-tooltip>
         </div>
       </v-col>
     </v-row>
@@ -111,6 +120,9 @@ export default {
       onboard: (state) => state.user.onboard,
       n: (state) => state.user.onboardStep,
     }),
+    clss() {
+      return this.onboard && this.n === 1 ? 'red-out' : ''
+    },
     // Remember active tab
     tab: {
       get() {
