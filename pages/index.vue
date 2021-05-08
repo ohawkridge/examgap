@@ -81,7 +81,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/grades.png" alt="Grade book"></v-img>
+          <v-img src="/grades.png" alt="Grades"></v-img>
         </v-col>
       </v-row>
       <v-row class="d-flex align-center justify-center pad-vert">
@@ -115,6 +115,74 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-img src="/revision.png" alt="Independent revision"></v-img>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- Testamonials -->
+    <v-container fluid>
+      <v-row class="d-flex justify-center">
+        <v-col cols="12" md="9">
+          <p class="text-h5 font-weight-bold text-md-h4 text-center">
+            What people say&hellip;
+          </p>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex align-center testamonial border-top-bottom pa-md-10"
+        >
+          <div>
+            <p class="text-h6 text-center">
+              "Examgap supports my teaching at GCSE. It's especially good for
+              high achievers."
+            </p>
+            <p class="text-body-1 text-center">
+              <span class="font-weight-medium">Alan</span>&mdash;<i
+                >Chauncy School, The Ware Academy for Visual Arts, Mathematics
+                &amp; Computing
+              </i>
+            </p>
+          </div>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex align-center testamonial border-left border-top-bottom pa-md-10"
+        >
+          <div>
+            <p class="text-h6 text-center">
+              "[The Examgap process], done regularly, creates a cycle of
+              continuous improvement and can lead to better exam results."
+            </p>
+            <p class="text-body-1 text-center">
+              <span class="font-weight-medium">Grace</span>&mdash;<i
+                >St. Mary's CE High School</i
+              >
+            </p>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row class="border-top-bottom">
+        <v-col
+          cols="12"
+          class="testamonial long-test d-flex align-center justify-center pa-md-10"
+        >
+          <div>
+            <p class="text-h6 text-center">
+              "Students found Examgap really helped strucure answers. Immediate
+              feedback, combined with comparing self assessment to the teacher's
+              assessment allowed students to identify mistakes when writing
+              answers."
+            </p>
+            <p class="text-body-1 text-center">
+              <span class="font-weight-medium">Andy</span>&mdash;<i
+                >The Hertfordshire &amp; Essex High School and Science
+                College</i
+              >
+            </p>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -377,66 +445,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <!-- Testamonials -->
-    <v-container fluid>
-      <v-row class="d-flex justify-center">
-        <v-col cols="12" md="9">
-          <p class="text-h5 font-weight-bold text-md-h4 text-center">
-            What people say&hellip;
-          </p>
-        </v-col>
-      </v-row>
-      <!-- <v-row class="testamonial-one">
-        <v-col cols="12" md="6" class="testamonial d-flex align-center">
-          <div>
-            <p class="text-h6 font-weight-medium text-center">
-              "Testamonial ONE blah blah blah blah blah blah blah blah blah blah
-              blah blah."
-            </p>
-            <p class="text-body-1 text-center">
-              <span class="font-weight-medium">Andy</span>&mdash;<i
-                >The Hertfordshire &amp; Essex High School and Science
-                College</i
-              >
-            </p>
-          </div>
-        </v-col>
-        <v-col
-          cols="12"
-          md="6"
-          class="testamonial testamonial-two d-flex align-center"
-        >
-          <div>
-            <p class="text-h6 font-weight-medium text-center">
-              "Testamonial TWO blah blah blah blah blah blah blah blah blah blah
-              blah blah."
-            </p>
-            <p class="text-body-1 text-center">
-              <span class="font-weight-medium">Someone</span>&mdash;<i
-                >Somebody School Science College</i
-              >
-            </p>
-          </div>
-        </v-col>
-      </v-row> -->
-      <v-row class="testamonial-border">
-        <v-col cols="12" class="testamonial d-flex align-center justify-center">
-          <div>
-            <p class="text-h6 font-weight-medium text-center">
-              "Examgap supports my teaching at GCSE. It's especially good for
-              high achievers."
-            </p>
-            <p class="text-body-1 text-center">
-              <span class="font-weight-medium">Alan</span>&mdash;<i
-                >Chauncy School, The Ware Academy for Visual Arts, Mathematics
-                &amp; Computing
-              </i>
-            </p>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container>
+    <v-container id="featured">
       <v-row class="d-flex justify-center">
         <v-col cols="12" md="3">
           <p class="text-center text-caption">Featured in</p>
@@ -604,12 +613,25 @@ export default {
 
 /* ----- Testamonials ----- */
 .testamonial {
-  height: 240px;
+  height: 300px;
+}
+@media only screen and (max-width: 600px) {
+  .long-test {
+    height: 400px;
+    padding-bottom: 5em;
+  }
 }
 
-.testamonial-border {
-  border-top: 1px solid rgb(224, 224, 224) !important;
-  border-bottom: 1px solid rgb(224, 224, 224) !important;
+/* add borders on desktop */
+@media only screen and (min-width: 600px) {
+  .border-top-bottom {
+    border-top: 1px solid rgb(224, 224, 224) !important;
+    border-bottom: 1px solid rgb(224, 224, 224) !important;
+  }
+
+  .border-left {
+    border-left: 1px solid rgb(224, 224, 224) !important;
+  }
 }
 
 /* --------- Misc --------- */
@@ -636,5 +658,11 @@ export default {
 
 #owen {
   border-radius: 8px;
+}
+
+/* ----- Featured in  ----- */
+#featured {
+  padding-top: 3em;
+  padding-bottom: 3em;
 }
 </style>

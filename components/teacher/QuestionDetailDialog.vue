@@ -1,14 +1,8 @@
 <template>
   <v-dialog v-model="dialog" max-width="860px">
     <template #activator="{ on, attrs }">
-      <v-btn
-        v-bind="attrs"
-        :disabled="disabled"
-        outlined
-        color="primary"
-        v-on="on"
-      >
-        Show Question
+      <v-btn v-bind="attrs" :disabled="disabled" elevation="0" v-on="on">
+        View question
       </v-btn>
     </template>
     <v-card class="modal pa-md-3">

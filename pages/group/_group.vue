@@ -14,19 +14,6 @@
             Assignment{{ assignments.length | pluralize }} ({{
               assignments.length
             }})
-            <v-btn
-              :class="onboard && n === 4 ? 'red-out' : ''"
-              elevation="0"
-              color="primary"
-              @click="createAssignment()"
-            >
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              {{
-                $vuetify.breakpoint.name == 'xs'
-                  ? 'Create'
-                  : 'Create Assignment'
-              }}
-            </v-btn>
           </v-card-title>
           <v-card-text>
             <v-list v-if="assignments.length > 0">
@@ -107,7 +94,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
@@ -134,10 +121,6 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
-    ...mapState({
-      n: (state) => state.user.onboardStep,
-      onboard: (state) => state.user.onboard,
-    }),
     // Defend against logout, refresh etc.
     assignments() {
       return this.group && 'assignments' in this.group
@@ -152,29 +135,6 @@ export default {
       mdiPlus,
       mdiBookOpenOutline,
     }
-  },
-  mounted() {
-    if (this.group !== undefined) {
-      // No students? Onboard @step 3
-      if (this.group.num_students === 0) {
-        this.$store.commit('user/setOnboardStep', 3)
-        this.$store.commit('user/setOnboard', true)
-      }
-      // No assignments? Onboard @step 4
-      if (this.group.num_students > 0 && this.assignments.length < 3) {
-        this.$store.commit('user/setOnboardStep', 4)
-        this.$store.commit('user/setOnboard', true)
-      }
-    }
-  },
-  methods: {
-    createAssignment() {
-      // Clear any previously selected questions
-      this.$store.commit('assignments/clearSelectedQuestions')
-      // Advance onboarding
-      this.$store.commit('user/setOnboardStep', 5)
-      this.$router.push(`/course/${this.group.course.id}`)
-    },
   },
 }
 </script>

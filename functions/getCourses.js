@@ -20,14 +20,7 @@ exports.handler = async (event, context, callback) => {
             },
             {
               id: q.Select(['ref', 'id'], q.Var('instance')),
-              name: q.If(
-                q.ContainsField(
-                  'shortName',
-                  q.Select('data', q.Var('instance'))
-                ),
-                q.Select(['data', 'shortName'], q.Var('instance')),
-                q.Select(['data', 'name'], q.Var('instance'))
-              ),
+              name: q.Select(['data', 'shortName'], q.Var('instance')),
               board: q.Select(['data', 'board'], q.Var('instance')),
               cat: q.Select(['data', 'cat'], q.Var('instance')),
             }
@@ -36,36 +29,23 @@ exports.handler = async (event, context, callback) => {
       )
     )
     const data = await keyedClient.query(qry)
-    // Post-processing for categories
-    const out = [
-      {
-        header: 'GCSE COURSES',
-      },
-      { divider: true },
-    ]
+    // Organise courses into categories
+    // GCSE
+    const out = [{ header: 'GCSE COURSES' }, { divider: true }]
     for (const course of data) {
       if (course.cat === 'GCSE') {
         out.push(course)
       }
     }
-    out.push(
-      {
-        header: 'A LEVEL COURSES',
-      },
-      { divider: true }
-    )
+    // A level
+    out.push({ header: 'A LEVEL COURSES' }, { divider: true })
     for (const course of data) {
       if (course.cat === 'A2') {
-        course.name = course.name.slice(8)
         out.push(course)
       }
     }
-    out.push(
-      {
-        header: 'IT COURSES',
-      },
-      { divider: true }
-    )
+    // IT
+    out.push({ header: 'IT COURSES' }, { divider: true })
     for (const course of data) {
       if (course.cat === 'IT') {
         out.push(course)

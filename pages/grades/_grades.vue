@@ -45,7 +45,7 @@
       <v-col cols="12" md="9">
         <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
-            Grade book
+            Grades
             <div class="d-flex">
               <v-btn
                 color="primary"
@@ -178,7 +178,7 @@ export default {
   },
   head() {
     return {
-      title: this.group ? `${this.group.name} grade book` : ``,
+      title: this.group ? `${this.group.name} grades` : ``,
     }
   },
   computed: {

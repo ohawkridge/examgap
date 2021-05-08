@@ -34,7 +34,7 @@
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>Grade book</v-list-item-title>
+              <v-list-item-title>Grades</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item value="edit-edit" nuxt :to="`/edit/${group.id}`">
@@ -68,7 +68,7 @@
         <v-icon>
           {{ $icons.mdiFinance }}
         </v-icon>
-        <span>Grade book</span>
+        <span>Grades</span>
       </v-btn>
       <v-btn value="edit-edit" nuxt :to="`/edit/${group.id}`" exact>
         <v-icon>

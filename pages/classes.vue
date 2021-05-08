@@ -4,11 +4,17 @@
       <v-col cols="12">
         <div class="d-flex justify-space-between align-center">
           <v-btn-toggle v-model="tab" color="primary" group mandatory>
-            <v-btn :value="true" class="rounded"> Classes </v-btn>
-            <v-btn :value="false" class="rounded"> Archive </v-btn>
+            <v-btn :value="true" class="rounded">
+              <v-icon left>{{ $icons.mdiHomeOutline }}</v-icon>
+              Home
+            </v-btn>
+            <v-btn :value="false" class="rounded">
+              <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
+
+              Archive
+            </v-btn>
           </v-btn-toggle>
           <v-btn
-            color="primary"
             elevation="0"
             :class="onboard && n === 1 ? 'red-out' : ''"
             @click="$nuxt.$emit('show-create')"
@@ -17,11 +23,6 @@
             {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
           </v-btn>
         </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-divider class="primary" />
       </v-col>
     </v-row>
     <v-row>
@@ -36,19 +37,21 @@
       </template>
       <!-- Create class card -->
       <v-col v-if="tab && activeGroupCount > 0" cols="12" md="6" lg="4">
-        <v-card
-          id="create-class"
-          class="d-flex align-center justify-center"
-          outlined
-          hover
-          height="172"
-          @click="$nuxt.$emit('show-create')"
-        >
-          <v-btn color="primary" text>
-            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-            Create class
-          </v-btn>
-        </v-card>
+        <v-hover v-slot="{ hover }">
+          <v-card
+            id="create-class"
+            class="d-flex align-center justify-center"
+            outlined
+            hover
+            height="172"
+            @click="$nuxt.$emit('show-create')"
+          >
+            <v-btn text :color="hover ? 'primary' : ''">
+              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+              Create class
+            </v-btn>
+          </v-card>
+        </v-hover>
       </v-col>
       <!-- Empty state -->
       <template v-if="activeGroupCount === 0 && tab">
@@ -75,7 +78,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { mdiPlus } from '@mdi/js'
+import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
 import CreateClass from '@/components/teacher/CreateClass'
 import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar.vue'
@@ -127,7 +130,7 @@ export default {
     this.isOnboarding()
   },
   created() {
-    this.$icons = { mdiPlus }
+    this.$icons = { mdiPlus, mdiHomeOutline, mdiArchiveOutline }
   },
   methods: {
     isOnboarding() {
@@ -144,8 +147,8 @@ export default {
 
 <style scoped>
 #create-class {
-  background: #f1eeee !important;
-  border: 1px dashed #0078a0 !important;
+  background: #fefcfb !important;
+  border: 1px dashed darkgray !important;
 }
 
 #empty {

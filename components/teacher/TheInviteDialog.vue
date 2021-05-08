@@ -2,11 +2,14 @@
   <v-dialog v-model="dialog" width="500">
     <template #activator="{ on, attrs }">
       <v-btn
-        color="primary"
         :block="$vuetify.breakpoint.name === 'xs'"
-        outlined
+        elevation="0"
         v-bind="attrs"
-        :class="onboard && n === 3 && group.num_students === 0 ? 'red-out' : ''"
+        :class="
+          onboard && n === 3 && group.num_students === 0
+            ? 'red-out mr-2'
+            : 'mr-2'
+        "
         v-on="on"
         @click="
           $store.commit('user/setOnboardStep', 4)
@@ -57,8 +60,7 @@
         <p class="mb-0">
           On the
           <nuxt-link :to="`/students/${group.id}`">Students</nuxt-link>
-          screen, click Students, Add students&hellip; Enter a list of student
-          email addresses.
+          screen, click Students, Add students.
         </p>
       </v-card-text>
       <v-card-actions>

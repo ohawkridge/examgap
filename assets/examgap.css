@@ -20,11 +20,6 @@ a:link {
   background: #f7eabb;
 }
 
-/* underline header */
-hr.primary {
-  border-color: #0078a0;
-}
-
 /* highlight elements for onboarding */
 .red-out {
   outline: #ef7a85 solid 4px !important;
@@ -96,6 +91,16 @@ span.v-chip.theme--light.green {
     margin-top: 0;
     margin-bottom: 3em;
   }
+}
+
+/* colour border-top on card */
+.eg-card::before {
+  content: '';
+  display: block;
+  height: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background-color: #b7d1da;
 }
 
 /* -------- Modal dialogs --------- */

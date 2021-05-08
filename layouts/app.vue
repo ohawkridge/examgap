@@ -1,22 +1,13 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#f1eeee" app elevate-on-scroll>
+    <v-app-bar color="#fefcfb" elevation="2" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
           <TheLogo />
         </nuxt-link>
-        <v-btn
-          text
-          color="#2e2e3a"
-          nuxt
-          :to="teacher ? '/classes' : '/home'"
-          class="ml-8 d-none d-sm-flex"
-        >
-          Home
-        </v-btn>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
-            <v-btn color="#2e2e3a" text class="ml-2" v-bind="attrs" v-on="on">
+            <v-btn elevation="0" class="ml-4 ml-md-10" v-bind="attrs" v-on="on">
               Classes
               <v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
             </v-btn>
@@ -49,20 +40,26 @@
           </v-list>
         </v-menu>
         <v-spacer />
-        <v-btn
-          v-if="teacher"
-          color="#2e2e3a"
-          text
-          nuxt
-          to="/author"
-          class="mr-4 d-none d-sm-flex"
-        >
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Create Question
-        </v-btn>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <v-btn
+              v-if="teacher"
+              v-bind="attrs"
+              elevation="0"
+              nuxt
+              to="/author"
+              class="mr-4 d-none d-sm-flex"
+              v-on="on"
+            >
+              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+              Create Question
+            </v-btn>
+          </template>
+          <span>Create new question</span>
+        </v-tooltip>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
-            <v-btn color="#2e2e3a" icon v-bind="attrs" v-on="on">
+            <v-btn elevation="0" icon v-bind="attrs" v-on="on">
               <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
             </v-btn>
           </template>

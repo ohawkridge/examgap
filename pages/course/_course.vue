@@ -23,7 +23,7 @@
               Clear
             </v-btn>
           </template>
-          <span>Clear selected questions</span>
+          <span>Clear selection</span>
         </v-tooltip>
         <v-tooltip bottom>
           <template #activator="{ on, attrs }">
@@ -50,12 +50,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <v-divider class="primary" />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-card>
+        <v-card class="eg-card">
           <v-container>
             <v-row>
               <v-col cols="12" md="3">

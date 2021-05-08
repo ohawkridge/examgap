@@ -1,6 +1,6 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#f1eeee" app elevation="0">
+    <v-app-bar color="#fefcfb" elevation="2" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
           <TheLogo />
@@ -10,27 +10,29 @@
     <v-main>
       <v-container>
         <v-row class="d-flex justify-center">
-          <v-col cols="12" md="5" class="d-flex align-center">
-            <svg
-              height="92"
-              width="92"
-              viewBox="0 0 24 24"
-              role="img"
-              fill="#f44336"
-            >
-              <path :d="$icons.mdiAlertCircleOutline"></path>
-            </svg>
-            <p class="text-h6 text-center mb-0 ml-2">
+          <v-col cols="12" md="5" class="text-center">
+            <p>
+              <svg
+                height="46"
+                width="46"
+                viewBox="0 0 24 24"
+                role="img"
+                fill="#ef7a85"
+              >
+                <path :d="$icons.mdiExclamationThick"></path>
+              </svg>
+            </p>
+            <p class="text-h6">
               {{ error.statusCode === 404 ? pageNotFound : otherError }}
             </p>
-          </v-col>
-          <v-col cols="12" md="5">
+            <p>This will automatically be reported.</p>
             <p>
-              Sorry, an error has occurred. This will automatically be reported.
+              <v-btn nuxt :to="home" elevation="0" outlined>
+                Try going home
+              </v-btn>
             </p>
-            <p><NuxtLink :to="home">Try going home</NuxtLink>.</p>
             <p>
-              If the problem persists, contact
+              If the problem persists, email
               <a href="mailto:support@examgap.com">support@examgap.com</a>.
             </p>
           </v-col>
@@ -42,7 +44,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { mdiAlertCircleOutline } from '@mdi/js'
+import { mdiExclamationThick } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 
 export default {
@@ -76,7 +78,7 @@ export default {
   },
   created() {
     this.$icons = {
-      mdiAlertCircleOutline,
+      mdiExclamationThick,
     }
   },
 }
