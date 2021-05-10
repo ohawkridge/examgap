@@ -47,13 +47,13 @@ exports.handler = async (event, context, callback) => {
               Charset: 'UTF-8',
               Data: `<html>
                   <body>
-                  <p>Here are your new login details:</p>
-                  <p>-------------------------</p>
+                  <p>Here are your new sign in details:</p>
+                  <p>------------------------------------------</p>
                   Username: ${email}<br />
-                  New password: ${newPass}
-                  <p>-------------------------</p>
-                  <p><a href="https://examgap.com/signin">Login to Examgap</a></p>
-                  <p>If you're still having problems, <a href="mailto:support@examgap.com">email support@examgap.com</a>.</p>
+                  Password: ${newPass}
+                  <p>------------------------------------------</p>
+                  <p><a href="https://examgap.com/signin">Sign in to Examgap</a></p><br />
+                  <p>Still having problems? Email <a href="mailto:support@examgap.com">support@examgap.com</a></p>
                 </body>
                 </html>`,
             },
@@ -64,7 +64,7 @@ exports.handler = async (event, context, callback) => {
           },
           Subject: {
             Charset: 'UTF-8',
-            Data: '>> Examgap new password',
+            Data: '>> Examgap new password 🔒',
           },
         },
         Source: 'Examgap <support@examgap.com>',

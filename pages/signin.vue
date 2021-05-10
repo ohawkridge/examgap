@@ -5,11 +5,11 @@
         <TheLogo />
       </nuxt-link>
       <v-spacer />
-      <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
+      <nuxt-link to="/">Back home</nuxt-link>
     </v-container>
     <v-container class="fill-height">
-      <v-row align="center" justify="center">
-        <v-col cols="12" sm="8" md="6" lg="5" xl="4" class="px-4">
+      <v-row class="d-flex justify-center">
+        <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
           <p class="text-h5 font-weight-bold text-center">Sign In</p>
           <v-form ref="form" @submit.prevent="login()">
             <v-text-field
@@ -58,7 +58,7 @@
               >Sign In</v-btn
             >
             <div class="mt-3 d-flex justify-space-between">
-              <nuxt-link to="/forgot">Reset password</nuxt-link>
+              <nuxt-link to="/reset">Reset password</nuxt-link>
               <nuxt-link to="/trial">Free trial</nuxt-link>
             </div>
           </v-form>

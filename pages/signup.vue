@@ -5,134 +5,137 @@
         <TheLogo />
       </nuxt-link>
       <v-spacer />
-      <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
+      <nuxt-link to="/">Back home</nuxt-link>
     </v-container>
-    <v-main>
-      <v-container class="fill-height">
-        <v-row class="d-flex justify-center">
-          <v-col cols="12" sm="8" md="6" lg="5">
-            <v-card elevation="0">
-              <v-form ref="form" @submit.prevent="signup()">
-                <v-card-title
-                  class="text-h5 font-weight-bold d-flex justify-center"
+    <v-container class="fill-height">
+      <v-row class="d-flex justify-center">
+        <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
+          <v-card flat>
+            <v-form ref="form" @submit.prevent="signup()">
+              <v-card-title
+                class="text-h5 font-weight-bold d-flex justify-center"
+              >
+                Join Class
+              </v-card-title>
+              <v-window v-model="step">
+                <v-window-item :value="1">
+                  <v-card-text>
+                    <v-text-field
+                      v-model="code"
+                      outlined
+                      :rules="codeRules"
+                      validate-on-blur
+                      label="Class code"
+                      placeholder="123-456"
+                      autofocus
+                      @input="formatCode"
+                    >
+                    </v-text-field>
+                    <v-alert
+                      v-if="invalidCode"
+                      border="left"
+                      text
+                      dense
+                      type="error"
+                      :icon="$icons.mdiAlertOutline"
+                    >
+                      Invalid code. Please try again
+                    </v-alert>
+                  </v-card-text>
+                </v-window-item>
+                <v-window-item :value="2">
+                  <v-card-text>
+                    <v-row>
+                      <v-col class="pb-0" cols="12">
+                        <v-text-field
+                          v-model="email"
+                          outlined
+                          validate-on-blur
+                          :rules="emailRules"
+                          label="School email*"
+                          placeholder="17bloggsj@yourschool.org.uk"
+                          required
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col class="pb-0" cols="12" md="6">
+                        <v-text-field
+                          v-model="pass1"
+                          outlined
+                          :rules="passwordRules"
+                          validate-on-blur
+                          type="password"
+                          label="Create password*"
+                          required
+                        >
+                        </v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="pass2"
+                          outlined
+                          :rules="passwordRules"
+                          validate-on-blur
+                          type="password"
+                          label="Confirm password*"
+                          :error-messages="match"
+                          required
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <small> *Indicates required field </small>
+                    <p class="mt-2 mb-0">
+                      By registering you accept our
+                      <a href="/terms" target="_blank">terms of service</a>
+                      <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
+                      >.
+                    </p>
+                    <v-alert
+                      v-if="emailInUse"
+                      border="left"
+                      text
+                      dense
+                      type="error"
+                      :icon="$icons.mdiAlertOutline"
+                    >
+                      Email already registered.
+                      <nuxt-link to="/signin">Sign in</nuxt-link> instead
+                    </v-alert>
+                  </v-card-text>
+                </v-window-item>
+              </v-window>
+              <v-card-actions>
+                <v-btn :disabled="step === 1" text @click="step--">
+                  Back
+                </v-btn>
+                <v-spacer />
+                <v-btn
+                  v-if="step === 1"
+                  elevation="0"
+                  color="primary"
+                  @click="next()"
                 >
-                  Join class
-                </v-card-title>
-                <v-window v-model="step">
-                  <v-window-item :value="1">
-                    <v-card-text>
-                      <v-text-field
-                        v-model="code"
-                        outlined
-                        :rules="codeRules"
-                        label="Class code"
-                        placeholder="123-456"
-                        autofocus
-                        @input="formatCode"
-                      >
-                      </v-text-field>
-                      <v-alert
-                        v-if="invalidCode"
-                        border="left"
-                        text
-                        dense
-                        type="error"
-                        :icon="$icons.mdiAlertOutline"
-                      >
-                        Invalid code. Please try again
-                      </v-alert>
-                    </v-card-text>
-                  </v-window-item>
-                  <v-window-item :value="2">
-                    <v-card-text>
-                      <v-row>
-                        <v-col class="pb-0" cols="12">
-                          <v-text-field
-                            v-model="email"
-                            outlined
-                            :rules="emailRules"
-                            label="School email*"
-                            placeholder="17bloggsj@yourschool.org.uk"
-                            required
-                          >
-                          </v-text-field> </v-col
-                      ></v-row>
-                      <v-row>
-                        <v-col class="pb-0" cols="12" md="6">
-                          <v-text-field
-                            v-model="pass1"
-                            outlined
-                            :rules="passwordRules"
-                            type="password"
-                            label="Create password*"
-                            required
-                          >
-                          </v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="6">
-                          <v-text-field
-                            v-model="pass2"
-                            outlined
-                            :rules="passwordRules"
-                            type="password"
-                            label="Confirm password*"
-                            :error-messages="match"
-                            required
-                          >
-                          </v-text-field>
-                        </v-col>
-                      </v-row>
-                      <small> *Indicates required field </small>
-                      <p class="mt-2 mb-0">
-                        By registering you accept our
-                        <a href="/terms" target="_blank">terms of service</a>
-                        <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
-                        >.
-                      </p>
-                      <v-alert
-                        v-if="emailInUse"
-                        border="left"
-                        text
-                        dense
-                        type="error"
-                        :icon="$icons.mdiAlertOutline"
-                      >
-                        Email already registered.
-                        <nuxt-link to="/signin">Sign in</nuxt-link> instead
-                      </v-alert>
-                    </v-card-text>
-                  </v-window-item>
-                </v-window>
-                <v-card-actions>
-                  <v-btn :disabled="step === 1" text @click="step--">
-                    Back
-                  </v-btn>
-                  <v-spacer />
-                  <v-btn
-                    v-if="step === 1"
-                    elevation="0"
-                    color="primary"
-                    @click="next()"
-                  >
-                    Next
-                  </v-btn>
-                  <v-btn
-                    v-if="step === 2"
-                    elevation="0"
-                    :loading="loading"
-                    :disabled="loading"
-                    color="primary"
-                    type="submit"
-                  >
-                    Sign up
-                  </v-btn>
-                </v-card-actions>
-              </v-form>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
+                  Next
+                </v-btn>
+                <v-btn
+                  v-if="step === 2"
+                  elevation="0"
+                  :loading="loading"
+                  :disabled="loading"
+                  color="primary"
+                  type="submit"
+                >
+                  Sign up
+                </v-btn>
+              </v-card-actions>
+            </v-form>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-app>
 </template>
 
@@ -177,7 +180,7 @@ export default {
   },
   computed: {
     match() {
-      return this.pass1 === this.pass2 ? [] : 'Passwords do not match'
+      return this.pass1 === this.pass2 ? [] : "Passwords don't match"
     },
   },
   created() {
@@ -188,7 +191,7 @@ export default {
     }
   },
   mounted() {
-    // Fill in code from query string
+    // Get code from query string
     if (this.$route.query.code) this.code = this.$route.query.code
   },
   methods: {
@@ -196,6 +199,7 @@ export default {
       if (this.code.length === 7 && /\d{3}-\d{3}/gm.test(this.code)) {
         this.step++
         this.invalidCode = false
+        this.$refs.form.resetValidation()
       } else {
         this.invalidCode = true
       }

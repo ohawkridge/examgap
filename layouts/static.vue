@@ -18,7 +18,7 @@
             <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/signup"
               >Join class</v-btn
             >
-            <v-btn outlined class="mr-2 d-none d-sm-flex" nuxt to="/signin"
+            <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/signin"
               >Sign in</v-btn
             >
             <v-btn

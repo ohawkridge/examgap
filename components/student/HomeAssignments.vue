@@ -30,7 +30,14 @@
           </v-chip>
         </v-list-item-title>
         <v-list-item-subtitle>
-          Due {{ assignment.dateDue | date }}
+          <div class="fix-width">
+            <span class="font-weight-bold">Start:</span>
+            {{ assignment.start | date }}
+          </div>
+          <div class="fix-width">
+            <span class="font-weight-bold">Due:</span>
+            {{ assignment.dateDue | date }}
+          </div>
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
@@ -69,3 +76,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.fix-width {
+  display: inline-block;
+  width: 130px;
+}
+</style>

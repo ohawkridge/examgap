@@ -1,21 +1,27 @@
 <template>
-  <v-dialog v-model="dialog" max-width="860px">
+  <v-dialog v-model="dialog" max-width="840px">
     <template #activator="{ on, attrs }">
       <v-btn v-bind="attrs" :disabled="disabled" elevation="0" v-on="on">
         View question
       </v-btn>
     </template>
-    <v-card class="modal pa-md-3">
+    <v-card class="pa-md-3">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
-        <v-card-title class="d-flex justify-space-between">
-          Question
+        <v-card-title class="d-flex justify-space-between align-start">
+          <div>
+            <p class="mb-0">Question</p>
+            <p class="mb-0 text-subtitle-2">
+              <nuxt-link nuxt :to="`/question/${questionId}`">{{
+                questionId
+              }}</nuxt-link>
+            </p>
+          </div>
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <v-btn
                 v-bind="attrs"
                 elevation="0"
-                :color="included ? 'accent' : 'primary'"
-                outlined
+                :color="included ? 'accent' : ''"
                 @click="select(questionId)"
                 v-on="on"
               >
@@ -28,11 +34,6 @@
             <span>{{ included ? 'Remove from' : 'Add to' }} assignment</span>
           </v-tooltip>
         </v-card-title>
-        <v-card-subtitle>
-          <nuxt-link nuxt :to="`/question/${questionId}`">{{
-            questionId
-          }}</nuxt-link>
-        </v-card-subtitle>
         <v-card-text class="text-body-2">
           <div v-html="question.text"></div>
           <div class="d-flex justify-end">
@@ -54,9 +55,6 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn text nuxt :to="`/author/${question.id}`">
-            Edit Question
-          </v-btn>
           <v-btn
             color="primary"
             class="ml-2"

@@ -5,7 +5,7 @@
         <v-card class="pa-md-3">
           <v-card-title class="d-flex justify-space-between">
             Question
-            <v-btn outlined color="primary" nuxt :to="`/author/${question.id}`">
+            <v-btn elevation="0" nuxt :to="`/author/${question.id}`">
               Edit Question
             </v-btn>
           </v-card-title>

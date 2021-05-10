@@ -93,6 +93,12 @@ span.v-chip.theme--light.green {
   }
 }
 
+/* adjust for navbar height */
+#nav-fix {
+  position: relative;
+  top: -58px !important;
+}
+
 /* colour border-top on card */
 .eg-card::before {
   content: '';

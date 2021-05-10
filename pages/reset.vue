@@ -5,14 +5,12 @@
         <TheLogo />
       </nuxt-link>
       <v-spacer />
-      <span class="grey--text">Back to <nuxt-link to="/">home</nuxt-link></span>
+      <nuxt-link to="/signin">Sign In</nuxt-link>
     </v-container>
     <v-container class="fill-height">
-      <v-row class="d-flex align-center justify-center">
-        <v-col id="form" cols="12" sm="8" md="6" lg="5" xl="4">
-          <p class="text-h5 font-weight-bold text-center">
-            Reset your password
-          </p>
+      <v-row class="d-flex justify-center">
+        <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
+          <p class="text-h5 font-weight-bold text-center">Reset Password</p>
           <!-- Prevent submit btn posting form -->
           <v-form ref="form" @submit.prevent="reset">
             <v-text-field
@@ -21,6 +19,7 @@
               label="Email"
               color="primary"
               type="text"
+              placeholder="joe.bloggs@yourschool.org.uk"
               validate-on-blur
               required
               outlined
@@ -34,7 +33,8 @@
               type="info"
               :icon="$icons.mdiInformationOutline"
             >
-              Student? Your teacher can reset your password
+              <span class="font-weight-bold">Student?</span> Your teacher can
+              reset your password.
             </v-alert>
             <v-alert
               v-if="failed"
@@ -118,11 +118,6 @@ export default {
             }),
             method: 'POST',
           })
-          // console.log(
-          //   '%c' + 'Response',
-          //   'padding:2px 4px;background-color:green;color:white;border-radius:3px'
-          // )
-          // console.log(response)
           if (response.status === 400) {
             this.$rollbar.debug('Error resetting password')
             this.failed = true

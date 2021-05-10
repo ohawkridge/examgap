@@ -114,9 +114,9 @@
               <v-col class="d-flex justify-end">
                 <span class="mr-2"> N/A&mdash;Not answered </span>
                 <v-icon>{{ $icons.mdiCheck }}</v-icon>
-                <span class="mr-2"> &mdash;Self-marked </span>
+                <span class="mr-2"> &mdash;Self mark </span>
                 <v-icon>{{ $icons.mdiCheckAll }}</v-icon>
-                &mdash;Teacher-marked
+                &mdash;Teacher mark
               </v-col>
             </v-row>
           </v-card-text>
@@ -193,26 +193,47 @@
                 <span>Reassign</span>
               </v-tooltip>
               <v-spacer />
-              <v-chip color="primary" outlined class="mr-2">
-                <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
-                <span v-if="marking" class="font-weight-black">{{
-                  response.tm.length
-                }}</span>
-                <v-icon right>{{ $icons.mdiCheck }}</v-icon>
-              </v-chip>
-              <v-chip color="green darken-2" outlined>
-                <v-icon left color="green darken-2">{{
-                  $icons.mdiAccountOutline
-                }}</v-icon>
-                <span
-                  v-if="marking"
-                  class="green--text text--darken-2 font-weight-black"
-                  >{{ response.sm.length }}</span
-                >
-                <v-icon right color="green darken-2">{{
-                  $icons.mdiCheck
-                }}</v-icon>
-              </v-chip>
+              <v-tooltip bottom>
+                <template #activator="{ on, attrs }">
+                  <v-chip
+                    v-bind="attrs"
+                    color="primary"
+                    outlined
+                    class="mr-2"
+                    v-on="on"
+                  >
+                    <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                    <span v-if="marking" class="font-weight-black">{{
+                      response.tm.length
+                    }}</span>
+                    <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+                  </v-chip>
+                </template>
+                <span>Teacher mark</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template #activator="{ on, attrs }">
+                  <v-chip
+                    v-bind="attrs"
+                    color="green darken-2"
+                    outlined
+                    v-on="on"
+                  >
+                    <v-icon left color="green darken-2">{{
+                      $icons.mdiAccountOutline
+                    }}</v-icon>
+                    <span
+                      v-if="marking"
+                      class="green--text text--darken-2 font-weight-black"
+                      >{{ response.sm.length }}</span
+                    >
+                    <v-icon right color="green darken-2">{{
+                      $icons.mdiCheck
+                    }}</v-icon>
+                  </v-chip>
+                </template>
+                <span>Self mark</span>
+              </v-tooltip>
             </v-col>
           </v-row>
           <v-row>
@@ -288,7 +309,7 @@
                       <template #activator="{ on, attrs }">
                         <span v-bind="attrs" v-on="on">Smart sort</span>
                       </template>
-                      <span>Self-marks first</span>
+                      <span>Self marks first</span>
                     </v-tooltip>
                   </template>
                 </v-switch>

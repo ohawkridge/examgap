@@ -9,7 +9,6 @@
         <div v-if="group !== undefined">
           {{ group.course.name }} ({{ group.course.board }})
         </div>
-        <v-divider class="primary" />
       </v-col>
     </v-row>
     <v-row class="d-flex justify-center">
