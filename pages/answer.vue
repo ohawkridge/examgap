@@ -216,9 +216,11 @@ export default {
   },
   methods: {
     // Debounce answer area
+    // N.B. If the first call to saveAnswer doesn't complete
+    // within 1700ms you may get duplicate responses
     update: debounce(function () {
       this.save()
-    }, 1500),
+    }, 1700),
     // Get SpeechSynthesisVoice objects if supported
     // https://wicg.github.io/speech-api/#utterance-attributes
     getVoices() {
@@ -323,14 +325,14 @@ export default {
           throw new Error(`Error saving answer ${response.status}`)
         }
         const docId = await response.json()
-        console.log(
-          '%c' + 'Response',
-          'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
-        )
-        console.log(docId)
+        // console.log(
+        //   '%c' + 'Response',
+        //   'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+        // )
+        // console.log(docId)
         // Save response id to update just response text
         this.responseId = docId
-        this.saveStatus = `Saved ✓`
+        this.saveStatus = `Changes saved`
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
