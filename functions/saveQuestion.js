@@ -39,7 +39,7 @@ exports.handler = async (event, context, callback) => {
         ),
       },
       {
-        marks: q.Do(
+        topics: q.Do(
           // Delete all existing topic mappings
           q.Map(
             q.Paginate(
@@ -62,35 +62,6 @@ exports.handler = async (event, context, callback) => {
                 },
               })
             )
-          ),
-          // Update text for marks + create any new marks
-          // NEVER delete marks!! (could be awarded to existing responses)
-          q.Foreach(
-            // marks are objects like { id: '', text: '' }
-            q.Select(['question', 'marks'], data),
-            q.Lambda(
-              'obj',
-              q.If(
-                q.Equals(q.Select('id', q.Var('obj')), ''),
-                // Create a new mark
-                // (New marks don't have an ID yet)
-                q.Create(q.Collection('Mark'), {
-                  data: {
-                    text: q.Select('text', q.Var('obj')),
-                    question: q.Select('ref', q.Var('instance')), // Question above
-                  },
-                }),
-                // Update an existing mark
-                q.Update(
-                  q.Ref(q.Collection('Mark'), q.Select('id', q.Var('obj'))),
-                  {
-                    data: {
-                      text: q.Select('text', q.Var('obj')),
-                    },
-                  }
-                )
-              )
-            )
           )
         ),
         // We need to return the question id
@@ -98,6 +69,30 @@ exports.handler = async (event, context, callback) => {
       }
     )
     const res = await keyedClient.query(qry)
+
+    // NEVER delete marks!! (could be awarded to existing responses)
+    // Don't use Foreach or Map. This results in identical
+    // timestamps and therefore random ordering of marks
+    for (const mark of data.question.marks) {
+      const qry2 = q.If(
+        q.Equals(q.Select('id', mark), ''), // New marks don't have an id yet
+        // Create new
+        q.Create(q.Collection('Mark'), {
+          data: {
+            text: q.Select('text', mark),
+            question: q.Ref(q.Collection('Question'), res.id),
+          },
+        }),
+        // Update existing
+        q.Update(q.Ref(q.Collection('Mark'), q.Select('id', mark)), {
+          data: {
+            text: q.Select('text', mark),
+          },
+        })
+      )
+      await keyedClient.query(qry2)
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify(res),

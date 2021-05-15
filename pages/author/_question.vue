@@ -72,6 +72,7 @@
                   </v-tooltip>
                 </template>
               </v-text-field>
+              <p class="red--text">{{ question.marks }}</p>
             </div>
             <p class="text-subtitle-1 font-weight-bold">Marking guidance</p>
             <TextEditor

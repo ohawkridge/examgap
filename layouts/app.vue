@@ -48,7 +48,7 @@
               elevation="0"
               nuxt
               to="/author"
-              class="mr-4 d-none d-sm-flex"
+              class="mr-4 d-none d-md-flex"
               v-on="on"
             >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>

@@ -39,13 +39,13 @@ exports.handler = async (event, context, callback) => {
                       ['data'],
                       q.Paginate(
                         q.Match(
-                          q.Index('marks_for_question_2'),
+                          q.Index('marks_for_question_3'),
                           q.Select('ref', q.Var('instance'))
                         )
                       )
                     ),
-                    // marks_for_question_2 returns an array:
-                    // [data.order, data.text, Mark ref]
+                    // marks_for_question_3 returns an array:
+                    // [data.order, ts, data.text, Mark ref]
                     q.Lambda(
                       'mArr',
                       q.Let(
@@ -55,8 +55,8 @@ exports.handler = async (event, context, callback) => {
                         },
                         {
                           order: q.Select([0], q.Var('obj')),
-                          text: q.Select([1], q.Var('obj')),
-                          id: q.Select('id', q.Select([2], q.Var('obj'))),
+                          text: q.Select([2], q.Var('obj')),
+                          id: q.Select('id', q.Select([3], q.Var('obj'))),
                         }
                       )
                     )

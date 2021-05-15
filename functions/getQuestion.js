@@ -26,7 +26,7 @@ exports.handler = async (event, context, callback) => {
           q.Map(
             q.Paginate(
               q.Match(
-                q.Index('marks_for_question_2'),
+                q.Index('marks_for_question_3'),
                 q.Ref(q.Collection('Question'), questionId)
               )
             ),
@@ -34,9 +34,9 @@ exports.handler = async (event, context, callback) => {
               'mRef',
               q.Let(
                 {
-                  // marks_for_question_2 sorts on order (if it exists)
-                  // this index returns array of [order, text, ref]
-                  instance: q.Get(q.Select([2], q.Var('mRef'))), // Mark
+                  // marks_for_question_3 sorts on order (if it exists) then ts
+                  // this index returns array of [order, ts, text, ref]
+                  instance: q.Get(q.Select([3], q.Var('mRef'))), // Mark
                 },
                 {
                   id: q.Select(['ref', 'id'], q.Var('instance')),
