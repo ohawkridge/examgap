@@ -10,6 +10,13 @@ pre {
   word-wrap: break-word;
 }
 
+blockquote {
+  /* border-left: 4px solid rgb(224, 224, 224); */
+  border-left: 0.25em solid #dfe2e5;
+  color: #6a737d;
+  padding-left: 1em;
+}
+
 /* don't underline links */
 a:link {
   text-decoration: none;
