@@ -195,6 +195,11 @@ exports.handler = async (event, context, callback) => {
                           id: q.Select(['ref', 'id'], q.Var('instance')),
                           name: q.Select(['data', 'name'], q.Var('instance')),
                           board: q.Select(['data', 'board'], q.Var('instance')),
+                          commands: q.Select(
+                            ['data', 'commands'],
+                            q.Var('instance'),
+                            ''
+                          ),
                         }
                       ),
                       // Empty array we'll push assignments into client-side

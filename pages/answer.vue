@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
 import { mdiTextToSpeech, mdiPause, mdiCheckboxMarkedOutline } from '@mdi/js'
 
@@ -159,6 +159,10 @@ export default {
       questionId: (state) => state.assignments.questionId,
       reviseExamMode: (state) => state.user.reviseExamMode,
     }),
+    ...mapGetters({ group: 'groups/activeGroup' }),
+    commands() {
+      return this.group.course.commands
+    },
     // Set assignment or independent revision?
     revising() {
       return this.assignmentId === 0
@@ -213,8 +217,24 @@ export default {
     // Copy mode from store so it doesn't change
     // while the student is answering a question
     this.examMode = this.$store.state.user.examMode
+    if (this.commands !== '') {
+      this.addTooltips()
+    }
   },
   methods: {
+    // Add tooltips to command words
+    addTooltips() {
+      const els = document.querySelectorAll('strong, b')
+      // Loop through <strong> or <b> elements looking for command words
+      for (const el of els) {
+        const word = el.innerHTML.toLowerCase()
+        // If found, set data-text attribute
+        if (word in this.commands) {
+          el.classList.add('command')
+          el.setAttribute('data-text', this.commands[word])
+        }
+      }
+    },
     // Debounce answer area
     // N.B. If the first call to saveAnswer doesn't complete
     // within 1700ms you may get duplicate responses
@@ -366,5 +386,37 @@ span.v-chip.theme--light.red {
 span.v-chip.theme--light.green {
   background-color: rgb(201, 237, 194) !important;
   color: rgb(18, 39, 14) !important;
+}
+
+/* Needs 'deep' selecting */
+/* https://stackoverflow.com/questions/52310060/how-to-override-vuetify-styles */
+div.v-card__text >>> .command {
+  border-bottom: 1px dashed #0078a0;
+  cursor: pointer !important;
+  position: relative;
+}
+
+div.v-card__text >>> .command:before {
+  content: attr(data-text);
+  position: absolute;
+  /* vertically center */
+  /* top: 50%; */
+  /* transform: translateY(-50%); */
+  margin-left: -120px;
+  top: 110%;
+  left: 50%;
+  width: 240px;
+  padding: 6px;
+  border-radius: 4px;
+  background: rgb(126, 126, 126);
+  color: #fff;
+  text-align: center;
+  display: none;
+}
+
+/* show on hover */
+div.v-card__text >>> .command:hover:before {
+  display: block;
+  font-weight: normal;
 }
 </style>
