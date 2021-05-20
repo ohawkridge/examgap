@@ -378,7 +378,7 @@
     </v-container>
     <v-container id="boards">
       <v-row class="d-flex align-center justify-center">
-        <v-col cols="12" md="5" class="text-center text-sm-left">
+        <v-col cols="12" sm="6" md="5" class="text-center text-sm-left">
           <p class="text-h5 text-md-h4 font-weight-bold mb-8">
             GCSE Computer Science courses for:
           </p>
@@ -426,7 +426,7 @@
             Start 30-day free trial
           </v-btn>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" sm="6" md="5">
           <v-card elevation="6" rounded="lg" class="pa-6">
             <v-card-title> More courses coming soon </v-card-title>
             <v-card-text class="text-body-1">
@@ -458,7 +458,7 @@
           </v-col>
         </v-row>
         <v-row class="white--text">
-          <v-col cols="4" class="d-flex">
+          <v-col cols="12" sm="6" md="4" class="d-flex">
             <div class="mr-3">
               <svg
                 height="42"
@@ -477,7 +477,7 @@
               </p>
             </div>
           </v-col>
-          <v-col cols="4" class="d-flex">
+          <v-col cols="12" sm="6" md="4" class="d-flex">
             <div class="mr-3">
               <svg
                 height="42"
@@ -496,7 +496,7 @@
               </p>
             </div>
           </v-col>
-          <v-col cols="4" class="d-flex">
+          <v-col cols="12" sm="6" md="4" class="d-flex">
             <div class="mr-3">
               <svg
                 height="42"
@@ -515,9 +515,7 @@
               </p>
             </div></v-col
           >
-        </v-row>
-        <v-row class="white--text">
-          <v-col cols="4" class="d-flex">
+          <v-col cols="12" sm="6" md="4" class="d-flex">
             <div class="mr-3">
               <svg
                 height="42"
@@ -536,7 +534,7 @@
               </p>
             </div></v-col
           >
-          <v-col cols="4" class="d-flex">
+          <v-col cols="12" sm="6" md="4" class="d-flex">
             <div class="mr-3">
               <svg
                 height="42"
@@ -555,7 +553,7 @@
               </p>
             </div>
           </v-col>
-          <v-col cols="4" class="d-flex">
+          <v-col cols="12" sm="6" md="4" class="d-flex">
             <div class="mr-3">
               <svg
                 height="42"
