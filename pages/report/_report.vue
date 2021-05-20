@@ -315,9 +315,12 @@
                 </v-switch>
               </div>
               <p class="text-subtitle-1">Guidance</p>
-              <p class="text-body-2">
-                {{ question.guidance ? question.guidance : 'None' }}
-              </p>
+              <p
+                v-if="question.guidance"
+                class="text-body-2"
+                v-html="question.guidance"
+              ></p>
+              <p v-else class="text-body-2">None</p>
             </v-col>
           </v-row>
         </v-container>

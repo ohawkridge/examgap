@@ -34,6 +34,7 @@ exports.handler = async (event, context, callback) => {
                   value: q.ToString(q.Var('ref')),
                   text: q.Select(['data', 'text'], q.Var('instance')),
                   maxMark: q.Select(['data', 'maxMark'], q.Var('instance')),
+                  guidance: q.Select(['data', 'guidance'], q.Var('instance')),
                   markScheme: q.Map(
                     q.Select(
                       ['data'],

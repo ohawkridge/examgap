@@ -149,7 +149,13 @@
         <v-col
           cols="12"
           md="6"
-          class="d-flex align-center testamonial border-left border-top-bottom pa-md-10"
+          class="
+            d-flex
+            align-center
+            testamonial
+            border-left border-top-bottom
+            pa-md-10
+          "
         >
           <div>
             <p class="text-h6 text-center">
@@ -164,10 +170,17 @@
           </div>
         </v-col>
       </v-row>
-      <v-row class="border-top-bottom">
+      <v-row>
         <v-col
           cols="12"
-          class="testamonial long-test d-flex align-center justify-center pa-md-10"
+          class="
+            testamonial
+            long-test
+            d-flex
+            align-center
+            justify-center
+            pa-md-10
+          "
         >
           <div>
             <p class="text-h6 text-center">
@@ -191,7 +204,9 @@
       <v-container>
         <v-row>
           <v-col cols="12" class="d-flex align-center justify-center pb-0">
-            <p id="how-text" class="text-h4 text-md-h2">How it works</p>
+            <p id="how-text" class="text-h4 text-md-h2">
+              <span class="illum">H</span>ow it works
+            </p>
           </v-col>
         </v-row>
       </v-container>
@@ -199,7 +214,7 @@
     <v-container id="how-cont">
       <v-row class="justify-center">
         <v-col cols="12" md="4">
-          <v-card id="card1" rounded="lg" elevation="6" class="pa-6 how-card">
+          <v-card rounded="lg" elevation="6" class="pa-6 how-card">
             <v-card-title>
               <svg
                 height="42"
@@ -395,8 +410,138 @@
         </v-col>
       </v-row>
     </v-container>
+    <!-- What else you got? -->
+    <div id="what">
+      <v-container>
+        <v-row>
+          <v-col cols="12" class="d-flex align-center justify-center">
+            <p id="what-text" class="text-h4 text-md-h2">
+              <span class="illum">W</span>hat else you got?
+            </p>
+          </v-col>
+        </v-row>
+        <v-row class="white--text">
+          <v-col cols="4" class="d-flex">
+            <div class="mr-3">
+              <svg
+                height="42"
+                width="42"
+                viewBox="0 0 24 24"
+                role="img"
+                fill="#fff"
+              >
+                <path :d="$icons.mdiTextToSpeech"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-weight-bold">Audio Descriptions</p>
+              <p class="font-weight-light">
+                Automatically read every question out loud.
+              </p>
+            </div>
+          </v-col>
+          <v-col cols="4" class="d-flex">
+            <div class="mr-3">
+              <svg
+                height="42"
+                width="42"
+                viewBox="0 0 24 24"
+                role="img"
+                fill="#fff"
+              >
+                <path :d="$icons.mdiSortBoolDescendingVariant"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-weight-bold">Smart Sort</p>
+              <p class="font-weight-light">
+                Sort mark scheme by self marks to speed up marking.
+              </p>
+            </div>
+          </v-col>
+          <v-col cols="4" class="d-flex">
+            <div class="mr-3">
+              <svg
+                height="42"
+                width="42"
+                viewBox="0 0 24 24"
+                role="img"
+                fill="#fff"
+              >
+                <path :d="$icons.mdiCommentTextMultipleOutline"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-weight-bold">Comment Bank</p>
+              <p class="font-weight-light">
+                Built automatically for each question. Reuse comments.
+              </p>
+            </div></v-col
+          >
+        </v-row>
+        <v-row class="white--text">
+          <v-col cols="4" class="d-flex">
+            <div class="mr-3">
+              <svg
+                height="42"
+                width="42"
+                viewBox="0 0 24 24"
+                role="img"
+                fill="#fff"
+              >
+                <path :d="$icons.mdiTargetAccount"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-weight-bold">Target Setting</p>
+              <p class="font-weight-light">
+                See whether or not your students are on target.
+              </p>
+            </div></v-col
+          >
+          <v-col cols="4" class="d-flex">
+            <div class="mr-3">
+              <svg
+                height="42"
+                width="42"
+                viewBox="0 0 24 24"
+                role="img"
+                fill="#fff"
+              >
+                <path :d="$icons.mdiDownloadOutline"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-weight-bold">Export Data</p>
+              <p class="font-weight-light">
+                Export all your student data in CSV format.
+              </p>
+            </div>
+          </v-col>
+          <v-col cols="4" class="d-flex">
+            <div class="mr-3">
+              <svg
+                height="42"
+                width="42"
+                viewBox="0 0 24 24"
+                role="img"
+                fill="#fff"
+              >
+                <path :d="$icons.mdiBoomerang"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-weight-bold">Reassign Questions</p>
+              <p class="font-weight-light">
+                Reassign questions to students with a single click.
+              </p>
+            </div></v-col
+          >
+        </v-row>
+      </v-container>
+    </div>
     <!-- About -->
-    <v-container>
+    <v-container id="written">
       <v-row>
         <v-col>
           <p class="sub-hero-text text-center">
@@ -467,6 +612,12 @@ import {
   mdiNumeric3Circle,
   mdiCheck,
   mdiMicroscope,
+  mdiTextToSpeech,
+  mdiSortBoolDescendingVariant,
+  mdiCommentTextMultipleOutline,
+  mdiTargetAccount,
+  mdiDownloadOutline,
+  mdiBoomerang,
 } from '@mdi/js'
 
 export default {
@@ -479,6 +630,12 @@ export default {
       mdiNumeric3Circle,
       mdiMicroscope,
       mdiCheck,
+      mdiTextToSpeech,
+      mdiSortBoolDescendingVariant,
+      mdiCommentTextMultipleOutline,
+      mdiTargetAccount,
+      mdiDownloadOutline,
+      mdiBoomerang,
     }
   },
 }
@@ -546,6 +703,29 @@ export default {
   }
 }
 
+/* ----- Testamonials ----- */
+.testamonial {
+  height: 300px;
+}
+@media only screen and (max-width: 600px) {
+  .long-test {
+    height: 400px;
+    padding-bottom: 5em;
+  }
+}
+
+/* add borders on desktop */
+@media only screen and (min-width: 600px) {
+  .border-top-bottom {
+    border-top: 1px solid rgb(224, 224, 224) !important;
+    border-bottom: 1px solid rgb(224, 224, 224) !important;
+  }
+
+  .border-left {
+    border-left: 1px solid rgb(224, 224, 224) !important;
+  }
+}
+
 /* --------- How ---------- */
 #how {
   background-color: #0078a0 !important;
@@ -580,12 +760,6 @@ export default {
   }
 }
 
-.sub-hero-text {
-  line-height: 1.375em;
-  font-size: 2.125em;
-  font-weight: 800;
-}
-
 /* ------- Research ------- */
 #research {
   padding-top: 4em;
@@ -611,30 +785,32 @@ export default {
   }
 }
 
-/* ----- Testamonials ----- */
-.testamonial {
-  height: 300px;
-}
-@media only screen and (max-width: 600px) {
-  .long-test {
-    height: 400px;
-    padding-bottom: 5em;
-  }
+/* ------ What else? ------ */
+#what {
+  background-color: #0078a0 !important;
+  padding-top: 4em;
+  padding-bottom: 6em;
 }
 
-/* add borders on desktop */
-@media only screen and (min-width: 600px) {
-  .border-top-bottom {
-    border-top: 1px solid rgb(224, 224, 224) !important;
-    border-bottom: 1px solid rgb(224, 224, 224) !important;
-  }
-
-  .border-left {
-    border-left: 1px solid rgb(224, 224, 224) !important;
-  }
+#what-text {
+  color: #f1f3f8;
+  line-height: 1.375em;
+  font-weight: 800;
+  margin-bottom: 1em;
 }
 
 /* --------- Misc --------- */
+
+/* large headings */
+.sub-hero-text {
+  line-height: 1.375em;
+  font-size: 2.125em;
+  font-weight: 800;
+}
+
+.illum {
+  border-bottom: 6px solid #ef7a85;
+}
 
 /* add vertical space between screenshots */
 .pad-vert {
@@ -658,6 +834,11 @@ export default {
 
 #owen {
   border-radius: 8px;
+}
+
+#written {
+  padding-top: 6em;
+  padding-bottom: 3em;
 }
 
 /* ----- Featured in  ----- */
