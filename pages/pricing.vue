@@ -15,18 +15,36 @@
               <v-card-title class="font-weight-black text-h6">
                 A Level
               </v-card-title>
-              <v-card-subtitle class="text-overline">
-                Coming Soon
-              </v-card-subtitle>
+              <v-card-subtitle> Coming Soon </v-card-subtitle>
               <v-card-text class="text-body-1">
-                <p class="mb-2">
-                  <b>AQA</b> A level<v-chip small outlined class="ml-1"
-                    >7517</v-chip
-                  >
+                <p class="text-h4 font-weight-bold">
+                  £129 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
-                  <b>OCR</b> A level
-                  <v-chip small outlined class="ml-1">H446</v-chip>
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  <b>AQA</b> <span class="text-caption"> (7517) </span>
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  <b>OCR</b> <span class="text-caption"> (H446) </span>
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  <b>WJEC Eduqas</b>
+                  <span class="text-caption"> (8501QS) </span>
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  <b>Cambridge Assessment</b>
+                  <span class="text-caption"> (9618) </span>
                 </p>
               </v-card-text>
               <v-card-actions>
@@ -42,29 +60,40 @@
               <v-card-subtitle> 9-1 Computer Science </v-card-subtitle>
               <v-card-text class="text-body-1">
                 <p class="text-h4 font-weight-bold">
-                  £89 <span class="text-overline">/ YEAR</span>
+                  £129 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
                   <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
-                  <b>AQA</b> GCSE<v-chip small outlined class="ml-1"
-                    >8520</v-chip
-                  >
+                  <b>AQA</b> <span class="text-caption"> (8520 & 8525) </span>
                 </p>
                 <p class="mb-2">
                   <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
-                  <b>OCR</b> GCSE
-                  <v-chip small outlined class="ml-1">J276</v-chip>
+                  <b>OCR</b> <span class="text-caption"> (J276 & J277) </span>
                 </p>
                 <p class="mb-2">
                   <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
-                  <b>Pearson Edexcel</b> GCSE
-                  <v-chip small outlined class="ml-1">1CP1</v-chip>
+                  <b>Pearson Edexcel</b>
+                  <span class="text-caption"> (1CP1 & 1CP2) </span>
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  <b>WJEC Eduqas</b>
+                  <span class="text-caption"> (C500QS) </span>
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  <b>Cambridge IGCSE</b>
+                  <span class="text-caption"> (0984) </span>
                 </p>
               </v-card-text>
               <v-card-actions>
@@ -77,21 +106,28 @@
           <v-col cols="12" md="4" order="2" order-md="2">
             <v-card class="pa-3" outlined rounded="lg" disabled>
               <v-card-title class="font-weight-black text-h6">
-                Information Technology
+                The Complete Package
               </v-card-title>
-              <v-card-subtitle class="text-overline">
-                Coming Soon
-              </v-card-subtitle>
+              <v-card-subtitle> GCSE and A Level</v-card-subtitle>
               <v-card-text class="text-body-1">
-                <p class="mb-2">
-                  OCR Creative iMedia<v-chip small outlined class="ml-1"
-                    >J817</v-chip
+                <p class="text-h4 font-weight-bold">
+                  £199 <span class="text-overline">/ YEAR</span>
+                  <v-chip color="accent" class="float-right mt-2"
+                    >Save £59</v-chip
                   >
                 </p>
+                <p>Also includes:</p>
                 <p class="mb-2">
-                  Pearson Edexcel BTEC IT<v-chip small outlined class="ml-1"
-                    >Level 3</v-chip
-                  >
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  OCR Creative iMedia <span class="text-caption"> (J817) </span>
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  BTEC Level 3 IT <span class="text-caption"> (Unit 1) </span>
                 </p>
               </v-card-text>
               <v-card-actions>
@@ -206,7 +242,13 @@
         <v-row class="d-flex justify-center text-center">
           <v-col class="12" md="8">
             <p
-              class="text-h5 text-md-h4 font-weight-bold white--text text-center mb-8"
+              class="
+                text-h5 text-md-h4
+                font-weight-bold
+                white--text
+                text-center
+                mb-8
+              "
             >
               Try Examgap for free
             </p>

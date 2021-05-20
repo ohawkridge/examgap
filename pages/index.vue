@@ -380,31 +380,68 @@
       <v-row class="d-flex align-center justify-center">
         <v-col cols="12" md="5" class="text-center text-sm-left">
           <p class="text-h5 text-md-h4 font-weight-bold mb-8">
-            Try Examgap for free
+            GCSE Computer Science courses for:
           </p>
-          <p class="text-body-1 mb-8">
-            GCSE Computer Science courses for
-            <span class="font-weight-bold">AQA</span>,
-            <span class="font-weight-bold">OCR</span>, and
-            <span class="font-weight-bold">Pearson Edexcel</span>
+          <p>
+            <v-icon color="accent" class="mr-2 pb-1">{{
+              $icons.mdiCheckboxMarkedCircleOutline
+            }}</v-icon>
+            <span class="font-weight-medium">AQA</span> (8520 & 8525)
           </p>
-          <v-btn x-large color="primary" elevation="0" nuxt to="/trial">
+          <p>
+            <v-icon color="accent" class="mr-2 pb-1">{{
+              $icons.mdiCheckboxMarkedCircleOutline
+            }}</v-icon>
+            <span class="font-weight-medium">OCR</span> (J276 & J277)
+          </p>
+          <p>
+            <v-icon color="accent" class="mr-2 pb-1">{{
+              $icons.mdiCheckboxMarkedCircleOutline
+            }}</v-icon>
+            <span class="font-weight-medium">Pearson Edexcel</span> (1CP1 &
+            1CP2) <v-chip class="ml-2">SOON</v-chip>
+          </p>
+          <p>
+            <v-icon color="accent" class="mr-2 pb-1">{{
+              $icons.mdiCheckboxMarkedCircleOutline
+            }}</v-icon>
+            <span class="font-weight-medium">WJEC Eduqas</span> (C500QS)
+            <v-chip class="ml-2">SOON</v-chip>
+          </p>
+          <p class="mb-10">
+            <v-icon color="accent" class="mr-2 pb-1">{{
+              $icons.mdiCheckboxMarkedCircleOutline
+            }}</v-icon>
+            <span class="font-weight-medium">Cambridge IGCSE</span> (0984)
+            <v-chip class="ml-2">SOON</v-chip>
+          </p>
+          <v-btn
+            x-large
+            outlined
+            color="primary"
+            elevation="0"
+            nuxt
+            to="/trial"
+          >
             Start 30-day free trial
           </v-btn>
         </v-col>
         <v-col cols="12" md="5">
           <v-card elevation="6" rounded="lg" class="pa-6">
-            <v-card-title>
-              <v-chip outlined color="primary">COMING SOON</v-chip>
-            </v-card-title>
+            <v-card-title> More courses coming soon </v-card-title>
             <v-card-text class="text-body-1">
               <p>
-                A level Computer Science for
-                <span class="font-weight-bold">AQA</span> and
-                <span class="font-weight-bold">OCR</span>
+                A level Computer Science for AQA, OCR, WJEC Eduqas and Cambridge
+                Assessment.
               </p>
-              <p>BTEC Level 3 Information Technology</p>
-              <p>OCR Cambridge Nationals Creative iMedia</p>
+              <p>
+                BTEC Level 3 Information Technology
+                <v-icon>{{ $icons.mdiFlaskOutline }}</v-icon>
+              </p>
+              <p>
+                OCR Cambridge Nationals Creative iMedia
+                <v-icon>{{ $icons.mdiFlaskOutline }}</v-icon>
+              </p>
             </v-card-text>
           </v-card>
         </v-col>
@@ -618,6 +655,7 @@ import {
   mdiTargetAccount,
   mdiDownloadOutline,
   mdiBoomerang,
+  mdiFlaskOutline,
 } from '@mdi/js'
 
 export default {
@@ -636,6 +674,7 @@ export default {
       mdiTargetAccount,
       mdiDownloadOutline,
       mdiBoomerang,
+      mdiFlaskOutline,
     }
   },
 }
@@ -775,7 +814,7 @@ export default {
 /* -------- Boards -------- */
 #boards {
   padding-top: 3em;
-  padding-bottom: 11em;
+  padding-bottom: 8em;
 }
 /* reduce spacing on mobile */
 @media only screen and (max-width: 600px) {
