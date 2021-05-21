@@ -61,6 +61,8 @@ exports.handler = async (event, context, callback) => {
       }
     )
     const data = await keyedClient.query(qry)
+    // Alphabetise keywords
+    data.keywords = data.keywords.split(', ').sort().join(', ')
     return {
       statusCode: 200,
       body: JSON.stringify(data),
