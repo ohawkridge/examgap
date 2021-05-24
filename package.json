@@ -11,9 +11,9 @@
     "lint": "yarn lint:js"
   },
   "dependencies": {
-    "core-js": "^3.11.1",
-    "faunadb": "^4.2.0",
-    "nuxt": "^2.15.4",
+    "core-js": "^3.12.1",
+    "faunadb": "^4.3.0",
+    "nuxt": "^2.15.6",
     "nuxt-rollbar-module": "^1.1.0",
     "tiptap-vuetify": "^2.24.0",
     "vuex-persistedstate": "^4.0.0-beta.3"
@@ -23,13 +23,13 @@
     "@nuxtjs/eslint-config": "^6.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/vuetify": "^1.11.3",
-    "aws-sdk": "^2.900.0",
+    "aws-sdk": "^2.913.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.25.0",
+    "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.9.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.3"
   }
 }
