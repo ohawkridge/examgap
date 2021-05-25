@@ -331,6 +331,9 @@ export default {
     },
     async toggleMode(student) {
       try {
+        // Update local data first because of latency
+        student.examMode = !student.examMode
+        // console.time('toggleMode')
         const url = new URL(
           '/.netlify/functions/updateExamMode',
           this.$config.baseURL
@@ -346,14 +349,15 @@ export default {
         if (!response.ok) {
           throw new Error(`Error updating examMode ${response.status}`)
         }
-        // Update local data if call succeeds
-        student.examMode = !student.examMode
+        // console.timeEnd('toggleMode')
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
           type: 'error',
-          msg: 'Error updating mode',
+          msg: 'Error updating exam mode',
         })
+        // Reverse change to local data
+        student.examMode = !student.examMode
       }
     },
     async create() {
