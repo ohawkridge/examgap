@@ -61,8 +61,7 @@
             </v-col>
             <v-col cols="12" class="d-flex justify-end">
               <v-btn color="primary" elevation="0" @click="marking = true">
-                <v-icon left>{{ $icons.mdiCheckboxMarkedOutline }}</v-icon>
-                Self-mark
+                Self mark
               </v-btn>
             </v-col>
           </v-row>
@@ -109,7 +108,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
-import { mdiTextToSpeech, mdiPause, mdiCheckboxMarkedOutline } from '@mdi/js'
+import { mdiTextToSpeech, mdiPause } from '@mdi/js'
 
 export default {
   beforeRouteLeave(to, from, next) {
@@ -206,7 +205,6 @@ export default {
     this.$icons = {
       mdiTextToSpeech,
       mdiPause,
-      mdiCheckboxMarkedOutline,
     }
   },
   mounted() {
