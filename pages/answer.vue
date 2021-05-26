@@ -91,7 +91,6 @@
                 v-html="question.guidance"
               ></div>
               <p v-else>None</p>
-              <p class="red--text">{{ marks }}</p>
               <div class="d-flex justify-end">
                 <v-btn color="primary" elevation="0" @click="done()">
                   Finish
@@ -311,7 +310,7 @@ export default {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             responseId: this.responseId,
-            marks: this,
+            marks: this.marks,
           }),
           method: 'POST',
         })
