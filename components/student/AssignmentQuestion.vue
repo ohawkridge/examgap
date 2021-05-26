@@ -8,7 +8,7 @@
         :to="`/response/${response.id}`"
         class="px-0 px-md-3"
       >
-        <v-list-item-content>
+        <v-list-item-content class="d-flex align-start">
           <v-col cols="12" md="9" class="pa-0 pa-md-3 mb-2">
             <v-list-item-title>
               {{ question.text | strip }}
@@ -23,24 +23,40 @@
             class="pa-0 pa-md-3 d-flex justify-space-around"
           >
             <!-- Teacher mark -->
-            <v-chip
-              v-if="response.marked"
-              :color="color(response.tm, question.maxMark)"
-            >
-              <v-avatar left>
-                <v-icon>{{ $icons.mdiSchoolOutline }}</v-icon>
-              </v-avatar>
-              <span class="font-weight-black">{{ response.tm }}</span>
-            </v-chip>
-            <!-- Empty div so self mark aligns right -->
-            <!-- <div v-else class="spacer flex-grow-0"></div> -->
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-chip
+                  v-if="response.marked"
+                  v-bind="attrs"
+                  :color="color(response.tm, question.maxMark)"
+                  v-on="on"
+                >
+                  <v-avatar left>
+                    <v-icon>{{ $icons.mdiSchoolOutline }}</v-icon>
+                  </v-avatar>
+                  <span class="font-weight-black">{{ response.tm }}</span>
+                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                </v-chip>
+              </template>
+              <span>Your teacher</span>
+            </v-tooltip>
             <!-- Self mark -->
-            <v-chip :color="color(response.sm, question.maxMark)">
-              <v-avatar left>
-                <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
-              </v-avatar>
-              <span class="font-weight-black"> {{ response.sm }}</span>
-            </v-chip>
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-chip
+                  v-bind="attrs"
+                  :color="color(response.sm, question.maxMark)"
+                  v-on="on"
+                >
+                  <v-avatar left>
+                    <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+                  </v-avatar>
+                  <span class="font-weight-black"> {{ response.sm }}</span>
+                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                </v-chip>
+              </template>
+              <span>You</span>
+            </v-tooltip>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -92,7 +108,7 @@
 </template>
 
 <script>
-import { mdiAccountOutline, mdiSchoolOutline } from '@mdi/js'
+import { mdiAccountOutline, mdiSchoolOutline, mdiCheck } from '@mdi/js'
 
 export default {
   name: 'AssignmentQuestion',
@@ -110,6 +126,7 @@ export default {
     this.$icons = {
       mdiAccountOutline,
       mdiSchoolOutline,
+      mdiCheck,
     }
   },
   methods: {

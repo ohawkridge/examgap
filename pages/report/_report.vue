@@ -604,7 +604,7 @@ export default {
       // Don't exceed max mark
       if (this.response.tm.length > this.question.maxMark) {
         this.$snack.showMessage({
-          msg: `Maximum mark is ${this.question.maxMark}`,
+          msg: `Max. mark is ${this.question.maxMark}`,
           type: '',
         })
         // Untick checkbox by splicing id out of v-model data

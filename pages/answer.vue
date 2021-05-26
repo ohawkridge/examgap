@@ -82,7 +82,7 @@
                 color="success"
                 :label="m.text"
                 :value="m.id"
-                @change="toggleMark(m.id)"
+                @change="checkMax()"
               >
               </v-checkbox>
               <p class="font-weight-bold">Max. {{ question.maxMark }}</p>
@@ -92,6 +92,7 @@
                 v-html="question.guidance"
               ></div>
               <p v-else>None</p>
+              <p class="red--text">{{ marks }}</p>
               <div class="d-flex justify-end">
                 <v-btn color="primary" elevation="0" @click="done()">
                   Finish
@@ -118,8 +119,11 @@ export default {
     // Warn if not yet marked
     if (!this.marking) {
       if (confirm(`Really leave without marking?`)) next()
+    } else {
+      // Save self marks
+      if (!this.finishClicked) this.saveMarks()
+      next()
     }
-    next()
   },
   layout: 'app',
   async asyncData({ $config: { baseURL }, store }) {
@@ -151,6 +155,7 @@ export default {
       prefVoice: false,
       saveStatus: '',
       responseId: '',
+      finishClicked: false,
     }
   },
   computed: {
@@ -275,6 +280,8 @@ export default {
       }
     },
     done() {
+      this.saveMarks()
+      this.finishClicked = true
       if (this.revising) {
         // Increment count of questions answered
         this.$store.commit('groups/incrementTopicCount')
@@ -285,44 +292,43 @@ export default {
         this.$router.push(`/assignment/${this.assignmentId}`)
       }
     },
-    async toggleMark(id) {
-      // Don't exceed max mark, but always allow unticking
-      const checked = this.marks.includes(id)
-      if (checked && this.marks.length > this.question.maxMark) {
+    // Don't exceed max. mark
+    checkMax() {
+      if (this.marks.length > this.question.maxMark) {
         this.$snack.showMessage({
           msg: `Max. mark is ${this.question.maxMark}`,
-          type: 'error',
+          type: '',
         })
         this.marks.splice(-1, 1) // Uncheck
-      } else {
-        try {
-          const url = new URL(
-            '/.netlify/functions/toggleMark',
-            this.$config.baseURL
-          )
-          const response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.$store.state.user.secret,
-              responseId: this.responseId,
-              markId: id,
-              add: checked,
-              teacher: false,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error marking ${response.status}`)
-          }
-        } catch (e) {
-          console.error(e)
-          this.$snack.showMessage({
-            type: 'error',
-            msg: 'Error marking',
-          })
-        }
       }
     },
-    // Kids don't save shit, so save automatically
+    // Save self marks to db
+    async saveMarks() {
+      try {
+        const url = new URL(
+          '/.netlify/functions/saveSelfMarks',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            responseId: this.responseId,
+            marks: this,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error saving marks ${response.status}`)
+        }
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error saving marks',
+        })
+      }
+    },
+    // Kids don't save shit; save automatically
     async save() {
       try {
         this.saveStatus = `Saving...`
@@ -345,11 +351,11 @@ export default {
           throw new Error(`Error saving answer ${response.status}`)
         }
         const docId = await response.json()
-        // console.log(
-        //   '%c' + 'Response',
-        //   'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
-        // )
-        // console.log(docId)
+        console.log(
+          '%c' + 'Response',
+          'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+        )
+        console.log(docId)
         // Save response id to update just response text
         this.responseId = docId
         this.saveStatus = `Changes saved`

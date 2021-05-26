@@ -1,137 +1,142 @@
 <template>
-  <div>
-    <v-row>
-      <v-col cols="12">
-        <v-btn text nuxt :to="`/assignment/${response.assignmentId}`">
-          <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
-          {{ response.assignmentName }}
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-card class="pa-md-3">
-          <v-card-title class="d-flex justify-space-between">
-            Question
-            <div class="d-flex justify-end">
-              <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-chip
-                    v-bind="attrs"
-                    :color="
-                      color(response.tm.length, response.question.maxMark)
-                    "
-                    class="mr-4"
-                    v-on="on"
-                  >
-                    <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
-                    <span class="font-weight-black">{{
-                      response.tm.length
-                    }}</span>
-                  </v-chip>
-                </template>
-                <span>Teacher mark</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-chip
-                    v-bind="attrs"
-                    :color="
-                      color(response.sm.length, response.question.maxMark)
-                    "
-                    v-on="on"
-                  >
-                    <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
-                    <span class="font-weight-black">{{
-                      response.sm.length
-                    }}</span>
-                  </v-chip>
-                </template>
-                <span>Self mark</span>
-              </v-tooltip>
-            </div>
-          </v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" md="6">
-                <div v-html="response.question.text"></div>
-                <div class="d-flex justify-end">
-                  <v-chip outlined
-                    >{{ response.question.maxMark }} mark{{
-                      response.question.maxMark | pluralize
-                    }}
-                  </v-chip>
-                </div>
-                <p class="text-subtitle-1 font-weight-medium">Your answer</p>
-                <p id="ans" class="pa-4 breaks" v-text="response.text"></p>
-                <p class="text-subtitle-1 font-weight-medium">Model answer</p>
-                <p
-                  class="text-subtitle-1"
-                  v-html="response.question.modelAnswer"
+  <v-row>
+    <v-col cols="12">
+      <v-card class="pa-md-3 mt-md-3">
+        <v-card-title class="d-flex justify-space-between">
+          Question
+          <div class="d-flex justify-end">
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-chip
+                  v-bind="attrs"
+                  :color="color(response.tm.length, response.question.maxMark)"
+                  class="mr-4"
+                  v-on="on"
                 >
-                  Model answer
-                </p>
-              </v-col>
-              <v-col cols="12" md="6">
-                <p class="text-subtitle-1 font-weight-medium">Mark scheme</p>
-                <v-simple-table>
-                  <template #default>
-                    <thead>
-                      <tr>
-                        <th class="text-left">
-                          <v-icon>{{ $icons.mdiSchoolOutline }}</v-icon>
-                        </th>
-                        <th class="text-left">
-                          <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
-                        </th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(mark, i) in response.question.markScheme"
-                        :key="i"
-                      >
-                        <td>
-                          <v-icon
-                            v-if="response.tm.includes(mark.id)"
-                            color="primary"
-                            >{{ $icons.mdiCheckboxMarked }}</v-icon
-                          >
-                        </td>
-                        <td>
-                          <v-icon
-                            v-if="response.sm.includes(mark.id)"
-                            color="green"
-                            >{{ $icons.mdiCheckboxMarked }}</v-icon
-                          >
-                        </td>
-                        <td>{{ mark.text }}</td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
-                <div
-                  v-if="response.feedback"
-                  id="fb"
-                  class="pa-4 mb-4"
-                  v-text="response.feedback"
-                ></div>
-                <p class="text-subtitle-1 font-weight-medium mt-4">
-                  Marking guidance
-                </p>
-                <div
-                  v-if="response.question.guidance"
-                  v-html="response.question.guidance"
-                ></div>
-                <p v-else>None</p>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </div>
+                  <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                  <span class="font-weight-black">{{
+                    response.tm.length
+                  }}</span>
+                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                </v-chip>
+              </template>
+              <span>Your teacher</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-chip
+                  v-bind="attrs"
+                  :color="color(response.sm.length, response.question.maxMark)"
+                  v-on="on"
+                >
+                  <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                  <span class="font-weight-black">{{
+                    response.sm.length
+                  }}</span>
+                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                </v-chip>
+              </template>
+              <span>You</span>
+            </v-tooltip>
+          </div>
+        </v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12" md="6">
+              <div v-html="response.question.text"></div>
+              <div class="d-flex justify-end">
+                <v-chip outlined
+                  >{{ response.question.maxMark }} mark{{
+                    response.question.maxMark | pluralize
+                  }}
+                </v-chip>
+              </div>
+              <p class="text-subtitle-1 font-weight-medium">Your answer</p>
+              <p id="ans" class="pa-4 breaks" v-text="response.text"></p>
+              <p class="text-subtitle-1 font-weight-medium">Model answer</p>
+              <p v-html="response.question.modelAnswer">Model answer</p>
+            </v-col>
+            <v-col cols="12" md="6">
+              <p class="text-subtitle-1 font-weight-medium">Mark scheme</p>
+              <v-simple-table>
+                <template #default>
+                  <thead>
+                    <tr>
+                      <v-tooltip bottom>
+                        <template #activator="{ on, attrs }">
+                          <th v-bind="attrs" class="text-left" v-on="on">
+                            <v-icon>{{ $icons.mdiSchoolOutline }}</v-icon>
+                          </th>
+                        </template>
+                        <span>Your teacher</span>
+                      </v-tooltip>
+                      <v-tooltip bottom>
+                        <template #activator="{ on, attrs }">
+                          <th v-bind="attrs" class="text-left" v-on="on">
+                            <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+                          </th>
+                        </template>
+                        <span>You</span>
+                      </v-tooltip>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(mark, i) in response.question.markScheme"
+                      :key="i"
+                    >
+                      <td>
+                        <v-icon
+                          v-if="response.tm.includes(mark.id)"
+                          color="primary"
+                          >{{ $icons.mdiCheckboxMarked }}</v-icon
+                        >
+                      </td>
+                      <td>
+                        <v-icon
+                          v-if="response.sm.includes(mark.id)"
+                          color="green"
+                          >{{ $icons.mdiCheckboxMarked }}</v-icon
+                        >
+                      </td>
+                      <td>{{ mark.text }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+              <div
+                v-if="response.feedback"
+                id="fb"
+                class="pa-4 mb-4"
+                v-text="response.feedback"
+              ></div>
+              <p class="text-subtitle-1 font-weight-medium mt-4">
+                Marking guidance
+              </p>
+              <div
+                v-if="response.question.guidance"
+                v-html="response.question.guidance"
+              ></div>
+              <p v-else>None</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" class="d-flex justify-end">
+              <v-btn
+                color="primary"
+                elevation="0"
+                nuxt
+                :to="`/assignment/${response.assignmentId}`"
+              >
+                Done
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -141,6 +146,7 @@ import {
   mdiAccountOutline,
   mdiCheckboxMarked,
   mdiArrowLeft,
+  mdiCheck,
 } from '@mdi/js'
 
 export default {
@@ -167,6 +173,7 @@ export default {
       mdiAccountOutline,
       mdiCheckboxMarked,
       mdiArrowLeft,
+      mdiCheck,
     }
   },
   methods: {
