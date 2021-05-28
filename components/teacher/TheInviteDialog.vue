@@ -28,7 +28,7 @@
         <p class="text-subtitle-1 font-weight-medium mb-2">Share invite link</p>
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>
-            <v-btn class="btn-slot" text color="primary" @click="copy()">
+            <v-btn class="fix-btn" text color="primary" @click="copy()">
               <v-icon left>{{ $icons.mdiContentCopy }}</v-icon>
               {{ copyBtn }}
             </v-btn>
@@ -39,12 +39,7 @@
         </p>
         <v-text-field :value="formattedCode" readonly outlined hide-details>
           <template #append>
-            <v-btn
-              class="btn-slot"
-              text
-              color="primary"
-              @click="overlay = true"
-            >
+            <v-btn class="fix-btn" text color="primary" @click="overlay = true">
               <v-icon left>{{ $icons.mdiFullscreen }}</v-icon>
               Show
             </v-btn>
@@ -74,14 +69,12 @@
     <v-overlay
       opacity="0.86"
       :value="overlay"
+      class="font-weight-bold white--text text-center big"
       @click.native="overlay = !overlay"
     >
-      <div class="font-weight-bold white--text text-center big">
-        Go to examgap.com, Join Class
-      </div>
-      <div class="font-weight-bold white--text text-center big">
-        Use code <span class="accent--text">{{ formattedCode }}</span>
-      </div>
+      <div>examgap.com</div>
+      <div>Join Class</div>
+      <div class="secondary--text">{{ formattedCode }}</div>
     </v-overlay>
   </v-dialog>
 </template>
@@ -153,12 +146,19 @@ export default {
 </script>
 
 <style scoped>
-.btn-slot {
+/* Align button inside input */
+.fix-btn {
   margin-top: -7px;
   margin-right: -2px;
 }
 
+/* Large class code */
 .big {
-  font-size: 6vw;
+  font-size: 10vw;
+}
+@media only screen and (max-width: 600px) {
+  .big {
+    font-size: 14vw;
+  }
 }
 </style>
