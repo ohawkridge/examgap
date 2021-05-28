@@ -167,7 +167,7 @@ export default {
 </script>
 
 <style scoped>
-/* style hover highlight */
+/* create class card hover */
 #cc1 {
   background: #fefcfb !important;
   border: 1px dashed darkgray !important;

@@ -86,7 +86,7 @@ export default {
     }
   },
   async fetch() {
-    // Dispatch an action to fetch + store revision topics
+    // Dispatch an action to fetch revision topics
     if (this.forceFetch || this.topics.length === 0) {
       await this.$store.dispatch('groups/getRevisionTopics')
       this.forceFetch = false
@@ -101,6 +101,7 @@ export default {
     ...mapState({
       groups: (state) => state.groups.groups,
       topics: (state) => state.groups.revisionTopics,
+      lastFetch: (state) => state.user.lastFetch,
     }),
     // Get current active group for home page
     ...mapGetters({ group: 'groups/activeGroup' }),
@@ -121,6 +122,13 @@ export default {
         this.$fetch()
       }
     },
+  },
+  mounted() {
+    // Check for new assignments after 5 mins.
+    // localStorage will be full ∴ getUser won't fire
+    if (Date.now() - this.lastFetch > 300000) {
+      this.$store.dispatch('user/getUser')
+    }
   },
   methods: {
     revise(topic) {

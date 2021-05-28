@@ -14,6 +14,7 @@ export const state = () => ({
   quote: 'Experiment, fail, learn, repeat.—Anonymous',
   onboard: false,
   onboardStep: 1,
+  lastFetch: undefined,
 })
 
 export const actions = {
@@ -33,6 +34,7 @@ export const actions = {
           throw new Error(`Error fetching user data ${response.status}`)
         }
         const userData = await response.json()
+        console.log(`data`, userData)
         // Commit user data to store
         commit('setUser', userData)
         // For students we need to do some 'post processing'
@@ -45,6 +47,8 @@ export const actions = {
               }
             }
           }
+          // Remember when this was stored
+          commit('setLastFetch', Date.now())
           // Open doc stream
           dispatch('openStream', userData)
         }
@@ -107,6 +111,9 @@ export const actions = {
 }
 
 export const mutations = {
+  setLastFetch(state, ts) {
+    state.lastFetch = ts
+  },
   setOnboard(state, val) {
     state.onboard = val
   },
@@ -150,5 +157,6 @@ export const mutations = {
     state.quote = 'Experiment, fail, learn, repeat.—Anonymous'
     state.onboard = false
     state.onboardStep = 1
+    state.lastFetch = undefined
   },
 }
