@@ -4,6 +4,7 @@
       v-model="content"
       :card-props="{ flat: true }"
       :extensions="extensions"
+      :toolbar-attributes="{ class: 'rounded-t' }"
     />
     <template #placeholder> Loading... </template>
   </ClientOnly>

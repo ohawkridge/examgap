@@ -55,7 +55,7 @@
               Create Question
             </v-btn>
           </template>
-          <span>Create new question</span>
+          <span>Create question</span>
         </v-tooltip>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">

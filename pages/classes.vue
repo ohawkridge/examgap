@@ -4,15 +4,24 @@
       <v-col cols="12">
         <div class="d-flex justify-space-between align-center">
           <v-btn-toggle v-model="tab" color="primary" group mandatory>
-            <v-btn :value="true" class="rounded">
-              <v-icon left>{{ $icons.mdiHomeOutline }}</v-icon>
-              Home
-            </v-btn>
-            <v-btn :value="false" class="rounded">
-              <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
-
-              Archive
-            </v-btn>
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-btn v-bind="attrs" :value="true" class="rounded" v-on="on">
+                  <v-icon left>{{ $icons.mdiHomeOutline }}</v-icon>
+                  Home
+                </v-btn>
+              </template>
+              <span>Home</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-btn v-bind="attrs" :value="false" class="rounded" v-on="on">
+                  <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
+                  Archive
+                </v-btn>
+              </template>
+              <span>Archive</span>
+            </v-tooltip>
           </v-btn-toggle>
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
@@ -29,7 +38,7 @@
                 }}
               </v-btn>
             </template>
-            <span>Create new class</span>
+            <span>Create class</span>
           </v-tooltip>
         </div>
       </v-col>
@@ -48,7 +57,7 @@
       <v-col v-if="tab && activeGroupCount > 0" cols="12" md="6" lg="4">
         <v-hover v-slot="{ hover }">
           <v-card
-            id="create-class"
+            :id="hover ? 'cc2' : 'cc1'"
             class="d-flex align-center justify-center"
             outlined
             hover
@@ -158,11 +167,18 @@ export default {
 </script>
 
 <style scoped>
-#create-class {
+/* style hover highlight */
+#cc1 {
   background: #fefcfb !important;
   border: 1px dashed darkgray !important;
 }
 
+#cc2 {
+  background: #fefcfb !important;
+  border: 1px dashed #0078a0 !important;
+}
+
+/* position empty state graphic */
 #empty {
   padding-left: 3em;
   padding-right: 3em;
