@@ -34,7 +34,6 @@ export const actions = {
           throw new Error(`Error fetching user data ${response.status}`)
         }
         const userData = await response.json()
-        console.log(`data`, userData)
         // Commit user data to store
         commit('setUser', userData)
         // For students we need to do some 'post processing'
