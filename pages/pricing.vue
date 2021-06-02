@@ -9,55 +9,15 @@
             </p>
           </v-col>
         </v-row>
-        <v-row class="d-flex justify-center align-end">
-          <v-col cols="12" md="4" order="1" order-md="1">
-            <v-card class="pa-3" outlined rounded="lg" disabled>
-              <v-card-title class="font-weight-black text-h6">
-                A Level
-              </v-card-title>
-              <v-card-subtitle> Coming Soon </v-card-subtitle>
-              <v-card-text class="text-body-1">
-                <p class="text-h4 font-weight-bold">
-                  £129 <span class="text-overline">/ YEAR</span>
-                </p>
-                <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
-                  <b>AQA</b> <span class="text-caption"> (7517) </span>
-                </p>
-                <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
-                  <b>OCR</b> <span class="text-caption"> (H446) </span>
-                </p>
-                <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
-                  <b>WJEC Eduqas</b>
-                  <span class="text-caption"> (8501QS) </span>
-                </p>
-                <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
-                  <b>Cambridge Assessment</b>
-                  <span class="text-caption"> (9618) </span>
-                </p>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn block outlined nuxt to="/trial"> Coming Soon </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="4" order="0" order-md="2">
+        <v-row class="d-flex justify-center">
+          <v-col cols="12" md="4">
             <v-card class="gcse pa-3" outlined rounded="lg">
               <v-card-title class="text-h6 font-weight-black">
                 GCSE
               </v-card-title>
-              <v-card-subtitle> 9-1 Computer Science </v-card-subtitle>
+              <v-card-subtitle class="text-overline">
+                9-1 Computer Science
+              </v-card-subtitle>
               <v-card-text class="text-body-1">
                 <p class="text-h4 font-weight-bold">
                   £129 <span class="text-overline">/ YEAR</span>
@@ -66,34 +26,30 @@
                   <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
-                  <b>AQA</b> <span class="text-caption"> (8520 & 8525) </span>
+                  Improve your results
                 </p>
                 <p class="mb-2">
                   <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
-                  <b>OCR</b> <span class="text-caption"> (J276 & J277) </span>
+                  Unlock more 8-9 grades
                 </p>
                 <p class="mb-2">
                   <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
-                  <b>Pearson Edexcel</b>
-                  <span class="text-caption"> (1CP1 & 1CP2) </span>
+                  Mark more efficiently
                 </p>
                 <p class="mb-2">
                   <v-icon color="#b7d1da" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
-                  <b>WJEC Eduqas</b>
-                  <span class="text-caption"> (C500QS) </span>
+                  Diagnose weaknesses
                 </p>
-                <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
-                  <b>Cambridge IGCSE</b>
-                  <span class="text-caption"> (0984) </span>
+                <p class="text-caption mb-0">
+                  <nuxt-link nuxt to="/#boards"
+                    >Which boards do you support?</nuxt-link
+                  >
                 </p>
               </v-card-text>
               <v-card-actions>
@@ -103,7 +59,54 @@
               </v-card-actions>
             </v-card>
           </v-col>
-          <v-col cols="12" md="4" order="2" order-md="2">
+          <v-col cols="12" md="4">
+            <v-card class="pa-3" outlined rounded="lg" disabled>
+              <v-card-title class="font-weight-black text-h6">
+                A Level
+              </v-card-title>
+              <v-card-subtitle class="text-overline">
+                Coming Soon
+              </v-card-subtitle>
+              <v-card-text class="text-body-1">
+                <p class="text-h4 font-weight-bold">
+                  £129 <span class="text-overline">/ YEAR</span>
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  Improve your results
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  Differentiate quickly
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  Support independent study
+                </p>
+                <p class="mb-2">
+                  <v-icon color="#b7d1da" class="mr-2">{{
+                    $icons.mdiCheckboxMarkedCircleOutline
+                  }}</v-icon>
+                  Create your own questions
+                </p>
+                <p class="text-caption mb-0">
+                  <nuxt-link nuxt to="/#boards"
+                    >Which boards do you support?</nuxt-link
+                  >
+                </p>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn block outlined nuxt to="/trial"> Coming Soon </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+          <!-- <v-col cols="12" md="4" order="2" order-md="2">
             <v-card class="pa-3" outlined rounded="lg" disabled>
               <v-card-title class="font-weight-black text-h6">
                 The Complete Package
@@ -134,7 +137,7 @@
                 <v-btn block outlined nuxt to="/trial"> Coming soon </v-btn>
               </v-card-actions>
             </v-card>
-          </v-col>
+          </v-col> -->
         </v-row>
       </v-container>
     </div>

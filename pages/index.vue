@@ -400,7 +400,9 @@
                     <span class="text-caption">(0984)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip outlined> Sep. 2021 </v-chip>
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
                   </td>
                 </tr>
                 <tr>
@@ -409,7 +411,9 @@
                     <span class="text-caption">(4CP0)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip outlined> Sep. 2021 </v-chip>
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
                   </td>
                 </tr>
               </tbody>
@@ -440,12 +444,9 @@
                   <td>
                     <span class="font-weight-bold">AQA</span>
                     <span class="text-caption">(8520)</span>
-                    <v-chip label class="ml-2" outlined small>Legacy</v-chip>
                   </td>
                   <td class="text-center">
-                    <v-icon>
-                      {{ $icons.mdiCheckBold }}
-                    </v-icon>
+                    <v-chip label class="ml-2" outlined small>Legacy</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -463,12 +464,9 @@
                   <td>
                     <span class="font-weight-bold">OCR</span>
                     <span class="text-caption">(J276)</span>
-                    <v-chip label class="ml-2" outlined small>Legacy</v-chip>
                   </td>
                   <td class="text-center">
-                    <v-icon>
-                      {{ $icons.mdiCheckBold }}
-                    </v-icon>
+                    <v-chip label class="ml-2" outlined small>Legacy</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -477,7 +475,18 @@
                     <span class="text-caption">(1CP2)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip outlined> Sep. 2021 </v-chip>
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">Pearson Edexcel</span>
+                    <span class="text-caption">(1CP1)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-chip label class="ml-2" outlined small>Legacy </v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -486,7 +495,9 @@
                     <span class="text-caption">(C500QS)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip outlined> Sep. 2021 </v-chip>
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
                   </td>
                 </tr>
                 <tr>
@@ -495,7 +506,9 @@
                     <span class="text-caption">(C816 75)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip outlined> Sep. 2021 </v-chip>
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
                   </td>
                 </tr>
               </tbody>
