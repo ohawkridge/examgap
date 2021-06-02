@@ -11,7 +11,7 @@
             />
           </v-col>
           <v-col class="d-none d-sm-flex">
-            <v-card class="pa-3 flex-grow-1">
+            <v-card class="eg-card pa-3 flex-grow-1">
               <v-simple-table dense>
                 <template #default>
                   <thead>

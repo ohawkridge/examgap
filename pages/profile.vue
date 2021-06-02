@@ -5,7 +5,7 @@
         <v-card-title> Profile </v-card-title>
         <v-card-text>
           <v-text-field
-            :value="username"
+            :value="$store.state.user.username"
             label="Username"
             outlined
             hide-details
@@ -14,7 +14,7 @@
           ></v-text-field>
           <v-checkbox
             v-if="!teacher"
-            v-model="examMode"
+            v-model="$store.state.user.examMode"
             label="Exam mode"
             disabled
             hide-details
@@ -22,7 +22,7 @@
           </v-checkbox>
           <p v-if="!teacher" class="text-caption">Set by your teacher</p>
           <v-text-field
-            :value="school"
+            :value="$store.state.user.school"
             label="School name"
             outlined
             readonly
@@ -33,10 +33,22 @@
             :error="teacher && expires <= 0"
             outlined
             readonly
-          ></v-text-field>
+          >
+            <template #append>
+              <v-chip v-if="expires > 30" color="green" label class="fix-chip">
+                Subscribed
+                <v-icon color="#183a11" right>
+                  {{ $icons.mdiCheck }}
+                </v-icon>
+              </v-chip>
+              <v-chip v-else color="accent" label class="fix-chip">
+                Soon
+              </v-chip>
+            </template>
+          </v-text-field>
         </v-card-text>
         <v-card-actions v-if="teacher">
-          <the-subscribe-dialog :expired="expires <= 0" />
+          <the-subscribe-dialog :days="expires" />
         </v-card-actions>
       </v-card>
     </v-col>
@@ -45,6 +57,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { mdiCheck } from '@mdi/js'
 import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 
 export default {
@@ -59,16 +72,18 @@ export default {
   },
   computed: {
     ...mapState({
-      username: (state) => state.user.username,
       teacher: (state) => state.user.teacher,
-      examMode: (state) => state.user.examMode,
-      school: (state) => state.user.school,
       expires: (state) => state.user.subscriptionExpires,
     }),
     expiry() {
       if (!this.teacher) return `N/A`
       return this.expires <= 0 ? 'Expired' : `${this.expires} days`
     },
+  },
+  created() {
+    this.$icons = {
+      mdiCheck,
+    }
   },
 }
 </script>

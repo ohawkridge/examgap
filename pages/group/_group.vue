@@ -9,7 +9,7 @@
         />
       </v-col>
       <v-col cols="12" md="9">
-        <v-card class="mt-n6 mt-sm-0">
+        <v-card class="eg-card mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
             Assignment{{ assignments.length | pluralize }} ({{
               assignments.length

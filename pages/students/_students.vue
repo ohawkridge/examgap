@@ -11,7 +11,7 @@
       <v-col cols="12" md="9">
         <v-card
           v-if="group !== undefined && group.course"
-          class="mt-n6 mt-sm-0"
+          class="eg-card mt-n6 mt-sm-0"
         >
           <v-card-title class="d-flex justify-space-between">
             Student{{ students.length | pluralize }} ({{ students.length }})

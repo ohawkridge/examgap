@@ -46,7 +46,8 @@ span.v-chip.theme--light.orange {
 
 span.v-chip.theme--light.green {
   background-color: rgb(201, 237, 194) !important;
-  color: rgb(18, 39, 14) !important;
+  /* color: rgb(18, 39, 14) !important; */
+  color: hsl(110, 54%, 18) !important;
 }
 
 /* --------- Misc. classes -------- */
@@ -104,6 +105,12 @@ span.v-chip.theme--light.green {
 #nav-fix {
   position: relative;
   top: -58px !important;
+}
+
+/* align chips in text-fields */
+.fix-chip {
+  margin-top: -5px;
+  margin-right: -2px;
 }
 
 /* colour border-top on card */

@@ -27,7 +27,7 @@
           hide-details
         >
           <template #append>
-            <v-btn id="apply" text color="primary" @click="append()">
+            <v-btn class="fix-chip" text color="primary" @click="append()">
               Append
             </v-btn>
           </template>
@@ -163,10 +163,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-#apply {
-  margin-top: -7px;
-  margin-right: -2px;
-}
-</style>

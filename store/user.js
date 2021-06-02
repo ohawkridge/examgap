@@ -6,7 +6,7 @@ export const state = () => ({
   id: '',
   username: '',
   secret: '',
-  school: '',
+  school: 'N/A',
   teacher: false,
   subscriptionExpires: '',
   examMode: false,

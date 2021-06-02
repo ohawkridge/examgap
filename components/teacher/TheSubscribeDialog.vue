@@ -1,13 +1,7 @@
 <template>
-  <v-dialog v-model="dialog" max-width="400">
+  <v-dialog v-model="dialog" max-width="420">
     <template #activator="{ on, attrs }">
-      <v-btn
-        v-bind="attrs"
-        :color="expired ? 'accent' : 'primary'"
-        elevation="0"
-        block
-        v-on="on"
-      >
+      <v-btn v-bind="attrs" color="primary" elevation="0" block v-on="on">
         Subscribe to Examgap
       </v-btn>
     </template>
@@ -16,25 +10,30 @@
         >Subscribe to Examgap</v-card-title
       >
       <v-card-text>
-        <p>Request an email invoice you can forward to your finance office.</p>
-        <v-radio-group v-model="choice" hide-details>
-          <v-radio :value="1">
-            <template #label>
-              <p>
-                <span class="text-overline">GCSE Computer Science</span><br />
-                One year subscription—<strong>£89</strong> (VAT included)
-              </p>
-            </template>
-          </v-radio>
-          <!-- <v-radio label="Rad 2" :value="2">
-            <template #label>
-              <p>
-                <span class="text-overline">GCSE Computer Science</span><br />
-                Proprated until summer 2022—<strong>£{{ prorate }}</strong>
-              </p>
-            </template>
-          </v-radio> -->
-        </v-radio-group>
+        <p>Request an email invoice you can pay online.</p>
+        <!-- <v-checkbox v-model="selectedPackage" value="both">
+          <template #label>
+            <div>
+              Complete Computer Science—<strong>£199</strong>
+              <v-chip color="accent" outlined class="ml-2 mb-1" small
+                >Save £59</v-chip
+              >
+            </div>
+          </template>
+        </v-checkbox> -->
+        <v-checkbox v-model="selectedPackage" value="gcse" readonly>
+          <template #label>
+            <div>
+              GCSE Computer Science—<strong>£129</strong>
+              <span class="text-caption">(VAT included)</span>
+            </div>
+          </template>
+        </v-checkbox>
+        <!-- <v-checkbox v-model="selectedPackage" value="alevel">
+          <template #label>
+            <div>A Level Computer Science—<strong>£129</strong></div>
+          </template>
+        </v-checkbox> -->
       </v-card-text>
       <v-card-actions>
         <v-spacer />
@@ -51,8 +50,8 @@
       </v-card-actions>
     </v-card>
     <the-success-dialog
-      title="Invoice requested"
-      subtitle="You should receive your invoice within 24hrs."
+      title="Thank You"
+      subtitle="You should receive your invoice within one day."
     />
   </v-dialog>
 </template>
@@ -63,33 +62,20 @@ import TheSuccessDialog from '@/components/common/TheSuccessDialog'
 export default {
   components: { TheSuccessDialog },
   props: {
-    expired: {
-      type: Boolean,
-      default: false,
+    days: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
     return {
       dialog: false,
-      choice: 1,
+      selectedPackage: 'gcse',
       loading: false,
     }
   },
-  computed: {
-    prorate() {
-      // N.B. Months are numbered from 0 !!
-      return Math.round(
-        Math.round(
-          (new Date(2021, 7, 31) - new Date()) / (1000 * 60 * 60 * 24)
-        ) *
-          (89 / 365) +
-          89
-      )
-    },
-  },
   methods: {
     request() {
-      console.log(`Sending request...`)
       this.loading = true
       try {
         const url = new URL(

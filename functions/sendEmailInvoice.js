@@ -16,7 +16,7 @@ exports.handler = async (event) => {
   const ses = new AWS.SES({ apiVersion: '2010-12-01' })
   const params = {
     Destination: {
-      ToAddresses: ['owen@examgap.com', 'owen.hawkridge@chauncy.org.uk'], // Must be array
+      ToAddresses: ['owen@examgap.com'], // Must be array
     },
     // ConfigurationSetName: <<ConfigurationSetName>>,
     Message: {
@@ -26,9 +26,8 @@ exports.handler = async (event) => {
           Charset: 'UTF-8',
           Data: `<html>
                   <body>
-                    >> Invoice requested from:
-                    <br />
-                    ${username} (${id}) at ${school}.
+                    Invoice requested by ${username} (${id}).<br />
+                    ${school}
                   </body>
               </html>`,
         },
@@ -39,10 +38,10 @@ exports.handler = async (event) => {
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: '>> Woo hoo! Invoice requested',
+        Data: '>> Woo hoo! £££ Invoice requested',
       },
     },
-    Source: 'System <no-reply@examgap.com>',
+    Source: 'Examgap <no-reply@examgap.com>',
   }
 
   return ses
