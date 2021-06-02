@@ -31,7 +31,7 @@
                 Create assignment
               </v-btn>
             </template>
-            <span>Create new assignment</span>
+            <span>Create assignment</span>
           </v-tooltip>
         </div>
       </v-col>

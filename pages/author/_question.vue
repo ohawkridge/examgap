@@ -6,9 +6,9 @@
           {{ $route.params.question ? 'Edit' : 'Create' }} question
         </v-card-title>
         <v-card-text>
-          <p class="text-subtitle-1 font-weight-bold">Question</p>
           <TextEditor ref="question" :initial="question.text" class="mb-6" />
           <v-text-field
+            v-if="question !== undefined"
             v-model="question.maxMark"
             :suffix="question.maxMark == 1 ? 'mark' : 'marks'"
             type="number"
@@ -131,7 +131,6 @@ export default {
       throw new Error(`Error fetching topics ${topics.status}`)
     }
     topics = await topics.json()
-    let question
     if (params.question !== undefined) {
       // Get existing question
       const url = new URL('/.netlify/functions/getQuestion', baseURL)
@@ -146,19 +145,20 @@ export default {
         throw new Error(`Error fetching question ${question.status}`)
       }
       question = await question.json()
-    } else {
-      // Return an empty question object
-      question = {
-        id: '',
-        text: '',
-        maxMark: 1,
-        modelAnswer: '',
-        guidance: '',
-        keywords: '',
-        marks: [{ id: '', text: '' }], // Create first empty mark
-        selectedTopics: [],
-      }
+      return { topics, question }
     }
+    // Return an empty question object
+    const question = {
+      id: '',
+      text: '',
+      maxMark: 1,
+      modelAnswer: '',
+      guidance: '',
+      keywords: '',
+      marks: [{ id: '', text: '' }], // Create first empty mark
+      selectedTopics: [],
+    }
+
     return { topics, question }
   },
   data() {

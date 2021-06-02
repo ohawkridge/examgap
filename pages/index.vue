@@ -214,7 +214,7 @@
     <v-container id="how-cont">
       <v-row class="justify-center">
         <v-col cols="12" md="4">
-          <v-card rounded="lg" elevation="6" class="pa-6 how-card">
+          <v-card id="card1" rounded="lg" elevation="6" class="pa-6 how-card">
             <v-card-title>
               <svg
                 height="42"
@@ -377,73 +377,170 @@
       </v-row>
     </v-container>
     <v-container id="boards">
-      <v-row class="d-flex align-center justify-center">
-        <v-col cols="12" sm="6" md="5" class="text-center text-sm-left">
-          <p class="text-h5 text-md-h4 font-weight-bold mb-8">
-            GCSE Computer Science courses for:
+      <v-row>
+        <v-col cols="12">
+          <p class="text-h5 text-md-h4 text-center font-weight-bold">
+            GCSE and A level Computer Science courses
           </p>
-          <p>
-            <v-icon color="accent" class="mr-2 pb-1">{{
-              $icons.mdiCheckboxMarkedCircleOutline
-            }}</v-icon>
-            <span class="font-weight-medium">AQA</span> (8520 & 8525)
-          </p>
-          <p>
-            <v-icon color="accent" class="mr-2 pb-1">{{
-              $icons.mdiCheckboxMarkedCircleOutline
-            }}</v-icon>
-            <span class="font-weight-medium">OCR</span> (J276 & J277)
-          </p>
-          <p>
-            <v-icon color="accent" class="mr-2 pb-1">{{
-              $icons.mdiCheckboxMarkedCircleOutline
-            }}</v-icon>
-            <span class="font-weight-medium">Pearson Edexcel</span> (1CP1 &
-            1CP2) <v-chip class="ml-2">SOON</v-chip>
-          </p>
-          <p>
-            <v-icon color="accent" class="mr-2 pb-1">{{
-              $icons.mdiCheckboxMarkedCircleOutline
-            }}</v-icon>
-            <span class="font-weight-medium">WJEC Eduqas</span> (C500QS)
-            <v-chip class="ml-2">SOON</v-chip>
-          </p>
-          <p class="mb-10">
-            <v-icon color="accent" class="mr-2 pb-1">{{
-              $icons.mdiCheckboxMarkedCircleOutline
-            }}</v-icon>
-            <span class="font-weight-medium">Cambridge IGCSE</span> (0984)
-            <v-chip class="ml-2">SOON</v-chip>
-          </p>
-          <v-btn
-            x-large
-            outlined
-            color="primary"
-            elevation="0"
-            nuxt
-            to="/trial"
-          >
-            Start 30-day free trial
-          </v-btn>
         </v-col>
-        <v-col cols="12" sm="6" md="5">
-          <v-card elevation="6" rounded="lg" class="pa-6">
-            <v-card-title> More courses coming soon </v-card-title>
-            <v-card-text class="text-body-1">
-              <p>
-                A level Computer Science for AQA, OCR, WJEC Eduqas and Cambridge
-                Assessment.
-              </p>
-              <p>
-                BTEC Level 3 Information Technology
-                <v-icon>{{ $icons.mdiFlaskOutline }}</v-icon>
-              </p>
-              <p>
-                OCR Cambridge Nationals Creative iMedia
-                <v-icon>{{ $icons.mdiFlaskOutline }}</v-icon>
-              </p>
-            </v-card-text>
-          </v-card>
+      </v-row>
+      <v-row class="d-flex justify-center">
+        <v-col cols="12" md="4">
+          <v-simple-table>
+            <template #default>
+              <thead>
+                <tr>
+                  <th colspan="2" class="text-overline">IGCSE Courses</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">Cambridge Assessment</span>
+                    <span class="text-caption">(0984)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-chip outlined> Sep. 2021 </v-chip>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">Pearson Edexcel</span>
+                    <span class="text-caption">(4CP0)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-chip outlined> Sep. 2021 </v-chip>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-simple-table>
+            <template #default>
+              <thead>
+                <tr>
+                  <th colspan="2" class="text-overline">GCSE Courses</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">AQA</span>
+                    <span class="text-caption">(8525)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">AQA</span>
+                    <span class="text-caption">(8520)</span>
+                    <v-chip label class="ml-2" outlined small>Legacy</v-chip>
+                  </td>
+                  <td class="text-center">
+                    <v-icon>
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">OCR</span>
+                    <span class="text-caption">(J277)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">OCR</span>
+                    <span class="text-caption">(J276)</span>
+                    <v-chip label class="ml-2" outlined small>Legacy</v-chip>
+                  </td>
+                  <td class="text-center">
+                    <v-icon>
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">Pearson Edexcel</span>
+                    <span class="text-caption">(1CP2)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-chip outlined> Sep. 2021 </v-chip>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">WJEC Eduqas</span>
+                    <span class="text-caption">(C500QS)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-chip outlined> Sep. 2021 </v-chip>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">SQA National 5</span>
+                    <span class="text-caption">(C816 75)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-chip outlined> Sep. 2021 </v-chip>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-simple-table>
+            <template #default>
+              <thead>
+                <tr>
+                  <th class="text-overline">A Level Courses</th>
+                  <th>
+                    <v-chip outlined color="accent">SOON</v-chip>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="2">
+                    <span class="font-weight-bold">AQA</span>
+                    <span class="text-caption">(7517)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <span class="font-weight-bold">OCR</span>
+                    <span class="text-caption">(H446)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <span class="font-weight-bold">WJEC Eduqas</span>
+                    <span class="text-caption">(A500QS)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <span class="font-weight-bold">Cambridge Assessment</span>
+                    <span class="text-caption">(9618)</span>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
         </v-col>
       </v-row>
     </v-container>
@@ -646,6 +743,7 @@ import {
   mdiNumeric2Circle,
   mdiNumeric3Circle,
   mdiCheck,
+  mdiCheckBold,
   mdiMicroscope,
   mdiTextToSpeech,
   mdiSortBoolDescendingVariant,
@@ -666,6 +764,7 @@ export default {
       mdiNumeric3Circle,
       mdiMicroscope,
       mdiCheck,
+      mdiCheckBold,
       mdiTextToSpeech,
       mdiSortBoolDescendingVariant,
       mdiCommentTextMultipleOutline,
