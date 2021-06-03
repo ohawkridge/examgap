@@ -102,6 +102,9 @@
       <JoinClass v-if="!teacher" />
     </v-main>
     <TheFooter v-if="showFooter" />
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-app>
 </template>
 
@@ -132,6 +135,7 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
       groups: (state) => state.groups.groups,
+      loading: (state) => state.user.loading,
     }),
     ...mapGetters({
       activeGroupCount: 'groups/activeGroupCount',

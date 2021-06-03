@@ -30,35 +30,49 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <v-skeleton-loader :loading="$fetchState.pending" type="card">
-              <v-card>
-                <v-card-title>
-                  Revision topics ({{ topics.length }})
-                </v-card-title>
-                <v-card-text>
-                  <v-list>
-                    <v-list-item
-                      v-for="(topic, i) in topics"
-                      :key="i"
-                      :title="`Revise ${topic.name}`"
-                      class="px-0 px-md-3"
-                      :disabled="topic.count === 0"
-                      @click="revise(topic)"
-                    >
-                      <v-list-item-content>
-                        <v-list-item-title>{{ topic.name }}</v-list-item-title>
-                      </v-list-item-content>
-                      <v-list-item-action>
-                        <v-chip
-                          :color="topic.answered > 0 ? 'green-chip' : ''"
-                          >{{ topic.answered }}</v-chip
-                        >
-                      </v-list-item-action>
-                    </v-list-item>
-                  </v-list>
-                </v-card-text>
-              </v-card>
-            </v-skeleton-loader>
+            <v-sheet v-if="loading" elevation="2" class="pa-4">
+              <v-skeleton-loader
+                v-bind="attrs"
+                :loading="loading"
+                width="200%"
+                type="heading"
+              >
+              </v-skeleton-loader>
+              <v-skeleton-loader
+                v-for="n in 9"
+                :key="n"
+                :loading="loading"
+                type="text"
+                v-bind="attrs"
+              >
+              </v-skeleton-loader>
+            </v-sheet>
+            <v-card v-else>
+              <v-card-title>
+                Revision topics ({{ topics.length }})
+              </v-card-title>
+              <v-card-text>
+                <v-list>
+                  <v-list-item
+                    v-for="(topic, i) in topics"
+                    :key="i"
+                    :title="`Revise ${topic.name}`"
+                    class="px-0 px-md-3"
+                    :disabled="topic.count === 0"
+                    @click="revise(topic)"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>{{ topic.name }}</v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-chip :color="topic.answered > 0 ? 'green-chip' : ''">{{
+                        topic.answered
+                      }}</v-chip>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row>
       </v-col>
@@ -82,14 +96,9 @@ export default {
   layout: 'app',
   data() {
     return {
-      forceFetch: false,
-    }
-  },
-  async fetch() {
-    // Dispatch an action to fetch revision topics
-    if (this.forceFetch || this.topics.length === 0) {
-      await this.$store.dispatch('groups/getRevisionTopics')
-      this.forceFetch = false
+      attrs: {
+        class: 'mb-8',
+      },
     }
   },
   head() {
@@ -98,14 +107,14 @@ export default {
     }
   },
   computed: {
+    // Get current active group
+    ...mapGetters({ group: 'groups/activeGroup' }),
     ...mapState({
       groups: (state) => state.groups.groups,
       topics: (state) => state.groups.revisionTopics,
-      lastFetch: (state) => state.user.lastFetch,
+      loading: (state) => state.groups.loading,
     }),
-    // Get current active group for home page
-    ...mapGetters({ group: 'groups/activeGroup' }),
-    // Filter out assignments that haven't started yet
+    // Filter out post-dated assignments
     assignments() {
       if (this.group === undefined) return false
       return this.group.assignments.filter(
@@ -114,38 +123,28 @@ export default {
     },
   },
   watch: {
-    // Update revision topics if class is changed
-    // (Except if logging out)
     group() {
+      // Update revision topics if class is changed
+      // (except if logging out)
       if (this.group !== undefined && Object.entries(this.group).length > 0) {
-        this.forceFetch = true
-        this.$fetch()
+        this.getTopics()
       }
     },
   },
-  mounted() {
-    // Check for new assignments after 5 mins.
-    // localStorage will be full ∴ getUser won't fire
-    if (Date.now() - this.lastFetch > 300000) {
-      this.$store.dispatch('user/getUser')
-    }
-  },
   methods: {
+    // Remember revision topic
     revise(topic) {
-      // Remember topic being revised
       this.$store.commit('groups/setCurrentRevisionTopic', topic)
       // Event bus using Nuxt
       // https://aneesshameed.medium.com/event-bus-in-nuxt-7728315e81b6
       this.$nuxt.$emit('show-revise')
     },
+    // Dispatch action to fetch revision topics
+    getTopics() {
+      if (this.topics.length === 0) {
+        this.$store.dispatch('groups/getRevisionTopics')
+      }
+    },
   },
 }
 </script>
-
-<style scoped>
-/* revision count chips */
-span.v-chip.theme--light.green-chip {
-  background-color: rgb(201, 237, 194) !important;
-  color: rgb(18, 39, 14) !important;
-}
-</style>

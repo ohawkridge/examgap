@@ -53,61 +53,43 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import AssignmentQuestion from '@/components/student/AssignmentQuestion'
-import { mdiArrowLeft } from '@mdi/js'
 
 export default {
   components: {
     AssignmentQuestion,
   },
   layout: 'app',
-  // async asyncData({ store, params, $config: { baseURL } }) {
-  //   const url = new URL('/.netlify/functions/getAssignment', baseURL)
-  //   const response = await fetch(url, {
-  //     body: JSON.stringify({
-  //       secret: store.state.user.secret,
-  //       assignmentId: params.assignment,
-  //     }),
-  //     method: 'POST',
-  //   })
-  //   if (!response.ok) {
-  //     throw new Error(`Error fetching assignment ${response.status}`)
-  //   }
-  //   const assignment = await response.json()
-  //   return { assignment }
-  // },
   data() {
     return {
-      assignment: {},
+      // Common attributes for skeleton-loaders
       attrs: {
         class: 'mb-6',
       },
     }
   },
-  async fetch() {
-    const url = new URL(
-      '/.netlify/functions/getAssignment',
-      this.$config.baseURL
+  fetch() {
+    // Dispatch store action to get assignment
+    // (allows page to survive refresh as assignment data will be in store)
+    this.$store.dispatch(
+      'assignments/getAssignment',
+      this.$route.params.assignment
     )
-    const response = await fetch(url, {
-      body: JSON.stringify({
-        secret: this.$store.state.user.secret,
-        assignmentId: this.$route.params.assignment,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error(`Error fetching assignment ${response.status}`)
-    }
-    this.assignment = await response.json()
   },
-  created() {
-    this.$icons = { mdiArrowLeft }
+  head() {
+    return {
+      title: this.assignment.name,
+    }
+  },
+  computed: {
+    ...mapState({ assignment: (state) => state.assignments.assignment }),
   },
 }
 </script>
 
 <style scoped>
+/* align start/due dates */
 .fix-width {
   display: inline-block;
   width: 60px;

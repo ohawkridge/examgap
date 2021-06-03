@@ -15,12 +15,13 @@ export const state = () => ({
   onboard: false,
   onboardStep: 1,
   lastFetch: undefined,
+  loading: false,
 })
 
 export const actions = {
   // Call a function to get user data
   async getUser({ commit, state, dispatch, rootGetters }) {
-    // secret is empty string during hard refresh
+    // secret is empty during hard refresh
     if (state.secret !== '') {
       try {
         const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
@@ -33,6 +34,10 @@ export const actions = {
         if (!response.ok) {
           throw new Error(`Error fetching user data ${response.status}`)
         }
+        console.log(
+          '%c' + 'getUser',
+          'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+        )
         const userData = await response.json()
         // Commit user data to store
         commit('setUser', userData)
@@ -53,6 +58,7 @@ export const actions = {
         }
         // Commit group data to groups store
         commit('groups/setGroups', userData.groups, { root: true })
+        commit('groups/setLoading', false)
         // Activate onboarding?
         if (rootGetters['groups/activeGroupCount'] === 0)
           commit('setOnboard', true)
@@ -110,6 +116,9 @@ export const actions = {
 }
 
 export const mutations = {
+  setLoading(state, loading) {
+    state.loading = loading
+  },
   setLastFetch(state, ts) {
     state.lastFetch = ts
   },
@@ -157,5 +166,6 @@ export const mutations = {
     state.onboard = false
     state.onboardStep = 1
     state.lastFetch = undefined
+    state.loading = false
   },
 }

@@ -4,6 +4,7 @@ export const state = () => ({
   activeGroupIndex: 0,
   revisionTopics: [],
   currentRevisionTopic: {},
+  loading: false,
 })
 
 export const getters = {
@@ -28,8 +29,8 @@ export const getters = {
 
 export const actions = {
   async getRevisionTopics({ commit, getters, rootState }) {
-    // group is undefined during hard refresh
     if (getters.activeGroup !== undefined) {
+      commit('setLoading', true)
       try {
         const url = new URL(
           '/.netlify/functions/getTopics',
@@ -45,8 +46,8 @@ export const actions = {
         if (!response.ok) {
           throw new Error(`Error fetching revision topics ${response.status}`)
         }
-        const data = await response.json()
-        commit('setRevisionTopics', data)
+        commit('setRevisionTopics', await response.json())
+        commit('setLoading', false)
       } catch (e) {
         console.error(e)
       }
@@ -105,7 +106,10 @@ export const actions = {
 }
 
 export const mutations = {
-  // N.B. Use slice in mutations for reactivity
+  // N.B. Use slice in mutations for reactivity !!
+  setLoading(state, loading) {
+    state.loading = loading
+  },
   setGroups(state, groups) {
     state.groups = groups
   },
@@ -188,9 +192,9 @@ export const mutations = {
   logout(state) {
     state.groups = []
     state.tab = true
-    state.group = {}
     state.activeGroupIndex = 0
     state.revisionTopics = []
     state.currentRevisionTopic = {}
+    state.loading = false
   },
 }

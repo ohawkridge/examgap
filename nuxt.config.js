@@ -19,6 +19,9 @@ export default {
       /^\/answer/,
       /^\/profile/,
       /^\/settings/,
+      /^\/edit/,
+      /^\/author/,
+      /^\/map/,
     ],
   },
 
@@ -107,6 +110,7 @@ export default {
           accent: '#ef7a85',
           secondary: '#b7d1da',
           background: '#fefcfb',
+          green: '#c9edc2', // Fix all chips?
         },
       },
     },
