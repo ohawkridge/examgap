@@ -34,7 +34,7 @@
             outlined
             readonly
           >
-            <template #append>
+            <template v-if="teacher" #append>
               <v-chip v-if="expires > 30" color="green" label class="fix-chip">
                 Subscribed
                 <v-icon color="#183a11" right>

@@ -138,6 +138,12 @@ export default {
           // Using key, try to login
           const res = await this.getUserSecret()
           this.$store.commit('user/setSecret', res.secret)
+          // Always call getUser on signin
+          // (otherwise last user's data still in store)
+          this.$store.dispatch('user/getUser')
+          // Reset activeGroupIndex
+          // (unless you explicity logout, this will still be set)
+          this.$store.commit('groups/setActiveGroupIndex', 0)
           this.$router.push(res.teacher ? `/classes` : `/home`)
         } catch (e) {
           console.error(e)
