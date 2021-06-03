@@ -47,9 +47,10 @@ export const actions = {
           throw new Error(`Error fetching revision topics ${response.status}`)
         }
         commit('setRevisionTopics', await response.json())
-        commit('setLoading', false)
       } catch (e) {
         console.error(e)
+      } finally {
+        commit('setLoading', false)
       }
     }
   },

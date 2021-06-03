@@ -24,6 +24,7 @@ export const actions = {
     // secret is empty during hard refresh
     if (state.secret !== '') {
       try {
+        commit('setLoading', true)
         const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
         const response = await fetch(url, {
           body: JSON.stringify({
@@ -58,12 +59,13 @@ export const actions = {
         }
         // Commit group data to groups store
         commit('groups/setGroups', userData.groups, { root: true })
-        commit('groups/setLoading', false)
         // Activate onboarding?
         if (rootGetters['groups/activeGroupCount'] === 0)
           commit('setOnboard', true)
       } catch (e) {
         console.error(e)
+      } finally {
+        commit('setLoading', false)
       }
     }
   },
