@@ -996,12 +996,19 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@honeybadger-io/js@^3.2.1":
+"@honeybadger-io/js@^3.0.3":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@honeybadger-io/js/-/js-3.2.1.tgz#13de9c6d4801f6653acc02683cd74e100b1a36fc"
   integrity sha512-PA54DU4tKOw0G5HUeyxjLs6emU9dm9vo/AmSufhVrs0kgkIL0h0V+5zfXYzO3HByUwJvjGksmxQ/2tSkh874lg==
   dependencies:
     stacktrace-parser "^0.1.10"
+
+"@honeybadger-io/vue@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@honeybadger-io/vue/-/vue-1.0.3.tgz#1bbb4bd501b5457e4031c497e18ad4404d6ccb7d"
+  integrity sha512-QtlJUXCJ2jF/8vB1YwhePaUb3sWd+FbyokyEcF/adJZyQFWzfpX43qOl3zCPtI6HeXWx0ky1PMcsFQCo9oGhsA==
+  dependencies:
+    "@honeybadger-io/js" "^3.0.3"
 
 "@mdi/js@^5.9.55":
   version "5.9.55"
