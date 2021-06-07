@@ -432,7 +432,7 @@
                 <tr>
                   <td>
                     <span class="font-weight-bold">AQA</span>
-                    <span class="text-caption">(8525)</span>
+                    <span class="text-caption">(8520)</span>
                   </td>
                   <td class="text-center">
                     <v-icon color="green">
@@ -443,16 +443,10 @@
                 <tr>
                   <td>
                     <span class="font-weight-bold">AQA</span>
-                    <span class="text-caption">(8520)</span>
-                  </td>
-                  <td class="text-center">
-                    <v-chip label class="ml-2" outlined small>Legacy</v-chip>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="font-weight-bold">OCR</span>
-                    <span class="text-caption">(J277)</span>
+                    <span class="text-caption">(8525)</span>
+                    <v-chip label color="accent" class="ml-2" outlined small
+                      >NEW</v-chip
+                    >
                   </td>
                   <td class="text-center">
                     <v-icon color="green">
@@ -466,13 +460,18 @@
                     <span class="text-caption">(J276)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip label class="ml-2" outlined small>Legacy</v-chip>
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <span class="font-weight-bold">Pearson Edexcel</span>
-                    <span class="text-caption">(1CP2)</span>
+                    <span class="font-weight-bold">OCR</span>
+                    <span class="text-caption">(J277)</span>
+                    <v-chip label color="accent" class="ml-2" outlined small
+                      >NEW</v-chip
+                    >
                   </td>
                   <td class="text-center">
                     <v-icon color="green">
@@ -486,13 +485,32 @@
                     <span class="text-caption">(1CP1)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip label class="ml-2" outlined small>Legacy </v-chip>
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="font-weight-bold">Pearson Edexcel</span>
+                    <span class="text-caption">(1CP2)</span>
+                    <v-chip label color="accent" class="ml-2" outlined small
+                      >NEW</v-chip
+                    >
+                  </td>
+                  <td class="text-center">
+                    <v-icon color="green">
+                      {{ $icons.mdiCheckBold }}
+                    </v-icon>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <span class="font-weight-bold">WJEC Eduqas</span>
                     <span class="text-caption">(C500QS)</span>
+                    <v-chip label color="accent" class="ml-2" outlined small
+                      >NEW</v-chip
+                    >
                   </td>
                   <td class="text-center">
                     <v-icon color="green">
@@ -520,35 +538,44 @@
             <template #default>
               <thead>
                 <tr>
-                  <th class="text-overline">A Level Courses</th>
-                  <th>
-                    <v-chip outlined color="accent">SOON</v-chip>
-                  </th>
+                  <th colspan="2" class="text-overline">A Level Courses</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td colspan="2">
+                  <td>
                     <span class="font-weight-bold">AQA</span>
                     <span class="text-caption">(7517)</span>
                   </td>
+                  <td class="text-center">
+                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                  </td>
                 </tr>
                 <tr>
-                  <td colspan="2">
+                  <td>
                     <span class="font-weight-bold">OCR</span>
                     <span class="text-caption">(H446)</span>
                   </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <span class="font-weight-bold">WJEC Eduqas</span>
-                    <span class="text-caption">(A500QS)</span>
+                  <td class="text-center">
+                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="2">
+                  <td>
+                    <span class="font-weight-bold">WJEC Eduqas</span>
+                    <span class="text-caption">(A500QS)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     <span class="font-weight-bold">Cambridge Assessment</span>
                     <span class="text-caption">(9618)</span>
+                  </td>
+                  <td class="text-center">
+                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
