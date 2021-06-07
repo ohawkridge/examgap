@@ -1,7 +1,7 @@
 <template>
   <v-snackbar v-model="snack" :vertical="true" timeout="-1">
-    <span class="font-weight-bold">({{ n }}/8)</span>
-    {{ stringsForSteps[n] }}
+    <span class="font-weight-bold">({{ obs }}/8)</span>
+    {{ stringsForSteps[obs] }}
     <template #action="{ attrs }">
       <v-btn color="secondary" plain v-bind="attrs" @click="close()">
         <span class="text-uppercase">Close</span>
@@ -32,13 +32,15 @@ export default {
   },
   computed: {
     ...mapState({
-      n: (state) => state.user.onboardStep,
-      snack: (state) => state.user.onboard,
+      obs: (state) => state.user.onboardStep,
     }),
+    snack() {
+      return this.obs > 0
+    },
   },
   methods: {
     close() {
-      this.$store.commit('user/setOnboard', false)
+      this.$store.commit('user/setOnboardStep', 0)
     },
   },
 }

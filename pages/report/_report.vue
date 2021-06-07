@@ -468,7 +468,6 @@ export default {
   mounted() {
     if (this.group.assignments.length < 3) {
       this.$store.commit('user/setOnboardStep', 8)
-      this.$store.commit('user/setOnboard', true)
     }
   },
   methods: {
@@ -531,7 +530,7 @@ export default {
       // Must be *after* marking = true
       this.updateBank()
       // Hide onboarding
-      this.$store.commit('user/setOnboard', false)
+      this.$store.commit('user/setOnboardStep', 0)
       // You could open a response and close it without clicking
       // next or previous, so set it as 'marked' on open
       this.marked(this.response.id)

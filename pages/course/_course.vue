@@ -353,7 +353,7 @@ export default {
     assign() {
       this.$nuxt.$emit('show-assign')
       // Onboarding complete
-      this.$store.commit('user/setOnboard', false)
+      this.$store.commit('user/setOnboardStep', 0)
     },
   },
 }

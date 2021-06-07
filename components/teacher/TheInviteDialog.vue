@@ -126,7 +126,6 @@ export default {
   mounted() {
     if (this.group.num_students === 0) {
       this.$store.commit('user/setOnboardStep', 3)
-      this.$store.commit('user/setOnboard', true)
     }
     this.$nuxt.$on('open-invite', () => {
       this.dialog = true

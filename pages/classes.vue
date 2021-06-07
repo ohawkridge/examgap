@@ -28,7 +28,7 @@
               <v-btn
                 v-bind="attrs"
                 elevation="0"
-                :class="clss"
+                :class="obs === 1 ? 'red-out' : ''"
                 @click="$nuxt.$emit('show-create')"
                 v-on="on"
               >
@@ -50,7 +50,7 @@
           :key="i"
           :group="group"
           :group-index="i"
-          :outline="onboard && n === 2"
+          :outline="obs === 2"
         />
       </template>
       <!-- Create class card -->
@@ -72,7 +72,7 @@
         </v-hover>
       </v-col>
       <!-- Empty state -->
-      <template v-if="activeGroupCount === 0 && tab">
+      <template v-if="!loading && activeGroupCount === 0 && tab">
         <v-col id="empty" cols="12">
           <v-img src="/no-class.svg" alt="Empty chair illustration" />
         </v-col>
@@ -126,12 +126,9 @@ export default {
     }),
     ...mapState({
       groups: (state) => state.groups.groups,
-      onboard: (state) => state.user.onboard,
-      n: (state) => state.user.onboardStep,
+      obs: (state) => state.user.onboardStep,
+      loading: (state) => state.user.loading,
     }),
-    clss() {
-      return this.onboard && this.n === 1 ? 'red-out' : ''
-    },
     // Remember active tab
     tab: {
       get() {
@@ -142,26 +139,8 @@ export default {
       },
     },
   },
-  watch: {
-    tab() {
-      this.isOnboarding()
-    },
-  },
-  mounted() {
-    this.isOnboarding()
-  },
   created() {
     this.$icons = { mdiPlus, mdiHomeOutline, mdiArchiveOutline }
-  },
-  methods: {
-    isOnboarding() {
-      if (this.activeGroupCount === 0 && this.tab) {
-        this.$store.commit('user/setOnboard', true)
-        this.$store.commit('user/setOnboardStep', 1)
-      } else {
-        this.$store.commit('user/setOnboard', false)
-      }
-    },
   },
 }
 </script>

@@ -12,8 +12,7 @@ export const state = () => ({
   examMode: false,
   reviseExamMode: false,
   quote: 'Experiment, fail, learn, repeat.—Anonymous',
-  onboard: false,
-  onboardStep: 1,
+  onboardStep: 0, // 0 = don't onboard
   lastFetch: undefined,
   loading: false,
 })
@@ -59,9 +58,8 @@ export const actions = {
         }
         // Commit group data to groups store
         commit('groups/setGroups', userData.groups, { root: true })
-        // Activate onboarding?
-        if (rootGetters['groups/activeGroupCount'] === 0)
-          commit('setOnboard', true)
+        // Activate onboarding if nec.
+        if (userData.groups.length === 0) commit('setOnboardStep', 1)
       } catch (e) {
         console.error(e)
       } finally {
@@ -124,11 +122,12 @@ export const mutations = {
   setLastFetch(state, ts) {
     state.lastFetch = ts
   },
-  setOnboard(state, val) {
-    state.onboard = val
-  },
   setOnboardStep(state, n) {
     state.onboardStep = n
+    console.log(
+      '%c' + n,
+      'padding:2px 4px;background-color:yellow;color:black;border-radius:10px'
+    )
   },
   setSecret(state, secret) {
     state.secret = secret
@@ -166,7 +165,7 @@ export const mutations = {
     state.reviseExamMode = false
     state.quote = 'Experiment, fail, learn, repeat.—Anonymous'
     state.onboard = false
-    state.onboardStep = 1
+    state.onboardStep = 0
     state.lastFetch = undefined
     state.loading = false
   },

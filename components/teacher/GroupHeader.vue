@@ -76,12 +76,10 @@ export default {
       // No students? Onboard @step 3
       if (this.group.num_students === 0) {
         this.$store.commit('user/setOnboardStep', 3)
-        this.$store.commit('user/setOnboard', true)
       }
       // No assignments? Onboard @step 4
       if (this.group.num_students > 0 && this.assignments.length < 2) {
         this.$store.commit('user/setOnboardStep', 4)
-        this.$store.commit('user/setOnboard', true)
       }
     }
   },
