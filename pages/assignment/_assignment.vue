@@ -1,6 +1,6 @@
 <template>
-  <v-row class="justify-center">
-    <v-col cols="12" lg="10">
+  <v-row>
+    <v-col cols="12">
       <v-sheet v-if="$fetchState.pending" elevation="2" class="pa-7 mt-md-3">
         <v-skeleton-loader
           v-bind="attrs"

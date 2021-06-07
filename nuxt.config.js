@@ -1,5 +1,3 @@
-import { execSync } from 'child_process'
-
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -70,27 +68,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    [
-      'nuxt-rollbar-module',
-      {
-        serverAccessToken: process.env.ROLLBAR_SERVER_TOKEN,
-        clientAccessToken: process.env.ROLLBAR_CLIENT_TOKEN,
-        config: {
-          payload: {
-            environment: process.env.NODE_ENV,
-            client: {
-              javascript: {
-                source_map_enabled: true, // true by default
-                code_version: JSON.stringify(codeVersion()),
-                guess_uncaught_frames: true,
-              },
-            },
-          },
-        },
-      },
-    ],
-  ],
+  modules: [],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -138,8 +116,4 @@ export default {
       sourceMap: true,
     },
   },
-}
-
-function codeVersion() {
-  return execSync('git rev-parse --short HEAD').toString().trim()
 }

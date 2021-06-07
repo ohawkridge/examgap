@@ -15,10 +15,9 @@ export default class FaunaStream {
 
     this.stream.on('start', (data, event) => {
       console.log(
-        '%c' + 'GO',
+        '%c' + 'Streaming',
         'padding:2px 4px;background-color:green;color:white;border-radius:3px'
       )
-      console.log('Stream started')
     })
 
     this.stream.on('version', ({ diff: { data } }, event) => {

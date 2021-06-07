@@ -5,16 +5,27 @@ export const state = () => ({
   topicId: '',
   selected: [],
   currentTopic: 0,
+  response: {
+    question: {
+      markScheme: [
+        {
+          id: '',
+          text: '',
+        },
+      ],
+    },
+    tm: [],
+    sm: [],
+  },
 })
 
 export const actions = {
-  async getAssignment({ commit, rootState, state }, assignmentId) {
-    console.log('getAssignment (to store):', assignmentId)
+  async getAssignment({ commit, rootState }, assignmentId) {
     const url = new URL(
       '/.netlify/functions/getAssignment',
       this.$config.baseURL
     )
-    let response = await fetch(url, {
+    const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
         assignmentId,
@@ -24,12 +35,28 @@ export const actions = {
     if (!response.ok) {
       throw new Error(`Error fetching assignment ${response.status}`)
     }
-    response = await response.json()
-    commit('setAssignment', response)
+    commit('setAssignment', await response.json())
+  },
+  async getResponse({ commit, rootState }, responseId) {
+    const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        responseId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error fetching response ${responseId}`, response.status)
+    }
+    commit('setResponse', await response.json())
   },
 }
 
 export const mutations = {
+  setResponse(state, data) {
+    state.response = data
+  },
   setAssignment(state, data) {
     state.assignment = data
   },

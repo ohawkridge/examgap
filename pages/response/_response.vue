@@ -1,9 +1,75 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-card class="pa-md-3 mt-md-3">
+      <v-sheet v-if="$fetchState.pending" elevation="2" class="pa-md-3 mt-md-3">
+        <v-skeleton-loader
+          type="chip"
+          :loading="$fetchState.pending"
+          class="mt-4 mr-4 float-right"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="chip"
+          :loading="$fetchState.pending"
+          class="mt-4 mr-4 float-right"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="button"
+          :loading="$fetchState.pending"
+          class="ma-4 mb-8"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="image"
+          class="float-right ma-4"
+          width="40%"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="heading"
+          :loading="$fetchState.pending"
+          class="ma-4 mb-8"
+          width="40%"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="paragraph"
+          :loading="$fetchState.pending"
+          class="ma-4 mb-8"
+          width="50%"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="heading"
+          :loading="$fetchState.pending"
+          class="ma-4 mb-8"
+          width="40%"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="paragraph"
+          :loading="$fetchState.pending"
+          class="ma-4 mb-8"
+          width="50%"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="heading"
+          :loading="$fetchState.pending"
+          class="ma-4 mb-8"
+          width="40%"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          type="paragraph"
+          :loading="$fetchState.pending"
+          class="ma-4 mb-8"
+          width="50%"
+        ></v-skeleton-loader>
+      </v-sheet>
+      <v-card v-if="!$fetchState.pending" class="pa-md-3 mt-md-3">
         <v-card-title class="d-flex justify-space-between">
-          Question
+          <v-btn
+            color="primary"
+            nuxt
+            :to="`/assignment/${response.assignmentId}`"
+            elevation="0"
+          >
+            <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
+            Back
+          </v-btn>
           <div class="d-flex justify-end">
             <v-tooltip bottom>
               <template #activator="{ on, attrs }">
@@ -43,6 +109,7 @@
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
+              <p class="text-subtitle-1 font-weight-medium">Question</p>
               <div v-html="response.question.text"></div>
               <div class="d-flex justify-end">
                 <v-chip outlined
@@ -52,7 +119,18 @@
                 </v-chip>
               </div>
               <p class="text-subtitle-1 font-weight-medium">Your answer</p>
-              <p id="ans" class="pa-4 breaks" v-text="response.text"></p>
+              <p
+                id="ans"
+                class="pa-4 breaks mb-0"
+                :class="noFb"
+                v-text="response.text"
+              ></p>
+              <div
+                v-if="response.feedback"
+                id="fb"
+                class="pa-4 mb-4"
+                v-text="response.feedback"
+              ></div>
               <p class="text-subtitle-1 font-weight-medium">Model answer</p>
               <p v-html="response.question.modelAnswer">Model answer</p>
             </v-col>
@@ -61,23 +139,14 @@
               <v-simple-table>
                 <template #default>
                   <thead>
+                    <!-- N.B. Tooltips cause NodeList mismatch here -->
                     <tr>
-                      <v-tooltip bottom>
-                        <template #activator="{ on, attrs }">
-                          <th v-bind="attrs" class="text-left" v-on="on">
-                            <v-icon>{{ $icons.mdiSchoolOutline }}</v-icon>
-                          </th>
-                        </template>
-                        <span>Your teacher</span>
-                      </v-tooltip>
-                      <v-tooltip bottom>
-                        <template #activator="{ on, attrs }">
-                          <th v-bind="attrs" class="text-left" v-on="on">
-                            <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
-                          </th>
-                        </template>
-                        <span>You</span>
-                      </v-tooltip>
+                      <th class="text-left" title="Your teacher">
+                        <v-icon>{{ $icons.mdiSchoolOutline }}</v-icon>
+                      </th>
+                      <th class="text-left" title="You">
+                        <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+                      </th>
                       <th></th>
                     </tr>
                   </thead>
@@ -105,12 +174,6 @@
                   </tbody>
                 </template>
               </v-simple-table>
-              <div
-                v-if="response.feedback"
-                id="fb"
-                class="pa-4 mb-4"
-                v-text="response.feedback"
-              ></div>
               <p class="text-subtitle-1 font-weight-medium mt-4">
                 Marking guidance
               </p>
@@ -121,18 +184,6 @@
               <p v-else>None</p>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12" class="d-flex justify-end">
-              <v-btn
-                color="primary"
-                elevation="0"
-                nuxt
-                :to="`/assignment/${response.assignmentId}`"
-              >
-                Done
-              </v-btn>
-            </v-col>
-          </v-row>
         </v-card-text>
       </v-card>
     </v-col>
@@ -140,8 +191,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import {
-  mdiCommentTextOutline,
   mdiSchoolOutline,
   mdiAccountOutline,
   mdiCheckboxMarked,
@@ -151,24 +202,17 @@ import {
 
 export default {
   layout: 'app',
-  async asyncData({ store, params, $config: { baseURL } }) {
-    const url = new URL('/.netlify/functions/getResponse', baseURL)
-    const data = await fetch(url, {
-      body: JSON.stringify({
-        secret: store.state.user.secret,
-        responseId: params.response,
-      }),
-      method: 'POST',
-    })
-    if (!data.ok) {
-      throw new Error(`Error fetching response ${data.status}`)
-    }
-    const response = await data.json()
-    return { response }
+  fetch() {
+    this.$store.dispatch('assignments/getResponse', this.$route.params.response)
+  },
+  computed: {
+    ...mapState({ response: (state) => state.assignments.response }),
+    noFb() {
+      return this.response.feedback === '' ? 'mb-4' : ''
+    },
   },
   created() {
     this.$icons = {
-      mdiCommentTextOutline,
       mdiSchoolOutline,
       mdiAccountOutline,
       mdiCheckboxMarked,
@@ -178,14 +222,9 @@ export default {
   },
   methods: {
     color(n, max) {
-      if (n / max <= 1 / 3) {
-        return 'red'
-      }
-      if (n / max > 2 / 3) {
-        return 'green'
-      } else {
-        return 'orange'
-      }
+      if (n / max <= 1 / 3) return 'red'
+      if (n / max > 2 / 3) return 'green'
+      return 'orange'
     },
   },
 }
@@ -193,6 +232,6 @@ export default {
 
 <style scoped>
 #fb {
-  background: #c9d4ff;
+  background-color: #b7d1da;
 }
 </style>
