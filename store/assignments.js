@@ -7,6 +7,8 @@ export const state = () => ({
   currentTopic: 0,
   response: {
     question: {},
+    tm: [],
+    sm: [],
   },
 })
 
@@ -79,6 +81,8 @@ export const mutations = {
     state.currentTopic = 0
     state.response = {
       question: {},
+      tm: [],
+      sm: [],
     }
   },
 }
