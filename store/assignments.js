@@ -1,21 +1,12 @@
 export const state = () => ({
-  assignment: {}, // Student assignment cache
+  assignment: {},
   assignmentId: '',
   questionId: '',
   topicId: '',
   selected: [],
   currentTopic: 0,
   response: {
-    question: {
-      markScheme: [
-        {
-          id: '',
-          text: '',
-        },
-      ],
-    },
-    tm: [],
-    sm: [],
+    question: {},
   },
 })
 
@@ -86,5 +77,8 @@ export const mutations = {
     state.topicId = ''
     state.selected = []
     state.currentTopic = 0
+    state.response = {
+      question: {},
+    }
   },
 }
