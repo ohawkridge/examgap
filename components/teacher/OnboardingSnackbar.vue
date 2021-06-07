@@ -26,7 +26,7 @@ export default {
         5: 'Change topic to see more questions.',
         6: 'Click + to select questions to assign.',
         7: "When you're ready, click + Assign.",
-        8: 'Click on a self-mark to enter marking view.',
+        8: 'Click on a self mark to enter marking view.',
       },
     }
   },

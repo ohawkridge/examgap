@@ -69,7 +69,7 @@
       </v-card>
       <!-- Marking dialog -->
       <v-card v-if="marking" class="pa-md-3">
-        <v-card-title> Self-marking </v-card-title>
+        <v-card-title> Self Marking </v-card-title>
         <v-card-text>
           <v-row>
             <v-col cols="12">

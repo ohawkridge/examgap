@@ -65,7 +65,7 @@
                       <v-list-item-title>{{ topic.name }}</v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-chip :color="topic.answered > 0 ? 'green-chip' : ''">{{
+                      <v-chip :color="topic.answered > 0 ? 'green' : ''">{{
                         topic.answered
                       }}</v-chip>
                     </v-list-item-action>
