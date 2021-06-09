@@ -130,7 +130,7 @@ export default {
     TheFooter,
     JoinClass,
   },
-  middleware: ['get-user'],
+  middleware: ['get-user', 'auth'],
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,

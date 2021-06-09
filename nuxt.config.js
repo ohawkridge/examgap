@@ -54,7 +54,7 @@ export default {
     { src: '@/plugins/snack.js' },
     { src: '@/plugins/localStorage.js', mode: 'client' },
     { src: '@/plugins/tiptapVuetify.js' },
-    { src: '@/plugins/honeybadger', mode: 'client' },
+    { src: '@/plugins/honeybadger.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

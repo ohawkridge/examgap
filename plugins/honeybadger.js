@@ -2,7 +2,7 @@ import Vue from 'vue'
 import HoneybadgerVue from '@honeybadger-io/vue'
 
 const config = {
-  apiKey: 'hbp_xaKmNAUS8NVp6kBJfKcCMEYe8iCCi30wuKXo',
+  apiKey: process.env.HONEYB_KEY,
   environment: process.env.NODE_ENV,
 }
 
