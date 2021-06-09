@@ -518,17 +518,6 @@
                     </v-icon>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    <span class="font-weight-bold">SQA National 5</span>
-                    <span class="text-caption">(C816 75)</span>
-                  </td>
-                  <td class="text-center">
-                    <v-icon color="green">
-                      {{ $icons.mdiCheckBold }}
-                    </v-icon>
-                  </td>
-                </tr>
               </tbody>
             </template>
           </v-simple-table>
