@@ -30,10 +30,9 @@ exports.handler = async (event, context, callback) => {
                 {
                   header: q.UpperCase(
                     q.Concat([
-                      q.Select(['data', 'name'], q.Get(q.Var('ref'))),
-                      ' (',
                       q.Select(['data', 'board'], q.Get(q.Var('ref'))),
-                      ')',
+                      ' ',
+                      q.Select(['data', 'shortName'], q.Get(q.Var('ref'))),
                     ])
                   ),
                 },
