@@ -141,6 +141,10 @@ export default {
   },
   created() {
     this.$icons = { mdiPlus, mdiHomeOutline, mdiArchiveOutline }
+    // Onboard if nec.
+    if (this.activeGroupCount === 0) {
+      this.$store.commit('user/setOnboardStep', 1)
+    }
   },
 }
 </script>
@@ -157,11 +161,12 @@ export default {
   border: 1px dashed #0078a0 !important;
 }
 
-/* position empty state graphic */
+/* shrink empty state graphic */
 #empty {
-  padding-left: 3em;
-  padding-right: 3em;
+  padding-left: 6em;
+  padding-right: 6em;
 }
+/* window is 600px or more */
 @media only screen and (min-width: 600px) {
   #empty {
     padding-left: 38%;

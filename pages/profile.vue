@@ -30,7 +30,9 @@
           <v-text-field
             :value="expiry"
             label="Subscription expires"
-            :error="teacher && expires <= 0"
+            :error-messages="
+              teacher && expires <= 0 ? ['Subscription expired'] : []
+            "
             outlined
             readonly
           >
@@ -84,8 +86,8 @@ export default {
       expires: (state) => state.user.subscriptionExpires,
     }),
     expiry() {
-      if (!this.teacher) return `N/A`
-      return this.expires <= 0 ? 'Expired' : `${this.expires} days`
+      if (!this.teacher) return this.expires
+      return `${this.expires} days ${this.expires <= 0 ? 'ago' : ''}`
     },
   },
   created() {

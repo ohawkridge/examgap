@@ -49,18 +49,20 @@ export default {
       course: '',
     }
   },
+  beforeDestroy() {
+    // Destroy event listeners to prevent memory leaks?
+    this.$nuxt.$off('show-create')
+    this.$nuxt.$off('select-course')
+  },
   mounted() {
     this.$nuxt.$on('show-create', () => {
       this.dialog = true
     })
     this.$nuxt.$on('select-course', (courseId) => {
-      this.updateCourse(courseId)
+      this.course = courseId
     })
   },
   methods: {
-    updateCourse(courseId) {
-      this.course = courseId
-    },
     async create() {
       if (this.$refs.form.validate()) {
         this.loading = true
@@ -81,9 +83,12 @@ export default {
             throw new Error(`Error creating class ${response.status}`)
           }
           const data = await response.json()
+          // Update local data
           this.$store.commit('groups/addGroup', data)
-          // Progress with onboarding
+          // Progress onboarding
           this.$store.commit('user/setOnboardStep', 2)
+          // In case user is on Archive, send them Home
+          this.$store.commit('groups/setTab', true)
           this.$snack.showMessage({
             type: 'success',
             msg: `Class created`,
@@ -95,7 +100,7 @@ export default {
             msg: `Error creating class`,
           })
         } finally {
-          // Close dialog; clear form
+          // Close dialog + clear form
           this.dialog = false
           this.loading = false
           this.$refs.form.reset()

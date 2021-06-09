@@ -134,6 +134,7 @@ exports.handler = async (event, context, callback) => {
             id: q.Select(['ref', 'id'], q.Var('instance')),
             username: q.Select(['data', 'username'], q.Var('instance'), null),
             examMode: q.Select(['data', 'examMode'], q.Var('instance'), true),
+            subscriptionExpires: 'N/A',
             teacher: false,
             quote: q.Let(
               {

@@ -20,7 +20,7 @@ export default {
         1: `To get started, click + ${
           this.$vuetify.breakpoint.name !== 'xs' ? 'Create ' : ''
         } Class.`,
-        2: 'Click on the class you created.',
+        2: 'Click the class you just created.',
         3: 'To add students, click Invite Students.',
         4: 'Click + Create Assignment to browse questions.',
         5: 'Change topic to see more questions.',

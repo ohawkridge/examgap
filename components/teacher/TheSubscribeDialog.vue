@@ -1,6 +1,11 @@
 <template>
+  <!-- Force show on profile.vue -->
+  <!-- No room to show on mobile -->
   <v-dialog
-    v-if="expires < 31 || $route.name === 'profile'"
+    v-if="
+      (expires < 31 || $route.name === 'profile') &&
+      $vuetify.breakpoint.name !== 'xs'
+    "
     v-model="dialog"
     max-width="420"
   >

@@ -19,7 +19,7 @@ export const state = () => ({
 
 export const actions = {
   // Call a function to get user data
-  async getUser({ commit, state, dispatch, rootGetters }) {
+  async getUser({ commit, state, dispatch }) {
     // secret is empty during hard refresh
     if (state.secret !== '') {
       try {
@@ -58,8 +58,6 @@ export const actions = {
         }
         // Commit group data to groups store
         commit('groups/setGroups', userData.groups, { root: true })
-        // Activate onboarding if nec.
-        if (userData.groups.length === 0) commit('setOnboardStep', 1)
       } catch (e) {
         console.error(e)
       } finally {
