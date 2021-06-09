@@ -5,6 +5,7 @@ export default function ({ store, redirect }) {
   // as these won't exist during a hard page refresh
   // N.B. localStorage not available server-side
   if (process.browser && localStorage.getItem('examgap') === null) {
+    console.warn('NOT LOGGED IN') //  NOT WORKING
     return redirect('/signin')
   }
   // For students, check for new assignments after 5 mins.

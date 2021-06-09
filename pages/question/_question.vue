@@ -5,9 +5,19 @@
         <v-card class="pa-md-3">
           <v-card-title class="d-flex justify-space-between">
             Question
-            <v-btn elevation="0" nuxt :to="`/author/${question.id}`">
-              Edit Question
-            </v-btn>
+            <div>
+              <v-btn
+                elevation="0"
+                nuxt
+                :to="`/map/${question.id}`"
+                class="mr-2"
+              >
+                Map
+              </v-btn>
+              <v-btn elevation="0" nuxt :to="`/author/${question.id}`">
+                Edit
+              </v-btn>
+            </div>
           </v-card-title>
           <v-card-subtitle>
             {{ question.id }}

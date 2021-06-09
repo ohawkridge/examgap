@@ -3,10 +3,9 @@ const q = faunadb.query
 
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
-  const secret = data.secret
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret,
+    secret: data.secret,
   })
   try {
     const qry = q.Select(

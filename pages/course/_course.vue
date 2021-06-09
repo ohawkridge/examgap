@@ -281,7 +281,10 @@ export default {
       get() {
         // In some circumstances, currentTopic may become undefined
         const ct = this.$store.state.assignments.currentTopic
-        return ct === undefined ? 0 : ct
+        // Since we only remember the currentTopic's index and not the course
+        // It's possible to for currentTopic to exceed the number of topics
+        // if you go from a course with lots of topics to one with less
+        return ct === undefined || ct > this.topics.length ? 0 : ct
       },
       set(value) {
         this.$store.commit('assignments/setCurrentTopic', value)
@@ -318,6 +321,7 @@ export default {
   methods: {
     // Get questions for topic
     async loadQuestions() {
+      console.log(`currentTopic`, this.currentTopic)
       try {
         this.loading = true
         const url = new URL(

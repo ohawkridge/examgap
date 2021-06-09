@@ -38,8 +38,16 @@ exports.handler = async (event, context, callback) => {
       }
     }
     // IGCSE
+    out.push({ header: 'IGCSE COURSES' }, { divider: true })
     for (const course of data) {
       if (course.cat === 'IGCSE') {
+        out.push(course)
+      }
+    }
+    // N5
+    out.push({ header: 'N5 COURSES' }, { divider: true })
+    for (const course of data) {
+      if (course.cat === 'N5') {
         out.push(course)
       }
     }

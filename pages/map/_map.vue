@@ -1,6 +1,6 @@
 <template>
   <v-row class="justify-center">
-    <v-col cols="12" md="10">
+    <v-col cols="12">
       <v-card class="pa-md-3 mt-md-3">
         <v-card-title>Map question</v-card-title>
         <v-card-text>
@@ -11,7 +11,7 @@
                 outlined
                 label="Question id"
                 clearable
-                @blur="getQuestion()"
+                @blur="getQuestion(id)"
               ></v-text-field>
               <v-autocomplete
                 v-model="selectedTopics"
@@ -72,48 +72,72 @@ export default {
       throw new Error(`Error fetching topics ${topics.status}`)
     }
     this.topics = await topics.json()
+    this.getQuestion()
   },
-  // Since we don't have a router link to this page
-  // Disable server-side fetching when rendering
-  fetchOnServer: false,
   head() {
     return {
       title: 'Map question',
     }
   },
+  mounted() {
+    this.id = this.$route.params.map
+  },
   methods: {
-    async getQuestion() {
-      if (this.id !== '') {
-        console.log(`getQuestion`, this.id)
-        try {
-          const url = new URL(
-            '/.netlify/functions/getQuestion',
-            this.$config.baseURL
-          )
-          let response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.$store.state.user.secret,
-              questionId: this.id,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error getting question ${response.status}`)
-          }
-          response = await response.json()
-          this.question = response.text
-          this.selectedTopics = response.selectedTopics
-        } catch (e) {
-          console.error(e)
-          this.$snack.showMessage({
-            type: 'error',
-            msg: 'Error getting question',
-          })
+    async getQuestion(questionId = this.$route.params.map) {
+      try {
+        const url = new URL(
+          '/.netlify/functions/getQuestion',
+          this.$config.baseURL
+        )
+        let response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            questionId,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error getting question ${response.status}`)
         }
+        response = await response.json()
+        this.question = response.text
+        this.selectedTopics = response.selectedTopics
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error getting question',
+        })
       }
     },
-    save() {
-      console.log('Saving topics..')
+    async save() {
+      try {
+        const url = new URL(
+          '/.netlify/functions/updateMap',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            topics: this.selectedTopics,
+            questionId: this.id,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error saving topics ${response.status}`)
+        }
+        this.$snack.showMessage({
+          type: 'success',
+          msg: 'Changes saved',
+        })
+      } catch (e) {
+        console.error(e)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error saving',
+        })
+      }
     },
   },
 }
