@@ -48,7 +48,7 @@
               elevation="0"
               nuxt
               to="/author"
-              class="mr-4 d-none d-md-flex"
+              class="d-none d-md-flex"
               v-on="on"
             >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -57,9 +57,10 @@
           </template>
           <span>Create question</span>
         </v-tooltip>
+        <the-subscribe-dialog v-if="teacher" />
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
-            <v-btn elevation="0" icon v-bind="attrs" v-on="on">
+            <v-btn class="ml-2" elevation="0" icon v-bind="attrs" v-on="on">
               <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
             </v-btn>
           </template>
@@ -113,6 +114,7 @@ import { mapState, mapGetters } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
+import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 import JoinClass from '@/components/student/JoinClass'
 
 import {
@@ -128,6 +130,7 @@ export default {
     TheLogo,
     TheSnackbar,
     TheFooter,
+    TheSubscribeDialog,
     JoinClass,
   },
   middleware: ['get-user', 'auth'],

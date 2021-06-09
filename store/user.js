@@ -120,6 +120,7 @@ export const mutations = {
     state.loading = loading
   },
   setLastFetch(state, ts) {
+    console.log(`-> stale data`, ts)
     state.lastFetch = ts
   },
   setOnboardStep(state, n) {

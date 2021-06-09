@@ -35,20 +35,28 @@
             readonly
           >
             <template v-if="teacher" #append>
-              <v-chip v-if="expires > 30" color="green" label class="fix-chip">
+              <v-chip
+                v-if="expires > 30"
+                color="green"
+                outlined
+                class="fix-chip"
+              >
                 Subscribed
-                <v-icon color="#183a11" right>
+                <v-icon color="green" right>
                   {{ $icons.mdiCheck }}
                 </v-icon>
               </v-chip>
-              <v-chip v-else color="accent" label class="fix-chip">
+              <v-chip v-else color="accent" outlined class="fix-chip">
                 Soon
+                <v-icon color="accent" right>
+                  {{ $icons.mdiClockAlertOutline }}
+                </v-icon>
               </v-chip>
             </template>
           </v-text-field>
         </v-card-text>
         <v-card-actions v-if="teacher">
-          <the-subscribe-dialog :days="expires" />
+          <the-subscribe-dialog :block="true" />
         </v-card-actions>
       </v-card>
     </v-col>
@@ -57,7 +65,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { mdiCheck } from '@mdi/js'
+import { mdiCheck, mdiClockAlertOutline } from '@mdi/js'
 import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 
 export default {
@@ -83,6 +91,7 @@ export default {
   created() {
     this.$icons = {
       mdiCheck,
+      mdiClockAlertOutline,
     }
   },
 }

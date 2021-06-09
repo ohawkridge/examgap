@@ -1,8 +1,18 @@
 <template>
-  <v-dialog v-model="dialog" max-width="420">
+  <v-dialog
+    v-if="expires < 31 || $route.name === 'profile'"
+    v-model="dialog"
+    max-width="420"
+  >
     <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" color="primary" elevation="0" block v-on="on">
-        Subscribe to Examgap
+      <v-btn
+        v-bind="attrs"
+        color="primary"
+        elevation="0"
+        :block="block"
+        v-on="on"
+      >
+        Subscribe
       </v-btn>
     </template>
     <v-card class="modal">
@@ -10,7 +20,9 @@
         >Subscribe to Examgap</v-card-title
       >
       <v-card-text>
-        <p>Request an email invoice you can pay online.</p>
+        <p>
+          Request an email invoice you can pay online or forward to your bursar.
+        </p>
         <!-- <v-checkbox v-model="selectedPackage" value="both">
           <template #label>
             <div>
@@ -57,14 +69,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import TheSuccessDialog from '@/components/common/TheSuccessDialog'
 
 export default {
   components: { TheSuccessDialog },
   props: {
-    days: {
-      type: Number,
-      default: 0,
+    block: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -73,6 +86,17 @@ export default {
       selectedPackage: 'gcse',
       loading: false,
     }
+  },
+  computed: {
+    ...mapState({ expires: (state) => state.user.subscriptionExpires }),
+  },
+  beforeDestroy() {
+    this.$nuxt.$off('show-subscribe')
+  },
+  mounted() {
+    this.$nuxt.$on('show-subscribe', () => {
+      this.dialog = true
+    })
   },
   methods: {
     request() {
