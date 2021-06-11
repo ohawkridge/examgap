@@ -35,10 +35,10 @@ export const actions = {
         if (!response.ok) {
           throw new Error(`Error fetching user data ${response.status}`)
         }
-        // console.log(
-        //   '%c' + 'getUser',
-        //   'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
-        // )
+        console.log(
+          '%c' + 'getUser',
+          'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+        )
         const userData = await response.json()
         // Commit user data to store
         commit('setUser', userData)
@@ -132,15 +132,14 @@ export const mutations = {
     state.loading = loading
   },
   setLastFetch(state, ts) {
-    console.log(`-> stale data`, ts)
     state.lastFetch = ts
   },
   setOnboardStep(state, n) {
     state.onboardStep = n
-    console.log(
-      '%c' + n,
-      'padding:2px 4px;background-color:yellow;color:black;border-radius:10px'
-    )
+    // console.log(
+    //   '%c' + n,
+    //   'padding:2px 4px;background-color:yellow;color:black;border-radius:10px'
+    // )
   },
   setSecret(state, secret) {
     state.secret = secret
