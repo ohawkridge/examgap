@@ -52,6 +52,10 @@ exports.handler = async (event, context, callback) => {
                         {
                           id: q.Select(['id'], q.Var('rRef')),
                           text: q.Select(['data', 'text'], q.Var('instance')),
+                          feedback: q.Select(
+                            ['data', 'feedback'],
+                            q.Var('instance')
+                          ),
                           marked: q.Select(
                             ['data', 'marked'],
                             q.Var('instance')

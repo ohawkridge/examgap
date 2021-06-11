@@ -128,7 +128,7 @@
               <div
                 v-if="response.feedback"
                 id="fb"
-                class="pa-4 mb-4"
+                class="pa-4 mb-4 font-italic"
                 v-text="response.feedback"
               ></div>
               <p class="text-subtitle-1 font-weight-medium">Model answer</p>

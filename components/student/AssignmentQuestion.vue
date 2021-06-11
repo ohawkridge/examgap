@@ -9,13 +9,19 @@
         class="px-0 px-md-3"
       >
         <v-list-item-content class="d-flex align-start">
-          <v-col cols="12" md="9" class="pa-0 pa-md-3 mb-2">
+          <v-col cols="12" md="9" class="pa-0 pa-md-3">
             <v-list-item-title>
               {{ question.text | strip }}
             </v-list-item-title>
             <v-list-item-subtitle>
               {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-list-item-subtitle>
+            <div class="my-3 mb-md-0 font-italic d-flex">
+              <v-icon small class="mr-2">
+                {{ $icons.mdiCommentTextOutline }}
+              </v-icon>
+              {{ response.feedback }}
+            </div>
           </v-col>
           <v-col
             cols="12"
@@ -108,7 +114,12 @@
 </template>
 
 <script>
-import { mdiAccountOutline, mdiSchoolOutline, mdiCheck } from '@mdi/js'
+import {
+  mdiAccountOutline,
+  mdiSchoolOutline,
+  mdiCheck,
+  mdiCommentTextOutline,
+} from '@mdi/js'
 
 export default {
   name: 'AssignmentQuestion',
@@ -127,6 +138,7 @@ export default {
       mdiAccountOutline,
       mdiSchoolOutline,
       mdiCheck,
+      mdiCommentTextOutline,
     }
   },
   methods: {
