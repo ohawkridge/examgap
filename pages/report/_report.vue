@@ -80,9 +80,7 @@
                         >
                           <MarkChip
                             :class="`${
-                              onboard && n === 8 && i === 0 && j === 0
-                                ? 'red-out'
-                                : ''
+                              obs === 8 && i === 0 && j === 0 ? 'red-out' : ''
                             }`"
                             :student-index="i"
                             :question-index="j"
@@ -396,10 +394,7 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
-    ...mapState({
-      n: (state) => state.user.onboardStep,
-      onboard: (state) => state.user.onboard,
-    }),
+    ...mapState({ obs: (state) => state.user.onboardStep }),
     // Question is included in header data (for hover preview)
     question() {
       return this.data.headers[this.questionIndex + 1]
