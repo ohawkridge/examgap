@@ -8,9 +8,9 @@
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container class="fill-height">
         <v-row class="d-flex justify-center">
-          <v-col cols="12" md="5" class="text-center">
+          <v-col id="nav-fix" cols="12" md="5" class="text-center">
             <p>
               <svg
                 height="46"

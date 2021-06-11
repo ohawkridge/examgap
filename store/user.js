@@ -9,10 +9,11 @@ export const state = () => ({
   school: 'N/A',
   teacher: false,
   subscriptionExpires: '',
+  subscribed: null,
   examMode: false,
   reviseExamMode: false,
   quote: 'Experiment, fail, learn, repeat.—Anonymous',
-  onboardStep: 0, // 0 = don't onboard
+  onboardStep: 0, // Don't onboard
   lastFetch: undefined,
   loading: false,
 })
@@ -55,6 +56,19 @@ export const actions = {
           commit('setLastFetch', Date.now())
           // Open doc stream
           dispatch('openStream', userData)
+          // Onboard teacher if nec.
+        } else if (userData.groups.length === 0 && userData.teacher) {
+          commit('setOnboardStep', 1)
+        } else {
+          // Unlikely, a teacher with no active groups
+          let activeFound = false
+          for (const group of userData.groups) {
+            if (group.active) {
+              activeFound = true
+              break
+            }
+          }
+          if (!activeFound) commit('setOnboardStep', 1)
         }
         // Commit group data to groups store
         commit('groups/setGroups', userData.groups, { root: true })
@@ -140,6 +154,7 @@ export const mutations = {
     // Store user-specific properties
     if (data.teacher) {
       state.school = data.school
+      state.subscribed = data.subscribed
     } else {
       state.examMode = data.examMode
       state.quote = data.quote.text
@@ -160,11 +175,12 @@ export const mutations = {
     state.school = ''
     state.teacher = false
     state.subscriptionExpires = ''
+    state.subscribed = null
     state.examMode = false
     state.reviseExamMode = false
     state.quote = 'Experiment, fail, learn, repeat.—Anonymous'
     state.onboard = false
-    state.onboardStep = 0
+    state.onboardStep = 1
     state.lastFetch = undefined
     state.loading = false
   },

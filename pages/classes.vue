@@ -50,7 +50,6 @@
           :key="i"
           :group="group"
           :group-index="i"
-          :outline="obs === 2"
         />
       </template>
       <!-- Create class card -->
@@ -141,10 +140,6 @@ export default {
   },
   created() {
     this.$icons = { mdiPlus, mdiHomeOutline, mdiArchiveOutline }
-    // Onboard if nec.
-    if (this.activeGroupCount === 0) {
-      this.$store.commit('user/setOnboardStep', 1)
-    }
   },
 }
 </script>

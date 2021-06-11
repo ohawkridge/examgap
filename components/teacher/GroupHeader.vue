@@ -7,7 +7,7 @@
             v-if="group.name !== undefined"
             class="text-h6 font-weight-bold mb-0"
           >
-            {{ group.name }}
+            {{ group.name }} ({{ group.num_students }})
           </p>
           <p v-if="group.course.name !== undefined">
             {{ group.course.name }} ({{ group.course.board }})
@@ -20,11 +20,11 @@
               <v-btn
                 v-bind="attrs"
                 class="mt-2 mt-md-0"
-                :class="clss"
+                :class="$store.state.user.onboardStep === 4 ? 'red-out' : ''"
                 elevation="0"
                 :block="$vuetify.breakpoint.name === 'xs'"
                 color="primary"
-                @click="createAssignment()"
+                @click="create()"
                 v-on="on"
               >
                 <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { mdiPlus } from '@mdi/js'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
 
@@ -55,37 +54,29 @@ export default {
     },
   },
   computed: {
-    ...mapState({
-      n: (state) => state.user.onboardStep,
-      onboard: (state) => state.user.onboard,
-    }),
     assignments() {
       return this.group && 'assignments' in this.group
         ? this.group.assignments
         : []
-    },
-    clss() {
-      return this.onboard && this.n === 4 ? 'red-out' : ''
     },
   },
   created() {
     this.$icons = { mdiPlus }
   },
   mounted() {
-    if (this.group !== undefined) {
-      // No students? Onboard @step 3
-      if (this.group.num_students === 0) {
-        this.$store.commit('user/setOnboardStep', 3)
-      }
-      // No assignments? Onboard @step 4
-      if (this.group.num_students > 0 && this.assignments.length < 2) {
-        this.$store.commit('user/setOnboardStep', 4)
-      }
+    // Onboard no students
+    if (this.group.num_students === 0) {
+      console.log('But Im not 0!')
+      this.$store.commit('user/setOnboardStep', 3)
+    }
+    // Onboard few assignments
+    if (this.group.num_students > 0 && this.assignments.length < 3) {
+      this.$store.commit('user/setOnboardStep', 4)
     }
   },
   methods: {
-    createAssignment() {
-      // Clear any previously selected questions
+    create() {
+      // Clear previously selection
       this.$store.commit('assignments/clearSelectedQuestions')
       // Advance onboarding
       this.$store.commit('user/setOnboardStep', 5)

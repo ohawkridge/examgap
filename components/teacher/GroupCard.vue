@@ -1,7 +1,11 @@
 <template>
   <v-col cols="12" md="6" lg="4">
     <v-hover v-slot="{ hover }">
-      <v-card hover :class="`${outline ? 'red-out' : ''}`" @click="open()">
+      <v-card
+        hover
+        :class="`${$store.state.user.onboardStep === 2 ? 'red-out' : ''}`"
+        @click="open()"
+      >
         <v-card-title :class="hover ? 'primary--text' : ''">
           {{ group.name }}
         </v-card-title>
@@ -23,12 +27,7 @@
 </template>
 
 <script>
-import {
-  mdiPlus,
-  mdiChevronDown,
-  mdiAlertCircleOutline,
-  mdiAccountGroupOutline,
-} from '@mdi/js'
+import { mdiAccountGroupOutline } from '@mdi/js'
 
 export default {
   name: 'GroupCard',
@@ -41,25 +40,14 @@ export default {
       type: Number,
       default: 0,
     },
-    outline: {
-      type: Boolean,
-      default: false,
-    },
   },
   created() {
-    this.$icons = {
-      mdiPlus,
-      mdiChevronDown,
-      mdiAlertCircleOutline,
-      mdiAccountGroupOutline,
-    }
+    this.$icons = { mdiAccountGroupOutline }
   },
   methods: {
     open() {
       // Remember active group
       this.$store.commit('groups/setActiveGroupIndex', this.groupIndex)
-      // Set onboarding step
-      this.$store.commit('user/setOnboardStep', 3)
       this.$router.push(`/group/${this.group.id}`)
     },
   },

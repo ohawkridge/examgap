@@ -32,7 +32,7 @@
               :disabled="selected.length == 0"
               v-bind="attrs"
               elevation="0"
-              :class="`${onboard && n === 7 ? 'red-out' : ''}`"
+              :class="`${obs === 7 ? 'red-out' : ''}`"
               @click="assign()"
               v-on="on"
             >
@@ -65,7 +65,7 @@
                       <v-list-item
                         v-for="(topic, i) in topics"
                         :key="i"
-                        :class="onboard && i === 1 && n === 5 ? 'red-out' : ''"
+                        :class="i === 1 && obs === 5 ? 'red-out' : ''"
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
                       >
@@ -124,13 +124,16 @@
                                 <v-btn
                                   icon
                                   :class="`${
-                                    n === 6 && onboard && i === 0
-                                      ? 'red-out'
-                                      : ''
+                                    obs === 6 && i === 0 ? 'red-out' : ''
                                   }`"
                                   v-bind="attrs"
                                   v-on="on"
-                                  @click.stop="select(q.id)"
+                                  @click.stop="
+                                    $store.commit(
+                                      'assignments/updateSelectedQuestions',
+                                      q.id
+                                    )
+                                  "
                                 >
                                   <v-icon
                                     :color="
@@ -145,13 +148,8 @@
                                 </v-btn>
                               </template>
                               <span>
-                                {{
-                                  selected.includes(q.id)
-                                    ? 'Remove from'
-                                    : 'Add to'
-                                }}
-                                assignment</span
-                              >
+                                {{ selected.includes(q.id) ? 'Remove' : 'Add' }}
+                              </span>
                             </v-tooltip>
                           </v-list-item-action>
                         </v-list-item>
@@ -230,7 +228,6 @@ export default {
     }
   },
   async fetch() {
-    // Get course topics
     try {
       const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
       const response = await fetch(url, {
@@ -251,7 +248,7 @@ export default {
         msg: 'Error fetching topics',
       })
     }
-    // Get topic questions
+    // Now we have the course's topics, get the questions
     this.loadQuestions()
   },
   head() {
@@ -262,8 +259,7 @@ export default {
   computed: {
     ...mapState({
       selected: (state) => state.assignments.selected,
-      n: (state) => state.user.onboardStep,
-      onboard: (state) => state.user.onboard,
+      obs: (state) => state.user.onboardStep,
     }),
     ...mapGetters({ group: 'groups/activeGroup' }),
     // Since selectedQuestion is only an index of v-list of questions
@@ -279,11 +275,11 @@ export default {
     // Remember which topic we were on last
     currentTopic: {
       get() {
-        // In some circumstances, currentTopic may become undefined
+        // In some circumstances, currentTopic may become undefined?
         const ct = this.$store.state.assignments.currentTopic
-        // Since we only remember the currentTopic's index and not the course
-        // It's possible to for currentTopic to exceed the number of topics
-        // if you go from a course with lots of topics to one with less
+        // Since we only remember currentTopicIndex, it's possible
+        // for currentTopicIndex to exceed the number of topics
+        // if you go from a course with more topics to one with less
         return ct === undefined || ct > this.topics.length ? 0 : ct
       },
       set(value) {
@@ -293,7 +289,7 @@ export default {
   },
   watch: {
     // Load questions when topic changes
-    // TODO Can cause errors on logout
+    // TODO Can cause errors on logout?
     currentTopic() {
       if (this.group) {
         this.loadQuestions()
@@ -321,7 +317,6 @@ export default {
   methods: {
     // Get questions for topic
     async loadQuestions() {
-      console.log(`currentTopic`, this.currentTopic)
       try {
         this.loading = true
         const url = new URL(
@@ -349,10 +344,6 @@ export default {
       } finally {
         this.loading = false
       }
-    },
-    // Add/remove questions from selection
-    select(questionid) {
-      this.$store.commit('assignments/updateSelectedQuestions', questionid)
     },
     assign() {
       this.$nuxt.$emit('show-assign')

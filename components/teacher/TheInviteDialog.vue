@@ -1,20 +1,14 @@
 <template>
-  <v-dialog v-model="dialog" width="500">
+  <v-dialog v-model="dialog" width="510">
     <template #activator="{ on, attrs }">
       <v-btn
         :block="$vuetify.breakpoint.name === 'xs'"
         elevation="0"
         v-bind="attrs"
-        :class="
-          onboard && n === 3 && group.num_students === 0
-            ? 'red-out mr-2'
-            : 'mr-2'
-        "
+        class="mr-2"
+        :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
         v-on="on"
-        @click="
-          $store.commit('user/setOnboardStep', 4)
-          outline = false
-        "
+        @click="$store.commit('user/setOnboardStep', 4)"
       >
         Invite students
       </v-btn>
@@ -24,7 +18,7 @@
         Invite students
       </v-card-title>
       <v-card-text>
-        <p>There are three ways to add students&hellip;</p>
+        <p>There are three ways to add students:</p>
         <p class="text-subtitle-1 font-weight-medium mb-2">Share invite link</p>
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>
@@ -37,7 +31,7 @@
         <p class="text-subtitle-1 font-weight-medium mb-2 mt-6">
           Share join code
         </p>
-        <v-text-field :value="formattedCode" readonly outlined hide-details>
+        <v-text-field :value="formattedLink" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text color="primary" @click="overlay = true">
               <v-icon left>{{ $icons.mdiFullscreen }}</v-icon>
@@ -72,15 +66,13 @@
       class="font-weight-bold white--text text-center big"
       @click.native="overlay = !overlay"
     >
-      <div>examgap.com</div>
       <div>Join Class</div>
-      <div class="secondary--text">{{ formattedCode }}</div>
+      <div class="secondary--text">{{ formattedLink }}</div>
     </v-overlay>
   </v-dialog>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { mdiFullscreen, mdiContentCopy } from '@mdi/js'
 
 export default {
@@ -98,14 +90,10 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      n: (state) => state.user.onboardStep,
-      onboard: (state) => state.user.onboard,
-    }),
     link() {
-      return `https://examgap.com/signup?code=${this.formattedCode}`
+      return `https://examgap.com/signup?code=${this.formattedLink}`
     },
-    formattedCode() {
+    formattedLink() {
       return `${this.group.code.substring(0, 3)}-${this.group.code.substring(
         3,
         6
@@ -114,6 +102,7 @@ export default {
   },
   watch: {
     dialog() {
+      // Reset text on Copy button
       if (!this.dialog) this.copyBtn = 'Copy'
     },
   },
@@ -122,6 +111,9 @@ export default {
       mdiFullscreen,
       mdiContentCopy,
     }
+  },
+  beforeDestroy() {
+    this.$nuxt.$off('open-invite')
   },
   mounted() {
     if (this.group.num_students === 0) {
@@ -145,13 +137,13 @@ export default {
 </script>
 
 <style scoped>
-/* Align button inside input */
+/* align buttons in inputs */
 .fix-btn {
   margin-top: -7px;
   margin-right: -2px;
 }
 
-/* Large class code */
+/* big class code */
 .big {
   font-size: 10vw;
 }

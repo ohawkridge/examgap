@@ -38,6 +38,7 @@ exports.handler = async (event, context, callback) => {
               q.Select(['data', 'subscriptionExpires'], q.Var('instance')),
               'days'
             ),
+            subscribed: q.Select(['data', 'subscribed'], q.Var('instance')),
             groups: q.Select(
               ['data'],
               q.Map(

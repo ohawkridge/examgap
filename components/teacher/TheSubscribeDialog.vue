@@ -1,11 +1,8 @@
 <template>
-  <!-- Force show on profile.vue -->
-  <!-- No room to show on mobile -->
+  <!-- Hide on mobile -->
+  <!-- Show if not subscribed -->
   <v-dialog
-    v-if="
-      (expires < 31 || $route.name === 'profile') &&
-      $vuetify.breakpoint.name !== 'xs'
-    "
+    v-if="(!subscribed && $vuetify.breakpoint.name !== 'xs') || block"
     v-model="dialog"
     max-width="420"
   >
@@ -17,7 +14,7 @@
         :block="block"
         v-on="on"
       >
-        Subscribe
+        {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
       </v-btn>
     </template>
     <v-card class="modal">
@@ -93,7 +90,10 @@ export default {
     }
   },
   computed: {
-    ...mapState({ expires: (state) => state.user.subscriptionExpires }),
+    ...mapState({
+      expires: (state) => state.user.subscriptionExpires,
+      subscribed: (state) => state.user.subscribed,
+    }),
   },
   beforeDestroy() {
     this.$nuxt.$off('show-subscribe')

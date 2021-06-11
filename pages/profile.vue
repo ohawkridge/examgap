@@ -71,6 +71,7 @@ import { mdiCheck, mdiClockAlertOutline } from '@mdi/js'
 import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 
 export default {
+  name: 'Profile',
   components: {
     TheSubscribeDialog,
   },

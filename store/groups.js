@@ -11,10 +11,11 @@ export const getters = {
   activeGroup: (state) => {
     return state.groups[state.activeGroupIndex]
   },
+  // N.B. rootState is 3rd arg (can't descructure)
   activeGroupCount: (state, getters, rootState) => {
-    return rootState.user.teacher
-      ? state.groups.filter((group) => group.active).length
-      : state.groups.length
+    return state.groups.filter(
+      (group) => group.active || !rootState.user.teacher
+    ).length
   },
   groupsForSelect: (state) => {
     return state.groups.map((group) => {

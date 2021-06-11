@@ -104,6 +104,12 @@ export default {
         : 'http://localhost:8888',
   },
 
+  // Honeybadger can't see env vars in plugin
+  // https://nuxtjs.org/docs/2.x/directory-structure/nuxt-config/#env
+  env: {
+    HONEYB_KEY: 'hbp_xaKmNAUS8NVp6kBJfKcCMEYe8iCCi30wuKXo',
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, { isClient }) {

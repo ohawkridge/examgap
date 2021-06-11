@@ -23,7 +23,7 @@ export default {
         2: 'Click the class you just created.',
         3: 'To add students, click Invite Students.',
         4: 'Click + Create Assignment to browse questions.',
-        5: 'Change topic to see more questions.',
+        5: 'Change topics to see more questions.',
         6: 'Click + to select questions to assign.',
         7: "When you're ready, click + Assign.",
         8: 'Click on a self mark to enter marking view.',
