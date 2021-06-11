@@ -35,10 +35,10 @@ export const actions = {
         if (!response.ok) {
           throw new Error(`Error fetching user data ${response.status}`)
         }
-        console.log(
-          '%c' + 'getUser',
-          'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
-        )
+        // console.log(
+        //   '%c' + 'getUser',
+        //   'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+        // )
         const userData = await response.json()
         // Commit user data to store
         commit('setUser', userData)
@@ -180,7 +180,7 @@ export const mutations = {
     state.reviseExamMode = false
     state.quote = 'Experiment, fail, learn, repeat.—Anonymous'
     state.onboard = false
-    state.onboardStep = 1
+    state.onboardStep = 0
     state.lastFetch = undefined
     state.loading = false
   },
