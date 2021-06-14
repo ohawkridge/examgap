@@ -99,13 +99,11 @@
       <v-container>
         <nuxt />
       </v-container>
-      <TheSnackbar />
-      <JoinClass v-if="!teacher" />
+      <the-snackbar />
+      <the-join-dialog v-if="!teacher" />
+      <the-loading-overlay />
     </v-main>
-    <TheFooter v-if="showFooter" />
-    <v-overlay :value="loading">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+    <the-footer v-if="showFooter" />
   </v-app>
 </template>
 
@@ -115,7 +113,8 @@ import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
 import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
-import JoinClass from '@/components/student/JoinClass'
+import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
+import TheJoinDialog from '@/components/student/TheJoinDialog'
 
 import {
   mdiPlus,
@@ -131,14 +130,14 @@ export default {
     TheSnackbar,
     TheFooter,
     TheSubscribeDialog,
-    JoinClass,
+    TheJoinDialog,
+    TheLoadingOverlay,
   },
   middleware: ['get-user', 'auth'],
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
       groups: (state) => state.groups.groups,
-      loading: (state) => state.user.loading,
     }),
     ...mapGetters({
       activeGroupCount: 'groups/activeGroupCount',
@@ -153,6 +152,9 @@ export default {
           this.$route.name === 'edit-edit')
       )
     },
+  },
+  watch: {
+    teacher() {},
   },
   created() {
     this.$icons = {

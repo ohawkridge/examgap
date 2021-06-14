@@ -18,13 +18,7 @@
             <div>
               <v-menu offset-y open-on-hover>
                 <template #activator="{ on, attrs }">
-                  <v-btn
-                    outlined
-                    color="primary"
-                    class="mr-2"
-                    elevation="0"
-                    v-bind="attrs"
-                    v-on="on"
+                  <v-btn class="mr-2" elevation="0" v-bind="attrs" v-on="on"
                     >Students<v-icon right>{{
                       $icons.mdiChevronDown
                     }}</v-icon></v-btn
@@ -70,21 +64,14 @@
               <CopyStudents :selected="selected" />
               <RemoveStudents :selected="selected" :group-id="group.id" />
               <v-btn
-                color="primary"
                 nuxt
                 :to="`/students/logins/${group.id}`"
                 class="mr-2"
                 elevation="0"
-                outlined
               >
                 Logins
               </v-btn>
-              <v-btn
-                outlined
-                color="primary"
-                elevation="0"
-                @click="exportTableToCSV()"
-              >
+              <v-btn elevation="0" @click="exportTableToCSV()">
                 <v-icon v-if="$vuetify.breakpoint.name !== 'xs'" left>{{
                   $icons.mdiDownloadOutline
                 }}</v-icon>

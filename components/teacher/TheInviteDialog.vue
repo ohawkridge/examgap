@@ -5,6 +5,8 @@
         :block="$vuetify.breakpoint.name === 'xs'"
         elevation="0"
         v-bind="attrs"
+        outlined
+        color="primary"
         class="mr-2"
         :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
         v-on="on"

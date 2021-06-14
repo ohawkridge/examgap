@@ -145,16 +145,17 @@ export const mutations = {
     state.secret = secret
   },
   setUser(state, data) {
-    // Store common properties
+    // Common properties
     state.id = data.id
     state.username = data.username
     state.subscriptionExpires = data.subscriptionExpires
     state.teacher = data.teacher
-    // Store user-specific properties
     if (data.teacher) {
+      // Teacher-specific properties
       state.school = data.school
       state.subscribed = data.subscribed
     } else {
+      // Student-specific properties
       state.examMode = data.examMode
       state.quote = data.quote.text
     }

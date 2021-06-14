@@ -153,7 +153,7 @@ export default {
 
 #cc2 {
   background: #fefcfb !important;
-  border: 1px dashed #0078a0 !important;
+  border: 2px dashed #0078a0 !important;
 }
 
 /* shrink empty state graphic */

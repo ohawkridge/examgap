@@ -84,6 +84,8 @@ export default {
   },
   methods: {
     async getQuestion(questionId = this.$route.params.map) {
+      // In case you paste with extra whitespace
+      questionId = questionId.trim()
       try {
         const url = new URL(
           '/.netlify/functions/getQuestion',

@@ -1,42 +1,41 @@
 <template>
-  <div>
-    <v-row>
-      <v-col cols="12" class="d-md-flex justify-space-between align-center">
-        <div>
-          <p
-            v-if="group.name !== undefined"
-            class="text-h6 font-weight-bold mb-0"
-          >
-            {{ group.name }} ({{ group.num_students }})
-          </p>
-          <p v-if="group.course.name !== undefined">
-            {{ group.course.name }} ({{ group.course.board }})
-          </p>
+  <v-row>
+    <!-- No flex on xs—just stack -->
+    <v-col cols="12" class="d-sm-flex justify-space-between align-center">
+      <div>
+        <div
+          v-if="group.name !== undefined"
+          class="text-h6 font-weight-bold mb-0"
+        >
+          {{ group.name }}
         </div>
-        <div>
-          <the-invite-dialog :group="group" />
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                class="mt-2 mt-md-0"
-                :class="$store.state.user.onboardStep === 4 ? 'red-out' : ''"
-                elevation="0"
-                :block="$vuetify.breakpoint.name === 'xs'"
-                color="primary"
-                @click="create()"
-                v-on="on"
-              >
-                <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                Create assignment
-              </v-btn>
-            </template>
-            <span>Create assignment</span>
-          </v-tooltip>
+        <div v-if="group.course.name !== undefined" class="mb-2">
+          {{ group.course.name }} ({{ group.course.board }})
         </div>
-      </v-col>
-    </v-row>
-  </div>
+      </div>
+      <div>
+        <the-invite-dialog :group="group" />
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              class="mt-2 mt-sm-0"
+              :class="$store.state.user.onboardStep === 4 ? 'red-out' : ''"
+              elevation="0"
+              :block="$vuetify.breakpoint.name === 'xs'"
+              color="primary"
+              @click="create()"
+              v-on="on"
+            >
+              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+              Create assignment
+            </v-btn>
+          </template>
+          <span>Create assignment</span>
+        </v-tooltip>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -64,12 +63,12 @@ export default {
     this.$icons = { mdiPlus }
   },
   mounted() {
-    // Onboard no students
+    // Onboard -> no students
     if (this.group.num_students === 0) {
       console.log('But Im not 0!')
       this.$store.commit('user/setOnboardStep', 3)
     }
-    // Onboard few assignments
+    // Onboard -> few assignments
     if (this.group.num_students > 0 && this.assignments.length < 3) {
       this.$store.commit('user/setOnboardStep', 4)
     }

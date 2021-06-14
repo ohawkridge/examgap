@@ -3,64 +3,24 @@
     <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
     <v-row>
       <v-col cols="12" md="3">
-        <v-row>
-          <v-col>
-            <GroupNav
-              v-if="group && Object.keys(group).length > 0"
-              :group="group"
-            />
-          </v-col>
-          <v-col class="d-none d-sm-flex">
-            <v-card class="eg-card pa-3 flex-grow-1">
-              <v-simple-table dense>
-                <template #default>
-                  <thead>
-                    <tr>
-                      <th class="text-left text-center">Grade</th>
-                      <th class="text-left text-center">Boundary (%)</th>
-                    </tr>
-                  </thead>
-                  <tbody v-if="group && group.course.rag">
-                    <tr v-for="(row, i) in group.course.rag" :key="i">
-                      <td class="text-center">{{ row[0] }}</td>
-                      <td class="text-center">
-                        {{ Math.round(row[1] * 100, 0) }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-              <small>
-                <a
-                  href="https://drive.google.com/file/d/1bJXevmNAUcLfpRv3OEliSRlVWrIZEDCw/view?usp=sharing"
-                  target="_blank"
-                  >Series data</a
-                >
-                <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon>
-              </small>
-            </v-card>
-          </v-col>
-        </v-row>
+        <GroupNav
+          v-if="group && Object.keys(group).length > 0"
+          :group="group"
+        />
       </v-col>
       <v-col cols="12" md="9">
+        <!-- Negative margin accounts for hidden bottom-nav -->
         <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
             Grades
             <div class="d-flex">
-              <v-btn
-                color="primary"
-                elevation="0"
-                outlined
-                class="ml-2"
-                @click="exportTableToCSV()"
-              >
+              <v-btn elevation="0" class="ml-2" @click="exportTableToCSV()">
                 <v-icon left>{{ $icons.mdiDownloadOutline }}</v-icon>
                 Csv
               </v-btn>
               <v-btn
                 class="d-none d-sm-flex ml-2"
-                color="primary"
-                outlined
+                elevation="0"
                 @mouseover="scroll"
                 @mouseleave="stop"
                 @mouseup="stop"
@@ -102,14 +62,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="12" class="d-flex justify-center justify-md-start">
-                <v-chip color="green" class="mr-2">On target</v-chip>
-                <v-chip color="orange" class="mr-2">Within 10%</v-chip>
-                <v-chip color="red">&gt;10% below</v-chip>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" class="d-flex">
+              <v-col cols="12" class="d-flex justify-space-between align-start">
                 <v-alert
                   :icon="$icons.mdiInformationOutline"
                   border="left"
@@ -123,6 +76,11 @@
                   >
                   screen.
                 </v-alert>
+                <div>
+                  <v-chip color="green" class="mr-2">On target</v-chip>
+                  <v-chip color="orange" class="mr-2">Within 10%</v-chip>
+                  <v-chip color="red">&gt;10% below</v-chip>
+                </div>
               </v-col>
             </v-row>
           </v-container>
