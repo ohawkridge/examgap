@@ -48,7 +48,7 @@
               elevation="0"
               nuxt
               to="/author"
-              class="d-none d-md-flex"
+              class="d-none d-md-flex mr-2"
               v-on="on"
             >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -152,9 +152,6 @@ export default {
           this.$route.name === 'edit-edit')
       )
     },
-  },
-  watch: {
-    teacher() {},
   },
   created() {
     this.$icons = {
