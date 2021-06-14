@@ -40,23 +40,17 @@
           </v-list>
         </v-menu>
         <v-spacer />
-        <v-tooltip bottom>
-          <template #activator="{ on, attrs }">
-            <v-btn
-              v-if="teacher"
-              v-bind="attrs"
-              elevation="0"
-              nuxt
-              to="/author"
-              class="d-none d-md-flex mr-2"
-              v-on="on"
-            >
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              Create Question
-            </v-btn>
-          </template>
-          <span>Create question</span>
-        </v-tooltip>
+        <!-- WTF?! Use of v-tooltip breaks reactivity? -->
+        <v-btn
+          v-if="teacher"
+          elevation="0"
+          nuxt
+          to="/author"
+          class="d-none d-md-flex mr-2"
+        >
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Create Question
+        </v-btn>
         <the-subscribe-dialog v-if="teacher" />
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
