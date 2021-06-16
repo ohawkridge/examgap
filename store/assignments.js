@@ -5,7 +5,6 @@ export const state = () => ({
   topics: [],
   topicId: '',
   selected: [],
-  // currentTopic: 0,
   response: {
     question: {},
     tm: [],
@@ -78,10 +77,6 @@ export const mutations = {
   setCurrentTopicId(state, topicId) {
     state.topicId = topicId
   },
-  // setCurrentTopic(state, index) {
-  //   state.currentTopic = index
-  // },
-  // Add/remove questionId from selected questions
   updateSelectedQuestions(state, questionId) {
     state.selected.includes(questionId)
       ? (state.selected = state.selected.filter((id) => id !== questionId))
@@ -96,7 +91,6 @@ export const mutations = {
     state.questionId = ''
     state.topicId = ''
     state.selected = []
-    // state.currentTopic = 0
     state.response = {
       question: {},
       tm: [],
