@@ -9,7 +9,7 @@
             <v-card-text>
               <v-row v-if="students.length > 0">
                 <v-col cols="12">
-                  <v-checkbox v-model="selectAll" class="mt-0" hide-details>
+                  <v-checkbox v-model="allSelected" class="mt-0" hide-details>
                     <template #label>
                       <strong>Select all</strong>
                     </template>
@@ -50,6 +50,9 @@
                       </v-tooltip>
                     </template>
                   </v-checkbox>
+                </v-col>
+                <v-col cols="12" class="red--text">
+                  {{ selectedStudents }}
                 </v-col>
                 <v-col cols="12">
                   <v-alert
@@ -192,7 +195,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   mdiCalendarOutline,
   mdiInformationOutline,
@@ -236,38 +239,40 @@ export default {
   },
   async fetch() {
     // Get students for this group
-    try {
-      const url = new URL(
-        '/.netlify/functions/getStudents',
-        this.$config.baseURL
-      )
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          secret: this.$store.state.user.secret,
-          groupId: this.group.id,
-          namesOnly: true,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Error fetching students ${response.status}`)
+    // group undefined during refresh
+    if (this.group !== undefined) {
+      try {
+        const url = new URL(
+          '/.netlify/functions/getStudents',
+          this.$config.baseURL
+        )
+        const response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.secret,
+            groupId: this.group.id,
+            namesOnly: true,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error fetching students ${response.status}`)
+        }
+        this.students = await response.json()
+      } catch (e) {
+        console.error(e)
       }
-      response = await response.json()
-      this.students = response
-    } catch (e) {
-      console.error(e)
     }
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
-    selectAll: {
+    ...mapState({ secret: (state) => state.user.secret }),
+    allSelected: {
       get() {
-        return (
-          this.students && this.selectedStudents.length === this.students.length
-        )
+        return this.selectedStudents.length === this.students.length
       },
       set(allSelected) {
         if (allSelected) {
+          this.selectedStudents = []
           for (const student of this.students) {
             this.selectedStudents.push(student.id)
           }
@@ -279,7 +284,7 @@ export default {
     subtitle() {
       return this.step === 1
         ? 'Select students for this assignment.'
-        : 'Name your assignment and set start/end dates.'
+        : 'Name the assignment and set start/end dates.'
     },
   },
   watch: {
@@ -297,13 +302,18 @@ export default {
       mdiArrowRight,
     }
   },
+  beforeDestroy() {
+    this.$nuxt.$off('show-assign')
+  },
   mounted() {
     this.$nuxt.$on('show-assign', () => {
-      this.selectAll = true // Select all by default
+      this.allSelected = true // Select all by default
       this.dialog = true
     })
     // If group has no students, skip step 1
-    if (this.group.num_students === 0) this.step = 2
+    if (this.group.num_students === 0) {
+      this.step = 2
+    }
   },
   methods: {
     // Default assignment name like "Week X Assignment"
@@ -340,7 +350,7 @@ export default {
         )
         const response = await fetch(url, {
           body: JSON.stringify({
-            secret: this.$store.state.user.secret,
+            secret: this.secret,
             studentId: student.id,
             examMode: !student.examMode,
           }),
@@ -370,7 +380,7 @@ export default {
           )
           let response = await fetch(url, {
             body: JSON.stringify({
-              secret: this.$store.state.user.secret,
+              secret: this.secret,
               name: this.name,
               start: this.startDate,
               end: this.endDate,
@@ -384,7 +394,6 @@ export default {
             throw new Error(`Error creating assignment ${response.status}`)
           }
           response = await response.json()
-          console.dir(response)
           // Clear any previously selected questions
           this.$store.commit('assignments/clearSelectedQuestions')
           // Update local data

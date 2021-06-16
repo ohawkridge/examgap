@@ -10,7 +10,7 @@
       </v-col>
       <v-col cols="12" md="9">
         <!-- mt-n6 accounts for bottom-nav space when hidden on desktop -->
-        <v-card class="mt-n6 mt-sm-0">
+        <v-card class="eg-card mt-n6 mt-sm-0">
           <v-card-text>
             <v-row>
               <v-col cols="12" md="10">
@@ -133,7 +133,7 @@
           <v-btn icon dark @click="marking = false">
             <v-icon>{{ $icons.mdiClose }}</v-icon>
           </v-btn>
-          <v-toolbar-title>Marking</v-toolbar-title>
+          <v-toolbar-title>Marking {{ response.id }}</v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
             <v-btn dark text @click="marking = false">Close</v-btn>

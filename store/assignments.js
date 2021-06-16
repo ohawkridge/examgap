@@ -2,9 +2,10 @@ export const state = () => ({
   assignment: {},
   assignmentId: '',
   questionId: '',
+  topics: [],
   topicId: '',
   selected: [],
-  currentTopic: 0,
+  // currentTopic: 0,
   response: {
     question: {},
     tm: [],
@@ -13,6 +14,20 @@ export const state = () => ({
 })
 
 export const actions = {
+  async getTopics({ commit, rootState }, courseId) {
+    const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        courseId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error fetching topics ${response.status}`)
+    }
+    commit('setTopics', await response.json())
+  },
   async getAssignment({ commit, rootState }, assignmentId) {
     const url = new URL(
       '/.netlify/functions/getAssignment',
@@ -47,6 +62,9 @@ export const actions = {
 }
 
 export const mutations = {
+  setTopics(state, topics) {
+    state.topics = topics
+  },
   setResponse(state, data) {
     state.response = data
   },
@@ -60,9 +78,9 @@ export const mutations = {
   setCurrentTopicId(state, topicId) {
     state.topicId = topicId
   },
-  setCurrentTopic(state, index) {
-    state.currentTopic = index
-  },
+  // setCurrentTopic(state, index) {
+  //   state.currentTopic = index
+  // },
   // Add/remove questionId from selected questions
   updateSelectedQuestions(state, questionId) {
     state.selected.includes(questionId)
@@ -78,7 +96,7 @@ export const mutations = {
     state.questionId = ''
     state.topicId = ''
     state.selected = []
-    state.currentTopic = 0
+    // state.currentTopic = 0
     state.response = {
       question: {},
       tm: [],

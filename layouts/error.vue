@@ -10,7 +10,7 @@
     <v-main>
       <v-container class="fill-height">
         <v-row class="d-flex justify-center">
-          <v-col id="nav-fix" cols="12" md="5" class="text-center">
+          <v-col id="nav-fix" cols="12" md="8" class="text-center">
             <p>
               <svg
                 height="46"
@@ -27,7 +27,7 @@
             </p>
             <p>This will automatically be reported.</p>
             <p>
-              <v-btn nuxt :to="home" elevation="0" outlined>
+              <v-btn nuxt :to="home" elevation="0" color="primary" outlined>
                 Try going home
               </v-btn>
             </p>

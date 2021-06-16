@@ -65,7 +65,6 @@ export default {
   mounted() {
     // Onboard -> no students
     if (this.group.num_students === 0) {
-      console.log('But Im not 0!')
       this.$store.commit('user/setOnboardStep', 3)
     }
     // Onboard -> few assignments
@@ -75,10 +74,13 @@ export default {
   },
   methods: {
     create() {
-      // Clear previously selection
+      // Clear any previous selection
       this.$store.commit('assignments/clearSelectedQuestions')
-      // Advance onboarding
-      this.$store.commit('user/setOnboardStep', 5)
+      // Continue onboarding if user hasn't set assignments
+      this.$store.commit(
+        'user/setOnboardStep',
+        this.assignments.length < 3 ? 5 : 0
+      )
       this.$router.push(`/course/${this.group.course.id}`)
     },
   },

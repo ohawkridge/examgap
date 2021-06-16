@@ -40,6 +40,8 @@
           </v-list>
         </v-menu>
         <v-spacer />
+        <!-- v-if must be on the tooltip !! -->
+        <!-- You can't refill an empty slot -->
         <v-tooltip v-if="teacher" bottom>
           <template #activator="{ on, attrs }">
             <v-btn

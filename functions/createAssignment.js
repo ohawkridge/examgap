@@ -29,7 +29,7 @@ exports.handler = async (event, context, callback) => {
 
     // Use the new assignment's ref, create mappings
     // in AssignmentStudent for selected students
-    qry = q.Foreach(
+    qry = q.Map(
       students,
       q.Lambda(
         'id',
@@ -42,7 +42,7 @@ exports.handler = async (event, context, callback) => {
             },
           }),
           // Update student's user doc with the new assignment id
-          // Document streaming watches this doc for new assignments
+          // (Document streaming watches this for new assignments)
           q.Update(q.Ref(q.Collection('User'), q.Var('id')), {
             data: {
               newAssignment: assignment.ref.id,

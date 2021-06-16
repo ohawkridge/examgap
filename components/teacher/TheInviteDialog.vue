@@ -1,19 +1,23 @@
 <template>
   <v-dialog v-model="dialog" width="510">
-    <template #activator="{ on, attrs }">
-      <v-btn
-        :block="$vuetify.breakpoint.name === 'xs'"
-        elevation="0"
-        v-bind="attrs"
-        outlined
-        color="primary"
-        class="mr-2"
-        :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
-        v-on="on"
-        @click="$store.commit('user/setOnboardStep', 4)"
-      >
-        Invite students
-      </v-btn>
+    <template #activator="{ on: dialg }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }">
+          <v-btn
+            :block="$vuetify.breakpoint.name === 'xs'"
+            elevation="0"
+            outlined
+            color="primary"
+            class="mr-2"
+            :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
+            v-on="{ ...tooltip, ...dialg }"
+            @click="$store.commit('user/setOnboardStep', 4)"
+          >
+            Invite students
+          </v-btn>
+        </template>
+        <span>Invite students</span>
+      </v-tooltip>
     </template>
     <v-card class="modal">
       <v-card-title class="d-flex justify-center">

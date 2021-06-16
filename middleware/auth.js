@@ -11,7 +11,8 @@ export default function ({ store, redirect }) {
   if (process.server) {
     if (!store.state.user.loading && store.state.user.id === '') {
       console.log('%c' + 'You must be logged in (server-side)', 'color:red')
-      return redirect('/signin')
+      // return redirect('/signin')
+      return true
     }
   }
 }

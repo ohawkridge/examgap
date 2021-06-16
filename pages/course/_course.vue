@@ -219,35 +219,17 @@ export default {
   layout: 'app',
   data() {
     return {
-      topics: [],
+      currentTopic: 0,
       questions: [],
       question: {},
-      selectedQuestion: 0, // questions list v-model
+      selectedQuestion: 0, // questions v-model
       loading: false,
       outline: true,
     }
   },
-  async fetch() {
-    try {
-      const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
-      const response = await fetch(url, {
-        body: JSON.stringify({
-          secret: this.$store.state.user.secret,
-          courseId: this.$route.params.course,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Error fetching topics ${response.status}`)
-      }
-      this.topics = await response.json()
-    } catch (e) {
-      console.error(e)
-      this.$snack.showMessage({
-        type: 'error',
-        msg: 'Error fetching topics',
-      })
-    }
+  fetch() {
+    // Dispatch store action to get topics
+    this.$store.dispatch('assignments/getTopics', this.$route.params.course)
     // Now we have the course's topics, get the questions
     this.loadQuestions()
   },
@@ -258,12 +240,13 @@ export default {
   },
   computed: {
     ...mapState({
+      topics: (state) => state.assignments.topics,
       selected: (state) => state.assignments.selected,
       obs: (state) => state.user.onboardStep,
     }),
     ...mapGetters({ group: 'groups/activeGroup' }),
-    // Since selectedQuestion is only an index of v-list of questions
-    // Get the actual id of the currently selected question
+    // selectedQuestion is only an index into questions
+    // get actual id of currently selected question
     questionId() {
       return this.$fetchState.pending || this.questions.length === 0
         ? ''
@@ -272,36 +255,21 @@ export default {
     preview() {
       return this.questions[this.selectedQuestion]
     },
-    // Remember which topic we were on last
-    currentTopic: {
-      get() {
-        // In some circumstances, currentTopic may become undefined?
-        const ct = this.$store.state.assignments.currentTopic
-        // Since we only remember currentTopicIndex, it's possible
-        // for currentTopicIndex to exceed the number of topics
-        // if you go from a course with more topics to one with less
-        return ct === undefined || ct > this.topics.length ? 0 : ct
-      },
-      set(value) {
-        this.$store.commit('assignments/setCurrentTopic', value)
-      },
-    },
   },
   watch: {
     // Load questions when topic changes
-    // TODO Can cause errors on logout?
     currentTopic() {
-      if (this.group) {
-        this.loadQuestions()
-        // Select first question of topic by default
-        this.selectedQuestion = 0
+      this.loadQuestions()
+      // Select first question of topic by default
+      this.selectedQuestion = 0
+      // Advance onboarding if nec.
+      if (this.group.assignments.length < 3) {
+        this.$store.commit('user/setOnboardStep', 6)
       }
-      // Advance onboarding
-      this.$store.commit('user/setOnboardStep', 6)
     },
     selected() {
       // Advance onboarding
-      if (this.selected.length > 0) {
+      if (this.obs !== 0 && this.selected.length > 0) {
         this.$store.commit('user/setOnboardStep', 7)
       }
     },
@@ -315,7 +283,6 @@ export default {
     }
   },
   methods: {
-    // Get questions for topic
     async loadQuestions() {
       try {
         this.loading = true
@@ -335,8 +302,8 @@ export default {
           throw new Error(`Error fetching questions ${response.status}`)
         }
         this.questions = await response.json()
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error fetching questions',

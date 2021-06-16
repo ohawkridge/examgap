@@ -118,7 +118,7 @@ export const actions = {
       // Trigger snackbar
       commit(
         'snackbar/showSnack',
-        { type: '', msg: 'New assignment set' },
+        { type: '', msg: 'New assignment' },
         { root: true }
       )
     } catch (e) {
@@ -136,23 +136,20 @@ export const mutations = {
   },
   setOnboardStep(state, n) {
     state.onboardStep = n
-    // console.log(
-    //   '%c' + n,
-    //   'padding:2px 4px;background-color:yellow;color:black;border-radius:10px'
-    // )
+    console.log(
+      '%c' + n,
+      'padding:2px 4px;background-color:yellow;color:black;border-radius:14px'
+    )
   },
   setSecret(state, secret) {
     state.secret = secret
   },
   setUser(state, data) {
-    console.log('userData SET')
-    console.log('1) teacher?', state.teacher)
     // Common properties
     state.id = data.id
     state.username = data.username
     state.subscriptionExpires = data.subscriptionExpires
     state.teacher = data.teacher
-    console.log('2) teacher?', state.teacher)
     if (data.teacher) {
       // Teacher-specific properties
       state.school = data.school
@@ -175,7 +172,7 @@ export const mutations = {
     state.id = ''
     state.username = ''
     state.secret = ''
-    state.school = ''
+    state.school = 'N/A'
     state.teacher = false
     state.subscriptionExpires = ''
     state.subscribed = null

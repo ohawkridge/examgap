@@ -2,18 +2,20 @@
   <!-- Student home page -->
   <div>
     <v-row>
-      <v-col cols="12">
-        <div v-if="group !== undefined" class="text-h6 font-weight-bold">
-          {{ group.name }}
-        </div>
-        <div v-if="group !== undefined">
-          {{ group.course.name }} ({{ group.course.board }})
+      <v-col cols="12" class="px-3">
+        <div class="pl-4">
+          <div v-if="group !== undefined" class="text-h6 font-weight-bold">
+            {{ group.name }}
+          </div>
+          <div v-if="group !== undefined">
+            {{ group.course.name }} ({{ group.course.board }})
+          </div>
         </div>
       </v-col>
     </v-row>
     <v-row class="d-flex justify-center">
       <v-col cols="12" md="7">
-        <v-card>
+        <v-card class="eg-card">
           <v-card-title v-if="assignments">
             Assignments ({{ assignments.length }})
           </v-card-title>
