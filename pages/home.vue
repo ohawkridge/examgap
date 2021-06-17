@@ -133,6 +133,17 @@ export default {
       }
     },
   },
+  created() {
+    // User could return to /home without signing in
+    // ∴ new assignments might be missing
+    // Call getUser periodically or when page loaded directly
+    if (
+      this.$store.state.user.lastFetch === undefined ||
+      Date.now() - this.$store.state.user.lastFetch > 900000 // 15 mins.
+    ) {
+      this.$store.dispatch('user/getUser')
+    }
+  },
   methods: {
     // Remember revision topic
     revise(topic) {

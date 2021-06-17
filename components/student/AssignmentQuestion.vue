@@ -16,7 +16,10 @@
             <v-list-item-subtitle>
               {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-list-item-subtitle>
-            <div class="my-3 mb-md-0 font-italic d-flex">
+            <div
+              v-if="response.feedback !== ''"
+              class="my-3 mb-md-0 font-italic d-flex"
+            >
               <v-icon small class="mr-2">
                 {{ $icons.mdiCommentTextOutline }}
               </v-icon>

@@ -1,7 +1,7 @@
 <template>
   <v-row class="justify-center">
     <v-col cols="12">
-      <v-card class="pa-md-3 mt-md-3">
+      <v-card class="pa-md-3 mt-sm-3">
         <v-card-title>Map question</v-card-title>
         <v-card-text>
           <v-row class="justify-center">

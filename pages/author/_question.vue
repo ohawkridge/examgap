@@ -1,5 +1,5 @@
 <template>
-  <v-row class="d-flex justify-center mt-md-3">
+  <v-row class="d-flex justify-center mt-sm-3">
     <v-col cols="12" md="10" lg="9">
       <v-card class="pa-md-3">
         <v-card-title>

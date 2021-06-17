@@ -134,7 +134,7 @@ export default {
     TheJoinDialog,
     TheLoadingOverlay,
   },
-  middleware: ['get-user', 'auth'],
+  middleware: ['auth'],
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,

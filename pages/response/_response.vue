@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-sheet v-if="$fetchState.pending" elevation="2" class="pa-md-3 mt-md-3">
+      <v-sheet v-if="$fetchState.pending" elevation="2" class="pa-md-3 mt-sm-3">
         <v-skeleton-loader
           type="chip"
           :loading="$fetchState.pending"
@@ -59,7 +59,7 @@
           width="50%"
         ></v-skeleton-loader>
       </v-sheet>
-      <v-card v-if="!$fetchState.pending" class="pa-md-3 mt-md-3">
+      <v-card v-if="!$fetchState.pending" class="pa-md-3 mt-sm-3">
         <v-card-title class="d-flex justify-space-between">
           <v-btn
             color="primary"
