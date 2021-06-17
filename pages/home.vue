@@ -135,12 +135,13 @@ export default {
   },
   created() {
     // User could return to /home without signing in
-    // ∴ new assignments might be missing
-    // Call getUser periodically or when page loaded directly
+    // ∴ new assignments might be missing so call
+    // getUser periodically or when /home URL entered
     if (
-      this.$store.state.user.lastFetch === undefined ||
+      this.$store.state.user.lastFetch !== '' &&
       Date.now() - this.$store.state.user.lastFetch > 900000 // 15 mins.
     ) {
+      console.log('Stale data..')
       this.$store.dispatch('user/getUser')
     }
   },

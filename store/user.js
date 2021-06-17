@@ -14,7 +14,7 @@ export const state = () => ({
   reviseExamMode: false,
   quote: 'Experiment, fail, learn, repeat.—Anonymous',
   onboardStep: 0, // Don't onboard
-  lastFetch: undefined,
+  lastFetch: '',
   loading: false,
 })
 
@@ -53,7 +53,7 @@ export const actions = {
             }
           }
           // Remember when this was stored
-          commit('setLastFetch', Date.now())
+          commit('setLastFetch')
           // Open doc stream
           dispatch('openStream', userData)
           // Onboard teacher if nec.
@@ -131,8 +131,8 @@ export const mutations = {
   setLoading(state, loading) {
     state.loading = loading
   },
-  setLastFetch(state, ts) {
-    state.lastFetch = ts
+  setLastFetch(state) {
+    state.lastFetch = Date.now()
   },
   setOnboardStep(state, n) {
     state.onboardStep = n
@@ -181,7 +181,7 @@ export const mutations = {
     state.quote = 'Experiment, fail, learn, repeat.—Anonymous'
     state.onboard = false
     state.onboardStep = 0
-    state.lastFetch = undefined
+    state.lastFetch = ''
     state.loading = false
   },
 }

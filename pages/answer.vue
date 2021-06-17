@@ -56,11 +56,15 @@
                 </v-chip>
               </div>
               <v-progress-circular :value="progress" :color="color" size="32">
-                {{ count }}
+                {{ wordCount }}
               </v-progress-circular>
             </v-col>
             <v-col cols="12" class="d-flex justify-end">
-              <v-btn color="primary" elevation="0" @click="marking = true">
+              <v-btn
+                color="primary"
+                elevation="0"
+                @click="confirmDialog = true"
+              >
                 Self mark
               </v-btn>
             </v-col>
@@ -100,6 +104,32 @@
           </v-row>
         </v-card-text>
       </v-card>
+      <!-- Confirm dialog -->
+      <v-dialog v-model="confirmDialog" width="400">
+        <v-card class="modal">
+          <v-card-title class="d-flex justify-center">
+            Self mark?
+          </v-card-title>
+          <v-card-text>
+            Are you sure? Once you've seen the mark scheme, you
+            <em>cannot</em> go back.
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn text @click="confirmDialog = false">Cancel</v-btn>
+            <v-btn
+              color="primary"
+              elevation="0"
+              @click="
+                marking = true
+                confirmDialog = false
+              "
+            >
+              Self mark</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-col>
   </v-row>
 </template>
@@ -118,7 +148,7 @@ export default {
     if (!this.marking) {
       if (confirm(`Really leave without marking?`)) next()
     } else {
-      // Save self marks
+      // Save marks even if student doesn't click 'Finish'
       if (!this.finishClicked) this.saveMarks()
       next()
     }
@@ -154,6 +184,7 @@ export default {
       saveStatus: '',
       responseId: '',
       finishClicked: false,
+      confirmDialog: false,
     }
   },
   computed: {
@@ -163,20 +194,16 @@ export default {
       reviseExamMode: (state) => state.user.reviseExamMode,
     }),
     ...mapGetters({ group: 'groups/activeGroup' }),
-    commands() {
-      return this.group.course.commands
-    },
     // Set assignment or independent revision?
     revising() {
       return this.assignmentId === 0
     },
-    // Count words in answer
-    count() {
+    wordCount() {
       return this.parse(this.answer).split(' ').length - 1
     },
-    // Calculate % of word count
+    // Calculate % of min. word count
     progress() {
-      return (this.count / this.question.minWords) * 100
+      return (this.wordCount / this.question.minWords) * 100
     },
     // Show keywords & min. word count?
     showHelp() {
@@ -211,32 +238,27 @@ export default {
     // Call getVoices twice so it's ready when needed
     // https://stackoverflow.com/questions/22812303/why-is-my-speech-synthesis-api-voice-changing-when-function-run-more-than-1-time
     this.synth.onvoiceschanged = function () {
-      // Call two
       this.voices = window.speechSynthesis.getVoices()
     }
-    // Call one
     this.synth.getVoices()
     // Copy mode from store so it doesn't change
     // while the student is answering a question
     this.examMode = this.$store.state.user.examMode
-    if (this.commands !== '') {
-      this.addTooltips()
+    // Add command word tooltips for this course
+    const cWords = this.group.course.commands
+    if (cWords !== '') {
+      const els = document.querySelectorAll('strong, b')
+      for (const el of els) {
+        const word = el.innerHTML.toLowerCase()
+        // Set data-text attribute and css class
+        if (word in cWords) {
+          el.classList.add('command')
+          el.setAttribute('data-text', cWords[word])
+        }
+      }
     }
   },
   methods: {
-    // Add tooltips to command words
-    addTooltips() {
-      const els = document.querySelectorAll('strong, b')
-      // Loop through <strong> or <b> elements looking for command words
-      for (const el of els) {
-        const word = el.innerHTML.toLowerCase()
-        // If found, set data-text attribute
-        if (word in this.commands) {
-          el.classList.add('command')
-          el.setAttribute('data-text', this.commands[word])
-        }
-      }
-    },
     // Debounce answer area
     // N.B. If the first call to saveAnswer doesn't complete
     // within 1700ms you may get duplicate responses
@@ -246,7 +268,6 @@ export default {
     // Get SpeechSynthesisVoice objects if supported
     // https://wicg.github.io/speech-api/#utterance-attributes
     getVoices() {
-      // Third time's the charm!
       this.voices = []
       const voices = this.synth.getVoices()
       for (const voice of voices) {
@@ -280,9 +301,8 @@ export default {
       this.saveMarks()
       this.finishClicked = true
       if (this.revising) {
-        // Increment count of questions answered
+        // Increment count for topic
         this.$store.commit('groups/incrementTopicCount')
-        // Go home
         this.$router.push(`/home`)
       } else {
         // Go to assignment

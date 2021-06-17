@@ -17,7 +17,7 @@
         ></v-skeleton-loader>
         <v-skeleton-loader
           v-bind="attrs"
-          type="image@2"
+          type="image"
           :loading="$fetchState.pending"
           width="95%"
           class="mx-auto"
