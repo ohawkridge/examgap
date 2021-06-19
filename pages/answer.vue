@@ -33,7 +33,7 @@
               <v-textarea
                 v-model="answer"
                 outlined
-                :counter="question.minWords"
+                :counter="showHelp ? question.minWords : ''"
                 color="primary"
                 auto-grow
                 :append-icon="
@@ -42,12 +42,7 @@
                     : $icons.mdiCloudCheckOutline
                 "
                 label="Your answer"
-                :counter-value="
-                  (v) =>
-                    parse(answer)
-                      .split(' ')
-                      .filter((w) => w !== '').length
-                "
+                :counter-value="counterVal"
                 @input="update()"
               >
               </v-textarea>
@@ -177,11 +172,11 @@ export default {
     this.speaking = undefined
     this.synth.cancel()
     // Save self marks
-    if (this.marking) {
-      this.saveMarks()
-      next()
-      // Warn if not yet marked
-    } else if (confirm(`Really leave without marking?`)) {
+    if (this.marking || confirm(`Really leave without marking?`)) {
+      // Increment questions answered for topic
+      if (this.revising) {
+        this.$store.commit('groups/incrementTopicCount')
+      }
       this.saveMarks()
       next()
     }
@@ -234,9 +229,9 @@ export default {
       return this.parse(this.answer).split(' ').length - 1
     },
     // Calculate % of min. word count
-    progress() {
-      return (this.wordCount / this.question.minWords) * 100
-    },
+    // progress() {
+    //   return (this.wordCount / this.question.minWords) * 100
+    // },
     // Show keywords & min. word count?
     showHelp() {
       return (
@@ -293,6 +288,13 @@ export default {
     }
   },
   methods: {
+    // N.B. counter-value must be a function
+    counterVal() {
+      if (!this.showHelp) return ''
+      return this.parse(this.answer)
+        .split(' ')
+        .filter((w) => w !== '').length
+    },
     // Ask for confirmation if answer is blank or very short
     selfMark() {
       if (this.wordCount === 0 || this.wordCount < this.question.minWords / 2) {
@@ -340,13 +342,11 @@ export default {
       }
     },
     done() {
-      if (this.revising) {
-        // Increment questions answered for topic
-        this.$store.commit('groups/incrementTopicCount')
-        this.$router.push(`/home`)
-      } else {
-        this.$router.push(`/assignment/${this.assignmentId}`)
-      }
+      // Just change the route
+      // beforeRouteLeave handles saving marks etc.
+      this.$router.push(
+        this.revising ? `/home` : `/assignment/${this.assignmentId}`
+      )
     },
     // Don't exceed max. mark
     checkMax() {
