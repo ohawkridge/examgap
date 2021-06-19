@@ -227,10 +227,14 @@ export default {
       outline: true,
     }
   },
-  fetch() {
+  async fetch() {
     // Dispatch store action to get topics
-    this.$store.dispatch('assignments/getTopics', this.$route.params.course)
-    // Now we have the course's topics, get the questions
+    // await completion otherwise loadQuestions will fail
+    await this.$store.dispatch(
+      'assignments/getTopics',
+      this.$route.params.course
+    )
+    // Get questions for topic
     this.loadQuestions()
   },
   head() {
@@ -259,10 +263,11 @@ export default {
   watch: {
     // Load questions when topic changes
     currentTopic() {
+      console.log(this.currentTopic)
       this.loadQuestions()
       // Select first question of topic by default
       this.selectedQuestion = 0
-      // Advance onboarding if nec.
+      // Show onboarding if nec.
       if (this.group.assignments.length < 3) {
         this.$store.commit('user/setOnboardStep', 6)
       }
