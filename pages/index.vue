@@ -688,7 +688,7 @@
                 role="img"
                 fill="#fff"
               >
-                <path :d="$icons.mdiBoomerang"></path>
+                <path :d="$icons.mdiRepeat"></path>
               </svg>
             </div>
             <div>
@@ -779,7 +779,7 @@ import {
   mdiCommentTextMultipleOutline,
   mdiTargetAccount,
   mdiDownloadOutline,
-  mdiBoomerang,
+  mdiRepeat,
   mdiFlaskOutline,
 } from '@mdi/js'
 
@@ -799,7 +799,7 @@ export default {
       mdiCommentTextMultipleOutline,
       mdiTargetAccount,
       mdiDownloadOutline,
-      mdiBoomerang,
+      mdiRepeat,
       mdiFlaskOutline,
     }
   },

@@ -16,7 +16,7 @@
         >
           <span class="font-weight-bold">{{ response.tm.length }}</span>
           <v-icon right>{{
-            response.repeat ? $icons.mdiBoomerang : $icons.mdiCheckAll
+            response.repeat ? $icons.mdiRepeat : $icons.mdiCheckAll
           }}</v-icon>
         </v-chip>
         <v-icon v-if="response.flagged" color="accent" class="ff">{{
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mdiCheck, mdiCheckAll, mdiFlagOutline, mdiBoomerang } from '@mdi/js'
+import { mdiCheck, mdiCheckAll, mdiFlagOutline, mdiRepeat } from '@mdi/js'
 export default {
   name: 'EgMarkChip',
   props: {
@@ -72,7 +72,7 @@ export default {
       mdiCheck,
       mdiCheckAll,
       mdiFlagOutline,
-      mdiBoomerang,
+      mdiRepeat,
     }
   },
   methods: {

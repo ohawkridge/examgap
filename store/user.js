@@ -136,10 +136,10 @@ export const mutations = {
   },
   setOnboardStep(state, n) {
     state.onboardStep = n
-    console.log(
-      '%c' + n,
-      'padding:2px 4px;background-color:yellow;color:black;border-radius:14px'
-    )
+    // console.log(
+    //   '%c' + n,
+    //   'padding:2px 4px;background-color:yellow;color:black;border-radius:14px'
+    // )
   },
   setSecret(state, secret) {
     state.secret = secret

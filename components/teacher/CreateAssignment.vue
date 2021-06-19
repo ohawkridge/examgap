@@ -51,9 +51,6 @@
                     </template>
                   </v-checkbox>
                 </v-col>
-                <v-col cols="12" class="red--text">
-                  {{ selectedStudents }}
-                </v-col>
                 <v-col cols="12">
                   <v-alert
                     border="left"

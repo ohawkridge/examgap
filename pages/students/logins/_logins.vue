@@ -4,23 +4,9 @@
       <v-col cols="12" md="10" class="d-flex justify-space-between">
         <p class="text-h6">{{ group.name }} logins</p>
         <div>
-          <v-btn
-            color="primary"
-            outlined
-            elevation="0"
-            class="mr-2"
-            @click="print()"
-          >
+          <v-btn elevation="0" nuxt :to="`/students/${group.id}`"> Back </v-btn>
+          <v-btn color="primary" elevation="0" class="ml-2" @click="print()">
             Print
-          </v-btn>
-          <v-btn
-            color="primary"
-            elevation="0"
-            outlined
-            nuxt
-            :to="`/students/${group.id}`"
-          >
-            Back
           </v-btn>
         </div>
       </v-col>
@@ -35,7 +21,8 @@
         >
           If you created student accounts by inputting their email addresses,
           the default password is <b>password</b>. Otherwise, students chose
-          their own passwords. You can reset student passwords on the
+          their own passwords when they signed up. You can reset student
+          passwords on the
           <nuxt-link nuxt :to="`/students/${group.id}`">Students</nuxt-link>
           screen.
         </v-alert>

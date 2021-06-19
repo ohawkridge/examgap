@@ -46,6 +46,3 @@ jobs:
 
       - name: Run linter 👀
         run: yarn lint
-
-- name: Rollbar deploy
-  uses: rollbar/github-deploy-action@2.0.0

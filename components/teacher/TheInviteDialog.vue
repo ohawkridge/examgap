@@ -11,7 +11,7 @@
             class="mr-2"
             :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
             v-on="{ ...tooltip, ...dialg }"
-            @click="$store.commit('user/setOnboardStep', 4)"
+            @click="onboard()"
           >
             Invite students
           </v-btn>
@@ -137,6 +137,12 @@ export default {
         type: '',
         msg: 'Copied to clipboard',
       })
+    },
+    onboard() {
+      // Continue onboarding if few assignments
+      if (this.group.assignments.length < 3) {
+        this.$store.commit('user/setOnboardStep', 4)
+      }
     },
   },
 }

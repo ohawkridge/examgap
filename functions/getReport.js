@@ -135,6 +135,10 @@ exports.handler = async (event, context, callback) => {
                                       ['data', 'text'],
                                       q.Var('instance')
                                     ),
+                                    time: q.Select(
+                                      ['data', 'timeTaken'],
+                                      q.Var('instance')
+                                    ),
                                     // Grab username again here so it's
                                     // visible in EgMarking interface
                                     username: q.Select(

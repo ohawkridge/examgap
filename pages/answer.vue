@@ -33,12 +33,24 @@
               <v-textarea
                 v-model="answer"
                 outlined
+                :counter="question.minWords"
                 color="primary"
                 auto-grow
-                :messages="saveStatus"
+                :append-icon="
+                  saving
+                    ? $icons.mdiCloudSyncOutline
+                    : $icons.mdiCloudCheckOutline
+                "
                 label="Your answer"
+                :counter-value="
+                  (v) =>
+                    parse(answer)
+                      .split(' ')
+                      .filter((w) => w !== '').length
+                "
                 @input="update()"
-              ></v-textarea>
+              >
+              </v-textarea>
             </v-col>
             <v-col
               v-if="showHelp"
@@ -55,18 +67,34 @@
                   {{ word }}
                 </v-chip>
               </div>
-              <v-progress-circular :value="progress" :color="color" size="32">
-                {{ wordCount }}
-              </v-progress-circular>
+              <!-- <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-progress-circular
+                    :value="progress"
+                    :color="color"
+                    size="32"
+                    v-on="on"
+                  >
+                    {{ wordCount }}
+                  </v-progress-circular>
+                </template>
+                <span>Word count</span>
+              </v-tooltip> -->
             </v-col>
             <v-col cols="12" class="d-flex justify-end">
-              <v-btn
-                color="primary"
-                elevation="0"
-                @click="confirmDialog = true"
-              >
-                Self mark
-              </v-btn>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    color="primary"
+                    elevation="0"
+                    @click="selfMark()"
+                    v-on="on"
+                  >
+                    Self mark
+                  </v-btn>
+                </template>
+                <span>Self mark</span>
+              </v-tooltip>
             </v-col>
           </v-row>
         </v-card-text>
@@ -111,8 +139,7 @@
             Self mark?
           </v-card-title>
           <v-card-text>
-            Are you sure? Once you've seen the mark scheme, you
-            <em>cannot</em> go back.
+            Are you sure? Once you've seen the mark scheme, you can't go back.
           </v-card-text>
           <v-card-actions>
             <v-spacer />
@@ -137,19 +164,25 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
-import { mdiTextToSpeech, mdiPause } from '@mdi/js'
+import {
+  mdiTextToSpeech,
+  mdiPause,
+  mdiCloudCheckOutline,
+  mdiCloudSyncOutline,
+} from '@mdi/js'
 
 export default {
   beforeRouteLeave(to, from, next) {
-    // Cancel speaking on page exit
+    // Cancel speaking
     this.speaking = undefined
     this.synth.cancel()
-    // Warn if not yet marked
-    if (!this.marking) {
-      if (confirm(`Really leave without marking?`)) next()
-    } else {
-      // Save marks even if student doesn't click 'Finish'
-      if (!this.finishClicked) this.saveMarks()
+    // Save self marks
+    if (this.marking) {
+      this.saveMarks()
+      next()
+      // Warn if not yet marked
+    } else if (confirm(`Really leave without marking?`)) {
+      this.saveMarks()
       next()
     }
   },
@@ -174,14 +207,13 @@ export default {
       answer: ``,
       saved: {},
       marking: false,
-      loading: false,
       marks: [],
       examMode: false,
       synth: null,
       voices: [],
       speakDisabled: false,
       prefVoice: false,
-      saveStatus: '',
+      saving: false,
       responseId: '',
       finishClicked: false,
       confirmDialog: false,
@@ -231,6 +263,8 @@ export default {
     this.$icons = {
       mdiTextToSpeech,
       mdiPause,
+      mdiCloudCheckOutline,
+      mdiCloudSyncOutline,
     }
   },
   mounted() {
@@ -259,6 +293,14 @@ export default {
     }
   },
   methods: {
+    // Ask for confirmation if answer is blank or very short
+    selfMark() {
+      if (this.wordCount === 0 || this.wordCount < this.question.minWords / 2) {
+        this.confirmDialog = true
+      } else {
+        this.marking = true
+      }
+    },
     // Debounce answer area
     // N.B. If the first call to saveAnswer doesn't complete
     // within 1700ms you may get duplicate responses
@@ -298,14 +340,11 @@ export default {
       }
     },
     done() {
-      this.saveMarks()
-      this.finishClicked = true
       if (this.revising) {
-        // Increment count for topic
+        // Increment questions answered for topic
         this.$store.commit('groups/incrementTopicCount')
         this.$router.push(`/home`)
       } else {
-        // Go to assignment
         this.$router.push(`/assignment/${this.assignmentId}`)
       }
     },
@@ -348,12 +387,12 @@ export default {
     // Kids don't save shit; save automatically
     async save() {
       try {
-        this.saveStatus = `Saving...`
+        this.saving = true
         const url = new URL(
           '/.netlify/functions/saveAnswer',
           this.$config.baseURL
         )
-        const response = await fetch(url, {
+        let docID = await fetch(url, {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             assignmentId: this.$store.state.assignments.assignmentId,
@@ -364,18 +403,17 @@ export default {
           }),
           method: 'POST',
         })
-        if (!response.ok) {
-          throw new Error(`Error saving answer ${response.status}`)
+        if (!docID.ok) {
+          throw new Error(`Error saving answer ${docID.status}`)
         }
-        const docId = await response.json()
+        docID = await docID.json()
         console.log(
           '%c' + 'Response',
           'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
         )
-        console.log(docId)
-        // Save response id to update just response text
-        this.responseId = docId
-        this.saveStatus = `Changes saved`
+        console.log(docID)
+        this.responseId = docID
+        this.saving = false
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
@@ -394,6 +432,7 @@ export default {
       text = text.replace(/[.,/#!$%^&*;:{}=_`~()]/g, ' ')
       text = text.replace(/\s{2,}/g, ' ')
       text = text.replace(/\r?\n|\r/g, ' ')
+      text = text.trim()
       return text
     },
   },

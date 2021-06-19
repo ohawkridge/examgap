@@ -133,7 +133,7 @@
           <v-btn icon dark @click="marking = false">
             <v-icon>{{ $icons.mdiClose }}</v-icon>
           </v-btn>
-          <v-toolbar-title>Marking {{ response.id }}</v-toolbar-title>
+          <v-toolbar-title>Marking</v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
             <v-btn dark text @click="marking = false">Close</v-btn>
@@ -183,12 +183,26 @@
                     class="ml-2"
                     :color="flagColor(response.repeat)"
                     v-on="on"
-                    @click="boomerang()"
+                    @click="reassign()"
                   >
-                    <v-icon>{{ $icons.mdiBoomerang }}</v-icon>
+                    <v-icon>{{ $icons.mdiRepeat }}</v-icon>
                   </v-btn>
                 </template>
                 <span>Reassign</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template #activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    class="ml-2"
+                    v-on="on"
+                    @click="infoDialog = true"
+                  >
+                    <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
+                  </v-btn>
+                </template>
+                <span>More information</span>
               </v-tooltip>
               <v-spacer />
               <v-tooltip bottom>
@@ -321,6 +335,33 @@
               <p v-else class="text-body-2">None</p>
             </v-col>
           </v-row>
+          <v-dialog v-model="infoDialog" width="400">
+            <v-card class="modal">
+              <v-card-title class="d-flex justify-center">
+                More information
+              </v-card-title>
+              <v-card-text>
+                <ul>
+                  <li>Response id: {{ response.id }}</li>
+                  <li>
+                    Time taken: {{ Math.floor(response.time / 60) }}:{{
+                      response.time - Math.floor(response.time / 60) * 60
+                    }}
+                  </li>
+                </ul>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn
+                  color="primary"
+                  elevation="0"
+                  @click="infoDialog = false"
+                >
+                  Close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-container>
       </v-card>
     </v-dialog>
@@ -338,8 +379,9 @@ import {
   mdiSchoolOutline,
   mdiClose,
   mdiArrowLeft,
-  mdiBoomerang,
+  mdiRepeat,
   mdiCommentTextOutline,
+  mdiInformationOutline,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
 import { debounce, cloneDeep } from 'lodash'
@@ -385,6 +427,7 @@ export default {
       smartSort: false,
       markScheme: [],
       loading: false,
+      infoDialog: false,
     }
   },
   head() {
@@ -456,8 +499,9 @@ export default {
       mdiSchoolOutline,
       mdiClose,
       mdiArrowLeft,
-      mdiBoomerang,
+      mdiRepeat,
       mdiCommentTextOutline,
+      mdiInformationOutline,
     }
   },
   mounted() {
@@ -677,7 +721,7 @@ export default {
         })
       }
     },
-    async boomerang() {
+    async reassign() {
       try {
         const url = new URL(
           '/.netlify/functions/reassignQuestion',
@@ -699,7 +743,7 @@ export default {
         this.response.repeat = state.data.repeat
         if (state.data.repeat) {
           this.$snack.showMessage({
-            msg: `Reassigned to ${this.response.username}`,
+            msg: `Question reassigned`,
             type: '',
           })
         } else {
