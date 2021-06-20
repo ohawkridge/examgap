@@ -1,21 +1,24 @@
 <template>
-  <!-- Hide on mobile -->
-  <!-- Show if not subscribed -->
+  <!-- Hide on mobile // show if not subscribed -->
   <v-dialog
     v-if="(!subscribed && $vuetify.breakpoint.name !== 'xs') || block"
     v-model="dialog"
     max-width="420"
   >
-    <template #activator="{ on, attrs }">
-      <v-btn
-        v-bind="attrs"
-        color="primary"
-        elevation="0"
-        :block="block"
-        v-on="on"
-      >
-        {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
-      </v-btn>
+    <template #activator="{ on: dial }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }">
+          <v-btn
+            color="primary"
+            elevation="0"
+            :block="block"
+            v-on="{ ...tooltip, ...dial }"
+          >
+            {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
+          </v-btn>
+        </template>
+        <span>Subscribe</span>
+      </v-tooltip>
     </template>
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"
