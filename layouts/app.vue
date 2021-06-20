@@ -59,6 +59,7 @@
           <span>Create question</span>
         </v-tooltip>
         <the-subscribe-dialog v-if="teacher" />
+        <the-feedback-dialog />
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
             <v-btn class="ml-2" elevation="0" icon v-bind="attrs" v-on="on">
@@ -116,6 +117,7 @@ import TheFooter from '@/components/common/TheFooter'
 import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
+import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 
 import {
   mdiPlus,
@@ -133,6 +135,7 @@ export default {
     TheSubscribeDialog,
     TheJoinDialog,
     TheLoadingOverlay,
+    TheFeedbackDialog,
   },
   middleware: ['auth'],
   computed: {

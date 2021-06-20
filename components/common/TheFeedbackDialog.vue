@@ -1,9 +1,14 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <template #activator="{ on }">
-      <v-btn icon v-on="on">
-        <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
-      </v-btn>
+    <template #activator="{ on: dial }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tool }">
+          <v-btn class="ml-2" icon v-on="{ ...tool, ...dial }">
+            <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
+          </v-btn>
+        </template>
+        <span>Send feedback</span>
+      </v-tooltip>
     </template>
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Send feedback </v-card-title>
@@ -16,6 +21,7 @@
             auto-grow
             placeholder="Thanks for helping make Examgap better."
             outlined
+            autofocus
           ></v-textarea>
         </v-form>
         <small>*Indicates required field</small>
@@ -73,6 +79,10 @@ export default {
             throw new Error(`Error sending feedback ${response.status}`)
           }
           response = await response.json()
+          this.$snack.showMessage({
+            type: 'success',
+            msg: 'Feedback sent',
+          })
           console.log(response)
         } catch (e) {
           console.error(e)

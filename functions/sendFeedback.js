@@ -29,38 +29,53 @@ exports.handler = async (event, context, callback) => {
       },
     })
     const data = await keyedClient.query(qry)
-    // const ses = new AWS.SES({ apiVersion: '2010-12-01' })
-    // const params = {
-    //   Destination: {
-    //     ToAddresses: ['owen@examgap.com'], // Must be array
-    //   },
-    //   Message: {
-    //     Body: {
-    //       Html: {
-    //         // HTML Format of the email
-    //         Charset: 'UTF-8',
-    //         Data: `<html>
-    //               <body>
-    //                 Incoming feedback from: ${name}
-    //                 <br />
-    //                 Email: ${email}
-    //                 <br />
-    //                 ${message}
-    //               </body>
-    //           </html>`,
-    //       },
-    //       Text: {
-    //         Charset: 'UTF-8',
-    //         Data: '',
-    //       },
-    //     },
-    //     Subject: {
-    //       Charset: 'UTF-8',
-    //       Data: 'In-app feedback',
-    //     },
-    //   },
-    //   Source: 'feedback@examgap.com',
-    // }
+    const ses = new AWS.SES({ apiVersion: '2010-12-01' })
+    const params = {
+      Destination: {
+        ToAddresses: ['owen@examgap.com'], // Must be array
+      },
+      Message: {
+        Body: {
+          Html: {
+            // HTML Format of the email
+            Charset: 'UTF-8',
+            Data: `<html>
+                  <body>
+                    Feedback from: ${data.user}
+                    <br />
+                    ${feedback}
+                  </body>
+              </html>`,
+          },
+          Text: {
+            Charset: 'UTF-8',
+            Data: '',
+          },
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: 'Incoming feedback',
+        },
+      },
+      Source: 'feedback@examgap.com',
+    }
+    ses
+      .sendEmail(params)
+      .promise()
+      .then((data) => {
+        console.log('email submitted to SES', data)
+        return {
+          statusCode: 200,
+          body: `Message sent`,
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        return {
+          statusCode: 500,
+          body: `Message unsuccesfully sent, error: ${error}`,
+        }
+      })
     return {
       statusCode: 200,
       body: JSON.stringify(data),

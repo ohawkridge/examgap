@@ -164,8 +164,8 @@ export default {
 /* window is 600px or more */
 @media only screen and (min-width: 600px) {
   #empty {
-    padding-left: 38%;
-    padding-right: 38%;
+    padding-left: 40%;
+    padding-right: 40%;
   }
 }
 </style>
