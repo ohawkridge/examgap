@@ -15,21 +15,27 @@
             <v-row>
               <v-col cols="12" md="10">
                 <p class="text-h6">
-                  {{ data.name }}
+                  {{ $fetchState.pending ? 'Loading...' : assignment.name }}
                 </p>
                 <div class="text-subtitle-1">
                   <span class="fix-width font-weight-medium">Start:</span>
-                  {{ data.start | date }}
+                  {{
+                    $fetchState.pending ? '2021-00-00' : assignment.start | date
+                  }}
                 </div>
                 <div class="text-subtitle-1">
                   <span class="fix-width font-weight-medium">Due:</span>
-                  {{ data.dateDue | date }}
+                  {{
+                    $fetchState.pending
+                      ? '2021-00-00'
+                      : assignment.dateDue | date
+                  }}
                 </div>
               </v-col>
               <v-col cols="12" md="2" class="d-flex justify-end">
                 <DeleteAssignment
-                  v-if="group"
-                  :assignment-id="data.id"
+                  v-if="!$fetchState.pending && group"
+                  :assignment-id="assignment.id"
                   :group-id="group.id"
                   type="btn"
                 />
@@ -40,12 +46,12 @@
             </v-row>
             <v-row>
               <v-col id="table" cols="12">
-                <v-skeleton-loader :loading="loading" type="table">
+                <v-skeleton-loader :loading="$fetchState.pending" type="table">
                   <table>
                     <thead>
-                      <tr>
+                      <tr v-if="!$fetchState.pending">
                         <th
-                          v-for="(q, i) in data.headers"
+                          v-for="(q, i) in assignment.headers"
                           :key="i"
                           :class="i === 0 ? 'left' : ''"
                         >
@@ -58,7 +64,7 @@
                             </template>
                             <v-card max-width="440">
                               <v-card-text class="text-body-2">
-                                <div v-html="data.headers[i].text"></div>
+                                <div v-html="assignment.headers[i].text"></div>
                                 <div class="font-weight-bold text-right">
                                   [{{ q.maxMark }}]
                                 </div>
@@ -68,8 +74,8 @@
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr v-for="(student, i) in data.students" :key="i">
+                    <tbody v-if="!$fetchState.pending">
+                      <tr v-for="(student, i) in assignment.students" :key="i">
                         <td>
                           {{ student.name }}
                         </td>
@@ -89,8 +95,11 @@
                           />
                         </td>
                       </tr>
-                      <tr v-if="data.students.length === 0">
-                        <td class="text-center" :colspan="data.headers.length">
+                      <tr v-if="assignment.students.length === 0">
+                        <td
+                          class="text-center"
+                          :colspan="assignment.headers.length"
+                        >
                           <p class="text-body-2 mt-4">No students yet</p>
                           <p>
                             <v-btn
@@ -400,22 +409,6 @@ export default {
     OnboardingSnackbar,
   },
   layout: 'app',
-  async asyncData({ store, params, $config: { baseURL } }) {
-    const url = new URL('/.netlify/functions/getReport', baseURL)
-    const response = await fetch(url, {
-      body: JSON.stringify({
-        secret: store.state.user.secret,
-        assignmentId: params.report,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error(`Error fetching assignment data ${response.status}`)
-    }
-    const data = await response.json()
-    // console.log(JSON.stringify(data, null, 2))
-    return { data }
-  },
   data() {
     return {
       studentIndex: 0, // These 3 values let us index into data structure
@@ -426,24 +419,45 @@ export default {
       feedbackStatus: '',
       smartSort: false,
       markScheme: [],
-      loading: false,
       infoDialog: false,
+    }
+  },
+  async fetch() {
+    // Dispatch store action to get data
+    // (render data straight from store)
+    try {
+      await this.$store.dispatch(
+        'assignments/getReport',
+        this.$route.params.report
+      )
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching data',
+      })
     }
   },
   head() {
     return {
-      title: this.data.name,
+      title: this.$fetchState.pending ? '' : this.assignment.name,
     }
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
-    ...mapState({ obs: (state) => state.user.onboardStep }),
-    // Question is included in header data (for hover preview)
+    ...mapState({
+      obs: (state) => state.user.onboardStep,
+      assignment: (state) => state.assignments.assignment,
+    }),
+    // Questions included in header data for hover preview
+    // +1 because index 0 contains table metadata
     question() {
-      return this.data.headers[this.questionIndex + 1]
+      return this.$fetchState.pending
+        ? {}
+        : this.assignment.headers[this.questionIndex + 1]
     },
     response() {
-      // data is the object we get back from getAssignmentDetails
+      // data is the massive object we get back from getReport
       // Its two main keys are: headers (contains questions and
       // mark schemes) and students (all answers, self marks and
       // teacher marks)
@@ -458,9 +472,11 @@ export default {
       // This finally gives you an array of objects where each
       // object is one complete student response including marks
       if (this.marking) {
-        return this.data.students[this.studentIndex].data[this.questionIndex][
-          this.data.headers[this.questionIndex + 1].value
-        ][this.responseIndex]
+        return this.assignment.students[this.studentIndex].assignment[
+          this.questionIndex
+        ][this.assignment.headers[this.questionIndex + 1].value][
+          this.responseIndex
+        ]
       } else {
         return {}
       }
@@ -477,10 +493,11 @@ export default {
   watch: {
     // If smartSort is on, re-sort mark scheme when response changes
     response() {
+      if (this.$fetchState.pending) return ''
       if (this.smartSort) this.markScheme.sort(this.selfMarksFirst)
     },
     smartSort() {
-      if (this.smartSort) {
+      if (!this.$fetchState.pending && this.smartSort) {
         // Turn on smartSort by calling sorting function
         this.markScheme.sort(this.selfMarksFirst)
       } else {
@@ -510,42 +527,17 @@ export default {
     }
   },
   methods: {
-    async refresh() {
-      try {
-        this.loading = true
-        const url = new URL(
-          '/.netlify/functions/getReport',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            assignmentId: this.$route.params.report,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error refreshing data ${response.status}`)
-        }
-        this.data = await response.json()
-      } catch (e) {
-        console.error(e)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error refreshing data',
-        })
-      } finally {
-        this.loading = false
-      }
+    refresh() {
+      this.$fetch()
     },
-    // Build comment bank from existing responses
+    // Build comment bank from feedback on existing responses
     updateBank() {
       const bank = []
-      if (this.marking) {
-        for (const obj of this.data.students) {
+      if (this.marking && !this.$fetchState.pending) {
+        for (const obj of this.assignment.students) {
           const responses =
-            obj.data[this.questionIndex][
-              this.data.headers[this.questionIndex + 1].value
+            obj.assignment[this.questionIndex][
+              this.assignment.headers[this.questionIndex + 1].value
             ]
           // Inner loop to handle reassigned questions
           for (const response of responses) {
@@ -555,7 +547,7 @@ export default {
           }
         }
       }
-      // Remove duplicates
+      // Remove duplicate comments
       this.bank = [...new Set(bank)]
     },
     mark(obj) {
@@ -609,7 +601,7 @@ export default {
     next() {
       this.updateBank()
       // Loop back to start
-      if (this.studentIndex >= this.data.students.length - 1) {
+      if (this.studentIndex >= this.assignment.students.length - 1) {
         this.studentIndex = 0
       } else {
         this.studentIndex += 1
@@ -626,7 +618,7 @@ export default {
       this.updateBank()
       // Loop back to end
       if (this.studentIndex === 0) {
-        this.studentIndex = this.data.students.length - 1
+        this.studentIndex = this.assignment.students.length - 1
       } else {
         this.studentIndex -= 1
       }
@@ -711,7 +703,9 @@ export default {
         this.response.flagged = !this.response.flagged
         this.$snack.showMessage({
           type: '',
-          msg: `${state.data.flagged ? 'Response flagged' : 'Flag removed'}`,
+          msg: `${
+            state.assignment.flagged ? 'Response flagged' : 'Flag removed'
+          }`,
         })
       } catch (e) {
         console.error(e)
@@ -740,8 +734,8 @@ export default {
         }
         const state = await response.json()
         // Update local data structure
-        this.response.repeat = state.data.repeat
-        if (state.data.repeat) {
+        this.response.repeat = state.assignment.repeat
+        if (state.assignment.repeat) {
           this.$snack.showMessage({
             msg: `Question reassigned`,
             type: '',

@@ -1,41 +1,41 @@
 <template>
-  <!-- fix alignment for reassigned questions -->
-  <div
-    :class="`${responses.length > 1 ? 'd-flex flex-column align-center' : ''}`"
-  >
-    <!-- Not answered yet -->
-    <div v-if="responses.length === 0" class="chip-height">N/A</div>
-    <template v-for="(response, i) in responses">
+  <!-- Switch to flex columns if more than one response -->
+  <div :class="responses.length > 1 ? 'd-flex flex-column align-center' : ''">
+    <!-- Not answered -->
+    <div v-if="responses.length === 0" class="my-auto">N/A</div>
+    <!-- Loop through responses (see note below) -->
+    <template v-for="(response, i) in responses" v-else>
+      <!-- Self marked -->
+      <v-tooltip v-if="!response.marked" :key="i" bottom>
+        <template #activator="{ on }">
+          <v-chip outlined @click="mark(i)" v-on="on">
+            {{ response.sm.length }}
+            <v-icon right color="grey">{{ $icons.mdiCheck }}</v-icon>
+          </v-chip>
+        </template>
+        <span>Mark</span>
+      </v-tooltip>
       <!-- Teacher marked -->
-      <div v-if="response.marked" :key="i">
-        <v-chip
-          :class="`check fix-width ${
-            responses.length > 1 && i < responses.length - 1 ? 'mb-2' : ''
-          }`"
-          @click="mark(i)"
-        >
-          <span class="font-weight-bold">{{ response.tm.length }}</span>
-          <v-icon right>{{
-            response.repeat ? $icons.mdiRepeat : $icons.mdiCheckAll
+      <v-tooltip v-else :key="i" bottom>
+        <template #activator="{ on }">
+          <v-chip
+            :key="i"
+            :class="mb(i)"
+            class="green"
+            @click="mark(i)"
+            v-on="on"
+          >
+            <span class="font-weight-bold">{{ response.tm.length }}</span>
+            <v-icon right>{{
+              response.repeat ? $icons.mdiRepeat : $icons.mdiCheckAll
+            }}</v-icon>
+          </v-chip>
+          <v-icon v-if="response.flagged" color="accent" class="fix-flag">{{
+            $icons.mdiFlagOutline
           }}</v-icon>
-        </v-chip>
-        <v-icon v-if="response.flagged" color="accent" class="ff">{{
-          $icons.mdiFlagOutline
-        }}</v-icon>
-      </div>
-      <!-- Just self marked -->
-      <v-chip
-        v-else
-        :key="i"
-        outlined
-        :class="`fix-width ${
-          responses.length > 1 && i < responses.length - 1 ? 'mb-2' : ''
-        }`"
-        @click="mark(i)"
-      >
-        {{ response.sm.length }}
-        <v-icon right color="grey">{{ $icons.mdiCheck }}</v-icon>
-      </v-chip>
+        </template>
+        <span>Mark</span>
+      </v-tooltip>
     </template>
   </div>
 </template>
@@ -43,7 +43,6 @@
 <script>
 import { mdiCheck, mdiCheckAll, mdiFlagOutline, mdiRepeat } from '@mdi/js'
 export default {
-  name: 'EgMarkChip',
   props: {
     // Data for one table cell (an object)
     // Top level key is the question id
@@ -62,7 +61,8 @@ export default {
     },
   },
   computed: {
-    // Extract the array of responses for this question
+    // Students can have more than one attempt
+    // so extract responses for this question
     responses() {
       return this.data[Object.keys(this.data)[0]]
     },
@@ -76,15 +76,21 @@ export default {
     }
   },
   methods: {
-    // Emit an event containing indexes into data structure
+    // If multiple responses, add margin bottom
+    mb(i) {
+      return this.responses.length > 1 && i < this.responses.length - 1
+        ? 'mb-2'
+        : ''
+    },
+    // Emit an event containing indexes into big data structure
     mark(responseIndex) {
       const obj = {
         studentIndex: this.studentIndex,
         questionIndex: this.questionIndex,
         responseIndex,
       }
-      // NOT a Nuxt event
-      // This is picked up by @clicked in the parent
+      // Not a Nuxt event
+      // @clicked event bubbles up to _report.vue to trigger marking
       this.$emit('clicked', obj)
     },
   },
@@ -92,23 +98,9 @@ export default {
 </script>
 
 <style scoped>
-.v-chip.check {
-  background-color: rgb(201, 237, 194) !important;
-  color: rgb(18, 39, 14) !important;
-}
-
-.v-chip.fix-width {
-  width: 58px;
-}
-
 /* adjust flags to keep chips aligned */
-.ff {
-  margin-left: -27px;
+.fix-flag {
+  margin-left: -25px;
   left: 24px;
-}
-
-/* make N/A the same height as a chip */
-.chip-height {
-  height: 32px;
 }
 </style>

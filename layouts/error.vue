@@ -19,7 +19,7 @@
                 role="img"
                 fill="#ef7a85"
               >
-                <path :d="$icons.mdiExclamationThick"></path>
+                <path :d="$icons.mdiAlertCircleOutline"></path>
               </svg>
             </p>
             <p class="text-h6">
@@ -27,7 +27,7 @@
             </p>
             <p>This will automatically be reported.</p>
             <p>
-              <v-btn nuxt :to="home" elevation="0" color="primary" outlined>
+              <v-btn nuxt :to="home" elevation="0" color="primary">
                 Try going home
               </v-btn>
             </p>
@@ -44,7 +44,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { mdiExclamationThick } from '@mdi/js'
+import { mdiAlertCircleOutline } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 
 export default {
@@ -78,7 +78,7 @@ export default {
   },
   created() {
     this.$icons = {
-      mdiExclamationThick,
+      mdiAlertCircleOutline,
     }
   },
 }

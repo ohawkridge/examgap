@@ -27,6 +27,7 @@ export const actions = {
     }
     commit('setTopics', await response.json())
   },
+  // For students (_assignment.vue)
   async getAssignment({ commit, rootState }, assignmentId) {
     const url = new URL(
       '/.netlify/functions/getAssignment',
@@ -43,6 +44,23 @@ export const actions = {
       throw new Error(`Error fetching assignment ${response.status}`)
     }
     commit('setAssignment', await response.json())
+  },
+  // For teachers (_report.vue)
+  async getReport({ commit, rootState }, assignmentId) {
+    const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        assignmentId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error fetching data ${response.status}`)
+    }
+    response = await response.json()
+    console.log(response)
+    commit('setAssignment', response)
   },
   async getResponse({ commit, rootState }, responseId) {
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
@@ -89,6 +107,7 @@ export const mutations = {
     state.assignment = {}
     state.assignmentId = ''
     state.questionId = ''
+    state.topics = []
     state.topicId = ''
     state.selected = []
     state.response = {
