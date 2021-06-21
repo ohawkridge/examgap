@@ -41,7 +41,7 @@ exports.handler = async (event, context, callback) => {
             Charset: 'UTF-8',
             Data: `<html>
                   <body>
-                    Feedback from: ${data.user}
+                    <p>Feedback from: ${data.data.user}</p>
                     <br />
                     ${feedback}
                   </body>
@@ -54,7 +54,7 @@ exports.handler = async (event, context, callback) => {
         },
         Subject: {
           Charset: 'UTF-8',
-          Data: 'Incoming feedback',
+          Data: 'Incoming feedback!',
         },
       },
       Source: 'feedback@examgap.com',

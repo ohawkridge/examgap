@@ -83,7 +83,6 @@ export default {
             type: 'success',
             msg: 'Feedback sent',
           })
-          console.log(response)
         } catch (e) {
           console.error(e)
           this.$snack.showMessage({
