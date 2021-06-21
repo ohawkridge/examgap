@@ -48,7 +48,7 @@ export const actions = {
   // For teachers (_report.vue)
   async getReport({ commit, rootState }, assignmentId) {
     const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
-    let response = await fetch(url, {
+    const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
         assignmentId,
@@ -58,9 +58,7 @@ export const actions = {
     if (!response.ok) {
       throw new Error(`Error fetching data ${response.status}`)
     }
-    response = await response.json()
-    console.log(response)
-    commit('setAssignment', response)
+    commit('setAssignment', await response.json())
   },
   async getResponse({ commit, rootState }, responseId) {
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)

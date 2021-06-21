@@ -53,7 +53,7 @@
                         <th
                           v-for="(q, i) in assignment.headers"
                           :key="i"
-                          :class="i === 0 ? 'left' : ''"
+                          :class="i === 0 ? 'text-left' : ''"
                         >
                           <span v-if="i === 0">Username</span>
                           <v-menu v-else offset-x open-on-hover>
@@ -152,27 +152,26 @@
           <v-row id="div2">
             <v-col cols="12" class="d-flex align-center">
               <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" @click="previous()" v-on="on">
+                <template #activator="{ on }">
+                  <v-btn icon @click="previous()" v-on="on">
                     <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
                   </v-btn>
                 </template>
                 <span>Previous</span>
               </v-tooltip>
               <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" @click="next()" v-on="on">
+                <template #activator="{ on }">
+                  <v-btn icon @click="next()" v-on="on">
                     <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
                   </v-btn>
                 </template>
                 <span>Next</span>
               </v-tooltip>
               <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
+                <template #activator="{ on }">
                   <v-btn
                     icon
                     class="ml-2"
-                    v-bind="attrs"
                     :color="flagColor(response.flagged)"
                     v-on="on"
                     @click="flag()"
@@ -185,10 +184,9 @@
                 }}</span>
               </v-tooltip>
               <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
+                <template #activator="{ on }">
                   <v-btn
                     icon
-                    v-bind="attrs"
                     class="ml-2"
                     :color="flagColor(response.repeat)"
                     v-on="on"
@@ -200,14 +198,8 @@
                 <span>Reassign</span>
               </v-tooltip>
               <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    class="ml-2"
-                    v-on="on"
-                    @click="infoDialog = true"
-                  >
+                <template #activator="{ on }">
+                  <v-btn icon class="ml-2" v-on="on" @click="infoDialog = true">
                     <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
                   </v-btn>
                 </template>
@@ -215,14 +207,8 @@
               </v-tooltip>
               <v-spacer />
               <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-chip
-                    v-bind="attrs"
-                    color="primary"
-                    outlined
-                    class="mr-2"
-                    v-on="on"
-                  >
+                <template #activator="{ on }">
+                  <v-chip color="primary" outlined class="mr-2" v-on="on">
                     <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
                     <span v-if="marking" class="font-weight-black">{{
                       response.tm.length
@@ -233,13 +219,8 @@
                 <span>Teacher mark</span>
               </v-tooltip>
               <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-chip
-                    v-bind="attrs"
-                    color="green darken-2"
-                    outlined
-                    v-on="on"
-                  >
+                <template #activator="{ on }">
+                  <v-chip color="green darken-2" outlined v-on="on">
                     <v-icon left color="green darken-2">{{
                       $icons.mdiAccountOutline
                     }}</v-icon>
@@ -288,7 +269,7 @@
               ></v-textarea>
               <v-list dense>
                 <v-list-item
-                  v-for="(comment, i) in bank"
+                  v-for="(comment, i) in commentBank"
                   :key="i"
                   title="Click to reuse"
                   @click="reuse(comment)"
@@ -301,7 +282,6 @@
             </v-col>
             <v-col v-if="marking" cols="12" md="4">
               <p class="text-subtitle-1">Mark Scheme</p>
-              <!-- N.B. We need v-model + value for this to work -->
               <v-checkbox
                 v-for="mp in markScheme"
                 :key="mp.id"
@@ -327,8 +307,8 @@
                 <v-switch v-model="smartSort" inset hide-details>
                   <template #label>
                     <v-tooltip bottom>
-                      <template #activator="{ on, attrs }">
-                        <span v-bind="attrs" v-on="on">Smart sort</span>
+                      <template #activator="{ on }">
+                        <span v-on="on">Smart sort</span>
                       </template>
                       <span>Self marks first</span>
                     </v-tooltip>
@@ -344,19 +324,18 @@
               <p v-else class="text-body-2">None</p>
             </v-col>
           </v-row>
-          <v-dialog v-model="infoDialog" width="400">
+          <!-- More info dialog -->
+          <v-dialog v-if="marking" v-model="infoDialog" width="400">
             <v-card class="modal">
               <v-card-title class="d-flex justify-center">
                 More information
               </v-card-title>
               <v-card-text>
                 <ul>
-                  <li>Response id: {{ response.id }}</li>
                   <li>
-                    Time taken: {{ Math.floor(response.time / 60) }}:{{
-                      response.time - Math.floor(response.time / 60) * 60
-                    }}
+                    Response id: <code>{{ response.id }}</code>
                   </li>
+                  <li>Time taken: {{ timeTaken }}</li>
                 </ul>
               </v-card-text>
               <v-card-actions>
@@ -393,6 +372,7 @@ import {
   mdiInformationOutline,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
+// eslint-disable-next-line no-unused-vars
 import { debounce, cloneDeep } from 'lodash'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'
@@ -415,7 +395,7 @@ export default {
       questionIndex: 0,
       responseIndex: 0,
       marking: false,
-      bank: [],
+      commentBank: [],
       feedbackStatus: '',
       smartSort: false,
       markScheme: [],
@@ -449,34 +429,36 @@ export default {
       obs: (state) => state.user.onboardStep,
       assignment: (state) => state.assignments.assignment,
     }),
-    // Questions included in header data for hover preview
-    // +1 because index 0 contains table metadata
+    // Questions included in assignment -> headers (for hover preview)
+    // +1 because index 0 contains Vuetify table metadata
     question() {
       return this.$fetchState.pending
         ? {}
         : this.assignment.headers[this.questionIndex + 1]
     },
+    // Current question id as a String
+    qIdStr() {
+      return this.assignment.headers[this.questionIndex + 1].value
+    },
+    // Format time taken as mm:ss
+    timeTaken() {
+      const t = this.response.time
+      return `${Math.floor(t / 60)}:${t - Math.floor(t / 60) * 60}`
+    },
     response() {
-      // data is the massive object we get back from getReport
-      // Its two main keys are: headers (contains questions and
-      // mark schemes) and students (all answers, self marks and
-      // teacher marks)
+      // this.assignment is the massive data structure we get back
+      // from getReport (see sample at Examgap/json).
+      // Its two main keys are: headers and students.
       // studentIndex gets us horizontally into the student array
-      // as they appear in the alphabetical list of usernames
       // Each student object has two main keys: name and data
-      // Data is an array of objects—one for each question
-      // Within data, the array of student's answers (if the
-      // question has been reassigned) lives under a key—the
-      // question id. I think this is because there is no guarantee
-      // the database will return responses in the same order
-      // This finally gives you an array of objects where each
-      // object is one complete student response including marks
+      // data is an array of objects (one for each question).
+      // Within these objects is an array of the student's answers.
+      // If the question has been reassigned, they could have more
+      // than one response. Finally, we have the response object.
       if (this.marking) {
-        return this.assignment.students[this.studentIndex].assignment[
+        return this.assignment.students[this.studentIndex].data[
           this.questionIndex
-        ][this.assignment.headers[this.questionIndex + 1].value][
-          this.responseIndex
-        ]
+        ][this.qIdStr][this.responseIndex]
       } else {
         return {}
       }
@@ -485,15 +467,14 @@ export default {
       get() {
         return this.marking ? this.response.feedback : ''
       },
-      set(fb) {
-        this.response.feedback = fb
+      set(feedback) {
+        this.response.feedback = feedback
       },
     },
   },
   watch: {
     // If smartSort is on, re-sort mark scheme when response changes
     response() {
-      if (this.$fetchState.pending) return ''
       if (this.smartSort) this.markScheme.sort(this.selfMarksFirst)
     },
     smartSort() {
@@ -532,38 +513,36 @@ export default {
     },
     // Build comment bank from feedback on existing responses
     updateBank() {
-      const bank = []
+      const commentBank = []
       if (this.marking && !this.$fetchState.pending) {
-        for (const obj of this.assignment.students) {
-          const responses =
-            obj.assignment[this.questionIndex][
-              this.assignment.headers[this.questionIndex + 1].value
-            ]
-          // Inner loop to handle reassigned questions
-          for (const response of responses) {
-            if (response && response.feedback !== '') {
-              bank.push(response.feedback)
+        for (const stuRespObj of this.assignment.students) {
+          // Array of response objects for this question
+          const rs = stuRespObj.data[this.questionIndex][this.qIdStr]
+          for (const response of rs) {
+            if (response.feedback !== '') {
+              commentBank.push(response.feedback)
             }
           }
         }
       }
       // Remove duplicate comments
-      this.bank = [...new Set(bank)]
+      this.commentBank = [...new Set(commentBank)]
     },
     mark(obj) {
-      // Index into student responses data structure
+      // Index into big data structure
       this.studentIndex = obj.studentIndex
       this.questionIndex = obj.questionIndex
       this.responseIndex = obj.responseIndex
       this.marking = true
-      // *Actually copy* (not just reference) original mark scheme
+      // Copy original (unsorted) mark scheme
+      // N.B. Don't just copy by reference!
       this.markScheme = cloneDeep(this.question.markScheme)
-      // Must be *after* marking = true
+      // Build comment bank
+      // (must be *after* marking = true)
       this.updateBank()
-      // Hide onboarding
+      // Done onboarding
       this.$store.commit('user/setOnboardStep', 0)
-      // You could open a response and close it without clicking
-      // next or previous, so set it as 'marked' on open
+      // Set as 'marked' as soon as response opened
       this.marked(this.response.id)
     },
     flagColor(val) {
@@ -672,7 +651,6 @@ export default {
           throw new Error(`Error saving mark ${response.status}`)
         }
         response = await response.json()
-        // console.log(response)
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
@@ -835,10 +813,6 @@ tr:last-child > td {
 div.v-list {
   max-height: 240px;
   overflow-y: scroll;
-}
-
-.left {
-  text-align: left !important;
 }
 
 /* thin divider under app-bar */
