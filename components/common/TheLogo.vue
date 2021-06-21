@@ -118,9 +118,3 @@
     </g>
   </svg>
 </template>
-
-<script>
-export default {
-  name: 'TheLogo',
-}
-</script>

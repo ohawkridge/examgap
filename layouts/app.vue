@@ -3,7 +3,9 @@
     <v-app-bar color="#fefcfb" elevation="2" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
-          <TheLogo />
+          <!-- Just show logo mark on mobile -->
+          <TheLogoMark v-if="$vuetify.breakpoint.name === 'xs'" />
+          <TheLogo v-else />
         </nuxt-link>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
@@ -116,6 +118,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
+import TheLogoMark from '@/components/common/TheLogoMark'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
 import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
@@ -134,6 +137,7 @@ export default {
   name: 'App',
   components: {
     TheLogo,
+    TheLogoMark,
     TheSnackbar,
     TheFooter,
     TheSubscribeDialog,
