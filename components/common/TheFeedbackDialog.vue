@@ -3,7 +3,7 @@
     <template #activator="{ on: dial }">
       <v-tooltip bottom>
         <template #activator="{ on: tool }">
-          <v-btn class="ml-2" icon v-on="{ ...tool, ...dial }">
+          <v-btn icon v-on="{ ...tool, ...dial }">
             <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
           </v-btn>
         </template>

@@ -49,11 +49,15 @@
               elevation="0"
               nuxt
               to="/author"
-              class="d-none d-md-flex mr-2"
+              class="d-none d-sm-flex mr-2"
               v-on="on"
             >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              Create Question
+              {{
+                $vuetify.breakpoint.name === 'sm'
+                  ? 'Question'
+                  : 'Create Question'
+              }}
             </v-btn>
           </template>
           <span>Create question</span>
