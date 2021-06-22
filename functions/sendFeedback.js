@@ -2,7 +2,6 @@ const faunadb = require('faunadb')
 const q = faunadb.query
 
 exports.handler = async (event, context, callback) => {
-  const AWS = require('aws-sdk')
   const data = JSON.parse(event.body)
   const feedback = data.feedback
   // Configure client using user's secret token
@@ -23,53 +22,9 @@ exports.handler = async (event, context, callback) => {
       },
     })
     const data = await keyedClient.query(qry)
-    // Configure and send email
-    AWS.config.update({
-      accessKeyId: process.env.SES_KEY,
-      secretAccessKey: process.env.SES_SECRET,
-      region: 'eu-west-2',
-    })
-    const ses = new AWS.SES({ apiVersion: '2010-12-01' })
-    const params = {
-      Destination: {
-        ToAddresses: ['owen@examgap.com'], // Must be array
-      },
-      Message: {
-        Body: {
-          Html: {
-            // HTML Format of the email
-            Charset: 'UTF-8',
-            Data: `<html>
-                  <body>
-                    <p>Feedback from: ${data.data.user}</p>
-                    ${feedback}
-                  </body>
-              </html>`,
-          },
-          Text: {
-            Charset: 'UTF-8',
-            Data: '',
-          },
-        },
-        Subject: {
-          Charset: 'UTF-8',
-          Data: 'Incoming feedback 📩',
-        },
-      },
-      Source: 'Eg Feedback <no-reply@examgap.com>',
-    }
-    ses
-      .sendEmail(params)
-      .promise()
-      .then(function (data) {
-        console.log(data.MessageId)
-      })
-      .catch(function (err) {
-        console.error(err, err.stack)
-      })
     return {
       statusCode: 200,
-      body: 'Feedback sent',
+      body: JSON.stringify(data),
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }

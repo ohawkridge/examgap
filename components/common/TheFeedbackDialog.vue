@@ -64,19 +64,41 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
-          const url = new URL(
+          // Can't seem to execute FQL /and/ send email in one function
+          // Record feedback in db
+          let url = new URL(
             '/.netlify/functions/sendFeedback',
             this.$config.baseURL
           )
-          const response = await fetch(url, {
+          let response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
-              feedback: this.feedback,
             }),
             method: 'POST',
           })
           if (!response.ok) {
-            throw new Error(`Error sending feedback ${response.status}`)
+            throw new Error(`Error saving feedback ${response.status}`)
+          }
+          response = await response.json()
+          // Send copy to me via email
+          url = new URL(
+            '/.netlify/functions/sendEmailFeedback',
+            this.$config.baseURL
+          )
+          response = await fetch(url, {
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              nameStr: response.data.user,
+              message: this.feedback,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error sending email ${response.status}`)
           }
           this.$snack.showMessage({
             type: 'success',
