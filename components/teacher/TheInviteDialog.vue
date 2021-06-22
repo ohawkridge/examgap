@@ -6,10 +6,8 @@
           <v-btn
             :block="$vuetify.breakpoint.name === 'xs'"
             elevation="0"
-            outlined
-            color="primary"
             class="mr-2"
-            :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
+            :class="$store.state.user.onboardStep === 2 ? 'red-out' : ''"
             v-on="{ ...tooltip, ...dialg }"
             @click="onboard()"
           >
@@ -123,7 +121,7 @@ export default {
   },
   mounted() {
     if (this.group.num_students === 0) {
-      this.$store.commit('user/setOnboardStep', 3)
+      this.$store.commit('user/setOnboardStep', 2)
     }
     this.$nuxt.$on('open-invite', () => {
       this.dialog = true
@@ -141,7 +139,7 @@ export default {
     onboard() {
       // Continue onboarding if few assignments
       if (this.group.assignments.length < 3) {
-        this.$store.commit('user/setOnboardStep', 4)
+        this.$store.commit('user/setOnboardStep', 3)
       }
     },
   },

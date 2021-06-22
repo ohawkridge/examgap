@@ -33,7 +33,13 @@ exports.handler = async (event, context, callback) => {
               q.Select(['data', 'school'], q.Var('instance'))
             ),
             teacher: true,
-            subscriptionExpires: q.TimeDiff(
+            subscriptionExpires: q.Select(
+              ['data', 'subscriptionExpires'],
+              q.Var('instance'),
+              'N/A'
+            ),
+
+            subscriptionDays: q.TimeDiff(
               q.Now(),
               q.Select(['data', 'subscriptionExpires'], q.Var('instance')),
               'days'
@@ -135,7 +141,6 @@ exports.handler = async (event, context, callback) => {
             id: q.Select(['ref', 'id'], q.Var('instance')),
             username: q.Select(['data', 'username'], q.Var('instance'), null),
             examMode: q.Select(['data', 'examMode'], q.Var('instance'), true),
-            subscriptionExpires: 'N/A',
             teacher: false,
             quote: q.Let(
               {

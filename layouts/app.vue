@@ -39,27 +39,39 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
+            <template v-else>
+              <v-divider />
+              <v-list-item @click="$nuxt.$emit('show-create')">
+                <v-list-item-content>
+                  <v-list-item-title> Create class&hellip; </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
           </v-list>
         </v-menu>
         <v-spacer />
         <!-- v-if must be on the tooltip !! -->
         <!-- You can't refill an empty slot -->
         <v-tooltip v-if="teacher" bottom>
-          <template #activator="{ on, attrs }">
+          <template #activator="{ on }">
             <v-btn
-              v-bind="attrs"
+              nuxt
+              to="/author"
+              class="mr-2 hidden-md-and-up"
+              icon
+              v-on="on"
+            >
+              <v-icon>{{ $icons.mdiPencilPlusOutline }}</v-icon>
+            </v-btn>
+            <v-btn
               elevation="0"
               nuxt
               to="/author"
-              class="d-none d-sm-flex mr-2"
+              class="mr-2 hidden-sm-and-down"
               v-on="on"
             >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              {{
-                $vuetify.breakpoint.name === 'sm'
-                  ? 'Question'
-                  : 'Create Question'
-              }}
+              Create Question
             </v-btn>
           </template>
           <span>Create question</span>
@@ -67,8 +79,8 @@
         <the-subscribe-dialog v-if="teacher" />
         <the-feedback-dialog />
         <v-menu offset-y open-on-hover>
-          <template #activator="{ on, attrs }">
-            <v-btn class="ml-2" elevation="0" icon v-bind="attrs" v-on="on">
+          <template #activator="{ on }">
+            <v-btn class="ml-2" elevation="0" icon v-on="on">
               <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
             </v-btn>
           </template>
@@ -89,11 +101,6 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item nuxt to="/settings">
-              <v-list-item-content>
-                <v-list-item-title>Change password</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
             <v-list-item @click="logout()">
               <v-list-item-content>
                 <v-list-item-title>Sign out</v-list-item-title>
@@ -109,6 +116,7 @@
       </v-container>
       <the-snackbar />
       <the-join-dialog v-if="!teacher" />
+      <create-class v-if="teacher" />
       <the-loading-overlay />
     </v-main>
     <the-footer v-if="showFooter" />
@@ -125,12 +133,14 @@ import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
+import CreateClass from '@/components/teacher/CreateClass'
 
 import {
   mdiPlus,
   mdiAccountCircleOutline,
   mdiChevronDown,
   mdiOpenInNew,
+  mdiPencilPlusOutline,
 } from '@mdi/js'
 
 export default {
@@ -144,6 +154,7 @@ export default {
     TheJoinDialog,
     TheLoadingOverlay,
     TheFeedbackDialog,
+    CreateClass,
   },
   middleware: ['auth'],
   computed: {
@@ -171,6 +182,7 @@ export default {
       mdiAccountCircleOutline,
       mdiChevronDown,
       mdiOpenInNew,
+      mdiPencilPlusOutline,
     }
   },
   methods: {

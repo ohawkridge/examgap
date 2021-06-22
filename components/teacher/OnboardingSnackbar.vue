@@ -1,6 +1,8 @@
 <template>
   <v-snackbar v-model="snack" :vertical="true" timeout="-1">
-    <span class="font-weight-bold">({{ obs }}/8)</span>
+    <span class="font-weight-bold"
+      >({{ obs }}/{{ Object.keys(stringsForSteps).length }})</span
+    >
     {{ stringsForSteps[obs] }}
     <template #action="{ attrs }">
       <v-btn color="secondary" plain v-bind="attrs" @click="close()">
@@ -20,13 +22,12 @@ export default {
         1: `To get started, click + ${
           this.$vuetify.breakpoint.name !== 'xs' ? 'Create ' : ''
         } Class.`,
-        2: 'Click the class you just created.',
-        3: 'To add students, click Invite Students.',
-        4: 'Click + Create Assignment to browse questions.',
-        5: 'Change topics to see more questions.',
-        6: 'Click + to select questions to assign.',
-        7: "When you're ready, click + Assign.",
-        8: 'Click a self mark to enter marking view.',
+        2: 'To add students, click Invite Students.',
+        3: 'Click + Create Assignment to browse questions.',
+        4: 'Change topics to see more questions.',
+        5: 'Click + to select questions to assign.',
+        6: "When you're ready, click + Assign.",
+        7: 'Click a self mark to enter marking view.',
       },
     }
   },

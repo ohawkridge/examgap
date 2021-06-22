@@ -3,11 +3,8 @@
     <!-- No flex on xs—just stack -->
     <v-col cols="12" class="d-sm-flex justify-space-between align-center">
       <div>
-        <div
-          v-if="group.name !== undefined"
-          class="text-h6 font-weight-bold mb-0"
-        >
-          {{ group.name }}
+        <div class="text-h6 font-weight-bold mb-0">
+          {{ group.name === undefined ? 'Loading...' : group.name }}
         </div>
         <div v-if="group.course.name !== undefined" class="mb-2">
           {{ group.course.name }} ({{ group.course.board }})
@@ -22,6 +19,7 @@
               class="mt-2 mt-sm-0"
               :class="$store.state.user.onboardStep === 4 ? 'red-out' : ''"
               elevation="0"
+              outlined
               :block="$vuetify.breakpoint.name === 'xs'"
               color="primary"
               @click="create()"
@@ -39,6 +37,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { mdiPlus } from '@mdi/js'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
 
@@ -46,18 +45,8 @@ export default {
   components: {
     TheInviteDialog,
   },
-  props: {
-    group: {
-      type: Object,
-      default: () => {},
-    },
-  },
   computed: {
-    assignments() {
-      return this.group && 'assignments' in this.group
-        ? this.group.assignments
-        : []
-    },
+    ...mapGetters({ group: 'groups/activeGroup' }),
   },
   created() {
     this.$icons = { mdiPlus }
@@ -65,11 +54,11 @@ export default {
   mounted() {
     // Onboard -> no students
     if (this.group.num_students === 0) {
-      this.$store.commit('user/setOnboardStep', 3)
+      this.$store.commit('user/setOnboardStep', 2)
     }
     // Onboard -> few assignments
-    if (this.group.num_students > 0 && this.assignments.length < 3) {
-      this.$store.commit('user/setOnboardStep', 4)
+    if (this.group.num_students > 0 && this.group.assignments.length < 3) {
+      this.$store.commit('user/setOnboardStep', 3)
     }
   },
   methods: {
@@ -79,7 +68,7 @@ export default {
       // Continue onboarding if user hasn't set assignments
       this.$store.commit(
         'user/setOnboardStep',
-        this.assignments.length < 3 ? 5 : 0
+        this.group.assignments.length < 3 ? 5 : 0
       )
       this.$router.push(`/course/${this.group.course.id}`)
     },

@@ -8,8 +8,9 @@ export const state = () => ({
   secret: '',
   school: 'N/A',
   teacher: false,
-  subscriptionExpires: '',
-  subscribed: null,
+  subscribed: false,
+  subscriptionExpires: 'N/A',
+  subscriptionDays: '',
   examMode: false,
   reviseExamMode: false,
   quote: 'Experiment, fail, learn, repeat.—Anonymous',
@@ -148,12 +149,13 @@ export const mutations = {
     // Common properties
     state.id = data.id
     state.username = data.username
-    state.subscriptionExpires = data.subscriptionExpires
     state.teacher = data.teacher
     if (data.teacher) {
       // Teacher-specific properties
       state.school = data.school
       state.subscribed = data.subscribed
+      state.subscriptionExpires = data.subscriptionExpires
+      state.subscriptionDays = data.subscriptionDays
     } else {
       // Student-specific properties
       state.examMode = data.examMode
@@ -174,8 +176,9 @@ export const mutations = {
     state.secret = ''
     state.school = 'N/A'
     state.teacher = false
-    state.subscriptionExpires = ''
-    state.subscribed = null
+    state.subscribed = false
+    state.subscriptionExpires = 'N/A'
+    state.subscriptionDays = ''
     state.examMode = false
     state.reviseExamMode = false
     state.quote = 'Experiment, fail, learn, repeat.—Anonymous'

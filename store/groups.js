@@ -143,7 +143,8 @@ export const mutations = {
     state.currentRevisionTopic = topic
   },
   setActiveGroupIndex(state, i) {
-    state.activeGroupIndex = i
+    // CreateClass.vue sends -1 as active group
+    state.activeGroupIndex = i === -1 ? state.groups.length - 1 : i
   },
   incrementTopicCount(state) {
     for (let i = 0; i < state.revisionTopics.length; i++) {

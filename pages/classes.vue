@@ -88,7 +88,6 @@
         </v-col>
       </template>
     </v-row>
-    <create-class />
     <onboarding-snackbar />
   </div>
 </template>
@@ -97,13 +96,11 @@
 import { mapState, mapGetters } from 'vuex'
 import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
-import CreateClass from '@/components/teacher/CreateClass'
 import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar.vue'
 
 export default {
   components: {
     GroupCard,
-    CreateClass,
     OnboardingSnackbar,
   },
   layout: 'app',

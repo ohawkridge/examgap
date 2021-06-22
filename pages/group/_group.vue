@@ -1,9 +1,9 @@
 <template>
   <div>
-    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
+    <group-header />
     <v-row>
       <v-col cols="12" md="3">
-        <GroupNav
+        <group-nav
           v-if="group && Object.keys(group).length > 0"
           :group="group"
         />
