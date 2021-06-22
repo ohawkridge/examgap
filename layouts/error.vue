@@ -25,14 +25,14 @@
             <p class="text-h6">
               {{ error.statusCode === 404 ? pageNotFound : otherError }}
             </p>
-            <p>This will automatically be reported.</p>
             <p>
-              <v-btn nuxt :to="home" elevation="0" color="primary">
-                Try going home
+              <v-btn elevation="0" color="primary" @click="$router.go(-1)">
+                Go back
               </v-btn>
             </p>
             <p>
-              If the problem persists, email
+              This will automatically be reported. If the problem persists,
+              email
               <a href="mailto:support@examgap.com">support@examgap.com</a>.
             </p>
           </v-col>

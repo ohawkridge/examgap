@@ -372,7 +372,6 @@ import {
   mdiInformationOutline,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
-// eslint-disable-next-line no-unused-vars
 import { debounce, cloneDeep } from 'lodash'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'

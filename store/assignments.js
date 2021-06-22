@@ -47,6 +47,7 @@ export const actions = {
   },
   // For teachers (_report.vue)
   async getReport({ commit, rootState }, assignmentId) {
+    console.log(`getReport`, assignmentId)
     const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
     const response = await fetch(url, {
       body: JSON.stringify({
@@ -84,7 +85,10 @@ export const mutations = {
     state.response = data
   },
   setAssignment(state, data) {
-    state.assignment = data
+    // Maintain reactivity?
+    console.log('clear and spread')
+    state.assignment = {}
+    state.assignment = { ...data }
   },
   setAnswerData(state, { assignmentId, questionId }) {
     state.assignmentId = assignmentId

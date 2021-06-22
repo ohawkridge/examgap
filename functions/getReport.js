@@ -4,6 +4,7 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const assignmentId = data.assignmentId
+  console.time('getReport')
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
@@ -221,6 +222,9 @@ exports.handler = async (event, context, callback) => {
     const data = await keyedClient.query(qry)
     data.students.sort(compare)
     // console.dir(data)
+    console.log()
+    console.timeEnd('getReport')
+    console.log()
     return {
       statusCode: 200,
       body: JSON.stringify(data),
