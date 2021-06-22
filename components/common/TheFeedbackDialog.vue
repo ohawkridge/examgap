@@ -68,7 +68,7 @@ export default {
             '/.netlify/functions/sendFeedback',
             this.$config.baseURL
           )
-          let response = await fetch(url, {
+          const response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
               feedback: this.feedback,
@@ -78,7 +78,6 @@ export default {
           if (!response.ok) {
             throw new Error(`Error sending feedback ${response.status}`)
           }
-          response = await response.json()
           this.$snack.showMessage({
             type: 'success',
             msg: 'Feedback sent',

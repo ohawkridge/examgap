@@ -1,5 +1,6 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
+const AWS = require('aws-sdk')
 
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
@@ -7,13 +8,6 @@ exports.handler = async (event, context, callback) => {
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
-  })
-  // Configure email
-  const AWS = require('aws-sdk')
-  AWS.config.update({
-    accessKeyId: process.env.SES_KEY,
-    secretAccessKey: process.env.SES_SECRET,
-    region: 'eu-west-2',
   })
   try {
     const qry = q.Create(q.Collection('Feedback'), {
@@ -29,6 +23,12 @@ exports.handler = async (event, context, callback) => {
       },
     })
     const data = await keyedClient.query(qry)
+    // Configure and send email
+    AWS.config.update({
+      accessKeyId: process.env.SES_KEY,
+      secretAccessKey: process.env.SES_SECRET,
+      region: 'eu-west-2',
+    })
     const ses = new AWS.SES({ apiVersion: '2010-12-01' })
     const params = {
       Destination: {
@@ -42,7 +42,6 @@ exports.handler = async (event, context, callback) => {
             Data: `<html>
                   <body>
                     <p>Feedback from: ${data.data.user}</p>
-                    <br />
                     ${feedback}
                   </body>
               </html>`,
@@ -54,31 +53,22 @@ exports.handler = async (event, context, callback) => {
         },
         Subject: {
           Charset: 'UTF-8',
-          Data: 'Incoming feedback!',
+          Data: 'Incoming feedback 📩',
         },
       },
-      Source: 'feedback@examgap.com',
+      Source: 'Eg Feedback <no-reply@examgap.com>',
     }
     ses
       .sendEmail(params)
       .promise()
-      .then((data) => {
-        console.log('email submitted to SES', data)
-        return {
-          statusCode: 200,
-          body: `Message sent`,
-        }
+      .then(function (data) {
+        console.log(data.MessageId)
       })
-      .catch((error) => {
-        console.log(error)
-        return {
-          statusCode: 500,
-          body: `Message unsuccesfully sent, error: ${error}`,
-        }
+      .catch(function (err) {
+        console.error(err, err.stack)
       })
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }
