@@ -1,8 +1,8 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
-const AWS = require('aws-sdk')
 
 exports.handler = async (event, context, callback) => {
+  const AWS = require('aws-sdk')
   const data = JSON.parse(event.body)
   const feedback = data.feedback
   // Configure client using user's secret token
@@ -69,6 +69,7 @@ exports.handler = async (event, context, callback) => {
       })
     return {
       statusCode: 200,
+      body: 'Feedback sent',
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }

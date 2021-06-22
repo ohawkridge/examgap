@@ -11,6 +11,7 @@
           <v-btn
             color="primary"
             elevation="0"
+            class="mr-2"
             :block="block"
             v-on="{ ...tooltip, ...dial }"
           >
