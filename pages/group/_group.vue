@@ -96,7 +96,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { isEmpty, find } from 'lodash'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
@@ -123,19 +124,38 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapState({ assignment: (state) => state.assignments.assignment }),
     // Defend against logout, refresh etc.
+    // TODO TEST ME!
     assignments() {
       return this.group && 'assignments' in this.group
         ? this.group.assignments
         : []
     },
   },
-  created() {
+  async created() {
     this.$icons = {
       mdiDotsVertical,
       mdiInformationOutline,
       mdiPlus,
       mdiBookOpenOutline,
+    }
+    // Pre-fetch most recent assignment for group if store
+    // is empty or stored assignment not for this group
+    if (
+      (isEmpty(this.assignment) ||
+        !find(this.assignments, ['id', this.assignment.id])) &&
+      this.assignments.length > 0
+    ) {
+      try {
+        console.log(
+          '%c' + 'Prefetch',
+          'padding:2px 4px;background-color:#464646;color:white;border-radius:3px'
+        )
+        await this.$store.dispatch('assignments/getReport', -1)
+      } catch (err) {
+        console.error(err)
+      }
     }
   },
 }

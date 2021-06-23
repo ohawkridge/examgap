@@ -63,20 +63,31 @@
               <AddStudents :group-id="group.id" />
               <CopyStudents :selected="selected" />
               <RemoveStudents :selected="selected" :group-id="group.id" />
-              <v-btn
-                nuxt
-                :to="`/students/logins/${group.id}`"
-                class="mr-2"
-                elevation="0"
-              >
-                Logins
-              </v-btn>
-              <v-btn elevation="0" @click="exportTableToCSV()">
-                <v-icon v-if="$vuetify.breakpoint.name !== 'xs'" left>{{
-                  $icons.mdiDownloadOutline
-                }}</v-icon>
-                Csv
-              </v-btn>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    nuxt
+                    :to="`/students/logins/${group.id}`"
+                    class="mr-2"
+                    elevation="0"
+                    v-on="on"
+                  >
+                    Logins
+                  </v-btn>
+                </template>
+                <span>Print logins</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn elevation="0" @click="exportTableToCSV()" v-on="on">
+                    <v-icon v-if="$vuetify.breakpoint.name !== 'xs'" left>{{
+                      $icons.mdiDownloadOutline
+                    }}</v-icon>
+                    Csv
+                  </v-btn>
+                </template>
+                <span>Download csv</span>
+              </v-tooltip>
             </div>
           </v-card-title>
           <v-container>

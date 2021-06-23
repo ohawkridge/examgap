@@ -47,15 +47,19 @@
                   :group-id="group.id"
                   type="btn"
                 />
-                <v-btn
-                  elevation="0"
-                  color="orange"
-                  dark
-                  class="ml-2"
-                  @click="refresh()"
-                >
-                  Refresh
-                </v-btn>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      elevation="0"
+                      class="ml-2"
+                      @click="refresh()"
+                      v-on="on"
+                    >
+                      Refresh
+                    </v-btn>
+                  </template>
+                  <span>Refresh data</span>
+                </v-tooltip>
               </v-col>
             </v-row>
             <v-row>
@@ -100,7 +104,7 @@
                         >
                           <MarkChip
                             :class="`${
-                              obs === 8 && i === 0 && j === 0 ? 'red-out' : ''
+                              obs === 7 && i === 0 && j === 0 ? 'red-out' : ''
                             }`"
                             :student-index="i"
                             :question-index="j"
@@ -209,7 +213,7 @@
                     <v-icon>{{ $icons.mdiRepeat }}</v-icon>
                   </v-btn>
                 </template>
-                <span>Reassign</span>
+                <span>Reassign question</span>
               </v-tooltip>
               <v-tooltip bottom>
                 <template #activator="{ on }">
@@ -261,6 +265,14 @@
                   >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
+              <p class="red--text">teacherMarks</p>
+              <p class="red--text">
+                {{ teacherMarks }}
+              </p>
+              <p class="red--text">markScheme</p>
+              <p class="red--text">
+                {{ markScheme }}
+              </p>
             </v-col>
             <v-col cols="12" md="4">
               <p v-if="marking" class="text-subtitle-1 font-weight-medium">
@@ -272,13 +284,17 @@
                 v-text="response.text"
               ></p>
               <p class="text-subtitle-1">Feedback</p>
+              <!-- N.B. update is debounced method -->
               <v-textarea
                 v-model="feedback"
                 outlined
-                :append-icon="$icons.mdiCommentTextOutline"
                 rows="4"
                 auto-grow
-                :messages="feedbackStatus"
+                :append-icon="
+                  savingFeedback
+                    ? $icons.mdiCloudSyncOutline
+                    : $icons.mdiCloudCheckOutline
+                "
                 @input="update()"
               ></v-textarea>
               <v-list dense>
@@ -299,10 +315,10 @@
               <v-checkbox
                 v-for="mp in markScheme"
                 :key="mp.id"
-                v-model="response.tm"
+                v-model="teacherMarks"
                 :value="mp.id"
                 hide-details
-                @change="addRemoveMark(mp.id)"
+                @change="toggleMark(mp.id)"
               >
                 <template #label>
                   <span
@@ -318,7 +334,7 @@
                 </template>
               </v-checkbox>
               <div class="d-flex justify-end">
-                <v-switch v-model="smartSort" inset hide-details>
+                <v-switch v-model="smartSort" hide-details>
                   <template #label>
                     <v-tooltip bottom>
                       <template #activator="{ on }">
@@ -348,6 +364,11 @@
                 <ul>
                   <li>
                     Response id: <code>{{ response.id }}</code>
+                    <v-btn icon small @click="copyId()">
+                      <v-icon small>
+                        {{ $icons.mdiContentCopy }}
+                      </v-icon>
+                    </v-btn>
                   </li>
                   <li>Time taken: {{ timeTaken }}</li>
                 </ul>
@@ -382,9 +403,11 @@ import {
   mdiClose,
   mdiArrowLeft,
   mdiRepeat,
-  mdiCommentTextOutline,
   mdiInformationOutline,
   mdiChevronLeft,
+  mdiContentCopy,
+  mdiCloudCheckOutline,
+  mdiCloudSyncOutline,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
 import { debounce, cloneDeep } from 'lodash'
@@ -405,31 +428,38 @@ export default {
   layout: 'app',
   data() {
     return {
-      studentIndex: 0, // These 3 values let us index into data structure
+      studentIndex: 0,
       questionIndex: 0,
       responseIndex: 0,
+      // These 3 ^^^ values let us index into data structure
       marking: false,
       commentBank: [],
-      feedbackStatus: '',
+      feedback: '',
+      savingFeedback: '',
       smartSort: false,
       markScheme: [],
+      teacherMarks: [],
       infoDialog: false,
     }
   },
   async fetch() {
-    // Dispatch store action to get data
-    // (render data straight from store)
-    try {
-      await this.$store.dispatch(
-        'assignments/getReport',
-        this.$route.params.report
-      )
-    } catch (err) {
-      console.error(err)
-      this.$snack.showMessage({
-        type: 'error',
-        msg: 'Error fetching data',
-      })
+    // Dispatch store action to get data (render from store)
+    // Don't fetch if assignment already in store
+    if (
+      this.$store.state.assignments.assignment.id !== this.$route.params.report
+    ) {
+      try {
+        await this.$store.dispatch(
+          'assignments/getReport',
+          this.$route.params.report
+        )
+      } catch (err) {
+        console.error(err)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error fetching data',
+        })
+      }
     }
   },
   head() {
@@ -457,7 +487,9 @@ export default {
     // Format time taken as mm:ss
     timeTaken() {
       const t = this.response.time
-      return `${Math.floor(t / 60)}:${t - Math.floor(t / 60) * 60}`
+      return `${Math.floor(t / 60)}:${String(
+        t - Math.floor(t / 60) * 60
+      ).padStart(2, '0')}`
     },
     response() {
       // this.assignment is the massive data structure we get back
@@ -469,27 +501,18 @@ export default {
       // Within these objects is an array of the student's answers.
       // If the question has been reassigned, they could have more
       // than one response. Finally, we have the response object.
-      if (this.marking) {
-        return this.assignment.students[this.studentIndex].data[
-          this.questionIndex
-        ][this.qIdStr][this.responseIndex]
-      } else {
-        return {}
-      }
-    },
-    feedback: {
-      get() {
-        return this.marking ? this.response.feedback : ''
-      },
-      set(feedback) {
-        this.response.feedback = feedback
-      },
+      return this.assignment.students[this.studentIndex].data[
+        this.questionIndex
+      ][this.qIdStr][this.responseIndex]
     },
   },
   watch: {
-    // If smartSort is on, re-sort mark scheme when response changes
     response() {
+      console.log('WATCH RESPONSE')
+      // this.updateBank()
+      // If smartSort is on, re-sort mark scheme when response changes
       if (this.smartSort) this.markScheme.sort(this.selfMarksFirst)
+      this.feedback = this.response.feedback
     },
     smartSort() {
       if (!this.$fetchState.pending && this.smartSort) {
@@ -512,9 +535,11 @@ export default {
       mdiClose,
       mdiArrowLeft,
       mdiRepeat,
-      mdiCommentTextOutline,
       mdiInformationOutline,
       mdiChevronLeft,
+      mdiContentCopy,
+      mdiCloudCheckOutline,
+      mdiCloudSyncOutline,
     }
   },
   mounted() {
@@ -523,30 +548,16 @@ export default {
     }
   },
   methods: {
-    async refresh() {
-      // this.$fetch()
-      try {
-        console.time(`_report_${this.$route.params.report}`)
-        const url = new URL(
-          '/.netlify/functions/getReportDebug',
-          this.$config.baseURL
-        )
-        let response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            assignmentId: this.$route.params.report,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Fuck :( ${response.status}`)
-        }
-        response = await response.json()
-        console.timeEnd(`_report_${this.$route.params.report}`)
-        console.log(response)
-      } catch (err) {
-        console.error(err)
-      }
+    // Copy response id to clipboard
+    async copyId() {
+      await navigator.clipboard.writeText(this.response.id)
+      this.$snack.showMessage({
+        type: '',
+        msg: 'Copied to clipboard',
+      })
+    },
+    refresh() {
+      this.$fetch()
     },
     // Build comment bank from feedback on existing responses
     updateBank() {
@@ -564,6 +575,7 @@ export default {
       }
       // Remove duplicate comments
       this.commentBank = [...new Set(commentBank)]
+      console.log('COMMENTS UPDATED')
     },
     mark(obj) {
       // Index into big data structure
@@ -615,7 +627,6 @@ export default {
       }
     },
     next() {
-      this.updateBank()
       // Loop back to start
       if (this.studentIndex >= this.assignment.students.length - 1) {
         this.studentIndex = 0
@@ -631,7 +642,6 @@ export default {
       }
     },
     previous() {
-      this.updateBank()
       // Loop back to end
       if (this.studentIndex === 0) {
         this.studentIndex = this.assignment.students.length - 1
@@ -646,54 +656,46 @@ export default {
         this.marked(this.response.id)
       }
     },
-    addRemoveMark(id) {
+    async toggleMark(markId) {
       // Don't exceed max mark
-      if (this.response.tm.length > this.question.maxMark) {
+      if (this.teacherMarks.length > this.question.maxMark) {
         this.$snack.showMessage({
-          msg: `Max. mark is ${this.question.maxMark}`,
-          type: '',
+          msg: `Max. ${this.question.maxMark} mark${
+            this.question.maxMark !== '1' ? 's' : ''
+          }`,
         })
-        // Untick checkbox by splicing id out of v-model data
-        for (let i = 0; i < this.response.tm.length; i++) {
-          if (this.response.tm[i] === id) {
-            this.response.tm.splice(i, 1)
+        // Untick checkbox by splicing id out of v-model
+        for (let i = 0; i < this.teacherMarks.length; i++) {
+          if (this.teacherMarks[i] === markId) {
+            this.teacherMarks.splice(i, 1)
           }
         }
-      } else if (this.response.tm.find((x) => x === id)) {
-        // Adding mark
-        this.toggleMark(id, true)
       } else {
-        // Removing mark
-        this.toggleMark(id, false)
-      }
-    },
-    // Actually write mark to database
-    async toggleMark(markId, addOrRemove) {
-      try {
-        const url = new URL(
-          '/.netlify/functions/toggleMark',
-          this.$config.baseURL
-        )
-        let response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            responseId: this.response.id,
-            markId,
-            add: addOrRemove,
-            teacher: true,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error saving mark ${response.status}`)
+        try {
+          const url = new URL(
+            '/.netlify/functions/toggleMark',
+            this.$config.baseURL
+          )
+          const response = await fetch(url, {
+            body: JSON.stringify({
+              secret: this.$store.state.user.secret,
+              responseId: this.response.id,
+              markId,
+              add: !!this.teacherMarks.find((x) => x === markId),
+              teacher: true,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error saving mark ${response.status}`)
+          }
+        } catch (err) {
+          console.error(err)
+          this.$snack.showMessage({
+            type: 'error',
+            msg: 'Error saving mark',
+          })
         }
-        response = await response.json()
-      } catch (e) {
-        console.error(e)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error saving mark',
-        })
       }
     },
     async flag() {
@@ -713,15 +715,13 @@ export default {
         if (!response.ok) {
           throw new Error(`Error setting flag ${response.status}`)
         }
-        const state = await response.json()
         // Update local data
         this.response.flagged = !this.response.flagged
-        this.$snack.showMessage({
-          type: '',
-          msg: `${
-            state.assignment.flagged ? 'Response flagged' : 'Flag removed'
-          }`,
-        })
+        // this.$snack.showMessage({
+        //   msg: `${
+        //     state.assignment.flagged ? 'Response flagged' : 'Flag removed'
+        //   }`,
+        // })
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
@@ -774,8 +774,8 @@ export default {
       this.save()
     }, 1500),
     async save() {
-      this.feedbackStatus = 'Saving...'
       try {
+        this.savingFeedback = true
         const url = new URL(
           '/.netlify/functions/saveFeedback',
           this.$config.baseURL
@@ -791,19 +791,19 @@ export default {
         if (!response.ok) {
           throw new Error(`Error saving feedback ${response.status}`)
         }
-        this.feedbackStatus = `Saved ✓`
       } catch (e) {
         console.error(e)
-        this.feedbackStatus = 'Error saving'
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error saving feedback',
         })
+      } finally {
+        this.savingFeedback = false
       }
     },
     // Reuse an existing comment
     reuse(text) {
-      this.response.feedback = text
+      this.feedback = text
       this.save() // Trigger save
     },
     // Comparison function so student self marks are first

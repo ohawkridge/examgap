@@ -50,32 +50,25 @@
           </v-list>
         </v-menu>
         <v-spacer />
-        <!-- v-if must be on the tooltip !! -->
-        <!-- You can't refill an empty slot -->
-        <v-tooltip v-if="teacher" bottom>
-          <template #activator="{ on }">
-            <v-btn
-              nuxt
-              to="/author"
-              class="mr-2 hidden-md-and-up"
-              icon
-              v-on="on"
-            >
-              <v-icon>{{ $icons.mdiPencilPlusOutline }}</v-icon>
-            </v-btn>
-            <v-btn
-              elevation="0"
-              nuxt
-              to="/author"
-              class="mr-2 hidden-sm-and-down"
-              v-on="on"
-            >
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              Create Question
-            </v-btn>
-          </template>
-          <span>Create question</span>
-        </v-tooltip>
+        <v-btn
+          v-if="teacher"
+          nuxt
+          to="/author"
+          class="mr-2 hidden-md-and-up"
+          icon
+        >
+          <v-icon>{{ $icons.mdiPencilPlusOutline }}</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="teacher"
+          elevation="0"
+          nuxt
+          to="/author"
+          class="mr-2 hidden-sm-and-down"
+        >
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Create Question
+        </v-btn>
         <the-subscribe-dialog v-if="teacher" />
         <the-feedback-dialog />
         <v-menu offset-y open-on-hover>

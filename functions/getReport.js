@@ -142,7 +142,8 @@ exports.handler = async (event, context, callback) => {
                                     ),
                                     time: q.Select(
                                       ['data', 'timeTaken'],
-                                      q.Var('instance')
+                                      q.Var('instance'),
+                                      0 // Old responses don't have time taken !!
                                     ),
                                     // Grab username again here so it's
                                     // visible in EgMarking interface

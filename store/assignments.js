@@ -46,8 +46,14 @@ export const actions = {
     commit('setAssignment', await response.json())
   },
   // For teachers (_report.vue)
-  async getReport({ commit, rootState }, assignmentId) {
+  async getReport({ commit, rootState, rootGetters }, assignmentId) {
     const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
+    // *Attempt pre-fetch*
+    // _group.vue sends -1 if no assignment cached yet
+    if (assignmentId === -1) {
+      // Select id of most recent assignment
+      assignmentId = rootGetters['groups/activeGroup'].assignments[0].id
+    }
     const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
@@ -59,6 +65,7 @@ export const actions = {
       throw new Error(`Error fetching data ${response.status}`)
     }
     commit('setAssignment', await response.json())
+    console.log('%c' + `Stored ${assignmentId}`, 'color:red;')
   },
   async getResponse({ commit, rootState }, responseId) {
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
@@ -101,6 +108,11 @@ export const mutations = {
   clearSelectedQuestions(state) {
     state.selected = []
   },
+  // _report.vue
+  // Big data structure mutations
+  flag(state) {},
+  reassign(state) {},
+  setFeedback(state) {},
   logout(state) {
     state.assignment = {}
     state.assignmentId = ''

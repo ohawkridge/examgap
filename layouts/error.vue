@@ -11,29 +11,21 @@
       <v-container class="fill-height">
         <v-row class="d-flex justify-center">
           <v-col id="nav-fix" cols="12" md="8" class="text-center">
-            <p>
-              <svg
-                height="46"
-                width="46"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#ef7a85"
-              >
-                <path :d="$icons.mdiAlertCircleOutline"></path>
-              </svg>
-            </p>
-            <p class="text-h6">
+            <p class="text-h6 error--text">
               {{ error.statusCode === 404 ? pageNotFound : otherError }}
-            </p>
-            <p>
-              <v-btn elevation="0" color="primary" @click="$router.go(-1)">
-                Go back
-              </v-btn>
+              <v-icon color="error" class="pb-1">
+                {{ $icons.mdiAlertOutline }}
+              </v-icon>
             </p>
             <p>
               This will automatically be reported. If the problem persists,
               email
               <a href="mailto:support@examgap.com">support@examgap.com</a>.
+            </p>
+            <p>
+              <v-btn elevation="0" color="primary" @click="$router.go(-1)">
+                Try going back
+              </v-btn>
             </p>
           </v-col>
         </v-row>
@@ -44,7 +36,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { mdiAlertCircleOutline } from '@mdi/js'
+import { mdiAlertOutline } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 
 export default {
@@ -78,7 +70,7 @@ export default {
   },
   created() {
     this.$icons = {
-      mdiAlertCircleOutline,
+      mdiAlertOutline,
     }
   },
 }
