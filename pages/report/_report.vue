@@ -15,6 +15,14 @@
             <v-row>
               <v-col cols="12" md="10">
                 <p class="text-h6">
+                  <v-tooltip bottom>
+                    <template #activator="{ on }">
+                      <v-btn icon @click="$router.go(-1)" v-on="on">
+                        <v-icon>{{ $icons.mdiChevronLeft }}</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Back</span>
+                  </v-tooltip>
                   {{ $fetchState.pending ? 'Loading...' : assignment.name }}
                 </p>
                 <div class="text-subtitle-1">
@@ -39,7 +47,13 @@
                   :group-id="group.id"
                   type="btn"
                 />
-                <v-btn elevation="0" class="ml-2" @click="refresh()">
+                <v-btn
+                  elevation="0"
+                  color="orange"
+                  dark
+                  class="ml-2"
+                  @click="refresh()"
+                >
                   Refresh
                 </v-btn>
               </v-col>
@@ -370,6 +384,7 @@ import {
   mdiRepeat,
   mdiCommentTextOutline,
   mdiInformationOutline,
+  mdiChevronLeft,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
 import { debounce, cloneDeep } from 'lodash'
@@ -499,16 +514,39 @@ export default {
       mdiRepeat,
       mdiCommentTextOutline,
       mdiInformationOutline,
+      mdiChevronLeft,
     }
   },
   mounted() {
     if (this.group.assignments.length < 3) {
-      this.$store.commit('user/setOnboardStep', 8)
+      this.$store.commit('user/setOnboardStep', 7)
     }
   },
   methods: {
-    refresh() {
-      this.$fetch()
+    async refresh() {
+      // this.$fetch()
+      try {
+        console.time(`_report_${this.$route.params.report}`)
+        const url = new URL(
+          '/.netlify/functions/getReportDebug',
+          this.$config.baseURL
+        )
+        let response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            assignmentId: this.$route.params.report,
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Fuck :( ${response.status}`)
+        }
+        response = await response.json()
+        console.timeEnd(`_report_${this.$route.params.report}`)
+        console.log(response)
+      } catch (err) {
+        console.error(err)
+      }
     },
     // Build comment bank from feedback on existing responses
     updateBank() {

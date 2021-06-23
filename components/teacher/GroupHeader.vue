@@ -12,25 +12,18 @@
       </div>
       <div>
         <the-invite-dialog :group="group" />
-        <v-tooltip bottom>
-          <template #activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              class="mt-2 mt-sm-0"
-              :class="$store.state.user.onboardStep === 4 ? 'red-out' : ''"
-              elevation="0"
-              outlined
-              :block="$vuetify.breakpoint.name === 'xs'"
-              color="primary"
-              @click="create()"
-              v-on="on"
-            >
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              Create assignment
-            </v-btn>
-          </template>
-          <span>Create assignment</span>
-        </v-tooltip>
+        <v-btn
+          class="mt-2 mt-sm-0"
+          :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
+          elevation="0"
+          outlined
+          :block="$vuetify.breakpoint.name === 'xs'"
+          color="primary"
+          @click="create()"
+        >
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Create assignment
+        </v-btn>
       </div>
     </v-col>
   </v-row>
