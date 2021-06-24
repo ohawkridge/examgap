@@ -13,6 +13,25 @@ export const state = () => ({
 })
 
 export const actions = {
+  // Dispatched from _report.vue
+  // Sets flag property of a response in the db
+  async flagResponse({ commit, rootState }, payload) {
+    console.log(`${payload.responseId} to ${payload.flag}`)
+    const url = new URL(
+      '/.netlify/functions/flagResponse',
+      this.$config.baseURL
+    )
+    await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        responseId: payload.responseId,
+        flagged: payload.flag,
+      }),
+      method: 'POST',
+    })
+    // Sets flag in local data
+    commit('setFlag', payload)
+  },
   async getTopics({ commit, rootState }, courseId) {
     const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
     const response = await fetch(url, {
@@ -108,9 +127,12 @@ export const mutations = {
   clearSelectedQuestions(state) {
     state.selected = []
   },
-  // _report.vue
-  // Big data structure mutations
-  flag(state) {},
+  // _report.vue data structure mutations
+  setFlag(state, { studentIndex, questionIndex, responseIndex, qIdStr, flag }) {
+    state.assignment.students[studentIndex].data[questionIndex][qIdStr][
+      responseIndex
+    ].flagged = flag
+  },
   reassign(state) {},
   setFeedback(state) {},
   logout(state) {

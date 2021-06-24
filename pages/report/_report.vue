@@ -190,25 +190,23 @@
                   <v-btn
                     icon
                     class="ml-2"
-                    :color="flagColor(response.flagged)"
-                    v-on="on"
+                    :color="response.flagged ? 'accent' : ''"
                     @click="flag()"
+                    v-on="on"
                   >
                     <v-icon>{{ $icons.mdiFlagOutline }}</v-icon>
                   </v-btn>
                 </template>
-                <span v-if="response">{{
-                  response.flagged ? 'Unflag' : 'Flag'
-                }}</span>
+                <span>{{ response.flagged ? 'Unflag' : 'Flag' }} response</span>
               </v-tooltip>
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-btn
                     icon
                     class="ml-2"
-                    :color="flagColor(response.repeat)"
-                    v-on="on"
+                    :color="response.repeat ? 'accent' : ''"
                     @click="reassign()"
+                    v-on="on"
                   >
                     <v-icon>{{ $icons.mdiRepeat }}</v-icon>
                   </v-btn>
@@ -594,9 +592,6 @@ export default {
       // Set as 'marked' as soon as response opened
       this.marked(this.response.id)
     },
-    flagColor(val) {
-      return !val || this.response === undefined ? '' : 'accent'
-    },
     // Set response as 'marked'
     async marked() {
       if (!this.response.marked) {
@@ -699,34 +694,23 @@ export default {
       }
     },
     async flag() {
+      // Dispatch a store action to update the db
+      // This action also mutates local data
+      // https://medium.com/js-dojo/vuex-tip-error-handling-on-actions-ee286ed28df4
       try {
-        const url = new URL(
-          '/.netlify/functions/flagResponse',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            responseId: this.response.id,
-            flagged: !this.response.flagged,
-          }),
-          method: 'POST',
+        await this.$store.dispatch('assignments/flagResponse', {
+          responseId: this.response.id,
+          flag: !this.response.flagged,
+          studentIndex: this.studentIndex,
+          questionIndex: this.questionIndex,
+          qIdStr: this.qIdStr,
+          responseIndex: this.responseIndex,
         })
-        if (!response.ok) {
-          throw new Error(`Error setting flag ${response.status}`)
-        }
-        // Update local data
-        this.response.flagged = !this.response.flagged
-        // this.$snack.showMessage({
-        //   msg: `${
-        //     state.assignment.flagged ? 'Response flagged' : 'Flag removed'
-        //   }`,
-        // })
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
-          msg: 'An error occurred',
+          msg: 'Error setting flag',
         })
       }
     },
