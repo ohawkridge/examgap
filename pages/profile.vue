@@ -125,12 +125,14 @@ export default {
       teacher: (state) => state.user.teacher,
       subscribed: (state) => state.user.subscribed,
       expires: (state) => state.user.subscriptionExpires,
-      days: (state) => state.user.subscriptionDays,
     }),
     expiry() {
       return `${this.expires['@ts'].substring(0, 10)} (${Math.abs(
         this.days
       )} days${this.days <= 0 ? ' ago' : ''})`
+    },
+    days() {
+      return 'TODO'
     },
     match() {
       return this.pass1 === this.pass2 ? [] : 'Passwords do not match'

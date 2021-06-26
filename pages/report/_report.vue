@@ -263,14 +263,6 @@
                   >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
-              <p class="red--text">teacherMarks</p>
-              <p class="red--text">
-                {{ teacherMarks }}
-              </p>
-              <p class="red--text">markScheme</p>
-              <p class="red--text">
-                {{ markScheme }}
-              </p>
             </v-col>
             <v-col cols="12" md="4">
               <p v-if="marking" class="text-subtitle-1 font-weight-medium">
@@ -506,8 +498,7 @@ export default {
   },
   watch: {
     response() {
-      console.log('WATCH RESPONSE')
-      // this.updateBank()
+      this.updateBank()
       // If smartSort is on, re-sort mark scheme when response changes
       if (this.smartSort) this.markScheme.sort(this.selfMarksFirst)
       this.feedback = this.response.feedback
@@ -573,7 +564,6 @@ export default {
       }
       // Remove duplicate comments
       this.commentBank = [...new Set(commentBank)]
-      console.log('COMMENTS UPDATED')
     },
     mark(obj) {
       // Index into big data structure
@@ -584,9 +574,6 @@ export default {
       // Copy original (unsorted) mark scheme
       // N.B. Don't just copy by reference!
       this.markScheme = cloneDeep(this.question.markScheme)
-      // Build comment bank
-      // (must be *after* marking = true)
-      this.updateBank()
       // Done onboarding
       this.$store.commit('user/setOnboardStep', 0)
       // Set as 'marked' as soon as response opened
@@ -706,6 +693,9 @@ export default {
           qIdStr: this.qIdStr,
           responseIndex: this.responseIndex,
         })
+        this.$snack.showMessage({
+          msg: this.response.flagged ? 'Response flagged' : 'Flag removed',
+        })
       } catch (err) {
         console.error(err)
         this.$snack.showMessage({
@@ -716,37 +706,19 @@ export default {
     },
     async reassign() {
       try {
-        const url = new URL(
-          '/.netlify/functions/reassignQuestion',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            repeat: !this.response.repeat,
-            responseId: this.response.id,
-          }),
-          method: 'POST',
+        await this.$store.dispatch('assignments/reassign', {
+          responseId: this.response.id,
+          repeat: !this.response.repeat,
+          studentIndex: this.studentIndex,
+          questionIndex: this.questionIndex,
+          qIdStr: this.qIdStr,
+          responseIndex: this.responseIndex,
         })
-        if (!response.ok) {
-          throw new Error(`Error reassigning question ${response.status}`)
-        }
-        const state = await response.json()
-        // Update local data structure
-        this.response.repeat = state.assignment.repeat
-        if (state.assignment.repeat) {
-          this.$snack.showMessage({
-            msg: `Question reassigned`,
-            type: '',
-          })
-        } else {
-          this.$snack.showMessage({
-            msg: `Assignment cancelled`,
-            type: '',
-          })
-        }
-      } catch (e) {
-        console.error(e)
+        this.$snack.showMessage({
+          msg: this.response.repeat ? 'Reassigned' : 'Reassignment removed',
+        })
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error reassigning question',

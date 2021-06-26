@@ -1,5 +1,6 @@
 <template>
-  <v-overlay :value="loading">
+  <!-- TODO Fix up -->
+  <v-overlay :value="false">
     <v-progress-circular indeterminate size="64"></v-progress-circular>
   </v-overlay>
 </template>

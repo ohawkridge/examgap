@@ -257,7 +257,7 @@ export default {
             }
             // Complete the login process
             // Use email and password to try for secret
-            const res = await this.getUserSecret()
+            const res = await this.getUser()
             this.$store.commit('user/setSecret', res.secret)
             this.$router.push(`/home`)
           }
@@ -271,11 +271,8 @@ export default {
         this.step = 2
       }
     },
-    async getUserSecret() {
-      const url = new URL(
-        '/.netlify/functions/getUserSecret',
-        this.$config.baseURL
-      )
+    async getUser() {
+      const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
       let response = await fetch(url, {
         body: JSON.stringify({
           username: this.email,

@@ -107,7 +107,8 @@ export default {
       emailRules: [
         (v) => !!v || 'E-mail is required',
         (v) => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(v) || 'Invalid e-mail.'
         },
       ],
@@ -140,11 +141,8 @@ export default {
     }
   },
   methods: {
-    async getUserSecret() {
-      const url = new URL(
-        '/.netlify/functions/getUserSecret',
-        this.$config.baseURL
-      )
+    async getUser() {
+      const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
       let response = await fetch(url, {
         body: JSON.stringify({
           username: this.email,
@@ -214,7 +212,7 @@ export default {
               body: JSON.stringify({ username: response.data.username }),
             })
             // Complete the login process
-            const res = await this.getUserSecret()
+            const res = await this.getUser()
             this.$store.commit('user/setSecret', res.secret)
             this.$router.push(res.teacher ? `/classes` : `/home`)
           }

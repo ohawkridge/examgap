@@ -94,7 +94,6 @@ export default {
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 2) || 'Password must be at least 2 characters',
       ],
-      loginKey: '',
     }
   },
   head() {
@@ -112,41 +111,20 @@ export default {
     }
   },
   methods: {
-    // Try to login user with credentials
-    async getUserSecret() {
-      const url = new URL(
-        '/.netlify/functions/getUserSecret',
-        this.$config.baseURL
-      )
-      const response = await fetch(url, {
-        body: JSON.stringify({
-          username: this.username,
-          password: this.pw,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Invalid credentials! ${response.status}`)
-      } else {
-        return await response.json()
-      }
-    },
     async login() {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
-          // Using key, try to login
-          const res = await this.getUserSecret()
-          this.$store.commit('user/setSecret', res.secret)
-          // Always call getUser on signin
-          // (otherwise last user's data still in store)
-          this.$store.dispatch('user/getUser')
-          // Reset activeGroupIndex
-          // (unless you explicity logout, this will still be set)
-          this.$store.commit('groups/setActiveGroupIndex', 0)
-          this.$router.push(res.teacher ? `/classes` : `/home`)
-        } catch (e) {
-          console.error(e)
+          // Dispatch action to get user document
+          await this.$store.dispatch('user/getUser', {
+            username: this.username,
+            password: this.pw,
+          })
+          // Route to appropriate home page
+          const isTeacher = this.$store.state.user.teacher
+          this.$router.push(isTeacher ? `/classes` : `/home`)
+        } catch (err) {
+          console.log(err)
           this.failed = true
         } finally {
           this.$refs.form.resetValidation()

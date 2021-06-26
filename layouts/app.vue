@@ -14,7 +14,7 @@
               <v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
             </v-btn>
           </template>
-          <v-list>
+          <!-- <v-list>
             <template v-for="(group, i) in groups">
               <v-list-item
                 v-if="!teacher || group.active"
@@ -47,7 +47,7 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-          </v-list>
+          </v-list> -->
         </v-menu>
         <v-spacer />
         <v-btn
@@ -112,7 +112,8 @@
       <create-class v-if="teacher" />
       <the-loading-overlay />
     </v-main>
-    <the-footer v-if="showFooter" />
+    <!-- TODO Clashes with v-bottom-nav? -->
+    <the-footer />
   </v-app>
 </template>
 
@@ -153,21 +154,21 @@ export default {
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
-      groups: (state) => state.groups.groups,
+      // groups: (state) => state.user.groups,
     }),
     ...mapGetters({
-      activeGroupCount: 'groups/activeGroupCount',
+      activeGroupCount: 'user/activeGroupCount',
     }),
     // Hide footer on pages with bottom-navigation
-    showFooter() {
-      return !(
-        this.$vuetify.breakpoint.name === 'xs' &&
-        (this.$route.name === 'group-group' ||
-          this.$route.name === 'students-students' ||
-          this.$route.name === 'grades-grades' ||
-          this.$route.name === 'edit-edit')
-      )
-    },
+    // showFooter() {
+    //   return !(
+    //     this.$vuetify.breakpoint.name === 'xs' &&
+    //     (this.$route.name === 'group-group' ||
+    //       this.$route.name === 'students-students' ||
+    //       this.$route.name === 'grades-grades' ||
+    //       this.$route.name === 'edit-edit')
+    //   )
+    // },
   },
   created() {
     this.$icons = {
@@ -185,11 +186,10 @@ export default {
       this.$router.push(this.teacher ? `/group/${groupId}` : `/home`)
     },
     logout() {
+      localStorage.removeItem('secret')
       this.$router.push('/')
-      this.$store.commit('assignments/logout')
-      this.$store.commit('groups/logout')
-      this.$store.commit('user/logout')
-      localStorage.removeItem('examgap')
+      // Reload page to clear Vuex
+      this.$router.go()
     },
   },
 }

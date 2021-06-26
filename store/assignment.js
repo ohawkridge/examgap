@@ -1,9 +1,9 @@
 export const state = () => ({
-  assignment: {},
+  assignment: {}, // _report.vue data structure
   assignmentId: '',
   questionId: '',
-  topics: [],
-  topicId: '',
+  // Info ^^^ for answer.vue
+  topics: [], //
   selected: [],
   response: {
     question: {},
@@ -13,10 +13,24 @@ export const state = () => ({
 })
 
 export const actions = {
+  async reassign({ commit, rootState }, payload) {
+    const url = new URL(
+      '/.netlify/functions/reassignQuestion',
+      this.$config.baseURL
+    )
+    await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        responseId: payload.responseId,
+        repeat: payload.repeat,
+      }),
+      method: 'POST',
+    })
+    commit('setReassign', payload)
+  },
   // Dispatched from _report.vue
   // Sets flag property of a response in the db
   async flagResponse({ commit, rootState }, payload) {
-    console.log(`${payload.responseId} to ${payload.flag}`)
     const url = new URL(
       '/.netlify/functions/flagResponse',
       this.$config.baseURL
@@ -31,20 +45,6 @@ export const actions = {
     })
     // Sets flag in local data
     commit('setFlag', payload)
-  },
-  async getTopics({ commit, rootState }, courseId) {
-    const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
-    const response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        courseId,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error(`Error fetching topics ${response.status}`)
-    }
-    commit('setTopics', await response.json())
   },
   // For students (_assignment.vue)
   async getAssignment({ commit, rootState }, assignmentId) {
@@ -133,7 +133,14 @@ export const mutations = {
       responseIndex
     ].flagged = flag
   },
-  reassign(state) {},
+  setReassign(
+    state,
+    { studentIndex, questionIndex, responseIndex, qIdStr, repeat }
+  ) {
+    state.assignment.students[studentIndex].data[questionIndex][qIdStr][
+      responseIndex
+    ].repeat = repeat
+  },
   setFeedback(state) {},
   logout(state) {
     state.assignment = {}
