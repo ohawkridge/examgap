@@ -1,41 +1,44 @@
 <template>
-  <!-- Student home page -->
   <div>
     <v-row>
-      <v-col cols="12" class="px-3">
-        <div class="pl-4">
-          <!-- <div v-if="group !== undefined" class="text-h6 font-weight-bold">
-            {{ group.name }}
+      <v-col cols="12">
+        <v-skeleton-loader :loading="$fetchState.pending" type="heading">
+          <div class="text-h6 font-weight-black">
+            {{ $fetchState.pending ? 'Loading' : group.name }}
           </div>
-          <div v-if="group !== undefined">
-            {{ group.course.name }} ({{ group.course.board }})
-          </div> -->
-        </div>
+        </v-skeleton-loader>
+        <v-skeleton-loader
+          :loading="$fetchState.pending"
+          type="text"
+          width="50%"
+        >
+          <!-- skeleton-loader buggy if v-if on div -->
+          <div>
+            {{
+              $fetchState.pending
+                ? '...'
+                : `${group.course.name} (${group.course.board})`
+            }}
+          </div>
+        </v-skeleton-loader>
       </v-col>
     </v-row>
-    <v-row class="d-flex justify-center">
+    <v-row>
       <v-col cols="12" md="7">
-        <v-card class="eg-card">
-          <!-- <v-card-title v-if="assignments">
-            Assignments ({{ assignments.length }})
-          </v-card-title> -->
-          <v-card-text>
-            <!-- <HomeAssignments v-if="assignments" :assignments="assignments" /> -->
-          </v-card-text>
-        </v-card>
+        <TheAssignmentsCard />
       </v-col>
       <v-col cols="12" md="5">
         <v-row>
           <v-col cols="12">
-            <!-- <HomeQuote /> -->
+            <the-quote-of-the-day />
           </v-col>
         </v-row>
-        <v-row>
+        <!-- <v-row>
           <v-col cols="12">
-            <v-sheet v-if="$fetchState.pending" elevation="2" class="pa-4">
+            <v-sheet v-if="true" elevation="2" class="pa-4">
               <v-skeleton-loader
                 v-bind="attrs"
-                :loading="$fetchState.pending"
+                :loading="true"
                 width="200%"
                 type="heading"
               >
@@ -43,18 +46,18 @@
               <v-skeleton-loader
                 v-for="n in 8"
                 :key="n"
-                :loading="$fetchState.pending"
+                :loading="true"
                 type="text"
                 v-bind="attrs"
               >
               </v-skeleton-loader>
             </v-sheet>
             <v-card v-else>
-              <!-- <v-card-title>
+              <v-card-title>
                 Revision topics ({{ topics.length }})
-              </v-card-title> -->
+              </v-card-title>
               <v-card-text>
-                <!-- <v-list>
+                <v-list>
                   <v-list-item
                     v-for="(topic, i) in topics"
                     :key="i"
@@ -72,11 +75,11 @@
                       }}</v-chip>
                     </v-list-item-action>
                   </v-list-item>
-                </v-list> -->
+                </v-list>
               </v-card-text>
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-col>
     </v-row>
     <!-- <HomeRevisionDialog /> -->
@@ -84,15 +87,15 @@
 </template>
 
 <script>
-// import { mapState, mapGetters } from 'vuex'
-// import HomeAssignments from '@/components/student/HomeAssignments'
+import { mapGetters } from 'vuex'
+import TheAssignmentsCard from '@/components/student/TheAssignmentsCard'
 // import HomeRevisionDialog from '@/components/student/HomeRevisionDialog'
-// import HomeQuote from '@/components/student/HomeQuote'
+import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
 
 export default {
   components: {
-    // HomeAssignments,
-    // HomeQuote,
+    TheAssignmentsCard,
+    TheQuoteOfTheDay,
     // HomeRevisionDialog,
   },
   layout: 'app',
@@ -101,7 +104,6 @@ export default {
       attrs: {
         class: 'mb-8',
       },
-      group: {},
     }
   },
   async fetch() {
@@ -116,28 +118,7 @@ export default {
     }
   },
   computed: {
-    // Get current active group
-    // ...mapGetters({ group: 'groups/activeGroup' }),
-    // ...mapState({
-    //   groups: (state) => state.groups.groups,
-    //   topics: (state) => state.groups.revisionTopics,
-    // }),
-    // Filter out post-dated assignments
-    // assignments() {
-    //   if (this.group === undefined) return false
-    //   return this.group.assignments.filter(
-    //     (ass) => ass.start === 'N/A' || new Date(ass.start) <= new Date()
-    //   )
-    // },
-  },
-  watch: {
-    // group() {
-    //   // Update revision topics if class is changed
-    //   // (except if logging out)
-    //   if (this.group !== undefined && Object.entries(this.group).length > 0) {
-    //     this.getTopics()
-    //   }
-    // },
+    ...mapGetters({ group: 'user/activeGroup' }),
   },
   methods: {
     // Remember revision topic

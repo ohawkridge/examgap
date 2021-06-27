@@ -51,6 +51,16 @@ export default {
   computed: {
     // Re-format groups for Vuetify select
     ...mapGetters({ groups: 'groups/groupsForSelect' }),
+    // TODO Only used in CopyStudents MOVE?
+    // groupsForSelect: (state) => {
+    //   return state.groups.map((group) => {
+    //     const obj = {
+    //       text: group.name,
+    //       value: group.id,
+    //     }
+    //     return obj
+    //   })
+    // },
   },
   mounted() {
     this.$nuxt.$on('open-copy', () => {

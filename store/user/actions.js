@@ -3,6 +3,20 @@ const faunadb = require('faunadb')
 const q = faunadb.query
 
 const actions = {
+  async getQuote({ commit, rootState }) {
+    const url = new URL('/.netlify/functions/getQuote', this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`getQuote\n ${response.statusText} (${response.status})`)
+    }
+    response = await response.json()
+    commit('setQuote', response)
+  },
   // Try to obtain user document with credentials
   async getUser({ commit }, { username, password }) {
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)

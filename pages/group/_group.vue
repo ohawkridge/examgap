@@ -27,11 +27,11 @@
                   <v-list-item-content>
                     <v-list-item-title>{{ assignment.name }}</v-list-item-title>
                     <v-list-item-subtitle>
-                      <div class="fix-width">
+                      <div class="align-date">
                         <span class="font-weight-bold">Start:</span>
                         {{ assignment.start | date }}
                       </div>
-                      <div class="fix-width">
+                      <div class="align-date">
                         <span class="font-weight-bold">Due:</span>
                         {{ assignment.dateDue | date }}
                       </div>
@@ -160,10 +160,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.fix-width {
-  display: inline-block;
-  width: 130px;
-}
-</style>

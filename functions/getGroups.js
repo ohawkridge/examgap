@@ -147,7 +147,13 @@ exports.handler = async (event) => {
                           q.CurrentIdentity()
                         )
                       ),
-                      q.Lambda('ref', q.Select('data', q.Get(q.Var('ref'))))
+                      q.Lambda(
+                        'ref',
+                        q.Merge(
+                          { id: q.Select('id', q.Var('ref')) },
+                          q.Select('data', q.Get(q.Var('ref')))
+                        )
+                      )
                     )
                   )
                 ),

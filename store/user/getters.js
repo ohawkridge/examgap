@@ -5,15 +5,13 @@ const getters = {
   activeGroupCount: (state) => {
     return state.groups.filter((group) => group.active || state.teacher).length
   },
-  // TODO Only used in CopyStudents
-  // groupsForSelect: (state) => {
-  //   return state.groups.map((group) => {
-  //     const obj = {
-  //       text: group.name,
-  //       value: group.id,
-  //     }
-  //     return obj
-  //   })
-  // },
+  assignments: (state, getters) => {
+    // Filter out post-dated assignments
+    if (!getters.activeGroup) return []
+    return getters.activeGroup.assignments.filter(
+      (assignment) =>
+        assignment.start === 'N/A' || new Date(assignment.start) <= new Date()
+    )
+  },
 }
 export default getters

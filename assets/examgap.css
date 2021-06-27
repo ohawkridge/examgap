@@ -18,9 +18,9 @@ blockquote {
 }
 
 /* don't underline links */
-a:link {
+/* a:link {
   text-decoration: none;
-}
+} */
 
 /* colour student answers */
 #ans {
@@ -111,6 +111,12 @@ span.v-chip.theme--light.green {
 .fix-chip {
   margin-top: -5px;
   margin-right: -2px;
+}
+
+/* align assignment Start: + Due: */
+.align-date {
+  display: inline-block;
+  width: 128px;
 }
 
 /* colour border-top on card */

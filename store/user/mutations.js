@@ -6,6 +6,9 @@ export default {
   addGroup(state, group) {
     state.groups.push(group)
   },
+  setQuote(state, quote) {
+    state.quote = quote
+  },
   // Called by _students.vue (in case new students have joined)
   updateStudentCount(state, n) {
     state.groups[state.activeGroupIndex].num_students = n
