@@ -436,7 +436,7 @@ export default {
     // Dispatch store action to get data (render from store)
     // Don't fetch if assignment already in store
     if (
-      this.$store.state.assignments.assignment.id !== this.$route.params.report
+      this.$store.state.assignment.assignment.id !== this.$route.params.report
     ) {
       try {
         await this.$store.dispatch(
@@ -458,10 +458,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({
       obs: (state) => state.user.onboardStep,
-      assignment: (state) => state.assignments.assignment,
+      assignment: (state) => state.assignment.assignment,
     }),
     // Questions included in assignment -> headers (for hover preview)
     // +1 because index 0 contains Vuetify table metadata

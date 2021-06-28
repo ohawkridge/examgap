@@ -206,7 +206,7 @@ export default {
     this.$store.dispatch('assignments/getResponse', this.$route.params.response)
   },
   computed: {
-    ...mapState({ response: (state) => state.assignments.response }),
+    ...mapState({ response: (state) => state.assignment.response }),
     noFb() {
       return this.response.feedback === '' ? 'mb-4' : ''
     },

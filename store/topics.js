@@ -5,9 +5,7 @@ export const state = () => ({
 
 export const getters = {
   topicCount: (state) => {
-    const topic = state.topics.find(({ id }) => id === state.topicId)
-    console.log(`should be 0`, topic.answered)
-    return topic.answered
+    return state.topics.find(({ id }) => id === state.topicId).answered
   },
 }
 
@@ -51,10 +49,12 @@ export const mutations = {
     //   }
     // }
     // TODO test
-    for (const topic of state.topics) {
-      if (topic.id === state.topicId) {
-        topic.answered++
-      }
-    }
+    // for (const topic of state.topics) {
+    //   if (topic.id === state.topicId) {
+    //     topic.answered++
+    //   }
+    // }
+    const topicIndex = state.topics.findIndex((x) => x.id === state.topicId)
+    state.topics[topicIndex]++
   },
 }

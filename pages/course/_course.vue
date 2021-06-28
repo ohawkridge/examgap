@@ -244,11 +244,11 @@ export default {
   },
   computed: {
     ...mapState({
-      topics: (state) => state.assignments.topics,
-      selected: (state) => state.assignments.selected,
+      topics: (state) => state.assignment.topics,
+      selected: (state) => state.assignment.selected,
       obs: (state) => state.user.onboardStep,
     }),
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     // selectedQuestion is only an index into questions
     // get actual id of currently selected question
     questionId() {

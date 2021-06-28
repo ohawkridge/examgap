@@ -173,21 +173,22 @@ export default {
     this.synth.cancel()
     // Save self marks
     if (this.marking || confirm(`Really leave without marking?`)) {
-      // Increment questions answered for topic
-      if (this.revising) {
-        this.$store.commit('groups/incrementTopicCount')
+      // Increment count for topic
+      if (this.responseId !== '' && this.revising) {
+        this.$store.commit('user/incrementTopicCount')
       }
       this.saveMarks()
       next()
     }
   },
   layout: 'app',
-  async asyncData({ $config: { baseURL }, store }) {
+  // Remember, asyncData has no access to 'this'
+  async asyncData({ store, $config: { baseURL } }) {
     const url = new URL('/.netlify/functions/getQuestion', baseURL)
     const response = await fetch(url, {
       body: JSON.stringify({
         secret: store.state.user.secret,
-        questionId: store.state.assignments.questionId,
+        questionId: store.state.assignment.questionId,
       }),
       method: 'POST',
     })
@@ -216,11 +217,10 @@ export default {
   },
   computed: {
     ...mapState({
-      assignmentId: (state) => state.assignments.assignmentId,
-      questionId: (state) => state.assignments.questionId,
+      assignmentId: (state) => state.assignment.assignmentId,
       reviseExamMode: (state) => state.user.reviseExamMode,
     }),
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     // Set assignment or independent revision?
     revising() {
       return this.assignmentId === 0
@@ -273,16 +273,15 @@ export default {
     // Copy mode from store so it doesn't change
     // while the student is answering a question
     this.examMode = this.$store.state.user.examMode
-    // Add command word tooltips for this course
-    const cWords = this.group.course.commands
-    if (cWords !== '') {
-      const els = document.querySelectorAll('strong, b')
-      for (const el of els) {
+    // Add tooltips for command words
+    const commandWords = this.group.course.commands
+    if (commandWords !== '') {
+      for (const el of document.querySelectorAll('strong, b')) {
         const word = el.innerHTML.toLowerCase()
         // Set data-text attribute and css class
-        if (word in cWords) {
+        if (word in commandWords) {
           el.classList.add('command')
-          el.setAttribute('data-text', cWords[word])
+          el.setAttribute('data-text', commandWords[word])
         }
       }
     }
@@ -305,10 +304,10 @@ export default {
     },
     // Debounce answer area
     // N.B. If the first call to saveAnswer doesn't complete
-    // within 1700ms you may get duplicate responses
+    // within 1800ms you may get duplicate responses
     update: debounce(function () {
       this.save()
-    }, 1700),
+    }, 1800),
     // Get SpeechSynthesisVoice objects if supported
     // https://wicg.github.io/speech-api/#utterance-attributes
     getVoices() {
@@ -395,10 +394,10 @@ export default {
         let docID = await fetch(url, {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
-            assignmentId: this.$store.state.assignments.assignmentId,
-            questionId: this.$store.state.assignments.questionId,
+            assignmentId: this.$store.state.assignment.assignmentId,
+            questionId: this.$store.state.assignment.questionId,
             text: this.answer,
-            topicId: this.$store.state.assignments.topicId,
+            topicId: this.$store.state.topics.topicId,
             responseId: this.responseId,
           }),
           method: 'POST',

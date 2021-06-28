@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     ...mapState({
-      selected: (state) => state.assignments.selected,
+      selected: (state) => state.assignment.selected,
     }),
     included() {
       return this.selected.includes(this.questionId)

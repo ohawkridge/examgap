@@ -71,7 +71,7 @@ export const actions = {
     // _group.vue sends -1 if no assignment cached yet
     if (assignmentId === -1) {
       // Select id of most recent assignment
-      assignmentId = rootGetters['groups/activeGroup'].assignments[0].id
+      assignmentId = rootGetters['user/activeGroup'].assignments[0].id
     }
     const response = await fetch(url, {
       body: JSON.stringify({

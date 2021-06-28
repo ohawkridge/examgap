@@ -144,7 +144,7 @@ export default {
             throw new Error(`Error sending email ${mailResponse.status}`)
           }
           // Increment num_students on group in store
-          this.$store.commit('groups/incrementStudentCount')
+          this.$store.commit('user/incrementStudentCount')
           // Emit event to re-fetch student data in parent
           this.$nuxt.$emit('user-added')
         }

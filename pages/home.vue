@@ -25,7 +25,7 @@
     </v-row>
     <v-row>
       <v-col cols="12" md="7">
-        <the-assignments-card />
+        <the-assignments-card :fetching="$fetchState.pending" />
       </v-col>
       <v-col cols="12" md="5">
         <v-row>
@@ -35,7 +35,7 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <the-revision-card />
+            <the-revision-card :fetching="$fetchState.pending" />
           </v-col>
         </v-row>
       </v-col>
@@ -57,11 +57,15 @@ export default {
   },
   layout: 'app',
   async fetch() {
-    console.log('fetching groups..')
     // Dispatch store action to get groups + assignments
-    await this.$store.dispatch('user/getGroups', {
-      secret: this.$store.state.user.secret,
-    })
+    if (this.$store.state.user.groups.length === 0) {
+      console.log('%c' + 'fetch (home.vue)..', 'color:purple')
+      await this.$store.dispatch('user/getGroups', {
+        secret: this.$store.state.user.secret,
+      })
+      // Fetch revision topics once group(s) exist
+      await this.$store.dispatch('topics/getTopics')
+    }
   },
   head() {
     return {

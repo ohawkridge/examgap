@@ -235,7 +235,6 @@ export default {
             '%c' + 'User',
             'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
           )
-          console.dir(response)
           if (response === false) {
             this.emailInUse = true
           } else {

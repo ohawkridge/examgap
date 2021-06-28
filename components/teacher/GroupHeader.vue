@@ -39,7 +39,7 @@ export default {
     TheInviteDialog,
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
   },
   created() {
     this.$icons = { mdiPlus }

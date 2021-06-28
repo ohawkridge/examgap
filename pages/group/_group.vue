@@ -123,8 +123,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
-    ...mapState({ assignment: (state) => state.assignments.assignment }),
+    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapState({ assignment: (state) => state.assignment.assignment }),
     // Defend against logout, refresh etc.
     // TODO TEST ME!
     assignments() {

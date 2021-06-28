@@ -81,7 +81,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({ assignment: (state) => state.assignments.assignment }),
+    ...mapState({ assignment: (state) => state.assignment.assignment }),
   },
 }
 </script>

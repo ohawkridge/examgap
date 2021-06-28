@@ -231,7 +231,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
   },
   mounted() {
     // Re-fetch data when students added

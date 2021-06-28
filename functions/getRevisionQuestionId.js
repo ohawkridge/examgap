@@ -6,7 +6,6 @@ exports.handler = async (event) => {
   const topicId = data.topicId
   const answered = data.answered
   const secret = data.secret
-  console.log(answered)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
@@ -34,7 +33,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       // Use the student's count of answered questions
       // as an index into the array of question ids
-      body: JSON.stringify(listOfIds)[answered],
+      body: JSON.stringify(listOfIds[answered]),
     }
   } catch (err) {
     console.error(err.description)

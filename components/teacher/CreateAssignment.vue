@@ -261,7 +261,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({ secret: (state) => state.user.secret }),
     allSelected: {
       get() {

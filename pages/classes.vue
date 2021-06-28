@@ -118,7 +118,7 @@ export default {
     ...mapGetters({
       // N.B. You *cannot* use this for GroupCards
       // The filter will throw off activeGroupIndex
-      activeGroupCount: 'groups/activeGroupCount',
+      activeGroupCount: 'user/activeGroupCount',
     }),
     ...mapState({
       groups: (state) => state.groups.groups,

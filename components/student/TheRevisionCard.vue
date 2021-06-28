@@ -3,10 +3,10 @@
     <v-card>
       <v-card-title> Revision topics ({{ topics.length }}) </v-card-title>
       <v-card-text>
-        <template v-if="$fetchState.pending" elevation="2" class="pa-4">
+        <template v-if="fetching" elevation="2" class="pa-4">
           <v-skeleton-loader
             v-bind="attrs"
-            :loading="$fetchState.pending"
+            :loading="fetching"
             width="200%"
             type="heading"
           >
@@ -14,7 +14,7 @@
           <v-skeleton-loader
             v-for="n in 8"
             :key="n"
-            :loading="$fetchState.pending"
+            :loading="fetching"
             type="text"
             v-bind="attrs"
           >
@@ -101,6 +101,13 @@ import { mdiTimerOutline, mdiBullseyeArrow } from '@mdi/js'
 
 export default {
   name: 'TheRevisionCard',
+  props: {
+    // $fetchState from home.vue
+    fetching: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       dialog: false,
@@ -109,12 +116,6 @@ export default {
         class: 'mb-8',
       },
     }
-  },
-  async fetch() {
-    // Fetch topics for current course including
-    // count of revision questions answered
-    console.log('fetching topics..')
-    await this.$store.dispatch('topics/getTopics')
   },
   computed: {
     ...mapState({
@@ -147,32 +148,31 @@ export default {
       this.$store.commit('topics/setTopicId', topicId)
       this.dialog = true
     },
-    start() {
+    async start() {
       try {
         this.loading = true
-        // const url = new URL(
-        //   '/.netlify/functions/getRevisionQuestionId',
-        //   this.$config.baseURL
-        // )
-        console.log(`HERE?`, this.$store.getters['topics/topicCount'])
-        // let response = await fetch(url, {
-        //   body: JSON.stringify({
-        //     secret: this.$store.state.user.secret,
-        //     topicId: this.$store.state.topics.topicId,
-        //     answered: this.$store.getters['topics/topicCount'],
-        //   }),
-        //   method: 'POST',
-        // })
-        // if (!response.ok) {
-        //   throw new Error(`Error getting questionId ${response.status}`)
-        // }
-        // response = await response.json()
-        // // Store question info for later
-        // this.$store.commit('assignment/setAnswerData', {
-        //   assignmentId: 0,
-        //   questionId: response,
-        // })
-        // this.$router.push(`/answer`)
+        const url = new URL(
+          '/.netlify/functions/getRevisionQuestionId',
+          this.$config.baseURL
+        )
+        let response = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.$store.state.user.secret,
+            topicId: this.$store.state.topics.topicId,
+            answered: this.$store.getters['topics/topicCount'],
+          }),
+          method: 'POST',
+        })
+        if (!response.ok) {
+          throw new Error(`Error getting questionId ${response.status}`)
+        }
+        response = await response.json()
+        // Store question info for later
+        this.$store.commit('assignment/setAnswerData', {
+          assignmentId: 0,
+          questionId: response,
+        })
+        this.$router.push(`/answer`)
       } catch (err) {
         console.error(err)
         this.$snack.showMessage({
