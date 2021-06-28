@@ -88,8 +88,8 @@ export default {
           // Progress onboarding
           this.$store.commit('user/setOnboardStep', 2)
           // If on Archive, set back to Home
-          this.$store.commit('groups/setTab', true)
-          this.$store.commit('groups/setActiveGroupIndex', -1)
+          this.$store.commit('app/setTab', true)
+          this.$store.commit('user/setActiveGroupIndex', -1)
           this.$router.push(`/group/${data.id}`)
           this.$snack.showMessage({
             type: 'success',

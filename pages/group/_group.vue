@@ -152,7 +152,7 @@ export default {
           '%c' + 'Prefetch',
           'padding:2px 4px;background-color:#464646;color:white;border-radius:3px'
         )
-        await this.$store.dispatch('assignments/getReport', -1)
+        await this.$store.dispatch('assignment/getReport', -1)
       } catch (err) {
         console.error(err)
       }

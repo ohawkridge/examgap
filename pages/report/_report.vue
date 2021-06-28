@@ -440,7 +440,7 @@ export default {
     ) {
       try {
         await this.$store.dispatch(
-          'assignments/getReport',
+          'assignment/getReport',
           this.$route.params.report
         )
       } catch (err) {
@@ -685,7 +685,7 @@ export default {
       // This action also mutates local data
       // https://medium.com/js-dojo/vuex-tip-error-handling-on-actions-ee286ed28df4
       try {
-        await this.$store.dispatch('assignments/flagResponse', {
+        await this.$store.dispatch('assignment/flagResponse', {
           responseId: this.response.id,
           flag: !this.response.flagged,
           studentIndex: this.studentIndex,
@@ -706,7 +706,7 @@ export default {
     },
     async reassign() {
       try {
-        await this.$store.dispatch('assignments/reassign', {
+        await this.$store.dispatch('assignment/reassign', {
           responseId: this.response.id,
           repeat: !this.response.repeat,
           studentIndex: this.studentIndex,

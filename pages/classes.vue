@@ -109,6 +109,16 @@ export default {
       outline: false,
     }
   },
+  async fetch() {
+    // Dispatch store action to get groups + assignments
+    if (this.$store.state.user.groups.length === 0) {
+      console.log('%c' + 'fetch (classes.vue)..', 'color:purple')
+      await this.$store.dispatch('user/getGroups', {
+        secret: this.$store.state.user.secret,
+        teacher: this.$store.state.user.teacher,
+      })
+    }
+  },
   head() {
     return {
       title: 'Home',
@@ -121,17 +131,17 @@ export default {
       activeGroupCount: 'user/activeGroupCount',
     }),
     ...mapState({
-      groups: (state) => state.groups.groups,
+      groups: (state) => state.user.groups,
       obs: (state) => state.user.onboardStep,
       loading: (state) => state.user.loading,
     }),
     // Remember active tab
     tab: {
       get() {
-        return this.$store.state.groups.tab
+        return this.$store.state.app.tab
       },
       set(value) {
-        this.$store.commit('groups/setTab', value)
+        this.$store.commit('app/setTab', value)
       },
     },
   },

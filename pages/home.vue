@@ -62,6 +62,7 @@ export default {
       console.log('%c' + 'fetch (home.vue)..', 'color:purple')
       await this.$store.dispatch('user/getGroups', {
         secret: this.$store.state.user.secret,
+        teacher: this.$store.state.user.teacher,
       })
       // Fetch revision topics once group(s) exist
       await this.$store.dispatch('topics/getTopics')

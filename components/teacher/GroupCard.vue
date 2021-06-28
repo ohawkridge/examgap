@@ -47,7 +47,7 @@ export default {
   methods: {
     open() {
       // Remember active group
-      this.$store.commit('groups/setActiveGroupIndex', this.groupIndex)
+      this.$store.commit('user/setActiveGroupIndex', this.groupIndex)
       this.$router.push(`/group/${this.group.id}`)
     },
   },

@@ -71,7 +71,7 @@ export default {
     // Dispatch store action to get assignment
     // (allows page to survive refresh as assignment data will be in store)
     this.$store.dispatch(
-      'assignments/getAssignment',
+      'assignment/getAssignment',
       this.$route.params.assignment
     )
   },

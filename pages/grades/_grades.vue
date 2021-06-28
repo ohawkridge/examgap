@@ -171,13 +171,6 @@ export default {
     gk(val) {
       return `item.${val}`
     },
-    createAssignment() {
-      // Remember group when creating assignments
-      this.$store.commit('assignments/setGroup', this.group.id)
-      // Clear any questions selected for a previous group
-      this.$store.commit('assignments/clearSelectedQuestions')
-      this.$router.push(`/course/${this.group.course.id}`)
-    },
     // Scroll right https://jsfiddle.net/Herteby/x53494ef/
     scroll() {
       if (!this.interval) {

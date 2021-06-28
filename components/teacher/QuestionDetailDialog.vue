@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     select(questionid) {
-      this.$store.commit('assignments/updateSelectedQuestions', questionid)
+      this.$store.commit('assignment/updateSelectedQuestions', questionid)
     },
   },
 }

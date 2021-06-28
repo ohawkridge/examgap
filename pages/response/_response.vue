@@ -203,7 +203,7 @@ import {
 export default {
   layout: 'app',
   fetch() {
-    this.$store.dispatch('assignments/getResponse', this.$route.params.response)
+    this.$store.dispatch('assignment/getResponse', this.$route.params.response)
   },
   computed: {
     ...mapState({ response: (state) => state.assignment.response }),

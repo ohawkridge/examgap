@@ -43,18 +43,7 @@ export const mutations = {
     state.topicId = topicId
   },
   incrementTopicCount(state) {
-    // for (let i = 0; i < state.revisionTopics.length; i++) {
-    //   if (state.revisionTopics[i].id === state.currentRevisionTopic.id) {
-    //     state.revisionTopics[i].answered += 1
-    //   }
-    // }
-    // TODO test
-    // for (const topic of state.topics) {
-    //   if (topic.id === state.topicId) {
-    //     topic.answered++
-    //   }
-    // }
     const topicIndex = state.topics.findIndex((x) => x.id === state.topicId)
-    state.topics[topicIndex]++
+    state.topics[topicIndex].answered++
   },
 }

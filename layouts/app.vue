@@ -14,7 +14,8 @@
               <v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
             </v-btn>
           </template>
-          <!-- <v-list>
+          <v-list>
+            <!-- Filter teacher groups for active on-the-fly -->
             <template v-for="(group, i) in groups">
               <v-list-item
                 v-if="!teacher || group.active"
@@ -47,7 +48,7 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-          </v-list> -->
+          </v-list>
         </v-menu>
         <v-spacer />
         <v-btn
@@ -154,8 +155,9 @@ export default {
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
-      // groups: (state) => state.user.groups,
+      groups: (state) => state.user.groups,
     }),
+    // Only needed to display 'No active classes' menu item
     ...mapGetters({
       activeGroupCount: 'user/activeGroupCount',
     }),
@@ -182,7 +184,7 @@ export default {
   methods: {
     nav(index, groupId) {
       // Store the index of the current group
-      this.$store.commit('groups/setActiveGroupIndex', index)
+      this.$store.commit('user/setActiveGroupIndex', index)
       this.$router.push(this.teacher ? `/group/${groupId}` : `/home`)
     },
     logout() {

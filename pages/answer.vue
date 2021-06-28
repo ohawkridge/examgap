@@ -77,19 +77,9 @@
               </v-tooltip> -->
             </v-col>
             <v-col cols="12" class="d-flex justify-end">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    color="primary"
-                    elevation="0"
-                    @click="selfMark()"
-                    v-on="on"
-                  >
-                    Self mark
-                  </v-btn>
-                </template>
-                <span>Self mark</span>
-              </v-tooltip>
+              <v-btn color="primary" elevation="0" @click="selfMark()">
+                Self mark
+              </v-btn>
             </v-col>
           </v-row>
         </v-card-text>
@@ -130,9 +120,7 @@
       <!-- Confirm dialog -->
       <v-dialog v-model="confirmDialog" width="400">
         <v-card class="modal">
-          <v-card-title class="d-flex justify-center">
-            Self mark?
-          </v-card-title>
+          <v-card-title class="d-flex justify-center"> Self mark </v-card-title>
           <v-card-text>
             Are you sure? Once you've seen the mark scheme, you can't go back.
           </v-card-text>
@@ -175,7 +163,7 @@ export default {
     if (this.marking || confirm(`Really leave without marking?`)) {
       // Increment count for topic
       if (this.responseId !== '' && this.revising) {
-        this.$store.commit('user/incrementTopicCount')
+        this.$store.commit('topics/incrementTopicCount')
       }
       this.saveMarks()
       next()
@@ -296,7 +284,7 @@ export default {
     },
     // Ask for confirmation if answer is blank or very short
     selfMark() {
-      if (this.wordCount === 0 || this.wordCount < this.question.minWords / 2) {
+      if (this.wordCount === 0 || this.wordCount < this.question.minWords / 3) {
         this.confirmDialog = true
       } else {
         this.marking = true

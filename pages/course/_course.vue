@@ -18,7 +18,7 @@
               v-bind="attrs"
               class="mr-2"
               v-on="on"
-              @click="$store.commit('assignments/clearSelectedQuestions')"
+              @click="$store.commit('assignment/clearSelectedQuestions')"
             >
               Clear
             </v-btn>
@@ -130,7 +130,7 @@
                                   v-on="on"
                                   @click.stop="
                                     $store.commit(
-                                      'assignments/updateSelectedQuestions',
+                                      'assignment/updateSelectedQuestions',
                                       q.id
                                     )
                                   "
@@ -230,10 +230,7 @@ export default {
   async fetch() {
     // Dispatch store action to get topics
     // await completion otherwise loadQuestions will fail
-    await this.$store.dispatch(
-      'assignments/getTopics',
-      this.$route.params.course
-    )
+    await this.$store.dispatch('topics/getTopics', this.$route.params.course)
     // Get questions for topic
     this.loadQuestions()
   },

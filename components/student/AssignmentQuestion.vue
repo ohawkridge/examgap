@@ -148,7 +148,7 @@ export default {
     answer(questionId) {
       // Store assignment and question ids to associate
       // later with the student's saved response
-      this.$store.commit(`assignments/setAnswerData`, {
+      this.$store.commit(`assignment/setAnswerData`, {
         assignmentId: this.assignmentId,
         questionId,
       })
