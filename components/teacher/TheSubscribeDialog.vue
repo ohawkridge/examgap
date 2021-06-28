@@ -5,21 +5,16 @@
     v-model="dialog"
     max-width="420"
   >
-    <template #activator="{ on: dial }">
-      <v-tooltip bottom>
-        <template #activator="{ on: tooltip }">
-          <v-btn
-            color="primary"
-            elevation="0"
-            class="mr-2"
-            :block="block"
-            v-on="{ ...tooltip, ...dial }"
-          >
-            {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
-          </v-btn>
-        </template>
-        <span>Subscribe</span>
-      </v-tooltip>
+    <template #activator="{ on }">
+      <v-btn
+        color="primary"
+        elevation="0"
+        class="mr-2"
+        :block="block"
+        v-on="on"
+      >
+        {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
+      </v-btn>
     </template>
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"

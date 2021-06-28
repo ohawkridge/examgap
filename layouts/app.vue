@@ -27,7 +27,7 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-            <v-list-item v-if="activeGroupCount === 0" disabled>
+            <v-list-item v-if="teacher && activeGroupCount === 0" disabled>
               <v-list-item-content>
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
@@ -50,6 +50,7 @@
             </template>
           </v-list>
         </v-menu>
+        d: {{ activeGroupCount }}
         <v-spacer />
         <v-btn
           v-if="teacher"

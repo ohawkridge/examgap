@@ -3,7 +3,7 @@ const getters = {
     return state.groups[state.activeGroupIndex]
   },
   activeGroupCount: (state) => {
-    return state.groups.filter((group) => group.active || state.teacher).length
+    return state.groups.filter((group) => group.active).length
   },
   assignments: (state, getters) => {
     // Filter out post-dated assignments
