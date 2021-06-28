@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <template v-if="fetching">
+    <template v-if="$fetchState.pending">
       <v-skeleton-loader
         :loading="true"
         class="pa-4"
