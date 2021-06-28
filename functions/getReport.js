@@ -222,7 +222,7 @@ exports.handler = async (event) => {
     )
     const data = await keyedClient.query(qry)
     data.students.sort(compare)
-    // console.dir(data)
+    console.log(data)
     console.timeEnd(`_report_${assignmentId}`)
     return {
       statusCode: 200,

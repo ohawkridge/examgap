@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     close() {
-      this.$store.commit('user/setOnboardStep', 0)
+      this.$store.commit('app/setOnboardStep', 0)
     },
   },
 }

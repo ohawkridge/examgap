@@ -3,13 +3,12 @@ export const state = () => ({
   assignmentId: '',
   questionId: '',
   // Info ^^^ for answer.vue
-  topics: [], //
+  topics: [], // Student revision and teacher -> _course.vue
   selected: [],
-  response: {
-    question: {},
-    tm: [],
-    sm: [],
-  },
+  studentIndex: '',
+  questionIndex: '',
+  responseIndex: '',
+  // Indecies ^^^ into _report.vue data structure
 })
 
 export const actions = {
@@ -106,9 +105,6 @@ export const mutations = {
   setTopics(state, topics) {
     state.topics = topics
   },
-  setResponse(state, data) {
-    state.response = data
-  },
   setAssignment(state, data) {
     state.assignment = data
   },
@@ -128,10 +124,13 @@ export const mutations = {
     state.selected = []
   },
   // _report.vue data structure mutations
-  setFlag(state, { studentIndex, questionIndex, responseIndex, qIdStr, flag }) {
-    state.assignment.students[studentIndex].data[questionIndex][qIdStr][
-      responseIndex
-    ].flagged = flag
+  // Fuck me this code is ugly!
+  // { studentIndex, questionIndex, responseIndex, qIdStr, flag }
+  setFlag(state, obj) {
+    console.log('setFlag')
+    // state.assignment.students[studentIndex].data[questionIndex][qIdStr][
+    //   responseIndex
+    // ].flagged = flag
   },
   setReassign(
     state,
@@ -142,17 +141,6 @@ export const mutations = {
     ].repeat = repeat
   },
   setFeedback(state) {},
-  logout(state) {
-    state.assignment = {}
-    state.assignmentId = ''
-    state.questionId = ''
-    state.topics = []
-    state.topicId = ''
-    state.selected = []
-    state.response = {
-      question: {},
-      tm: [],
-      sm: [],
-    }
-  },
+  setTeacherMarks(state) {},
+  setMarked(state) {},
 }

@@ -116,7 +116,7 @@ export default {
   },
   mounted() {
     if (this.group.num_students === 0) {
-      this.$store.commit('user/setOnboardStep', 2)
+      this.$store.commit('app/setOnboardStep', 2)
     }
     this.$nuxt.$on('open-invite', () => {
       this.dialog = true
@@ -134,7 +134,7 @@ export default {
     onboard() {
       // Continue onboarding if few assignments
       if (this.group.assignments.length < 3) {
-        this.$store.commit('user/setOnboardStep', 3)
+        this.$store.commit('app/setOnboardStep', 3)
       }
     },
   },

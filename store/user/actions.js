@@ -35,11 +35,12 @@ const actions = {
     commit('setUser', response)
   },
   // Get groups and assignments
-  async getGroups({ rootState, commit }) {
+  async getGroups({ rootState, commit, rootGetters }) {
     const url = new URL('/.netlify/functions/getGroups', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
+        teacher: rootState.user.teacher,
       }),
       method: 'POST',
     })
@@ -48,11 +49,10 @@ const actions = {
     }
     response = await response.json()
     commit('setGroups', response)
-    // Onboard teachers without groups
-    // TODO
-    // if (response.groups.length === 0) {
-    //   commit('user/setOnboardStep', 1)
-    // }
+    // Onboard if no active groups
+    if (rootGetters['user/activeGroupCount'] === 0) {
+      commit('app/setOnboardStep', 1)
+    }
   },
   // For students, stream user document
   openStream({ state, commit, dispatch }, { id }) {

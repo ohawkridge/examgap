@@ -185,7 +185,7 @@
                 </template>
                 <span>Next</span>
               </v-tooltip>
-              <v-tooltip bottom>
+              <v-tooltip v-if="marking" bottom>
                 <template #activator="{ on }">
                   <v-btn
                     icon
@@ -227,7 +227,7 @@
                   <v-chip color="primary" outlined class="mr-2" v-on="on">
                     <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
                     <span v-if="marking" class="font-weight-black">{{
-                      response.tm.length
+                      teacherMarks.length
                     }}</span>
                     <v-icon right>{{ $icons.mdiCheck }}</v-icon>
                   </v-chip>
@@ -430,14 +430,14 @@ export default {
       markScheme: [],
       teacherMarks: [],
       infoDialog: false,
+      forceRefresh: false,
     }
   },
   async fetch() {
-    // Dispatch store action to get data (render from store)
-    // Don't fetch if assignment already in store
-    if (
-      this.$store.state.assignment.assignment.id !== this.$route.params.report
-    ) {
+    // Dispatch action to get data if not already in store
+    const reportId = this.$store.state.assignment.assignment.id
+    const paramId = this.$route.params.report
+    if (this.forceRefresh || reportId !== paramId) {
       try {
         await this.$store.dispatch(
           'assignment/getReport',
@@ -451,6 +451,7 @@ export default {
         })
       }
     }
+    this.forceRefresh = false
   },
   head() {
     return {
@@ -463,12 +464,10 @@ export default {
       obs: (state) => state.user.onboardStep,
       assignment: (state) => state.assignment.assignment,
     }),
-    // Questions included in assignment -> headers (for hover preview)
+    // Questions included in assignment headers (for hover preview)
     // +1 because index 0 contains Vuetify table metadata
     question() {
-      return this.$fetchState.pending
-        ? {}
-        : this.assignment.headers[this.questionIndex + 1]
+      return this.assignment.headers[this.questionIndex + 1]
     },
     // Current question id as a String
     qIdStr() {
@@ -533,7 +532,7 @@ export default {
   },
   mounted() {
     if (this.group.assignments.length < 3) {
-      this.$store.commit('user/setOnboardStep', 7)
+      this.$store.commit('app/setOnboardStep', 7)
     }
   },
   methods: {
@@ -546,6 +545,7 @@ export default {
       })
     },
     refresh() {
+      this.forceRefresh = true
       this.$fetch()
     },
     // Build comment bank from feedback on existing responses
@@ -570,12 +570,14 @@ export default {
       this.studentIndex = obj.studentIndex
       this.questionIndex = obj.questionIndex
       this.responseIndex = obj.responseIndex
+      // Copy marks to this
+      this.teacherMarks = this.response.tm
       this.marking = true
       // Copy original (unsorted) mark scheme
       // N.B. Don't just copy by reference!
       this.markScheme = cloneDeep(this.question.markScheme)
-      // Done onboarding
-      this.$store.commit('user/setOnboardStep', 0)
+      // Stop onboarding once user has seen marking view
+      this.$store.commit('app/setOnboardStep', 0)
       // Set as 'marked' as soon as response opened
       this.marked(this.response.id)
     },
@@ -681,17 +683,12 @@ export default {
       }
     },
     async flag() {
-      // Dispatch a store action to update the db
-      // This action also mutates local data
+      // Keep store data in sync with database
+      // (also reassign, feedback, etc.)
       // https://medium.com/js-dojo/vuex-tip-error-handling-on-actions-ee286ed28df4
       try {
         await this.$store.dispatch('assignment/flagResponse', {
-          responseId: this.response.id,
           flag: !this.response.flagged,
-          studentIndex: this.studentIndex,
-          questionIndex: this.questionIndex,
-          qIdStr: this.qIdStr,
-          responseIndex: this.responseIndex,
         })
         this.$snack.showMessage({
           msg: this.response.flagged ? 'Response flagged' : 'Flag removed',

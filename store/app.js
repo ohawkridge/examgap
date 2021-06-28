@@ -10,6 +10,10 @@ export const mutations = {
   },
   setOnboardStep(state, step) {
     state.onboardStep = step
+    console.log(
+      '%c' + step,
+      'padding:2px 4px;background-color:#ef7a85;color:white;border-radius:16px'
+    )
   },
   setLoading(state, loading) {
     state.loading = loading

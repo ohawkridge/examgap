@@ -47,11 +47,11 @@ export default {
   mounted() {
     // Onboard -> no students
     if (this.group.num_students === 0) {
-      this.$store.commit('user/setOnboardStep', 2)
+      this.$store.commit('app/setOnboardStep', 2)
     }
     // Onboard -> few assignments
     if (this.group.num_students > 0 && this.group.assignments.length < 3) {
-      this.$store.commit('user/setOnboardStep', 3)
+      this.$store.commit('app/setOnboardStep', 3)
     }
   },
   methods: {
@@ -60,7 +60,7 @@ export default {
       this.$store.commit('assignment/clearSelectedQuestions')
       // Continue onboarding if user hasn't set assignments
       this.$store.commit(
-        'user/setOnboardStep',
+        'app/setOnboardStep',
         this.group.assignments.length < 3 ? 5 : 0
       )
       this.$router.push(`/course/${this.group.course.id}`)

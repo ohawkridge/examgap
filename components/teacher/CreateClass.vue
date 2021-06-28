@@ -86,7 +86,7 @@ export default {
           // Update local data
           this.$store.commit('groups/addGroup', data)
           // Progress onboarding
-          this.$store.commit('user/setOnboardStep', 2)
+          this.$store.commit('app/setOnboardStep', 2)
           // If on Archive, set back to Home
           this.$store.commit('app/setTab', true)
           this.$store.commit('user/setActiveGroupIndex', -1)

@@ -266,13 +266,13 @@ export default {
       this.selectedQuestion = 0
       // Show onboarding if nec.
       if (this.group.assignments.length < 3) {
-        this.$store.commit('user/setOnboardStep', 6)
+        this.$store.commit('app/setOnboardStep', 6)
       }
     },
     selected() {
       // Advance onboarding
       if (this.obs !== 0 && this.selected.length > 0) {
-        this.$store.commit('user/setOnboardStep', 7)
+        this.$store.commit('app/setOnboardStep', 7)
       }
     },
   },
@@ -317,7 +317,7 @@ export default {
     assign() {
       this.$nuxt.$emit('show-assign')
       // Onboarding complete
-      this.$store.commit('user/setOnboardStep', 0)
+      this.$store.commit('app/setOnboardStep', 0)
     },
   },
 }

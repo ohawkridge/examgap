@@ -60,10 +60,7 @@ export default {
     // Dispatch store action to get groups + assignments
     if (this.$store.state.user.groups.length === 0) {
       console.log('%c' + 'fetch (home.vue)..', 'color:purple')
-      await this.$store.dispatch('user/getGroups', {
-        secret: this.$store.state.user.secret,
-        teacher: this.$store.state.user.teacher,
-      })
+      await this.$store.dispatch('user/getGroups')
       // Fetch revision topics once group(s) exist
       await this.$store.dispatch('topics/getTopics')
     }
