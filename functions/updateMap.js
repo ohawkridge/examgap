@@ -5,8 +5,9 @@ exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const topics = data.topics
   const questionId = data.questionId
+  const secret = data.secret
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Let(
@@ -71,6 +72,7 @@ exports.handler = async (event, context, callback) => {
       statusCode: 200,
     }
   } catch (err) {
+    console.log(err.description)
     return { statusCode: 500, body: err.toString() }
   }
 }

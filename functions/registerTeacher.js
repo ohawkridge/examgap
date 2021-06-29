@@ -20,6 +20,7 @@ exports.handler = async (event, context, callback) => {
           username: q.LowerCase(username),
           created: q.Now(),
           subscriptionExpires: q.TimeAdd(q.Now(), 30, 'days'),
+          subscribed: false,
           teacher: true,
         },
         credentials: {

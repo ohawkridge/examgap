@@ -47,13 +47,7 @@
                   :group-id="group.id"
                   type="btn"
                 />
-                <v-btn
-                  elevation="0"
-                  color="orange"
-                  dark
-                  class="ml-2"
-                  @click="refresh()"
-                >
+                <v-btn elevation="0" class="ml-2" @click="refresh()">
                   Refresh
                 </v-btn>
               </v-col>

@@ -1,7 +1,7 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const AWS = require('aws-sdk')
   const data = JSON.parse(event.body)
   const email = data.email
@@ -64,7 +64,7 @@ exports.handler = async (event, context, callback) => {
           },
           Subject: {
             Charset: 'UTF-8',
-            Data: '>> Examgap new password 🔒',
+            Data: 'Examgap new password 🔒',
           },
         },
         Source: 'Examgap <support@examgap.com>',

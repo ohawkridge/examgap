@@ -281,6 +281,7 @@ exports.handler = async (event, context, callback) => {
       body: JSON.stringify(data),
     }
   } catch (e) {
+    // console.log(e)
     return { statusCode: 500, body: e.toString() }
   }
 }
