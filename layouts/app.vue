@@ -1,5 +1,29 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
+    <v-navigation-drawer v-model="drawer" app right>
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="navGroup"
+          active-class="deep-purple--text text--accent-4"
+        >
+          <v-list-item>
+            <v-list-item-title>Foo</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>Bar</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>Fizz</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>Buzz</v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
     <v-app-bar color="#fefcfb" elevation="2" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
@@ -50,9 +74,9 @@
             </template>
           </v-list>
         </v-menu>
-        d: {{ activeGroupCount }}
         <v-spacer />
-        <v-btn
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <!-- <v-btn
           v-if="teacher"
           nuxt
           to="/author"
@@ -102,7 +126,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-        </v-menu>
+        </v-menu> -->
       </v-container>
     </v-app-bar>
     <v-main>
@@ -110,11 +134,10 @@
         <nuxt />
       </v-container>
       <the-snackbar />
-      <the-join-dialog v-if="!teacher" />
       <create-class v-if="teacher" />
+      <the-join-dialog v-if="!teacher" />
       <the-loading-overlay />
     </v-main>
-    <!-- TODO Clashes with v-bottom-nav? -->
     <the-footer />
   </v-app>
 </template>
@@ -125,10 +148,10 @@ import TheLogo from '@/components/common/TheLogo'
 import TheLogoMark from '@/components/common/TheLogoMark'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
-import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
+// import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
-import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
+// import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import CreateClass from '@/components/teacher/CreateClass'
 
 import {
@@ -146,13 +169,19 @@ export default {
     TheLogoMark,
     TheSnackbar,
     TheFooter,
-    TheSubscribeDialog,
+    // TheSubscribeDialog,
     TheJoinDialog,
     TheLoadingOverlay,
-    TheFeedbackDialog,
+    // TheFeedbackDialog,
     CreateClass,
   },
   middleware: ['auth'],
+  data() {
+    return {
+      drawer: null,
+      navGroup: '',
+    }
+  },
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
@@ -162,16 +191,6 @@ export default {
     ...mapGetters({
       activeGroupCount: 'user/activeGroupCount',
     }),
-    // Hide footer on pages with bottom-navigation
-    // showFooter() {
-    //   return !(
-    //     this.$vuetify.breakpoint.name === 'xs' &&
-    //     (this.$route.name === 'group-group' ||
-    //       this.$route.name === 'students-students' ||
-    //       this.$route.name === 'grades-grades' ||
-    //       this.$route.name === 'edit-edit')
-    //   )
-    // },
   },
   created() {
     this.$icons = {

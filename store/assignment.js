@@ -5,6 +5,7 @@ export const state = () => ({
   // Info ^^^ for answer.vue
   topics: [], // Student revision and teacher -> _course.vue
   selected: [],
+  response: {}, // _response.vue
   studentIndex: '',
   questionIndex: '',
   responseIndex: '',
@@ -122,6 +123,9 @@ export const mutations = {
   },
   clearSelectedQuestions(state) {
     state.selected = []
+  },
+  setResponse(state, response) {
+    state.response = response
   },
   // _report.vue data structure mutations
   // Fuck me this code is ugly!

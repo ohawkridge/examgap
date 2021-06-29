@@ -119,19 +119,16 @@
                 </v-chip>
               </div>
               <p class="text-subtitle-1 font-weight-medium">Your answer</p>
-              <p
-                id="ans"
-                class="pa-4 breaks mb-0"
-                :class="noFb"
-                v-text="response.text"
-              ></p>
+              <p id="ans" class="pa-4 breaks mb-0" v-text="response.text"></p>
               <div
                 v-if="response.feedback"
                 id="fb"
                 class="pa-4 mb-4 font-italic"
                 v-text="response.feedback"
               ></div>
-              <p class="text-subtitle-1 font-weight-medium">Model answer</p>
+              <p class="text-subtitle-1 font-weight-medium mt-4">
+                Model answer
+              </p>
               <p v-html="response.question.modelAnswer">Model answer</p>
             </v-col>
             <v-col cols="12" md="6">
@@ -207,9 +204,6 @@ export default {
   },
   computed: {
     ...mapState({ response: (state) => state.assignment.response }),
-    noFb() {
-      return this.response.feedback === '' ? 'mb-4' : ''
-    },
   },
   created() {
     this.$icons = {
