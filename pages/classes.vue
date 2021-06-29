@@ -4,42 +4,23 @@
       <v-col cols="12">
         <div class="d-flex justify-space-between align-center">
           <v-btn-toggle v-model="tab" color="primary" group mandatory>
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn v-bind="attrs" :value="true" class="rounded" v-on="on">
-                  <v-icon left>{{ $icons.mdiHomeOutline }}</v-icon>
-                  Home
-                </v-btn>
-              </template>
-              <span>Home</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn v-bind="attrs" :value="false" class="rounded" v-on="on">
-                  <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
-                  Archive
-                </v-btn>
-              </template>
-              <span>Archive</span>
-            </v-tooltip>
+            <v-btn :value="true" class="rounded">
+              <v-icon left>{{ $icons.mdiHomeOutline }}</v-icon>
+              Home
+            </v-btn>
+            <v-btn :value="false" class="rounded">
+              <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
+              Archive
+            </v-btn>
           </v-btn-toggle>
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                elevation="0"
-                :class="obs === 1 ? 'red-out' : ''"
-                @click="$nuxt.$emit('show-create')"
-                v-on="on"
-              >
-                <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                {{
-                  $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class'
-                }}
-              </v-btn>
-            </template>
-            <span>Create class</span>
-          </v-tooltip>
+          <v-btn
+            elevation="0"
+            :class="obs === 1 ? 'red-out' : ''"
+            @click="$nuxt.$emit('show-create')"
+          >
+            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+            {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
+          </v-btn>
         </div>
       </v-col>
     </v-row>

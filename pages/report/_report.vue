@@ -418,10 +418,6 @@ export default {
   layout: 'app',
   data() {
     return {
-      studentIndex: 0,
-      questionIndex: 0,
-      responseIndex: 0,
-      // These 3 ^^^ values let us index into data structure
       marking: false,
       commentBank: [],
       feedback: '',
@@ -463,6 +459,9 @@ export default {
     ...mapState({
       obs: (state) => state.user.onboardStep,
       assignment: (state) => state.assignment.assignment,
+      studentIndex: (state) => state.assignment.studentIndex,
+      questionIndex: (state) => state.assignment.questionIndex,
+      responseIndex: (state) => state.assignment.responseIndex,
     }),
     // Questions included in assignment headers (for hover preview)
     // +1 because index 0 contains Vuetify table metadata
@@ -565,11 +564,11 @@ export default {
       // Remove duplicate comments
       this.commentBank = [...new Set(commentBank)]
     },
-    mark(obj) {
-      // Index into big data structure
-      this.studentIndex = obj.studentIndex
-      this.questionIndex = obj.questionIndex
-      this.responseIndex = obj.responseIndex
+    mark({ studentIndex, questionIndex, responseIndex }) {
+      // Data structure indices
+      this.$store.commit('assignment/setStudentIndex', studentIndex)
+      this.$store.commit('assignment/setQuestionIndex', questionIndex)
+      this.$store.commit('assignment/setResponseIndex', responseIndex)
       // Copy marks to this
       this.teacherMarks = this.response.tm
       this.marking = true
@@ -688,7 +687,8 @@ export default {
       // https://medium.com/js-dojo/vuex-tip-error-handling-on-actions-ee286ed28df4
       try {
         await this.$store.dispatch('assignment/flagResponse', {
-          flag: !this.response.flagged,
+          responseId: this.response.id,
+          flagged: !this.response.flagged,
         })
         this.$snack.showMessage({
           msg: this.response.flagged ? 'Response flagged' : 'Flag removed',

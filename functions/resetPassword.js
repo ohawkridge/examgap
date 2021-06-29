@@ -1,7 +1,8 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+// eslint-disable-next-line require-await
+exports.handler = async (event) => {
   const AWS = require('aws-sdk')
   const data = JSON.parse(event.body)
   const email = data.email
@@ -18,8 +19,8 @@ exports.handler = async (event, context, callback) => {
   const ses = new AWS.SES({ apiVersion: '2010-12-01' })
   const newPass = createPassword()
   try {
+    // eslint-disable-next-line no-unused-vars
     const qry = q.If(
-      // Update password if username exists
       q.Exists(q.Match(q.Index('user_by_username'), email)),
       q.Update(
         q.Select('ref', q.Get(q.Match(q.Index('user_by_username'), email))),
@@ -64,7 +65,7 @@ exports.handler = async (event, context, callback) => {
           },
           Subject: {
             Charset: 'UTF-8',
-            Data: '>> Examgap new password 🔒',
+            Data: 'Examgap new password 🔒',
           },
         },
         Source: 'Examgap <support@examgap.com>',

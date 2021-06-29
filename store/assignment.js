@@ -1,3 +1,12 @@
+// Helper function to find response
+function getResponse(state) {
+  return state.assignment.students[state.studentIndex].data[
+    state.questionIndex
+  ][state.assignment.headers[state.questionIndex + 1].value][
+    state.responseIndex
+  ]
+}
+
 export const state = () => ({
   assignment: {}, // _report.vue data structure
   assignmentId: '',
@@ -29,8 +38,10 @@ export const actions = {
     commit('setReassign', payload)
   },
   // Dispatched from _report.vue
-  // Sets flag property of a response in the db
-  async flagResponse({ commit, rootState }, payload) {
+  // Sets flag property of response in database
+  // Commits mutation to update local store
+  async flagResponse({ commit, rootState }, { responseId, flagged }) {
+    console.log(`flagAction`, responseId, flagged)
     const url = new URL(
       '/.netlify/functions/flagResponse',
       this.$config.baseURL
@@ -38,13 +49,12 @@ export const actions = {
     await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
-        responseId: payload.responseId,
-        flagged: payload.flag,
+        responseId,
+        flagged,
       }),
       method: 'POST',
     })
-    // Sets flag in local data
-    commit('setFlag', payload)
+    commit('setFlag', flagged)
   },
   // For students (_assignment.vue)
   async getAssignment({ commit, rootState }, assignmentId) {
@@ -127,14 +137,19 @@ export const mutations = {
   setResponse(state, response) {
     state.response = response
   },
-  // _report.vue data structure mutations
-  // Fuck me this code is ugly!
-  // { studentIndex, questionIndex, responseIndex, qIdStr, flag }
-  setFlag(state, obj) {
-    console.log('setFlag')
-    // state.assignment.students[studentIndex].data[questionIndex][qIdStr][
-    //   responseIndex
-    // ].flagged = flag
+  // **_report.vue mutations**
+  setStudentIndex(state, i) {
+    state.studentIndex = i
+  },
+  setResponseIndex(state, i) {
+    state.responseIndex = i
+  },
+  setQuestionIndex(state, i) {
+    state.questionIndex = i
+  },
+  setFlag(state, flagged) {
+    const response = getResponse(state)
+    response.flagged = flagged
   },
   setReassign(
     state,

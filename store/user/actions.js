@@ -51,7 +51,7 @@ const actions = {
     commit('setGroups', response)
     // Onboard if no active groups
     if (rootGetters['user/activeGroupCount'] === 0) {
-      commit('app/setOnboardStep', 1)
+      commit('app/setOnboardStep', 1, { root: true })
     }
   },
   // For students, stream user document
