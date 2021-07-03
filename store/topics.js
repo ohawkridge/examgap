@@ -4,6 +4,7 @@ export const state = () => ({
 })
 
 export const getters = {
+  // TODO Isn't this value already returned by getTopics.js?
   topicCount: (state) => {
     return state.topics.find(({ id }) => id === state.topicId).answered
   },

@@ -41,6 +41,7 @@
                 </div>
               </v-col>
               <v-col cols="12" md="2" class="d-flex justify-end">
+                M: {{ marking }}
                 <DeleteAssignment
                   v-if="!$fetchState.pending && group"
                   :assignment-id="assignment.id"
@@ -103,13 +104,9 @@
                           class="text-center"
                         >
                           <MarkChip
-                            :class="`${
-                              obs === 7 && i === 0 && j === 0 ? 'red-out' : ''
-                            }`"
+                            :data="item"
                             :student-index="i"
                             :question-index="j"
-                            :data="item"
-                            @clicked="mark"
                           />
                         </td>
                       </tr>
@@ -157,13 +154,13 @@
     >
       <v-card tile>
         <v-toolbar dark dense color="primary">
-          <v-btn icon dark @click="marking = false">
+          <v-btn icon dark @click="close()">
             <v-icon>{{ $icons.mdiClose }}</v-icon>
           </v-btn>
           <v-toolbar-title>Marking</v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
-            <v-btn dark text @click="marking = false">Close</v-btn>
+            <v-btn dark text @click="close()">Close</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-container>
@@ -197,7 +194,9 @@
                     <v-icon>{{ $icons.mdiFlagOutline }}</v-icon>
                   </v-btn>
                 </template>
-                <span>{{ response.flagged ? 'Unflag' : 'Flag' }} response</span>
+                <span>{{
+                  response.flagged ? 'Remove flag' : 'Flag response'
+                }}</span>
               </v-tooltip>
               <v-tooltip bottom>
                 <template #activator="{ on }">
@@ -263,6 +262,9 @@
                   >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
+              <p v-for="(p, i) of markScheme" :key="i" class="red--text">
+                {{ p }}
+              </p>
             </v-col>
             <v-col cols="12" md="4">
               <p v-if="marking" class="text-subtitle-1 font-weight-medium">
@@ -305,14 +307,13 @@
               <v-checkbox
                 v-for="mp in markScheme"
                 :key="mp.id"
-                v-model="teacherMarks"
+                v-model="marks"
                 :value="mp.id"
                 hide-details
-                @change="toggleMark(mp.id)"
+                @change="checkMax(mp.id)"
               >
                 <template #label>
                   <span
-                    v-if="response"
                     :class="
                       response.sm.includes(mp.id)
                         ? 'green--text text--darken-2'
@@ -323,6 +324,10 @@
                   >
                 </template>
               </v-checkbox>
+              <!-- v-model for checkboxes -->
+              <p class="red--text">
+                {{ marks }}
+              </p>
               <div class="d-flex justify-end">
                 <v-switch v-model="smartSort" hide-details>
                   <template #label>
@@ -344,37 +349,7 @@
               <p v-else class="text-body-2">None</p>
             </v-col>
           </v-row>
-          <!-- More info dialog -->
-          <v-dialog v-if="marking" v-model="infoDialog" width="400">
-            <v-card class="modal">
-              <v-card-title class="d-flex justify-center">
-                More information
-              </v-card-title>
-              <v-card-text>
-                <ul>
-                  <li>
-                    Response id: <code>{{ response.id }}</code>
-                    <v-btn icon small @click="copyId()">
-                      <v-icon small>
-                        {{ $icons.mdiContentCopy }}
-                      </v-icon>
-                    </v-btn>
-                  </li>
-                  <li>Time taken: {{ timeTaken }}</li>
-                </ul>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  color="primary"
-                  elevation="0"
-                  @click="infoDialog = false"
-                >
-                  Close
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <the-info-dialog :response="response" />
         </v-container>
       </v-card>
     </v-dialog>
@@ -393,19 +368,19 @@ import {
   mdiClose,
   mdiArrowLeft,
   mdiRepeat,
-  mdiInformationOutline,
   mdiChevronLeft,
   mdiContentCopy,
   mdiCloudCheckOutline,
   mdiCloudSyncOutline,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
-import { debounce, cloneDeep } from 'lodash'
+import { debounce } from 'lodash'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import GroupNav from '@/components/teacher/GroupNav'
 import MarkChip from '@/components/teacher/MarkChip'
 import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
+import TheInfoDialog from '@/components/teacher/TheInfoDialog'
 
 export default {
   components: {
@@ -414,17 +389,21 @@ export default {
     GroupNav,
     MarkChip,
     OnboardingSnackbar,
+    TheInfoDialog,
+  },
+  beforeRouteLeave(to, from, next) {
+    // TODO Just in case Marking view not closed properly
+    this.$store.commit('assignment/setMarking', false)
+    next()
   },
   layout: 'app',
   data() {
     return {
-      marking: false,
       commentBank: [],
-      feedback: '',
-      savingFeedback: '',
+      savingFeedback: false,
       smartSort: false,
-      markScheme: [],
-      teacherMarks: [],
+      markScheme: [], // Copied via question.markScheme
+      marks: [], // v-model for checkboxes
       infoDialog: false,
       forceRefresh: false,
     }
@@ -455,13 +434,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapGetters({
+      group: 'user/activeGroup',
+      response: 'assignment/response',
+    }),
     ...mapState({
       obs: (state) => state.user.onboardStep,
       assignment: (state) => state.assignment.assignment,
       studentIndex: (state) => state.assignment.studentIndex,
       questionIndex: (state) => state.assignment.questionIndex,
       responseIndex: (state) => state.assignment.responseIndex,
+      marking: (state) => state.assignment.marking,
     }),
     // Questions included in assignment headers (for hover preview)
     // +1 because index 0 contains Vuetify table metadata
@@ -472,42 +455,52 @@ export default {
     qIdStr() {
       return this.assignment.headers[this.questionIndex + 1].value
     },
-    // Format time taken as mm:ss
-    timeTaken() {
-      const t = this.response.time
-      return `${Math.floor(t / 60)}:${String(
-        t - Math.floor(t / 60) * 60
-      ).padStart(2, '0')}`
+    feedback: {
+      get() {
+        return this.response.feedback
+      },
+      set(text) {
+        this.$store.commit('assignment/setFeedback', text)
+      },
     },
-    response() {
-      // this.assignment is the massive data structure we get back
-      // from getReport (see sample at Examgap/json).
-      // Its two main keys are: headers and students.
-      // studentIndex gets us horizontally into the student array
-      // Each student object has two main keys: name and data
-      // data is an array of objects (one for each question).
-      // Within these objects is an array of the student's answers.
-      // If the question has been reassigned, they could have more
-      // than one response. Finally, we have the response object.
-      return this.assignment.students[this.studentIndex].data[
-        this.questionIndex
-      ][this.qIdStr][this.responseIndex]
+    teacherMarks: {
+      get() {
+        return this.response.tm
+      },
+      set(markArr) {
+        this.$store.commit('assignment/set', markArr)
+      },
     },
   },
   watch: {
+    marking() {
+      // Copy original mark scheme off question to use while marking
+      // If smart sort is activated, this gets mixed up
+      if (this.marking) {
+        this.markScheme = { ...this.question.markScheme }
+      }
+    },
     response() {
+      // Check not already marked
+      // TODO Do this better?
+      // if (!this.response.marked && this.response !== undefined) {
+      //   this.$store.dispatch('assignment/setMarked')
+      // }
+      // Copy existing teacher marks to be v-model
+      this.marks = this.response.tm
       this.updateBank()
-      // If smartSort is on, re-sort mark scheme when response changes
-      if (this.smartSort) this.markScheme.sort(this.selfMarksFirst)
-      this.feedback = this.response.feedback
+      // If smartSort is on, re-sort when response changes
+      if (this.smartSort) {
+        this.markScheme.sort(this.selfMarksFirst)
+      }
     },
     smartSort() {
-      if (!this.$fetchState.pending && this.smartSort) {
-        // Turn on smartSort by calling sorting function
+      if (this.marking && this.smartSort) {
+        // Turn on smart sort by calling sorting function
         this.markScheme.sort(this.selfMarksFirst)
       } else {
         // When smartSort is turned off, restore normal mark scheme
-        this.markScheme = cloneDeep(this.question.markScheme)
+        this.markScheme = { ...this.question.markScheme }
       }
     },
   },
@@ -522,7 +515,6 @@ export default {
       mdiClose,
       mdiArrowLeft,
       mdiRepeat,
-      mdiInformationOutline,
       mdiChevronLeft,
       mdiContentCopy,
       mdiCloudCheckOutline,
@@ -535,14 +527,32 @@ export default {
     }
   },
   methods: {
-    // Copy response id to clipboard
-    async copyId() {
-      await navigator.clipboard.writeText(this.response.id)
-      this.$snack.showMessage({
-        type: '',
-        msg: 'Copied to clipboard',
-      })
+    // Don't exceed max. mark
+    checkMax(markId) {
+      if (this.marks.length > this.question.maxMark) {
+        this.$snack.showMessage({
+          msg: `Max. ${this.question.maxMark} mark${
+            this.question.maxMark !== '1' ? 's' : ''
+          }`,
+        })
+        // Untick checkbox by splicing id out of v-model
+        for (let i = 0; i < this.marks.length; i++) {
+          if (this.marks[i] === markId) {
+            this.marks.splice(i, 1)
+          }
+        }
+      }
     },
+    // Close marking view
+    close() {
+      this.saveMarks()
+      this.$store.commit('assignment/setMarking', false)
+    },
+    // Save marks on close *and* when moving to a new response
+    saveMarks() {
+      this.$store.dispatch('assignment/saveMarks', this.marks)
+    },
+    // Fetch and store data again
     refresh() {
       this.forceRefresh = true
       this.$fetch()
@@ -564,132 +574,39 @@ export default {
       // Remove duplicate comments
       this.commentBank = [...new Set(commentBank)]
     },
-    mark({ studentIndex, questionIndex, responseIndex }) {
-      // Data structure indices
-      this.$store.commit('assignment/setStudentIndex', studentIndex)
-      this.$store.commit('assignment/setQuestionIndex', questionIndex)
-      this.$store.commit('assignment/setResponseIndex', responseIndex)
-      // Copy marks to this
-      this.teacherMarks = this.response.tm
-      this.marking = true
-      // Copy original (unsorted) mark scheme
-      // N.B. Don't just copy by reference!
-      this.markScheme = cloneDeep(this.question.markScheme)
-      // Stop onboarding once user has seen marking view
-      this.$store.commit('app/setOnboardStep', 0)
-      // Set as 'marked' as soon as response opened
-      this.marked(this.response.id)
-    },
-    // Set response as 'marked'
     async marked() {
       if (!this.response.marked) {
         try {
-          const url = new URL(
-            '/.netlify/functions/setAsMarked',
-            this.$config.baseURL
-          )
-          const response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.$store.state.user.secret,
-              responseId: this.response.id,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error setting as 'marked' ${response.status}`)
-          }
-          // Set as marked in local data structure
-          this.response.marked = true
+          // Dispatch store action
+          await this.$store.dispatch('assignment/setMarked')
         } catch (e) {
           console.error(e)
           this.$snack.showMessage({
             type: 'error',
-            msg: 'Error marking',
+            msg: 'Error marking response',
           })
         }
       }
     },
     next() {
-      // Loop back to start
-      if (this.studentIndex >= this.assignment.students.length - 1) {
-        this.studentIndex = 0
-      } else {
-        this.studentIndex += 1
-      }
-      // Keep advancing if no response is found
+      this.$store.commit('assignment/next')
+      // Keep advancing until we find the next response
       if (this.response === undefined) {
         this.next()
-      } else {
-        // Set response as marked as soon as it's been seen
-        this.marked(this.response.id)
       }
     },
     previous() {
-      // Loop back to end
-      if (this.studentIndex === 0) {
-        this.studentIndex = this.assignment.students.length - 1
-      } else {
-        this.studentIndex -= 1
-      }
-      // Keep retreating if no response is found
+      this.$store.commit('assignment/previous')
+      // Keep retreating until we find the next response
       if (this.response === undefined) {
         this.previous()
-      } else {
-        // Set response as marked as soon as it's been seen
-        this.marked(this.response.id)
       }
     },
-    async toggleMark(markId) {
-      // Don't exceed max mark
-      if (this.teacherMarks.length > this.question.maxMark) {
-        this.$snack.showMessage({
-          msg: `Max. ${this.question.maxMark} mark${
-            this.question.maxMark !== '1' ? 's' : ''
-          }`,
-        })
-        // Untick checkbox by splicing id out of v-model
-        for (let i = 0; i < this.teacherMarks.length; i++) {
-          if (this.teacherMarks[i] === markId) {
-            this.teacherMarks.splice(i, 1)
-          }
-        }
-      } else {
-        try {
-          const url = new URL(
-            '/.netlify/functions/toggleMark',
-            this.$config.baseURL
-          )
-          const response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.$store.state.user.secret,
-              responseId: this.response.id,
-              markId,
-              add: !!this.teacherMarks.find((x) => x === markId),
-              teacher: true,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error saving mark ${response.status}`)
-          }
-        } catch (err) {
-          console.error(err)
-          this.$snack.showMessage({
-            type: 'error',
-            msg: 'Error saving mark',
-          })
-        }
-      }
-    },
+    // Keep store data in sync with database
+    // https://medium.com/js-dojo/vuex-tip-error-handling-on-actions-ee286ed28df4
     async flag() {
-      // Keep store data in sync with database
-      // (also reassign, feedback, etc.)
-      // https://medium.com/js-dojo/vuex-tip-error-handling-on-actions-ee286ed28df4
       try {
-        await this.$store.dispatch('assignment/flagResponse', {
-          responseId: this.response.id,
-          flagged: !this.response.flagged,
-        })
+        await this.$store.dispatch('assignment/flagResponse')
         this.$snack.showMessage({
           msg: this.response.flagged ? 'Response flagged' : 'Flag removed',
         })
@@ -703,16 +620,9 @@ export default {
     },
     async reassign() {
       try {
-        await this.$store.dispatch('assignment/reassign', {
-          responseId: this.response.id,
-          repeat: !this.response.repeat,
-          studentIndex: this.studentIndex,
-          questionIndex: this.questionIndex,
-          qIdStr: this.qIdStr,
-          responseIndex: this.responseIndex,
-        })
+        await this.$store.dispatch('assignment/reassign')
         this.$snack.showMessage({
-          msg: this.response.repeat ? 'Reassigned' : 'Reassignment removed',
+          msg: this.response.repeat ? 'Reassigned' : 'Cancelled',
         })
       } catch (err) {
         console.error(err)
