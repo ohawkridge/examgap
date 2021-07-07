@@ -52,6 +52,23 @@ export const actions = {
     })
     commit('setTeacherMarks', { response, markIds })
   },
+  async saveFeedback({ commit, getters, rootState }, feedback) {
+    const response = getters.response
+    const url = new URL(
+      '/.netlify/functions/saveFeedback',
+      this.$config.baseURL
+    )
+    console.log(`action got`, feedback)
+    await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        responseId: response.id,
+        feedback,
+      }),
+      method: 'POST',
+    })
+    commit('setFeedback', { response, feedback })
+  },
   async reassign({ commit, getters, rootState }) {
     const response = getters.response
     const repeat = !response.repeat
@@ -213,16 +230,17 @@ export const mutations = {
   setMarked(state, response) {
     response.marked = true
   },
-  // Navigate to next/previous responses
-  // (looping around if nec.)
-  next(state) {
-    state.studentIndex >= state.assignment.students.length - 1
-      ? (state.studentIndex = 0)
-      : (state.studentIndex += 1)
-  },
-  previous(state) {
-    state.studentIndex === 0
-      ? (state.studentIndex = state.assignment.students.length - 1)
-      : (state.studentIndex -= 1)
+  // Navigate to next (1)/previous (-1) response
+  // (loop around if nec.)
+  next(state, n) {
+    if (n === 1) {
+      state.studentIndex >= state.assignment.students.length - 1
+        ? (state.studentIndex = 0)
+        : (state.studentIndex += 1)
+    } else {
+      state.studentIndex === 0
+        ? (state.studentIndex = state.assignment.students.length - 1)
+        : (state.studentIndex -= 1)
+    }
   },
 }

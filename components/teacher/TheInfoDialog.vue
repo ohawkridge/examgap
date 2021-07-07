@@ -1,5 +1,15 @@
 <template>
   <v-dialog v-model="dialog" width="400">
+    <template #activator="{ on: dial }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tool }">
+          <v-btn class="ml-2" icon v-on="{ ...tool, ...dial }">
+            <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
+          </v-btn>
+        </template>
+        <span>More information</span>
+      </v-tooltip>
+    </template>
     <v-card class="modal">
       <v-card-title class="d-flex justify-center">
         More information
@@ -28,7 +38,7 @@
 </template>
 
 <script>
-import { mdiInformationOutline } from '@mdi/js'
+import { mdiInformationOutline, mdiContentCopy } from '@mdi/js'
 
 export default {
   props: {
@@ -46,6 +56,7 @@ export default {
     // Format time taken as mm:ss
     timeTaken() {
       const t = this.response.time
+      if (t === 0) return 'N/A'
       return `${Math.floor(t / 60)}:${String(
         t - Math.floor(t / 60) * 60
       ).padStart(2, '0')}`
@@ -54,6 +65,7 @@ export default {
   created() {
     this.$icons = {
       mdiInformationOutline,
+      mdiContentCopy,
     }
   },
   methods: {

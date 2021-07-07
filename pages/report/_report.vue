@@ -41,7 +41,6 @@
                 </div>
               </v-col>
               <v-col cols="12" md="2" class="d-flex justify-end">
-                M: {{ marking }}
                 <DeleteAssignment
                   v-if="!$fetchState.pending && group"
                   :assignment-id="assignment.id"
@@ -168,7 +167,7 @@
             <v-col cols="12" class="d-flex align-center">
               <v-tooltip bottom>
                 <template #activator="{ on }">
-                  <v-btn icon @click="previous()" v-on="on">
+                  <v-btn icon @click="next(-1)" v-on="on">
                     <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
                   </v-btn>
                 </template>
@@ -176,7 +175,7 @@
               </v-tooltip>
               <v-tooltip bottom>
                 <template #activator="{ on }">
-                  <v-btn icon @click="next()" v-on="on">
+                  <v-btn icon @click="next(1)" v-on="on">
                     <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
                   </v-btn>
                 </template>
@@ -212,21 +211,14 @@
                 </template>
                 <span>Reassign question</span>
               </v-tooltip>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn icon class="ml-2" v-on="on" @click="infoDialog = true">
-                    <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
-                  </v-btn>
-                </template>
-                <span>More information</span>
-              </v-tooltip>
+              <the-info-dialog :response="response" />
               <v-spacer />
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-chip color="primary" outlined class="mr-2" v-on="on">
                     <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
                     <span v-if="marking" class="font-weight-black">{{
-                      teacherMarks.length
+                      marks.length
                     }}</span>
                     <v-icon right>{{ $icons.mdiCheck }}</v-icon>
                   </v-chip>
@@ -262,9 +254,6 @@
                   >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
-              <p v-for="(p, i) of markScheme" :key="i" class="red--text">
-                {{ p }}
-              </p>
             </v-col>
             <v-col cols="12" md="4">
               <p v-if="marking" class="text-subtitle-1 font-weight-medium">
@@ -324,10 +313,6 @@
                   >
                 </template>
               </v-checkbox>
-              <!-- v-model for checkboxes -->
-              <p class="red--text">
-                {{ marks }}
-              </p>
               <div class="d-flex justify-end">
                 <v-switch v-model="smartSort" hide-details>
                   <template #label>
@@ -349,7 +334,6 @@
               <p v-else class="text-body-2">None</p>
             </v-col>
           </v-row>
-          <the-info-dialog :response="response" />
         </v-container>
       </v-card>
     </v-dialog>
@@ -400,6 +384,7 @@ export default {
   data() {
     return {
       commentBank: [],
+      feedback: '',
       savingFeedback: false,
       smartSort: false,
       markScheme: [], // Copied via question.markScheme
@@ -455,44 +440,27 @@ export default {
     qIdStr() {
       return this.assignment.headers[this.questionIndex + 1].value
     },
-    feedback: {
-      get() {
-        return this.response.feedback
-      },
-      set(text) {
-        this.$store.commit('assignment/setFeedback', text)
-      },
-    },
-    teacherMarks: {
-      get() {
-        return this.response.tm
-      },
-      set(markArr) {
-        this.$store.commit('assignment/set', markArr)
-      },
-    },
   },
   watch: {
-    marking() {
-      // Copy original mark scheme off question to use while marking
-      // If smart sort is activated, this gets mixed up
-      if (this.marking) {
-        this.markScheme = { ...this.question.markScheme }
-      }
-    },
     response() {
-      // Check not already marked
-      // TODO Do this better?
-      // if (!this.response.marked && this.response !== undefined) {
-      //   this.$store.dispatch('assignment/setMarked')
-      // }
+      // Set response as marked
+      // N.B. This watch fires on close. At that point response
+      // exists, but only as a 'prototype' object
+      if ('id' in this.response && !this.response.marked) {
+        this.$store.dispatch('assignment/setMarked')
+      }
       // Copy existing teacher marks to be v-model
       this.marks = this.response.tm
+      // Update feedback for current response
+      this.feedback = this.response.feedback
       this.updateBank()
       // If smartSort is on, re-sort when response changes
       if (this.smartSort) {
         this.markScheme.sort(this.selfMarksFirst)
       }
+    },
+    marking() {
+      this.copyMarkScheme()
     },
     smartSort() {
       if (this.marking && this.smartSort) {
@@ -525,8 +493,22 @@ export default {
     if (this.group.assignments.length < 3) {
       this.$store.commit('app/setOnboardStep', 7)
     }
+    // TODO
+    // Might only need during development
+    // Could go on marking = true?
+    if (this.markScheme.length === 0) {
+      this.copyMarkScheme()
+    }
   },
   methods: {
+    // Copy original mark scheme off question to use while marking
+    // If smart sort is activated, this gets mixed up
+    // so we need to be able to re-copy the unsorted one
+    copyMarkScheme() {
+      if (this.marking) {
+        this.markScheme = { ...this.question.markScheme }
+      }
+    },
     // Don't exceed max. mark
     checkMax(markId) {
       if (this.marks.length > this.question.maxMark) {
@@ -548,11 +530,13 @@ export default {
       this.saveMarks()
       this.$store.commit('assignment/setMarking', false)
     },
-    // Save marks on close *and* when moving to a new response
+    // Save marks on close/when response changes
     saveMarks() {
-      this.$store.dispatch('assignment/saveMarks', this.marks)
+      if (this.marks.length > 0) {
+        this.$store.dispatch('assignment/saveMarks', this.marks)
+      }
     },
-    // Fetch and store data again
+    // Fetch fresh data
     refresh() {
       this.forceRefresh = true
       this.$fetch()
@@ -574,32 +558,16 @@ export default {
       // Remove duplicate comments
       this.commentBank = [...new Set(commentBank)]
     },
-    async marked() {
-      if (!this.response.marked) {
-        try {
-          // Dispatch store action
-          await this.$store.dispatch('assignment/setMarked')
-        } catch (e) {
-          console.error(e)
-          this.$snack.showMessage({
-            type: 'error',
-            msg: 'Error marking response',
-          })
-        }
+    // Navigate forwards (1) or backwards (-1) through responses
+    next(n) {
+      // Save marks *before* moving on
+      if (this.response !== undefined) {
+        this.saveMarks()
       }
-    },
-    next() {
-      this.$store.commit('assignment/next')
-      // Keep advancing until we find the next response
+      this.$store.commit('assignment/next', n)
+      // Keep advancing/retreating until we find next response
       if (this.response === undefined) {
-        this.next()
-      }
-    },
-    previous() {
-      this.$store.commit('assignment/previous')
-      // Keep retreating until we find the next response
-      if (this.response === undefined) {
-        this.previous()
+        this.next(n)
       }
     },
     // Keep store data in sync with database
@@ -608,7 +576,7 @@ export default {
       try {
         await this.$store.dispatch('assignment/flagResponse')
         this.$snack.showMessage({
-          msg: this.response.flagged ? 'Response flagged' : 'Flag removed',
+          msg: this.response.flagged ? 'Flagged' : 'Flag removed',
         })
       } catch (err) {
         console.error(err)
@@ -634,26 +602,12 @@ export default {
     },
     // Debounce feedback area
     update: debounce(function () {
-      this.save()
-    }, 1500),
-    async save() {
+      this.saveFeedback()
+    }, 2000),
+    async saveFeedback() {
       try {
         this.savingFeedback = true
-        const url = new URL(
-          '/.netlify/functions/saveFeedback',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            responseId: this.response.id,
-            feedback: this.feedback,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error saving feedback ${response.status}`)
-        }
+        await this.$store.dispatch('assignment/saveFeedback', this.feedback)
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
@@ -667,7 +621,7 @@ export default {
     // Reuse an existing comment
     reuse(text) {
       this.feedback = text
-      this.save() // Trigger save
+      this.saveFeedback() // Trigger save
     },
     // Comparison function so student self marks are first
     selfMarksFirst(m1, m2) {
