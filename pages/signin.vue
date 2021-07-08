@@ -4,8 +4,6 @@
       <nuxt-link to="/">
         <TheLogo />
       </nuxt-link>
-      <v-spacer />
-      <nuxt-link to="/">Back home</nuxt-link>
     </v-container>
     <v-container class="fill-height">
       <v-row class="d-flex justify-center">
@@ -58,8 +56,12 @@
               >Sign In</v-btn
             >
             <div class="mt-3 d-flex justify-space-between">
-              <nuxt-link to="/reset">Reset password</nuxt-link>
-              <nuxt-link to="/trial">Free trial</nuxt-link>
+              <nuxt-link to="/reset" class="text-decoration-none"
+                >Reset password</nuxt-link
+              >
+              <nuxt-link to="/trial" class="text-decoration-none"
+                >Free trial</nuxt-link
+              >
             </div>
           </v-form>
         </v-col>

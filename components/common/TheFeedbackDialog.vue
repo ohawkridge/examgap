@@ -1,6 +1,16 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <template #activator="{ on: dial }">
+    <template #activator="{ on }">
+      <v-list-item v-on="on">
+        <v-list-item-icon>
+          <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>Send Feedback</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </template>
+    <!-- <template #activator="{ on: dial }">
       <v-tooltip bottom>
         <template #activator="{ on: tool }">
           <v-btn icon v-on="{ ...tool, ...dial }">
@@ -9,7 +19,7 @@
         </template>
         <span>Send feedback</span>
       </v-tooltip>
-    </template>
+    </template> -->
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Send feedback </v-card-title>
       <v-card-text>

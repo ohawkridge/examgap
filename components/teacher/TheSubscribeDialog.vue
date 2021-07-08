@@ -1,21 +1,5 @@
 <template>
-  <!-- Hide on mobile // show if not subscribed -->
-  <v-dialog
-    v-if="(!subscribed && $vuetify.breakpoint.name !== 'xs') || block"
-    v-model="dialog"
-    max-width="420"
-  >
-    <template #activator="{ on }">
-      <v-btn
-        color="primary"
-        elevation="0"
-        class="mr-2"
-        :block="block"
-        v-on="on"
-      >
-        {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
-      </v-btn>
-    </template>
+  <v-dialog v-model="dialog" max-width="420">
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"
         >Subscribe to Examgap</v-card-title
@@ -62,10 +46,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <the-success-dialog
-      title="Thank You"
-      subtitle="You should receive your invoice within one day."
-    />
+    <the-success-dialog :title="title" :subtitle="subtitle" />
   </v-dialog>
 </template>
 
@@ -86,6 +67,8 @@ export default {
       dialog: false,
       selectedPackage: 'gcse',
       loading: false,
+      title: 'Thank You',
+      subtitle: 'You should receive your invoice within one day.',
     }
   },
   computed: {
@@ -104,8 +87,8 @@ export default {
   },
   methods: {
     request() {
-      this.loading = true
       try {
+        this.loading = true
         const url = new URL(
           '/.netlify/functions/sendEmailInvoice',
           this.$config.baseURL

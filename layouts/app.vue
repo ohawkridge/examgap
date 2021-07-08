@@ -1,35 +1,49 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-navigation-drawer v-model="drawer" app right>
+    <v-navigation-drawer v-model="drawer" color="#fefcfb" app right temporary>
       <v-list nav dense>
-        <v-list-item-group
-          v-model="navGroup"
-          active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item>
-            <v-list-item-title>Foo</v-list-item-title>
+        <v-list-item-group v-model="navGroup" color="primary">
+          <v-list-item nuxt to="/author">
+            <v-list-item-content>
+              <v-btn elevation="0" color="primary" outlined>
+                <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+                Create Question
+              </v-btn>
+            </v-list-item-content>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title>Bar</v-list-item-title>
+          <the-feedback-dialog />
+
+          <v-list-item @click="$nuxt.$emit('show-subscribe')">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiCheckCircleOutline }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Subscribe</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title>Fizz</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title>Buzz</v-list-item-title>
+          <v-divider class="my-2" />
+          <v-list-item nuxt to="/profile">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Profile</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
+      <template #append>
+        <div class="pa-2">
+          <v-btn elevation="0" outlined block @click="logout()"> Logout </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
     <v-app-bar color="#fefcfb" elevation="2" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
-          <!-- Just show logo mark on mobile -->
-          <TheLogoMark v-if="$vuetify.breakpoint.name === 'xs'" />
-          <TheLogo v-else />
+          <TheLogo />
         </nuxt-link>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on, attrs }">
@@ -65,68 +79,25 @@
               </v-list-item>
             </template>
             <template v-else>
-              <v-divider />
+              <v-divider class="my-2" />
               <v-list-item @click="$nuxt.$emit('show-create')">
                 <v-list-item-content>
-                  <v-list-item-title> Create class&hellip; </v-list-item-title>
+                  <v-list-item-title> Create Class&hellip; </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </template>
           </v-list>
         </v-menu>
         <v-spacer />
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <!-- <v-btn
-          v-if="teacher"
-          nuxt
-          to="/author"
-          class="mr-2 hidden-md-and-up"
-          icon
-        >
-          <v-icon>{{ $icons.mdiPencilPlusOutline }}</v-icon>
-        </v-btn>
-        <v-btn
-          v-if="teacher"
-          elevation="0"
-          nuxt
-          to="/author"
-          class="mr-2 hidden-sm-and-down"
-        >
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Create Question
-        </v-btn>
-        <the-subscribe-dialog v-if="teacher" />
-        <the-feedback-dialog />
-        <v-menu offset-y open-on-hover>
+        <v-tooltip bottom>
           <template #activator="{ on }">
-            <v-btn class="ml-2" elevation="0" icon v-on="on">
-              <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
-            </v-btn>
+            <v-app-bar-nav-icon
+              @click.stop="drawer = !drawer"
+              v-on="on"
+            ></v-app-bar-nav-icon>
           </template>
-          <v-list>
-            <v-list-item nuxt to="/profile">
-              <v-list-item-content>
-                <v-list-item-title>Profile</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item
-              href="https://github.com/users/ohawkridge/projects/2"
-              target="_blank"
-            >
-              <v-list-item-content>
-                <v-list-item-title
-                  >What's new
-                  <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="logout()">
-              <v-list-item-content>
-                <v-list-item-title>Sign out</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-menu> -->
+          <span>{{ drawer ? 'Hide menu' : 'Show menu' }}</span>
+        </v-tooltip>
       </v-container>
     </v-app-bar>
     <v-main>
@@ -139,41 +110,43 @@
       <the-loading-overlay />
     </v-main>
     <the-footer />
+    <the-subscribe-dialog v-if="teacher" />
   </v-app>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
-import TheLogoMark from '@/components/common/TheLogoMark'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
-// import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
+import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
-// import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
+import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import CreateClass from '@/components/teacher/CreateClass'
 
 import {
   mdiPlus,
-  mdiAccountCircleOutline,
+  mdiAccountOutline,
   mdiChevronDown,
   mdiOpenInNew,
-  mdiPencilPlusOutline,
+  mdiCommentAlertOutline,
+  mdiTrello,
+  mdiLogout,
+  mdiCheckCircleOutline,
 } from '@mdi/js'
 
 export default {
   name: 'App',
   components: {
     TheLogo,
-    TheLogoMark,
     TheSnackbar,
     TheFooter,
-    // TheSubscribeDialog,
+    TheSubscribeDialog,
     TheJoinDialog,
     TheLoadingOverlay,
-    // TheFeedbackDialog,
     CreateClass,
+    TheFeedbackDialog,
   },
   middleware: ['auth'],
   data() {
@@ -195,10 +168,13 @@ export default {
   created() {
     this.$icons = {
       mdiPlus,
-      mdiAccountCircleOutline,
+      mdiAccountOutline,
       mdiChevronDown,
       mdiOpenInNew,
-      mdiPencilPlusOutline,
+      mdiCommentAlertOutline,
+      mdiTrello,
+      mdiLogout,
+      mdiCheckCircleOutline,
     }
   },
   methods: {

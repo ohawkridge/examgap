@@ -34,10 +34,10 @@
           ></v-text-field>
           <v-text-field
             v-if="teacher"
-            :value="expiry"
-            :success="subscribed"
+            :value="`${expires} (${subscriptionDays} days)`"
             label="Subscription expires"
-            :error-messages="days <= 0 ? ['Subscription expired'] : []"
+            :error="subscriptionDays <= 0"
+            :success="subscriptionDays > 0"
             :append-icon="
               subscribed
                 ? $icons.mdiCheckCircleOutline
@@ -124,16 +124,10 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
       subscribed: (state) => state.user.subscribed,
-      expires: (state) => state.user.subscriptionExpires,
+      expires: (state) =>
+        state.user.subscriptionExpires['@ts'].substring(0, 10),
+      subscriptionDays: (state) => state.user.subscriptionDays,
     }),
-    expiry() {
-      return `${this.expires['@ts'].substring(0, 10)} (${Math.abs(
-        this.days
-      )} days${this.days <= 0 ? ' ago' : ''})`
-    },
-    days() {
-      return 'TODO'
-    },
     match() {
       return this.pass1 === this.pass2 ? [] : 'Passwords do not match'
     },

@@ -15,6 +15,8 @@
           </v-btn-toggle>
           <v-btn
             elevation="0"
+            color="primary"
+            outlined
             :class="obs === 1 ? 'red-out' : ''"
             @click="$nuxt.$emit('show-create')"
           >

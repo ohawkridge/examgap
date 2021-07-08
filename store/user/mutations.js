@@ -53,6 +53,7 @@ export default {
     state.teacher = data.teacher
     if (data.teacher) {
       // Teacher properties
+      state.subscriptionDays = data.subscriptionDays
       state.school = data.school
       state.subscribed = data.subscribed
       state.subscriptionExpires = data.subscriptionExpires

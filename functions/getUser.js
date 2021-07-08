@@ -26,7 +26,9 @@ exports.handler = async (event) => {
         },
         {
           user: q.Merge(
+            // Object one
             q.Var('usr'),
+            // Object two
             // This is the second object passed to Merge
             // function ∴ school value will be replaced
             {
@@ -43,6 +45,15 @@ exports.handler = async (event) => {
                     q.Get(q.Select('school', q.Var('usr')))
                   ),
                   q.Select('school', q.Var('usr'))
+                ),
+                'N/A'
+              ),
+              subscriptionDays: q.If(
+                q.Select('teacher', q.Var('usr')),
+                q.TimeDiff(
+                  q.Now(),
+                  q.Select('subscriptionExpires', q.Var('usr')),
+                  'days'
                 ),
                 'N/A'
               ),

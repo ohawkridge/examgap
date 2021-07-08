@@ -17,11 +17,6 @@ blockquote {
   padding-left: 1em;
 }
 
-/* don't underline links */
-/* a:link {
-  text-decoration: none;
-} */
-
 /* colour student answers */
 #ans {
   background: #f7eabb;
