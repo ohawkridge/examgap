@@ -392,7 +392,7 @@ export default {
           }
           response = await response.json()
           // Clear any previously selected questions
-          this.$store.commit('assignment/clearSelectedQuestions')
+          this.$store.commit('topics/clearSelectedQuestions')
           // Update local data
           this.$store.commit('groups/addAssignment', response)
           this.$router.push(`/report/${response.ref['@ref'].id}`)

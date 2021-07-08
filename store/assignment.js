@@ -2,8 +2,6 @@ export const state = () => ({
   assignmentId: '',
   questionId: '',
   // Info ^^^ for answer.vue
-  topics: [], // Student revision and teacher -> _course.vue
-  selected: [],
   response: {}, // _response.vue
   assignment: {}, // _report.vue data structure
   studentIndex: '',
@@ -178,9 +176,6 @@ export const actions = {
 }
 
 export const mutations = {
-  setTopics(state, topics) {
-    state.topics = topics
-  },
   setAssignment(state, data) {
     state.assignment = data
   },
@@ -190,14 +185,6 @@ export const mutations = {
   },
   setCurrentTopicId(state, topicId) {
     state.topicId = topicId
-  },
-  updateSelectedQuestions(state, questionId) {
-    state.selected.includes(questionId)
-      ? (state.selected = state.selected.filter((id) => id !== questionId))
-      : state.selected.push(questionId)
-  },
-  clearSelectedQuestions(state) {
-    state.selected = []
   },
   setResponse(state, response) {
     state.response = response

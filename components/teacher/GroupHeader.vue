@@ -57,7 +57,7 @@ export default {
   methods: {
     create() {
       // Clear any previous selection
-      this.$store.commit('assignment/clearSelectedQuestions')
+      this.$store.commit('topics/clearSelectedQuestions')
       // Continue onboarding if user hasn't set assignments
       this.$store.commit(
         'app/setOnboardStep',

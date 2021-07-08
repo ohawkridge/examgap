@@ -1,9 +1,9 @@
 <template>
-  <v-snackbar v-model="snack" :vertical="true" timeout="-1">
+  <v-snackbar :value="onboardStep > 0" :vertical="true" timeout="-1">
     <span class="font-weight-bold"
-      >({{ obs }}/{{ Object.keys(stringsForSteps).length }})</span
+      >({{ onboardStep }}/{{ Object.keys(stringsForSteps).length }})</span
     >
-    {{ stringsForSteps[obs] }}
+    {{ stringsForSteps[onboardStep] }}
     <template #action="{ attrs }">
       <v-btn color="secondary" plain v-bind="attrs" @click="close()">
         <span class="text-uppercase">Close</span>
@@ -24,20 +24,16 @@ export default {
         } Class.`,
         2: 'To add students, click Invite Students.',
         3: 'Click + Create Assignment to browse questions.',
-        4: 'Change topics to see more questions.',
-        5: 'Click + to select questions to assign.',
-        6: "When you're ready, click + Assign.",
-        7: 'Click on a mark to open the marking view.',
+        4: 'Click + to select questions to assign.',
+        5: "When you're ready, click + Assign.",
+        6: 'Click on a mark to open the marking view.',
       },
     }
   },
   computed: {
     ...mapState({
-      obs: (state) => state.user.onboardStep,
+      onboardStep: (state) => state.user.onboardStep,
     }),
-    snack() {
-      return this.obs > 0
-    },
   },
   methods: {
     close() {

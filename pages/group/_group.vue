@@ -91,7 +91,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <onboarding-snackbar />
   </div>
 </template>
 
@@ -101,7 +100,6 @@ import { isEmpty, find } from 'lodash'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
-import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
 import {
   mdiDotsVertical,
   mdiInformationOutline,
@@ -114,7 +112,6 @@ export default {
     GroupNav,
     GroupHeader,
     DeleteAssignment,
-    OnboardingSnackbar,
   },
   layout: 'app',
   head() {

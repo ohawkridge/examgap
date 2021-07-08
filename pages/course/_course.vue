@@ -18,7 +18,7 @@
               v-bind="attrs"
               class="mr-2"
               v-on="on"
-              @click="$store.commit('assignment/clearSelectedQuestions')"
+              @click="$store.commit('topics/clearSelectedQuestions')"
             >
               Clear
             </v-btn>
@@ -32,7 +32,7 @@
               :disabled="selected.length == 0"
               v-bind="attrs"
               elevation="0"
-              :class="`${obs === 7 ? 'red-out' : ''}`"
+              :class="`${onboardStep === 7 ? 'red-out' : ''}`"
               @click="assign()"
               v-on="on"
             >
@@ -61,11 +61,14 @@
                     type="list"
                     :types="{ list: 'list-item-two-line@6' }"
                   >
-                    <v-list-item-group v-model="currentTopic" color="primary">
+                    <v-list-item-group
+                      v-model="currentTopicIndex"
+                      color="primary"
+                    >
                       <v-list-item
                         v-for="(topic, i) in topics"
                         :key="i"
-                        :class="i === 1 && obs === 5 ? 'red-out' : ''"
+                        :class="i === 1 && onboardStep === 5 ? 'red-out' : ''"
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
                       >
@@ -81,11 +84,14 @@
                     </v-list-item-group>
                   </v-skeleton-loader>
                 </v-list>
+                <p v-if="$fetchState.error" class="red--text">
+                  Error loading topics
+                </p>
               </v-col>
               <v-col cols="12" md="5">
                 <p class="text-h6">Questions ({{ questions.length }})</p>
                 <v-skeleton-loader
-                  :loading="loading"
+                  :loading="loading || $fetchState.loading"
                   type="list"
                   :types="{ list: 'list-item-two-line@6' }"
                 >
@@ -104,12 +110,11 @@
                                 :key="j"
                                 small
                                 outlined
-                                label
                                 class="ml-2"
                               >
                                 <v-tooltip bottom>
-                                  <template #activator="{ on, attrs }">
-                                    <span v-bind="attrs" v-on="on">
+                                  <template #activator="{ on }">
+                                    <span v-on="on">
                                       {{ assignment.date | date }}</span
                                     >
                                   </template>
@@ -120,17 +125,18 @@
                           </v-list-item-content>
                           <v-list-item-action>
                             <v-tooltip bottom>
-                              <template #activator="{ on, attrs }">
+                              <template #activator="{ on }">
                                 <v-btn
                                   icon
                                   :class="`${
-                                    obs === 6 && i === 0 ? 'red-out' : ''
+                                    onboardStep === 6 && i === 0
+                                      ? 'red-out'
+                                      : ''
                                   }`"
-                                  v-bind="attrs"
                                   v-on="on"
                                   @click.stop="
                                     $store.commit(
-                                      'assignment/updateSelectedQuestions',
+                                      'topics/updateSelectedQuestions',
                                       q.id
                                     )
                                   "
@@ -148,19 +154,18 @@
                                 </v-btn>
                               </template>
                               <span>
-                                {{ selected.includes(q.id) ? 'Remove' : 'Add' }}
+                                {{
+                                  selected.includes(q.id)
+                                    ? 'Remove from'
+                                    : 'Add to'
+                                }}
+                                assignment
                               </span>
                             </v-tooltip>
                           </v-list-item-action>
                         </v-list-item>
                       </template>
-                      <v-list-item
-                        v-if="!$fetchState.pending && questions.length === 0"
-                        disabled
-                      >
-                        <v-list-item-icon>
-                          <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
-                        </v-list-item-icon>
+                      <v-list-item v-if="noQuestions" disabled>
                         <v-list-item-title>
                           No questions yet
                         </v-list-item-title>
@@ -172,19 +177,22 @@
               <v-col cols="12" md="4">
                 <div class="d-flex justify-space-between">
                   <p class="text-h6">Preview</p>
-                  <QuestionDetailDialog
-                    :question-id="questionId"
+                  <the-question-detail-dialog
+                    v-if="question"
+                    :question-id="question.id"
                     :disabled="questions.length === 0"
                   />
                 </div>
                 <div
-                  v-if="preview"
+                  v-if="question"
                   class="pt-2 text-body-2"
-                  v-html="preview.text"
+                  v-html="question.text"
                 ></div>
-                <div v-if="preview" class="d-flex justify-end">
+                <div v-if="question" class="d-flex justify-end">
                   <v-chip outlined
-                    >{{ preview.maxMark }} mark{{ preview.maxMark | pluralize }}
+                    >{{ question.maxMark }} mark{{
+                      question.maxMark | pluralize
+                    }}
                   </v-chip>
                 </div>
               </v-col>
@@ -194,45 +202,30 @@
         </v-card>
       </v-col>
     </v-row>
-    <onboarding-snackbar />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import {
-  mdiPlus,
-  mdiMinus,
-  mdiArrowRight,
-  mdiInformationOutline,
-} from '@mdi/js'
+import { mdiPlus, mdiMinus, mdiArrowRight } from '@mdi/js'
 import CreateAssignment from '@/components/teacher/CreateAssignment'
-import QuestionDetailDialog from '@/components/teacher/QuestionDetailDialog'
-import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
+import TheQuestionDetailDialog from '@/components/teacher/TheQuestionDetailDialog'
 
 export default {
   components: {
     CreateAssignment,
-    QuestionDetailDialog,
-    OnboardingSnackbar,
+    TheQuestionDetailDialog,
   },
   layout: 'app',
   data() {
     return {
-      currentTopic: 0,
-      questions: [],
-      question: {},
-      selectedQuestion: 0, // questions v-model
-      loading: false,
-      outline: true,
+      selectedQuestion: 0, // v-model for questions v-list
     }
   },
   async fetch() {
     // Dispatch store action to get topics
-    // await completion otherwise loadQuestions will fail
+    // N.B. This also fetches the first topic's questions
     await this.$store.dispatch('topics/getTopics', this.$route.params.course)
-    // Get questions for topic
-    this.loadQuestions()
   },
   head() {
     return {
@@ -241,83 +234,60 @@ export default {
   },
   computed: {
     ...mapState({
-      topics: (state) => state.assignment.topics,
-      selected: (state) => state.assignment.selected,
-      obs: (state) => state.user.onboardStep,
+      topics: (state) => state.topics.topics,
+      questions: (state) => state.topics.questions,
+      selected: (state) => state.topics.selected,
+      loading: (state) => state.topics.loading,
+      onboardStep: (state) => state.user.onboardStep,
     }),
     ...mapGetters({ group: 'user/activeGroup' }),
-    // selectedQuestion is only an index into questions
-    // get actual id of currently selected question
-    questionId() {
-      return this.$fetchState.pending || this.questions.length === 0
-        ? ''
-        : this.questions[this.selectedQuestion].id
+    currentTopicIndex: {
+      get() {
+        return this.$store.state.topics.currentTopicIndex
+      },
+      set(i) {
+        this.$store.commit('topics/setCurrentTopicIndex', i)
+      },
     },
-    preview() {
-      return this.questions[this.selectedQuestion]
+    question() {
+      return this.questions.length === 0
+        ? {}
+        : this.questions[this.selectedQuestion]
+    },
+    noQuestions() {
+      return (
+        !this.$fetchState.pending &&
+        this.questions.length === 0 &&
+        !this.$fetchState.error
+      )
     },
   },
   watch: {
     // Load questions when topic changes
-    currentTopic() {
-      console.log(this.currentTopic)
-      this.loadQuestions()
-      // Select first question of topic by default
-      this.selectedQuestion = 0
-      // Show onboarding if nec.
-      if (this.group.assignments.length < 3) {
-        this.$store.commit('app/setOnboardStep', 6)
-      }
+    currentTopicIndex() {
+      console.log(`currenTopicIndex`, this.currentTopicIndex)
+      this.$store.dispatch('topics/getQuestions')
     },
-    selected() {
-      // Advance onboarding
-      if (this.obs !== 0 && this.selected.length > 0) {
-        this.$store.commit('app/setOnboardStep', 7)
-      }
-    },
+    // TODO? Or leave out--self explanatory?
+    // selected() {
+    //   // Advance onboarding
+    //   if (this.onboardStep !== 0 && this.selected.length > 0) {
+    //     this.$store.commit('app/setOnboardStep', 7)
+    //   }
+    // },
   },
   created() {
     this.$icons = {
       mdiPlus,
       mdiMinus,
       mdiArrowRight,
-      mdiInformationOutline,
     }
   },
   methods: {
-    async loadQuestions() {
-      try {
-        this.loading = true
-        const url = new URL(
-          '/.netlify/functions/getQuestions',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            topicId: this.topics[this.currentTopic].id,
-            groupId: this.group.id,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error fetching questions ${response.status}`)
-        }
-        this.questions = await response.json()
-      } catch (err) {
-        console.error(err)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error fetching questions',
-        })
-      } finally {
-        this.loading = false
-      }
-    },
     assign() {
       this.$nuxt.$emit('show-assign')
       // Onboarding complete
-      this.$store.commit('app/setOnboardStep', 0)
+      this.$store.commit('app/setOnboardStep', 7)
     },
   },
 }

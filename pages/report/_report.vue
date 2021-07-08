@@ -337,7 +337,6 @@
         </v-container>
       </v-card>
     </v-dialog>
-    <onboarding-snackbar />
   </div>
 </template>
 
@@ -363,7 +362,6 @@ import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import GroupNav from '@/components/teacher/GroupNav'
 import MarkChip from '@/components/teacher/MarkChip'
-import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
 
 export default {
@@ -372,7 +370,6 @@ export default {
     GroupHeader,
     GroupNav,
     MarkChip,
-    OnboardingSnackbar,
     TheInfoDialog,
   },
   beforeRouteLeave(to, from, next) {
@@ -424,7 +421,7 @@ export default {
       response: 'assignment/response',
     }),
     ...mapState({
-      obs: (state) => state.user.onboardStep,
+      onboardStep: (state) => state.user.onboardStep,
       assignment: (state) => state.assignment.assignment,
       studentIndex: (state) => state.assignment.studentIndex,
       questionIndex: (state) => state.assignment.questionIndex,

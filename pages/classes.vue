@@ -17,7 +17,7 @@
             elevation="0"
             color="primary"
             outlined
-            :class="obs === 1 ? 'red-out' : ''"
+            :class="onboardStep === 1 ? 'red-out' : ''"
             @click="$nuxt.$emit('show-create')"
           >
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -71,7 +71,6 @@
         </v-col>
       </template>
     </v-row>
-    <onboarding-snackbar />
   </div>
 </template>
 
@@ -79,12 +78,10 @@
 import { mapState, mapGetters } from 'vuex'
 import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
-import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar.vue'
 
 export default {
   components: {
     GroupCard,
-    OnboardingSnackbar,
   },
   layout: 'app',
   data() {
@@ -112,7 +109,7 @@ export default {
     }),
     ...mapState({
       groups: (state) => state.user.groups,
-      obs: (state) => state.user.onboardStep,
+      onboardStep: (state) => state.user.onboardStep,
       loading: (state) => state.user.loading,
     }),
     // Remember active tab

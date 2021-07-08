@@ -80,7 +80,7 @@ export default {
   methods: {
     // TODO (onboarding moved into Chip)
     // onboardClass(i, j) {
-    //   return this.obs === 7 && i === 0 && j === 0 ? 'red-out' : ''
+    //   return this.onboardStep === 7 && i === 0 && j === 0 ? 'red-out' : ''
     // },
     // For reassigned responses, add margin bottom
     // (except for last one)

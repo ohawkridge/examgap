@@ -105,6 +105,7 @@
         <nuxt />
       </v-container>
       <the-snackbar />
+      <the-onboarding-snackbar v-if="teacher" />
       <create-class v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
       <the-loading-overlay />
@@ -123,6 +124,7 @@ import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
+import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import CreateClass from '@/components/teacher/CreateClass'
 
 import {
@@ -147,6 +149,7 @@ export default {
     TheLoadingOverlay,
     CreateClass,
     TheFeedbackDialog,
+    TheOnboardingSnackbar,
   },
   middleware: ['auth'],
   data() {

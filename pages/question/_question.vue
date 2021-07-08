@@ -2,7 +2,7 @@
   <v-row class="justify-center mt-sm-3">
     <v-col cols="12" md="10">
       <v-skeleton-loader :loading="$fetchState.pending" type="card">
-        <v-card class="eg-card pa-sm-8">
+        <v-card class="eg-card">
           <v-card-title class="d-flex justify-space-between">
             Question
             <div>
