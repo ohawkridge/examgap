@@ -1,11 +1,7 @@
 <template>
   <v-col cols="12" md="6" lg="4">
     <v-hover v-slot="{ hover }">
-      <v-card
-        hover
-        :class="`${$store.state.user.onboardStep === 2 ? 'red-out' : ''}`"
-        @click="open()"
-      >
+      <v-card hover @click="open()">
         <v-card-title :class="hover ? 'primary--text' : ''">
           {{ group.name }}
         </v-card-title>

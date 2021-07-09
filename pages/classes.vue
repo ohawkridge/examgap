@@ -17,7 +17,6 @@
             elevation="0"
             color="primary"
             outlined
-            :class="onboardStep === 1 ? 'red-out' : ''"
             @click="$nuxt.$emit('show-create')"
           >
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -101,7 +100,6 @@ export default {
     }),
     ...mapState({
       groups: (state) => state.user.groups,
-      onboardStep: (state) => state.user.onboardStep,
       loading: (state) => state.app.loading,
     }),
     // Remember active tab (in store)

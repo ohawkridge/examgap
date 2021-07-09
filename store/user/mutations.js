@@ -1,6 +1,6 @@
 export default {
   setActiveGroupIndex(state, i) {
-    // CreateClass.vue sends -1 as active group
+    // TheCreateClassDialog sends -1 as active group
     state.activeGroupIndex = i === -1 ? state.groups.length - 1 : i
   },
   addGroup(state, group) {
@@ -9,11 +9,11 @@ export default {
   setQuote(state, quote) {
     state.quote = quote
   },
-  // Called by _students.vue (in case new students have joined)
-  updateStudentCount(state, n) {
-    state.groups[state.activeGroupIndex].num_students = n
+  // Called after copying students
+  updateNumStudents(state, copied) {
+    state.groups[state.activeGroupIndex].num_students += copied
   },
-  // Called after manually adding a student
+  // Called after manually adding students
   incrementStudentCount(state) {
     state.groups[state.activeGroupIndex].num_students++
   },

@@ -106,6 +106,32 @@ const actions = {
     })
     commit('setArchived')
   },
+  async createGroup({ commit, rootState, getters }, { courseId, groupName }) {
+    const url = new URL('/.netlify/functions/createGroup', this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        groupName,
+        courseId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(
+        `Error creating class \n ${response.statusText} (${response.status})`
+      )
+    }
+    response = await response.json()
+    console.log(`createGroup adding..`, response)
+    // Update local store
+    // (mutations.js will find the actual index of new group)
+    commit('addGroup', response)
+    commit('setActiveGroupIndex', -1)
+    // Progress onboarding
+    commit('app/setOnboardStep', 2, { root: true })
+    // If on Archive, set back to Home
+    commit('app/setTab', true, { root: true })
+  },
   async updateGroup({ commit, rootState, getters }, { courseId, groupName }) {
     const url = new URL('/.netlify/functions/updateGroup', this.$config.baseURL)
     const response = await fetch(url, {
@@ -123,6 +149,30 @@ const actions = {
       name: groupName,
       course: await response.json(),
     })
+  },
+  // Copy student(s) into another group by
+  // creating new mappings in GroupStudent
+  async copyStudents({ commit, rootState, getters }, { studentIds, groupId }) {
+    const url = new URL(
+      '/.netlify/functions/createGroupStudent',
+      this.$config.baseURL
+    )
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        studentIds,
+        groupId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(
+        `Error copying students \n ${response.statusText} (${response.status})`
+      )
+    }
+    // Commit mutation to update num_students on new group
+    // so, for example, counts are correct on classes.vue
+    commit('user/updateNumStudents', studentIds.length)
   },
 }
 export default actions

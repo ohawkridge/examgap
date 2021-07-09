@@ -75,7 +75,9 @@
                   :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
                 />
               </div>
-              <p class="text-body-2 text-center mt-4">No assignments yet</p>
+              <p class="text-body-2 text-center mt-4" style="color: #000000de">
+                No assignments yet
+              </p>
               <div class="d-flex justify-center">
                 <v-btn
                   elevation="0"
@@ -121,13 +123,13 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-    ...mapState({ assignment: (state) => state.assignment.assignment }),
-    // Defend against logout, refresh etc.
-    // TODO TEST ME!
+    ...mapState({
+      // The last assignment data for _report.vue
+      // Used to check whether to pre-fetch again
+      assignment: (state) => state.assignment.assignment,
+    }),
     assignments() {
-      return this.group && 'assignments' in this.group
-        ? this.group.assignments
-        : []
+      return this.group.assignments
     },
   },
   async created() {
@@ -139,11 +141,9 @@ export default {
     }
     // Pre-fetch most recent assignment for group if store
     // is empty or stored assignment not for this group
-    if (
-      (isEmpty(this.assignment) ||
-        !find(this.assignments, ['id', this.assignment.id])) &&
-      this.assignments.length > 0
-    ) {
+    const notSame = !find(this.assignments, ['id', this.assignment.id])
+    console.log(`pre-fetch same?`, notSame)
+    if ((isEmpty(this.assignment) || notSame) && this.assignments.length > 0) {
       try {
         console.log(
           '%c' + 'Prefetch',
@@ -153,6 +153,11 @@ export default {
       } catch (err) {
         console.error(err)
       }
+    }
+  },
+  mounted() {
+    if (this.group.num_students === 0) {
+      this.$store.commit('app/setOnboardStep', 2)
     }
   },
 }

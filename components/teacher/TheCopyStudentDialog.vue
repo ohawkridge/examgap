@@ -10,6 +10,7 @@
         </ul>
         <v-select
           v-model="selectedClass"
+          no-data-text="No classes available"
           outlined
           :items="groups"
           label="To class*"
@@ -36,6 +37,7 @@
 import { mapGetters } from 'vuex'
 export default {
   props: {
+    // Array of student ids to copy
     selected: {
       type: Array,
       default: () => [],
@@ -49,18 +51,8 @@ export default {
     }
   },
   computed: {
-    // Re-format groups for Vuetify select
-    ...mapGetters({ groups: 'groups/groupsForSelect' }),
-    // TODO Only used in CopyStudents MOVE?
-    // groupsForSelect: (state) => {
-    //   return state.groups.map((group) => {
-    //     const obj = {
-    //       text: group.name,
-    //       value: group.id,
-    //     }
-    //     return obj
-    //   })
-    // },
+    // Groups for v-select
+    ...mapGetters({ groups: 'user/selectGroups' }),
   },
   mounted() {
     this.$nuxt.$on('open-copy', () => {
@@ -68,35 +60,16 @@ export default {
     })
   },
   methods: {
-    // Copy student(s) into another group by
-    // creating new mappings in GroupStudent
-    async copy() {
+    async copyStudents() {
       this.loading = true
       try {
-        for (const user of this.selected) {
-          const url = new URL(
-            '/.netlify/functions/createGroupStudent',
-            this.$config.baseURL
-          )
-          const response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.$store.state.user.secret,
-              studentId: user.id,
-              groupId: this.selectedClass,
-              addStudent: true,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error copying student(s) ${response.status}`)
-          }
-        }
+        await this.$store.dispatch('user/copyStudents', this.selected)
         this.$snack.showMessage({
           type: 'success',
           msg: `Student${this.selected.length === 1 ? '' : 's'} copied`,
         })
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: `Error copying student${this.selected.length === 1 ? '' : 's'}`,

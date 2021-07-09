@@ -32,7 +32,6 @@
               :disabled="selected.length == 0"
               v-bind="attrs"
               elevation="0"
-              :class="`${onboardStep === 7 ? 'red-out' : ''}`"
               @click="assign()"
               v-on="on"
             >
@@ -68,7 +67,6 @@
                       <v-list-item
                         v-for="(topic, i) in topics"
                         :key="i"
-                        :class="i === 1 && onboardStep === 5 ? 'red-out' : ''"
                         color="primary"
                         :title="`${topic.name} (${topic.count})`"
                       >
@@ -128,11 +126,6 @@
                               <template #activator="{ on }">
                                 <v-btn
                                   icon
-                                  :class="`${
-                                    onboardStep === 6 && i === 0
-                                      ? 'red-out'
-                                      : ''
-                                  }`"
                                   v-on="on"
                                   @click.stop="
                                     $store.commit(

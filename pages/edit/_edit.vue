@@ -28,7 +28,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="8">
-              <CourseSelect :course="group.course.id" />
+              <the-course-select :course-id="group.course.id" />
             </v-col>
             <v-col cols="12" class="px-0">
               <v-btn
@@ -53,7 +53,7 @@ import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import ArchiveGroup from '@/components/teacher/ArchiveGroup'
-import CourseSelect from '@/components/teacher/CourseSelect'
+import TheCourseSelect from '@/components/teacher/TheCourseSelect'
 import { mdiInformationOutline } from '@mdi/js'
 
 export default {
@@ -61,7 +61,7 @@ export default {
     GroupNav,
     GroupHeader,
     ArchiveGroup,
-    CourseSelect,
+    TheCourseSelect,
   },
   layout: 'app',
   data() {

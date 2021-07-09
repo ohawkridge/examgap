@@ -14,7 +14,6 @@
         <the-invite-dialog :group="group" />
         <v-btn
           class="mt-2 mt-sm-0"
-          :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
           elevation="0"
           outlined
           :block="$vuetify.breakpoint.name === 'xs'"

@@ -5,9 +5,7 @@
         :block="$vuetify.breakpoint.name === 'xs'"
         elevation="0"
         class="mr-2"
-        :class="$store.state.user.onboardStep === 2 ? 'red-out' : ''"
         v-on="on"
-        @click="onboard()"
       >
         Invite students
       </v-btn>
@@ -101,8 +99,14 @@ export default {
   },
   watch: {
     dialog() {
-      // Reset text on Copy button
-      if (!this.dialog) this.copyBtn = 'Copy'
+      if (!this.dialog) {
+        // Reset text on Copy button
+        this.copyBtn = 'Copy'
+      }
+      if (!this.dialog && this.group.assignments.length < 2) {
+        // Continue onboarding
+        this.$store.commit('app/setOnboardStep', 3)
+      }
     },
   },
   created() {
@@ -115,9 +119,6 @@ export default {
     this.$nuxt.$off('open-invite')
   },
   mounted() {
-    if (this.group.num_students === 0) {
-      this.$store.commit('app/setOnboardStep', 2)
-    }
     this.$nuxt.$on('open-invite', () => {
       this.dialog = true
     })
@@ -131,24 +132,18 @@ export default {
         msg: 'Copied to clipboard',
       })
     },
-    onboard() {
-      // Continue onboarding if few assignments
-      if (this.group.assignments.length < 3) {
-        this.$store.commit('app/setOnboardStep', 3)
-      }
-    },
   },
 }
 </script>
 
 <style scoped>
-/* align buttons in inputs */
+/* Align buttons in inputs */
 .fix-btn {
   margin-top: -7px;
   margin-right: -2px;
 }
 
-/* big class code */
+/* Big class code */
 .big {
   font-size: 10vw;
 }

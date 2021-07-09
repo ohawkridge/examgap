@@ -106,7 +106,7 @@
       </v-container>
       <the-snackbar />
       <the-onboarding-snackbar v-if="teacher" />
-      <create-class v-if="teacher" />
+      <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
       <the-loading-overlay />
     </v-main>
@@ -125,7 +125,7 @@ import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
-import CreateClass from '@/components/teacher/CreateClass'
+import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 
 import {
   mdiPlus,
@@ -147,7 +147,7 @@ export default {
     TheSubscribeDialog,
     TheJoinDialog,
     TheLoadingOverlay,
-    CreateClass,
+    TheCreateClassDialog,
     TheFeedbackDialog,
     TheOnboardingSnackbar,
   },

@@ -22,12 +22,6 @@ blockquote {
   background: #f7eabb;
 }
 
-/* highlight elements for onboarding */
-.red-out {
-  outline: #ef7a85 solid 3px !important;
-  outline-offset: 5px !important;
-}
-
 /* accessible RAG chips */
 span.v-chip.theme--light.red {
   background-color: rgb(254, 216, 216) !important;

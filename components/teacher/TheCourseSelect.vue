@@ -3,12 +3,13 @@
     v-model="selectedCourse"
     :loading="$fetchState.pending"
     :items="courses"
+    no-data-text="No courses available"
     item-text="name"
     item-value="id"
     :rules="courseRules"
     label="Select course*"
     outlined
-    @input="$nuxt.$emit('select-course', selectedCourse)"
+    @change="$nuxt.$emit('select-course', selectedCourse)"
   >
     <!-- Custom selection appearance -->
     <template #selection="data">
@@ -26,9 +27,9 @@
 
 <script>
 export default {
-  name: 'CourseSelect',
+  name: 'TheCourseSelect',
   props: {
-    course: {
+    courseId: {
       type: String,
       default: '',
     },
@@ -36,7 +37,7 @@ export default {
   data() {
     return {
       courses: [],
-      selectedCourse: this.course, // Copy to avoid mutating prop
+      selectedCourse: this.courseId, // Copy to avoid mutating prop
       courseRules: [(v) => !!v || 'Course is required'],
     }
   },

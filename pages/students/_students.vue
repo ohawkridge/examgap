@@ -61,7 +61,7 @@
                 </v-list>
               </v-menu>
               <AddStudents :group-id="group.id" />
-              <CopyStudents :selected="selected" />
+              <the-copy-student-dialog :selected="selected" />
               <RemoveStudents :selected="selected" :group-id="group.id" />
               <v-tooltip bottom>
                 <template #activator="{ on }">
@@ -97,6 +97,7 @@
                   v-model="selected"
                   :headers="headers"
                   :items="students"
+                  checkbox-color="primary"
                   item-key="id"
                   hide-default-footer
                   show-select
@@ -106,10 +107,9 @@
                 >
                   <template #no-data>
                     <v-img
-                      id="grad"
+                      max-width="30%"
                       src="/no-student.svg"
                       alt="Graduation gap illustration"
-                      :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
                     />
                     <p class="text-body-2 mt-4">No students yet</p>
                     <v-btn
@@ -154,17 +154,17 @@ import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
-import CopyStudents from '@/components/teacher/CopyStudents'
 import RemoveStudents from '@/components/teacher/RemoveStudents'
 import { mdiChevronDown, mdiDownloadOutline, mdiPlus } from '@mdi/js'
+import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog.vue'
 
 export default {
   components: {
     GroupNav,
     GroupHeader,
     AddStudents,
-    CopyStudents,
     RemoveStudents,
+    TheCopyStudentDialog,
   },
   layout: 'app',
   data() {
@@ -343,10 +343,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-#grad {
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
