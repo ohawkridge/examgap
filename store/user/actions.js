@@ -60,6 +60,26 @@ const actions = {
       commit('app/setOnboardStep', 1, { root: true })
     }
   },
+  async getStudents({ rootState, commit, getters }) {
+    const url = new URL('/.netlify/functions/getStudents', this.$config.baseURL)
+    const groupId = getters.activeGroup.id
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        groupId,
+        namesOnly: false,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(
+        `Error getting students \n ${response.statusText} (${response.status})`
+      )
+    }
+    response = await response.json()
+    console.log(`_student data`, response)
+    commit('setStudents', response)
+  },
   // For students, stream user document
   openStream({ state, commit, dispatch }, { id }) {
     const keyedClient = new faunadb.Client({

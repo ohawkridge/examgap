@@ -15,6 +15,7 @@ const state = () => ({
   examMode: false,
   reviseExamMode: false,
   quote: 'Experiment, fail, learn, repeat.—Anonymous',
+  students: [], // _students.vue
 })
 
 export default state

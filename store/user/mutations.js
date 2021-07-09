@@ -9,6 +9,9 @@ export default {
   setQuote(state, quote) {
     state.quote = quote
   },
+  setStudents(state, students) {
+    state.students = students
+  },
   // Called after copying students
   updateNumStudents(state, copied) {
     state.groups[state.activeGroupIndex].num_students += copied

@@ -9,9 +9,10 @@ export const state = () => ({
 })
 
 export const getters = {
-  // TODO Isn't this value already returned by getTopics.js?
-  // TODO undefined for teacher
-  topicCount: (state) => {
+  // For students, access count of questions answered for a topic
+  // getRevisionQuestionId uses this to get next question in sequence
+  topicCount: (state, getters, rootState) => {
+    if (rootState.user.teacher) return ''
     return state.topics.find(({ id }) => id === state.topicId).answered
   },
 }

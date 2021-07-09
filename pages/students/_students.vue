@@ -106,19 +106,24 @@
                   loading-text="Fetching student data..."
                 >
                   <template #no-data>
-                    <v-img
-                      max-width="30%"
-                      src="/no-student.svg"
-                      alt="Graduation gap illustration"
-                    />
-                    <p class="text-body-2 mt-4">No students yet</p>
-                    <v-btn
-                      color="primary"
-                      elevation="0"
-                      @click="$nuxt.$emit('open-invite')"
-                    >
-                      Invite students
-                    </v-btn>
+                    <div>
+                      <v-img
+                        max-width="200"
+                        src="/no-student.svg"
+                        alt="Graduation gap illustration"
+                        class="mx-auto"
+                      />
+                      <p class="text-body-2 mt-4" style="color: #000000de">
+                        No students yet
+                      </p>
+                      <v-btn
+                        color="primary"
+                        elevation="0"
+                        @click="$nuxt.$emit('open-invite')"
+                      >
+                        Invite students
+                      </v-btn>
+                    </div>
                   </template>
                   <template #[`item.target`]="props">
                     <v-edit-dialog
@@ -150,7 +155,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
@@ -169,10 +174,7 @@ export default {
   layout: 'app',
   data() {
     return {
-      csv: '',
-      students: [],
       selected: [],
-      removeModal: false,
       targetRules: [(v) => v.length === 1 || 'Target must be one character'],
       headers: [
         {
@@ -197,32 +199,20 @@ export default {
           value: 'target',
         },
       ],
+      csv: '',
     }
   },
   async fetch() {
+    // TODO Check if already stored
+    // Consider caching issues though
     try {
-      const url = new URL(
-        '/.netlify/functions/getStudents',
-        this.$config.baseURL
-      )
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          secret: this.$store.state.user.secret,
-          groupId: this.group.id,
-          namesOnly: false,
-        }),
-        method: 'POST',
+      await this.$store.dispatch('user/getStudents')
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching students',
       })
-      if (!response.ok) {
-        throw new Error(`Error fetching student data ${response.status}`)
-      }
-      response = await response.json()
-      // console.log(response)
-      // Update student count for group
-      this.$store.commit('groups/updateStudentCount', response.length)
-      this.students = response
-    } catch (e) {
-      console.error(e)
     }
   },
   head() {
@@ -231,11 +221,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'user/activeGroup' }),
-  },
-  mounted() {
-    // Re-fetch data when students added
-    this.$nuxt.$on('user-added', () => this.$fetch())
+    ...mapGetters({
+      group: 'user/activeGroup',
+    }),
+    ...mapState({
+      students: (state) => state.user.students,
+    }),
   },
   created() {
     this.$icons = {
@@ -243,9 +234,6 @@ export default {
       mdiDownloadOutline,
       mdiPlus,
     }
-  },
-  beforeDestroy() {
-    this.$nuxt.$off('user-added')
   },
   methods: {
     // Save target grade
