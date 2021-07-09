@@ -18,7 +18,8 @@ const actions = {
     commit('setQuote', response)
   },
   // Try to obtain user document with credentials
-  async getUser({ commit }, { username, password }) {
+  async getUser({ dispatch, commit }, { username, password }) {
+    commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -29,10 +30,14 @@ const actions = {
     })
     // N.B. Must throw error in order to catch in component
     if (!response.ok) {
-      throw new Error(`getUser\n ${response.statusText} (${response.status})`)
+      throw new Error(
+        `Error getting user data \n ${response.statusText} (${response.status})`
+      )
     }
     response = await response.json()
     commit('setUser', response)
+    // Compose actions. getUser -> dispatches getGroups
+    await dispatch('getGroups')
   },
   // Get groups and assignments
   async getGroups({ rootState, commit, rootGetters }) {
@@ -49,6 +54,7 @@ const actions = {
     }
     response = await response.json()
     commit('setGroups', response)
+    commit('app/setLoading', false, { root: true })
     // Onboard if no active groups
     if (rootGetters['user/activeGroupCount'] === 0) {
       commit('app/setOnboardStep', 1, { root: true })

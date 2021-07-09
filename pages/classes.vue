@@ -55,8 +55,12 @@
       </v-col>
       <!-- Empty state -->
       <template v-if="!loading && activeGroupCount === 0 && tab">
-        <v-col id="empty" cols="12">
-          <v-img src="/no-class.svg" alt="Empty chair illustration" />
+        <v-col cols="12" class="d-flex justify-center">
+          <v-img
+            src="/no-class.svg"
+            max-width="30%"
+            alt="Empty chair illustration"
+          />
         </v-col>
         <v-col cols="12" class="text-center">
           <p class="text-body-2 mt-4">No classes yet</p>
@@ -84,18 +88,6 @@ export default {
     GroupCard,
   },
   layout: 'app',
-  data() {
-    return {
-      outline: false,
-    }
-  },
-  async fetch() {
-    // Dispatch store action to get groups + assignments
-    if (this.$store.state.user.groups.length === 0) {
-      console.log('%c' + 'fetch (classes.vue)..', 'color:purple')
-      await this.$store.dispatch('user/getGroups')
-    }
-  },
   head() {
     return {
       title: 'Home',
@@ -104,15 +96,15 @@ export default {
   computed: {
     ...mapGetters({
       // N.B. You *cannot* use this for GroupCards
-      // The filter will throw off activeGroupIndex
+      // Filter function throws off activeGroupIndex
       activeGroupCount: 'user/activeGroupCount',
     }),
     ...mapState({
       groups: (state) => state.user.groups,
       onboardStep: (state) => state.user.onboardStep,
-      loading: (state) => state.user.loading,
+      loading: (state) => state.app.loading,
     }),
-    // Remember active tab
+    // Remember active tab (in store)
     tab: {
       get() {
         return this.$store.state.app.tab
@@ -123,7 +115,11 @@ export default {
     },
   },
   created() {
-    this.$icons = { mdiPlus, mdiHomeOutline, mdiArchiveOutline }
+    this.$icons = {
+      mdiPlus,
+      mdiHomeOutline,
+      mdiArchiveOutline,
+    }
   },
 }
 </script>
@@ -138,18 +134,5 @@ export default {
 #cc2 {
   background: #fefcfb !important;
   border: 2px dashed #0078a0 !important;
-}
-
-/* shrink empty state graphic */
-#empty {
-  padding-left: 6em;
-  padding-right: 6em;
-}
-/* window is 600px or more */
-@media only screen and (min-width: 600px) {
-  #empty {
-    padding-left: 40%;
-    padding-right: 40%;
-  }
 }
 </style>

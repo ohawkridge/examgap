@@ -5,7 +5,7 @@ export default function ({ redirect, store }) {
   } else {
     console.log('%c' + 'auth.js (server-side)', 'color:red')
   }
-  if (!store.state.user.loading && store.state.user.id === '') {
+  if (!store.state.app.loading && store.state.user.id === '') {
     console.log('%c' + 'You must be logged in', 'color:red')
     redirect('/signin')
   }
