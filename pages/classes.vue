@@ -57,7 +57,7 @@
         <v-col cols="12" class="d-flex justify-center">
           <v-img
             src="/no-class.svg"
-            max-width="30%"
+            max-width="200"
             alt="Empty chair illustration"
           />
         </v-col>

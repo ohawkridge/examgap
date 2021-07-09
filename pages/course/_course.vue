@@ -231,7 +231,7 @@ export default {
       questions: (state) => state.topics.questions,
       selected: (state) => state.topics.selected,
       loading: (state) => state.topics.loading,
-      onboardStep: (state) => state.user.onboardStep,
+      onboardStep: (state) => state.app.onboardStep,
     }),
     ...mapGetters({ group: 'user/activeGroup' }),
     currentTopicIndex: {
@@ -258,16 +258,8 @@ export default {
   watch: {
     // Load questions when topic changes
     currentTopicIndex() {
-      console.log(`currenTopicIndex`, this.currentTopicIndex)
       this.$store.dispatch('topics/getQuestions')
     },
-    // TODO? Or leave out--self explanatory?
-    // selected() {
-    //   // Advance onboarding
-    //   if (this.onboardStep !== 0 && this.selected.length > 0) {
-    //     this.$store.commit('app/setOnboardStep', 7)
-    //   }
-    // },
   },
   created() {
     this.$icons = {

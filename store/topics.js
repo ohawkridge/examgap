@@ -18,7 +18,6 @@ export const getters = {
 
 export const actions = {
   async getQuestion({ commit, rootState }, questionId) {
-    console.log('%c' + 'dispatch -> getQuestion', 'color:purple')
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({

@@ -71,8 +71,8 @@
               <div class="d-flex justify-center">
                 <v-img
                   src="/no-assign.svg"
+                  max-width="240"
                   alt="Books and pens illustrations"
-                  :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
                 />
               </div>
               <p class="text-body-2 text-center mt-4" style="color: #000000de">
@@ -142,7 +142,6 @@ export default {
     // Pre-fetch most recent assignment for group if store
     // is empty or stored assignment not for this group
     const notSame = !find(this.assignments, ['id', this.assignment.id])
-    console.log(`pre-fetch same?`, notSame)
     if ((isEmpty(this.assignment) || notSame) && this.assignments.length > 0) {
       try {
         console.log(
@@ -159,6 +158,18 @@ export default {
     if (this.group.num_students === 0) {
       this.$store.commit('app/setOnboardStep', 2)
     }
+  },
+  methods: {
+    createAssignment() {
+      // Clear any previous selections
+      this.$store.commit('topics/clearSelectedQuestions')
+      // Continue onboarding if user hasn't set assignments
+      this.$store.commit(
+        'app/setOnboardStep',
+        this.group.assignments.length < 3 ? 4 : 0
+      )
+      this.$router.push(`/course/${this.group.course.id}`)
+    },
   },
 }
 </script>

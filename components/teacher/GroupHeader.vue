@@ -18,7 +18,7 @@
           outlined
           :block="$vuetify.breakpoint.name === 'xs'"
           color="primary"
-          @click="create()"
+          @click="createAssignment()"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Create assignment
@@ -54,13 +54,13 @@ export default {
     }
   },
   methods: {
-    create() {
-      // Clear any previous selection
+    createAssignment() {
+      // Clear any previous selections
       this.$store.commit('topics/clearSelectedQuestions')
       // Continue onboarding if user hasn't set assignments
       this.$store.commit(
         'app/setOnboardStep',
-        this.group.assignments.length < 3 ? 5 : 0
+        this.group.assignments.length < 3 ? 4 : 0
       )
       this.$router.push(`/course/${this.group.course.id}`)
     },

@@ -421,7 +421,7 @@ export default {
       response: 'assignment/response',
     }),
     ...mapState({
-      onboardStep: (state) => state.user.onboardStep,
+      onboardStep: (state) => state.app.onboardStep,
       assignment: (state) => state.assignment.assignment,
       studentIndex: (state) => state.assignment.studentIndex,
       questionIndex: (state) => state.assignment.questionIndex,

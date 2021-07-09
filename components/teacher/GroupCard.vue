@@ -8,12 +8,8 @@
         <v-card-subtitle>
           {{ group.course.name }} ({{ group.course.board }})
         </v-card-subtitle>
-        <!-- min-height must be in-line -->
-        <v-card-text class="d-flex align-end" style="min-height: 80px">
-          <v-chip label outlined>
-            <v-avatar left>
-              <v-icon>{{ $icons.mdiAccountGroupOutline }}</v-icon>
-            </v-avatar>
+        <v-card-text class="d-flex align-end fix-height">
+          <v-chip label color="primary" outlined>
             {{ group.num_students }} student{{ group.num_students | pluralize }}
           </v-chip>
         </v-card-text>
@@ -23,8 +19,6 @@
 </template>
 
 <script>
-import { mdiAccountGroupOutline } from '@mdi/js'
-
 export default {
   name: 'GroupCard',
   props: {
@@ -34,11 +28,8 @@ export default {
     },
     groupIndex: {
       type: Number,
-      default: 0,
+      required: true,
     },
-  },
-  created() {
-    this.$icons = { mdiAccountGroupOutline }
   },
   methods: {
     open() {
@@ -49,3 +40,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.fix-height {
+  min-height: 80px;
+}
+</style>

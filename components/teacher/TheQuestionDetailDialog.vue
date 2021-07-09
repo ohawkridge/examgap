@@ -76,9 +76,11 @@ import { mdiPlus, mdiMinus } from '@mdi/js'
 export default {
   name: 'QuestionDetailDialog',
   props: {
+    // Be sure to provide a default prop
+    // Will be undefined until fetch is complete
     questionId: {
       type: String,
-      required: true,
+      default: '',
     },
     disabled: {
       type: Boolean,
@@ -93,7 +95,6 @@ export default {
   async fetch() {
     // Fetch is called from parent (_course.vue)
     // questionId won't exist until questions loaded
-    console.log('%c' + 'fetch in TheQuestionDetailDialog', 'color:blue')
     if (this.questionId !== '') {
       try {
         await this.$store.dispatch('topics/getQuestion', this.questionId)
