@@ -1,20 +1,18 @@
 <template>
   <div>
-    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
+    <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <GroupNav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
-        <v-card
-          v-if="group !== undefined && group.course"
-          class="eg-card mt-n6 mt-sm-0"
-        >
+        <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
-            Student{{ students.length | pluralize }} ({{ students.length }})
+            <div>
+              <v-icon class="mr-2">
+                {{ $icons.mdiAccountGroupOutline }}
+              </v-icon>
+              Student{{ students.length | pluralize }} ({{ students.length }})
+            </div>
             <div>
               <v-menu offset-y open-on-hover>
                 <template #activator="{ on, attrs }">
@@ -80,13 +78,11 @@
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-btn elevation="0" @click="exportTableToCSV()" v-on="on">
-                    <v-icon v-if="$vuetify.breakpoint.name !== 'xs'" left>{{
-                      $icons.mdiDownloadOutline
-                    }}</v-icon>
                     Csv
+                    <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
                   </v-btn>
                 </template>
-                <span>Download csv</span>
+                <span>Download as csv</span>
               </v-tooltip>
             </div>
           </v-card-title>
@@ -106,7 +102,7 @@
                   loading-text="Fetching student data..."
                 >
                   <template #no-data>
-                    <div>
+                    <div class="mt-4">
                       <v-img
                         max-width="200"
                         src="/no-student.svg"
@@ -160,8 +156,14 @@ import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
 import RemoveStudents from '@/components/teacher/RemoveStudents'
-import { mdiChevronDown, mdiDownloadOutline, mdiPlus } from '@mdi/js'
+import {
+  mdiChevronDown,
+  mdiDownloadOutline,
+  mdiPlus,
+  mdiAccountGroupOutline,
+} from '@mdi/js'
 import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog.vue'
+import DividerRow from '@/components/teacher/DividerRow.vue'
 
 export default {
   components: {
@@ -170,6 +172,7 @@ export default {
     AddStudents,
     RemoveStudents,
     TheCopyStudentDialog,
+    DividerRow,
   },
   layout: 'app',
   data() {
@@ -233,6 +236,7 @@ export default {
       mdiChevronDown,
       mdiDownloadOutline,
       mdiPlus,
+      mdiAccountGroupOutline,
     }
   },
   methods: {

@@ -5,7 +5,7 @@
         Copy student{{ selected.length === 1 ? '' : 's' }}
       </v-card-title>
       <v-card-text>
-        <ul class="mb-4">
+        <ul class="mb-4 debug">
           <li v-for="(user, i) in selected" :key="i">{{ user.username }}</li>
         </ul>
         <v-select
@@ -24,7 +24,7 @@
           elevation="0"
           :disabled="loading"
           :loading="loading"
-          @click="copy()"
+          @click="copyStudents()"
         >
           Copy student{{ selected.length === 1 ? '' : 's' }}
         </v-btn>
@@ -52,7 +52,9 @@ export default {
   },
   computed: {
     // Groups for v-select
-    ...mapGetters({ groups: 'user/selectGroups' }),
+    ...mapGetters({
+      groups: 'user/selectGroups',
+    }),
   },
   mounted() {
     this.$nuxt.$on('open-copy', () => {

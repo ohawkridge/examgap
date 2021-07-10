@@ -1,16 +1,13 @@
 <template>
   <div>
     <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <group-nav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
         <v-card class="mt-n6 mt-sm-0">
-          <v-card-title class="d-flex justify-space-between">
+          <v-card-title>
+            <v-icon class="mr-2">{{ $icons.mdiTextBoxCheckOutline }}</v-icon>
             Assignment{{ assignments.length | pluralize }} ({{
               assignments.length
             }})
@@ -61,6 +58,7 @@
                     </v-menu>
                   </v-list-item-action>
                 </v-list-item>
+                <v-divider :key="i + 1000" class="my-1 mx-3" />
               </template>
             </v-list>
             <!-- Empty state -->
@@ -68,7 +66,7 @@
               <div class="d-flex justify-center">
                 <v-img
                   src="/no-assign.svg"
-                  max-width="240"
+                  max-width="200"
                   alt="Books and pens illustrations"
                 />
               </div>
@@ -99,11 +97,12 @@ import { isEmpty, find } from 'lodash'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
+import DividerRow from '@/components/teacher/DividerRow.vue'
 import {
   mdiDotsVertical,
   mdiInformationOutline,
   mdiPlus,
-  mdiBookOpenOutline,
+  mdiTextBoxCheckOutline,
 } from '@mdi/js'
 
 export default {
@@ -111,6 +110,7 @@ export default {
     GroupNav,
     GroupHeader,
     DeleteAssignment,
+    DividerRow,
   },
   layout: 'app',
   head() {
@@ -134,7 +134,7 @@ export default {
       mdiDotsVertical,
       mdiInformationOutline,
       mdiPlus,
-      mdiBookOpenOutline,
+      mdiTextBoxCheckOutline,
     }
     // Pre-fetch most recent assignment for group if store
     // is empty or stored assignment not for this group

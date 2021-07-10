@@ -1,17 +1,16 @@
 <template>
   <div>
-    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
+    <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <GroupNav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
-        <v-card class="eg-card mt-n6 mt-sm-0">
+        <v-card class="mt-n6 mt-sm-0">
           <v-card-title v-if="group" class="d-flex justify-space-between">
-            Settings
+            <div>
+              <v-icon class="mr-2">{{ $icons.mdiCogOutline }}</v-icon>
+              Settings
+            </div>
             <!-- Hide archive button for archived groups -->
             <!-- Add un-archive feature -->
             <ArchiveGroup v-if="group.active" :group-id="group.id" />
@@ -54,7 +53,8 @@ import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import ArchiveGroup from '@/components/teacher/ArchiveGroup'
 import TheCourseSelect from '@/components/teacher/TheCourseSelect'
-import { mdiInformationOutline } from '@mdi/js'
+import DividerRow from '@/components/teacher/DividerRow.vue'
+import { mdiCogOutline } from '@mdi/js'
 
 export default {
   components: {
@@ -62,6 +62,7 @@ export default {
     GroupHeader,
     ArchiveGroup,
     TheCourseSelect,
+    DividerRow,
   },
   layout: 'app',
   data() {
@@ -91,7 +92,7 @@ export default {
     },
   },
   created() {
-    this.$icons = { mdiInformationOutline }
+    this.$icons = { mdiCogOutline }
   },
   mounted() {
     // Listen for select change event

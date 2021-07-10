@@ -3,7 +3,7 @@
     <span class="font-weight-bold">({{ onboardStep }}/{{ numSteps }})</span>
     {{ stringsForSteps[onboardStep] }}
     <template #action="{ attrs }">
-      <v-btn color="accent" plain v-bind="attrs" @click="close()">
+      <v-btn color="secondary" plain v-bind="attrs" @click="close()">
         <span class="text-uppercase">Close</span>
       </v-btn>
     </template>

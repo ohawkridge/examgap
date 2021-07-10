@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <v-col cols="12" md="3">
     <v-card v-if="$vuetify.breakpoint.name !== 'xs'">
       <v-list nav>
         <v-list-item-group v-model="nav" color="primary">
           <v-list-item value="group-group" nuxt :to="`/group/${group.id}`">
             <v-list-item-icon>
               <v-icon>
-                {{ $icons.mdiBookOpenOutline }}
+                {{ $icons.mdiTextBoxCheckOutline }}
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
@@ -30,7 +30,7 @@
           <v-list-item value="grades-grades" nuxt :to="`/grades/${group.id}`">
             <v-list-item-icon>
               <v-icon>
-                {{ $icons.mdiFinance }}
+                {{ $icons.mdiChartBoxOutline }}
               </v-icon>
             </v-list-item-icon>
             <v-list-item-content>
@@ -54,7 +54,7 @@
     <v-bottom-navigation v-else v-model="nav" color="primary" app mandatory>
       <v-btn value="group-group" nuxt :to="`/group/${group.id}`" exact>
         <v-icon>
-          {{ $icons.mdiBookOpenOutline }}
+          {{ $icons.mdiTextBoxCheckOutline }}
         </v-icon>
         <span>Assignments</span>
       </v-btn>
@@ -66,7 +66,7 @@
       </v-btn>
       <v-btn value="grades-grades" nuxt :to="`/grades/${group.id}`" exact>
         <v-icon>
-          {{ $icons.mdiFinance }}
+          {{ $icons.mdiChartBoxOutline }}
         </v-icon>
         <span>Grades</span>
       </v-btn>
@@ -77,35 +77,35 @@
         <span>Settings</span>
       </v-btn>
     </v-bottom-navigation>
-  </div>
+  </v-col>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import {
   mdiAccountGroupOutline,
   mdiCogOutline,
-  mdiFinance,
-  mdiBookOpenOutline,
+  mdiChartBoxOutline,
+  mdiTextBoxCheckOutline,
 } from '@mdi/js'
 
 export default {
-  props: {
-    group: {
-      type: Object,
-      default: () => {},
-    },
-  },
   data() {
     return {
       nav: this.$route.name,
     }
   },
+  computed: {
+    ...mapGetters({
+      group: 'user/activeGroup',
+    }),
+  },
   created() {
     this.$icons = {
       mdiAccountGroupOutline,
       mdiCogOutline,
-      mdiFinance,
-      mdiBookOpenOutline,
+      mdiChartBoxOutline,
+      mdiTextBoxCheckOutline,
     }
   },
 }

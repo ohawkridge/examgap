@@ -172,7 +172,7 @@ const actions = {
   },
   // Copy student(s) into another group by
   // creating new mappings in GroupStudent
-  async copyStudents({ commit, rootState, getters }, { studentIds, groupId }) {
+  async copyStudents({ commit, rootState }, { studentIds, groupId }) {
     const url = new URL(
       '/.netlify/functions/createGroupStudent',
       this.$config.baseURL
@@ -192,7 +192,7 @@ const actions = {
     }
     // Commit mutation to update num_students on new group
     // so, for example, counts are correct on classes.vue
-    commit('user/updateNumStudents', studentIds.length)
+    commit('updateNumStudents', studentIds.length)
   },
 }
 export default actions

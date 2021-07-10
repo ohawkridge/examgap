@@ -1,22 +1,23 @@
 <template>
   <div>
-    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
+    <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <GroupNav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
         <!-- Negative margin accounts for hidden bottom-nav -->
         <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
-            Grades
+            <div>
+              <v-icon class="mr-2">
+                {{ $icons.mdiChartBoxOutline }}
+              </v-icon>
+              Grades
+            </div>
             <div class="d-flex">
-              <v-btn elevation="0" class="ml-2" @click="exportTableToCSV()">
-                <v-icon left>{{ $icons.mdiDownloadOutline }}</v-icon>
+              <v-btn elevation="0" @click="exportTableToCSV()">
                 Csv
+                <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
               </v-btn>
               <v-btn
                 class="d-none d-sm-flex ml-2"
@@ -94,17 +95,19 @@
 import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
+import DividerRow from '@/components/teacher/DividerRow.vue'
 import {
   mdiArrowRight,
   mdiDownloadOutline,
   mdiInformationOutline,
-  mdiOpenInNew,
+  mdiChartBoxOutline,
 } from '@mdi/js'
 
 export default {
   components: {
     GroupNav,
     GroupHeader,
+    DividerRow,
   },
   beforeRouteLeave(to, from, next) {
     this.stop() // Stop scrolling
@@ -162,7 +165,7 @@ export default {
       mdiArrowRight,
       mdiDownloadOutline,
       mdiInformationOutline,
-      mdiOpenInNew,
+      mdiChartBoxOutline,
     }
   },
   methods: {

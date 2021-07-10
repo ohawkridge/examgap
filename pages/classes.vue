@@ -25,11 +25,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12">
-        <div class="div mb-3"></div>
-      </v-col>
-    </v-row>
+    <divider-row />
     <v-row>
       <template v-for="(group, i) in groups">
         <GroupCard
@@ -86,10 +82,12 @@
 import { mapState, mapGetters } from 'vuex'
 import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
+import DividerRow from '~/components/teacher/DividerRow.vue'
 
 export default {
   components: {
     GroupCard,
+    DividerRow,
   },
   layout: 'app',
   head() {
