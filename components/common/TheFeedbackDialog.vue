@@ -1,25 +1,5 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <template #activator="{ on }">
-      <v-list-item v-on="on">
-        <v-list-item-icon>
-          <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Send Feedback</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </template>
-    <!-- <template #activator="{ on: dial }">
-      <v-tooltip bottom>
-        <template #activator="{ on: tool }">
-          <v-btn icon v-on="{ ...tool, ...dial }">
-            <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
-          </v-btn>
-        </template>
-        <span>Send feedback</span>
-      </v-tooltip>
-    </template> -->
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Send feedback </v-card-title>
       <v-card-text>
@@ -54,7 +34,6 @@
 </template>
 
 <script>
-import { mdiCommentAlertOutline } from '@mdi/js'
 export default {
   data() {
     return {
@@ -64,10 +43,13 @@ export default {
       rules: [(value) => !!value || 'This field is required.'],
     }
   },
-  created() {
-    this.$icons = {
-      mdiCommentAlertOutline,
-    }
+  beforeDestroy() {
+    this.$nuxt.$off('show-feedback')
+  },
+  mounted() {
+    this.$nuxt.$on('show-feedback', () => {
+      this.dialog = true
+    })
   },
   methods: {
     async send() {

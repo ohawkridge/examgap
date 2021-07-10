@@ -16,13 +16,18 @@
           <v-btn
             elevation="0"
             color="primary"
-            outlined
+            text
             @click="$nuxt.$emit('show-create')"
           >
             <v-icon left>{{ $icons.mdiPlus }}</v-icon>
             {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
           </v-btn>
         </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <div class="div mb-3"></div>
       </v-col>
     </v-row>
     <v-row>
@@ -39,7 +44,7 @@
         <v-hover v-slot="{ hover }">
           <v-card
             :id="hover ? 'cc2' : 'cc1'"
-            class="d-flex align-center justify-center"
+            class="d-flex align-center justify-center rounded-lg"
             outlined
             hover
             height="172"
@@ -132,5 +137,10 @@ export default {
 #cc2 {
   background: #fefcfb !important;
   border: 2px dashed #0078a0 !important;
+}
+
+.div {
+  /* border-bottom: 1px solid #e3dede; */
+  border-bottom: 1px solid #cccccc;
 }
 </style>

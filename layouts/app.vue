@@ -1,53 +1,13 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-navigation-drawer v-model="drawer" color="#fefcfb" app right temporary>
-      <v-list nav dense>
-        <v-list-item-group v-model="navGroup" color="primary">
-          <v-list-item nuxt to="/author">
-            <v-list-item-content>
-              <v-btn elevation="0" color="primary" outlined>
-                <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                Create Question
-              </v-btn>
-            </v-list-item-content>
-          </v-list-item>
-
-          <the-feedback-dialog />
-
-          <v-list-item @click="$nuxt.$emit('show-subscribe')">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiCheckCircleOutline }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Subscribe</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider class="my-2" />
-          <v-list-item nuxt to="/profile">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Profile</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-      <template #append>
-        <div class="pa-2">
-          <v-btn elevation="0" outlined block @click="logout()"> Logout </v-btn>
-        </div>
-      </template>
-    </v-navigation-drawer>
-    <v-app-bar color="#fefcfb" elevation="2" app>
+    <v-app-bar color="#fefcfb" elevation="0" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
           <TheLogo />
         </nuxt-link>
         <v-menu offset-y open-on-hover>
-          <template #activator="{ on, attrs }">
-            <v-btn elevation="0" class="ml-4 ml-md-10" v-bind="attrs" v-on="on">
+          <template #activator="{ on }">
+            <v-btn elevation="0" class="ml-4 ml-md-10" v-on="on">
               Classes
               <v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
             </v-btn>
@@ -89,15 +49,42 @@
           </v-list>
         </v-menu>
         <v-spacer />
-        <v-tooltip bottom>
+        <v-btn
+          nuxt
+          to="/author"
+          elevation="0"
+          color="primary"
+          class="mr-2"
+          text
+        >
+          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+          Create Question
+        </v-btn>
+        <v-menu offset-y open-on-hover>
           <template #activator="{ on }">
-            <v-app-bar-nav-icon
-              @click.stop="drawer = !drawer"
-              v-on="on"
-            ></v-app-bar-nav-icon>
+            <v-btn icon elevation="0" v-on="on">
+              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+            </v-btn>
           </template>
-          <span>{{ drawer ? 'Hide menu' : 'Show menu' }}</span>
-        </v-tooltip>
+          <v-list>
+            <v-list-item nuxt to="/profile">
+              <v-list-item-content>
+                <v-list-item-title> Profile </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item @click="$nuxt.$emit('send-feedback')">
+              <v-list-item-content>
+                <v-list-item-title> Send Feedback </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider class="my-2" />
+            <v-list-item @click="logout()">
+              <v-list-item-content>
+                <v-list-item-title> Sign Out </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-container>
     </v-app-bar>
     <v-main>
@@ -108,10 +95,10 @@
       <the-onboarding-snackbar v-if="teacher" />
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
+      <the-feedback-dialog />
       <the-loading-overlay />
     </v-main>
     <the-footer />
-    <the-subscribe-dialog v-if="teacher" />
   </v-app>
 </template>
 
@@ -120,7 +107,6 @@ import { mapState, mapGetters } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
-import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
@@ -131,9 +117,6 @@ import {
   mdiPlus,
   mdiAccountOutline,
   mdiChevronDown,
-  mdiOpenInNew,
-  mdiCommentAlertOutline,
-  mdiTrello,
   mdiLogout,
   mdiCheckCircleOutline,
 } from '@mdi/js'
@@ -144,7 +127,6 @@ export default {
     TheLogo,
     TheSnackbar,
     TheFooter,
-    TheSubscribeDialog,
     TheJoinDialog,
     TheLoadingOverlay,
     TheCreateClassDialog,
@@ -173,9 +155,6 @@ export default {
       mdiPlus,
       mdiAccountOutline,
       mdiChevronDown,
-      mdiOpenInNew,
-      mdiCommentAlertOutline,
-      mdiTrello,
       mdiLogout,
       mdiCheckCircleOutline,
     }

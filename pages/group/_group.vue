@@ -9,18 +9,19 @@
         />
       </v-col>
       <v-col cols="12" md="9">
-        <v-card class="eg-card mt-n6 mt-sm-0">
+        <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
             Assignment{{ assignments.length | pluralize }} ({{
               assignments.length
             }})
           </v-card-title>
+          <!-- <v-divider /> -->
           <v-card-text>
             <v-list v-if="assignments.length > 0">
               <template v-for="(assignment, i) in assignments">
                 <v-list-item
                   :key="i"
-                  class="px-0 px-md-3"
+                  class="px-0 px-md-3 my-1"
                   nuxt
                   :to="`/report/${assignment.id}`"
                 >
@@ -60,10 +61,6 @@
                     </v-menu>
                   </v-list-item-action>
                 </v-list-item>
-                <v-divider
-                  v-if="i < assignments.length - 1"
-                  :key="assignment.id"
-                />
               </template>
             </v-list>
             <!-- Empty state -->

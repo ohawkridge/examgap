@@ -35,20 +35,22 @@
           <v-text-field
             v-if="teacher"
             :value="`${expires} (${subscriptionDays} days)`"
-            label="Subscription expires"
-            :error="subscriptionDays <= 0"
-            :success="subscriptionDays > 0"
-            :append-icon="
-              subscribed
-                ? $icons.mdiCheckCircleOutline
-                : $icons.mdiAlertCircleOutline
-            "
+            :label="subscribed ? 'Subscription expires' : 'Trial expires'"
+            :error="subscriptionDays < 1"
             outlined
             readonly
           >
+            <template #append>
+              <div id="fix-chip">
+                <v-chip v-if="subscribed" color="green">
+                  Subscribed
+                  <v-icon right>{{ $icons.mdiCheckCircleOutline }}</v-icon>
+                </v-chip>
+              </div>
+            </template>
           </v-text-field>
-          <the-subscribe-dialog v-if="teacher" :block="true" />
-          <p class="font-weight-bold mt-6">
+          <the-subscribe-dialog v-if="teacher" />
+          <p class="font-weight-bold mt-8">
             <v-icon class="mr-2"> {{ $icons.mdiLockOutline }} </v-icon>Password
           </p>
           <v-divider class="mb-6" />
@@ -178,3 +180,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+#fix-chip {
+  margin-top: -5px;
+}
+</style>

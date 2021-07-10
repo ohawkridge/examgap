@@ -1,5 +1,10 @@
 <template>
   <v-dialog v-model="dialog" max-width="420">
+    <template #activator="{ on }">
+      <v-btn color="primary" block elevation="0" v-on="on">
+        {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
+      </v-btn>
+    </template>
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"
         >Subscribe to Examgap</v-card-title
@@ -55,12 +60,8 @@ import { mapState } from 'vuex'
 import TheSuccessDialog from '@/components/common/TheSuccessDialog'
 
 export default {
-  components: { TheSuccessDialog },
-  props: {
-    block: {
-      type: Boolean,
-      default: false,
-    },
+  components: {
+    TheSuccessDialog,
   },
   data() {
     return {
@@ -76,14 +77,6 @@ export default {
       expires: (state) => state.user.subscriptionExpires,
       subscribed: (state) => state.user.subscribed,
     }),
-  },
-  beforeDestroy() {
-    this.$nuxt.$off('show-subscribe')
-  },
-  mounted() {
-    this.$nuxt.$on('show-subscribe', () => {
-      this.dialog = true
-    })
   },
   methods: {
     request() {

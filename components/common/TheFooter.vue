@@ -24,6 +24,6 @@ export default {
 
 <style scoped>
 footer {
-  border-top: 1px solid #e3dede !important;
+  /* border-top: 1px solid #e3dede !important; */
 }
 </style>
