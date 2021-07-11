@@ -56,9 +56,11 @@ export const actions = {
     }
     response = await response.json()
     commit('setTopics', response)
-    // Dispatch a second action to get questions
+    // For teachers only, dispatch a second action to get questions
     // (uses state.currentTopicIndex)
-    await dispatch('getQuestions')
+    if (rootState.user.teacher) {
+      await dispatch('getQuestions')
+    }
   },
   async getQuestions({ commit, state, rootState, rootGetters }) {
     commit('setLoading', true)

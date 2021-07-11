@@ -18,7 +18,7 @@ const actions = {
     commit('setQuote', response)
   },
   // Try to obtain user document with credentials
-  async getUser({ dispatch, commit }, { username, password }) {
+  async getUser({ state, getters, dispatch, commit }, { username, password }) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
     let response = await fetch(url, {
@@ -38,6 +38,13 @@ const actions = {
     commit('setUser', response)
     // Compose actions. getUser -> dispatches getGroups
     await dispatch('getGroups')
+    // For students, get revision topics
+    const courseId = getters.activeGroup.course.id
+    console.log('%c' + `courseId ${courseId}`, 'color:purple')
+    if (!state.teacher) {
+      await dispatch('topics/getTopics', courseId, { root: true })
+    }
+    commit('app/setLoading', false, { root: true })
   },
   // Get groups and assignments
   async getGroups({ rootState, commit, rootGetters }) {
@@ -54,7 +61,6 @@ const actions = {
     }
     response = await response.json()
     commit('setGroups', response)
-    commit('app/setLoading', false, { root: true })
     // Onboard if no active groups
     if (rootGetters['user/activeGroupCount'] === 0) {
       commit('app/setOnboardStep', 1, { root: true })

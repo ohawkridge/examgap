@@ -163,7 +163,7 @@ import {
   mdiAccountGroupOutline,
 } from '@mdi/js'
 import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog.vue'
-import DividerRow from '@/components/teacher/DividerRow.vue'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {

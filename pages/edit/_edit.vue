@@ -53,8 +53,8 @@ import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import ArchiveGroup from '@/components/teacher/ArchiveGroup'
 import TheCourseSelect from '@/components/teacher/TheCourseSelect'
-import DividerRow from '@/components/teacher/DividerRow.vue'
 import { mdiCogOutline } from '@mdi/js'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {

@@ -100,13 +100,13 @@ import { isEmpty, find } from 'lodash'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
-import DividerRow from '@/components/teacher/DividerRow.vue'
 import {
   mdiDotsVertical,
   mdiInformationOutline,
   mdiPlus,
   mdiTextBoxCheckOutline,
 } from '@mdi/js'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {

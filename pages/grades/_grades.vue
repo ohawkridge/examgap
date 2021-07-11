@@ -95,13 +95,13 @@
 import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
-import DividerRow from '@/components/teacher/DividerRow.vue'
 import {
   mdiArrowRight,
   mdiDownloadOutline,
   mdiInformationOutline,
   mdiChartBoxOutline,
 } from '@mdi/js'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {

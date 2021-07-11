@@ -129,7 +129,6 @@ export default {
       set(val) {
         this.$store.commit('user/setRevisionExamMode', val)
         this.$snack.showMessage({
-          type: '',
           msg: `Exam mode ${val ? 'ON' : 'OFF'}`,
         })
       },

@@ -82,7 +82,7 @@
 import { mapState, mapGetters } from 'vuex'
 import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
-import DividerRow from '~/components/teacher/DividerRow.vue'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {

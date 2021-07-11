@@ -2,30 +2,25 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <v-skeleton-loader :loading="$fetchState.pending" type="heading">
+        <v-skeleton-loader :loading="loading" type="heading">
           <div class="text-h6 font-weight-black">
-            {{ $fetchState.pending ? 'Loading' : group.name }}
+            {{ loading ? 'Loading' : group.name }}
           </div>
         </v-skeleton-loader>
-        <v-skeleton-loader
-          :loading="$fetchState.pending"
-          type="text"
-          width="50%"
-        >
+        <v-skeleton-loader :loading="loading" type="text" width="50%">
           <!-- skeleton-loader buggy if v-if on div -->
           <div>
             {{
-              $fetchState.pending
-                ? '...'
-                : `${group.course.name} (${group.course.board})`
+              loading ? '...' : `${group.course.name} (${group.course.board})`
             }}
           </div>
         </v-skeleton-loader>
       </v-col>
     </v-row>
+    <divider-row />
     <v-row>
       <v-col cols="12" md="7">
-        <the-assignments-card :fetching="$fetchState.pending" />
+        <the-assignments-card :fetching="loading" />
       </v-col>
       <v-col cols="12" md="5">
         <v-row>
@@ -35,7 +30,7 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <the-revision-card :fetching="$fetchState.pending" />
+            <the-revision-card :fetching="loading" />
           </v-col>
         </v-row>
       </v-col>
@@ -44,34 +39,32 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import TheAssignmentsCard from '@/components/student/TheAssignmentsCard'
 import TheRevisionCard from '@/components/student/TheRevisionCard'
 import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
+import DividerRow from '@/components/common/DividerRow'
 
 export default {
   components: {
     TheAssignmentsCard,
     TheRevisionCard,
     TheQuoteOfTheDay,
+    DividerRow,
   },
   layout: 'app',
-  async fetch() {
-    // Dispatch store action to get groups + assignments
-    if (this.$store.state.user.groups.length === 0) {
-      console.log('%c' + 'fetch (home.vue)..', 'color:purple')
-      await this.$store.dispatch('user/getGroups')
-      // Fetch revision topics once group(s) exist
-      await this.$store.dispatch('topics/getTopics')
-    }
-  },
   head() {
     return {
       title: 'Home',
     }
   },
   computed: {
-    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapGetters({
+      group: 'user/activeGroup',
+    }),
+    ...mapState({
+      loading: (state) => state.app.loading,
+    }),
   },
   methods: {
     // Remember revision topic
@@ -81,13 +74,6 @@ export default {
       // https://aneesshameed.medium.com/event-bus-in-nuxt-7728315e81b6
       this.$nuxt.$emit('show-revise')
     },
-    // Dispatch action to fetch revision topics
-    // TODO
-    // getTopics() {
-    //   if (this.topics.length === 0) {
-    //     this.$store.dispatch('groups/getRevisionTopics')
-    //   }
-    // },
   },
 }
 </script>

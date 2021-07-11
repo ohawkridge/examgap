@@ -3,7 +3,9 @@
     <v-app-bar color="#fefcfb" elevation="0" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
-          <TheLogo />
+          <!-- Only show logomark on mobile -->
+          <the-logo-mark v-if="$vuetify.breakpoint.name === 'xs'" />
+          <the-logo v-else />
         </nuxt-link>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on }">
@@ -49,17 +51,30 @@
           </v-list>
         </v-menu>
         <v-spacer />
-        <v-btn
-          nuxt
-          to="/author"
-          elevation="0"
-          color="primary"
-          class="mr-2"
-          text
-        >
-          <v-icon>{{ $icons.mdiPlus }}</v-icon>
-          Create Question
-        </v-btn>
+        <template v-if="teacher">
+          <v-btn
+            v-if="$vuetify.breakpoint.name === 'xs'"
+            nuxt
+            to="/author"
+            color="primary"
+            class="mr-2"
+            icon
+          >
+            <v-icon>{{ $icons.mdiPlus }}</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            nuxt
+            to="/author"
+            elevation="0"
+            color="primary"
+            class="mr-2"
+            text
+          >
+            <v-icon>{{ $icons.mdiPlus }}</v-icon>
+            Create Question
+          </v-btn>
+        </template>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on }">
             <v-btn icon elevation="0" v-on="on">
@@ -96,7 +111,7 @@
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
       <the-feedback-dialog />
-      <the-loading-overlay />
+      <!-- <the-loading-overlay /> -->
     </v-main>
     <the-footer />
   </v-app>
@@ -105,9 +120,10 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
+import TheLogoMark from '@/components/common/TheLogoMark'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
-import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
+// import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
@@ -125,10 +141,11 @@ export default {
   name: 'App',
   components: {
     TheLogo,
+    TheLogoMark,
     TheSnackbar,
     TheFooter,
     TheJoinDialog,
-    TheLoadingOverlay,
+    // TheLoadingOverlay,
     TheCreateClassDialog,
     TheFeedbackDialog,
     TheOnboardingSnackbar,
