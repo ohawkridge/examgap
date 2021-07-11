@@ -1,6 +1,6 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#fefcfb" elevation="2" app>
+    <v-app-bar color="#fefcfb" elevation="0" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
           <TheLogo />
@@ -10,7 +10,7 @@
     <v-main>
       <v-container class="fill-height">
         <v-row class="d-flex justify-center">
-          <v-col id="nav-fix" cols="12" md="8" class="text-center">
+          <v-col id="nav-fix" cols="12" md="7" lg="6" class="text-center">
             <p class="text-h6 error--text">
               {{ error.statusCode === 404 ? pageNotFound : otherError }}
               <v-icon color="error" class="pb-1">

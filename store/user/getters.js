@@ -5,12 +5,11 @@ const getters = {
   activeGroupCount: (state) => {
     return state.groups.filter((group) => group.active).length
   },
+  // Filter out post-dated assignments
   assignments: (state, getters) => {
-    if (!getters.activeGroup) return []
+    if (getters.activeGroup === undefined) return []
     return getters.activeGroup.assignments.filter(
-      (assignment) =>
-        // Filter out post-dated assignments
-        assignment.start === 'N/A' || new Date(assignment.start) <= new Date()
+      (a) => a.start === 'N/A' || new Date(a.start) <= new Date()
     )
   },
   // Return a list of the user's groups formatted for v-select

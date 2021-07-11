@@ -39,9 +39,8 @@ const actions = {
     // Compose actions. getUser -> dispatches getGroups
     await dispatch('getGroups')
     // For students, get revision topics
-    const courseId = getters.activeGroup.course.id
-    console.log('%c' + `courseId ${courseId}`, 'color:purple')
     if (!state.teacher) {
+      const courseId = getters.activeGroup.course.id
       await dispatch('topics/getTopics', courseId, { root: true })
     }
     commit('app/setLoading', false, { root: true })

@@ -98,9 +98,33 @@ exports.handler = async (event) => {
                   ),
                   q.Lambda(
                     'ref',
-                    q.Merge(
-                      { id: q.Select('id', q.Var('ref')) },
-                      q.Select('data', q.Get(q.Var('ref')))
+                    // q.Merge(
+                    //   { id: q.Select('id', q.Var('ref')) },
+                    //   q.Select('data', q.Get(q.Var('ref')))
+                    // )
+                    q.Let(
+                      {
+                        instance: q.Get(q.Var('ref')), // Assignment
+                      },
+                      {
+                        id: q.Select(['ref', 'id'], q.Var('instance')),
+                        name: q.Select(['data', 'name'], q.Var('instance')),
+                        start: q.Select(
+                          ['data', 'start'],
+                          q.Var('instance'),
+                          'N/A'
+                        ),
+                        dateDue: q.Select(
+                          ['data', 'dateDue'],
+                          q.Var('instance')
+                        ),
+                        // Need group to filter assignments later
+                        group: q.Select(['data', 'group'], q.Var('instance')),
+                        questions: q.Select(
+                          ['data', 'questions'],
+                          q.Var('instance')
+                        ),
+                      }
                     )
                   )
                 )
@@ -122,6 +146,7 @@ exports.handler = async (event) => {
                     id: q.Select(['ref', 'id'], q.Var('instance')),
                     name: q.Select(['data', 'name'], q.Var('instance')),
                     active: q.Select(['data', 'active'], q.Var('instance')),
+                    // These come from much higher up! ^^^
                     assignments: q.Filter(
                       q.Var('assignments'),
                       q.Lambda(
@@ -158,7 +183,6 @@ exports.handler = async (event) => {
       )
     )
     const data = await keyedClient.query(qry)
-    console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
