@@ -12,13 +12,12 @@
               assignments.length
             }})
           </v-card-title>
-          <!-- <v-divider /> -->
           <v-card-text>
             <v-list v-if="assignments.length > 0">
               <template v-for="(assignment, i) in assignments">
                 <v-list-item
                   :key="i"
-                  class="px-0 px-md-3 my-1"
+                  class="px-0 px-md-3"
                   nuxt
                   :to="`/report/${assignment.id}`"
                 >
@@ -49,7 +48,7 @@
                         </v-btn>
                       </template>
                       <v-list>
-                        <DeleteAssignment
+                        <delete-assignment
                           v-if="group"
                           :assignment-id="assignment.id"
                           :group-id="group.id"
@@ -58,7 +57,11 @@
                     </v-menu>
                   </v-list-item-action>
                 </v-list-item>
-                <v-divider :key="i + 1000" class="my-1 mx-3" />
+                <v-divider
+                  v-if="i < assignments.length - 1"
+                  :key="i + 999"
+                  class="my-2 mx-0 mx-sm-3"
+                />
               </template>
             </v-list>
             <!-- Empty state -->

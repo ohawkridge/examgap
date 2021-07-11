@@ -5,7 +5,7 @@
         Copy student{{ selected.length === 1 ? '' : 's' }}
       </v-card-title>
       <v-card-text>
-        <ul class="mb-4 debug">
+        <ul class="mb-4">
           <li v-for="(user, i) in selected" :key="i">{{ user.username }}</li>
         </ul>
         <v-select
@@ -55,6 +55,11 @@ export default {
     ...mapGetters({
       groups: 'user/selectGroups',
     }),
+    // selected prop is an Array of student objects (not just ids)
+    // This is so we can list the student's names in dialog
+    studentIds() {
+      return this.selected.map((student) => student.id)
+    },
   },
   mounted() {
     this.$nuxt.$on('open-copy', () => {
@@ -63,9 +68,13 @@ export default {
   },
   methods: {
     async copyStudents() {
-      this.loading = true
       try {
-        await this.$store.dispatch('user/copyStudents', this.selected)
+        this.loading = true
+        const payload = {
+          studentIds: this.studentIds,
+          groupId: this.selectedClass,
+        }
+        await this.$store.dispatch('user/copyStudents', payload)
         this.$snack.showMessage({
           type: 'success',
           msg: `Student${this.selected.length === 1 ? '' : 's'} copied`,

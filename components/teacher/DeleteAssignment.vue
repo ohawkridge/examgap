@@ -3,7 +3,7 @@
     <template #activator="{ on }">
       <v-list-item v-if="type === 'item'" v-on="on">
         <v-list-item-content>
-          <v-list-item-title> Delete </v-list-item-title>
+          <v-list-item-title class="red--text"> Delete </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-btn v-else text @click="dialog = true"> Delete </v-btn>

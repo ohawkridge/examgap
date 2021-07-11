@@ -77,7 +77,6 @@ const actions = {
       )
     }
     response = await response.json()
-    console.log(`_student data`, response)
     commit('setStudents', response)
   },
   // For students, stream user document
@@ -192,7 +191,10 @@ const actions = {
     }
     // Commit mutation to update num_students on new group
     // so, for example, counts are correct on classes.vue
-    commit('updateNumStudents', studentIds.length)
+    commit('updateNumStudents', {
+      groupId,
+      numCopied: studentIds.length,
+    })
   },
 }
 export default actions

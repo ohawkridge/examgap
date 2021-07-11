@@ -298,8 +298,8 @@ export default {
             this.selected.length === 1 ? 'Password' : 'Passwords'
           } reset to 'password'`,
         })
-      } catch (e) {
-        console.warn(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           msg: 'Error resetting passwords',
           type: 'error',

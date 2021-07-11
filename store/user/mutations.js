@@ -13,8 +13,10 @@ export default {
     state.students = students
   },
   // Called after copying students
-  updateNumStudents(state, copied) {
-    state.groups[state.activeGroupIndex].num_students += copied
+  updateNumStudents(state, { groupId, numCopied }) {
+    // Find index of group being copied to
+    const i = state.groups.findIndex((g) => g.id === groupId)
+    state.groups[i].num_students += numCopied
   },
   // Called after manually adding students
   incrementStudentCount(state) {
