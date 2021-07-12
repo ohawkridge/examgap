@@ -159,9 +159,6 @@ export default {
     // Cancel speaking
     this.speaking = undefined
     this.synth.cancel()
-    // Reset responseId
-    // (otherwise new responses will continue to use old id)
-    this.$store.commit('assignment/setResponseId', '')
     // Save self marks
     if (this.marking || confirm(`Really leave without marking?`)) {
       // Increment count for topic
@@ -169,6 +166,10 @@ export default {
         this.$store.commit('topics/incrementTopicCount')
       }
       this.saveMarks()
+      // Reset responseId
+      // (otherwise new responses will continue to use old id)
+      // N.B. Must saveMarks() first !!
+      this.$store.commit('assignment/setResponseId', '')
       next()
     }
   },
@@ -344,11 +345,7 @@ export default {
     // Save self marks to db
     async saveMarks() {
       try {
-        const payload = {
-          responseId: this.responseId,
-          markIds: this.marks,
-        }
-        await this.$store.dispatch('assignment/saveSelfMarks', payload)
+        await this.$store.dispatch('assignment/saveSelfMarks', this.marks)
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({

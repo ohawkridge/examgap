@@ -6,6 +6,11 @@ exports.handler = async (event, context, callback) => {
   const responseId = data.responseId
   const marks = data.markIds
   const secret = data.secret
+  console.log()
+  console.log(responseId)
+  console.log(marks)
+  console.log(secret)
+  console.log()
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
@@ -30,6 +35,7 @@ exports.handler = async (event, context, callback) => {
       body: JSON.stringify(data),
     }
   } catch (err) {
+    console.error(err.description)
     return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

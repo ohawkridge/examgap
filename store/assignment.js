@@ -35,7 +35,6 @@ export const getters = {
 
 export const actions = {
   async saveAnswer({ commit, state, rootState }, text) {
-    console.log(`text to save`, text)
     const url = new URL('/.netlify/functions/saveAnswer', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -63,7 +62,7 @@ export const actions = {
     // _assignment fetches new data each time
     commit('setResponseId', response)
   },
-  async saveSelfMarks({ commit, rootState }, { responseId, markIds }) {
+  async saveSelfMarks({ state, rootState }, markIds) {
     const url = new URL(
       '/.netlify/functions/saveSelfMarks',
       this.$config.baseURL
@@ -71,7 +70,7 @@ export const actions = {
     await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
-        responseId,
+        responseId: state.responseId, // Already stored from first debounce
         markIds,
       }),
       method: 'POST',
