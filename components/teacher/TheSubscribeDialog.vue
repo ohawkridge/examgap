@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="420">
+  <v-dialog v-model="dialog" max-width="440">
     <template #activator="{ on }">
       <v-btn color="primary" block elevation="0" v-on="on">
         {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}

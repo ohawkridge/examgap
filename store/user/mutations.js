@@ -87,11 +87,8 @@ export default {
   setArchived(state) {
     state.groups[state.activeGroupIndex].active = false
   },
-  updateGroupName(state, { id, name }) {
-    for (let i = 0; i < state.groups.length; i++) {
-      if (state.groups[i].id === id) {
-        state.groups[i].name = name
-      }
-    }
+  // Computed setter on _edit.vue
+  updateGroupName(state, name) {
+    state.groups[state.activeGroupIndex].name = name
   },
 }

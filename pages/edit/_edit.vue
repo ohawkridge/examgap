@@ -74,20 +74,19 @@ export default {
   },
   head() {
     return {
-      title: this.group ? `${this.group.name} settings` : 'settings',
+      title: `${this.group.name} settings`,
     }
   },
   computed: {
-    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapGetters({
+      group: 'user/activeGroup',
+    }),
     name: {
       get() {
         return this.group.name
       },
-      set(value) {
-        this.$store.commit('groups/updateGroupName', {
-          id: this.group.id,
-          name: value,
-        })
+      set(name) {
+        this.$store.commit('user/updateGroupName', name)
       },
     },
   },
@@ -105,10 +104,10 @@ export default {
   },
   methods: {
     save() {
-      this.loading = true
       try {
+        this.loading = true
         // Dispatch store action to update group
-        this.$store.dispatch('groups/updateGroup', {
+        this.$store.dispatch('user/updateGroup', {
           courseId: this.courseId,
           groupName: this.name,
         })
@@ -116,8 +115,12 @@ export default {
           type: 'success',
           msg: 'Changes saved',
         })
-      } catch (e) {
-        console.error('Error dispatching updateGroup')
+      } catch (err) {
+        console.error(err)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error updating group',
+        })
       } finally {
         this.loading = false
       }

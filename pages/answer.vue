@@ -118,7 +118,7 @@
         </v-card-text>
       </v-card>
       <!-- Confirm dialog -->
-      <v-dialog v-model="confirmDialog" width="420">
+      <v-dialog v-model="confirmDialog" width="440">
         <v-card class="modal">
           <v-card-title class="d-flex justify-center"> Self mark </v-card-title>
           <v-card-text>

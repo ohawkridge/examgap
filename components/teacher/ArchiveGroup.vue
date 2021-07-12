@@ -8,9 +8,8 @@
         Archive class?
       </v-card-title>
       <v-card-text>
-        Are you sure? Archived classes are moved to the
-        <span class="font-weight-medium">Archive</span> section on the home
-        page.
+        Are you sure? Archived classes are moved to the 'Archive' section on
+        your home page.
       </v-card-text>
       <v-card-actions>
         <v-spacer />
@@ -21,7 +20,7 @@
           :disabled="loading"
           dark
           elevation="0"
-          @click="archive()"
+          @click="archiveGroup()"
         >
           <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
           Archive class
@@ -53,10 +52,10 @@ export default {
     }
   },
   methods: {
-    archive() {
-      this.loading = true
+    archiveGroup() {
       try {
-        this.$store.dispatch('groups/archiveGroup')
+        this.loading = true
+        this.$store.dispatch('user/archiveGroup')
         this.$snack.showMessage({
           type: 'success',
           msg: 'Class archived',
