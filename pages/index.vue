@@ -400,9 +400,10 @@
                     <span class="text-caption">(0984)</span>
                   </td>
                   <td class="text-center">
-                    <v-icon color="green">
+                    <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
-                    </v-icon>
+                    </v-icon> -->
+                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -411,9 +412,10 @@
                     <span class="text-caption">(4CP0)</span>
                   </td>
                   <td class="text-center">
-                    <v-icon color="green">
+                    <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
-                    </v-icon>
+                    </v-icon> -->
+                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -508,14 +510,15 @@
                   <td>
                     <span class="font-weight-bold">WJEC Eduqas</span>
                     <span class="text-caption">(C500QS)</span>
-                    <v-chip label color="accent" class="ml-2" outlined small
+                    <!-- <v-chip label color="accent" class="ml-2" outlined small
                       >NEW</v-chip
-                    >
+                    > -->
                   </td>
                   <td class="text-center">
-                    <v-icon color="green">
+                    <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
-                    </v-icon>
+                    </v-icon> -->
+                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>

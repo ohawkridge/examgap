@@ -78,7 +78,7 @@
         <v-menu offset-y open-on-hover>
           <template #activator="{ on }">
             <v-btn icon elevation="0" v-on="on">
-              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+              <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
             </v-btn>
           </template>
           <v-list>
@@ -87,7 +87,7 @@
                 <v-list-item-title> Profile </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item @click="$nuxt.$emit('send-feedback')">
+            <v-list-item @click="$nuxt.$emit('show-feedback')">
               <v-list-item-content>
                 <v-list-item-title> Send Feedback </v-list-item-title>
               </v-list-item-content>
@@ -129,7 +129,7 @@ import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 
 import {
   mdiPlus,
-  mdiAccountOutline,
+  mdiAccountCircleOutline,
   mdiChevronDown,
   mdiLogout,
   mdiCheckCircleOutline,
@@ -167,7 +167,7 @@ export default {
   created() {
     this.$icons = {
       mdiPlus,
-      mdiAccountOutline,
+      mdiAccountCircleOutline,
       mdiChevronDown,
       mdiLogout,
       mdiCheckCircleOutline,

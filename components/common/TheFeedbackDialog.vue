@@ -56,8 +56,8 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
-          // Can't seem to execute FQL /and/ send email in one function
-          // Record feedback in db
+          // Can't execute query and send email in one function
+          // Save feedback in db
           let url = new URL(
             '/.netlify/functions/sendFeedback',
             this.$config.baseURL
@@ -65,6 +65,7 @@ export default {
           let response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
+              feedback: this.feedback,
             }),
             method: 'POST',
           })
