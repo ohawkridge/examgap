@@ -33,7 +33,7 @@
               </v-list-item-content>
             </v-list-item>
             <template v-if="!teacher">
-              <v-divider />
+              <v-divider class="my-2" />
               <v-list-item @click="$nuxt.$emit('join-class')">
                 <v-list-item-content>
                   <v-list-item-title> Join class&hellip; </v-list-item-title>
@@ -111,7 +111,6 @@
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
       <the-feedback-dialog />
-      <!-- <the-loading-overlay /> -->
     </v-main>
     <the-footer />
   </v-app>
@@ -123,7 +122,6 @@ import TheLogo from '@/components/common/TheLogo'
 import TheLogoMark from '@/components/common/TheLogoMark'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
-// import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
@@ -145,7 +143,6 @@ export default {
     TheSnackbar,
     TheFooter,
     TheJoinDialog,
-    // TheLoadingOverlay,
     TheCreateClassDialog,
     TheFeedbackDialog,
     TheOnboardingSnackbar,

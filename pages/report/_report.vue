@@ -18,7 +18,7 @@
                   <v-tooltip bottom>
                     <template #activator="{ on }">
                       <v-btn icon @click="$router.go(-1)" v-on="on">
-                        <v-icon>{{ $icons.mdiChevronLeft }}</v-icon>
+                        <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
                       </v-btn>
                     </template>
                     <span>Back</span>
@@ -351,7 +351,6 @@ import {
   mdiClose,
   mdiArrowLeft,
   mdiRepeat,
-  mdiChevronLeft,
   mdiContentCopy,
   mdiCloudCheckOutline,
   mdiCloudSyncOutline,
@@ -480,7 +479,6 @@ export default {
       mdiClose,
       mdiArrowLeft,
       mdiRepeat,
-      mdiChevronLeft,
       mdiContentCopy,
       mdiCloudCheckOutline,
       mdiCloudSyncOutline,

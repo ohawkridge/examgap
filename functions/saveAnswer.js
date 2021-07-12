@@ -1,13 +1,20 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const assignmentId = data.assignmentId
   const questionId = data.questionId
   const text = data.text
   const topicId = data.topicId
   const responseId = data.responseId
+  console.log()
+  console.log(assignmentId)
+  console.log(questionId)
+  console.log(text)
+  console.log(topicId)
+  console.log(responseId)
+  console.log()
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret: data.secret,
@@ -65,6 +72,7 @@ exports.handler = async (event, context, callback) => {
       body: JSON.stringify(data.ref.id),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

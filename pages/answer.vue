@@ -1,7 +1,7 @@
 <template>
-  <v-row class="justify-center mt-sm-3">
+  <v-row class="justify-center">
     <v-col cols="12" md="10">
-      <v-card v-if="!marking" class="pa-md-3">
+      <v-card v-if="!marking" class="pa-md-3 mt-sm-3">
         <v-card-title class="d-flex justify-space-between">
           Question
           <v-tooltip bottom>
@@ -118,7 +118,7 @@
         </v-card-text>
       </v-card>
       <!-- Confirm dialog -->
-      <v-dialog v-model="confirmDialog" width="400">
+      <v-dialog v-model="confirmDialog" width="420">
         <v-card class="modal">
           <v-card-title class="d-flex justify-center"> Self mark </v-card-title>
           <v-card-text>
@@ -159,6 +159,9 @@ export default {
     // Cancel speaking
     this.speaking = undefined
     this.synth.cancel()
+    // Reset responseId
+    // (otherwise new responses will continue to use old id)
+    this.$store.commit('assignment/setResponseId', '')
     // Save self marks
     if (this.marking || confirm(`Really leave without marking?`)) {
       // Increment count for topic
@@ -198,7 +201,6 @@ export default {
       speakDisabled: false,
       prefVoice: false,
       saving: false,
-      responseId: '',
       finishClicked: false,
       confirmDialog: false,
     }
@@ -216,10 +218,6 @@ export default {
     wordCount() {
       return this.parse(this.answer).split(' ').length - 1
     },
-    // Calculate % of min. word count
-    // progress() {
-    //   return (this.wordCount / this.question.minWords) * 100
-    // },
     // Show keywords & min. word count?
     showHelp() {
       return (
@@ -331,38 +329,26 @@ export default {
     done() {
       // Just change the route
       // beforeRouteLeave handles saving marks etc.
-      this.$router.push(
-        this.revising ? `/home` : `/assignment/${this.assignmentId}`
-      )
+      const route = this.revising ? `/home` : `/assignment/${this.assignmentId}`
+      this.$router.push(route)
     },
     // Don't exceed max. mark
     checkMax() {
       if (this.marks.length > this.question.maxMark) {
         this.$snack.showMessage({
           msg: `Max. mark is ${this.question.maxMark}`,
-          type: '',
         })
-        this.marks.splice(-1, 1) // Uncheck
+        this.marks.splice(-1, 1) // Uncheck box
       }
     },
     // Save self marks to db
     async saveMarks() {
       try {
-        const url = new URL(
-          '/.netlify/functions/saveSelfMarks',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            responseId: this.responseId,
-            marks: this.marks,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error saving marks ${response.status}`)
+        const payload = {
+          responseId: this.responseId,
+          markIds: this.marks,
         }
+        await this.$store.dispatch('assignment/saveSelfMarks', payload)
       } catch (e) {
         console.error(e)
         this.$snack.showMessage({
@@ -371,42 +357,19 @@ export default {
         })
       }
     },
-    // Kids don't save shit; save automatically
+    // Save student's response
     async save() {
       try {
         this.saving = true
-        const url = new URL(
-          '/.netlify/functions/saveAnswer',
-          this.$config.baseURL
-        )
-        let docID = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            assignmentId: this.$store.state.assignment.assignmentId,
-            questionId: this.$store.state.assignment.questionId,
-            text: this.answer,
-            topicId: this.$store.state.topics.topicId,
-            responseId: this.responseId,
-          }),
-          method: 'POST',
-        })
-        if (!docID.ok) {
-          throw new Error(`Error saving answer ${docID.status}`)
-        }
-        docID = await docID.json()
-        console.log(
-          '%c' + 'Response',
-          'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
-        )
-        console.log(docID)
-        this.responseId = docID
-        this.saving = false
-      } catch (e) {
-        console.error(e)
+        await this.$store.dispatch('assignment/saveAnswer', this.answer)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           msg: 'Error saving answer',
           type: 'error',
         })
+      } finally {
+        this.saving = false
       }
     },
     // Check if keyword used in answer

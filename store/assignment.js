@@ -1,9 +1,10 @@
 export const state = () => ({
   assignmentId: '',
   questionId: '',
+  responseId: '', // debounced saved answer
   // Info ^^^ for answer.vue
   response: {}, // _response.vue
-  assignment: {}, // _report.vue data structure
+  assignment: {}, // _report.vue data structure + _assignment.vue
   studentIndex: '',
   questionIndex: '',
   responseIndex: '',
@@ -33,8 +34,50 @@ export const getters = {
 }
 
 export const actions = {
+  async saveAnswer({ commit, state, rootState }, text) {
+    console.log(`text to save`, text)
+    const url = new URL('/.netlify/functions/saveAnswer', this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        assignmentId: state.assignmentId,
+        questionId: state.questionId,
+        text,
+        topicId: rootState.topics.topicId, // If revising
+        responseId: state.responseId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error saving answer ${response.status}`)
+    }
+    response = await response.json()
+    console.log(
+      '%c' + 'Response',
+      'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+    )
+    console.log(response)
+    // Set responseId (all saveAnswer returns) for
+    // use in subsequent saves to update answer text
+    // No need to store whole response locally as
+    // _assignment fetches new data each time
+    commit('setResponseId', response)
+  },
+  async saveSelfMarks({ commit, rootState }, { responseId, markIds }) {
+    const url = new URL(
+      '/.netlify/functions/saveSelfMarks',
+      this.$config.baseURL
+    )
+    await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        responseId,
+        markIds,
+      }),
+      method: 'POST',
+    })
+  },
   async saveMarks({ commit, getters, rootState }, markIds) {
-    console.log(`saving marks`, markIds)
     const response = getters.response
     const url = new URL(
       '/.netlify/functions/saveTeacherMarks',
@@ -188,6 +231,9 @@ export const mutations = {
   },
   setResponse(state, response) {
     state.response = response
+  },
+  setResponseId(state, responseId) {
+    state.responseId = responseId
   },
   // **_report.vue mutations**
   setMarking(state, marking) {
