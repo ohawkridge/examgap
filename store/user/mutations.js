@@ -9,9 +9,6 @@ export default {
   setQuote(state, quote) {
     state.quote = quote
   },
-  setStudents(state, students) {
-    state.students = students
-  },
   // Called after copying students
   updateNumStudents(state, { groupId, numCopied }) {
     // Find index of group being copied to

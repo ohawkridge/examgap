@@ -216,12 +216,14 @@ exports.handler = async (event, context, callback) => {
     )
     const data = await keyedClient.query(qry)
     data.sort(compare)
+    // console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }
 

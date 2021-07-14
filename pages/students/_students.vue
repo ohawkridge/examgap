@@ -58,9 +58,9 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
-              <AddStudents :group-id="group.id" />
+              <add-students :group-id="group.id" />
               <the-copy-student-dialog :selected="selected" />
-              <RemoveStudents :selected="selected" :group-id="group.id" />
+              <remove-students :selected="selected" :group-id="group.id" />
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-btn
@@ -122,20 +122,20 @@
                     </div>
                   </template>
                   <template #[`item.target`]="props">
-                    <v-edit-dialog
-                      v-if="group"
-                      :return-value.sync="props.item.target[`${group.id}`]"
-                      large
-                      @save="save(props.item)"
-                    >
+                    <v-edit-dialog>
                       <!-- groupId is the key into target object -->
+                      <!-- Different targets for each group -->
                       {{ props.item.target[`${group.id}`] }}
                       <template #input>
                         <v-text-field
-                          v-model="props.item.target[`${group.id}`]"
+                          :value="props.item.target[`${group.id}`]"
                           :rules="targetRules"
-                          label="Edit target"
-                          single-line
+                          placeholder="E.g., 7"
+                          :loading="loading"
+                          label="Set target"
+                          @keyup.enter="
+                            save(props.item.id, $event.target.value)
+                          "
                         ></v-text-field>
                       </template>
                     </v-edit-dialog>
@@ -152,16 +152,15 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import {
+  mdiChevronDown,
+  mdiDownloadOutline,
+  mdiAccountGroupOutline,
+} from '@mdi/js'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
 import RemoveStudents from '@/components/teacher/RemoveStudents'
-import {
-  mdiChevronDown,
-  mdiDownloadOutline,
-  mdiPlus,
-  mdiAccountGroupOutline,
-} from '@mdi/js'
 import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog.vue'
 import DividerRow from '~/components/common/DividerRow.vue'
 
@@ -178,7 +177,7 @@ export default {
   data() {
     return {
       selected: [],
-      targetRules: [(v) => v.length === 1 || 'Target must be one character'],
+      targetRules: [(v) => v.length === 1 || 'Max. one character'],
       headers: [
         {
           text: 'Username',
@@ -203,13 +202,13 @@ export default {
         },
       ],
       csv: '',
+      loading: false,
     }
   },
   async fetch() {
-    // TODO Check if already stored
-    // Consider caching issues though
+    // Always re-fetch on page view
     try {
-      await this.$store.dispatch('user/getStudents')
+      await this.$store.dispatch('students/getStudents')
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -220,7 +219,7 @@ export default {
   },
   head() {
     return {
-      title: this.group ? `${this.group.name} students` : 'Students',
+      title: `${this.group.name} students`,
     }
   },
   computed: {
@@ -228,52 +227,40 @@ export default {
       group: 'user/activeGroup',
     }),
     ...mapState({
-      students: (state) => state.user.students,
+      students: (state) => state.students.students,
     }),
   },
   created() {
     this.$icons = {
       mdiChevronDown,
       mdiDownloadOutline,
-      mdiPlus,
       mdiAccountGroupOutline,
     }
   },
   methods: {
-    // Save target grade
-    // (row is the full v-data-table object)
-    async save(row) {
+    async save(studentId, target) {
       // For iMedia allow 2 characters, for everyone else just
       // take the first character even if the input is longer
-      row.target[`${this.group.id}`] = row.target[`${this.group.id}`].substring(
-        0,
-        this.group.course.id === '263317987221570048' ? 2 : 1
-      )
+      const len = this.group.course.id === '263317987221570048' ? 2 : 1
+      target = target.substring(0, len)
       try {
-        const url = new URL(
-          '/.netlify/functions/updateTarget',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            row,
-          }),
-          method: 'POST',
+        this.loading = true
+        await this.$store.dispatch('students/saveTarget', {
+          target,
+          groupId: this.group.id,
+          studentId,
         })
-        if (!response.ok) {
-          throw new Error(`Error saving target ${response.status}`)
-        }
         this.$snack.showMessage({
-          type: 'success',
           msg: 'Target saved',
         })
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error saving target',
         })
+      } finally {
+        this.loading = false
       }
     },
     async reset() {
