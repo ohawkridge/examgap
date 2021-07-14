@@ -4,10 +4,16 @@ const q = faunadb.query
 exports.handler = async (event, context, callback) => {
   const data = JSON.parse(event.body)
   const responseId = data.responseId
-  const marks = data.marks
+  const marks = data.markIds
+  const secret = data.secret
+  console.log()
+  console.log(responseId)
+  console.log(marks)
+  console.log(secret)
+  console.log()
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Map(
@@ -23,11 +29,13 @@ exports.handler = async (event, context, callback) => {
       )
     )
     const data = await keyedClient.query(qry)
+    console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

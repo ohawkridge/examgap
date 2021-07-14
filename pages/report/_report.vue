@@ -18,7 +18,7 @@
                   <v-tooltip bottom>
                     <template #activator="{ on }">
                       <v-btn icon @click="$router.go(-1)" v-on="on">
-                        <v-icon>{{ $icons.mdiChevronLeft }}</v-icon>
+                        <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
                       </v-btn>
                     </template>
                     <span>Back</span>
@@ -47,9 +47,19 @@
                   :group-id="group.id"
                   type="btn"
                 />
-                <v-btn elevation="0" class="ml-2" @click="refresh()">
-                  Refresh
-                </v-btn>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      elevation="0"
+                      class="ml-2"
+                      @click="refresh()"
+                      v-on="on"
+                    >
+                      Refresh
+                    </v-btn>
+                  </template>
+                  <span>Refresh data</span>
+                </v-tooltip>
               </v-col>
             </v-row>
             <v-row>
@@ -93,13 +103,9 @@
                           class="text-center"
                         >
                           <MarkChip
-                            :class="`${
-                              obs === 8 && i === 0 && j === 0 ? 'red-out' : ''
-                            }`"
+                            :data="item"
                             :student-index="i"
                             :question-index="j"
-                            :data="item"
-                            @clicked="mark"
                           />
                         </td>
                       </tr>
@@ -147,13 +153,13 @@
     >
       <v-card tile>
         <v-toolbar dark dense color="primary">
-          <v-btn icon dark @click="marking = false">
+          <v-btn icon dark @click="close()">
             <v-icon>{{ $icons.mdiClose }}</v-icon>
           </v-btn>
           <v-toolbar-title>Marking</v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
-            <v-btn dark text @click="marking = false">Close</v-btn>
+            <v-btn dark text @click="close()">Close</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-container>
@@ -161,7 +167,7 @@
             <v-col cols="12" class="d-flex align-center">
               <v-tooltip bottom>
                 <template #activator="{ on }">
-                  <v-btn icon @click="previous()" v-on="on">
+                  <v-btn icon @click="next(-1)" v-on="on">
                     <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
                   </v-btn>
                 </template>
@@ -169,26 +175,26 @@
               </v-tooltip>
               <v-tooltip bottom>
                 <template #activator="{ on }">
-                  <v-btn icon @click="next()" v-on="on">
+                  <v-btn icon @click="next(1)" v-on="on">
                     <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
                   </v-btn>
                 </template>
                 <span>Next</span>
               </v-tooltip>
-              <v-tooltip bottom>
+              <v-tooltip v-if="marking" bottom>
                 <template #activator="{ on }">
                   <v-btn
                     icon
                     class="ml-2"
-                    :color="flagColor(response.flagged)"
-                    v-on="on"
+                    :color="response.flagged ? 'accent' : ''"
                     @click="flag()"
+                    v-on="on"
                   >
                     <v-icon>{{ $icons.mdiFlagOutline }}</v-icon>
                   </v-btn>
                 </template>
-                <span v-if="response">{{
-                  response.flagged ? 'Unflag' : 'Flag'
+                <span>{{
+                  response.flagged ? 'Remove flag' : 'Flag response'
                 }}</span>
               </v-tooltip>
               <v-tooltip bottom>
@@ -196,30 +202,23 @@
                   <v-btn
                     icon
                     class="ml-2"
-                    :color="flagColor(response.repeat)"
-                    v-on="on"
+                    :color="response.repeat ? 'accent' : ''"
                     @click="reassign()"
+                    v-on="on"
                   >
                     <v-icon>{{ $icons.mdiRepeat }}</v-icon>
                   </v-btn>
                 </template>
-                <span>Reassign</span>
+                <span>Reassign question</span>
               </v-tooltip>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn icon class="ml-2" v-on="on" @click="infoDialog = true">
-                    <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
-                  </v-btn>
-                </template>
-                <span>More information</span>
-              </v-tooltip>
+              <the-info-dialog :response="response" />
               <v-spacer />
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-chip color="primary" outlined class="mr-2" v-on="on">
                     <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
                     <span v-if="marking" class="font-weight-black">{{
-                      response.tm.length
+                      marks.length
                     }}</span>
                     <v-icon right>{{ $icons.mdiCheck }}</v-icon>
                   </v-chip>
@@ -266,13 +265,17 @@
                 v-text="response.text"
               ></p>
               <p class="text-subtitle-1">Feedback</p>
+              <!-- N.B. update is debounced method -->
               <v-textarea
                 v-model="feedback"
                 outlined
-                :append-icon="$icons.mdiCommentTextOutline"
                 rows="4"
                 auto-grow
-                :messages="feedbackStatus"
+                :append-icon="
+                  savingFeedback
+                    ? $icons.mdiCloudSyncOutline
+                    : $icons.mdiCloudCheckOutline
+                "
                 @input="update()"
               ></v-textarea>
               <v-list dense>
@@ -293,14 +296,13 @@
               <v-checkbox
                 v-for="mp in markScheme"
                 :key="mp.id"
-                v-model="response.tm"
+                v-model="marks"
                 :value="mp.id"
                 hide-details
-                @change="addRemoveMark(mp.id)"
+                @change="checkMax(mp.id)"
               >
                 <template #label>
                   <span
-                    v-if="response"
                     :class="
                       response.sm.includes(mp.id)
                         ? 'green--text text--darken-2'
@@ -312,7 +314,7 @@
                 </template>
               </v-checkbox>
               <div class="d-flex justify-end">
-                <v-switch v-model="smartSort" inset hide-details>
+                <v-switch v-model="smartSort" hide-details>
                   <template #label>
                     <v-tooltip bottom>
                       <template #activator="{ on }">
@@ -332,36 +334,9 @@
               <p v-else class="text-body-2">None</p>
             </v-col>
           </v-row>
-          <!-- More info dialog -->
-          <v-dialog v-if="marking" v-model="infoDialog" width="400">
-            <v-card class="modal">
-              <v-card-title class="d-flex justify-center">
-                More information
-              </v-card-title>
-              <v-card-text>
-                <ul>
-                  <li>
-                    Response id: <code>{{ response.id }}</code>
-                  </li>
-                  <li>Time taken: {{ timeTaken }}</li>
-                </ul>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  color="primary"
-                  elevation="0"
-                  @click="infoDialog = false"
-                >
-                  Close
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </v-container>
       </v-card>
     </v-dialog>
-    <onboarding-snackbar />
   </div>
 </template>
 
@@ -376,17 +351,17 @@ import {
   mdiClose,
   mdiArrowLeft,
   mdiRepeat,
-  mdiCommentTextOutline,
-  mdiInformationOutline,
-  mdiChevronLeft,
+  mdiContentCopy,
+  mdiCloudCheckOutline,
+  mdiCloudSyncOutline,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
-import { debounce, cloneDeep } from 'lodash'
+import { debounce } from 'lodash'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import GroupNav from '@/components/teacher/GroupNav'
 import MarkChip from '@/components/teacher/MarkChip'
-import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
+import TheInfoDialog from '@/components/teacher/TheInfoDialog'
 
 export default {
   components: {
@@ -394,37 +369,45 @@ export default {
     GroupHeader,
     GroupNav,
     MarkChip,
-    OnboardingSnackbar,
+    TheInfoDialog,
+  },
+  beforeRouteLeave(to, from, next) {
+    // TODO Just in case Marking view not closed properly
+    this.$store.commit('assignment/setMarking', false)
+    next()
   },
   layout: 'app',
   data() {
     return {
-      studentIndex: 0, // These 3 values let us index into data structure
-      questionIndex: 0,
-      responseIndex: 0,
-      marking: false,
       commentBank: [],
-      feedbackStatus: '',
+      feedback: '',
+      savingFeedback: false,
       smartSort: false,
-      markScheme: [],
+      markScheme: [], // Copied via question.markScheme
+      marks: [], // v-model for checkboxes
       infoDialog: false,
+      forceRefresh: false,
     }
   },
   async fetch() {
-    // Dispatch store action to get data
-    // (render data straight from store)
-    try {
-      await this.$store.dispatch(
-        'assignments/getReport',
-        this.$route.params.report
-      )
-    } catch (err) {
-      console.error(err)
-      this.$snack.showMessage({
-        type: 'error',
-        msg: 'Error fetching data',
-      })
+    // Dispatch action to get data if not already in store
+    const reportId = this.$store.state.assignment.assignment.id
+    const paramId = this.$route.params.report
+    if (this.forceRefresh || reportId !== paramId) {
+      try {
+        await this.$store.dispatch(
+          'assignment/getReport',
+          this.$route.params.report
+        )
+      } catch (err) {
+        console.error(err)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error fetching data',
+        })
+      }
     }
+    this.forceRefresh = false
   },
   head() {
     return {
@@ -432,66 +415,56 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
-    ...mapState({
-      obs: (state) => state.user.onboardStep,
-      assignment: (state) => state.assignments.assignment,
+    ...mapGetters({
+      group: 'user/activeGroup',
+      response: 'assignment/response',
     }),
-    // Questions included in assignment -> headers (for hover preview)
+    ...mapState({
+      onboardStep: (state) => state.app.onboardStep,
+      assignment: (state) => state.assignment.assignment,
+      studentIndex: (state) => state.assignment.studentIndex,
+      questionIndex: (state) => state.assignment.questionIndex,
+      responseIndex: (state) => state.assignment.responseIndex,
+      marking: (state) => state.assignment.marking,
+    }),
+    // Questions included in assignment headers (for hover preview)
     // +1 because index 0 contains Vuetify table metadata
     question() {
-      return this.$fetchState.pending
-        ? {}
-        : this.assignment.headers[this.questionIndex + 1]
+      return this.assignment.headers[this.questionIndex + 1]
     },
     // Current question id as a String
     qIdStr() {
       return this.assignment.headers[this.questionIndex + 1].value
     },
-    // Format time taken as mm:ss
-    timeTaken() {
-      const t = this.response.time
-      return `${Math.floor(t / 60)}:${t - Math.floor(t / 60) * 60}`
-    },
-    response() {
-      // this.assignment is the massive data structure we get back
-      // from getReport (see sample at Examgap/json).
-      // Its two main keys are: headers and students.
-      // studentIndex gets us horizontally into the student array
-      // Each student object has two main keys: name and data
-      // data is an array of objects (one for each question).
-      // Within these objects is an array of the student's answers.
-      // If the question has been reassigned, they could have more
-      // than one response. Finally, we have the response object.
-      if (this.marking) {
-        return this.assignment.students[this.studentIndex].data[
-          this.questionIndex
-        ][this.qIdStr][this.responseIndex]
-      } else {
-        return {}
-      }
-    },
-    feedback: {
-      get() {
-        return this.marking ? this.response.feedback : ''
-      },
-      set(feedback) {
-        this.response.feedback = feedback
-      },
-    },
   },
   watch: {
-    // If smartSort is on, re-sort mark scheme when response changes
     response() {
-      if (this.smartSort) this.markScheme.sort(this.selfMarksFirst)
+      // Set response as marked
+      // N.B. This watch fires on close. At that point response
+      // exists, but only as a 'prototype' object
+      if ('id' in this.response && !this.response.marked) {
+        this.$store.dispatch('assignment/setMarked')
+      }
+      // Copy existing teacher marks to be v-model
+      this.marks = this.response.tm
+      // Update feedback for current response
+      this.feedback = this.response.feedback
+      this.updateBank()
+      // If smartSort is on, re-sort when response changes
+      if (this.smartSort) {
+        this.markScheme.sort(this.selfMarksFirst)
+      }
+    },
+    marking() {
+      this.copyMarkScheme()
     },
     smartSort() {
-      if (!this.$fetchState.pending && this.smartSort) {
-        // Turn on smartSort by calling sorting function
+      if (this.marking && this.smartSort) {
+        // Turn on smart sort by calling sorting function
         this.markScheme.sort(this.selfMarksFirst)
       } else {
         // When smartSort is turned off, restore normal mark scheme
-        this.markScheme = cloneDeep(this.question.markScheme)
+        this.markScheme = { ...this.question.markScheme }
       }
     },
   },
@@ -506,41 +479,62 @@ export default {
       mdiClose,
       mdiArrowLeft,
       mdiRepeat,
-      mdiCommentTextOutline,
-      mdiInformationOutline,
-      mdiChevronLeft,
+      mdiContentCopy,
+      mdiCloudCheckOutline,
+      mdiCloudSyncOutline,
     }
   },
   mounted() {
     if (this.group.assignments.length < 3) {
-      this.$store.commit('user/setOnboardStep', 7)
+      this.$store.commit('app/setOnboardStep', 7)
+    }
+    // TODO
+    // Might only need during development
+    // Could go on marking = true?
+    if (this.markScheme.length === 0) {
+      this.copyMarkScheme()
     }
   },
   methods: {
-    async refresh() {
-      // this.$fetch()
-      try {
-        console.time(`_report_${this.$route.params.report}`)
-        const url = new URL(
-          '/.netlify/functions/getReportDebug',
-          this.$config.baseURL
-        )
-        let response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            assignmentId: this.$route.params.report,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Fuck :( ${response.status}`)
-        }
-        response = await response.json()
-        console.timeEnd(`_report_${this.$route.params.report}`)
-        console.log(response)
-      } catch (err) {
-        console.error(err)
+    // Copy original mark scheme off question to use while marking
+    // If smart sort is activated, this gets mixed up
+    // so we need to be able to re-copy the unsorted one
+    copyMarkScheme() {
+      if (this.marking) {
+        this.markScheme = { ...this.question.markScheme }
       }
+    },
+    // Don't exceed max. mark
+    checkMax(markId) {
+      if (this.marks.length > this.question.maxMark) {
+        this.$snack.showMessage({
+          msg: `Max. ${this.question.maxMark} mark${
+            this.question.maxMark !== '1' ? 's' : ''
+          }`,
+        })
+        // Untick checkbox by splicing id out of v-model
+        for (let i = 0; i < this.marks.length; i++) {
+          if (this.marks[i] === markId) {
+            this.marks.splice(i, 1)
+          }
+        }
+      }
+    },
+    // Close marking view
+    close() {
+      this.saveMarks()
+      this.$store.commit('assignment/setMarking', false)
+    },
+    // Save marks on close/when response changes
+    saveMarks() {
+      if (this.marks.length > 0) {
+        this.$store.dispatch('assignment/saveMarks', this.marks)
+      }
+    },
+    // Fetch fresh data
+    refresh() {
+      this.forceRefresh = true
+      this.$fetch()
     },
     // Build comment bank from feedback on existing responses
     updateBank() {
@@ -559,204 +553,42 @@ export default {
       // Remove duplicate comments
       this.commentBank = [...new Set(commentBank)]
     },
-    mark(obj) {
-      // Index into big data structure
-      this.studentIndex = obj.studentIndex
-      this.questionIndex = obj.questionIndex
-      this.responseIndex = obj.responseIndex
-      this.marking = true
-      // Copy original (unsorted) mark scheme
-      // N.B. Don't just copy by reference!
-      this.markScheme = cloneDeep(this.question.markScheme)
-      // Build comment bank
-      // (must be *after* marking = true)
-      this.updateBank()
-      // Done onboarding
-      this.$store.commit('user/setOnboardStep', 0)
-      // Set as 'marked' as soon as response opened
-      this.marked(this.response.id)
-    },
-    flagColor(val) {
-      return !val || this.response === undefined ? '' : 'accent'
-    },
-    // Set response as 'marked'
-    async marked() {
-      if (!this.response.marked) {
-        try {
-          const url = new URL(
-            '/.netlify/functions/setAsMarked',
-            this.$config.baseURL
-          )
-          const response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.$store.state.user.secret,
-              responseId: this.response.id,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error setting as 'marked' ${response.status}`)
-          }
-          // Set as marked in local data structure
-          this.response.marked = true
-        } catch (e) {
-          console.error(e)
-          this.$snack.showMessage({
-            type: 'error',
-            msg: 'Error marking',
-          })
-        }
+    // Navigate forwards (1) or backwards (-1) through responses
+    next(n) {
+      // Save marks *before* moving on
+      if (this.response !== undefined) {
+        this.saveMarks()
       }
-    },
-    next() {
-      this.updateBank()
-      // Loop back to start
-      if (this.studentIndex >= this.assignment.students.length - 1) {
-        this.studentIndex = 0
-      } else {
-        this.studentIndex += 1
-      }
-      // Keep advancing if no response is found
+      this.$store.commit('assignment/next', n)
+      // Keep advancing/retreating until we find next response
       if (this.response === undefined) {
-        this.next()
-      } else {
-        // Set response as marked as soon as it's been seen
-        this.marked(this.response.id)
+        this.next(n)
       }
     },
-    previous() {
-      this.updateBank()
-      // Loop back to end
-      if (this.studentIndex === 0) {
-        this.studentIndex = this.assignment.students.length - 1
-      } else {
-        this.studentIndex -= 1
-      }
-      // Keep retreating if no response is found
-      if (this.response === undefined) {
-        this.previous()
-      } else {
-        // Set response as marked as soon as it's been seen
-        this.marked(this.response.id)
-      }
-    },
-    addRemoveMark(id) {
-      // Don't exceed max mark
-      if (this.response.tm.length > this.question.maxMark) {
-        this.$snack.showMessage({
-          msg: `Max. mark is ${this.question.maxMark}`,
-          type: '',
-        })
-        // Untick checkbox by splicing id out of v-model data
-        for (let i = 0; i < this.response.tm.length; i++) {
-          if (this.response.tm[i] === id) {
-            this.response.tm.splice(i, 1)
-          }
-        }
-      } else if (this.response.tm.find((x) => x === id)) {
-        // Adding mark
-        this.toggleMark(id, true)
-      } else {
-        // Removing mark
-        this.toggleMark(id, false)
-      }
-    },
-    // Actually write mark to database
-    async toggleMark(markId, addOrRemove) {
-      try {
-        const url = new URL(
-          '/.netlify/functions/toggleMark',
-          this.$config.baseURL
-        )
-        let response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            responseId: this.response.id,
-            markId,
-            add: addOrRemove,
-            teacher: true,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error saving mark ${response.status}`)
-        }
-        response = await response.json()
-      } catch (e) {
-        console.error(e)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error saving mark',
-        })
-      }
-    },
+    // Keep store data in sync with database
+    // https://medium.com/js-dojo/vuex-tip-error-handling-on-actions-ee286ed28df4
     async flag() {
       try {
-        const url = new URL(
-          '/.netlify/functions/flagResponse',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            responseId: this.response.id,
-            flagged: !this.response.flagged,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error setting flag ${response.status}`)
-        }
-        const state = await response.json()
-        // Update local data
-        this.response.flagged = !this.response.flagged
+        await this.$store.dispatch('assignment/flagResponse')
         this.$snack.showMessage({
-          type: '',
-          msg: `${
-            state.assignment.flagged ? 'Response flagged' : 'Flag removed'
-          }`,
+          msg: this.response.flagged ? 'Flagged' : 'Flag removed',
         })
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
-          msg: 'An error occurred',
+          msg: 'Error setting flag',
         })
       }
     },
     async reassign() {
       try {
-        const url = new URL(
-          '/.netlify/functions/reassignQuestion',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            repeat: !this.response.repeat,
-            responseId: this.response.id,
-          }),
-          method: 'POST',
+        await this.$store.dispatch('assignment/reassign')
+        this.$snack.showMessage({
+          msg: this.response.repeat ? 'Reassigned' : 'Cancelled',
         })
-        if (!response.ok) {
-          throw new Error(`Error reassigning question ${response.status}`)
-        }
-        const state = await response.json()
-        // Update local data structure
-        this.response.repeat = state.assignment.repeat
-        if (state.assignment.repeat) {
-          this.$snack.showMessage({
-            msg: `Question reassigned`,
-            type: '',
-          })
-        } else {
-          this.$snack.showMessage({
-            msg: `Assignment cancelled`,
-            type: '',
-          })
-        }
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error reassigning question',
@@ -765,40 +597,26 @@ export default {
     },
     // Debounce feedback area
     update: debounce(function () {
-      this.save()
-    }, 1500),
-    async save() {
-      this.feedbackStatus = 'Saving...'
+      this.saveFeedback()
+    }, 2000),
+    async saveFeedback() {
       try {
-        const url = new URL(
-          '/.netlify/functions/saveFeedback',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            responseId: this.response.id,
-            feedback: this.feedback,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error saving feedback ${response.status}`)
-        }
-        this.feedbackStatus = `Saved ✓`
+        this.savingFeedback = true
+        await this.$store.dispatch('assignment/saveFeedback', this.feedback)
       } catch (e) {
         console.error(e)
-        this.feedbackStatus = 'Error saving'
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error saving feedback',
         })
+      } finally {
+        this.savingFeedback = false
       }
     },
     // Reuse an existing comment
     reuse(text) {
-      this.response.feedback = text
-      this.save() // Trigger save
+      this.feedback = text
+      this.saveFeedback() // Trigger save
     },
     // Comparison function so student self marks are first
     selfMarksFirst(m1, m2) {

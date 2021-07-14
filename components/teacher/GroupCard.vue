@@ -1,23 +1,15 @@
 <template>
   <v-col cols="12" md="6" lg="4">
     <v-hover v-slot="{ hover }">
-      <v-card
-        hover
-        :class="`${$store.state.user.onboardStep === 2 ? 'red-out' : ''}`"
-        @click="open()"
-      >
+      <v-card hover rounded="lg" @click="open()">
         <v-card-title :class="hover ? 'primary--text' : ''">
           {{ group.name }}
         </v-card-title>
         <v-card-subtitle>
           {{ group.course.name }} ({{ group.course.board }})
         </v-card-subtitle>
-        <!-- min-height must be in-line -->
-        <v-card-text class="d-flex align-end" style="min-height: 80px">
-          <v-chip label outlined>
-            <v-avatar left>
-              <v-icon>{{ $icons.mdiAccountGroupOutline }}</v-icon>
-            </v-avatar>
+        <v-card-text class="d-flex align-end fix-height">
+          <v-chip label color="primary" outlined small>
             {{ group.num_students }} student{{ group.num_students | pluralize }}
           </v-chip>
         </v-card-text>
@@ -27,8 +19,6 @@
 </template>
 
 <script>
-import { mdiAccountGroupOutline } from '@mdi/js'
-
 export default {
   name: 'GroupCard',
   props: {
@@ -38,18 +28,21 @@ export default {
     },
     groupIndex: {
       type: Number,
-      default: 0,
+      required: true,
     },
-  },
-  created() {
-    this.$icons = { mdiAccountGroupOutline }
   },
   methods: {
     open() {
       // Remember active group
-      this.$store.commit('groups/setActiveGroupIndex', this.groupIndex)
+      this.$store.commit('user/setActiveGroupIndex', this.groupIndex)
       this.$router.push(`/group/${this.group.id}`)
     },
   },
 }
 </script>
+
+<style scoped>
+.fix-height {
+  min-height: 80px;
+}
+</style>

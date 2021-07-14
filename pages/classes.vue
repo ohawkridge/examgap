@@ -4,45 +4,28 @@
       <v-col cols="12">
         <div class="d-flex justify-space-between align-center">
           <v-btn-toggle v-model="tab" color="primary" group mandatory>
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn v-bind="attrs" :value="true" class="rounded" v-on="on">
-                  <v-icon left>{{ $icons.mdiHomeOutline }}</v-icon>
-                  Home
-                </v-btn>
-              </template>
-              <span>Home</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn v-bind="attrs" :value="false" class="rounded" v-on="on">
-                  <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
-                  Archive
-                </v-btn>
-              </template>
-              <span>Archive</span>
-            </v-tooltip>
+            <v-btn :value="true" class="rounded">
+              <v-icon left>{{ $icons.mdiHomeOutline }}</v-icon>
+              Home
+            </v-btn>
+            <v-btn :value="false" class="rounded">
+              <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
+              Archive
+            </v-btn>
           </v-btn-toggle>
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                elevation="0"
-                :class="obs === 1 ? 'red-out' : ''"
-                @click="$nuxt.$emit('show-create')"
-                v-on="on"
-              >
-                <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-                {{
-                  $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class'
-                }}
-              </v-btn>
-            </template>
-            <span>Create class</span>
-          </v-tooltip>
+          <v-btn
+            elevation="0"
+            color="primary"
+            text
+            @click="$nuxt.$emit('show-create')"
+          >
+            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+            {{ $vuetify.breakpoint.name == 'xs' ? 'Class' : 'Create Class' }}
+          </v-btn>
         </div>
       </v-col>
     </v-row>
+    <divider-row />
     <v-row>
       <template v-for="(group, i) in groups">
         <GroupCard
@@ -57,7 +40,7 @@
         <v-hover v-slot="{ hover }">
           <v-card
             :id="hover ? 'cc2' : 'cc1'"
-            class="d-flex align-center justify-center"
+            class="d-flex align-center justify-center rounded-lg"
             outlined
             hover
             height="172"
@@ -72,8 +55,12 @@
       </v-col>
       <!-- Empty state -->
       <template v-if="!loading && activeGroupCount === 0 && tab">
-        <v-col id="empty" cols="12">
-          <v-img src="/no-class.svg" alt="Empty chair illustration" />
+        <v-col cols="12" class="d-flex justify-center">
+          <v-img
+            src="/no-class.svg"
+            max-width="200"
+            alt="Empty chair illustration"
+          />
         </v-col>
         <v-col cols="12" class="text-center">
           <p class="text-body-2 mt-4">No classes yet</p>
@@ -88,7 +75,6 @@
         </v-col>
       </template>
     </v-row>
-    <onboarding-snackbar />
   </div>
 </template>
 
@@ -96,19 +82,14 @@
 import { mapState, mapGetters } from 'vuex'
 import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
-import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar.vue'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {
     GroupCard,
-    OnboardingSnackbar,
+    DividerRow,
   },
   layout: 'app',
-  data() {
-    return {
-      outline: false,
-    }
-  },
   head() {
     return {
       title: 'Home',
@@ -117,26 +98,29 @@ export default {
   computed: {
     ...mapGetters({
       // N.B. You *cannot* use this for GroupCards
-      // The filter will throw off activeGroupIndex
-      activeGroupCount: 'groups/activeGroupCount',
+      // Filter function throws off activeGroupIndex
+      activeGroupCount: 'user/activeGroupCount',
     }),
     ...mapState({
-      groups: (state) => state.groups.groups,
-      obs: (state) => state.user.onboardStep,
-      loading: (state) => state.user.loading,
+      groups: (state) => state.user.groups,
+      loading: (state) => state.app.loading,
     }),
-    // Remember active tab
+    // Remember active tab (in store)
     tab: {
       get() {
-        return this.$store.state.groups.tab
+        return this.$store.state.app.tab
       },
       set(value) {
-        this.$store.commit('groups/setTab', value)
+        this.$store.commit('app/setTab', value)
       },
     },
   },
   created() {
-    this.$icons = { mdiPlus, mdiHomeOutline, mdiArchiveOutline }
+    this.$icons = {
+      mdiPlus,
+      mdiHomeOutline,
+      mdiArchiveOutline,
+    }
   },
 }
 </script>
@@ -153,16 +137,8 @@ export default {
   border: 2px dashed #0078a0 !important;
 }
 
-/* shrink empty state graphic */
-#empty {
-  padding-left: 6em;
-  padding-right: 6em;
-}
-/* window is 600px or more */
-@media only screen and (min-width: 600px) {
-  #empty {
-    padding-left: 40%;
-    padding-right: 40%;
-  }
+.div {
+  /* border-bottom: 1px solid #e3dede; */
+  border-bottom: 1px solid #cccccc;
 }
 </style>

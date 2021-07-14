@@ -1,16 +1,13 @@
 <template>
   <div>
     <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <group-nav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
-        <v-card class="eg-card mt-n6 mt-sm-0">
-          <v-card-title class="d-flex justify-space-between">
+        <v-card class="mt-n6 mt-sm-0">
+          <v-card-title>
+            <v-icon class="mr-2">{{ $icons.mdiTextBoxCheckOutline }}</v-icon>
             Assignment{{ assignments.length | pluralize }} ({{
               assignments.length
             }})
@@ -27,11 +24,11 @@
                   <v-list-item-content>
                     <v-list-item-title>{{ assignment.name }}</v-list-item-title>
                     <v-list-item-subtitle>
-                      <div class="fix-width">
+                      <div class="align-date">
                         <span class="font-weight-bold">Start:</span>
                         {{ assignment.start | date }}
                       </div>
-                      <div class="fix-width">
+                      <div class="align-date">
                         <span class="font-weight-bold">Due:</span>
                         {{ assignment.dateDue | date }}
                       </div>
@@ -51,7 +48,7 @@
                         </v-btn>
                       </template>
                       <v-list>
-                        <DeleteAssignment
+                        <delete-assignment
                           v-if="group"
                           :assignment-id="assignment.id"
                           :group-id="group.id"
@@ -62,7 +59,8 @@
                 </v-list-item>
                 <v-divider
                   v-if="i < assignments.length - 1"
-                  :key="assignment.id"
+                  :key="i + 999"
+                  class="my-2 mx-0 mx-sm-3"
                 />
               </template>
             </v-list>
@@ -71,11 +69,13 @@
               <div class="d-flex justify-center">
                 <v-img
                   src="/no-assign.svg"
+                  max-width="200"
                   alt="Books and pens illustrations"
-                  :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
                 />
               </div>
-              <p class="text-body-2 text-center mt-4">No assignments yet</p>
+              <p class="text-body-2 text-center mt-4" style="color: #000000de">
+                No assignments yet
+              </p>
               <div class="d-flex justify-center">
                 <v-btn
                   elevation="0"
@@ -91,29 +91,29 @@
         </v-card>
       </v-col>
     </v-row>
-    <onboarding-snackbar />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { isEmpty, find } from 'lodash'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
-import OnboardingSnackbar from '@/components/teacher/OnboardingSnackbar'
 import {
   mdiDotsVertical,
   mdiInformationOutline,
   mdiPlus,
-  mdiBookOpenOutline,
+  mdiTextBoxCheckOutline,
 } from '@mdi/js'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {
     GroupNav,
     GroupHeader,
     DeleteAssignment,
-    OnboardingSnackbar,
+    DividerRow,
   },
   layout: 'app',
   head() {
@@ -122,28 +122,54 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
-    // Defend against logout, refresh etc.
+    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapState({
+      // The last assignment data for _report.vue
+      // Used to check whether to pre-fetch again
+      assignment: (state) => state.assignment.assignment,
+    }),
     assignments() {
-      return this.group && 'assignments' in this.group
-        ? this.group.assignments
-        : []
+      return this.group.assignments
     },
   },
-  created() {
+  async created() {
     this.$icons = {
       mdiDotsVertical,
       mdiInformationOutline,
       mdiPlus,
-      mdiBookOpenOutline,
+      mdiTextBoxCheckOutline,
     }
+    // Pre-fetch most recent assignment for group if store
+    // is empty or stored assignment not for this group
+    const notSame = !find(this.assignments, ['id', this.assignment.id])
+    if ((isEmpty(this.assignment) || notSame) && this.assignments.length > 0) {
+      try {
+        console.log(
+          '%c' + 'Prefetch',
+          'padding:2px 4px;background-color:#464646;color:white;border-radius:3px'
+        )
+        await this.$store.dispatch('assignment/getReport', -1)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+  },
+  mounted() {
+    if (this.group.num_students === 0) {
+      this.$store.commit('app/setOnboardStep', 2)
+    }
+  },
+  methods: {
+    createAssignment() {
+      // Clear any previous selections
+      this.$store.commit('topics/clearSelectedQuestions')
+      // Continue onboarding if user hasn't set assignments
+      this.$store.commit(
+        'app/setOnboardStep',
+        this.group.assignments.length < 3 ? 4 : 0
+      )
+      this.$router.push(`/course/${this.group.course.id}`)
+    },
   },
 }
 </script>
-
-<style scoped>
-.fix-width {
-  display: inline-block;
-  width: 130px;
-}
-</style>

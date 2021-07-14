@@ -17,20 +17,9 @@ blockquote {
   padding-left: 1em;
 }
 
-/* don't underline links */
-a:link {
-  text-decoration: none;
-}
-
 /* colour student answers */
 #ans {
   background: #f7eabb;
-}
-
-/* highlight elements for onboarding */
-.red-out {
-  outline: #ef7a85 solid 3px !important;
-  outline-offset: 5px !important;
 }
 
 /* accessible RAG chips */
@@ -111,6 +100,12 @@ span.v-chip.theme--light.green {
 .fix-chip {
   margin-top: -5px;
   margin-right: -2px;
+}
+
+/* align assignment Start: + Due: */
+.align-date {
+  display: inline-block;
+  width: 128px;
 }
 
 /* colour border-top on card */

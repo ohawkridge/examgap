@@ -1,22 +1,23 @@
 <template>
   <div>
-    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
+    <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <GroupNav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
         <!-- Negative margin accounts for hidden bottom-nav -->
         <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
-            Grades
+            <div>
+              <v-icon class="mr-2">
+                {{ $icons.mdiChartBoxOutline }}
+              </v-icon>
+              Grades
+            </div>
             <div class="d-flex">
-              <v-btn elevation="0" class="ml-2" @click="exportTableToCSV()">
-                <v-icon left>{{ $icons.mdiDownloadOutline }}</v-icon>
+              <v-btn elevation="0" @click="exportTableToCSV()">
                 Csv
+                <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
               </v-btn>
               <v-btn
                 class="d-none d-sm-flex ml-2"
@@ -98,13 +99,15 @@ import {
   mdiArrowRight,
   mdiDownloadOutline,
   mdiInformationOutline,
-  mdiOpenInNew,
+  mdiChartBoxOutline,
 } from '@mdi/js'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {
     GroupNav,
     GroupHeader,
+    DividerRow,
   },
   beforeRouteLeave(to, from, next) {
     this.stop() // Stop scrolling
@@ -140,7 +143,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     // Convert 2d array from db: [["A*", 0.90], ["A", 0.82], ..]]
     // into an object so we can look up target grades
     rag() {
@@ -162,7 +165,7 @@ export default {
       mdiArrowRight,
       mdiDownloadOutline,
       mdiInformationOutline,
-      mdiOpenInNew,
+      mdiChartBoxOutline,
     }
   },
   methods: {
@@ -170,13 +173,6 @@ export default {
     // https://vuejs.org/v2/guide/syntax.html#Dynamic-Argument-Expression-Constraints
     gk(val) {
       return `item.${val}`
-    },
-    createAssignment() {
-      // Remember group when creating assignments
-      this.$store.commit('assignments/setGroup', this.group.id)
-      // Clear any questions selected for a previous group
-      this.$store.commit('assignments/clearSelectedQuestions')
-      this.$router.push(`/course/${this.group.course.id}`)
     },
     // Scroll right https://jsfiddle.net/Herteby/x53494ef/
     scroll() {

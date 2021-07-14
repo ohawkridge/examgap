@@ -34,21 +34,23 @@
           ></v-text-field>
           <v-text-field
             v-if="teacher"
-            :value="expiry"
-            :success="subscribed"
-            label="Subscription expires"
-            :error-messages="days <= 0 ? ['Subscription expired'] : []"
-            :append-icon="
-              subscribed
-                ? $icons.mdiCheckCircleOutline
-                : $icons.mdiAlertCircleOutline
-            "
+            :value="`${expires} (${subscriptionDays} days)`"
+            :label="subscribed ? 'Subscription expires' : 'Trial expires'"
+            :error="subscriptionDays < 1"
             outlined
             readonly
           >
+            <template #append>
+              <div id="fix-chip">
+                <v-chip v-if="subscribed" color="green">
+                  Subscribed
+                  <v-icon right>{{ $icons.mdiCheckCircleOutline }}</v-icon>
+                </v-chip>
+              </div>
+            </template>
           </v-text-field>
-          <the-subscribe-dialog v-if="teacher" :block="true" />
-          <p class="font-weight-bold mt-6">
+          <the-subscribe-dialog v-if="teacher" />
+          <p class="font-weight-bold mt-8">
             <v-icon class="mr-2"> {{ $icons.mdiLockOutline }} </v-icon>Password
           </p>
           <v-divider class="mb-6" />
@@ -124,14 +126,10 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
       subscribed: (state) => state.user.subscribed,
-      expires: (state) => state.user.subscriptionExpires,
-      days: (state) => state.user.subscriptionDays,
+      expires: (state) =>
+        state.user.subscriptionExpires['@ts'].substring(0, 10),
+      subscriptionDays: (state) => state.user.subscriptionDays,
     }),
-    expiry() {
-      return `${this.expires['@ts'].substring(0, 10)} (${Math.abs(
-        this.days
-      )} days${this.days <= 0 ? ' ago' : ''})`
-    },
     match() {
       return this.pass1 === this.pass2 ? [] : 'Passwords do not match'
     },
@@ -182,3 +180,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+#fix-chip {
+  margin-top: -5px;
+}
+</style>

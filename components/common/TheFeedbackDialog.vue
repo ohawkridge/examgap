@@ -1,15 +1,5 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <template #activator="{ on: dial }">
-      <v-tooltip bottom>
-        <template #activator="{ on: tool }">
-          <v-btn icon v-on="{ ...tool, ...dial }">
-            <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
-          </v-btn>
-        </template>
-        <span>Send feedback</span>
-      </v-tooltip>
-    </template>
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Send feedback </v-card-title>
       <v-card-text>
@@ -44,7 +34,6 @@
 </template>
 
 <script>
-import { mdiCommentAlertOutline } from '@mdi/js'
 export default {
   data() {
     return {
@@ -54,18 +43,21 @@ export default {
       rules: [(value) => !!value || 'This field is required.'],
     }
   },
-  created() {
-    this.$icons = {
-      mdiCommentAlertOutline,
-    }
+  beforeDestroy() {
+    this.$nuxt.$off('show-feedback')
+  },
+  mounted() {
+    this.$nuxt.$on('show-feedback', () => {
+      this.dialog = true
+    })
   },
   methods: {
     async send() {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
-          // Can't seem to execute FQL /and/ send email in one function
-          // Record feedback in db
+          // Can't execute query and send email in one function
+          // Save feedback in db
           let url = new URL(
             '/.netlify/functions/sendFeedback',
             this.$config.baseURL
@@ -73,6 +65,7 @@ export default {
           let response = await fetch(url, {
             body: JSON.stringify({
               secret: this.$store.state.user.secret,
+              feedback: this.feedback,
             }),
             method: 'POST',
           })

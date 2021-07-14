@@ -60,52 +60,52 @@
         ></v-skeleton-loader>
       </v-sheet>
       <v-card v-if="!$fetchState.pending" class="pa-md-3 mt-sm-3">
-        <v-card-title class="d-flex justify-space-between">
-          <v-btn
-            color="primary"
-            nuxt
-            :to="`/assignment/${response.assignmentId}`"
-            elevation="0"
-          >
-            <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
-            Back
-          </v-btn>
-          <div class="d-flex justify-end">
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-chip
-                  v-bind="attrs"
-                  :color="color(response.tm.length, response.question.maxMark)"
-                  class="mr-4"
-                  v-on="on"
-                >
-                  <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
-                  <span class="font-weight-black">{{
-                    response.tm.length
-                  }}</span>
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
-                </v-chip>
-              </template>
-              <span>Your teacher</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-chip
-                  v-bind="attrs"
-                  :color="color(response.sm.length, response.question.maxMark)"
-                  v-on="on"
-                >
-                  <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
-                  <span class="font-weight-black">{{
-                    response.sm.length
-                  }}</span>
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
-                </v-chip>
-              </template>
-              <span>You</span>
-            </v-tooltip>
-          </div>
+        <v-card-title>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                icon
+                nuxt
+                :to="`/assignment/${response.assignmentId}`"
+                class="mr-4"
+                v-on="on"
+              >
+                <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+              </v-btn>
+            </template>
+            <span>Back</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <v-chip
+                v-bind="attrs"
+                :color="color(response.tm.length, response.question.maxMark)"
+                class="mr-4"
+                v-on="on"
+              >
+                <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                <span class="font-weight-black">{{ response.tm.length }}</span>
+                <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+              </v-chip>
+            </template>
+            <span>Your teacher</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <v-chip
+                v-bind="attrs"
+                :color="color(response.sm.length, response.question.maxMark)"
+                v-on="on"
+              >
+                <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                <span class="font-weight-black">{{ response.sm.length }}</span>
+                <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+              </v-chip>
+            </template>
+            <span>You</span>
+          </v-tooltip>
         </v-card-title>
+        <v-divider />
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
@@ -119,19 +119,16 @@
                 </v-chip>
               </div>
               <p class="text-subtitle-1 font-weight-medium">Your answer</p>
-              <p
-                id="ans"
-                class="pa-4 breaks mb-0"
-                :class="noFb"
-                v-text="response.text"
-              ></p>
+              <p id="ans" class="pa-4 breaks mb-0" v-text="response.text"></p>
               <div
                 v-if="response.feedback"
                 id="fb"
                 class="pa-4 mb-4 font-italic"
                 v-text="response.feedback"
               ></div>
-              <p class="text-subtitle-1 font-weight-medium">Model answer</p>
+              <p class="text-subtitle-1 font-weight-medium mt-4">
+                Model answer
+              </p>
               <p v-html="response.question.modelAnswer">Model answer</p>
             </v-col>
             <v-col cols="12" md="6">
@@ -203,13 +200,10 @@ import {
 export default {
   layout: 'app',
   fetch() {
-    this.$store.dispatch('assignments/getResponse', this.$route.params.response)
+    this.$store.dispatch('assignment/getResponse', this.$route.params.response)
   },
   computed: {
-    ...mapState({ response: (state) => state.assignments.response }),
-    noFb() {
-      return this.response.feedback === '' ? 'mb-4' : ''
-    },
+    ...mapState({ response: (state) => state.assignment.response }),
   },
   created() {
     this.$icons = {

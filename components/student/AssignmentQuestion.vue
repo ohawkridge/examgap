@@ -18,7 +18,7 @@
             </v-list-item-subtitle>
             <div
               v-if="response.feedback !== ''"
-              class="my-3 mb-md-0 font-italic d-flex"
+              class="my-3 mb-md-0 font-italic d-flex grey--text text-darken-3"
             >
               <v-icon small class="mr-2">
                 {{ $icons.mdiCommentTextOutline }}
@@ -148,7 +148,7 @@ export default {
     answer(questionId) {
       // Store assignment and question ids to associate
       // later with the student's saved response
-      this.$store.commit(`assignments/setAnswerData`, {
+      this.$store.commit(`assignment/setAnswerData`, {
         assignmentId: this.assignmentId,
         questionId,
       })

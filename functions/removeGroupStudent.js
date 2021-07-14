@@ -1,35 +1,35 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-// *Teacher marking only*
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
-  const responseId = data.responseId
-  const markId = data.markId
-  const add = data.add
+  const studentId = data.studentId
+  const groupId = data.groupId
+  const addStudent = data.addStudent
+  const secret = data.secret
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
+    // Create mapping in GroupStudent
     const qry = q.If(
-      q.Equals(add, true),
-      // Add mark
-      q.Create(q.Collection('TeacherMark'), {
+      addStudent,
+      q.Create(q.Collection('GroupStudent'), {
         data: {
-          response: q.Ref(q.Collection('Response'), responseId),
-          mark: q.Ref(q.Collection('Mark'), markId),
+          student: q.Ref(q.Collection('User'), studentId),
+          group: q.Ref(q.Collection('Group'), groupId),
         },
       }),
-      // Remove mark
+      // Remove mapping
       q.Delete(
         q.Select(
           ['ref'],
           q.Get(
             q.Match(
-              q.Index('delete_teacher_mark'),
-              q.Ref(q.Collection('Mark'), markId),
-              q.Ref(q.Collection('Response'), responseId)
+              q.Index('remove_student'),
+              q.Ref(q.Collection('User'), studentId),
+              q.Ref(q.Collection('Group'), groupId)
             )
           )
         )

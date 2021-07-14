@@ -261,7 +261,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({ secret: (state) => state.user.secret }),
     allSelected: {
       get() {
@@ -392,7 +392,7 @@ export default {
           }
           response = await response.json()
           // Clear any previously selected questions
-          this.$store.commit('assignments/clearSelectedQuestions')
+          this.$store.commit('topics/clearSelectedQuestions')
           // Update local data
           this.$store.commit('groups/addAssignment', response)
           this.$router.push(`/report/${response.ref['@ref'].id}`)

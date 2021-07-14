@@ -1,287 +1,75 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
-  // Configure client using user's secret token
-  const keyedClient = new faunadb.Client({
-    secret: data.secret,
+  const username = data.username
+  const password = data.password
+  // Configure Fauna client with login secret
+  const client = new faunadb.Client({
+    secret: process.env.SECRET_KEY,
   })
   try {
-    const qry = q.Let(
-      {
-        user: q.Get(q.CurrentIdentity()), // User
-      },
-      q.If(
-        q.Select(['data', 'teacher'], q.Var('user')),
-        // If Teacher
-        q.Let(
-          {
-            instance: q.Var('user'),
-          },
-          {
-            id: q.Select(['ref', 'id'], q.Var('instance')),
-            username: q.Select(['data', 'username'], q.Var('instance'), null),
-            // User may or may not have a school (e.g. private tutor)
-            // Also, school is initially just a string
-            school: q.If(
-              q.IsRef(q.Select(['data', 'school'], q.Var('instance'))),
-              q.Select(
-                ['data', 'name'],
-                q.Get(q.Select(['data', 'school'], q.Var('instance')))
-              ),
-              q.Select(['data', 'school'], q.Var('instance'))
-            ),
-            teacher: true,
-            subscriptionExpires: q.Select(
-              ['data', 'subscriptionExpires'],
-              q.Var('instance'),
-              'N/A'
-            ),
-
-            subscriptionDays: q.TimeDiff(
-              q.Now(),
-              q.Select(['data', 'subscriptionExpires'], q.Var('instance')),
-              'days'
-            ),
-            subscribed: q.Select(['data', 'subscribed'], q.Var('instance')),
-            groups: q.Select(
-              ['data'],
-              q.Map(
-                q.Paginate(
-                  q.Match(
-                    q.Index('teacher_groups_2'),
-                    q.Select(['ref'], q.Var('instance'))
-                  )
-                ),
-                q.Lambda(
-                  'ref',
-                  q.Let(
-                    {
-                      instance: q.Get(q.Var('ref')), // A group
-                    },
-                    {
-                      id: q.Select(['id'], q.Var('ref')),
-                      name: q.Select(['data', 'name'], q.Var('instance')),
-                      active: q.Select(['data', 'active'], q.Var('instance')),
-                      code: q.Select(['data', 'code'], q.Var('instance')),
-                      num_students: q.Count(
-                        q.Match(
-                          q.Index('group_students'),
-                          q.Select('ref', q.Var('instance'))
-                        )
-                      ),
-                      course: q.Let(
-                        {
-                          instance: q.Get(
-                            q.Select(['data', 'course'], q.Var('instance'))
-                          ),
-                        },
-                        {
-                          id: q.Select(['ref', 'id'], q.Var('instance')),
-                          name: q.Select(['data', 'name'], q.Var('instance')),
-                          board: q.Select(['data', 'board'], q.Var('instance')),
-                          qan: q.Select(['data', 'qan'], q.Var('instance')),
-                          rag: q.Select(['data', 'rag'], q.Var('instance')),
-                        }
-                      ),
-                      assignments: q.Select(
-                        'data',
-                        q.Reverse(
-                          q.Map(
-                            q.Paginate(
-                              q.Match(
-                                q.Index('group_assignments'),
-                                q.Var('ref')
-                              )
-                            ),
-                            q.Lambda(
-                              'ref',
-                              q.Let(
-                                {
-                                  instance: q.Get(q.Var('ref')), // Assignment
-                                },
-                                {
-                                  id: q.Select(
-                                    ['ref', 'id'],
-                                    q.Var('instance')
-                                  ),
-                                  name: q.Select(
-                                    ['data', 'name'],
-                                    q.Var('instance')
-                                  ),
-                                  start: q.Select(
-                                    ['data', 'start'],
-                                    q.Var('instance'),
-                                    'N/A'
-                                  ),
-                                  dateDue: q.Select(
-                                    ['data', 'dateDue'],
-                                    q.Var('instance')
-                                  ),
-                                }
-                              )
-                            )
-                          )
-                        )
-                      ),
-                    }
-                  )
-                )
-              )
-            ),
-          }
-        ),
-        // If Student
-        q.Let(
-          {
-            instance: q.Var('user'), // User
-          },
-          {
-            id: q.Select(['ref', 'id'], q.Var('instance')),
-            username: q.Select(['data', 'username'], q.Var('instance'), null),
-            examMode: q.Select(['data', 'examMode'], q.Var('instance'), true),
-            teacher: false,
-            quote: q.Let(
-              {
-                instance: q.Get(
+    const qry = q.Select(
+      'user',
+      q.Let(
+        {
+          // Use login secret to try for user credentials
+          obj: q.Login(
+            q.Match(q.Index('user_by_username'), q.LowerCase(username)),
+            {
+              password,
+              ttl: q.TimeAdd(q.Now(), 14, 'days'),
+            }
+          ),
+          usr: q.Select('data', q.Get(q.Select('instance', q.Var('obj')))),
+        },
+        {
+          user: q.Merge(
+            // Object one
+            q.Var('usr'),
+            // Object two
+            // This is the second object passed to Merge
+            // function ∴ school value will be replaced
+            {
+              secret: q.Select('secret', q.Var('obj')),
+              id: q.Select(['instance', 'id'], q.Var('obj')),
+              // For teachers, look up school if we find a Ref
+              // For students, school is 'N/A'
+              school: q.If(
+                q.Select('teacher', q.Var('usr')),
+                q.If(
+                  q.IsRef(q.Select('school', q.Var('usr'))),
                   q.Select(
-                    ['data', 0],
-                    q.Paginate(q.Documents(q.Collection('Quote')), {
-                      size: 1,
-                      after: q.Floor(
-                        q.Divide(
-                          q.Multiply(
-                            Math.random(),
-                            q.Count(q.Documents(q.Collection('Quote')))
-                          ),
-                          64
-                        )
-                      ),
-                    })
-                  )
-                ),
-              },
-              {
-                text: q.Concat([
-                  q.Select(['data', 'quote'], q.Var('instance')),
-                  '—',
-                  q.Select(['data', 'author'], q.Var('instance')),
-                ]),
-              }
-            ),
-            groups: q.Select(
-              ['data'],
-              q.Map(
-                q.Paginate(
-                  q.Match(
-                    // New index returns groups in reverse order by
-                    // timestamp so most recent group is first
-                    q.Index('student_groups_2'),
-                    q.Select('ref', q.Var('instance'))
-                  )
-                ),
-                q.Lambda(
-                  // gRef is an array [ts, <group-Ref>]
-                  'gRef',
-                  q.Let(
-                    {
-                      instance: q.Get(q.Select([1], q.Var('gRef'))), // Group
-                    },
-                    {
-                      id: q.Select(['ref', 'id'], q.Var('instance')),
-                      name: q.Select(['data', 'name'], q.Var('instance')),
-                      active: q.Select(['data', 'active'], q.Var('instance')),
-                      course: q.Let(
-                        {
-                          instance: q.Get(
-                            q.Select(['data', 'course'], q.Var('instance'))
-                          ), // Course
-                        },
-                        {
-                          id: q.Select(['ref', 'id'], q.Var('instance')),
-                          name: q.Select(['data', 'name'], q.Var('instance')),
-                          board: q.Select(['data', 'board'], q.Var('instance')),
-                          commands: q.Select(
-                            ['data', 'commands'],
-                            q.Var('instance'),
-                            ''
-                          ),
-                        }
-                      ),
-                      // Empty array we'll push assignments into client-side
-                      assignments: [],
-                    }
-                  )
-                )
-              )
-            ),
-            assignments: q.Reverse(
-              q.Select(
-                ['data'],
-                q.Map(
-                  q.Paginate(
-                    q.Match(
-                      q.Index('student_assignments'),
-                      q.Select('ref', q.Var('instance')) // User (student)
-                    )
+                    ['data', 'name'],
+                    q.Get(q.Select('school', q.Var('usr')))
                   ),
-                  q.Lambda(
-                    'ref',
-                    q.Let(
-                      {
-                        instance: q.Get(q.Var('ref')), // Assignment
-                      },
-                      {
-                        id: q.Select(['ref', 'id'], q.Var('instance')),
-                        name: q.Select(['data', 'name'], q.Var('instance')),
-                        start: q.Select(
-                          ['data', 'start'],
-                          q.Var('instance'),
-                          'N/A'
-                        ),
-                        dateDue: q.Select(
-                          ['data', 'dateDue'],
-                          q.Var('instance')
-                        ),
-                        // Is the assignment 'live'?
-                        // How many days until the due date?
-                        live: q.TimeDiff(
-                          q.ToDate(q.Now()),
-                          q.Date(
-                            q.SubString(
-                              q.Select(['data', 'dateDue'], q.Var('instance')),
-                              0,
-                              10
-                            )
-                          ),
-                          'days'
-                        ),
-                        questions: q.Select(
-                          ['data', 'questions'],
-                          q.Var('instance')
-                        ),
-                        group: q.Select(
-                          ['id'],
-                          q.Select(['data', 'group'], q.Var('instance'))
-                        ),
-                      }
-                    )
-                  )
-                )
-              )
-            ),
-          }
-        )
+                  q.Select('school', q.Var('usr'))
+                ),
+                'N/A'
+              ),
+              subscriptionDays: q.If(
+                q.Select('teacher', q.Var('usr')),
+                q.TimeDiff(
+                  q.Now(),
+                  q.Select('subscriptionExpires', q.Var('usr')),
+                  'days'
+                ),
+                'N/A'
+              ),
+            }
+          ),
+        }
       )
     )
-    const data = await keyedClient.query(qry)
+    const data = await client.query(qry)
+    console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     }
-  } catch (e) {
-    // console.log(e)
-    return { statusCode: 500, body: e.toString() }
+  } catch (err) {
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

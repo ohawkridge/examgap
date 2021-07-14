@@ -1,7 +1,7 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const assignmentId = data.assignmentId
   console.time(`_report_${assignmentId}`)
@@ -142,7 +142,8 @@ exports.handler = async (event, context, callback) => {
                                     ),
                                     time: q.Select(
                                       ['data', 'timeTaken'],
-                                      q.Var('instance')
+                                      q.Var('instance'),
+                                      0 // Old responses don't have time taken !!
                                     ),
                                     // Grab username again here so it's
                                     // visible in EgMarking interface
@@ -221,7 +222,7 @@ exports.handler = async (event, context, callback) => {
     )
     const data = await keyedClient.query(qry)
     data.students.sort(compare)
-    // console.dir(data)
+    console.log(data)
     console.timeEnd(`_report_${assignmentId}`)
     return {
       statusCode: 200,

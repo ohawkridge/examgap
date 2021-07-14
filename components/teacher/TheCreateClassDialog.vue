@@ -11,7 +11,8 @@
             outlined
             autofocus
           ></v-text-field>
-          <CourseSelect />
+          <!-- Emits an event containing selected course id -->
+          <the-course-select />
         </v-form>
         <small>*Indicates required field</small>
       </v-card-text>
@@ -23,7 +24,7 @@
           elevation="0"
           :loading="loading"
           :disabled="loading"
-          @click="create()"
+          @click="createGroup()"
         >
           Create class
         </v-btn>
@@ -33,24 +34,30 @@
 </template>
 
 <script>
-import CourseSelect from '@/components/teacher/CourseSelect'
+import { mapState } from 'vuex'
+import TheCourseSelect from '@/components/teacher/TheCourseSelect'
 
 export default {
-  name: 'CreateClass',
+  name: 'TheCreateClassDialog',
   components: {
-    CourseSelect,
+    TheCourseSelect,
   },
   data() {
     return {
       dialog: false,
       loading: false,
       groupName: '',
-      nameRules: [(v) => !!v || 'Name is required'],
-      course: '',
+      nameRules: [(v) => !!v || 'Class name is required'],
+      courseId: '',
     }
   },
+  computed: {
+    ...mapState({
+      groups: (state) => state.user.groups,
+    }),
+  },
   beforeDestroy() {
-    // Destroy event listeners to prevent memory leaks?
+    // Destroy event listeners to prevent memory leaks
     this.$nuxt.$off('show-create')
     this.$nuxt.$off('select-course')
   },
@@ -59,44 +66,28 @@ export default {
       this.dialog = true
     })
     this.$nuxt.$on('select-course', (courseId) => {
-      this.course = courseId
+      this.courseId = courseId
     })
   },
   methods: {
-    async create() {
+    async createGroup() {
       if (this.$refs.form.validate()) {
-        this.loading = true
         try {
-          const url = new URL(
-            '/.netlify/functions/createGroup',
-            this.$config.baseURL
-          )
-          const response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.$store.state.user.secret,
-              groupName: this.groupName,
-              courseId: this.course,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error creating class ${response.status}`)
+          this.loading = true
+          const payload = {
+            groupName: this.groupName,
+            courseId: this.courseId,
           }
-          const data = await response.json()
-          // Update local data
-          this.$store.commit('groups/addGroup', data)
-          // Progress onboarding
-          this.$store.commit('user/setOnboardStep', 2)
-          // If on Archive, set back to Home
-          this.$store.commit('groups/setTab', true)
-          this.$store.commit('groups/setActiveGroupIndex', -1)
-          this.$router.push(`/group/${data.id}`)
+          await this.$store.dispatch('user/createGroup', payload)
+          // Route to _group.vue of new group
+          const lastAddedId = this.groups[this.groups.length - 1].id
+          this.$router.push(`/group/${lastAddedId}`)
           this.$snack.showMessage({
             type: 'success',
             msg: `Class created`,
           })
-        } catch (e) {
-          console.error(e)
+        } catch (err) {
+          console.error(err)
           this.$snack.showMessage({
             type: 'error',
             msg: `Error creating class`,

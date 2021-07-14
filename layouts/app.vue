@@ -1,20 +1,21 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#fefcfb" elevation="2" app>
+    <v-app-bar color="#fefcfb" elevation="0" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
-          <!-- Just show logo mark on mobile -->
-          <TheLogoMark v-if="$vuetify.breakpoint.name === 'xs'" />
-          <TheLogo v-else />
+          <!-- Only show logomark on mobile -->
+          <the-logo-mark v-if="$vuetify.breakpoint.name === 'xs'" />
+          <the-logo v-else />
         </nuxt-link>
         <v-menu offset-y open-on-hover>
-          <template #activator="{ on, attrs }">
-            <v-btn elevation="0" class="ml-4 ml-md-10" v-bind="attrs" v-on="on">
+          <template #activator="{ on }">
+            <v-btn elevation="0" class="ml-4 ml-md-10" v-on="on">
               Classes
               <v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
             </v-btn>
           </template>
           <v-list>
+            <!-- Filter teacher groups for active on-the-fly -->
             <template v-for="(group, i) in groups">
               <v-list-item
                 v-if="!teacher || group.active"
@@ -26,13 +27,13 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-            <v-list-item v-if="activeGroupCount === 0" disabled>
+            <v-list-item v-if="teacher && activeGroupCount === 0" disabled>
               <v-list-item-content>
                 <v-list-item-title> No active classes </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <template v-if="!teacher">
-              <v-divider />
+              <v-divider class="my-2" />
               <v-list-item @click="$nuxt.$emit('join-class')">
                 <v-list-item-content>
                   <v-list-item-title> Join class&hellip; </v-list-item-title>
@@ -40,70 +41,61 @@
               </v-list-item>
             </template>
             <template v-else>
-              <v-divider />
+              <v-divider class="my-2" />
               <v-list-item @click="$nuxt.$emit('show-create')">
                 <v-list-item-content>
-                  <v-list-item-title> Create class&hellip; </v-list-item-title>
+                  <v-list-item-title> Create Class&hellip; </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </template>
           </v-list>
         </v-menu>
         <v-spacer />
-        <!-- v-if must be on the tooltip !! -->
-        <!-- You can't refill an empty slot -->
-        <v-tooltip v-if="teacher" bottom>
-          <template #activator="{ on }">
-            <v-btn
-              nuxt
-              to="/author"
-              class="mr-2 hidden-md-and-up"
-              icon
-              v-on="on"
-            >
-              <v-icon>{{ $icons.mdiPencilPlusOutline }}</v-icon>
-            </v-btn>
-            <v-btn
-              elevation="0"
-              nuxt
-              to="/author"
-              class="mr-2 hidden-sm-and-down"
-              v-on="on"
-            >
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              Create Question
-            </v-btn>
-          </template>
-          <span>Create question</span>
-        </v-tooltip>
-        <the-subscribe-dialog v-if="teacher" />
-        <the-feedback-dialog />
+        <template v-if="teacher">
+          <v-btn
+            v-if="$vuetify.breakpoint.name === 'xs'"
+            nuxt
+            to="/author"
+            color="primary"
+            class="mr-2"
+            icon
+          >
+            <v-icon>{{ $icons.mdiPlus }}</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            nuxt
+            to="/author"
+            elevation="0"
+            color="primary"
+            class="mr-2"
+            text
+          >
+            <v-icon>{{ $icons.mdiPlus }}</v-icon>
+            Create Question
+          </v-btn>
+        </template>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on }">
-            <v-btn class="ml-2" elevation="0" icon v-on="on">
+            <v-btn icon elevation="0" v-on="on">
               <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
             </v-btn>
           </template>
           <v-list>
             <v-list-item nuxt to="/profile">
               <v-list-item-content>
-                <v-list-item-title>Profile</v-list-item-title>
+                <v-list-item-title> Profile </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item
-              href="https://github.com/users/ohawkridge/projects/2"
-              target="_blank"
-            >
+            <v-list-item @click="$nuxt.$emit('show-feedback')">
               <v-list-item-content>
-                <v-list-item-title
-                  >What's new
-                  <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon>
-                </v-list-item-title>
+                <v-list-item-title> Send Feedback </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
+            <v-divider class="my-2" />
             <v-list-item @click="logout()">
               <v-list-item-content>
-                <v-list-item-title>Sign out</v-list-item-title>
+                <v-list-item-title> Sign Out </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -115,11 +107,12 @@
         <nuxt />
       </v-container>
       <the-snackbar />
+      <the-onboarding-snackbar v-if="teacher" />
+      <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
-      <create-class v-if="teacher" />
-      <the-loading-overlay />
+      <the-feedback-dialog />
     </v-main>
-    <the-footer v-if="showFooter" />
+    <the-footer />
   </v-app>
 </template>
 
@@ -129,18 +122,17 @@ import TheLogo from '@/components/common/TheLogo'
 import TheLogoMark from '@/components/common/TheLogoMark'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
-import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
-import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
-import CreateClass from '@/components/teacher/CreateClass'
+import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
+import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 
 import {
   mdiPlus,
   mdiAccountCircleOutline,
   mdiChevronDown,
-  mdiOpenInNew,
-  mdiPencilPlusOutline,
+  mdiLogout,
+  mdiCheckCircleOutline,
 } from '@mdi/js'
 
 export default {
@@ -150,53 +142,48 @@ export default {
     TheLogoMark,
     TheSnackbar,
     TheFooter,
-    TheSubscribeDialog,
     TheJoinDialog,
-    TheLoadingOverlay,
+    TheCreateClassDialog,
     TheFeedbackDialog,
-    CreateClass,
+    TheOnboardingSnackbar,
   },
   middleware: ['auth'],
+  data() {
+    return {
+      drawer: null,
+      navGroup: '',
+    }
+  },
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
-      groups: (state) => state.groups.groups,
+      groups: (state) => state.user.groups,
     }),
+    // Only needed to display 'No active classes' menu item
     ...mapGetters({
-      activeGroupCount: 'groups/activeGroupCount',
+      activeGroupCount: 'user/activeGroupCount',
     }),
-    // Hide footer on pages with bottom-navigation
-    showFooter() {
-      return !(
-        this.$vuetify.breakpoint.name === 'xs' &&
-        (this.$route.name === 'group-group' ||
-          this.$route.name === 'students-students' ||
-          this.$route.name === 'grades-grades' ||
-          this.$route.name === 'edit-edit')
-      )
-    },
   },
   created() {
     this.$icons = {
       mdiPlus,
       mdiAccountCircleOutline,
       mdiChevronDown,
-      mdiOpenInNew,
-      mdiPencilPlusOutline,
+      mdiLogout,
+      mdiCheckCircleOutline,
     }
   },
   methods: {
     nav(index, groupId) {
       // Store the index of the current group
-      this.$store.commit('groups/setActiveGroupIndex', index)
+      this.$store.commit('user/setActiveGroupIndex', index)
       this.$router.push(this.teacher ? `/group/${groupId}` : `/home`)
     },
     logout() {
+      localStorage.removeItem('secret')
       this.$router.push('/')
-      this.$store.commit('assignments/logout')
-      this.$store.commit('groups/logout')
-      this.$store.commit('user/logout')
-      localStorage.removeItem('examgap')
+      // Reload page to clear Vuex
+      this.$router.go()
     },
   },
 }

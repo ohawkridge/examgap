@@ -6,7 +6,7 @@
         <div class="text-h6 font-weight-bold mb-0">
           {{ group.name === undefined ? 'Loading...' : group.name }}
         </div>
-        <div v-if="group.course.name !== undefined" class="mb-2">
+        <div v-if="group.course.name !== undefined" class="mb-3 mb-sm-0">
           {{ group.course.name }} ({{ group.course.board }})
         </div>
       </div>
@@ -14,12 +14,11 @@
         <the-invite-dialog :group="group" />
         <v-btn
           class="mt-2 mt-sm-0"
-          :class="$store.state.user.onboardStep === 3 ? 'red-out' : ''"
           elevation="0"
           outlined
           :block="$vuetify.breakpoint.name === 'xs'"
           color="primary"
-          @click="create()"
+          @click="createAssignment()"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Create assignment
@@ -39,7 +38,7 @@ export default {
     TheInviteDialog,
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
   },
   created() {
     this.$icons = { mdiPlus }
@@ -47,21 +46,21 @@ export default {
   mounted() {
     // Onboard -> no students
     if (this.group.num_students === 0) {
-      this.$store.commit('user/setOnboardStep', 2)
+      this.$store.commit('app/setOnboardStep', 2)
     }
     // Onboard -> few assignments
     if (this.group.num_students > 0 && this.group.assignments.length < 3) {
-      this.$store.commit('user/setOnboardStep', 3)
+      this.$store.commit('app/setOnboardStep', 3)
     }
   },
   methods: {
-    create() {
-      // Clear any previous selection
-      this.$store.commit('assignments/clearSelectedQuestions')
+    createAssignment() {
+      // Clear any previous selections
+      this.$store.commit('topics/clearSelectedQuestions')
       // Continue onboarding if user hasn't set assignments
       this.$store.commit(
-        'user/setOnboardStep',
-        this.group.assignments.length < 3 ? 5 : 0
+        'app/setOnboardStep',
+        this.group.assignments.length < 3 ? 4 : 0
       )
       this.$router.push(`/course/${this.group.course.id}`)
     },

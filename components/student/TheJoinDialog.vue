@@ -80,8 +80,8 @@ export default {
             throw new Error(`Error joining class ${response.status}`)
           }
           response = await response.json()
-          // Dispatch getUser action again
-          this.$store.dispatch('user/getUser')
+          // Dispatch getGroups action again
+          this.$store.dispatch('user/getGroups')
           this.$snack.showMessage({
             type: 'success',
             msg: `Class joined`,

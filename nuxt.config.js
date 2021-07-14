@@ -5,22 +5,22 @@ export default {
   // Exclude most pages
   // https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-generate#exclude
   generate: {
-    exclude: [
-      // /^\/home/,
-      /^\/classes/,
-      /^\/assignment/,
-      /^\/course/,
-      /^\/grades/,
-      /^\/question/,
-      /^\/report/,
-      /^\/response/,
-      /^\/answer/,
-      /^\/profile/,
-      /^\/settings/,
-      /^\/edit/,
-      /^\/author/,
-      /^\/map/,
-    ],
+    // exclude: [
+    //   // /^\/home/,
+    //   /^\/classes/,
+    //   /^\/assignment/,
+    //   /^\/course/,
+    //   /^\/grades/,
+    //   /^\/question/,
+    //   /^\/report/,
+    //   /^\/response/,
+    //   /^\/answer/,
+    //   /^\/profile/,
+    //   /^\/settings/,
+    //   /^\/edit/,
+    //   /^\/author/,
+    //   /^\/map/,
+    // ],
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -52,9 +52,8 @@ export default {
   plugins: [
     { src: '@/plugins/filters.js' },
     { src: '@/plugins/snack.js' },
-    { src: '@/plugins/localStorage.js', mode: 'client' },
     { src: '@/plugins/tiptapVuetify.js' },
-    { src: '@/plugins/honeybadger.js', mode: 'client' },
+    // { src: '@/plugins/honeybadger.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -106,21 +105,14 @@ export default {
 
   // Honeybadger can't see env vars in plugin
   // https://nuxtjs.org/docs/2.x/directory-structure/nuxt-config/#env
-  env: {
-    HONEYB_KEY: 'hbp_xaKmNAUS8NVp6kBJfKcCMEYe8iCCi30wuKXo',
-  },
+  // env: {
+  //   HONEYB_KEY: 'hbp_xaKmNAUS8NVp6kBJfKcCMEYe8iCCi30wuKXo',
+  // },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, { isClient }) {
-      if (isClient) {
-        config.devtool = 'source-map'
-      }
-    },
+    extend(config) {},
     // https://github.com/iliyaZelenko/tiptap-vuetify-nuxt
     transpile: ['vuetify/lib', 'tiptap-vuetify'],
-    terser: {
-      sourceMap: true,
-    },
   },
 }

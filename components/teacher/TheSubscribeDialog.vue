@@ -1,25 +1,9 @@
 <template>
-  <!-- Hide on mobile // show if not subscribed -->
-  <v-dialog
-    v-if="(!subscribed && $vuetify.breakpoint.name !== 'xs') || block"
-    v-model="dialog"
-    max-width="420"
-  >
-    <template #activator="{ on: dial }">
-      <v-tooltip bottom>
-        <template #activator="{ on: tooltip }">
-          <v-btn
-            color="primary"
-            elevation="0"
-            class="mr-2"
-            :block="block"
-            v-on="{ ...tooltip, ...dial }"
-          >
-            {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
-          </v-btn>
-        </template>
-        <span>Subscribe</span>
-      </v-tooltip>
+  <v-dialog v-model="dialog" max-width="440">
+    <template #activator="{ on }">
+      <v-btn color="primary" block elevation="0" v-on="on">
+        {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
+      </v-btn>
     </template>
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"
@@ -67,10 +51,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <the-success-dialog
-      title="Thank You"
-      subtitle="You should receive your invoice within one day."
-    />
+    <the-success-dialog :title="title" :subtitle="subtitle" />
   </v-dialog>
 </template>
 
@@ -79,18 +60,16 @@ import { mapState } from 'vuex'
 import TheSuccessDialog from '@/components/common/TheSuccessDialog'
 
 export default {
-  components: { TheSuccessDialog },
-  props: {
-    block: {
-      type: Boolean,
-      default: false,
-    },
+  components: {
+    TheSuccessDialog,
   },
   data() {
     return {
       dialog: false,
       selectedPackage: 'gcse',
       loading: false,
+      title: 'Thank You',
+      subtitle: 'You should receive your invoice within one day.',
     }
   },
   computed: {
@@ -99,18 +78,10 @@ export default {
       subscribed: (state) => state.user.subscribed,
     }),
   },
-  beforeDestroy() {
-    this.$nuxt.$off('show-subscribe')
-  },
-  mounted() {
-    this.$nuxt.$on('show-subscribe', () => {
-      this.dialog = true
-    })
-  },
   methods: {
     request() {
-      this.loading = true
       try {
+        this.loading = true
         const url = new URL(
           '/.netlify/functions/sendEmailInvoice',
           this.$config.baseURL

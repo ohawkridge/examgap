@@ -1,20 +1,18 @@
 <template>
   <div>
-    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
+    <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <GroupNav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
-        <v-card
-          v-if="group !== undefined && group.course"
-          class="eg-card mt-n6 mt-sm-0"
-        >
+        <v-card class="mt-n6 mt-sm-0">
           <v-card-title class="d-flex justify-space-between">
-            Student{{ students.length | pluralize }} ({{ students.length }})
+            <div>
+              <v-icon class="mr-2">
+                {{ $icons.mdiAccountGroupOutline }}
+              </v-icon>
+              Student{{ students.length | pluralize }} ({{ students.length }})
+            </div>
             <div>
               <v-menu offset-y open-on-hover>
                 <template #activator="{ on, attrs }">
@@ -60,23 +58,32 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
-              <AddStudents :group-id="group.id" />
-              <CopyStudents :selected="selected" />
-              <RemoveStudents :selected="selected" :group-id="group.id" />
-              <v-btn
-                nuxt
-                :to="`/students/logins/${group.id}`"
-                class="mr-2"
-                elevation="0"
-              >
-                Logins
-              </v-btn>
-              <v-btn elevation="0" @click="exportTableToCSV()">
-                <v-icon v-if="$vuetify.breakpoint.name !== 'xs'" left>{{
-                  $icons.mdiDownloadOutline
-                }}</v-icon>
-                Csv
-              </v-btn>
+              <add-students :group-id="group.id" />
+              <the-copy-student-dialog :selected="selected" />
+              <remove-students :selected="selected" :group-id="group.id" />
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    nuxt
+                    :to="`/students/logins/${group.id}`"
+                    class="mr-2"
+                    elevation="0"
+                    v-on="on"
+                  >
+                    Logins
+                  </v-btn>
+                </template>
+                <span>Print logins</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn elevation="0" @click="exportTableToCSV()" v-on="on">
+                    Csv
+                    <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
+                  </v-btn>
+                </template>
+                <span>Download as csv</span>
+              </v-tooltip>
             </div>
           </v-card-title>
           <v-container>
@@ -86,6 +93,7 @@
                   v-model="selected"
                   :headers="headers"
                   :items="students"
+                  checkbox-color="primary"
                   item-key="id"
                   hide-default-footer
                   show-select
@@ -94,36 +102,40 @@
                   loading-text="Fetching student data..."
                 >
                   <template #no-data>
-                    <v-img
-                      id="grad"
-                      src="/no-student.svg"
-                      alt="Graduation gap illustration"
-                      :max-width="$vuetify.breakpoint.name === 'xs' ? 120 : 200"
-                    />
-                    <p class="text-body-2 mt-4">No students yet</p>
-                    <v-btn
-                      color="primary"
-                      elevation="0"
-                      @click="$nuxt.$emit('open-invite')"
-                    >
-                      Invite students
-                    </v-btn>
+                    <div class="mt-4">
+                      <v-img
+                        max-width="200"
+                        src="/no-student.svg"
+                        alt="Graduation gap illustration"
+                        class="mx-auto"
+                      />
+                      <p class="text-body-2 mt-4" style="color: #000000de">
+                        No students yet
+                      </p>
+                      <v-btn
+                        color="primary"
+                        elevation="0"
+                        @click="$nuxt.$emit('open-invite')"
+                      >
+                        Invite students
+                      </v-btn>
+                    </div>
                   </template>
                   <template #[`item.target`]="props">
-                    <v-edit-dialog
-                      v-if="group"
-                      :return-value.sync="props.item.target[`${group.id}`]"
-                      large
-                      @save="save(props.item)"
-                    >
+                    <v-edit-dialog>
                       <!-- groupId is the key into target object -->
+                      <!-- Different targets for each group -->
                       {{ props.item.target[`${group.id}`] }}
                       <template #input>
                         <v-text-field
-                          v-model="props.item.target[`${group.id}`]"
+                          :value="props.item.target[`${group.id}`]"
                           :rules="targetRules"
-                          label="Edit target"
-                          single-line
+                          placeholder="E.g., 7"
+                          :loading="loading"
+                          label="Set target"
+                          @keyup.enter="
+                            save(props.item.id, $event.target.value)
+                          "
                         ></v-text-field>
                       </template>
                     </v-edit-dialog>
@@ -139,30 +151,33 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import {
+  mdiChevronDown,
+  mdiDownloadOutline,
+  mdiAccountGroupOutline,
+} from '@mdi/js'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
-import CopyStudents from '@/components/teacher/CopyStudents'
 import RemoveStudents from '@/components/teacher/RemoveStudents'
-import { mdiChevronDown, mdiDownloadOutline, mdiPlus } from '@mdi/js'
+import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog.vue'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {
     GroupNav,
     GroupHeader,
     AddStudents,
-    CopyStudents,
     RemoveStudents,
+    TheCopyStudentDialog,
+    DividerRow,
   },
   layout: 'app',
   data() {
     return {
-      csv: '',
-      students: [],
       selected: [],
-      removeModal: false,
-      targetRules: [(v) => v.length === 1 || 'Target must be one character'],
+      targetRules: [(v) => v.length === 1 || 'Max. one character'],
       headers: [
         {
           text: 'Username',
@@ -186,91 +201,66 @@ export default {
           value: 'target',
         },
       ],
+      csv: '',
+      loading: false,
     }
   },
   async fetch() {
+    // Always re-fetch on page view
     try {
-      const url = new URL(
-        '/.netlify/functions/getStudents',
-        this.$config.baseURL
-      )
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          secret: this.$store.state.user.secret,
-          groupId: this.group.id,
-          namesOnly: false,
-        }),
-        method: 'POST',
+      await this.$store.dispatch('students/getStudents')
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching students',
       })
-      if (!response.ok) {
-        throw new Error(`Error fetching student data ${response.status}`)
-      }
-      response = await response.json()
-      // console.log(response)
-      // Update student count for group
-      this.$store.commit('groups/updateStudentCount', response.length)
-      this.students = response
-    } catch (e) {
-      console.error(e)
     }
   },
   head() {
     return {
-      title: this.group ? `${this.group.name} students` : 'Students',
+      title: `${this.group.name} students`,
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
-  },
-  mounted() {
-    // Re-fetch data when students added
-    this.$nuxt.$on('user-added', () => this.$fetch())
+    ...mapGetters({
+      group: 'user/activeGroup',
+    }),
+    ...mapState({
+      students: (state) => state.students.students,
+    }),
   },
   created() {
     this.$icons = {
       mdiChevronDown,
       mdiDownloadOutline,
-      mdiPlus,
+      mdiAccountGroupOutline,
     }
   },
-  beforeDestroy() {
-    this.$nuxt.$off('user-added')
-  },
   methods: {
-    // Save target grade
-    // (row is the full v-data-table object)
-    async save(row) {
+    async save(studentId, target) {
       // For iMedia allow 2 characters, for everyone else just
       // take the first character even if the input is longer
-      row.target[`${this.group.id}`] = row.target[`${this.group.id}`].substring(
-        0,
-        this.group.course.id === '263317987221570048' ? 2 : 1
-      )
+      const len = this.group.course.id === '263317987221570048' ? 2 : 1
+      target = target.substring(0, len)
       try {
-        const url = new URL(
-          '/.netlify/functions/updateTarget',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            row,
-          }),
-          method: 'POST',
+        this.loading = true
+        await this.$store.dispatch('students/saveTarget', {
+          target,
+          groupId: this.group.id,
+          studentId,
         })
-        if (!response.ok) {
-          throw new Error(`Error saving target ${response.status}`)
-        }
         this.$snack.showMessage({
-          type: 'success',
           msg: 'Target saved',
         })
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error saving target',
         })
+      } finally {
+        this.loading = false
       }
     },
     async reset() {
@@ -295,8 +285,8 @@ export default {
             this.selected.length === 1 ? 'Password' : 'Passwords'
           } reset to 'password'`,
         })
-      } catch (e) {
-        console.warn(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           msg: 'Error resetting passwords',
           type: 'error',
@@ -332,10 +322,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-#grad {
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>

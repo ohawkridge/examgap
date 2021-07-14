@@ -1,17 +1,16 @@
 <template>
   <div>
-    <GroupHeader v-if="group && Object.keys(group).length > 0" :group="group" />
+    <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <GroupNav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
-        <v-card class="eg-card mt-n6 mt-sm-0">
+        <v-card class="mt-n6 mt-sm-0">
           <v-card-title v-if="group" class="d-flex justify-space-between">
-            Settings
+            <div>
+              <v-icon class="mr-2">{{ $icons.mdiCogOutline }}</v-icon>
+              Settings
+            </div>
             <!-- Hide archive button for archived groups -->
             <!-- Add un-archive feature -->
             <ArchiveGroup v-if="group.active" :group-id="group.id" />
@@ -28,7 +27,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="8">
-              <CourseSelect :course="group.course.id" />
+              <the-course-select :course-id="group.course.id" />
             </v-col>
             <v-col cols="12" class="px-0">
               <v-btn
@@ -53,15 +52,17 @@ import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import ArchiveGroup from '@/components/teacher/ArchiveGroup'
-import CourseSelect from '@/components/teacher/CourseSelect'
-import { mdiInformationOutline } from '@mdi/js'
+import TheCourseSelect from '@/components/teacher/TheCourseSelect'
+import { mdiCogOutline } from '@mdi/js'
+import DividerRow from '~/components/common/DividerRow.vue'
 
 export default {
   components: {
     GroupNav,
     GroupHeader,
     ArchiveGroup,
-    CourseSelect,
+    TheCourseSelect,
+    DividerRow,
   },
   layout: 'app',
   data() {
@@ -73,25 +74,24 @@ export default {
   },
   head() {
     return {
-      title: this.group ? `${this.group.name} settings` : 'settings',
+      title: `${this.group.name} settings`,
     }
   },
   computed: {
-    ...mapGetters({ group: 'groups/activeGroup' }),
+    ...mapGetters({
+      group: 'user/activeGroup',
+    }),
     name: {
       get() {
         return this.group.name
       },
-      set(value) {
-        this.$store.commit('groups/updateGroupName', {
-          id: this.group.id,
-          name: value,
-        })
+      set(name) {
+        this.$store.commit('user/updateGroupName', name)
       },
     },
   },
   created() {
-    this.$icons = { mdiInformationOutline }
+    this.$icons = { mdiCogOutline }
   },
   mounted() {
     // Listen for select change event
@@ -104,10 +104,10 @@ export default {
   },
   methods: {
     save() {
-      this.loading = true
       try {
+        this.loading = true
         // Dispatch store action to update group
-        this.$store.dispatch('groups/updateGroup', {
+        this.$store.dispatch('user/updateGroup', {
           courseId: this.courseId,
           groupName: this.name,
         })
@@ -115,8 +115,12 @@ export default {
           type: 'success',
           msg: 'Changes saved',
         })
-      } catch (e) {
-        console.error('Error dispatching updateGroup')
+      } catch (err) {
+        console.error(err)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error updating group',
+        })
       } finally {
         this.loading = false
       }
