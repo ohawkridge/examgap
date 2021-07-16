@@ -219,7 +219,7 @@ export default {
       const csvFile = new Blob([this.csv], { type: 'text/csv' })
       const downloadLink = document.createElement('a')
       downloadLink.download =
-        this.group.name.replace(/[/\\?%*:|"<>]/g, '-') + '-gradebook'
+        this.group.name.replace(/[/\\?%*:|"<>]/g, '-') + '-grades'
       downloadLink.href = window.URL.createObjectURL(csvFile)
       downloadLink.style.display = 'none'
       document.body.appendChild(downloadLink)

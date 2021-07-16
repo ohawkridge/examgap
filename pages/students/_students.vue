@@ -143,6 +143,11 @@
                 </v-data-table>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col>
+                <p class="red--text">{{ students }}</p>
+              </v-col>
+            </v-row>
           </v-container>
         </v-card>
       </v-col>
@@ -305,6 +310,7 @@ export default {
         for (const key in obj.data) {
           this.csv += obj.data[key] + ','
         }
+        this.csv += obj.target[this.group.id]
         this.csv += '\n'
       }
       this.downloadCSV()
