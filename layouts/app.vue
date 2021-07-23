@@ -1,6 +1,6 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#fefcfb" elevation="0" app>
+    <v-app-bar color="#fefcfb" elevate-on-scroll app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link :to="teacher ? '/classes' : '/home'">
           <!-- Only show logomark on mobile -->

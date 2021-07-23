@@ -3,21 +3,13 @@ const q = faunadb.query
 
 exports.handler = async (event) => {
   const data = JSON.parse(event.body)
-  let username = data.username
+  const username = data.username
   const password = data.password
-  let secret = ''
-  if (username.includes('+DEV')) {
-    const i = username.indexOf('+')
-    username = username.slice(0, i) + username.slice(i + 4)
-    secret = process.env.DEV_KEY
-  } else {
-    secret = process.env.SECRET_KEY
-  }
-  console.log(`♢ Username:`, username)
-  console.log(`♢ Secret:`, secret)
+  const database = data.database
   // Configure Fauna client with login secret
+  // (now either ExamgapProd or ExamgapDev)
   const client = new faunadb.Client({
-    secret,
+    secret: database === 'dev' ? process.env.DEV_KEY : process.env.SECRET_KEY,
   })
   try {
     const qry = q.Select(
@@ -73,7 +65,6 @@ exports.handler = async (event) => {
       )
     )
     const data = await client.query(qry)
-    console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

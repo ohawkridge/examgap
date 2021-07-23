@@ -117,11 +117,21 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
+          let username = this.username
+          let database = 'prod'
+          if (this.username.includes('+DEV')) {
+            const i = this.username.indexOf('+')
+            username = this.username.slice(0, i) + this.username.slice(i + 4)
+            database = 'dev'
+          }
           // Dispatch action to get user document
           await this.$store.dispatch('user/getUser', {
-            username: this.username,
+            username,
             password: this.pw,
+            database,
           })
+          // Remember which database
+          this.$store.commit('app/setDatabase', database)
           // Route to appropriate home page
           const isTeacher = this.$store.state.user.teacher
           this.$router.push(isTeacher ? `/classes` : `/home`)
