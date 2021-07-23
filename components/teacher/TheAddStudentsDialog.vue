@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="500px">
+  <v-dialog v-model="dialog" max-width="440px">
     <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Add students </v-card-title>
       <v-card-text>
@@ -8,26 +8,27 @@
           outlined
           clearable
           label="Email addresses*"
-          :error-messages="errors"
           autofocus
         ></v-textarea>
         <v-alert
           :icon="$icons.mdiInformationOutline"
           border="left"
+          dense
           type="info"
           text
         >
-          Enter student email addresses. <b>One email per line</b>
+          <div>Enter student email addresses.</div>
+          <div class="font-weight-bold">One address per line.</div>
         </v-alert>
         <v-text-field
           v-model="domain"
           label="Append email domain"
-          placeholder="schoolemail.com"
+          placeholder="yourschool.org.uk"
           outlined
           hide-details
         >
           <template #append>
-            <v-btn class="fix-chip" text color="primary" @click="append()">
+            <v-btn class="fix-btn" text color="primary" @click="append()">
               Append
             </v-btn>
           </template>
@@ -53,7 +54,7 @@
 import { mdiInformationOutline } from '@mdi/js'
 
 export default {
-  name: 'AddStudents',
+  name: 'TheAddStudentsDialog',
   props: {
     groupId: {
       type: String,
@@ -63,14 +64,13 @@ export default {
   data() {
     return {
       dialog: false,
-      usernames: '',
-      errors: [],
       loading: false,
+      usernames: '',
       domain: '',
     }
   },
   computed: {
-    namesArray() {
+    userNamesArray() {
       return this.usernames
         .split(/[\r\n|,]+/)
         .map((name) => name.trim().replace(',', '').toLowerCase())
@@ -93,7 +93,7 @@ export default {
   methods: {
     append() {
       let out = ''
-      for (let name of this.namesArray) {
+      for (let name of this.userNamesArray) {
         // Remove any old appendings
         if (name.includes('@')) {
           name = name.substring(0, name.indexOf('@'))
@@ -105,51 +105,18 @@ export default {
     // N.B. When you add students like this, they *don't*
     // automatically get all existing assignments added
     async addStudents() {
-      this.loading = true
-      // Create new student accounts
       try {
-        for (const username of this.namesArray) {
-          const url = new URL(
-            '/.netlify/functions/createAccount',
-            this.$config.baseURL
-          )
-          let response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.$store.state.user.secret,
-              username,
-              groupId: this.groupId,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error adding ${username} ${response.status}`)
-          }
-          response = await response.json()
-          // N.B. If you want to access student here use data.student
-          // Send intro email to student
-          const url2 = new URL(
-            '/.netlify/functions/sendEmailWelcomeStudent',
-            this.$config.baseURL
-          )
-          const mailResponse = await fetch(url2, {
-            method: 'POST',
-            mode: 'cors',
-            credentials: 'same-origin',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email: username }),
-          })
-          if (!mailResponse.ok) {
-            throw new Error(`Error sending email ${mailResponse.status}`)
-          }
-          // Increment num_students on group in store
-          this.$store.commit('user/incrementStudentCount')
-          // Emit event to re-fetch student data in parent
-          this.$nuxt.$emit('user-added')
-        }
-      } catch (e) {
-        console.error(e)
+        this.loading = true
+        await this.$store.dispatch('students/addStudents', {
+          usernames: this.userNamesArray,
+          groupId: this.groupId,
+        })
+        this.$snack.showMessage({
+          type: 'success',
+          msg: `Student${this.userNamesArray.length !== 1 ? 's' : ''} added`,
+        })
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error adding students',

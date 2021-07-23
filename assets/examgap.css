@@ -102,6 +102,11 @@ span.v-chip.theme--light.green {
   margin-right: -2px;
 }
 
+.fix-btn {
+  margin-top: -7px;
+  margin-right: -2px;
+}
+
 /* align assignment Start: + Due: */
 .align-date {
   display: inline-block;

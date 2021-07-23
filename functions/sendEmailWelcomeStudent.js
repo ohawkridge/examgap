@@ -4,19 +4,16 @@ exports.handler = async (event) => {
 
   const requestParams = JSON.parse(event.body)
   const email = requestParams.email
-
   AWS.config.update({
     accessKeyId: process.env.SES_KEY,
     secretAccessKey: process.env.SES_SECRET,
     region: 'eu-west-2',
   })
-  console.log(`Send email to`, email)
   const ses = new AWS.SES({ apiVersion: '2010-12-01' })
   const params = {
     Destination: {
       ToAddresses: [email], // Must be array
     },
-    // ConfigurationSetName: <<ConfigurationSetName>>,
     Message: {
       Body: {
         Html: {
@@ -24,14 +21,16 @@ exports.handler = async (event) => {
           Charset: 'UTF-8',
           Data: `<html>
                   <body>
-                  <p>Welcome to Examgap 👋,</p>
-                  <p>Examgap is a site that helps you improve your Computer Science results by practising written-answer exam questions.</p>
-                  <p>Your teacher will assign you questions to answer, but you can also use it to revise.</p>
-                  <p>Your username is ${email}. If you forget your password, you will need to ask your teacher to reset it.</p>
-                  <p>If you encounter problems you can email <a href="mailto:support@examgap.com">support@examgap.com</a>.</p>
-                  <p>Click <a href="https://examgap.com/signin">here</a> to sign in</p>
-                  <br />
-                  <p>—Cheers, the Examgap team</p>
+                  <p>Dear Student,</p>
+                  <p>You’re receiving this email because your teacher has created a new account for you at <a href="https://www.examgap.com" title="Open Examgap.com">Examgap.com</a>.</p>
+                  <p>Examgap is a site that helps you improve your results by practising exam questions online. Your teacher will set assignments, but you can revise on your own too.</p>
+                  <p>
+                  +----------------------------------+<br />
+                  >> <a href="https://www.examgap.com/signin" title="Sign in to Examgap">Sign in to Examgap</a><br /><br />
+                  Username: ${email}<br />
+                  Password: password<br />
+                  +----------------------------------+<br />
+                  </p>
                   </body>
               </html>`,
         },
@@ -42,7 +41,7 @@ exports.handler = async (event) => {
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: 'Your Examgap account',
+        Data: 'Welcome to Examgap',
       },
     },
     Source: 'Examgap <support@examgap.com>',

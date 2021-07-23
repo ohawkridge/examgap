@@ -36,21 +36,22 @@
                   </v-list-item>
                   <v-list-item
                     :disabled="selected.length === 0"
+                    @click="$nuxt.$emit('open-remove')"
+                  >
+                    <v-list-item-title>
+                      Remove student{{ selected.length | pluralize }}
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    :disabled="selected.length === 0"
                     @click="$nuxt.$emit('open-copy')"
                   >
                     <v-list-item-title>
                       Copy student{{ selected.length | pluralize }}
                     </v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="$nuxt.$emit('open-remove')">
-                    <v-list-item-title>
-                      Remove student{{ selected.length | pluralize }}
-                    </v-list-item-title>
-                  </v-list-item>
                 </v-list>
               </v-menu>
-              <add-students :group-id="group.id" />
-              <the-copy-student-dialog :selected="selected" />
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-btn
@@ -137,7 +138,10 @@
         </v-card>
       </v-col>
     </v-row>
+    <!-- Student action components -->
+    <the-add-students-dialog :group-id="group.id" />
     <the-remove-dialog :selected="selected" :group-id="group.id" />
+    <the-copy-student-dialog :selected="selected" />
   </div>
 </template>
 
@@ -150,7 +154,7 @@ import {
 } from '@mdi/js'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
-import AddStudents from '@/components/teacher/AddStudents'
+import TheAddStudentsDialog from '@/components/teacher/TheAddStudentsDialog'
 import TheRemoveDialog from '@/components/teacher/TheRemoveDialog'
 import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog.vue'
 import DividerRow from '@/components/common/DividerRow.vue'
@@ -159,10 +163,14 @@ export default {
   components: {
     GroupNav,
     GroupHeader,
-    AddStudents,
+    TheAddStudentsDialog,
     TheRemoveDialog,
     TheCopyStudentDialog,
     DividerRow,
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit('students/clearStudents')
+    next()
   },
   layout: 'app',
   data() {
