@@ -22,7 +22,6 @@
           elevation="0"
           @click="archiveGroup()"
         >
-          <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
           Archive class
         </v-btn>
       </v-card-actions>
@@ -31,8 +30,6 @@
 </template>
 
 <script>
-import { mdiArchiveOutline } from '@mdi/js'
-
 export default {
   props: {
     groupId: {
@@ -44,11 +41,6 @@ export default {
     return {
       dialog: false,
       loading: false,
-    }
-  },
-  created() {
-    this.$icons = {
-      mdiArchiveOutline,
     }
   },
   methods: {

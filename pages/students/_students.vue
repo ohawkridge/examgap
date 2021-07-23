@@ -46,21 +46,11 @@
                       }}</v-list-item-title
                     >
                   </v-list-item>
-                  <v-list-item
-                    :disabled="selected.length === 0"
-                    @click="$nuxt.$emit('open-remove')"
-                  >
-                    <v-list-item-title
-                      >Remove student{{
-                        selected.length !== 1 ? 's' : ''
-                      }}</v-list-item-title
-                    >
-                  </v-list-item>
+                  <remove-students :selected="selected" :group-id="group.id" />
                 </v-list>
               </v-menu>
               <add-students :group-id="group.id" />
               <the-copy-student-dialog :selected="selected" />
-              <remove-students :selected="selected" :group-id="group.id" />
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-btn

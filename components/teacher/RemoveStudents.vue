@@ -1,5 +1,14 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
+    <template #activator="{ on }">
+      <v-list-item :disabled="selected.length === 0" v-on="on">
+        <v-list-item-title
+          >Remove student{{
+            selected.length !== 1 ? 's' : ''
+          }}</v-list-item-title
+        >
+      </v-list-item>
+    </template>
     <v-card class="modal danger">
       <v-card-title class="d-flex justify-center">
         {{ `Remove student${selected.length !== 1 ? 's' : ''}?` }}
@@ -15,9 +24,6 @@
         <v-spacer />
         <v-btn text @click="dialog = false"> Cancel </v-btn>
         <v-btn color="error" elevation="0" @click="remove()">
-          <v-icon left>
-            {{ $icons.mdiMinusCircleOutline }}
-          </v-icon>
           Remove students
         </v-btn>
       </v-card-actions>
@@ -26,8 +32,6 @@
 </template>
 
 <script>
-import { mdiMinusCircleOutline } from '@mdi/js'
-
 export default {
   name: 'RemoveStudents',
   props: {
@@ -44,16 +48,6 @@ export default {
     return {
       dialog: false,
     }
-  },
-  created() {
-    this.$icons = {
-      mdiMinusCircleOutline,
-    }
-  },
-  mounted() {
-    this.$nuxt.$on('open-remove', () => {
-      this.dialog = true
-    })
   },
   methods: {
     async remove() {
