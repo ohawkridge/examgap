@@ -3,11 +3,21 @@ const q = faunadb.query
 
 exports.handler = async (event) => {
   const data = JSON.parse(event.body)
-  const username = data.username
+  let username = data.username
   const password = data.password
+  let secret = ''
+  if (username.includes('+DEV')) {
+    const i = username.indexOf('+')
+    username = username.slice(0, i) + username.slice(i + 4)
+    secret = process.env.DEV_KEY
+  } else {
+    secret = process.env.SECRET_KEY
+  }
+  console.log(`♢ Username:`, username)
+  console.log(`♢ Secret:`, secret)
   // Configure Fauna client with login secret
   const client = new faunadb.Client({
-    secret: process.env.SECRET_KEY,
+    secret,
   })
   try {
     const qry = q.Select(

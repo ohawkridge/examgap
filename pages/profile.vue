@@ -46,6 +46,10 @@
                   Subscribed
                   <v-icon right>{{ $icons.mdiCheckCircleOutline }}</v-icon>
                 </v-chip>
+                <v-chip v-else color="red">
+                  Subscribe
+                  <!-- <v-icon right>{{ $icons.mdiCheckCircleOutline }}</v-icon> -->
+                </v-chip>
               </div>
             </template>
           </v-text-field>
