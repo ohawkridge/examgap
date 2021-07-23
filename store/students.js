@@ -39,9 +39,30 @@ export const actions = {
     // Update local store
     commit('setTarget', { target, groupId, studentId })
   },
+  async removeStudents({ commit, rootState }, { groupId, studentIds }) {
+    const url = new URL(
+      '/.netlify/functions/removeGroupStudent',
+      this.$config.baseURL
+    )
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        studentIds,
+        groupId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error removing student(s) ${response.status}`)
+    }
+    commit('removeStudents', studentIds)
+  },
 }
 
 export const mutations = {
+  removeStudents(state, studentIds) {
+    state.students = state.students.filter((o) => !studentIds.includes(o.id))
+  },
   setStudents(state, students) {
     state.students = students
   },

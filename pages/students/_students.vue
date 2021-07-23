@@ -15,8 +15,8 @@
             </div>
             <div>
               <v-menu offset-y open-on-hover>
-                <template #activator="{ on, attrs }">
-                  <v-btn class="mr-2" elevation="0" v-bind="attrs" v-on="on"
+                <template #activator="{ on }">
+                  <v-btn class="mr-2" elevation="0" v-on="on"
                     >Students<v-icon right>{{
                       $icons.mdiChevronDown
                     }}</v-icon></v-btn
@@ -27,11 +27,9 @@
                     :disabled="selected.length === 0"
                     @click="reset()"
                   >
-                    <v-list-item-title
-                      >Reset password{{
-                        selected.length !== 1 ? 's' : ''
-                      }}</v-list-item-title
-                    >
+                    <v-list-item-title>
+                      Reset password{{ selected.length | pluralize }}
+                    </v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="$nuxt.$emit('open-add')">
                     <v-list-item-title>Add students</v-list-item-title>
@@ -40,13 +38,15 @@
                     :disabled="selected.length === 0"
                     @click="$nuxt.$emit('open-copy')"
                   >
-                    <v-list-item-title
-                      >Copy student{{
-                        selected.length !== 1 ? 's' : ''
-                      }}</v-list-item-title
-                    >
+                    <v-list-item-title>
+                      Copy student{{ selected.length | pluralize }}
+                    </v-list-item-title>
                   </v-list-item>
-                  <remove-students :selected="selected" :group-id="group.id" />
+                  <v-list-item @click="$nuxt.$emit('open-remove')">
+                    <v-list-item-title>
+                      Remove student{{ selected.length | pluralize }}
+                    </v-list-item-title>
+                  </v-list-item>
                 </v-list>
               </v-menu>
               <add-students :group-id="group.id" />
@@ -133,15 +133,11 @@
                 </v-data-table>
               </v-col>
             </v-row>
-            <v-row>
-              <v-col>
-                <p class="red--text">{{ students }}</p>
-              </v-col>
-            </v-row>
           </v-container>
         </v-card>
       </v-col>
     </v-row>
+    <the-remove-dialog :selected="selected" :group-id="group.id" />
   </div>
 </template>
 
@@ -155,16 +151,16 @@ import {
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import AddStudents from '@/components/teacher/AddStudents'
-import RemoveStudents from '@/components/teacher/RemoveStudents'
+import TheRemoveDialog from '@/components/teacher/TheRemoveDialog'
 import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog.vue'
-import DividerRow from '~/components/common/DividerRow.vue'
+import DividerRow from '@/components/common/DividerRow.vue'
 
 export default {
   components: {
     GroupNav,
     GroupHeader,
     AddStudents,
-    RemoveStudents,
+    TheRemoveDialog,
     TheCopyStudentDialog,
     DividerRow,
   },
@@ -201,7 +197,6 @@ export default {
     }
   },
   async fetch() {
-    // Always re-fetch on page view
     try {
       await this.$store.dispatch('students/getStudents')
     } catch (err) {

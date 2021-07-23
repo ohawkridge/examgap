@@ -3,44 +3,39 @@ const q = faunadb.query
 
 exports.handler = async (event) => {
   const data = JSON.parse(event.body)
-  const studentId = data.studentId
-  const groupId = data.groupId
-  const addStudent = data.addStudent
   const secret = data.secret
+  const studentIds = data.studentIds
+  const groupId = data.groupId
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
   })
   try {
-    // Create mapping in GroupStudent
-    const qry = q.If(
-      addStudent,
-      q.Create(q.Collection('GroupStudent'), {
-        data: {
-          student: q.Ref(q.Collection('User'), studentId),
-          group: q.Ref(q.Collection('Group'), groupId),
-        },
-      }),
-      // Remove mapping
-      q.Delete(
-        q.Select(
-          ['ref'],
-          q.Get(
-            q.Match(
-              q.Index('remove_student'),
-              q.Ref(q.Collection('User'), studentId),
-              q.Ref(q.Collection('Group'), groupId)
+    const qry = q.Map(
+      studentIds,
+      q.Lambda(
+        'id',
+        q.Delete(
+          q.Select(
+            'ref',
+            q.Get(
+              // Find GroupStudent document for this student & group
+              q.Match(
+                q.Index('remove_student'),
+                q.Ref(q.Collection('User'), q.Var('id')),
+                q.Ref(q.Collection('Group'), groupId)
+              )
             )
           )
         )
       )
     )
-    const data = await keyedClient.query(qry)
+    await keyedClient.query(qry)
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }
