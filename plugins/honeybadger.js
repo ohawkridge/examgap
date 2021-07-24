@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import HoneybadgerVue from '@honeybadger-io/vue'
+import HoneybadgerVue from '@honeybadger-io/js'
 
 const config = {
   apiKey: process.env.HONEYB_KEY,

@@ -1,4 +1,5 @@
-import { HoneybadgerSourceMapPlugin } from '@honeybadger-io/webpack'
+// eslint-disable-next-line nuxt/no-cjs-in-config
+const HoneybadgerSourceMapPlugin = require('@honeybadger-io/webpack')
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
