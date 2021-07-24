@@ -18,13 +18,17 @@ const actions = {
     commit('setQuote', response)
   },
   // Try to obtain user document with credentials
-  async getUser({ state, getters, dispatch, commit }, { username, password }) {
+  async getUser(
+    { state, getters, dispatch, commit },
+    { username, password, database }
+  ) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
         username,
         password,
+        database,
       }),
       method: 'POST',
     })

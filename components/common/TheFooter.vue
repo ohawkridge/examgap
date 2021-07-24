@@ -12,11 +12,16 @@
         <v-col cols="4" class="text-right">
           <v-icon small>{{ $icons.mdiArrowExpandHorizontal }}</v-icon>
           {{ $vuetify.breakpoint.name }} |
-          <v-icon small>{{
-            $store.state.app.database === 'dev'
-              ? $icons.mdiAlphaDCircleOutline
-              : $icons.mdiAlphaPCircleOutline
-          }}</v-icon>
+          <v-tooltip top>
+            <template #activator="{ on }">
+              <v-icon small v-on="on">{{
+                $store.state.app.database === 'dev'
+                  ? $icons.mdiAlphaDCircleOutline
+                  : $icons.mdiAlphaPCircleOutline
+              }}</v-icon>
+            </template>
+            <span>{{ database }}</span>
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-container>
@@ -33,6 +38,13 @@ import {
 
 export default {
   name: 'TheFooter',
+  computed: {
+    database() {
+      return this.$store.state.app.database === 'dev'
+        ? 'Development'
+        : 'Production'
+    },
+  },
   created() {
     this.$icons = {
       mdiArrowExpandHorizontal,

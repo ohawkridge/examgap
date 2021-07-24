@@ -8,8 +8,10 @@ exports.handler = async (event) => {
   const database = data.database
   // Configure Fauna client with login secret
   // (now either ExamgapProd or ExamgapDev)
+  const secret =
+    database === 'dev' ? process.env.DEV_KEY : process.env.SECRET_KEY
   const client = new faunadb.Client({
-    secret: database === 'dev' ? process.env.DEV_KEY : process.env.SECRET_KEY,
+    secret,
   })
   try {
     const qry = q.Select(
