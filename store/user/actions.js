@@ -131,10 +131,10 @@ const actions = {
       )
     }
     response = await response.json()
-    console.log(`createGroup adding..`, response)
     // Update local store
     // (mutations.js will find the actual index of new group)
     commit('addGroup', response)
+    this.$store.commit('students/clearStudents')
     commit('setActiveGroupIndex', -1)
     // Progress onboarding
     commit('app/setOnboardStep', 2, { root: true })

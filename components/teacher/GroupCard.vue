@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     open() {
+      this.$store.commit('students/clearStudents')
       // Remember active group
       this.$store.commit('user/setActiveGroupIndex', this.groupIndex)
       this.$router.push(`/group/${this.group.id}`)

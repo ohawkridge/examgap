@@ -168,10 +168,6 @@ export default {
     TheCopyStudentDialog,
     DividerRow,
   },
-  beforeRouteLeave(to, from, next) {
-    this.$store.commit('students/clearStudents')
-    next()
-  },
   layout: 'app',
   data() {
     return {

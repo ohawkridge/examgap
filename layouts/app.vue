@@ -175,6 +175,7 @@ export default {
   },
   methods: {
     nav(index, groupId) {
+      this.$store.commit('students/clearStudents')
       // Store the index of the current group
       this.$store.commit('user/setActiveGroupIndex', index)
       this.$router.push(this.teacher ? `/group/${groupId}` : `/home`)
