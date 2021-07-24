@@ -1,3 +1,5 @@
+import { HoneybadgerSourceMapPlugin } from '@honeybadger-io/webpack'
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -5,22 +7,7 @@ export default {
   // Exclude most pages
   // https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-generate#exclude
   generate: {
-    // exclude: [
-    //   // /^\/home/,
-    //   /^\/classes/,
-    //   /^\/assignment/,
-    //   /^\/course/,
-    //   /^\/grades/,
-    //   /^\/question/,
-    //   /^\/report/,
-    //   /^\/response/,
-    //   /^\/answer/,
-    //   /^\/profile/,
-    //   /^\/settings/,
-    //   /^\/edit/,
-    //   /^\/author/,
-    //   /^\/map/,
-    // ],
+    exclude: [],
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -53,7 +40,7 @@ export default {
     { src: '@/plugins/filters.js' },
     { src: '@/plugins/snack.js' },
     { src: '@/plugins/tiptapVuetify.js' },
-    // { src: '@/plugins/honeybadger.js', mode: 'client' },
+    { src: '@/plugins/honeybadger.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -96,6 +83,7 @@ export default {
 
   // Inject config variables into Nuxt
   // https://nuxtjs.org/blog/moving-from-nuxtjs-dotenv-to-runtime-config
+  // TODO THIS WON'T DO ANYTHING
   publicRuntimeConfig: {
     baseURL:
       process.env.NODE_ENV === 'production'
@@ -103,14 +91,20 @@ export default {
         : 'http://localhost:8888',
   },
 
-  // Honeybadger can't see env vars in plugin
-  // https://nuxtjs.org/docs/2.x/directory-structure/nuxt-config/#env
-  // env: {
-  //   HONEYB_KEY: 'hbp_xaKmNAUS8NVp6kBJfKcCMEYe8iCCi30wuKXo',
-  // },
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    plugins: [
+      new HoneybadgerSourceMapPlugin({
+        apiKey: process.env.HONEYB_KEY,
+        assetsUrl: 'https://www.examgap.com',
+        revision: 'master',
+        // You can also enable deployment notifications:
+        deploy: {
+          environment: 'production',
+          repository: 'https://github.com/ohawkridge/examgap',
+        },
+      }),
+    ],
     extend(config) {},
     // https://github.com/iliyaZelenko/tiptap-vuetify-nuxt
     transpile: ['vuetify/lib', 'tiptap-vuetify'],
