@@ -4,10 +4,11 @@ const q = faunadb.query
 exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const assignmentId = data.assignmentId
-  console.time(`_report_${assignmentId}`)
+  const secret = data.secret
+  // console.time(`_report_${assignmentId}`)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Let(
@@ -42,7 +43,7 @@ exports.handler = async (event) => {
                   ),
                   markScheme: q.Map(
                     q.Select(
-                      ['data'],
+                      'data',
                       q.Paginate(
                         q.Match(
                           q.Index('marks_for_question_3'),
@@ -195,7 +196,7 @@ exports.handler = async (event) => {
                                         q.Paginate(
                                           q.Match(
                                             q.Index('self_marks_by_response'),
-                                            q.Select(['ref'], q.Var('instance'))
+                                            q.Select('ref', q.Var('instance'))
                                           )
                                         ),
                                         q.Lambda(
@@ -222,14 +223,14 @@ exports.handler = async (event) => {
     )
     const data = await keyedClient.query(qry)
     data.students.sort(compare)
-    console.log(data)
-    console.timeEnd(`_report_${assignmentId}`)
+    // console.timeEnd(`_report_${assignmentId}`)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }
 

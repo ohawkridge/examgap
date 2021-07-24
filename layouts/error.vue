@@ -17,10 +17,12 @@
                 {{ $icons.mdiAlertOutline }}
               </v-icon>
             </p>
+            <p>This will automatically be reported.</p>
             <p>
-              This will automatically be reported. If the problem persists,
-              email
-              <a href="mailto:support@examgap.com">support@examgap.com</a>.
+              If the problem persists, email
+              <a class="text-decoration-none" href="mailto:support@examgap.com"
+                >support@examgap.com</a
+              >.
             </p>
             <p>
               <v-btn elevation="0" color="primary" @click="$router.go(-1)">

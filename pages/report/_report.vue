@@ -1,16 +1,11 @@
 <template>
   <div>
-    <GroupHeader :group="group" />
+    <group-header />
+    <divider-row />
     <v-row>
-      <v-col cols="12" md="3">
-        <GroupNav
-          v-if="group && Object.keys(group).length > 0"
-          :group="group"
-        />
-      </v-col>
+      <group-nav />
       <v-col cols="12" md="9">
-        <!-- mt-n6 accounts for bottom-nav space when hidden on desktop -->
-        <v-card class="eg-card mt-n6 mt-sm-0">
+        <v-card class="mt-n6 mt-sm-0">
           <v-card-text>
             <v-row>
               <v-col cols="12" md="10">
@@ -250,7 +245,7 @@
               <p class="text-subtitle-1">Question</p>
               <p v-if="marking" class="text-body-2" v-html="question.text"></p>
               <div class="d-flex justify-end">
-                <v-chip outlined
+                <v-chip v-if="marking" outlined
                   >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
@@ -309,8 +304,8 @@
                         : ''
                     "
                   >
-                    {{ mp.text }}</span
-                  >
+                    {{ mp.text }}
+                  </span>
                 </template>
               </v-checkbox>
               <div class="d-flex justify-end">
@@ -362,6 +357,7 @@ import GroupHeader from '@/components/teacher/GroupHeader'
 import GroupNav from '@/components/teacher/GroupNav'
 import MarkChip from '@/components/teacher/MarkChip'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
+import DividerRow from '@/components/common/DividerRow.vue'
 
 export default {
   components: {
@@ -370,6 +366,7 @@ export default {
     GroupNav,
     MarkChip,
     TheInfoDialog,
+    DividerRow,
   },
   beforeRouteLeave(to, from, next) {
     // TODO Just in case Marking view not closed properly
@@ -455,6 +452,8 @@ export default {
         this.markScheme.sort(this.selfMarksFirst)
       }
     },
+    // Watch 'marking' store prop -> get a fresh
+    // copy of the mark scheme off this.question
     marking() {
       this.copyMarkScheme()
     },
@@ -486,13 +485,7 @@ export default {
   },
   mounted() {
     if (this.group.assignments.length < 3) {
-      this.$store.commit('app/setOnboardStep', 7)
-    }
-    // TODO
-    // Might only need during development
-    // Could go on marking = true?
-    if (this.markScheme.length === 0) {
-      this.copyMarkScheme()
+      this.$store.commit('app/setOnboardStep', 6)
     }
   },
   methods: {

@@ -271,8 +271,7 @@ export default {
   methods: {
     assign() {
       this.$nuxt.$emit('show-assign')
-      // Onboarding complete
-      this.$store.commit('app/setOnboardStep', 7)
+      this.$store.commit('app/setOnboardStep', 6)
     },
   },
 }
