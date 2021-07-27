@@ -84,7 +84,7 @@ export default {
 
   // Inject config variables into Nuxt
   // https://nuxtjs.org/blog/moving-from-nuxtjs-dotenv-to-runtime-config
-  // TODO THIS WON'T DO ANYTHING
+  // N.B. Netlify automatically sets NODE_ENV to production/development
   publicRuntimeConfig: {
     baseURL:
       process.env.NODE_ENV === 'production'

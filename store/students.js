@@ -60,10 +60,9 @@ export const actions = {
       }),
       method: 'POST',
     })
+    // N.B. Make sure this is *before* you call .json() !!
     if (!response.ok) {
-      throw new Error(
-        `Error getting students \n ${response.statusText} (${response.status})`
-      )
+      throw new Error(`Error getting students`)
     }
     response = await response.json()
     commit('setStudents', response)
@@ -110,6 +109,7 @@ export const mutations = {
     state.students = state.students.filter((o) => !studentIds.includes(o.id))
   },
   setStudents(state, students) {
+    console.log('mutation -> setStudents')
     state.students = students
   },
   // Called on exit from _students.vue

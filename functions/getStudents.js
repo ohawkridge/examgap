@@ -58,139 +58,88 @@ exports.handler = async (event, context, callback) => {
                 [],
                 q.Let(
                   {
-                    // Get all responses for all questions by this student
-                    responses: q.Paginate(
-                      q.Match(
-                        q.Index('student_responses_by_group'),
-                        q.Select('ref', q.Var('instance')), // Student
-                        q.Ref(q.Collection('Group'), groupId) // Group
-                      ),
-                      { size: 999 }
+                    // Get all responses by this student
+                    // Get whole doc to filter assignments/revision
+                    responses: q.Select(
+                      'data',
+                      q.Map(
+                        q.Paginate(
+                          q.Match(
+                            q.Index('student_responses_by_group'),
+                            q.Select('ref', q.Var('instance')), // Student
+                            q.Ref(q.Collection('Group'), groupId)
+                          ),
+                          { size: 999 }
+                        ),
+                        q.Lambda('rRef', q.Get(q.Var('rRef')))
+                      )
                     ),
-                    // Count responses for *assignments*
-                    ass_count: q.Select(
-                      ['data', 0],
-                      q.Count(
-                        q.Filter(
-                          q.Var('responses'),
-                          q.Lambda(
-                            'ref',
-                            q.Not(
-                              q.Equals(
-                                q.Select(
-                                  ['data', 'assignment'],
-                                  q.Get(q.Var('ref'))
-                                ),
-                                '' // Empty for ndependent revision
-                              )
-                            )
+                    rev_count: q.Count(
+                      q.Filter(
+                        q.Var('responses'),
+                        q.Lambda(
+                          'res',
+                          // Independent revision has no assignment
+                          q.Equals(
+                            q.Select(['data', 'assignment'], q.Var('res')),
+                            ''
                           )
+                        )
+                      )
+                    ),
+                    // Need later
+                    markedResponses: q.Filter(
+                      q.Var('responses'),
+                      q.Lambda(
+                        'res',
+                        q.Equals(
+                          q.Select(['data', 'marked'], q.Var('res')),
+                          true
                         )
                       )
                     ),
                   },
                   {
-                    assignment: q.Var('ass_count'),
-                    // Calculate responses for *revision*
-                    revision: q.Subtract(
-                      q.Select(['data', 0], q.Count(q.Var('responses'))),
-                      q.Var('ass_count')
+                    assignment: q.Subtract(
+                      q.Count(q.Var('responses')),
+                      q.Var('rev_count')
                     ),
-                    average: q.Format(
-                      '%.0f',
-                      q.Multiply(
-                        q.Divide(
-                          // For each response, get the count of TeacherMarks
-                          q.ToDouble(
+                    revision: q.Var('rev_count'),
+                    average: q.If(
+                      // If no questions have been marked, you'll be
+                      // dividing by 0 when you calculate average
+                      q.Equals(q.Count(q.Var('markedResponses')), 0),
+                      '-',
+                      q.Round(
+                        q.Multiply(
+                          q.Divide(
+                            // Total marks awarded over all questions WORKS
                             q.Sum(
                               q.Map(
-                                q.Select(
-                                  ['data'],
-                                  q.Filter(
-                                    q.Var('responses'),
-                                    q.Lambda(
-                                      'ref',
-                                      q.Equals(
-                                        q.Select(
-                                          ['data', 'marked'],
-                                          q.Get(q.Var('ref'))
-                                        ),
-                                        true
-                                      )
-                                    )
-                                  )
-                                ),
+                                q.Var('markedResponses'),
                                 q.Lambda(
-                                  'ref',
-                                  q.Count(
-                                    q.Match(
-                                      q.Index('teacher_marks_by_response'),
-                                      q.Var('ref')
-                                    )
+                                  'res',
+                                  q.Call(
+                                    q.Function('TeacherMarks'),
+                                    q.Var('res')
                                   )
                                 )
                               )
-                            )
-                          ),
-                          // ABOVE WORKS
-                          // Sum the max marks for each response's question
-                          // Watch out !! If student hasn't answered any questions
-                          // you'll get a DIV0 error here
-                          q.If(
-                            // GT Will be true if there are responses
-                            q.GT(
-                              q.ToInteger(
-                                q.Select(
-                                  ['data', 0],
-                                  q.Count(
-                                    q.Filter(
-                                      q.Var('responses'),
-                                      q.Lambda(
-                                        'resp',
-                                        q.Equals(
-                                          q.Select(
-                                            ['data', 'marked'],
-                                            q.Get(q.Var('resp'))
-                                          ),
-                                          true
-                                        )
-                                      )
-                                    )
-                                  )
-                                )
-                              ),
-                              0
                             ),
-                            // This bit (denominator) is 0
-                            // There *are* responses, but none that are marked
+                            // Total marks possible
                             q.ToDouble(
                               q.Sum(
                                 q.Map(
-                                  q.Select(
-                                    ['data'],
-                                    q.Filter(
-                                      q.Var('responses'),
-                                      q.Lambda(
-                                        'ref',
-                                        q.Equals(
-                                          q.Select(
-                                            ['data', 'marked'],
-                                            q.Get(q.Var('ref'))
-                                          ),
-                                          true
-                                        )
-                                      )
-                                    )
-                                  ),
+                                  q.Var('markedResponses'),
                                   q.Lambda(
-                                    'ref',
+                                    'res',
                                     q.ToInteger(
                                       q.Select(
                                         ['data', 'maxMark'],
                                         q.Get(
                                           q.Select(
                                             ['data', 'question'],
-                                            q.Get(q.Var('ref'))
+                                            q.Var('res')
                                           )
                                         )
                                       )
@@ -198,12 +147,11 @@ exports.handler = async (event, context, callback) => {
                                   )
                                 )
                               )
-                            ),
-                            // There are no responses
-                            0.00000001 // Avoid DIV0, but rounds down to 0
-                          )
+                            )
+                          ),
+                          100
                         ),
-                        100
+                        0
                       )
                     ),
                   }
@@ -216,9 +164,6 @@ exports.handler = async (event, context, callback) => {
     )
     const data = await keyedClient.query(qry)
     data.sort(compare)
-    console.log()
-    console.log(data)
-    console.log()
     return {
       statusCode: 200,
       body: JSON.stringify(data),

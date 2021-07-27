@@ -34,7 +34,7 @@ export const getters = {
 }
 
 export const actions = {
-  async saveAnswer({ commit, state, rootState }, text) {
+  async saveAnswer({ commit, state, rootState, rootGetters }, text) {
     const url = new URL('/.netlify/functions/saveAnswer', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -44,6 +44,7 @@ export const actions = {
         text,
         topicId: rootState.topics.topicId, // If revising
         responseId: state.responseId,
+        groupId: rootGetters['user/activeGroup'].id,
       }),
       method: 'POST',
     })

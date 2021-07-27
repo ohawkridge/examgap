@@ -8,16 +8,11 @@ exports.handler = async (event) => {
   const text = data.text
   const topicId = data.topicId
   const responseId = data.responseId
-  console.log()
-  console.log(assignmentId)
-  console.log(questionId)
-  console.log(text)
-  console.log(topicId)
-  console.log(responseId)
-  console.log()
+  const groupId = data.groupId
+  const secret = data.secret
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.If(
@@ -32,21 +27,18 @@ exports.handler = async (event) => {
           flagged: false,
           student: q.CurrentIdentity(),
           question: q.Ref(q.Collection('Question'), questionId),
-          // Save topic for independent revision questions
-          topic: topicId === '' ? 0 : q.Ref(q.Collection('Topic'), topicId),
-          // Independent revision has no assignment id
-          assignment:
-            assignmentId === 0
-              ? ''
-              : q.Ref(q.Collection('Assignment'), assignmentId),
-          // Need group to filter data by class later on
-          group:
-            assignmentId === 0
-              ? ''
-              : q.Select(
-                  ['data', 'group'],
-                  q.Get(q.Ref(q.Collection('Assignment'), assignmentId))
-                ),
+          topic: q.If(
+            q.Equals(topicId, ''),
+            '',
+            q.Ref(q.Collection('Topic'), topicId)
+          ),
+          // Independent revision—no assignment id
+          assignment: q.If(
+            q.Equals(assignmentId, 0),
+            '',
+            q.Ref(q.Collection('Assignment'), assignmentId)
+          ),
+          group: q.Ref(q.Collection('Assignment'), groupId),
           startTime: q.Now(),
           timeTaken: 0,
         },
