@@ -69,6 +69,7 @@
               <div class="d-flex justify-center">
                 <v-img
                   src="/no-assign.svg"
+                  contain
                   max-width="200"
                   alt="Books and pens illustrations"
                 />

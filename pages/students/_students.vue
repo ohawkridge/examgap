@@ -96,6 +96,7 @@
                     <div class="mt-4">
                       <v-img
                         max-width="200"
+                        contain
                         src="/no-student.svg"
                         alt="Graduation gap illustration"
                         class="mx-auto"

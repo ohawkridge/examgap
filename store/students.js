@@ -109,7 +109,6 @@ export const mutations = {
     state.students = state.students.filter((o) => !studentIds.includes(o.id))
   },
   setStudents(state, students) {
-    console.log('mutation -> setStudents')
     state.students = students
   },
   // Called on exit from _students.vue
