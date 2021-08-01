@@ -447,18 +447,20 @@ export default {
         this.markScheme.sort(this.selfMarksFirst)
       }
     },
-    // Watch 'marking' store prop -> get a fresh
-    // copy of the mark scheme off this.question
     marking() {
-      this.copyMarkScheme()
+      // Copy original mark scheme from question object
+      // (This becomes v-for for checkboxes)
+      if (this.marking) {
+        this.copyMarkScheme()
+      }
     },
     smartSort() {
       if (this.marking && this.smartSort) {
         // Turn on smart sort by calling sorting function
         this.markScheme.sort(this.selfMarksFirst)
       } else {
-        // When smartSort is turned off, restore normal mark scheme
-        this.markScheme = { ...this.question.markScheme }
+        // Turn off smart sort by re-copying original
+        this.copyMarkScheme()
       }
     },
   },
@@ -484,13 +486,8 @@ export default {
     }
   },
   methods: {
-    // Copy original mark scheme off question to use while marking
-    // If smart sort is activated, this gets mixed up
-    // so we need to be able to re-copy the unsorted one
     copyMarkScheme() {
-      if (this.marking) {
-        this.markScheme = { ...this.question.markScheme }
-      }
+      this.markScheme = [...this.question.markScheme]
     },
     // Don't exceed max. mark
     checkMax(markId) {
