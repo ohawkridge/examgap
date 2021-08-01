@@ -124,16 +124,7 @@
                           <v-list-item-action>
                             <v-tooltip bottom>
                               <template #activator="{ on }">
-                                <v-btn
-                                  icon
-                                  v-on="on"
-                                  @click.stop="
-                                    $store.commit(
-                                      'topics/updateSelectedQuestions',
-                                      q.id
-                                    )
-                                  "
-                                >
+                                <v-btn icon v-on="on" @click.stop="add(q.id)">
                                   <v-icon
                                     :color="
                                       selected.includes(q.id) ? 'accent' : ''
@@ -171,17 +162,19 @@
                 <div class="d-flex justify-space-between">
                   <p class="text-h6">Preview</p>
                   <the-question-detail-dialog
-                    v-if="question"
                     :question-id="question.id"
-                    :disabled="questions.length === 0"
+                    :disable="Object.keys(question).length"
                   />
                 </div>
                 <div
-                  v-if="question"
+                  v-if="Object.keys(question).length"
                   class="pt-2 text-body-2"
                   v-html="question.text"
                 ></div>
-                <div v-if="question" class="d-flex justify-end">
+                <div
+                  v-if="Object.keys(question).length"
+                  class="d-flex justify-end"
+                >
                   <v-chip outlined
                     >{{ question.maxMark }} mark{{
                       question.maxMark | pluralize
@@ -213,6 +206,7 @@ export default {
   data() {
     return {
       selectedQuestion: 0, // v-model for questions v-list
+      loading: false,
     }
   },
   async fetch() {
@@ -230,7 +224,7 @@ export default {
       topics: (state) => state.topics.topics,
       questions: (state) => state.topics.questions,
       selected: (state) => state.topics.selected,
-      loading: (state) => state.topics.loading,
+      // loading: (state) => state.topics.loading,
       onboardStep: (state) => state.app.onboardStep,
     }),
     ...mapGetters({ group: 'user/activeGroup' }),
@@ -257,8 +251,18 @@ export default {
   },
   watch: {
     // Load questions when topic changes
-    currentTopicIndex() {
-      this.$store.dispatch('topics/getQuestions')
+    async currentTopicIndex() {
+      try {
+        this.loading = true
+        await this.$store.dispatch('topics/getQuestions')
+      } catch (err) {
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error loading questions',
+        })
+      } finally {
+        this.loading = false
+      }
     },
   },
   created() {
@@ -269,6 +273,10 @@ export default {
     }
   },
   methods: {
+    // Add/remove questions from assignment
+    add(id) {
+      this.$store.commit('topics/updateSelected', id)
+    },
     assign() {
       this.$nuxt.$emit('show-assign')
       this.$store.commit('app/setOnboardStep', 6)

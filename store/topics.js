@@ -5,7 +5,6 @@ export const state = () => ({
   selected: [],
   topicId: '',
   currentTopicIndex: 0,
-  loading: false,
 })
 
 export const getters = {
@@ -20,6 +19,8 @@ export const getters = {
 
 export const actions = {
   async getQuestion({ commit, rootState }, questionId) {
+    // Clear previous question
+    commit('setQuestion', {})
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -64,7 +65,6 @@ export const actions = {
     }
   },
   async getQuestions({ commit, state, rootState, rootGetters }) {
-    commit('setLoading', true)
     const url = new URL(
       '/.netlify/functions/getQuestions',
       this.$config.baseURL
@@ -82,7 +82,6 @@ export const actions = {
     }
     response = await response.json()
     commit('setQuestions', response)
-    commit('setLoading', false)
   },
 }
 
@@ -106,15 +105,12 @@ export const mutations = {
   setQuestions(state, questions) {
     state.questions = questions
   },
-  updateSelectedQuestions(state, questionId) {
+  updateSelected(state, questionId) {
     state.selected.includes(questionId)
       ? (state.selected = state.selected.filter((id) => id !== questionId))
       : state.selected.push(questionId)
   },
   clearSelectedQuestions(state) {
     state.selected = []
-  },
-  setLoading(state, loading) {
-    state.loading = loading
   },
 }

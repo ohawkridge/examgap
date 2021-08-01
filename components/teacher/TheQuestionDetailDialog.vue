@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="800px">
     <template #activator="{ on }">
-      <v-btn :disabled="disabled" elevation="0" v-on="on"> View </v-btn>
+      <v-btn elevation="0" :disabled="disable === 0" v-on="on"> View </v-btn>
     </template>
     <v-card :loading="$fetchState.pending">
       <v-card-title class="d-flex justify-space-between align-center">
@@ -21,9 +21,7 @@
             <v-btn
               elevation="0"
               :color="included ? 'accent' : ''"
-              @click="
-                $store.commit('topics/updateSelectedQuestions', questionid)
-              "
+              @click="$store.commit('topics/updateSelected', questionId)"
               v-on="on"
             >
               <v-icon left>{{
@@ -53,18 +51,12 @@
         <p v-else>None</p>
         <p class="text-subtitle-1 font-weight-medium mt-4">Model Answer</p>
         <div v-html="question.modelAnswer"></div>
+        <div class="d-flex justify-end">
+          <v-btn color="primary" elevation="0" @click="dialog = false">
+            Close
+          </v-btn>
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn
-          color="primary"
-          class="ml-2"
-          elevation="0"
-          @click="dialog = false"
-        >
-          Close
-        </v-btn>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -82,9 +74,9 @@ export default {
       type: String,
       default: '',
     },
-    disabled: {
-      type: Boolean,
-      default: false,
+    disable: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
@@ -93,13 +85,13 @@ export default {
     }
   },
   async fetch() {
-    // Fetch is called from parent (_course.vue)
-    // questionId won't exist until questions loaded
-    if (this.questionId !== '') {
+    // Don't fetch when called from parent
+    // or if question hasn't changed
+    if (this.questionId !== '' && this.questionId !== this.question.id) {
       try {
         await this.$store.dispatch('topics/getQuestion', this.questionId)
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error loading question',

@@ -368,11 +368,6 @@ export default {
     TheInfoDialog,
     DividerRow,
   },
-  beforeRouteLeave(to, from, next) {
-    // TODO Just in case Marking view not closed properly
-    this.$store.commit('assignment/setMarking', false)
-    next()
-  },
   layout: 'app',
   data() {
     return {

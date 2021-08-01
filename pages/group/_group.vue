@@ -159,6 +159,8 @@ export default {
     if (this.group.num_students === 0) {
       this.$store.commit('app/setOnboardStep', 2)
     }
+    // In case _report.vue crashes and we click back
+    this.$store.commit('assignment/setMarking', false)
   },
   methods: {
     createAssignment() {
