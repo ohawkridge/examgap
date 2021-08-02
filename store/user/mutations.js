@@ -10,10 +10,10 @@ export default {
     state.quote = quote
   },
   // Called after adding/copying students to a group
-  updateNumStudents(state, { groupId, numCopied }) {
+  setCount(state, { groupId, n }) {
     // Find index of group being copied to
     const i = state.groups.findIndex((g) => g.id === groupId)
-    state.groups[i].num_students += numCopied
+    state.groups[i].num_students += n
   },
   // Teacher creates a new assignment
   addAssignment(state, assignment) {

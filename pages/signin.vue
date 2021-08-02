@@ -2,7 +2,7 @@
   <v-app>
     <v-container class="d-flex align-center">
       <nuxt-link to="/">
-        <TheLogo />
+        <the-logo />
       </nuxt-link>
     </v-container>
     <v-container class="fill-height">

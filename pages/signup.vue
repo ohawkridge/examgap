@@ -2,7 +2,7 @@
   <v-app>
     <v-container class="d-flex align-center">
       <nuxt-link to="/">
-        <TheLogo />
+        <the-logo />
       </nuxt-link>
       <v-spacer />
       <nuxt-link to="/">Back home</nuxt-link>
@@ -231,10 +231,6 @@ export default {
             throw new Error(`Error signing up ${response.status}`)
           }
           response = await response.json()
-          console.log(
-            '%c' + 'User',
-            'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
-          )
           if (response === false) {
             this.emailInUse = true
           } else {
@@ -242,26 +238,33 @@ export default {
               '/.netlify/functions/sendEmailWelcomeStudent',
               this.$config.baseURL
             )
-            const mailResponse = await fetch(url2, {
-              method: 'POST',
-              mode: 'cors',
-              credentials: 'same-origin',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ email: response.data.username }),
-            })
-            if (!mailResponse.ok) {
-              throw new Error(`Error sending email ${mailResponse.status}`)
+            // Only send welcome email if username is email
+            const pattern =
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            if (pattern.test(this.email)) {
+              const mailResponse = await fetch(url2, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'same-origin',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: this.email }),
+              })
+              if (!mailResponse.ok) {
+                throw new Error(`Error sending email ${mailResponse.status}`)
+              }
             }
             // Complete the login process
-            // Use email and password to try for secret
-            const res = await this.getUser()
-            this.$store.commit('user/setSecret', res.secret)
+            await this.$store.dispatch('user/getUser', {
+              username: this.email,
+              password: this.pass1,
+              database: 'prod',
+            })
             this.$router.push(`/home`)
           }
-        } catch (e) {
-          console.error(e)
+        } catch (err) {
+          console.error(err)
         } finally {
           this.loading = false
         }
@@ -269,21 +272,6 @@ export default {
       if (this.step === 1) {
         this.step = 2
       }
-    },
-    async getUser() {
-      const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          username: this.email,
-          password: this.pass1,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Invalid credentials! ${response.status}`)
-      }
-      response = await response.json()
-      return response
     },
   },
 }

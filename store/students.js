@@ -17,14 +17,7 @@ export const actions = {
       throw new Error(`Error adding students ${response.status}`)
     }
     // Update num_students on group
-    commit(
-      'user/updateNumStudents',
-      {
-        groupId,
-        numCopied: usernames.length,
-      },
-      { root: true }
-    )
+    commit('user/setCount', { groupId, n: usernames.length }, { root: true })
     // Refetch student data
     // (too complicated to insert new students)
     await dispatch('getStudents')
