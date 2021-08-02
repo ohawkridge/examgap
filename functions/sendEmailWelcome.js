@@ -24,17 +24,13 @@ exports.handler = async (event) => {
           Charset: 'UTF-8',
           Data: `<html>
                   <body>
-                  <p>Hello there&mdash;I’m Owen.</p>
-                  <p>Thanks for your interest in Examgap. Here’s a few things you should know:</p>
-                  <ol>
-                  <li>I’ve been a teacher for fourteen years. I created Examgap to use in my department.<br /></li>
-                  <li>I can set up your classes for you. Reply to this email with a list of your student's email addresses and I'll take care of everything.<br /></li>
-                  <li>To get started yourself, first create a class. Then students can use the link or class code under ‘Invite Students’ to create their own accounts.<br /></li>
-                  <li>A level and IT courses aren’t complete yet, but you’ve got access to everything during your trial if you want to check out what’s there.<br /></li>
-                  <li>There’s no team behind Examgap—just me. If you encounter a problem, please let me know.<br /></li>
-                  </ol>
-                  <p>That’s it. I hope you find it useful. If you have questions or feedback, you can reply to this email. Your reply will go straight to me.</p>
-                  <p>—Cheers, Owen<br /><a href="https://www.examgap.com">Examgap</a></p>
+                  <p>Hello,</p>
+                  <p>Thanks for your interest in Examgap and for taking time to try it. I hope you find it useful.</p>
+                  <p>There’s no team behind Examgap—just me. I created it to use in my department and it’s become a regular part of my teaching.</p>
+                  <p>If you encounter a problem, have questions or feedback, please do email me.</p>
+                  <p>PS—It'd be my pleasure to setup your classes for you. Just reply with lists of your student’s email addresses for each class you’d like.</p>
+                  <p>Thanks again.</p>
+                  <p>—Cheers, Owen</p>
                   </body>
               </html>`,
         },
@@ -45,7 +41,7 @@ exports.handler = async (event) => {
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: '5 Important things to know about Examgap',
+        Data: 'Welcome to Examgap',
       },
     },
     Source: 'Owen <owen@examgap.com>',
