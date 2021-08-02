@@ -8,7 +8,7 @@
           <v-window-item :value="1">
             <v-card-text>
               <v-row v-if="students.length > 0">
-                <v-col cols="12">
+                <v-col cols="12" class="d-flex">
                   <v-checkbox v-model="allSelected" class="mt-0" hide-details>
                     <template #label>
                       <strong>Select all</strong>
@@ -31,13 +31,10 @@
                     <template #label>
                       {{ student.username }}&nbsp;
                       <v-tooltip bottom>
-                        <template #activator="{ on, attrs }">
+                        <template #activator="{ on }">
                           <a
-                            :class="`exam-chip ${
-                              student.examMode ? '' : 'disabled-chip'
-                            }`"
+                            :class="`on ${student.examMode ? '' : 'off'}`"
                             href="#"
-                            v-bind="attrs"
                             v-on="on"
                             @click.stop="toggleMode(student)"
                             >EXAM</a
@@ -157,15 +154,8 @@
           </v-window-item>
         </v-window>
         <v-card-actions>
-          <v-btn
-            v-if="group && group.num_students > 0"
-            :disabled="step === 1"
-            text
-            @click="step--"
-          >
-            Back
-          </v-btn>
-          <v-btn v-else text @click="dialog = false"> Cancel </v-btn>
+          <v-btn v-if="step === 1" text @click="dialog = false"> Cancel </v-btn>
+          <v-btn v-if="step === 2" text @click="step--"> Back </v-btn>
           <v-spacer />
           <v-btn
             v-if="step === 1"
@@ -235,29 +225,29 @@ export default {
     }
   },
   async fetch() {
-    // Get students for this group
-    // group undefined during refresh
-    if (this.group !== undefined) {
-      try {
-        const url = new URL(
-          '/.netlify/functions/getStudents',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.secret,
-            groupId: this.group.id,
-            namesOnly: true,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error fetching students ${response.status}`)
-        }
-        this.students = await response.json()
-      } catch (e) {
-        console.error(e)
+    try {
+      const url = new URL(
+        '/.netlify/functions/getStudents',
+        this.$config.baseURL
+      )
+      const response = await fetch(url, {
+        body: JSON.stringify({
+          secret: this.secret,
+          groupId: this.group.id,
+          namesOnly: true,
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error(`Error fetching students ${response.status}`)
       }
+      this.students = await response.json()
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching students',
+      })
     }
   },
   computed: {
@@ -284,14 +274,6 @@ export default {
         : 'Name the assignment and set start/end dates.'
     },
   },
-  watch: {
-    // If fetch hasn't loaded students (e.g. page refreshed) try and load them
-    dialog() {
-      if (this.dialog && this.students.length === 0) {
-        this.$fetch()
-      }
-    },
-  },
   created() {
     this.$icons = {
       mdiCalendarOutline,
@@ -313,7 +295,7 @@ export default {
     }
   },
   methods: {
-    // Default assignment name like "Week X Assignment"
+    // Default assignment name—"Week X Assignment"
     defaultName() {
       // https://stackoverflow.com/questions/6117814/get-week-of-year-in-javascript-like-in-php
       let dObj = new Date()
@@ -340,7 +322,6 @@ export default {
       try {
         // Update local data first because of latency
         student.examMode = !student.examMode
-        // console.time('toggleMode')
         const url = new URL(
           '/.netlify/functions/updateExamMode',
           this.$config.baseURL
@@ -349,19 +330,18 @@ export default {
           body: JSON.stringify({
             secret: this.secret,
             studentId: student.id,
-            examMode: !student.examMode,
+            examMode: student.examMode,
           }),
           method: 'POST',
         })
         if (!response.ok) {
-          throw new Error(`Error updating examMode ${response.status}`)
+          throw new Error(`Error updating mode ${response.status}`)
         }
-        // console.timeEnd('toggleMode')
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
-          msg: 'Error updating exam mode',
+          msg: 'Error updating mode',
         })
         // Reverse change to local data
         student.examMode = !student.examMode
@@ -412,7 +392,7 @@ export default {
 </script>
 
 <style scoped>
-.exam-chip {
+.on {
   position: relative;
   background-color: #e0e0e0;
   border-radius: 4px !important;
@@ -425,11 +405,11 @@ export default {
   color: #000000de;
 }
 
-.disabled-chip {
+.off {
   opacity: 0.4;
 }
 
-.disabled-chip:before {
+.off:before {
   position: absolute;
   content: '';
   left: 0;

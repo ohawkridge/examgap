@@ -32,7 +32,7 @@
               :disabled="selected.length == 0"
               v-bind="attrs"
               elevation="0"
-              @click="assign()"
+              @click="$nuxt.$emit('show-assign')"
               v-on="on"
             >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -276,10 +276,6 @@ export default {
     // Add/remove questions from assignment
     add(id) {
       this.$store.commit('topics/updateSelected', id)
-    },
-    assign() {
-      this.$nuxt.$emit('show-assign')
-      this.$store.commit('app/setOnboardStep', 6)
     },
   },
 }
