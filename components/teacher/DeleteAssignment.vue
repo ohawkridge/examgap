@@ -26,7 +26,6 @@
           :disabled="loading"
           @click="deleteAssignment()"
         >
-          <v-icon left>{{ $icons.mdiDeleteForeverOutline }}</v-icon>
           Delete Assignment</v-btn
         >
       </v-card-actions>
@@ -35,15 +34,9 @@
 </template>
 
 <script>
-import { mdiDeleteForeverOutline } from '@mdi/js'
-
 export default {
   props: {
     assignmentId: {
-      type: String,
-      default: '',
-    },
-    groupId: {
       type: String,
       default: '',
     },
@@ -58,44 +51,21 @@ export default {
       loading: false,
     }
   },
-  created() {
-    this.$icons = {
-      mdiDeleteForeverOutline,
-    }
-  },
   methods: {
     async deleteAssignment() {
-      this.loading = true
       try {
-        const url = new URL(
-          '/.netlify/functions/deleteAssignment',
-          this.$config.baseURL
-        )
-        const response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            assignmentId: this.assignmentId,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error deleting assignment ${response.status}`)
-        }
-        // Update local data
-        this.$store.commit('groups/deleteAssignment', {
-          groupId: this.groupId,
-          assignmentId: this.assignmentId,
-        })
-        // If on assignment detail, go to /group/xxx, else stay put
+        this.loading = true
+        await this.$store.dispatch('user/deleteAssignment', this.assignmentId)
+        // If on assignment detail, go back to _group.vue
         if (this.$route.name !== 'group-group') {
           this.$router.push(`/group/${this.groupId}`)
         }
         this.$snack.showMessage({
-          msg: 'Assignment deleted',
           type: 'success',
+          msg: 'Assignment deleted',
         })
-      } catch (e) {
-        console.warn(e)
+      } catch (err) {
+        console.warn(err)
         this.$snack.showMessage({
           msg: 'Error deleting assignment',
           type: 'error',

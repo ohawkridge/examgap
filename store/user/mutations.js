@@ -25,15 +25,10 @@ export default {
       start: assignment.data.start,
     })
   },
-  deleteAssignment(state, { groupId, assignmentId }) {
-    const groupIndex = state.groups.findIndex((g) => g.id === groupId)
-    const assignments = state.groups[groupIndex].assignments
-    // Let's prefer splice for now to maintain reactivity
-    for (let i = 0; i < assignments.length; i++) {
-      if (assignments[i].id === assignmentId) {
-        assignments.splice(i, 1)
-      }
-    }
+  deleteAssignment(state, assignmentId) {
+    const assignments = state.groups[state.activeGroupIndex].assignments
+    const i = assignments.findIndex((a) => a.id === assignmentId)
+    assignments.splice(i, 1)
   },
   // New streamed assignment for student
   newAssignment(state, assignment) {

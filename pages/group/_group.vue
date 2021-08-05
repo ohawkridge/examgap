@@ -48,11 +48,7 @@
                         </v-btn>
                       </template>
                       <v-list>
-                        <delete-assignment
-                          v-if="group"
-                          :assignment-id="assignment.id"
-                          :group-id="group.id"
-                        />
+                        <delete-assignment :assignment-id="assignment.id" />
                       </v-list>
                     </v-menu>
                   </v-list-item-action>

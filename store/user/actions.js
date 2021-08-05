@@ -151,12 +151,33 @@ const actions = {
       }),
       method: 'POST',
     })
+    if (!response.ok) {
+      throw new Error(`Error updating group ${response.status}`)
+    }
     // Update local data
     commit('setNameAndCourse', {
       id: getters.activeGroup.id,
       name: groupName,
       course: await response.json(),
     })
+  },
+  async deleteAssignment({ commit, rootState }, assignmentId) {
+    const url = new URL(
+      '/.netlify/functions/deleteAssignment',
+      this.$config.baseURL
+    )
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        assignmentId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error deleting assignment ${response.status}`)
+    }
+    // Update local data
+    commit('deleteAssignment', assignmentId)
   },
   // Copy student(s) into another group by
   // creating new mappings in GroupStudent
