@@ -100,6 +100,7 @@
                       dense
                       type="error"
                       :icon="$icons.mdiAlertOutline"
+                      class="mt-2 mb-0"
                     >
                       Email already registered.
                       <nuxt-link to="/signin">Sign in</nuxt-link> instead

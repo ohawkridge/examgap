@@ -55,7 +55,6 @@ export default {
       state.school = data.school
       state.subscribed = data.subscribed
       state.subscriptionExpires = data.subscriptionExpires
-      console.log('mutation setUser is done')
     } else {
       // Student properties
       state.examMode = data.examMode

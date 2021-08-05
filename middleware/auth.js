@@ -7,9 +7,6 @@ export default function ({ redirect, store }) {
   }
   if (!store.state.app.loading && store.state.user.id === '') {
     console.log('%c' + 'You must be logged in', 'color:red')
-    console.log('\nDebug auth.js')
-    console.log(`loading`, store.state.app.loading)
-    console.log(`user id`, store.state.user.id)
     redirect('/signin')
   }
 }

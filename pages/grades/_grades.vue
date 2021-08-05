@@ -72,7 +72,10 @@
                   text
                 >
                   To enable colour-coding, enter targets on the
-                  <nuxt-link :to="`/students/${group ? group.id : ''}`">
+                  <nuxt-link
+                    :to="`/students/${group ? group.id : ''}`"
+                    class="text-decoration-none"
+                  >
                     Students</nuxt-link
                   >
                   screen.
