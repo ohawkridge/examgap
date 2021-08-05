@@ -12,7 +12,7 @@
                 <p class="text-h6">
                   <v-tooltip bottom>
                     <template #activator="{ on }">
-                      <v-btn icon @click="$router.go(-1)" v-on="on">
+                      <v-btn icon nuxt :to="`/groups/${group.id}`" v-on="on">
                         <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
                       </v-btn>
                     </template>

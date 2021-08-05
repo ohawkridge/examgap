@@ -374,14 +374,18 @@ export default {
           // Clear any previously selected questions
           this.$store.commit('topics/clearSelectedQuestions')
           // Update local data
-          this.$store.commit('groups/addAssignment', response)
+          this.$store.commit('user/addAssignment', response)
           this.$router.push(`/report/${response.ref['@ref'].id}`)
           this.$snack.showMessage({
             type: 'success',
             msg: 'Assignment created',
           })
-        } catch (e) {
-          console.error(e)
+        } catch (err) {
+          console.error(err)
+          this.$snack.showMessage({
+            type: 'error',
+            msg: 'Error creating assignment',
+          })
         } finally {
           this.loading = false
         }
