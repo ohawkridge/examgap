@@ -181,23 +181,26 @@ export const actions = {
     commit('setAssignment', await response.json())
   },
   async getReport({ commit, rootState, rootGetters }, assignmentId) {
-    const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
-    // Pre-fetch most-recent assignment?
-    if (assignmentId === -1) {
-      assignmentId = rootGetters['user/activeGroup'].assignments[0].id
+    const numAssignments = rootGetters['user/activeGroup'].assignments.length
+    if (numAssignments > 0) {
+      // Pre-fetch most-recent assignment?
+      if (assignmentId === -1) {
+        assignmentId = rootGetters['user/activeGroup'].assignments[0].id
+        console.log('%c' + `Prefetching ${assignmentId}`, 'color:purple')
+      }
+      const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
+      const response = await fetch(url, {
+        body: JSON.stringify({
+          secret: rootState.user.secret,
+          assignmentId,
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error(`Error fetching data ${response.status}`)
+      }
+      commit('setAssignment', await response.json())
     }
-    const response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        assignmentId,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error(`Error fetching data ${response.status}`)
-    }
-    commit('setAssignment', await response.json())
-    console.log('%c' + `Prefetched ${assignmentId}`, 'color:purple')
   },
   async getResponse({ commit, rootState }, responseId) {
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
