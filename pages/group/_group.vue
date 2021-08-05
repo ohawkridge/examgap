@@ -92,8 +92,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import { isEmpty, find } from 'lodash'
+import { mapGetters } from 'vuex'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
@@ -120,42 +119,29 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-    ...mapState({
-      // The last assignment data for _report.vue
-      // Used to check whether to pre-fetch again
-      assignment: (state) => state.assignment.assignment,
-    }),
     assignments() {
       return this.group.assignments
     },
   },
-  async created() {
+  created() {
     this.$icons = {
       mdiDotsVertical,
       mdiInformationOutline,
       mdiPlus,
       mdiTextBoxCheckOutline,
     }
-    // Pre-fetch most recent assignment for group if store
-    // is empty or stored assignment not for this group
-    const notSame = !find(this.assignments, ['id', this.assignment.id])
-    if ((isEmpty(this.assignment) || notSame) && this.assignments.length > 0) {
-      try {
-        console.log(
-          '%c' + 'Prefetch',
-          'padding:2px 4px;background-color:#464646;color:white;border-radius:3px'
-        )
-        await this.$store.dispatch('assignment/getReport', -1)
-      } catch (err) {
-        console.error(err)
-      }
-    }
   },
-  mounted() {
+  async mounted() {
+    // Pre-fetch most recent assignment
+    try {
+      await this.$store.dispatch('assignment/getReport', -1)
+    } catch (err) {
+      console.error(err)
+    }
     if (this.group.num_students === 0) {
       this.$store.commit('app/setOnboardStep', 2)
     }
-    // In case _report.vue crashes and we click back
+    // In case _report.vue crashes deactivate marking
     this.$store.commit('assignment/setMarking', false)
   },
   methods: {

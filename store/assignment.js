@@ -180,13 +180,10 @@ export const actions = {
     }
     commit('setAssignment', await response.json())
   },
-  // For teachers (_report.vue)
   async getReport({ commit, rootState, rootGetters }, assignmentId) {
     const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
-    // *Attempt pre-fetch*
-    // _group.vue sends -1 if no assignment cached yet
+    // Pre-fetch most-recent assignment?
     if (assignmentId === -1) {
-      // Select id of most recent assignment
       assignmentId = rootGetters['user/activeGroup'].assignments[0].id
     }
     const response = await fetch(url, {
@@ -200,7 +197,7 @@ export const actions = {
       throw new Error(`Error fetching data ${response.status}`)
     }
     commit('setAssignment', await response.json())
-    console.log('%c' + `Stored ${assignmentId}`, 'color:red;')
+    console.log('%c' + `Prefetched ${assignmentId}`, 'color:purple')
   },
   async getResponse({ commit, rootState }, responseId) {
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
