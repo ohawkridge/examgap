@@ -8,12 +8,11 @@ export const state = () => ({
 })
 
 export const getters = {
-  // For students, access count of questions answered for a topic
-  // getRevisionQuestionId uses this to get next question in sequence
+  // Get count of revision questions answered for a topic
   // topicId = '' until a revision topic is chosen
   topicCount: (state, getters, rootState) => {
     if (state.topicId === '' || rootState.user.teacher) return 0
-    return state.topics.find(({ id }) => id === state.topicId)
+    return state.topics.find(({ id }) => id === state.topicId).answered
   },
 }
 

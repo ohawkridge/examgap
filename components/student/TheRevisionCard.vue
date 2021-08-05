@@ -142,35 +142,14 @@ export default {
   },
   methods: {
     revise(topicId) {
-      // Remember topic id so we can increment
-      // the count of questions later
+      // Store topic id to increment count later
       this.$store.commit('topics/setTopicId', topicId)
       this.dialog = true
     },
     async start() {
       try {
         this.loading = true
-        const url = new URL(
-          '/.netlify/functions/getRevisionQuestionId',
-          this.$config.baseURL
-        )
-        let response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            topicId: this.$store.state.topics.topicId,
-            answered: this.$store.getters['topics/topicCount'],
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error getting questionId ${response.status}`)
-        }
-        response = await response.json()
-        // Store question info for later
-        this.$store.commit('assignment/setAnswerData', {
-          assignmentId: 0,
-          questionId: response,
-        })
+        await this.$store.dispatch('assignment/revise')
         this.$router.push(`/answer`)
       } catch (err) {
         console.error(err)

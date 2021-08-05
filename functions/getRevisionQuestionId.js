@@ -26,6 +26,7 @@ exports.handler = async (event) => {
     )
     const listOfIds = await keyedClient.query(qry)
     // Topic has no questions
+    // (should never get here)
     if (listOfIds.length === 0) {
       return { statusCode: 404 }
     }

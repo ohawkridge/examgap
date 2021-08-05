@@ -34,6 +34,30 @@ export const getters = {
 }
 
 export const actions = {
+  // Get next revision question for selected topic
+  async revise({ commit, rootState, rootGetters }) {
+    const url = new URL(
+      '/.netlify/functions/getRevisionQuestionId',
+      this.$config.baseURL
+    )
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        topicId: rootState.topics.topicId,
+        answered: rootGetters['topics/topicCount'],
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error getting questionId ${response.status}`)
+    }
+    response = await response.json()
+    // Store question info for later
+    commit('setAnswerData', {
+      assignmentId: '',
+      questionId: response,
+    })
+  },
   async saveAnswer({ commit, state, rootState, rootGetters }, text) {
     const url = new URL('/.netlify/functions/saveAnswer', this.$config.baseURL)
     let response = await fetch(url, {
