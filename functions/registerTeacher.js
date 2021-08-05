@@ -1,7 +1,7 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const username = data.username
   const school = data.school
@@ -34,6 +34,7 @@ exports.handler = async (event, context, callback) => {
       body: JSON.stringify(data),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

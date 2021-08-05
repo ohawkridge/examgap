@@ -2,7 +2,7 @@
   <v-app>
     <v-container class="d-flex align-center">
       <nuxt-link to="/">
-        <TheLogo />
+        <the-logo />
       </nuxt-link>
       <v-spacer />
       <span class="grey--text"
@@ -141,25 +141,10 @@ export default {
     }
   },
   methods: {
-    async getUser() {
-      const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          username: this.email,
-          password: this.pass1,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Invalid credentials! ${response.status}`)
-      }
-      response = await response.json()
-      return response
-    },
     async register() {
       if (this.$refs.form.validate()) {
-        this.loading = true
         try {
+          this.loading = true
           const url = new URL(
             '/.netlify/functions/registerTeacher',
             this.$config.baseURL
@@ -184,7 +169,7 @@ export default {
               '/.netlify/functions/sendEmailSignup',
               this.$config.baseURL
             )
-            fetch(url, {
+            const res1 = await fetch(url, {
               method: 'POST',
               mode: 'cors',
               credentials: 'same-origin',
@@ -197,12 +182,15 @@ export default {
                 school: response.data.school,
               }),
             })
+            if (!res1.ok) {
+              throw new Error(`Error sending email ${response.status}`)
+            }
             // Send welcome email
             const url2 = new URL(
               '/.netlify/functions/sendEmailWelcome',
               this.$config.baseURL
             )
-            fetch(url2, {
+            const res2 = await fetch(url2, {
               method: 'POST',
               mode: 'cors',
               credentials: 'same-origin',
@@ -211,13 +199,18 @@ export default {
               },
               body: JSON.stringify({ username: response.data.username }),
             })
+            if (!res2.ok) {
+              throw new Error(`Error sending email ${response.status}`)
+            }
             // Complete the login process
-            const res = await this.getUser()
-            this.$store.commit('user/setSecret', res.secret)
-            this.$router.push(res.teacher ? `/classes` : `/home`)
+            await this.$store.dispatch('user/getUser', {
+              username: this.email,
+              password: this.pass1,
+            })
+            this.$router.push(`/classes`)
           }
-        } catch (e) {
-          console.error(e)
+        } catch (err) {
+          console.error(err)
         } finally {
           this.$refs.form.resetValidation()
           this.loading = false

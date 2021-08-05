@@ -130,11 +130,11 @@ export default {
             password: this.pw,
             database,
           })
-          // Remember which database
+          // Remember which database (signin only)
           this.$store.commit('app/setDatabase', database)
           // Route to appropriate home page
           const isTeacher = this.$store.state.user.teacher
-          this.$router.push(isTeacher ? `/classes` : `/home`)
+          this.$router.push(isTeacher ? '/classes' : '/home')
         } catch (err) {
           console.log(err)
           this.failed = true

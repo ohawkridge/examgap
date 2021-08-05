@@ -20,7 +20,7 @@ const actions = {
   // Try to obtain user document with credentials
   async getUser(
     { state, getters, dispatch, commit },
-    { username, password, database }
+    { username, password, database = 'prod' }
   ) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
