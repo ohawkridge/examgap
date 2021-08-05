@@ -351,31 +351,16 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           this.loading = true
-          const url = new URL(
-            '/.netlify/functions/createAssignment',
-            this.$config.baseURL
-          )
-          let response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.secret,
-              name: this.name,
-              start: this.startDate,
-              end: this.endDate,
-              group: this.group.id,
-              students: this.selectedStudents,
-              questions: this.questions,
-            }),
-            method: 'POST',
+          await this.$store.dispatch('user/createAssignment', {
+            secret: this.secret,
+            name: this.name,
+            start: this.startDate,
+            end: this.endDate,
+            group: this.group.id,
+            students: this.selectedStudents,
+            questions: this.questions,
           })
-          if (!response.ok) {
-            throw new Error(`Error creating assignment ${response.status}`)
-          }
-          response = await response.json()
-          // Clear any previously selected questions
-          this.$store.commit('topics/clearSelectedQuestions')
-          // Update local data
-          this.$store.commit('user/addAssignment', response)
-          this.$router.push(`/report/${response.ref['@ref'].id}`)
+          this.$router.push(`/report/${this.group.assignments[0].id}`)
           this.$snack.showMessage({
             type: 'success',
             msg: 'Assignment created',

@@ -15,9 +15,8 @@ export default {
     const i = state.groups.findIndex((g) => g.id === groupId)
     state.groups[i].num_students += n
   },
-  // Teacher creates a new assignment
   addAssignment(state, assignment) {
-    // Add assignment to front of assignments array
+    // Add assignment to *front* of assignments array
     state.groups[state.activeGroupIndex].assignments.unshift({
       dateDue: assignment.data.dateDue,
       id: assignment.ref['@ref'].id,

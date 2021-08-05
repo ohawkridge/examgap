@@ -161,6 +161,23 @@ const actions = {
       course: await response.json(),
     })
   },
+  async createAssignment({ commit }, obj) {
+    const url = new URL(
+      '/.netlify/functions/createAssignment',
+      this.$config.baseURL
+    )
+    let response = await fetch(url, {
+      body: JSON.stringify(obj),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error creating assignment ${response.status}`)
+    }
+    response = await response.json()
+    // Clear any previously selected questions
+    commit('topics/clearSelectedQuestions', null, { root: true })
+    commit('addAssignment', response)
+  },
   async deleteAssignment({ commit, rootState }, assignmentId) {
     const url = new URL(
       '/.netlify/functions/deleteAssignment',
