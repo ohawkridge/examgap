@@ -138,7 +138,6 @@ export default {
 }
 
 .div {
-  /* border-bottom: 1px solid #e3dede; */
   border-bottom: 1px solid #cccccc;
 }
 </style>
