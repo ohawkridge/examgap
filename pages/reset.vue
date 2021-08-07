@@ -2,10 +2,10 @@
   <v-app>
     <v-container class="d-flex align-center">
       <nuxt-link to="/">
-        <TheLogo />
+        <the-logo />
       </nuxt-link>
       <v-spacer />
-      <nuxt-link to="/signin">Sign In</nuxt-link>
+      <nuxt-link to="/signin" class="text-decoration-none">Sign In</nuxt-link>
     </v-container>
     <v-container class="fill-height">
       <v-row class="d-flex justify-center">
@@ -85,7 +85,8 @@ export default {
       userRules: [
         (v) => !!v || 'Email is required',
         (v) => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(v) || 'Invalid e-mail.'
         },
       ],
@@ -105,7 +106,6 @@ export default {
   methods: {
     async reset() {
       if (this.$refs.form.validate()) {
-        console.log(`reset()`)
         try {
           this.loading = true
           const url = new URL(

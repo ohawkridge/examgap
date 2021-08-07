@@ -11,65 +11,72 @@ exports.handler = async (event) => {
     secret: process.env.SECRET_KEY,
   })
   try {
-    // Create new student account (if not already exists)
-    let qry = q.If(
-      q.Exists(q.Match(q.Index('user_by_username'), username)),
-      false,
-      q.Create(q.Collection('User'), {
-        data: {
-          username: q.LowerCase(username),
-          created: q.Now(),
-          teacher: false,
-          examMode: true,
-        },
-        credentials: {
-          password,
-        },
-      })
-    )
-    const newUser = await keyedClient.query(qry)
-    if (newUser !== false) {
-      qry = q.Exists(q.Match(q.Index('group_by_code'), code))
-      const groupExists = await keyedClient.query(qry)
-      // Need group in order to add student and assignment mappings
-      if (groupExists && code !== '') {
-        qry = q.Do(
+    const qry = q.Let(
+      {
+        // Create new student user doc (if not already exists)
+        student: q.If(
+          q.Exists(q.Match(q.Index('user_by_username'), username)),
+          false,
+          q.Create(q.Collection('User'), {
+            data: {
+              username: q.LowerCase(username),
+              created: q.Now(),
+              teacher: false,
+              examMode: true,
+            },
+            credentials: {
+              password,
+            },
+          })
+        ),
+        // Get group with code if exists
+        group: q.If(
+          q.Exists(q.Match(q.Index('group_by_code'), code)),
+          q.Select('ref', q.Get(q.Match(q.Index('group_by_code'), code))),
+          false
+        ),
+      },
+      {
+        group: q.If(
+          q.And(
+            q.Not(q.Equals(q.Var('student'), false)),
+            q.Not(q.Equals(q.Var('group'), false))
+          ),
+          // Add student to group
           q.Create(q.Collection('GroupStudent'), {
             data: {
-              student: newUser.ref,
-              group: q.Select(
-                'ref',
-                q.Get(q.Match(q.Index('group_by_code'), code))
-              ),
+              student: q.Select('ref', q.Var('student')),
+              group: q.Select('ref'),
             },
-          }),
-          q.Foreach(
-            q.Paginate(
-              q.Match(
-                q.Index('group_assignments'),
-                q.Select('ref', q.Get(q.Match(q.Index('group_by_code'), code)))
-              ),
-              {
-                size: 999,
-              }
+          })
+        ),
+        assignments: q.Map(
+          q.Paginate(
+            q.Match(
+              q.Index('group_assignments'),
+              q.Select('ref', q.Get(q.Match(q.Index('group_by_code'), code)))
             ),
-            q.Lambda(
-              'ref',
-              q.Create(q.Collection('AssignmentStudent'), {
-                data: {
-                  assignment: q.Var('ref'),
-                  student: newUser.ref,
-                },
-              })
-            )
+            {
+              size: 999,
+            }
+          ),
+          q.Lambda(
+            'ref',
+            q.Create(q.Collection('AssignmentStudent'), {
+              data: {
+                assignment: q.Var('ref'),
+                student: q.Select('ref', q.Var('student')),
+              },
+            })
           )
-        )
+        ),
       }
-      await keyedClient.query(qry)
-    }
+    )
+    const data = await keyedClient.query(qry)
+    console.log(data)
     return {
       statusCode: 200,
-      body: JSON.stringify(newUser),
+      body: JSON.stringify(data),
     }
   } catch (err) {
     console.error(err.description)

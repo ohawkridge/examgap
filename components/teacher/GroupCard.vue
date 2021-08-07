@@ -10,7 +10,7 @@
         </v-card-subtitle>
         <v-card-text class="d-flex align-end fix-height">
           <v-chip label color="primary" outlined small>
-            {{ group.num_students }} student{{ group.num_students | pluralize }}
+            {{ group.count }} student{{ group.count | pluralize }}
           </v-chip>
         </v-card-text>
       </v-card>

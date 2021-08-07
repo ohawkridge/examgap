@@ -45,11 +45,11 @@ export default {
   },
   mounted() {
     // Onboard -> no students
-    if (this.group.num_students === 0) {
+    if (this.group.count === 0) {
       this.$store.commit('app/setOnboardStep', 2)
     }
     // Onboard -> few assignments
-    if (this.group.num_students > 0 && this.group.assignments.length < 3) {
+    if (this.group.count > 0 && this.group.assignments.length < 3) {
       this.$store.commit('app/setOnboardStep', 3)
     }
   },

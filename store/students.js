@@ -3,7 +3,10 @@ export const state = () => ({
 })
 
 export const actions = {
-  async addStudents({ rootState, commit, dispatch }, { usernames, groupId }) {
+  async addStudents(
+    { rootState, commit, rootGetters, dispatch },
+    { usernames, groupId }
+  ) {
     const url = new URL('/.netlify/functions/addStudents', this.$config.baseURL)
     const response = await fetch(url, {
       body: JSON.stringify({
@@ -16,8 +19,9 @@ export const actions = {
     if (!response.ok) {
       throw new Error(`Error adding students ${response.status}`)
     }
-    // Update num_students on group
-    commit('user/setCount', { groupId, n: usernames.length }, { root: true })
+    // Update count on group
+    const count = rootGetters['user/activeGroup'].count + usernames.length
+    commit('user/setCount', { groupId, count }, { root: true })
     // Refetch student data
     // (too complicated to insert new students)
     await dispatch('getStudents')
@@ -58,6 +62,12 @@ export const actions = {
       throw new Error(`Error getting students`)
     }
     response = await response.json()
+    // This data might be fresher (group count set at login)
+    // If so, update the student count for this group
+    const count = response.length
+    if (count !== rootGetters['user/activeGroup'].count) {
+      commit('user/setCount', { groupId, count }, { root: true })
+    }
     commit('setStudents', response)
   },
   async saveTarget({ commit, rootState }, { target, groupId, studentId }) {
@@ -77,7 +87,10 @@ export const actions = {
     // Update local store
     commit('setTarget', { target, groupId, studentId })
   },
-  async removeStudents({ commit, rootState }, { groupId, studentIds }) {
+  async removeStudents(
+    { commit, rootState, rootGetters },
+    { groupId, studentIds }
+  ) {
     const url = new URL(
       '/.netlify/functions/removeGroupStudent',
       this.$config.baseURL
@@ -94,6 +107,9 @@ export const actions = {
       throw new Error(`Error removing student(s) ${response.status}`)
     }
     commit('removeStudents', studentIds)
+    // Remove students from group count
+    const count = rootGetters['user/activeGroup'].count - studentIds.length
+    commit('user/setCount', { groupId, count }, { root: true })
   },
 }
 

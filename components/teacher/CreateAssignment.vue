@@ -290,7 +290,7 @@ export default {
       this.dialog = true
     })
     // If group has no students, skip step 1
-    if (this.group.num_students === 0) {
+    if (this.group.count === 0) {
       this.step = 2
     }
   },

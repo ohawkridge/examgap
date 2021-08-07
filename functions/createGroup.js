@@ -40,7 +40,7 @@ exports.handler = async (event, context, callback) => {
         name: q.Select(['data', 'name'], q.Var('instance')),
         active: q.Select(['data', 'active'], q.Var('instance')),
         code: q.Select(['data', 'code'], q.Var('instance')),
-        num_students: 0,
+        count: 0,
         course: q.Let(
           {
             instance: q.Get(q.Select(['data', 'course'], q.Var('instance'))),

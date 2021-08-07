@@ -5,7 +5,7 @@
         <the-logo />
       </nuxt-link>
       <v-spacer />
-      <nuxt-link to="/">Back home</nuxt-link>
+      <nuxt-link to="/" class="text-decoration-none">Back home</nuxt-link>
     </v-container>
     <v-container class="fill-height">
       <v-row class="d-flex justify-center">
@@ -103,7 +103,10 @@
                       class="mt-2 mb-0"
                     >
                       Email already registered.
-                      <nuxt-link to="/signin">Sign in</nuxt-link> instead
+                      <nuxt-link to="/signin" class="text-decoration-none"
+                        >Sign in</nuxt-link
+                      >
+                      instead
                     </v-alert>
                   </v-card-text>
                 </v-window-item>
@@ -149,14 +152,15 @@ export default {
   },
   data() {
     return {
-      emailRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => {
-          const pattern =
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          return pattern.test(v) || 'Invalid e-mail.'
-        },
-      ],
+      emailRules: [(v) => true],
+      // emailRules: [
+      //   (v) => !!v || 'E-mail is required',
+      //   (v) => {
+      //     const pattern =
+      //       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      //     return pattern.test(v) || 'Invalid e-mail.'
+      //   },
+      // ],
       passwordRules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 4) || 'Password must be at least 4 characters',
@@ -194,7 +198,10 @@ export default {
   },
   mounted() {
     // Get code from query string
-    if (this.$route.query.code) this.code = this.$route.query.code
+    if (this.$route.query.code) {
+      this.code = this.$route.query.code
+      this.step = 2
+    }
   },
   methods: {
     next() {
@@ -214,8 +221,8 @@ export default {
     },
     async signup() {
       if (this.step === 2 && this.$refs.form.validate()) {
-        this.loading = true
         try {
+          this.loading = true
           const url = new URL(
             '/.netlify/functions/registerStudent',
             this.$config.baseURL
@@ -232,6 +239,7 @@ export default {
             throw new Error(`Error signing up ${response.status}`)
           }
           response = await response.json()
+          console.log(response)
           if (response === false) {
             this.emailInUse = true
           } else {

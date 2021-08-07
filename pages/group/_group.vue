@@ -138,7 +138,7 @@ export default {
     } catch (err) {
       console.error(err)
     }
-    if (this.group.num_students === 0) {
+    if (this.group.count === 0) {
       this.$store.commit('app/setOnboardStep', 2)
     }
     // In case _report.vue crashes deactivate marking

@@ -216,7 +216,7 @@ const actions = {
         `Error copying students \n ${response.statusText} (${response.status})`
       )
     }
-    // Commit mutation to update num_students on new group
+    // Commit mutation to update count on new group
     // so, for example, counts are correct on classes.vue
     commit('setCount', {
       groupId,
