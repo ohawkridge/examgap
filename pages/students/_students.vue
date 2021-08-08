@@ -6,78 +6,109 @@
       <group-nav />
       <v-col cols="12" md="9">
         <v-card class="mt-n6 mt-sm-0">
-          <v-card-title class="d-flex justify-space-between">
-            <div>
-              <v-icon class="mr-2">
-                {{ $icons.mdiAccountGroupOutline }}
-              </v-icon>
-              Student{{ students.length | pluralize }} ({{ students.length }})
-            </div>
-            <div>
-              <v-menu offset-y open-on-hover>
-                <template #activator="{ on }">
-                  <v-btn class="mr-2" elevation="0" v-on="on"
-                    >Students<v-icon right>{{
-                      $icons.mdiChevronDown
-                    }}</v-icon></v-btn
-                  >
-                </template>
-                <v-list>
-                  <v-list-item
-                    :disabled="selected.length === 0"
-                    @click="reset()"
-                  >
-                    <v-list-item-title>
-                      Reset password{{ selected.length | pluralize }}
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="$nuxt.$emit('open-add')">
-                    <v-list-item-title>Add students</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item
-                    :disabled="selected.length === 0"
-                    @click="$nuxt.$emit('open-remove')"
-                  >
-                    <v-list-item-title>
-                      Remove student{{ selected.length | pluralize }}
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item
-                    :disabled="selected.length === 0"
-                    @click="$nuxt.$emit('open-copy')"
-                  >
-                    <v-list-item-title>
-                      Copy student{{ selected.length | pluralize }}
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    nuxt
-                    :to="`/students/logins/${group.id}`"
-                    class="mr-2"
-                    elevation="0"
-                    v-on="on"
-                  >
-                    Logins
-                  </v-btn>
-                </template>
-                <span>Print logins</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn elevation="0" @click="exportTableToCSV()" v-on="on">
-                    Csv
-                    <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
-                  </v-btn>
-                </template>
-                <span>Download as csv</span>
-              </v-tooltip>
-            </div>
-          </v-card-title>
           <v-container>
+            <v-row>
+              <v-col cols="12" md="4" class="pa-4">
+                <v-icon class="mr-2">
+                  {{ $icons.mdiAccountGroupOutline }}
+                </v-icon>
+                <span class="text-h6 black--text">
+                  Student{{ students.length | pluralize }} ({{
+                    students.length
+                  }})
+                </span>
+              </v-col>
+              <v-col cols="12" md="8" class="d-md-flex justify-end pa-4">
+                <v-menu offset-y open-on-hover>
+                  <template #activator="{ on }">
+                    <v-btn
+                      class="mr-2"
+                      elevation="0"
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      v-on="on"
+                      >Students<v-icon right>{{
+                        $icons.mdiChevronDown
+                      }}</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="reset()"
+                    >
+                      <v-list-item-title>
+                        Reset password{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="$nuxt.$emit('open-add')">
+                      <v-list-item-title>Add students</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="$nuxt.$emit('open-remove')"
+                    >
+                      <v-list-item-title>
+                        Remove student{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="$nuxt.$emit('open-copy')"
+                    >
+                      <v-list-item-title>
+                        Copy student{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      nuxt
+                      :to="`/students/logins/${group.id}`"
+                      class="mr-2"
+                      :class="xsBtns"
+                      elevation="0"
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      v-on="on"
+                    >
+                      Logins
+                    </v-btn>
+                  </template>
+                  <span>Print logins</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      elevation="0"
+                      class="mr-2"
+                      :class="xsBtns"
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      @click="exportTableToCSV()"
+                      v-on="on"
+                    >
+                      Csv
+                      <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Download as csv</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      elevation="0"
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      :class="xsBtns"
+                      @click="$fetch()"
+                      v-on="on"
+                    >
+                      Refresh
+                    </v-btn>
+                  </template>
+                  <span>Refresh data</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
             <v-row>
               <v-col cols="12">
                 <v-data-table
@@ -152,6 +183,8 @@ import {
   mdiChevronDown,
   mdiDownloadOutline,
   mdiAccountGroupOutline,
+  mdiTextBoxOutline,
+  mdiRefresh,
 } from '@mdi/js'
 import GroupNav from '@/components/teacher/GroupNav'
 import GroupHeader from '@/components/teacher/GroupHeader'
@@ -174,7 +207,6 @@ export default {
     return {
       selected: [],
       targetRules: [(v) => v.length === 1 || 'Max. one character'],
-      polling: null,
       headers: [
         {
           text: 'Username',
@@ -225,26 +257,20 @@ export default {
     ...mapState({
       students: (state) => state.students.students,
     }),
-  },
-  beforeDestroy() {
-    clearInterval(this.polling)
+    xsBtns() {
+      return this.$vuetify.breakpoint.name === 'xs' ? 'mt-2' : ''
+    },
   },
   created() {
     this.$icons = {
       mdiChevronDown,
       mdiDownloadOutline,
       mdiAccountGroupOutline,
+      mdiTextBoxOutline,
+      mdiRefresh,
     }
-    // Start polling
-    this.pollData()
   },
   methods: {
-    pollData() {
-      this.polling = setInterval(() => {
-        console.log('fetching new data..')
-        this.$fetch()
-      }, 10000)
-    },
     async save(studentId, target) {
       // For iMedia allow 2 characters, for everyone else just
       // take the first character even if the input is longer
