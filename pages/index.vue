@@ -184,8 +184,8 @@
         >
           <div>
             <p class="text-h6 text-center">
-              "Students found Examgap really helped strucure answers. Immediate
-              feedback, combined with comparing self assessment to the teacher's
+              "Students found Examgap really helped structure answers. Immediate
+              feedback, combined with comparing self-assessment to the teacher's
               assessment allowed students to identify mistakes when writing
               answers."
             </p>

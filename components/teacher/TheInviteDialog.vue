@@ -45,7 +45,9 @@
         </p>
         <p class="mb-0">
           On the
-          <nuxt-link :to="`/students/${group.id}`">Students</nuxt-link>
+          <nuxt-link :to="`/students/${group.id}`" class="text-decoration-none"
+            >Students</nuxt-link
+          >
           screen, click Students, Add students.
         </p>
       </v-card-text>

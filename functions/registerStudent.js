@@ -37,42 +37,43 @@ exports.handler = async (event) => {
         ),
       },
       {
-        group: q.If(
+        output: q.If(
+          // Created account and valid code?
           q.And(
             q.Not(q.Equals(q.Var('student'), false)),
             q.Not(q.Equals(q.Var('group'), false))
           ),
-          // Add student to group
-          q.Create(q.Collection('GroupStudent'), {
-            data: {
-              student: q.Select('ref', q.Var('student')),
-              group: q.Select('ref'),
-            },
-          })
-        ),
-        assignments: q.Map(
-          q.Paginate(
-            q.Match(
-              q.Index('group_assignments'),
-              q.Select('ref', q.Get(q.Match(q.Index('group_by_code'), code)))
-            ),
-            {
-              size: 999,
-            }
-          ),
-          q.Lambda(
-            'ref',
-            q.Create(q.Collection('AssignmentStudent'), {
+          q.Do(
+            // Add student to group
+            q.Create(q.Collection('GroupStudent'), {
               data: {
-                assignment: q.Var('ref'),
                 student: q.Select('ref', q.Var('student')),
+                group: q.Var('group'),
               },
-            })
-          )
+            }),
+            // Map existing assignments onto new student
+            q.Map(
+              q.Paginate(
+                q.Match(q.Index('group_assignments'), q.Var('group')),
+                { size: 999 }
+              ),
+              q.Lambda(
+                'ref',
+                q.Create(q.Collection('AssignmentStudent'), {
+                  data: {
+                    assignment: q.Var('ref'),
+                    student: q.Select('ref', q.Var('student')),
+                  },
+                })
+              )
+            )
+          ),
+          false
         ),
       }
     )
     const data = await keyedClient.query(qry)
+    console.log('-> registerStudent()')
     console.log(data)
     return {
       statusCode: 200,

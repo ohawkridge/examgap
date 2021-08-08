@@ -98,10 +98,6 @@ exports.handler = async (event) => {
                   ),
                   q.Lambda(
                     'ref',
-                    // q.Merge(
-                    //   { id: q.Select('id', q.Var('ref')) },
-                    //   q.Select('data', q.Get(q.Var('ref')))
-                    // )
                     q.Let(
                       {
                         instance: q.Get(q.Var('ref')), // Assignment
@@ -183,6 +179,7 @@ exports.handler = async (event) => {
       )
     )
     const data = await keyedClient.query(qry)
+    // console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

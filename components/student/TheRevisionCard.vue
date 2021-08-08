@@ -101,13 +101,6 @@ import { mdiTimerOutline, mdiBullseyeArrow } from '@mdi/js'
 
 export default {
   name: 'TheRevisionCard',
-  props: {
-    // $fetchState from home.vue
-    fetching: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
       dialog: false,
@@ -120,6 +113,7 @@ export default {
   computed: {
     ...mapState({
       topics: (state) => state.topics.topics,
+      loading: (state) => state.app.loading,
     }),
     // N.B. This is only tracked locally
     revisionExamMode: {

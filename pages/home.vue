@@ -2,25 +2,27 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <v-skeleton-loader :loading="loading" type="heading">
+        <v-skeleton-loader v-if="loading" :loading="true" type="heading">
+        </v-skeleton-loader>
+        <v-skeleton-loader
+          v-if="loading"
+          :loading="true"
+          type="text"
+          width="50%"
+        >
+        </v-skeleton-loader>
+        <template v-else>
           <div class="text-h6 font-weight-black">
-            {{ loading ? 'Loading' : group.name }}
+            {{ group.name }}
           </div>
-        </v-skeleton-loader>
-        <v-skeleton-loader :loading="loading" type="text" width="50%">
-          <!-- skeleton-loader buggy if v-if on div -->
-          <div>
-            {{
-              loading ? '...' : `${group.course.name} (${group.course.board})`
-            }}
-          </div>
-        </v-skeleton-loader>
+          <div>{{ group.course.name }} ({{ group.course.board }})</div>
+        </template>
       </v-col>
     </v-row>
     <divider-row />
     <v-row>
       <v-col cols="12" md="7">
-        <the-assignments-card :fetching="loading" />
+        <the-assignments-card />
       </v-col>
       <v-col cols="12" md="5">
         <v-row>
@@ -30,7 +32,7 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <the-revision-card :fetching="loading" />
+            <the-revision-card />
           </v-col>
         </v-row>
       </v-col>
@@ -65,15 +67,6 @@ export default {
     ...mapState({
       loading: (state) => state.app.loading,
     }),
-  },
-  methods: {
-    // Remember revision topic
-    revise(topic) {
-      this.$store.commit('topics/setTopicId', topic.id)
-      // Event bus using Nuxt
-      // https://aneesshameed.medium.com/event-bus-in-nuxt-7728315e81b6
-      this.$nuxt.$emit('show-revise')
-    },
   },
 }
 </script>

@@ -174,6 +174,7 @@ export default {
     return {
       selected: [],
       targetRules: [(v) => v.length === 1 || 'Max. one character'],
+      polling: null,
       headers: [
         {
           text: 'Username',
@@ -225,14 +226,25 @@ export default {
       students: (state) => state.students.students,
     }),
   },
+  beforeDestroy() {
+    clearInterval(this.polling)
+  },
   created() {
     this.$icons = {
       mdiChevronDown,
       mdiDownloadOutline,
       mdiAccountGroupOutline,
     }
+    // Start polling
+    this.pollData()
   },
   methods: {
+    pollData() {
+      this.polling = setInterval(() => {
+        console.log('fetching new data..')
+        this.$fetch()
+      }, 10000)
+    },
     async save(studentId, target) {
       // For iMedia allow 2 characters, for everyone else just
       // take the first character even if the input is longer
