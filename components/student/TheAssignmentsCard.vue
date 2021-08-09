@@ -37,7 +37,7 @@
         <template v-for="(assignment, i) in assignments" v-else>
           <v-list-item
             :key="i"
-            class="px-0 px-md-3"
+            class="px-0 px-md-3 my-2"
             nuxt
             :to="`/assignment/${assignment.id}`"
           >
@@ -70,11 +70,6 @@
               </v-icon>
             </v-list-item-action>
           </v-list-item>
-          <v-divider
-            v-if="i < assignments.length - 1"
-            :key="i + 999"
-            class="my-2 mx-0 mx-sm-3"
-          />
         </template>
       </v-list>
     </v-card-text>

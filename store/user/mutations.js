@@ -27,6 +27,7 @@ export default {
     const i = assignments.findIndex((a) => a.id === assignmentId)
     assignments.splice(i, 1)
   },
+  // TODO Won't need?
   // New streamed assignment for student
   newAssignment(state, assignment) {
     // Find index of group assignment is for

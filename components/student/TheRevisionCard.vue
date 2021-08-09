@@ -3,10 +3,10 @@
     <v-card>
       <v-card-title> Revision topics ({{ topics.length }}) </v-card-title>
       <v-card-text>
-        <template v-if="fetching" elevation="2" class="pa-4">
+        <template v-if="loading" elevation="2" class="pa-4">
           <v-skeleton-loader
             v-bind="attrs"
-            :loading="fetching"
+            :loading="loading"
             width="200%"
             type="heading"
           >
@@ -14,7 +14,7 @@
           <v-skeleton-loader
             v-for="n in 8"
             :key="n"
-            :loading="fetching"
+            :loading="loading"
             type="text"
             v-bind="attrs"
           >
@@ -104,7 +104,6 @@ export default {
   data() {
     return {
       dialog: false,
-      loading: false,
       attrs: {
         class: 'mb-8',
       },

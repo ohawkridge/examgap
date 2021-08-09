@@ -1,7 +1,3 @@
-import FaunaStream from '~/fauna/faunaStream'
-const faunadb = require('faunadb')
-const q = faunadb.query
-
 const actions = {
   async getQuote({ commit, rootState }) {
     const url = new URL('/.netlify/functions/getQuote', this.$config.baseURL)
@@ -40,9 +36,8 @@ const actions = {
     }
     response = await response.json()
     commit('setUser', response)
-    // Compose actions. getUser -> dispatches getGroups
     await dispatch('getGroups')
-    // For students, get revision topics
+    // For students only, get revision topics
     if (!state.teacher) {
       const courseId = getters.activeGroup.course.id
       await dispatch('topics/getTopics', courseId, { root: true })
@@ -69,21 +64,7 @@ const actions = {
       commit('app/setOnboardStep', 1, { root: true })
     }
   },
-  // For students, stream user document
-  openStream({ state, commit, dispatch }, { id }) {
-    const keyedClient = new faunadb.Client({
-      secret: state.secret,
-    })
-    // Create a Fauna stream object
-    const fso = new FaunaStream(
-      keyedClient,
-      q.Ref(q.Collection('User'), id),
-      commit,
-      dispatch
-    )
-    fso.initStream()
-    // TODO Destroy on logout
-  },
+  // TODO Won't need?
   // For students, get new streamed assignment
   async getAssignment({ commit, rootState }, assignmentId) {
     const url = new URL(

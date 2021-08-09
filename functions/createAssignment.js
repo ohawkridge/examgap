@@ -43,6 +43,7 @@ exports.handler = async (event) => {
                   student: q.Ref(q.Collection('User'), q.Var('id')),
                 },
               }),
+              // TODO Won't need this?
               // Update student's user doc with the new assignment id
               // (Document streaming watches this for new assignments)
               q.Update(q.Ref(q.Collection('User'), q.Var('id')), {
