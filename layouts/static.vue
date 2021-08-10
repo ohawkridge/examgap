@@ -5,17 +5,14 @@
         <v-col cols="12" class="d-flex justify-space-between">
           <div class="d-flex">
             <nuxt-link to="/">
-              <TheLogo />
+              <the-logo />
             </nuxt-link>
-            <v-btn text class="ml-8 d-none d-sm-flex" nuxt to="/pricing"
+            <v-btn text class="ml-8 d-none d-sm-flex" nuxt to="/pricing" rounded
               >Pricing</v-btn
-            >
-            <v-btn text class="ml-2 d-none d-sm-flex" nuxt to="/#how"
-              >How it works</v-btn
             >
           </div>
           <div class="d-flex">
-            <v-btn nuxt to="/signin" rounded outlined>
+            <v-btn nuxt to="/signin" rounded text>
               Your Account
               <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
             </v-btn>

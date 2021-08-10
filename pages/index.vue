@@ -3,7 +3,7 @@
     <v-container>
       <v-row class="d-flex justify-center">
         <v-col cols="12" class="text-center">
-          <p id="hero-text" class="text-h4 text-md-h2 mb-0">
+          <p id="hero-text" class="text-h4 text-md-h1 mb-0 font-weight-black">
             Improve your Computer Science results.
           </p>
         </v-col>
@@ -14,17 +14,24 @@
             <span class="highlight">written answer</span> exam questions.
           </p>
           <div class="d-flex justify-center">
-            <v-btn x-large color="primary" elevation="0" nuxt to="/trial">
+            <v-btn
+              x-large
+              color="primary"
+              rounded
+              elevation="0"
+              nuxt
+              to="/trial"
+            >
               Get a 30-day free trial
             </v-btn>
           </div>
           <div class="d-flex justify-center mt-4">
             <small>
-              <v-icon small color="secondary">{{
+              <v-icon small color="accent">{{
                 $icons.mdiCheckboxMarkedCircleOutline
               }}</v-icon>
               No payment info
-              <v-icon small color="secondary" class="ml-2">{{
+              <v-icon small color="accent" class="ml-2">{{
                 $icons.mdiCheckboxMarkedCircleOutline
               }}</v-icon>
               Set up in minutes
@@ -802,7 +809,6 @@ export default {
 <style scoped>
 /* --------- Hero --------- */
 #hero-text {
-  font-weight: 900;
   line-height: 1.25em;
   padding-top: 0.6em;
 }
@@ -811,6 +817,7 @@ export default {
 @media only screen and (min-width: 960px) {
   #hero-text {
     padding-top: 1em;
+    font-size: 4.5em !important;
   }
 }
 

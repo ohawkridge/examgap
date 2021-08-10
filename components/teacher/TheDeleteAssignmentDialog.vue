@@ -6,29 +6,34 @@
           <v-list-item-title class="red--text"> Delete </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-btn v-else text @click="dialog = true"> Delete </v-btn>
+      <v-btn v-else text rounded color="red" @click="dialog = true">
+        Delete
+      </v-btn>
     </template>
-    <v-card class="modal danger">
+    <v-card>
       <v-card-title class="d-flex justify-center">
         Delete assignment?
       </v-card-title>
       <v-card-text>
-        Are you sure? This assignment and all the responses that go with it will
-        be deleted. This action <em>cannot</em> be undone.
+        <p>
+          This assignment and all the responses that go with it will be deleted.
+          This action <em>cannot</em> be undone.
+        </p>
+        <div class="d-flex justify-end">
+          <v-btn text rounded @click="dialog = false">Cancel</v-btn>
+          <v-btn
+            color="error"
+            elevation="0"
+            rounded
+            :loading="loading"
+            :disabled="loading"
+            class="ml-2"
+            @click="deleteAssignment()"
+          >
+            Delete Assignment</v-btn
+          >
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="dialog = false">Cancel</v-btn>
-        <v-btn
-          color="error"
-          elevation="0"
-          :loading="loading"
-          :disabled="loading"
-          @click="deleteAssignment()"
-        >
-          Delete Assignment</v-btn
-        >
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>

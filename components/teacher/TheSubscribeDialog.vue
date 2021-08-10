@@ -1,11 +1,11 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
     <template #activator="{ on }">
-      <v-btn color="primary" block elevation="0" v-on="on">
+      <v-btn color="primary" block rounded elevation="0" v-on="on">
         {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
       </v-btn>
     </template>
-    <v-card class="modal">
+    <v-card>
       <v-card-title class="d-flex justify-center"
         >Subscribe to Examgap</v-card-title
       >
@@ -36,20 +36,21 @@
             <div>A Level Computer Science—<strong>£129</strong></div>
           </template>
         </v-checkbox> -->
+        <div class="d-flex justify-end">
+          <v-btn text rounded @click="dialog = false">Cancel</v-btn>
+          <v-btn
+            color="primary"
+            elevation="0"
+            :loading="loading"
+            :disabled="loading"
+            rounded
+            class="ml-2"
+            @click="request()"
+          >
+            Request invoice
+          </v-btn>
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="dialog = false">Cancel</v-btn>
-        <v-btn
-          color="primary"
-          elevation="0"
-          :loading="loading"
-          :disabled="loading"
-          @click="request()"
-        >
-          Request invoice
-        </v-btn>
-      </v-card-actions>
     </v-card>
     <the-success-dialog :title="title" :subtitle="subtitle" />
   </v-dialog>
@@ -100,8 +101,8 @@ export default {
           }),
         })
         this.$nuxt.$emit('show-success')
-      } catch (e) {
-        console.log(e)
+      } catch (err) {
+        console.log(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error sending request',

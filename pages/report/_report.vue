@@ -1,142 +1,120 @@
 <template>
-  <div>
-    <group-header />
-    <divider-row />
+  <div class="pa-3">
     <v-row>
-      <group-nav />
-      <v-col cols="12" md="9">
-        <v-card class="mt-n6 mt-sm-0">
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" md="10">
-                <p class="text-h6">
-                  <v-tooltip bottom>
-                    <template #activator="{ on }">
-                      <v-btn icon nuxt :to="`/group/${group.id}`" v-on="on">
-                        <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
-                      </v-btn>
+      <v-col cols="12" md="10">
+        <p class="text-h6">
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                icon
+                class="mr-2"
+                nuxt
+                :to="`/group/${group.id}`"
+                v-on="on"
+              >
+                <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+              </v-btn>
+            </template>
+            <span>Back</span>
+          </v-tooltip>
+          {{ $fetchState.pending ? 'Loading...' : assignment.name }}
+        </p>
+        <div>
+          <span class="fix-width">Start:</span>
+          {{ $fetchState.pending ? '2021-00-00' : assignment.start | date }}
+          <span class="fix-width">Due:</span>
+          {{ $fetchState.pending ? '2021-00-00' : assignment.dateDue | date }}
+        </div>
+      </v-col>
+      <v-col cols="12" md="2" class="d-flex justify-end">
+        <the-delete-assignment-dialog
+          v-if="!$fetchState.pending && group"
+          :assignment-id="assignment.id"
+          :group-id="group.id"
+          type="btn"
+        />
+        <v-btn elevation="0" text rounded class="ml-2" @click="refresh()">
+          Refresh
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col id="table" cols="12">
+        <v-skeleton-loader
+          :loading="$fetchState.pending"
+          type="table"
+          :types="{ table: 'table-thead, table-tbody, table-tfoot' }"
+        >
+          <table>
+            <thead>
+              <tr v-if="!$fetchState.pending">
+                <th
+                  v-for="(q, i) in assignment.headers"
+                  :key="i"
+                  :class="i === 0 ? 'text-left' : ''"
+                >
+                  <span v-if="i === 0">Username</span>
+                  <v-menu v-else offset-x open-on-hover>
+                    <template #activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">{{
+                        `Q${i} [${q.maxMark}]`
+                      }}</span>
                     </template>
-                    <span>Back</span>
-                  </v-tooltip>
-                  {{ $fetchState.pending ? 'Loading...' : assignment.name }}
-                </p>
-                <div class="text-subtitle-1">
-                  <span class="fix-width font-weight-medium">Start:</span>
-                  {{
-                    $fetchState.pending ? '2021-00-00' : assignment.start | date
-                  }}
-                </div>
-                <div class="text-subtitle-1">
-                  <span class="fix-width font-weight-medium">Due:</span>
-                  {{
-                    $fetchState.pending
-                      ? '2021-00-00'
-                      : assignment.dateDue | date
-                  }}
-                </div>
-              </v-col>
-              <v-col cols="12" md="2" class="d-flex justify-end">
-                <DeleteAssignment
-                  v-if="!$fetchState.pending && group"
-                  :assignment-id="assignment.id"
-                  :group-id="group.id"
-                  type="btn"
-                />
-                <v-tooltip bottom>
-                  <template #activator="{ on }">
+                    <v-card max-width="440">
+                      <v-card-text class="text-body-2">
+                        <div v-html="assignment.headers[i].text"></div>
+                        <div class="font-weight-bold text-right">
+                          [{{ q.maxMark }}]
+                        </div>
+                      </v-card-text>
+                    </v-card>
+                  </v-menu>
+                </th>
+              </tr>
+            </thead>
+            <tbody v-if="!$fetchState.pending">
+              <tr v-for="(student, i) in assignment.students" :key="i">
+                <td>
+                  {{ student.name }}
+                </td>
+                <td
+                  v-for="(item, j) in student.data"
+                  :key="j"
+                  class="text-center"
+                >
+                  <MarkChip
+                    :data="item"
+                    :student-index="i"
+                    :question-index="j"
+                  />
+                </td>
+              </tr>
+              <tr v-if="assignment.students.length === 0">
+                <td class="text-center" :colspan="assignment.headers.length">
+                  <p class="text-body-2 mt-4">No students yet</p>
+                  <p>
                     <v-btn
+                      color="primary"
                       elevation="0"
-                      class="ml-2"
-                      @click="refresh()"
-                      v-on="on"
+                      @click="$nuxt.$emit('open-invite')"
                     >
-                      Refresh
-                    </v-btn>
-                  </template>
-                  <span>Refresh data</span>
-                </v-tooltip>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col id="table" cols="12">
-                <v-skeleton-loader :loading="$fetchState.pending" type="table">
-                  <table>
-                    <thead>
-                      <tr v-if="!$fetchState.pending">
-                        <th
-                          v-for="(q, i) in assignment.headers"
-                          :key="i"
-                          :class="i === 0 ? 'text-left' : ''"
-                        >
-                          <span v-if="i === 0">Username</span>
-                          <v-menu v-else offset-x open-on-hover>
-                            <template #activator="{ on, attrs }">
-                              <span v-bind="attrs" v-on="on">{{
-                                `Q${i} [${q.maxMark}]`
-                              }}</span>
-                            </template>
-                            <v-card max-width="440">
-                              <v-card-text class="text-body-2">
-                                <div v-html="assignment.headers[i].text"></div>
-                                <div class="font-weight-bold text-right">
-                                  [{{ q.maxMark }}]
-                                </div>
-                              </v-card-text>
-                            </v-card>
-                          </v-menu>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody v-if="!$fetchState.pending">
-                      <tr v-for="(student, i) in assignment.students" :key="i">
-                        <td>
-                          {{ student.name }}
-                        </td>
-                        <td
-                          v-for="(item, j) in student.data"
-                          :key="j"
-                          class="text-center"
-                        >
-                          <MarkChip
-                            :data="item"
-                            :student-index="i"
-                            :question-index="j"
-                          />
-                        </td>
-                      </tr>
-                      <tr v-if="assignment.students.length === 0">
-                        <td
-                          class="text-center"
-                          :colspan="assignment.headers.length"
-                        >
-                          <p class="text-body-2 mt-4">No students yet</p>
-                          <p>
-                            <v-btn
-                              color="primary"
-                              elevation="0"
-                              @click="$nuxt.$emit('open-invite')"
-                            >
-                              Invite students</v-btn
-                            >
-                          </p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </v-skeleton-loader>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col class="d-flex justify-end">
-                <span class="mr-2"> N/A&mdash;Not answered </span>
-                <v-icon>{{ $icons.mdiCheck }}</v-icon>
-                <span class="mr-2"> &mdash;Self mark </span>
-                <v-icon>{{ $icons.mdiCheckAll }}</v-icon>
-                &mdash;Teacher mark
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
+                      Invite students</v-btn
+                    >
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </v-skeleton-loader>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="d-flex justify-end">
+        <span class="mr-2"> N/A&mdash;Not answered </span>
+        <v-icon>{{ $icons.mdiCheck }}</v-icon>
+        <span class="mr-2"> &mdash;Self mark </span>
+        <v-icon>{{ $icons.mdiCheckAll }}</v-icon>
+        &mdash;Teacher mark
       </v-col>
     </v-row>
     <!-- Marking dialog -->
@@ -349,22 +327,19 @@ import {
   mdiContentCopy,
   mdiCloudCheckOutline,
   mdiCloudSyncOutline,
+  mdiRefresh,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
-import DeleteAssignment from '@/components/teacher/DeleteAssignment'
-import GroupHeader from '@/components/teacher/GroupHeader'
 import MarkChip from '@/components/teacher/MarkChip'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
-import DividerRow from '@/components/common/DividerRow.vue'
+import TheDeleteAssignmentDialog from '@/components/teacher/TheDeleteAssignmentDialog'
 
 export default {
   components: {
-    DeleteAssignment,
-    GroupHeader,
+    TheDeleteAssignmentDialog,
     MarkChip,
     TheInfoDialog,
-    DividerRow,
   },
   layout: 'app',
   data() {
@@ -476,6 +451,7 @@ export default {
       mdiContentCopy,
       mdiCloudCheckOutline,
       mdiCloudSyncOutline,
+      mdiRefresh,
     }
   },
   mounted() {

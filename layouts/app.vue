@@ -2,54 +2,56 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" app>
       <v-sheet class="pa-4">
-        <the-logo />
-        <!-- <v-list-item>
-          <v-chip color="accent">
-            <v-avatar left>
-              <v-icon>{{ $icons.mdiFlashOutline }}</v-icon>
-            </v-avatar>
-            Subscribe to Examgap
-          </v-chip>
-        </v-list-item> -->
+        <nuxt-link to="/home">
+          <the-logo />
+        </nuxt-link>
         <v-list-item class="d-flex justify-center">
-          <v-btn
-            nuxt
-            to="/author"
-            elevation="0"
-            color="primary"
-            rounded
-            outlined
-          >
-            <v-icon>{{ $icons.mdiPlus }}</v-icon>
-            Question
-          </v-btn>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                nuxt
+                to="/author"
+                elevation="0"
+                color="primary"
+                rounded
+                outlined
+                v-on="on"
+              >
+                <v-icon>{{ $icons.mdiPlus }}</v-icon>
+                Question
+              </v-btn>
+            </template>
+            <span>Create question</span>
+          </v-tooltip>
         </v-list-item>
         <v-divider class="my-3" />
-        <v-list dense nav>
-          <v-list-item nuxt to="/profile">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Profile </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item @click="$nuxt.$emit('show-feedback')">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiCommentTextOutline }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Send Feedback </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item @click="logout()">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiLogout }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Sign Out </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+        <v-list dense nav shaped>
+          <v-list-item-group v-model="nav" color="primary">
+            <v-list-item nuxt to="/profile">
+              <v-list-item-icon>
+                <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title> Profile </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item @click="$nuxt.$emit('show-feedback')">
+              <v-list-item-icon>
+                <v-icon>{{ $icons.mdiCommentTextOutline }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title> Send Feedback </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item @click="logout()">
+              <v-list-item-icon>
+                <v-icon>{{ $icons.mdiLogout }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title> Sign Out </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
         </v-list>
       </v-sheet>
     </v-navigation-drawer>
@@ -77,7 +79,7 @@
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
       <the-feedback-dialog />
-      <the-footer />
+      <!-- <the-footer /> -->
     </v-main>
   </v-app>
 </template>
@@ -86,7 +88,7 @@
 import { mapState, mapGetters } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
-import TheFooter from '@/components/common/TheFooter'
+// import TheFooter from '@/components/common/TheFooter'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
@@ -107,7 +109,7 @@ export default {
   components: {
     TheLogo,
     TheSnackbar,
-    TheFooter,
+    // TheFooter,
     TheJoinDialog,
     TheCreateClassDialog,
     TheFeedbackDialog,
@@ -117,22 +119,20 @@ export default {
   data() {
     return {
       drawer: null,
-      navGroup: '',
+      nav: null,
     }
   },
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
+      pageTitle: (state) => state.app.pageTitle,
     }),
     ...mapGetters({
       // Only needed to display 'No active classes' menu item
       activeGroupCount: 'user/activeGroupCount',
       group: 'user/activeGroup',
     }),
-    pageTitle() {
-      return this.$route.name === 'home' ? 'Classes' : this.group.name
-    },
   },
   created() {
     this.$icons = {
@@ -146,12 +146,13 @@ export default {
     }
   },
   methods: {
-    nav(index, groupId) {
-      this.$store.commit('students/clearStudents')
-      // Store the index of the current group
-      this.$store.commit('user/setActiveGroupIndex', index)
-      this.$router.push(this.teacher ? `/group/${groupId}` : `/home`)
-    },
+    // TODO
+    // nav(index, groupId) {
+    //   this.$store.commit('students/clearStudents')
+    //   // Store the index of the current group
+    //   this.$store.commit('user/setActiveGroupIndex', index)
+    //   this.$router.push(this.teacher ? `/group/${groupId}` : `/home`)
+    // },
     logout() {
       localStorage.removeItem('secret')
       this.$router.push('/')

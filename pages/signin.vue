@@ -122,9 +122,7 @@ export default {
             username: this.username,
             password: this.pw,
           })
-          // Route to appropriate home page
-          const isTeacher = this.$store.state.user.teacher
-          this.$router.push(isTeacher ? '/classes' : '/home')
+          this.$router.push('/home')
         } catch (err) {
           console.log(err)
           this.failed = true

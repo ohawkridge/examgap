@@ -36,7 +36,9 @@
                     </v-btn>
                   </template>
                   <v-list>
-                    <delete-assignment :assignment-id="assignment.id" />
+                    <the-delete-assignment-dialog
+                      :assignment-id="assignment.id"
+                    />
                   </v-list>
                 </v-menu>
               </v-list-item-action>
@@ -81,18 +83,18 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import TheStudentsTable from '@/components/teacher/TheStudentsTable'
 import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import { mdiDotsVertical, mdiInformationOutline, mdiPlus } from '@mdi/js'
+import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 
 export default {
   components: {
-    DeleteAssignment,
     TheStudentsTable,
     TheGradesTable,
     TheGroupSettings,
+    TheDeleteAssignmentDialog,
   },
   layout: 'app',
   data() {
