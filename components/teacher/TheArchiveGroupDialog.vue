@@ -1,30 +1,34 @@
 <template>
   <v-dialog v-model="dialog" width="440">
     <template #activator="{ on }">
-      <v-btn elevation="0" text color="red" v-on="on"> Archive class </v-btn>
+      <v-btn elevation="0" text color="red" rounded v-on="on">
+        Archive class
+      </v-btn>
     </template>
-    <v-card class="modal danger">
+    <v-card class="">
       <v-card-title class="d-flex justify-center">
         Archive class?
       </v-card-title>
       <v-card-text>
-        Are you sure? Archived classes are moved to the 'Archive' section on
-        your home page.
+        <p>
+          Archived classes are moved to the 'ARCHIVE' section of your home page.
+        </p>
+        <div class="d-flex justify-end">
+          <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
+          <v-btn
+            color="red"
+            :loading="loading"
+            :disabled="loading"
+            dark
+            elevation="0"
+            rounded
+            class="ml-2"
+            @click="archiveGroup()"
+          >
+            Archive class
+          </v-btn>
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="dialog = false"> Cancel </v-btn>
-        <v-btn
-          color="red"
-          :loading="loading"
-          :disabled="loading"
-          dark
-          elevation="0"
-          @click="archiveGroup()"
-        >
-          Archive class
-        </v-btn>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>

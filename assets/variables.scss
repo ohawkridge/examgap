@@ -3,18 +3,16 @@
 // The variables you want to modify
 // $font-size-root: 20px;
 
-$font-size-root: 18px;
-
 .v-application .text-h1,
 .text-h2,
 .text-h3,
 .text-h4,
 .text-h5,
 .text-h6 {
-  color: #2e2e3a;
+  color: #333333;
 }
 
-button,
-a.v-btn {
-  text-transform: capitalize !important;
-}
+// button,
+// a.v-btn {
+//   text-transform: capitalize !important;
+// }

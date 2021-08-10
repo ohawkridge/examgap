@@ -135,7 +135,7 @@ const actions = {
     if (!response.ok) {
       throw new Error(`Error updating group ${response.status}`)
     }
-    // Update local data
+    // Change props on actual group object (locally)
     commit('setNameAndCourse', {
       id: getters.activeGroup.id,
       name: groupName,

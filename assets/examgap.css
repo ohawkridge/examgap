@@ -122,13 +122,3 @@ span.v-chip.theme--light.green {
   border-top-right-radius: 4px;
   background-color: #b7d1da;
 }
-
-/* -------- Modal dialogs --------- */
-
-.modal > .v-card__actions {
-  background: hsl(228, 25%, 92%);
-}
-
-.danger > .v-card__actions {
-  background: hsl(0, 25%, 94%);
-}

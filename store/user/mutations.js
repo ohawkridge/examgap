@@ -63,17 +63,13 @@ export default {
     state.groups = groups
   },
   setNameAndCourse(state, { id, name, course }) {
-    for (let i = 0; i < state.groups.length; i++) {
-      if (state.groups[i].id === id) {
-        state.groups[i].name = name
-        state.groups[i].course = { ...course }
-      }
-    }
+    const i = state.groups.findIndex((g) => g.id === id)
+    state.groups[i].name = name
+    state.groups[i].course = { ...course }
   },
   setArchived(state) {
     state.groups[state.activeGroupIndex].active = false
   },
-  // Computed setter on _edit.vue
   updateGroupName(state, name) {
     state.groups[state.activeGroupIndex].name = name
   },

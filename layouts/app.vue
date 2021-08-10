@@ -1,109 +1,75 @@
 <template>
-  <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#fefcfb" elevate-on-scroll app>
-      <v-container class="d-flex align-center px-0">
-        <nuxt-link :to="teacher ? '/classes' : '/home'">
-          <!-- Only show logomark on mobile -->
-          <the-logo-mark v-if="$vuetify.breakpoint.name === 'xs'" />
-          <the-logo v-else />
-        </nuxt-link>
-        <v-menu offset-y open-on-hover>
-          <template #activator="{ on }">
-            <v-btn elevation="0" class="ml-4 ml-md-10" v-on="on">
-              Classes
-              <v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <!-- Filter teacher groups for active on-the-fly -->
-            <template v-for="(group, i) in groups">
-              <v-list-item
-                v-if="!teacher || group.active"
-                :key="i"
-                @click="nav(i, group.id)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{ group.name }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-            <v-list-item v-if="teacher && activeGroupCount === 0" disabled>
-              <v-list-item-content>
-                <v-list-item-title> No active classes </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <template v-if="!teacher">
-              <v-divider class="my-2" />
-              <v-list-item @click="$nuxt.$emit('join-class')">
-                <v-list-item-content>
-                  <v-list-item-title> Join class&hellip; </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-            <template v-else>
-              <v-divider class="my-2" />
-              <v-list-item @click="$nuxt.$emit('show-create')">
-                <v-list-item-content>
-                  <v-list-item-title> Create Class&hellip; </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-list>
-        </v-menu>
-        <v-spacer />
-        <template v-if="teacher">
+  <v-app>
+    <v-navigation-drawer v-model="drawer" app>
+      <v-sheet class="pa-4">
+        <the-logo />
+        <!-- <v-list-item>
+          <v-chip color="accent">
+            <v-avatar left>
+              <v-icon>{{ $icons.mdiFlashOutline }}</v-icon>
+            </v-avatar>
+            Subscribe to Examgap
+          </v-chip>
+        </v-list-item> -->
+        <v-list-item class="d-flex justify-center">
           <v-btn
-            v-if="$vuetify.breakpoint.name === 'xs'"
-            nuxt
-            to="/author"
-            color="primary"
-            class="mr-2"
-            icon
-          >
-            <v-icon>{{ $icons.mdiPlus }}</v-icon>
-          </v-btn>
-          <v-btn
-            v-else
             nuxt
             to="/author"
             elevation="0"
             color="primary"
-            class="mr-2"
-            text
+            rounded
+            outlined
           >
             <v-icon>{{ $icons.mdiPlus }}</v-icon>
-            Create Question
+            Question
           </v-btn>
-        </template>
-        <v-menu offset-y open-on-hover>
-          <template #activator="{ on }">
-            <v-btn icon elevation="0" v-on="on">
-              <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item nuxt to="/profile">
-              <v-list-item-content>
-                <v-list-item-title> Profile </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="$nuxt.$emit('show-feedback')">
-              <v-list-item-content>
-                <v-list-item-title> Send Feedback </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider class="my-2" />
-            <v-list-item @click="logout()">
-              <v-list-item-content>
-                <v-list-item-title> Sign Out </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        </v-list-item>
+        <v-divider class="my-3" />
+        <v-list dense nav>
+          <v-list-item nuxt to="/profile">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Profile </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="$nuxt.$emit('show-feedback')">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiCommentTextOutline }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Send Feedback </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="logout()">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiLogout }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Sign Out </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-sheet>
+    </v-navigation-drawer>
+    <v-app-bar
+      app
+      color="#fafafa"
+      flat
+      style="border-bottom: 1px solid #d2d2d2 !important"
+    >
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-container class="d-flex justify-space-between align-center">
+        <span class="font-weight-medium"> {{ pageTitle }} </span>
+        <v-btn elevation="0" text rounded @click="$nuxt.$emit('show-create')">
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Class
+        </v-btn>
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container id="app-bar" class="pa-0">
         <nuxt />
       </v-container>
       <the-snackbar />
@@ -111,15 +77,14 @@
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
       <the-feedback-dialog />
+      <the-footer />
     </v-main>
-    <the-footer />
   </v-app>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
-import TheLogoMark from '@/components/common/TheLogoMark'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
@@ -129,17 +94,18 @@ import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 
 import {
   mdiPlus,
-  mdiAccountCircleOutline,
+  mdiAccountOutline,
   mdiChevronDown,
   mdiLogout,
   mdiCheckCircleOutline,
+  mdiCommentTextOutline,
+  mdiFlashOutline,
 } from '@mdi/js'
 
 export default {
   name: 'App',
   components: {
     TheLogo,
-    TheLogoMark,
     TheSnackbar,
     TheFooter,
     TheJoinDialog,
@@ -159,18 +125,24 @@ export default {
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
     }),
-    // Only needed to display 'No active classes' menu item
     ...mapGetters({
+      // Only needed to display 'No active classes' menu item
       activeGroupCount: 'user/activeGroupCount',
+      group: 'user/activeGroup',
     }),
+    pageTitle() {
+      return this.$route.name === 'home' ? 'Classes' : this.group.name
+    },
   },
   created() {
     this.$icons = {
       mdiPlus,
-      mdiAccountCircleOutline,
+      mdiAccountOutline,
       mdiChevronDown,
       mdiLogout,
       mdiCheckCircleOutline,
+      mdiCommentTextOutline,
+      mdiFlashOutline,
     }
   },
   methods: {

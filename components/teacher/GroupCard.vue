@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" md="6" lg="4">
     <v-hover v-slot="{ hover }">
-      <v-card hover rounded="lg" @click="open()">
+      <v-card hover outlined @click="open()">
         <v-card-title :class="hover ? 'primary--text' : ''">
           {{ group.name }}
         </v-card-title>
@@ -9,7 +9,7 @@
           {{ group.course.name }} ({{ group.course.board }})
         </v-card-subtitle>
         <v-card-text class="d-flex align-end fix-height">
-          <v-chip label color="primary" outlined small>
+          <v-chip label outlined small>
             {{ group.count }} student{{ group.count | pluralize }}
           </v-chip>
         </v-card-text>

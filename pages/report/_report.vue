@@ -354,7 +354,6 @@ import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
 import DeleteAssignment from '@/components/teacher/DeleteAssignment'
 import GroupHeader from '@/components/teacher/GroupHeader'
-import GroupNav from '@/components/teacher/GroupNav'
 import MarkChip from '@/components/teacher/MarkChip'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
 import DividerRow from '@/components/common/DividerRow.vue'
@@ -363,7 +362,6 @@ export default {
   components: {
     DeleteAssignment,
     GroupHeader,
-    GroupNav,
     MarkChip,
     TheInfoDialog,
     DividerRow,

@@ -15,7 +15,11 @@
             >
           </div>
           <div class="d-flex">
-            <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/signup"
+            <v-btn nuxt to="/signin" rounded outlined>
+              Your Account
+              <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
+            </v-btn>
+            <!-- <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/signup"
               >Join class</v-btn
             >
             <v-btn outlined class="mr-2 d-none d-sm-flex" nuxt to="/signin"
@@ -37,7 +41,7 @@
             >
               <v-icon left>{{ $icons.mdiMenu }}</v-icon>
               Menu
-            </v-btn>
+            </v-btn> -->
           </div>
         </v-col>
       </v-row>
@@ -72,7 +76,7 @@
 <script>
 import TheLogo from '@/components/common/TheLogo'
 import TheStaticFooter from '@/components/common/TheStaticFooter'
-import { mdiMenu, mdiClose } from '@mdi/js'
+import { mdiMenu, mdiClose, mdiArrowRight } from '@mdi/js'
 
 export default {
   name: 'Static',
@@ -94,6 +98,7 @@ export default {
     this.$icons = {
       mdiMenu,
       mdiClose,
+      mdiArrowRight,
     }
   },
 }
