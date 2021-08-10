@@ -24,9 +24,24 @@
             <span>Create question</span>
           </v-tooltip>
         </v-list-item>
-        <v-divider class="my-3" />
-        <v-list dense nav shaped>
+        <v-list dense nav rounded>
           <v-list-item-group v-model="nav" color="primary">
+            <v-list-group :prepend-icon="$icons.mdiAccountGroupOutline">
+              <template #activator>
+                <v-list-item-title>Classes</v-list-item-title>
+              </template>
+              <template v-for="(group, i) in groups">
+                <v-list-item
+                  v-if="group.active === true"
+                  :key="i"
+                  @click="navTo(i, group.id)"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title> {{ group.name }} </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list-group>
             <v-list-item nuxt to="/profile">
               <v-list-item-icon>
                 <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
@@ -102,6 +117,7 @@ import {
   mdiCheckCircleOutline,
   mdiCommentTextOutline,
   mdiFlashOutline,
+  mdiAccountGroupOutline,
 } from '@mdi/js'
 
 export default {
@@ -129,7 +145,6 @@ export default {
       pageTitle: (state) => state.app.pageTitle,
     }),
     ...mapGetters({
-      // Only needed to display 'No active classes' menu item
       activeGroupCount: 'user/activeGroupCount',
       group: 'user/activeGroup',
     }),
@@ -143,18 +158,20 @@ export default {
       mdiCheckCircleOutline,
       mdiCommentTextOutline,
       mdiFlashOutline,
+      mdiAccountGroupOutline,
     }
   },
   methods: {
-    // TODO
-    // nav(index, groupId) {
-    //   this.$store.commit('students/clearStudents')
-    //   // Store the index of the current group
-    //   this.$store.commit('user/setActiveGroupIndex', index)
-    //   this.$router.push(this.teacher ? `/group/${groupId}` : `/home`)
-    // },
+    navTo(index, groupId) {
+      this.$store.commit('user/setActiveGroupIndex', index)
+      if (this.teacher) {
+        this.$store.commit('students/clearStudents')
+        this.$router.push(`/group/${groupId}`)
+      }
+    },
     logout() {
       localStorage.removeItem('secret')
+      localStorage.removeItem('examgap')
       this.$router.push('/')
       // Reload page to clear Vuex
       this.$router.go()

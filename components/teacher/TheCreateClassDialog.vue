@@ -11,24 +11,25 @@
             outlined
             autofocus
           ></v-text-field>
-          <!-- Emits an event containing selected course id -->
           <the-course-select />
+          <!-- ^^^ Emits an event containing selected course id -->
         </v-form>
         <small>*Indicates required field</small>
+        <div class="d-flex justify-end">
+          <v-btn text rounded @click="dialog = false">Cancel</v-btn>
+          <v-btn
+            color="primary"
+            elevation="0"
+            :loading="loading"
+            :disabled="loading"
+            rounded
+            class="ml-2"
+            @click="createGroup()"
+          >
+            Create class
+          </v-btn>
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="dialog = false">Cancel</v-btn>
-        <v-btn
-          color="primary"
-          elevation="0"
-          :loading="loading"
-          :disabled="loading"
-          @click="createGroup()"
-        >
-          Create class
-        </v-btn>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
