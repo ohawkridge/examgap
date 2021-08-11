@@ -4,6 +4,8 @@
       <nuxt-link to="/">
         <the-logo />
       </nuxt-link>
+      <v-spacer />
+      <nuxt-link to="/" class="text-decoration-none">Back home</nuxt-link>
     </v-container>
     <v-container class="fill-height">
       <v-row class="d-flex justify-center">
@@ -49,6 +51,7 @@
               color="primary"
               block
               large
+              rounded
               elevation="0"
               :loading="loading"
               :disabled="loading"

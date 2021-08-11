@@ -42,6 +42,7 @@
                 </v-list-item>
               </template>
             </v-list-group>
+            <v-divider class="my-3" />
             <v-list-item nuxt to="/profile">
               <v-list-item-icon>
                 <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
@@ -94,6 +95,7 @@
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
       <the-feedback-dialog />
+      <the-loading-overlay />
       <!-- <the-footer /> -->
     </v-main>
   </v-app>
@@ -108,6 +110,7 @@ import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
+import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 
 import {
   mdiPlus,
@@ -130,6 +133,7 @@ export default {
     TheCreateClassDialog,
     TheFeedbackDialog,
     TheOnboardingSnackbar,
+    TheLoadingOverlay,
   },
   middleware: ['auth'],
   data() {

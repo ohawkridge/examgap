@@ -12,57 +12,53 @@
             >
           </div>
           <div class="d-flex">
-            <v-btn nuxt to="/signin" rounded text>
-              Your Account
-              <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
-            </v-btn>
-            <!-- <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/signup"
+            <v-btn text rounded class="d-none d-sm-flex mr-2" nuxt to="/signup"
               >Join class</v-btn
-            >
-            <v-btn outlined class="mr-2 d-none d-sm-flex" nuxt to="/signin"
-              >Sign in</v-btn
             >
             <v-btn
               color="primary"
-              elevation="0"
+              outlined
+              rounded
               class="d-none d-sm-flex"
               nuxt
-              to="/trial"
-              >Free trial</v-btn
+              to="/signin"
+              >Sign in</v-btn
             >
             <v-btn
               v-if="!menu"
-              outlined
+              icon
               class="d-flex d-sm-none"
               @click="menu = !menu"
             >
-              <v-icon left>{{ $icons.mdiMenu }}</v-icon>
-              Menu
-            </v-btn> -->
+              <v-icon>{{ $icons.mdiMenu }}</v-icon>
+            </v-btn>
           </div>
         </v-col>
       </v-row>
     </v-container>
     <nuxt />
-    <TheStaticFooter />
+    <the-static-footer />
     <v-overlay :value="menu" opacity="0.86" @click.native="menu = false">
       <v-btn
         v-if="menu"
         id="close"
-        outlined
+        icon
         class="d-flex d-sm-none"
         @click="menu = false"
       >
-        <v-icon left>{{ $icons.mdiClose }}</v-icon>
-        Close
+        <v-icon>{{ $icons.mdiClose }}</v-icon>
       </v-btn>
       <div class="d-flex flex-column">
-        <v-btn text large class="mb-6" nuxt to="/">Home</v-btn>
-        <v-btn text large class="mb-6" nuxt to="/pricing">Pricing</v-btn>
-        <v-btn text large class="mb-6" nuxt to="/#how">How it works</v-btn>
-        <v-btn text large class="mb-6" nuxt to="/signup">Join class</v-btn>
-        <v-btn outlined large class="mb-6" nuxt to="/signin">Sign in</v-btn>
-        <v-btn large color="primary" elevation="0" nuxt to="/trial"
+        <v-btn text large rounded class="mb-6" nuxt to="/pricing"
+          >Pricing</v-btn
+        >
+        <v-btn text large rounded class="mb-6" nuxt to="/signup"
+          >Join class</v-btn
+        >
+        <v-btn outlined large rounded class="mb-6" nuxt to="/signin"
+          >Sign in</v-btn
+        >
+        <v-btn large rounded color="primary" elevation="0" nuxt to="/trial"
           >Free trial</v-btn
         >
       </div>
@@ -73,7 +69,7 @@
 <script>
 import TheLogo from '@/components/common/TheLogo'
 import TheStaticFooter from '@/components/common/TheStaticFooter'
-import { mdiMenu, mdiClose, mdiArrowRight } from '@mdi/js'
+import { mdiMenu, mdiClose } from '@mdi/js'
 
 export default {
   name: 'Static',
@@ -95,7 +91,6 @@ export default {
     this.$icons = {
       mdiMenu,
       mdiClose,
-      mdiArrowRight,
     }
   },
 }

@@ -5,11 +5,10 @@ exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const username = data.username
   const password = data.password
-  const database = data.database
-  // Configure Fauna client with login secret
-  // (now either ExamgapProd or ExamgapDev)
-  const secret =
-    database === 'dev' ? process.env.DEV_KEY : process.env.SECRET_KEY
+  const ctx = process.env.CONTEXT
+  console.log(`\n==> Environment is`, ctx, '\n')
+  // Use ExamgapDev database in development
+  const secret = ctx === 'dev' ? process.env.DEV_KEY : process.env.SECRET_KEY
   const client = new faunadb.Client({
     secret,
   })
