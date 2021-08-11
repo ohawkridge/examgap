@@ -1,5 +1,5 @@
 export const state = () => ({
-  tab: true, // Home or Archive tab? (teacher only)
+  tab: null, // Home or Archive tab? (teacher only)
   onboardStep: 0, // Don't onboard
   loading: false, // Global loading state
   pageTitle: 'Classes', // Global page title

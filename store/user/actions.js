@@ -141,6 +141,7 @@ const actions = {
       name: groupName,
       course: await response.json(),
     })
+    commit('app/setPageTitle', groupName, { root: true })
   },
   async createAssignment({ commit }, obj) {
     const url = new URL(

@@ -5,34 +5,31 @@
         <nuxt-link to="/home">
           <the-logo />
         </nuxt-link>
-        <v-list-item class="d-flex justify-center">
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn
-                nuxt
-                to="/author"
-                elevation="0"
-                color="primary"
-                rounded
-                outlined
-                v-on="on"
-              >
-                <v-icon>{{ $icons.mdiPlus }}</v-icon>
-                Question
-              </v-btn>
-            </template>
-            <span>Create question</span>
-          </v-tooltip>
-        </v-list-item>
-        <v-list dense nav rounded>
+        <v-list dense nav shaped>
+          <v-list-item
+            v-if="teacher"
+            nuxt
+            to="/author"
+            class="d-flex justify-center"
+          >
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiPlus }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Create question </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item-group v-model="nav" color="primary">
-            <v-list-group :prepend-icon="$icons.mdiAccountGroupOutline">
+            <v-list-group
+              :value="true"
+              :prepend-icon="$icons.mdiAccountGroupOutline"
+            >
               <template #activator>
                 <v-list-item-title>Classes</v-list-item-title>
               </template>
               <template v-for="(group, i) in groups">
                 <v-list-item
-                  v-if="group.active === true"
+                  v-if="includeGroup(group)"
                   :key="i"
                   @click="navTo(i, group.id)"
                 >
@@ -79,15 +76,24 @@
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center">
-        <span class="font-weight-medium"> {{ pageTitle }} </span>
-        <v-btn elevation="0" text rounded @click="$nuxt.$emit('show-create')">
+        <span v-if="teacher" class="font-weight-medium"> {{ pageTitle }} </span>
+        <the-student-greeting v-else />
+        <v-btn
+          v-if="teacher"
+          elevation="0"
+          text
+          rounded
+          @click="$nuxt.$emit('show-create')"
+        >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Class
         </v-btn>
+        <!-- TODO -->
+        <!-- <v-btn elevation="0" text rounded> Join Class </v-btn> -->
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container id="app-bar" class="pa-0">
+      <v-container class="pa-0">
         <nuxt />
       </v-container>
       <the-snackbar />
@@ -103,15 +109,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import TheLogo from '@/components/common/TheLogo'
-import TheSnackbar from '@/components/common/TheSnackbar'
-// import TheFooter from '@/components/common/TheFooter'
-import TheJoinDialog from '@/components/student/TheJoinDialog'
-import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
-import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
-import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
-import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
-
 import {
   mdiPlus,
   mdiAccountOutline,
@@ -122,6 +119,15 @@ import {
   mdiFlashOutline,
   mdiAccountGroupOutline,
 } from '@mdi/js'
+import TheLogo from '@/components/common/TheLogo'
+import TheSnackbar from '@/components/common/TheSnackbar'
+// import TheFooter from '@/components/common/TheFooter'
+import TheJoinDialog from '@/components/student/TheJoinDialog'
+import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
+import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
+import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
+import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
+import TheStudentGreeting from '~/components/student/TheStudentGreeting'
 
 export default {
   name: 'App',
@@ -134,6 +140,7 @@ export default {
     TheFeedbackDialog,
     TheOnboardingSnackbar,
     TheLoadingOverlay,
+    TheStudentGreeting,
   },
   middleware: ['auth'],
   data() {
@@ -172,6 +179,12 @@ export default {
         this.$store.commit('students/clearStudents')
         this.$router.push(`/group/${groupId}`)
       }
+    },
+    // N.B. You *cannot* just filter groups (throws off i)
+    // For students, show all classes in nav
+    // For teachers, just show active classes
+    includeGroup(group) {
+      return this.teacher ? group.active === true : true
     },
     logout() {
       localStorage.removeItem('secret')

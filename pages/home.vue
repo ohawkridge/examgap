@@ -1,30 +1,47 @@
 <template>
-  <div class="pa-3">
-    <v-row>
-      <v-col cols="12" class="d-flex justify-center">
-        <v-btn-toggle v-model="tab" color="primary" mandatory rounded>
-          <v-btn :value="true">
-            <v-icon left>{{ $icons.mdiHomeOutline }}</v-icon>
-            Home
-          </v-btn>
-          <v-btn :value="false">
-            <v-icon left>{{ $icons.mdiArchiveOutline }}</v-icon>
-            Archive
-          </v-btn>
-        </v-btn-toggle>
-      </v-col>
-    </v-row>
-    <v-row>
-      <template v-for="(group, i) in groups">
+  <div>
+    <!-- **TEACHER** -->
+    <template v-if="teacher">
+      <v-tabs
+        v-model="tab"
+        centered
+        background-color="transparent"
+        style="border-bottom: 1px solid #d2d2d2 !important"
+      >
+        <v-tab class="text-capitalize">Home</v-tab>
+        <v-tab class="text-capitalize">Archive</v-tab>
+      </v-tabs>
+    </template>
+    <!-- **STUDENT** -->
+    <template v-else>
+      <v-tabs
+        v-model="tab"
+        centered
+        background-color="transparent"
+        style="border-bottom: 1px solid #d2d2d2 !important"
+      >
+        <v-tab class="text-capitalize">Assignments</v-tab>
+        <v-tab class="text-capitalize">Revision</v-tab>
+        <v-tab class="text-capitalize">Quote</v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab">
+        <v-tab-item> </v-tab-item>
+        <v-tab-item> </v-tab-item>
+        <v-tab-item>
+          <the-quote-of-the-day />
+        </v-tab-item>
+      </v-tabs-items>
+    </template>
+    <!-- <template v-for="(group, i) in groups">
         <group-card
           v-if="group.active === tab"
           :key="i"
           :group="group"
           :group-index="i"
         />
-      </template>
-      <!-- Create Class -->
-      <v-col v-if="tab && activeGroupCount > 0" cols="12" md="6" lg="4">
+      </template> -->
+    <!-- Create Class -->
+    <!-- <v-col v-if="tab && activeGroupCount > 0" cols="12" md="6" lg="4">
         <v-hover v-slot="{ hover }">
           <v-card
             :id="hover ? 'cc2' : 'cc1'"
@@ -40,28 +57,7 @@
             </v-btn>
           </v-card>
         </v-hover>
-      </v-col>
-      <template v-if="activeGroupCount === 0 && tab">
-        <v-col cols="12" class="d-flex justify-center">
-          <v-img
-            src="/no-class.svg"
-            max-width="200"
-            alt="Empty chair illustration"
-          />
-        </v-col>
-        <v-col cols="12" class="text-center">
-          <p class="text-body-2 mt-4">No classes yet</p>
-          <v-btn
-            elevation="0"
-            color="primary"
-            @click="$nuxt.$emit('show-create')"
-          >
-            <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-            Create class
-          </v-btn>
-        </v-col>
-      </template>
-    </v-row>
+      </v-col> -->
   </div>
   <!-- <div>
     <v-row>
@@ -107,11 +103,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
-import GroupCard from '@/components/teacher/GroupCard'
+import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
+// import GroupCard from '@/components/teacher/GroupCard'
 
 export default {
   components: {
-    GroupCard,
+    TheQuoteOfTheDay,
+    // GroupCard,
   },
   layout: 'app',
   head() {
@@ -126,6 +124,7 @@ export default {
       activeGroupCount: 'user/activeGroupCount',
     }),
     ...mapState({
+      teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
     }),
     // Remember active tab (in store)
@@ -144,6 +143,9 @@ export default {
       mdiHomeOutline,
       mdiArchiveOutline,
     }
+  },
+  mounted() {
+    this.$store.commit('app/setPageTitle', 'Classes')
   },
 }
 </script>
