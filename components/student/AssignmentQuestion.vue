@@ -6,7 +6,7 @@
         :key="i"
         nuxt
         :to="`/response/${response.id}`"
-        class="px-0 px-md-3"
+        class="divide"
       >
         <v-list-item-content class="d-flex align-start">
           <v-col cols="12" md="9" class="pa-0 pa-md-3">
@@ -88,7 +88,7 @@
             </v-list-item-subtitle>
           </v-col>
           <v-col cols="12" md="3" class="d-flex justify-center">
-            <v-btn elevation="0" color="primary"> Reassigned </v-btn>
+            <v-btn rounded elevation="0" color="primary"> Reassigned </v-btn>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -109,7 +109,7 @@
           </v-list-item-subtitle>
         </v-col>
         <v-col cols="12" md="3" class="d-flex justify-center">
-          <v-btn elevation="0" color="primary"> Answer </v-btn>
+          <v-btn rounded elevation="0" color="primary"> Answer </v-btn>
         </v-col>
       </v-list-item-content>
     </v-list-item>

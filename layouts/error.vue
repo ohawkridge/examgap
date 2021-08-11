@@ -1,9 +1,9 @@
 <template>
-  <v-app :style="{ background: $vuetify.theme.themes['light'].background }">
-    <v-app-bar color="#fefcfb" elevation="0" app>
+  <v-app>
+    <v-app-bar elevation="0" color="transparent" app>
       <v-container class="d-flex align-center px-0">
-        <nuxt-link :to="teacher ? '/classes' : '/home'">
-          <TheLogo />
+        <nuxt-link to="/home">
+          <the-logo />
         </nuxt-link>
       </v-container>
     </v-app-bar>
@@ -13,9 +13,6 @@
           <v-col id="nav-fix" cols="12" md="7" lg="6" class="text-center">
             <p class="text-h6 error--text">
               {{ error.statusCode === 404 ? pageNotFound : otherError }}
-              <v-icon color="error" class="pb-1">
-                {{ $icons.mdiAlertOutline }}
-              </v-icon>
             </p>
             <p>This will automatically be reported.</p>
             <p>
@@ -25,7 +22,12 @@
               >.
             </p>
             <p>
-              <v-btn elevation="0" color="primary" @click="$router.go(-1)">
+              <v-btn
+                elevation="0"
+                rounded
+                color="primary"
+                @click="$router.go(-1)"
+              >
                 Try going back
               </v-btn>
             </p>
@@ -37,8 +39,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { mdiAlertOutline } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 
 export default {
@@ -55,25 +55,13 @@ export default {
   data() {
     return {
       pageNotFound: '404 Not Found',
-      otherError: 'An error occurred',
+      otherError: 'Apologies, an error occurred.',
     }
   },
   computed: {
-    ...mapState({
-      teacher: (state) => state.user.teacher,
-    }),
-    home() {
-      if (this.$store.state.user.id === '') return '/'
-      return this.teacher ? '/classes' : '/home'
-    },
     head() {
       return this.error.statusCode === 404 ? this.pageNotFound : this.otherError
     },
-  },
-  created() {
-    this.$icons = {
-      mdiAlertOutline,
-    }
   },
 }
 </script>

@@ -70,14 +70,15 @@
     </v-navigation-drawer>
     <v-app-bar
       app
+      dense
       color="#fafafa"
       flat
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center">
-        <span v-if="teacher" class="font-weight-medium"> {{ pageTitle }} </span>
-        <the-student-greeting v-else />
+        <span class="font-weight-medium"> {{ pageTitle }} </span>
+        <!-- <the-student-greeting v-else /> -->
         <v-btn
           v-if="teacher"
           elevation="0"
@@ -86,7 +87,7 @@
           @click="$nuxt.$emit('show-create')"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Class
+          Create Class
         </v-btn>
         <!-- TODO -->
         <!-- <v-btn elevation="0" text rounded> Join Class </v-btn> -->
@@ -127,7 +128,7 @@ import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
-import TheStudentGreeting from '~/components/student/TheStudentGreeting'
+// import TheStudentGreeting from '~/components/student/TheStudentGreeting'
 
 export default {
   name: 'App',
@@ -140,7 +141,7 @@ export default {
     TheFeedbackDialog,
     TheOnboardingSnackbar,
     TheLoadingOverlay,
-    TheStudentGreeting,
+    // TheStudentGreeting,
   },
   middleware: ['auth'],
   data() {
@@ -178,6 +179,8 @@ export default {
       if (this.teacher) {
         this.$store.commit('students/clearStudents')
         this.$router.push(`/group/${groupId}`)
+      } else {
+        this.$store.commit('app/setPageTitle', this.group.name)
       }
     },
     // N.B. You *cannot* just filter groups (throws off i)

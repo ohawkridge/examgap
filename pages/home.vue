@@ -11,6 +11,16 @@
         <v-tab class="text-capitalize">Home</v-tab>
         <v-tab class="text-capitalize">Archive</v-tab>
       </v-tabs>
+      <v-row class="pa-3">
+        <template v-for="(group, i) in groups">
+          <group-card
+            v-if="group.active === (tab === 0 ? true : false)"
+            :key="i"
+            :group="group"
+            :group-index="i"
+          />
+        </template>
+      </v-row>
     </template>
     <!-- **STUDENT** -->
     <template v-else>
@@ -25,21 +35,51 @@
         <v-tab class="text-capitalize">Quote</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
-        <v-tab-item> </v-tab-item>
+        <v-tab-item>
+          <v-list class="py-0">
+            <v-list-item v-if="assignments.length === 0" class="divide">
+              <v-list-item-content>
+                <div class="d-flex align-center">
+                  <div class="col1 font-weight-medium">No assignments yet.</div>
+                </div>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item
+              v-for="(assignment, i) in assignments"
+              v-else
+              :key="i"
+              nuxt
+              :to="`/assignment/${assignment.id}`"
+              class="divide"
+            >
+              <v-list-item-content>
+                <div class="d-flex align-center">
+                  <div class="col1">
+                    <span class="font-weight-medium">{{
+                      assignment.name
+                    }}</span>
+                    <div>
+                      {{ assignment.questions.length }} Question{{
+                        assignment.questions.length | pluralize
+                      }}
+                    </div>
+                  </div>
+                  <div class="col2">
+                    {{ assignment.start | date }}
+                    <v-icon small>{{ $icons.mdiArrowRight }}</v-icon>
+                    {{ assignment.dateDue | date }}
+                  </div>
+                </div>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-tab-item>
         <v-tab-item> </v-tab-item>
         <v-tab-item>
           <the-quote-of-the-day />
         </v-tab-item>
       </v-tabs-items>
     </template>
-    <!-- <template v-for="(group, i) in groups">
-        <group-card
-          v-if="group.active === tab"
-          :key="i"
-          :group="group"
-          :group-index="i"
-        />
-      </template> -->
     <!-- Create Class -->
     <!-- <v-col v-if="tab && activeGroupCount > 0" cols="12" md="6" lg="4">
         <v-hover v-slot="{ hover }">
@@ -59,57 +99,18 @@
         </v-hover>
       </v-col> -->
   </div>
-  <!-- <div>
-    <v-row>
-      <v-col cols="12">
-        <v-skeleton-loader v-if="loading" :loading="true" type="heading">
-        </v-skeleton-loader>
-        <v-skeleton-loader
-          v-if="loading"
-          :loading="true"
-          type="text"
-          width="50%"
-        >
-        </v-skeleton-loader>
-        <template v-else>
-          <div class="text-h6 font-weight-black">
-            {{ group.name }}
-          </div>
-          <div>{{ group.course.name }} ({{ group.course.board }})</div>
-        </template>
-      </v-col>
-    </v-row>
-    <divider-row />
-    <v-row>
-      <v-col cols="12" md="7">
-        <the-assignments-card />
-      </v-col>
-      <v-col cols="12" md="5">
-        <v-row>
-          <v-col cols="12">
-            <the-quote-of-the-day />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <the-revision-card />
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-  </div> -->
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
 import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
-// import GroupCard from '@/components/teacher/GroupCard'
+import GroupCard from '@/components/teacher/GroupCard'
 
 export default {
   components: {
     TheQuoteOfTheDay,
-    // GroupCard,
+    GroupCard,
   },
   layout: 'app',
   head() {
@@ -119,9 +120,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      // N.B. You *cannot* use this for GroupCards
-      // Filter function throws off activeGroupIndex
       activeGroupCount: 'user/activeGroupCount',
+      assignments: 'user/assignments',
     }),
     ...mapState({
       teacher: (state) => state.user.teacher,
@@ -158,5 +158,10 @@ export default {
 
 #cc2 {
   border: 1px dashed #0078a0 !important;
+}
+
+/* Assignment name (students) */
+.col1 {
+  width: 400px;
 }
 </style>

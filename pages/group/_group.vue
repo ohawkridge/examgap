@@ -1,25 +1,42 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-tabs v-model="tab" grow background-color="transparent">
-        <v-tab>Assignments</v-tab>
-        <v-tab> Students </v-tab>
-        <v-tab> Grades </v-tab>
-        <v-tab> Settings </v-tab>
+      <v-tabs
+        v-model="tab"
+        centered
+        background-color="transparent"
+        style="border-bottom: 1px solid #d2d2d2 !important"
+      >
+        <v-tab class="text-capitalize">Assignments</v-tab>
+        <v-tab class="text-capitalize"> Students </v-tab>
+        <v-tab class="text-capitalize"> Grades </v-tab>
+        <v-tab class="text-capitalize"> Settings </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <v-list v-for="(assignment, i) in assignments" :key="i">
-            <v-list-item :key="i" nuxt :to="`/report/${assignment.id}`">
+          <v-list class="py-0">
+            <v-list-item
+              v-for="(assignment, i) in assignments"
+              :key="i"
+              nuxt
+              :to="`/report/${assignment.id}`"
+              class="divide"
+            >
               <v-list-item-content>
-                <div class="d-flex">
-                  <div
-                    class="col1 font-weight-medium text-decoration-underline"
-                  >
+                <div class="d-flex align-center">
+                  <div class="col1 font-weight-medium">
                     {{ assignment.name }}
                   </div>
-                  <div class="col2">Start: {{ assignment.start | date }}</div>
-                  <div>Due: {{ assignment.dateDue | date }}</div>
+                  <div class="col2">
+                    {{ assignment.start | date }}
+                    <v-icon small>{{ $icons.mdiArrowRight }}</v-icon>
+                    {{ assignment.dateDue | date }}
+                  </div>
+                  <div class="col3">
+                    <v-icon color="green">{{
+                      $icons.mdiCheckCircleOutline
+                    }}</v-icon>
+                  </div>
                 </div>
               </v-list-item-content>
               <v-list-item-action>
@@ -86,7 +103,13 @@ import { mapGetters } from 'vuex'
 import TheStudentsTable from '@/components/teacher/TheStudentsTable'
 import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
-import { mdiDotsVertical, mdiInformationOutline, mdiPlus } from '@mdi/js'
+import {
+  mdiDotsVertical,
+  mdiInformationOutline,
+  mdiPlus,
+  mdiArrowRight,
+  mdiCheckCircleOutline,
+} from '@mdi/js'
 import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 
 export default {
@@ -118,6 +141,8 @@ export default {
       mdiDotsVertical,
       mdiInformationOutline,
       mdiPlus,
+      mdiArrowRight,
+      mdiCheckCircleOutline,
     }
   },
   async mounted() {
@@ -151,11 +176,17 @@ export default {
 </script>
 
 <style scoped>
+/* Assignment name */
 .col1 {
   width: 300px;
 }
 
+/* Dates */
 .col2 {
-  width: 160px;
+  width: 240px;
+}
+
+.col3 {
+  width: 100px;
 }
 </style>
