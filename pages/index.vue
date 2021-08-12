@@ -72,7 +72,11 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/mark.png" alt="Marking"></v-img>
+          <!-- <v-img src="/mark.png" alt="Marking"></v-img> -->
+          <video loop width="570" autoplay>
+            <source src="/demo.mov" type="video/mp4" />
+            Sorry, your browser doesn't support embedded videos.
+          </video>
         </v-col>
       </v-row>
       <v-row

@@ -6,7 +6,6 @@ exports.handler = async (event) => {
   const username = data.username
   const password = data.password
   const ctx = process.env.CONTEXT
-  console.log(`\n==> Environment is`, ctx, '\n')
   // Use ExamgapDev database in development
   const secret = ctx === 'dev' ? process.env.DEV_KEY : process.env.SECRET_KEY
   const client = new faunadb.Client({

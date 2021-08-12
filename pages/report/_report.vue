@@ -479,15 +479,13 @@ export default {
         }
       }
     },
-    // Close marking view
     close() {
       this.saveMarks()
       this.$store.commit('assignment/setMarking', false)
     },
-    // Save marks on close/when response changes
-    saveMarks() {
+    async saveMarks() {
       if (this.marks.length > 0) {
-        this.$store.dispatch('assignment/saveMarks', this.marks)
+        await this.$store.dispatch('assignment/saveMarks', this.marks)
       }
     },
     // Fetch fresh data

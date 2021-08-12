@@ -123,7 +123,6 @@ export const actions = {
       '/.netlify/functions/saveFeedback',
       this.$config.baseURL
     )
-    console.log(`action got`, feedback)
     await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
@@ -175,8 +174,6 @@ export const actions = {
   async setMarked({ commit, getters, rootState }) {
     const response = getters.response
     const url = new URL('/.netlify/functions/setAsMarked', this.$config.baseURL)
-    console.log('%c' + 'marked ✓', 'color:blue')
-    console.log(response.id)
     await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
