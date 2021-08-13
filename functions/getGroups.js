@@ -73,6 +73,20 @@ exports.handler = async (event) => {
                               ['data', 'dateDue'],
                               q.Var('instance')
                             ),
+                            num_questions: q.Count(
+                              q.Select(['data', 'questions'], q.Var('instance'))
+                            ),
+                            live: q.If(
+                              q.LTE(
+                                q.Select(
+                                  ['data', 'dateDue'],
+                                  q.Var('instance')
+                                ),
+                                q.Now()
+                              ),
+                              false,
+                              true
+                            ),
                           }
                         )
                       )
@@ -116,9 +130,16 @@ exports.handler = async (event) => {
                         ),
                         // Need group to filter assignments later
                         group: q.Select(['data', 'group'], q.Var('instance')),
-                        questions: q.Select(
-                          ['data', 'questions'],
-                          q.Var('instance')
+                        num_questions: q.Count(
+                          q.Select(['data', 'questions'], q.Var('instance'))
+                        ),
+                        live: q.If(
+                          q.LTE(
+                            q.Select(['data', 'dateDue'], q.Var('instance')),
+                            q.Now()
+                          ),
+                          false,
+                          true
                         ),
                       }
                     )

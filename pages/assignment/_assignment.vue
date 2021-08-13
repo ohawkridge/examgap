@@ -2,7 +2,7 @@
   <div>
     <!-- Skeletons -->
     <template v-if="$fetchState.pending">
-      <div class="pa-3">
+      <div class="pa-4">
         <v-skeleton-loader
           v-bind="attrs"
           type="heading"
@@ -27,7 +27,7 @@
       </div>
     </template>
     <template v-else>
-      <div class="pa-3 d-flex justify-space-between">
+      <div class="pa-4 d-flex justify-space-between">
         <div style="width: 60%">
           <div class="text-h6">
             <v-tooltip bottom>
@@ -45,23 +45,6 @@
               assignment.questions.length | pluralize
             }}
           </p>
-          <div class="ml-10">
-            <v-tooltip bottom>
-              <template #activator="{ on }">
-                <svg
-                  height="42"
-                  width="42"
-                  viewBox="0 0 24 24"
-                  role="img"
-                  fill="#c0c0c0"
-                  v-on="on"
-                >
-                  <path :d="$icons.mdiMedalOutline"></path>
-                </svg>
-              </template>
-              <span>Reward</span>
-            </v-tooltip>
-          </div>
         </div>
         <div style="width: 40%">
           <div class="text-subtitle-1">

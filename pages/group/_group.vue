@@ -24,18 +24,43 @@
             >
               <v-list-item-content>
                 <div class="d-flex align-center">
-                  <div class="col1 font-weight-medium">
-                    {{ assignment.name }}
+                  <div class="col1">
+                    <span class="font-weight-medium">
+                      {{ assignment.name }}</span
+                    >
+                    <div class="text-body-2">
+                      {{ assignment.num_questions }} Question{{
+                        assignment.num_questions | pluralize
+                      }}
+                    </div>
                   </div>
-                  <div class="col2">
+                  <div class="col2 d-flex align-center">
+                    <v-icon class="mr-2">{{
+                      $icons.mdiCalendarRangeOutline
+                    }}</v-icon>
                     {{ assignment.start | date }}
-                    <v-icon small>{{ $icons.mdiArrowRight }}</v-icon>
+                    <v-icon small class="mx-2">{{
+                      $icons.mdiArrowRight
+                    }}</v-icon>
                     {{ assignment.dateDue | date }}
                   </div>
-                  <div class="col3">
-                    <v-icon color="green">{{
-                      $icons.mdiCheckCircleOutline
-                    }}</v-icon>
+                  <div class="col3 ml-auto">
+                    <v-tooltip v-if="assignment.live" bottom>
+                      <template #activator="{ on }">
+                        <v-icon color="green" v-on="on">{{
+                          $icons.mdiCircleOutline
+                        }}</v-icon>
+                      </template>
+                      <span>Open</span>
+                    </v-tooltip>
+                    <v-tooltip v-else bottom>
+                      <template #activator="{ on }">
+                        <v-icon v-on="on">{{
+                          $icons.mdiCheckCircleOutline
+                        }}</v-icon>
+                      </template>
+                      <span>Complete</span>
+                    </v-tooltip>
                   </div>
                 </div>
               </v-list-item-content>
@@ -81,8 +106,6 @@
               </v-btn>
             </div>
           </div>
-          <!-- </v-card-text>
-              </v-card> -->
         </v-tab-item>
         <v-tab-item>
           <the-students-table />
@@ -109,6 +132,8 @@ import {
   mdiPlus,
   mdiArrowRight,
   mdiCheckCircleOutline,
+  mdiCalendarRangeOutline,
+  mdiCircleOutline,
 } from '@mdi/js'
 import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 
@@ -127,7 +152,7 @@ export default {
   },
   head() {
     return {
-      title: this.group ? this.group.name : `Group`,
+      title: this.group.name,
     }
   },
   computed: {
@@ -143,6 +168,8 @@ export default {
       mdiPlus,
       mdiArrowRight,
       mdiCheckCircleOutline,
+      mdiCalendarRangeOutline,
+      mdiCircleOutline,
     }
   },
   async mounted() {
@@ -167,7 +194,7 @@ export default {
       // Continue onboarding if user hasn't set assignments
       this.$store.commit(
         'app/setOnboardStep',
-        this.group.assignments.length < 3 ? 4 : 0
+        this.assignments.length < 3 ? 4 : 0
       )
       this.$router.push(`/course/${this.group.course.id}`)
     },
@@ -187,6 +214,6 @@ export default {
 }
 
 .col3 {
-  width: 100px;
+  width: 24px;
 }
 </style>

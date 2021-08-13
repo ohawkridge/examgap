@@ -62,6 +62,7 @@
                 {{ actionText(assignment.questions.length) }}
               </v-list-item-action-text>
               <!-- Due soon! -->
+              <!-- TODO I don't think this exists -->
               <v-icon
                 v-if="assignment.live > 0 && assignment.live < 3"
                 color="accent"

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" width="232" app>
       <v-sheet class="pa-4">
         <nuxt-link to="/home">
           <the-logo />
@@ -70,7 +70,6 @@
     </v-navigation-drawer>
     <v-app-bar
       app
-      dense
       color="#fafafa"
       flat
       style="border-bottom: 1px solid #d2d2d2 !important"
@@ -80,7 +79,7 @@
         <span class="font-weight-medium"> {{ pageTitle }} </span>
         <!-- <the-student-greeting v-else /> -->
         <v-btn
-          v-if="teacher"
+          v-if="teacher && $route.name === 'home'"
           elevation="0"
           text
           rounded
@@ -88,6 +87,16 @@
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Create Class
+        </v-btn>
+        <v-btn
+          v-if="teacher && $route.name === 'group-group'"
+          elevation="0"
+          rounded
+          color="primary"
+          @click="createAssignment()"
+        >
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Create Assignment
         </v-btn>
         <!-- TODO -->
         <!-- <v-btn elevation="0" text rounded> Join Class </v-btn> -->
@@ -182,6 +191,16 @@ export default {
       } else {
         this.$store.commit('app/setPageTitle', this.group.name)
       }
+    },
+    createAssignment() {
+      // Clear any previous selections
+      this.$store.commit('topics/clearSelectedQuestions')
+      // Continue onboarding if user hasn't set assignments
+      this.$store.commit(
+        'app/setOnboardStep',
+        this.group.assignments.length < 3 ? 4 : 0
+      )
+      this.$router.push(`/course/${this.group.course.id}`)
     },
     // N.B. You *cannot* just filter groups (throws off i)
     // For students, show all classes in nav

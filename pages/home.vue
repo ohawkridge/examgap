@@ -20,6 +20,7 @@
             :group-index="i"
           />
         </template>
+        <the-create-class-card />
       </v-row>
     </template>
     <!-- **STUDENT** -->
@@ -58,16 +59,39 @@
                     <span class="font-weight-medium">{{
                       assignment.name
                     }}</span>
-                    <div>
+                    <div class="text-body-2">
                       {{ assignment.questions.length }} Question{{
                         assignment.questions.length | pluralize
                       }}
                     </div>
                   </div>
-                  <div class="col2">
+                  <div class="col2 d-flex align-center">
+                    <v-icon class="mr-2">{{
+                      $icons.mdiCalendarRangeOutline
+                    }}</v-icon>
                     {{ assignment.start | date }}
-                    <v-icon small>{{ $icons.mdiArrowRight }}</v-icon>
+                    <v-icon small class="mx-2">{{
+                      $icons.mdiArrowRight
+                    }}</v-icon>
                     {{ assignment.dateDue | date }}
+                  </div>
+                  <div class="col3 ml-auto">
+                    <v-tooltip v-if="assignment.live" bottom>
+                      <template #activator="{ on }">
+                        <v-icon color="green" v-on="on">{{
+                          $icons.mdiCircleOutline
+                        }}</v-icon>
+                      </template>
+                      <span>Open</span>
+                    </v-tooltip>
+                    <v-tooltip v-else bottom>
+                      <template #activator="{ on }">
+                        <v-icon v-on="on">{{
+                          $icons.mdiCheckCircleOutline
+                        }}</v-icon>
+                      </template>
+                      <span>Complete</span>
+                    </v-tooltip>
                   </div>
                 </div>
               </v-list-item-content>
@@ -80,47 +104,31 @@
         </v-tab-item>
       </v-tabs-items>
     </template>
-    <!-- Create Class -->
-    <!-- <v-col v-if="tab && activeGroupCount > 0" cols="12" md="6" lg="4">
-        <v-hover v-slot="{ hover }">
-          <v-card
-            :id="hover ? 'cc2' : 'cc1'"
-            class="d-flex align-center justify-center"
-            outlined
-            hover
-            height="172"
-            @click="$nuxt.$emit('show-create')"
-          >
-            <v-btn text :color="hover ? 'primary' : ''">
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              Create class
-            </v-btn>
-          </v-card>
-        </v-hover>
-      </v-col> -->
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { mdiPlus, mdiHomeOutline, mdiArchiveOutline } from '@mdi/js'
+import {
+  mdiPlus,
+  mdiHomeOutline,
+  mdiArchiveOutline,
+  mdiCalendarRangeOutline,
+  mdiArrowRight,
+} from '@mdi/js'
 import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
 import GroupCard from '@/components/teacher/GroupCard'
+import TheCreateClassCard from '@/components/teacher/TheCreateClassCard'
 
 export default {
   components: {
     TheQuoteOfTheDay,
     GroupCard,
+    TheCreateClassCard,
   },
   layout: 'app',
-  head() {
-    return {
-      title: 'Classes',
-    }
-  },
   computed: {
     ...mapGetters({
-      activeGroupCount: 'user/activeGroupCount',
       assignments: 'user/assignments',
     }),
     ...mapState({
@@ -142,6 +150,8 @@ export default {
       mdiPlus,
       mdiHomeOutline,
       mdiArchiveOutline,
+      mdiCalendarRangeOutline,
+      mdiArrowRight,
     }
   },
   mounted() {
@@ -151,17 +161,17 @@ export default {
 </script>
 
 <style scoped>
-/* create class card hover */
-#cc1 {
-  border: 1px dashed darkgray !important;
-}
-
-#cc2 {
-  border: 1px dashed #0078a0 !important;
-}
-
 /* Assignment name (students) */
 .col1 {
   width: 400px;
+}
+
+/* Dates */
+.col2 {
+  width: 240px;
+}
+
+.col3 {
+  width: 24px;
 }
 </style>
