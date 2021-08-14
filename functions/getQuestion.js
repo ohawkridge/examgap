@@ -56,6 +56,7 @@ exports.handler = async (event, context, callback) => {
               )
             )
           ),
+          // Whole doc only contains max. 3 fields so no point customising
           q.Lambda('tRef', q.Select(['ref', 'id'], q.Get(q.Var('tRef'))))
         ),
       }

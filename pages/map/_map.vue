@@ -1,49 +1,38 @@
 <template>
-  <v-row class="justify-center">
-    <v-col cols="12">
-      <v-card class="pa-md-3 mt-sm-3">
-        <v-card-title>Map question</v-card-title>
-        <v-card-text>
-          <v-row class="justify-center">
-            <v-col cols="6">
-              <v-text-field
-                v-model="id"
-                outlined
-                label="Question id"
-                clearable
-                @blur="getQuestion(id)"
-              ></v-text-field>
-              <v-autocomplete
-                v-model="selectedTopics"
-                :loading="$fetchState.pending"
-                :items="topics"
-                item-value="id"
-                item-text="name"
-                outlined
-                chips
-                small-chips
-                deletable-chips
-                hint="Map to course topics"
-                persistent-hint
-                multiple
-              >
-              </v-autocomplete>
-            </v-col>
-            <v-col cols="6">
-              <div v-html="question">
-                <p class="text-h6">Preview</p>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" elevation="0" class="ml-2" @click="save()">
-            Save Changes
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <div class="pa-4 mt-8">
+    <v-row>
+      <v-col cols="6">
+        <v-text-field
+          v-model="questionId"
+          outlined
+          label="Question Id"
+          clearable
+          @blur="getQuestion(questionId)"
+        ></v-text-field>
+        <v-autocomplete
+          v-model="selectedTopics"
+          :loading="$fetchState.pending"
+          :items="topics"
+          item-value="id"
+          item-text="name"
+          outlined
+          chips
+          small-chips
+          deletable-chips
+          hint="Select topics for question"
+          persistent-hint
+          multiple
+        >
+        </v-autocomplete>
+      </v-col>
+      <v-col cols="6">
+        <div v-html="question">
+          <p class="text-h6">Preview</p>
+        </div>
+      </v-col>
+    </v-row>
+    <v-btn color="primary" rounded elevation="0" @click="save()"> Save </v-btn>
+  </div>
 </template>
 
 <script>
@@ -51,7 +40,7 @@ export default {
   layout: 'app',
   data() {
     return {
-      id: '',
+      questionId: '',
       topics: [],
       question: '',
       selectedTopics: [],
@@ -74,13 +63,9 @@ export default {
     this.topics = await topics.json()
     this.getQuestion()
   },
-  head() {
-    return {
-      title: 'Map question',
-    }
-  },
   mounted() {
-    this.id = this.$route.params.map
+    this.questionId = this.$route.params.map
+    this.$store.commit('app/setPageTitle', 'Map Question')
   },
   methods: {
     async getQuestion(questionId = this.$route.params.map) {
@@ -104,8 +89,8 @@ export default {
         response = await response.json()
         this.question = response.text
         this.selectedTopics = response.selectedTopics
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error getting question',
@@ -122,7 +107,7 @@ export default {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
             topics: this.selectedTopics,
-            questionId: this.id,
+            questionId: this.questionId,
           }),
           method: 'POST',
         })
@@ -133,8 +118,8 @@ export default {
           type: 'success',
           msg: 'Changes saved',
         })
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error saving',

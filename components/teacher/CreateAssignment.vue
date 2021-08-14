@@ -1,6 +1,42 @@
 <template>
   <div>
     <v-dialog v-model="dialog" width="700" transition="scroll-x-transition">
+      <template #activator="{ on }">
+        <!-- <v-tooltip bottom>
+          <template #activator="{ on }"> -->
+        <v-btn
+          button
+          text
+          rounded
+          class="mr-2"
+          @click="$store.commit('topics/clearSelectedQuestions')"
+        >
+          Clear
+        </v-btn>
+        <!-- </template>
+          <span>Clear selection</span>
+        </v-tooltip> -->
+        <!-- <v-tooltip bottom>
+          <template #activator="{ on }"> -->
+        <v-btn
+          color="primary"
+          :disabled="selected.length == 0"
+          elevation="0"
+          rounded
+          @click="$nuxt.$emit('show-assign')"
+          v-on="on"
+        >
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Assign ({{ selected.length }})</v-btn
+        >
+        <!-- </template>
+          <span
+            >Create assignment with {{ selected.length }} question{{
+              selected.length | pluralize
+            }}
+          </span>
+        </v-tooltip> -->
+      </template>
       <v-card class="pa-md-3">
         <v-card-title> Create assignment </v-card-title>
         <v-card-subtitle> {{ subtitle }} </v-card-subtitle>
@@ -187,15 +223,10 @@ import {
   mdiCalendarOutline,
   mdiInformationOutline,
   mdiArrowRight,
+  mdiPlus,
 } from '@mdi/js'
 
 export default {
-  props: {
-    questions: {
-      type: Array,
-      default: () => [],
-    },
-  },
   data() {
     return {
       step: 1,
@@ -252,7 +283,10 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-    ...mapState({ secret: (state) => state.user.secret }),
+    ...mapState({
+      secret: (state) => state.user.secret,
+      selected: (state) => state.topics.selected, // Selected questions
+    }),
     allSelected: {
       get() {
         return this.selectedStudents.length === this.students.length
@@ -279,6 +313,7 @@ export default {
       mdiCalendarOutline,
       mdiInformationOutline,
       mdiArrowRight,
+      mdiPlus,
     }
   },
   beforeDestroy() {
@@ -358,7 +393,7 @@ export default {
             end: this.endDate,
             group: this.group.id,
             students: this.selectedStudents,
-            questions: this.questions,
+            questions: this.selected,
           })
           this.$router.push(`/report/${this.group.assignments[0].id}`)
           this.$snack.showMessage({

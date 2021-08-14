@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       pageNotFound: '404 Not Found',
-      otherError: 'Apologies, an error occurred.',
+      otherError: 'Sorry, an error has occurred.',
     }
   },
   computed: {

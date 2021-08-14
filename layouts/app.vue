@@ -6,19 +6,6 @@
           <the-logo />
         </nuxt-link>
         <v-list dense nav shaped>
-          <v-list-item
-            v-if="teacher"
-            nuxt
-            to="/author"
-            class="d-flex justify-center"
-          >
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiPlus }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Create question </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
           <v-list-item-group v-model="nav" color="primary">
             <v-list-group
               :value="true"
@@ -39,34 +26,23 @@
                 </v-list-item>
               </template>
             </v-list-group>
-            <v-divider class="my-3" />
-            <v-list-item nuxt to="/profile">
-              <v-list-item-icon>
-                <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title> Profile </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="$nuxt.$emit('show-feedback')">
-              <v-list-item-icon>
-                <v-icon>{{ $icons.mdiCommentTextOutline }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title> Send Feedback </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="logout()">
-              <v-list-item-icon>
-                <v-icon>{{ $icons.mdiLogout }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title> Sign Out </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
           </v-list-item-group>
+          <v-divider class="my-3" />
+          <v-list-item nuxt to="/profile">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Profile </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-sheet>
+      <template #append>
+        <div class="pa-4">
+          <v-btn block text rounded @click="logout()"> Sign out </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
     <v-app-bar
       app
@@ -86,7 +62,7 @@
           @click="$nuxt.$emit('show-create')"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Create Class
+          Class
         </v-btn>
         <v-btn
           v-if="teacher && $route.name === 'group-group'"
@@ -96,16 +72,19 @@
           @click="createAssignment()"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Create Assignment
+          Assignment
+        </v-btn>
+        <create-assignment v-if="$route.name === 'course-course'" />
+        <v-btn v-if="$route.name === 'question-question'" rounded text>
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Question
         </v-btn>
         <!-- TODO -->
         <!-- <v-btn elevation="0" text rounded> Join Class </v-btn> -->
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container class="pa-0">
-        <nuxt />
-      </v-container>
+      <nuxt />
       <the-snackbar />
       <the-onboarding-snackbar v-if="teacher" />
       <the-create-class-dialog v-if="teacher" />
@@ -123,7 +102,6 @@ import {
   mdiPlus,
   mdiAccountOutline,
   mdiChevronDown,
-  mdiLogout,
   mdiCheckCircleOutline,
   mdiCommentTextOutline,
   mdiFlashOutline,
@@ -137,6 +115,7 @@ import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
+import CreateAssignment from '~/components/teacher/CreateAssignment.vue'
 // import TheStudentGreeting from '~/components/student/TheStudentGreeting'
 
 export default {
@@ -151,6 +130,8 @@ export default {
     TheOnboardingSnackbar,
     TheLoadingOverlay,
     // TheStudentGreeting,
+
+    CreateAssignment,
   },
   middleware: ['auth'],
   data() {
@@ -175,7 +156,6 @@ export default {
       mdiPlus,
       mdiAccountOutline,
       mdiChevronDown,
-      mdiLogout,
       mdiCheckCircleOutline,
       mdiCommentTextOutline,
       mdiFlashOutline,

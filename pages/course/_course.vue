@@ -1,172 +1,153 @@
 <template>
-  <div>
-    <div
-      class="d-flex justify-end debug"
-      style="border-bottom: 1px solid #d2d2d2 !important"
-    >
-      <div>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn
-              button
-              text
-              rounded
-              class="mr-2"
-              v-on="on"
-              @click="$store.commit('topics/clearSelectedQuestions')"
-            >
-              Clear
-            </v-btn>
-          </template>
-          <span>Clear selection</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn
-              color="primary"
-              :disabled="selected.length == 0"
-              elevation="0"
-              rounded
-              @click="$nuxt.$emit('show-assign')"
-              v-on="on"
-            >
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              Assign ({{ selected.length }})</v-btn
-            >
-          </template>
-          <span
-            >Create assignment with {{ selected.length }} question{{
-              selected.length | pluralize
-            }}
-          </span>
-        </v-tooltip>
-      </div>
-    </div>
-    <v-row>
-      <v-col cols="12" md="3">
-        <p class="text-h6">Topics ({{ topics.length }})</p>
-        <v-list nav class="px-0">
-          <v-skeleton-loader
-            :loading="$fetchState.pending"
-            type="list"
-            :types="{ list: 'list-item-two-line@6' }"
+  <v-row>
+    <v-col cols="12" md="3">
+      <v-skeleton-loader
+        v-if="$fetchState.pending"
+        :loading="true"
+        type="list"
+        :types="{ list: 'list-item-two-line@6' }"
+      >
+      </v-skeleton-loader>
+      <v-list v-else nav>
+        <v-list-item-group v-model="currentTopicIndex" color="primary">
+          <v-list-item
+            v-for="(topic, i) in topics"
+            :key="i"
+            color="primary"
+            :title="`${topic.name} (${topic.count})`"
           >
-            <v-list-item-group v-model="currentTopicIndex" color="primary">
-              <v-list-item
-                v-for="(topic, i) in topics"
-                :key="i"
-                color="primary"
-                :title="`${topic.name} (${topic.count})`"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{ topic.name }}
-                    <span class="grey--text text--lighten-1">{{
-                      topic.count
-                    }}</span>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-skeleton-loader>
-        </v-list>
-        <p v-if="$fetchState.error" class="red--text">Error loading topics</p>
-      </v-col>
-      <v-col cols="12" md="5">
-        <p class="text-h6">Questions ({{ questions.length }})</p>
-        <v-skeleton-loader
-          :loading="loading || $fetchState.loading"
-          type="list"
-          :types="{ list: 'list-item-two-line@6' }"
-        >
-          <v-list>
-            <v-list-item-group v-model="selectedQuestion">
-              <template v-for="(q, i) in questions">
-                <v-list-item :key="i" :value="i">
-                  <v-list-item-content>
-                    <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
-                      <v-chip
-                        v-for="(assignment, j) in q.previous"
-                        :key="j"
-                        small
-                        outlined
-                        class="ml-2"
-                      >
-                        <v-tooltip bottom>
-                          <template #activator="{ on }">
-                            <span v-on="on"> {{ assignment.date | date }}</span>
-                          </template>
-                          <span>{{ assignment.name }}</span>
-                        </v-tooltip></v-chip
-                      >
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                  <v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ topic.name }}
+                <span class="grey--text text--lighten-1">{{
+                  topic.count
+                }}</span>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-if="$fetchState.error" color="error">
+            <v-list-item-content>
+              <v-list-item-title>Error loading topics</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-col>
+    <v-col cols="12" md="5">
+      <v-skeleton-loader
+        v-if="$fetchState.pending || loading"
+        :loading="true"
+        type="list"
+        :types="{ list: 'list-item-two-line@8' }"
+      >
+      </v-skeleton-loader>
+      <v-list v-else>
+        <v-list-item-group v-model="selectedQuestion">
+          <template v-for="(q, i) in questions">
+            <v-list-item :key="i" :value="i">
+              <v-list-item-content>
+                <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
+                  <v-chip
+                    v-for="(assignment, j) in q.previous"
+                    :key="j"
+                    small
+                    outlined
+                    color="primary"
+                    class="ml-2"
+                  >
                     <v-tooltip bottom>
                       <template #activator="{ on }">
-                        <v-btn icon v-on="on" @click.stop="add(q.id)">
-                          <v-icon
-                            :color="selected.includes(q.id) ? 'accent' : ''"
-                            >{{
-                              selected.includes(q.id)
-                                ? $icons.mdiMinus
-                                : $icons.mdiPlus
-                            }}</v-icon
-                          >
-                        </v-btn>
+                        <span v-on="on"> {{ assignment.date | date }}</span>
                       </template>
-                      <span>
-                        {{ selected.includes(q.id) ? 'Remove from' : 'Add to' }}
-                        assignment
-                      </span>
-                    </v-tooltip>
-                  </v-list-item-action>
-                </v-list-item>
-              </template>
-              <v-list-item v-if="noQuestions" disabled>
-                <v-list-item-title> No questions yet </v-list-item-title>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-skeleton-loader>
-      </v-col>
-      <v-col cols="12" md="4">
-        <div class="d-flex justify-space-between">
-          <p class="text-h6">Preview</p>
-          <the-question-detail-dialog
-            :question-id="question.id"
-            :disable="Object.keys(question).length"
-          />
-        </div>
-        <div
-          v-if="Object.keys(question).length"
-          class="pt-2 text-body-2"
-          v-html="question.text"
-        ></div>
-        <div v-if="Object.keys(question).length" class="d-flex justify-end">
-          <v-chip outlined
+                      <span>{{ assignment.name }}</span>
+                    </v-tooltip></v-chip
+                  >
+                </v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn icon v-on="on" @click.stop="add(q.id)">
+                      <v-icon
+                        :color="selected.includes(q.id) ? 'accent' : ''"
+                        >{{
+                          selected.includes(q.id)
+                            ? $icons.mdiMinus
+                            : $icons.mdiPlus
+                        }}</v-icon
+                      >
+                    </v-btn>
+                  </template>
+                  <span>
+                    {{ selected.includes(q.id) ? 'Remove' : 'Add' }}
+                  </span>
+                </v-tooltip>
+              </v-list-item-action>
+            </v-list-item>
+          </template>
+          <v-list-item v-if="noQuestions" disabled>
+            <v-list-item-title> No questions yet </v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-col>
+    <v-col cols="12" md="4">
+      <!-- Skeletons -->
+      <v-skeleton-loader
+        v-if="$fetchState.pending || loading"
+        :loading="true"
+        type="question"
+        :types="{ question: 'paragraph' }"
+        class="pa-5"
+      >
+      </v-skeleton-loader>
+      <v-skeleton-loader
+        v-if="$fetchState.pending || loading"
+        :loading="true"
+        type="question"
+        :types="{ question: 'paragraph' }"
+        class="px-5 mb-4"
+      >
+      </v-skeleton-loader>
+      <v-skeleton-loader
+        v-if="$fetchState.pending || loading"
+        :loading="true"
+        type="chip"
+        class="px-5 d-flex justify-end"
+      >
+      </v-skeleton-loader>
+      <div v-else class="pa-3">
+        <p>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <nuxt-link
+                :to="`/question/${question.id}`"
+                class="text-decoration-none"
+                v-on="on"
+                >{{ question.id }}</nuxt-link
+              >
+            </template>
+            <span>View</span>
+          </v-tooltip>
+        </p>
+        <div v-html="question.text"></div>
+        <div class="d-flex justify-end mt-4">
+          <v-chip outlined small
             >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
           </v-chip>
         </div>
-      </v-col>
-    </v-row>
-    <create-assignment :questions="selected" />
-  </div>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { mdiPlus, mdiMinus, mdiArrowRight } from '@mdi/js'
-import CreateAssignment from '@/components/teacher/CreateAssignment'
-import TheQuestionDetailDialog from '@/components/teacher/TheQuestionDetailDialog'
+import { mdiPlus, mdiMinus } from '@mdi/js'
 
 export default {
-  components: {
-    CreateAssignment,
-    TheQuestionDetailDialog,
-  },
   layout: 'app',
   data() {
     return {
@@ -184,7 +165,6 @@ export default {
       topics: (state) => state.topics.topics,
       questions: (state) => state.topics.questions,
       selected: (state) => state.topics.selected,
-      // loading: (state) => state.topics.loading,
       onboardStep: (state) => state.app.onboardStep,
     }),
     ...mapGetters({ group: 'user/activeGroup' }),
@@ -229,11 +209,10 @@ export default {
     this.$icons = {
       mdiPlus,
       mdiMinus,
-      mdiArrowRight,
     }
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', 'Create assignment')
+    this.$store.commit('app/setPageTitle', 'Create Assignment')
   },
   methods: {
     // Add/remove questions from assignment
