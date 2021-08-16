@@ -169,7 +169,7 @@ export default {
         this.$store.commit('students/clearStudents')
         this.$router.push(`/group/${groupId}`)
       } else {
-        this.$store.commit('app/setPageTitle', this.group.name)
+        this.$router.push('/home')
       }
     },
     createAssignment() {

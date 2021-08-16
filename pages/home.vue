@@ -37,7 +37,29 @@
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <v-list class="py-0">
+          <!-- Skeletons -->
+          <template v-if="loading">
+            <div v-for="n in 4" :key="n" class="my-6">
+              <v-skeleton-loader
+                type="heading"
+                height="21"
+                class="mb-1"
+                :loading="true"
+              ></v-skeleton-loader>
+              <v-skeleton-loader
+                type="chip"
+                :loading="true"
+                class="float-right"
+                style="position: relative; top: -26px"
+              ></v-skeleton-loader>
+              <v-skeleton-loader
+                type="text"
+                :loading="true"
+                width="56%"
+              ></v-skeleton-loader>
+            </div>
+          </template>
+          <v-list v-else class="py-0">
             <v-list-item v-if="assignments.length === 0" class="divide">
               <v-list-item-content>
                 <div class="d-flex align-center">
@@ -60,8 +82,8 @@
                       assignment.name
                     }}</span>
                     <div class="text-body-2">
-                      {{ assignment.questions.length }} Question{{
-                        assignment.questions.length | pluralize
+                      {{ assignment.num_questions }} Question{{
+                        assignment.num_questions | pluralize
                       }}
                     </div>
                   </div>
@@ -99,7 +121,7 @@
           </v-list>
         </v-tab-item>
         <v-tab-item> </v-tab-item>
-        <v-tab-item>
+        <v-tab-item eager>
           <the-quote-of-the-day />
         </v-tab-item>
       </v-tabs-items>
@@ -130,10 +152,12 @@ export default {
   computed: {
     ...mapGetters({
       assignments: 'user/assignments',
+      group: 'user/activeGroup',
     }),
     ...mapState({
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
+      loading: (state) => state.app.loading,
     }),
     // Remember active tab (in store)
     tab: {
@@ -155,7 +179,13 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', 'Classes')
+    // For students, the home page is the first
+    // class in the student's classes menu
+    if (this.teacher) {
+      this.$store.commit('app/setPageTitle', 'Classes')
+    } else {
+      this.$store.commit('app/setPageTitle', this.group.name)
+    }
   },
 }
 </script>

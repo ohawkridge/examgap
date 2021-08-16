@@ -2,8 +2,6 @@
   <div>
     <v-dialog v-model="dialog" width="700" transition="scroll-x-transition">
       <template #activator="{ on }">
-        <!-- <v-tooltip bottom>
-          <template #activator="{ on }"> -->
         <v-btn
           button
           text
@@ -13,11 +11,6 @@
         >
           Clear
         </v-btn>
-        <!-- </template>
-          <span>Clear selection</span>
-        </v-tooltip> -->
-        <!-- <v-tooltip bottom>
-          <template #activator="{ on }"> -->
         <v-btn
           color="primary"
           :disabled="selected.length == 0"
@@ -29,13 +22,6 @@
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Assign ({{ selected.length }})</v-btn
         >
-        <!-- </template>
-          <span
-            >Create assignment with {{ selected.length }} question{{
-              selected.length | pluralize
-            }}
-          </span>
-        </v-tooltip> -->
       </template>
       <v-card class="pa-md-3">
         <v-card-title> Create assignment </v-card-title>
@@ -77,8 +63,7 @@
                           >
                         </template>
                         <span
-                          >Turn exam mode
-                          {{ student.examMode ? 'off' : 'on' }}</span
+                          >Exam mode {{ student.examMode ? 'on' : 'off' }}</span
                         >
                       </v-tooltip>
                     </template>
@@ -126,7 +111,7 @@
                         <v-text-field
                           v-model="startDate"
                           label="Start date*"
-                          :append-icon="$icons.mdiCalendarOutline"
+                          :append-icon="$icons.mdiCalendarStart"
                           placeholder="YYYY-MM-DD"
                           :rules="startDateRules"
                           outlined
@@ -153,7 +138,7 @@
                           v-model="endDate"
                           label="End date*"
                           outlined
-                          :append-icon="$icons.mdiCalendarOutline"
+                          :append-icon="$icons.mdiCalendarEnd"
                           placeholder="YYYY-MM-DD"
                           :rules="endDateRules"
                           v-on="on"
@@ -190,12 +175,15 @@
           </v-window-item>
         </v-window>
         <v-card-actions>
-          <v-btn v-if="step === 1" text @click="dialog = false"> Cancel </v-btn>
-          <v-btn v-if="step === 2" text @click="step--"> Back </v-btn>
+          <v-btn v-if="step === 1" text rounded @click="dialog = false">
+            Cancel
+          </v-btn>
+          <v-btn v-if="step === 2" text rounded @click="step--"> Back </v-btn>
           <v-spacer />
           <v-btn
             v-if="step === 1"
             elevation="0"
+            rounded
             color="primary"
             @click="step++"
           >
@@ -204,6 +192,7 @@
           <v-btn
             v-if="step === 2"
             elevation="0"
+            rounded
             :loading="loading"
             :disabled="loading"
             color="primary"
@@ -220,10 +209,11 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import {
-  mdiCalendarOutline,
+  mdiCalendarStart,
   mdiInformationOutline,
   mdiArrowRight,
   mdiPlus,
+  mdiCalendarEnd,
 } from '@mdi/js'
 
 export default {
@@ -310,10 +300,11 @@ export default {
   },
   created() {
     this.$icons = {
-      mdiCalendarOutline,
+      mdiCalendarStart,
       mdiInformationOutline,
       mdiArrowRight,
       mdiPlus,
+      mdiCalendarEnd,
     }
   },
   beforeDestroy() {

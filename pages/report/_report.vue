@@ -41,64 +41,65 @@
       </div>
     </div>
     <v-skeleton-loader
-      :loading="$fetchState.pending"
+      v-if="$fetchState.pending"
+      :loading="true"
       type="table"
       :types="{ table: 'table-thead, table-tbody, table-tfoot' }"
       class="pa-4"
     >
-      <table id="table">
-        <thead>
-          <tr v-if="!$fetchState.pending">
-            <th
-              v-for="(q, i) in assignment.headers"
-              :key="i"
-              :class="i === 0 ? 'text-left' : ''"
-            >
-              <span v-if="i === 0">Username</span>
-              <v-menu v-else offset-x open-on-hover>
-                <template #activator="{ on, attrs }">
-                  <span v-bind="attrs" v-on="on">{{
-                    `Q${i} [${q.maxMark}]`
-                  }}</span>
-                </template>
-                <v-card max-width="440">
-                  <v-card-text class="text-body-2">
-                    <div v-html="assignment.headers[i].text"></div>
-                    <div class="font-weight-bold text-right">
-                      [{{ q.maxMark }}]
-                    </div>
-                  </v-card-text>
-                </v-card>
-              </v-menu>
-            </th>
-          </tr>
-        </thead>
-        <tbody v-if="!$fetchState.pending">
-          <tr v-for="(student, i) in assignment.students" :key="i">
-            <td>
-              {{ student.name }}
-            </td>
-            <td v-for="(item, j) in student.data" :key="j" class="text-center">
-              <MarkChip :data="item" :student-index="i" :question-index="j" />
-            </td>
-          </tr>
-          <tr v-if="assignment.students.length === 0">
-            <td class="text-center" :colspan="assignment.headers.length">
-              <p class="text-body-2 mt-4">No students yet</p>
-              <p>
-                <v-btn
-                  color="primary"
-                  elevation="0"
-                  @click="$nuxt.$emit('open-invite')"
-                >
-                  Invite students</v-btn
-                >
-              </p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </v-skeleton-loader>
+    <table v-else id="table">
+      <thead>
+        <tr v-if="!$fetchState.pending">
+          <th
+            v-for="(q, i) in assignment.headers"
+            :key="i"
+            :class="i === 0 ? 'text-left' : ''"
+          >
+            <span v-if="i === 0">Username</span>
+            <v-menu v-else offset-x open-on-hover>
+              <template #activator="{ on, attrs }">
+                <span v-bind="attrs" v-on="on">{{
+                  `Q${i} [${q.maxMark}]`
+                }}</span>
+              </template>
+              <v-card max-width="440">
+                <v-card-text class="text-body-2">
+                  <div v-html="assignment.headers[i].text"></div>
+                  <div class="font-weight-bold text-right">
+                    [{{ q.maxMark }}]
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-menu>
+          </th>
+        </tr>
+      </thead>
+      <tbody v-if="!$fetchState.pending">
+        <tr v-for="(student, i) in assignment.students" :key="i">
+          <td>
+            {{ student.name }}
+          </td>
+          <td v-for="(item, j) in student.data" :key="j" class="text-center">
+            <MarkChip :data="item" :student-index="i" :question-index="j" />
+          </td>
+        </tr>
+        <tr v-if="assignment.students.length === 0">
+          <td class="text-center" :colspan="assignment.headers.length">
+            <p class="text-body-2 mt-4">No students yet</p>
+            <p>
+              <v-btn
+                color="primary"
+                elevation="0"
+                @click="$nuxt.$emit('open-invite')"
+              >
+                Invite students</v-btn
+              >
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div class="d-flex justify-end pa-4">
       <span class="mr-2"> N/A&mdash;Not answered </span>
       <v-icon>{{ $icons.mdiCheck }}</v-icon>

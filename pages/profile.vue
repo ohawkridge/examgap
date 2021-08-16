@@ -1,5 +1,5 @@
 <template>
-  <v-row class="d-flex justify-center mt-8">
+  <v-row class="d-flex justify-center my-8">
     <v-col cols="12" md="5">
       <p class="text-h5 d-flex justify-space-between mb-3">Account</p>
       <p class="font-weight-light mb-9">Manage your account details.</p>

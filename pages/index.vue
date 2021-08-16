@@ -39,7 +39,11 @@
           </div>
         </v-col>
       </v-row>
-      <svg version="1.1" class="d-none svg-filters">
+      <svg
+        version="1.1"
+        class="svg-filters"
+        style="position: absolute; height: 0"
+      >
         <defs>
           <filter id="marker-shape">
             <feTurbulence
@@ -831,8 +835,8 @@ export default {
 }
 .highlight:before {
   content: '';
-  background-color: #ef7a85;
-  opacity: 0.35;
+  background-color: #db5461;
+  opacity: 0.3;
   width: 108%;
   height: 1em;
   position: absolute;

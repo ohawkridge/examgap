@@ -54,7 +54,6 @@
                     :key="j"
                     small
                     outlined
-                    color="primary"
                     class="ml-2"
                   >
                     <v-tooltip bottom>
