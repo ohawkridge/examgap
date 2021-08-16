@@ -10,6 +10,7 @@ export const state = () => ({
   responseIndex: '',
   // Indecies ^^^ into _report.vue data structure
   marking: false,
+  question: {}, // The question to answer
 })
 
 // getAssignment() returns a massive data structure
@@ -34,6 +35,21 @@ export const getters = {
 }
 
 export const actions = {
+  async getQuestion({ state, commit, rootState }) {
+    const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        questionId: state.questionId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error fetching question ${response.status}`)
+    }
+    response = await response.json()
+    commit('setQuestion', response)
+  },
   // Get next revision question for selected topic
   async revise({ commit, rootState, rootGetters }) {
     const url = new URL(
@@ -242,6 +258,9 @@ export const actions = {
 export const mutations = {
   setAssignment(state, data) {
     state.assignment = data
+  },
+  setQuestion(state, question) {
+    state.question = question
   },
   setAnswerData(state, { assignmentId, questionId }) {
     state.assignmentId = assignmentId

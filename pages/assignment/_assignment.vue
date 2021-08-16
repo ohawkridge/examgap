@@ -4,25 +4,22 @@
     <template v-if="$fetchState.pending">
       <div class="pa-4">
         <v-skeleton-loader
-          v-bind="attrs"
-          type="heading"
+          type="text@3"
           :loading="true"
-          class=""
-          height="40"
-          width="70%"
+          width="25%"
+          class="float-right mt-4"
+          style="margin-right: 10%"
         ></v-skeleton-loader>
         <v-skeleton-loader
-          v-bind="attrs"
-          type="text@2"
+          type="list-item-avatar"
           :loading="true"
-          width="200"
+          width="40%"
         ></v-skeleton-loader>
         <v-skeleton-loader
-          v-bind="attrs"
           type="image"
           :loading="true"
-          width="95%"
-          class="mx-auto"
+          width="100%"
+          class="pt-8 pa-4"
         ></v-skeleton-loader>
       </div>
     </template>
@@ -83,20 +80,13 @@ export default {
     AssignmentQuestion,
   },
   layout: 'app',
-  data() {
-    return {
-      // Common attributes for skeleton-loaders
-      attrs: {
-        class: 'mb-6',
-      },
-    }
-  },
   async fetch() {
     // Dispatch action to get assignment
     await this.$store.dispatch(
       'assignment/getAssignment',
       this.$route.params.assignment
     )
+    console.log('%c' + 'Fetching..', 'color:red')
   },
   computed: {
     ...mapState({
@@ -107,6 +97,7 @@ export default {
     s() {
       let total = 0
       let max = 0
+      let ave = 0
       // Each question contains an array of responses
       for (const q of this.assignment.questions) {
         const mm = parseInt(q.maxMark)
@@ -115,7 +106,16 @@ export default {
           max += mm
         }
       }
-      return { total, max, ave: Math.round((total / max) * 100) }
+      // If max is 0, student probably hasn't answered any questions
+      // Use questions to find max instead and avoid DIV0 in ave.
+      if (max === 0) {
+        ave = '--'
+        const x = this.assignment.questions.map((q) => parseInt(q.maxMark))
+        max = x.reduce((a, b) => a + b, 0)
+      } else {
+        ave = Math.round((total / max) * 100)
+      }
+      return { total, max, ave }
     },
   },
   created() {

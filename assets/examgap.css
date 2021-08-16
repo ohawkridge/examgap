@@ -17,11 +17,6 @@ blockquote {
   padding-left: 1em;
 }
 
-/* colour student answers */
-#ans {
-  background: #f7eabb;
-}
-
 /* accessible RAG chips */
 span.v-chip.theme--light.red {
   background-color: rgb(254, 216, 216) !important;

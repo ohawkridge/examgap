@@ -93,6 +93,7 @@ exports.handler = async (event, context, callback) => {
       body: JSON.stringify(data),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

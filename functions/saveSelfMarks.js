@@ -1,16 +1,11 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const responseId = data.responseId
   const marks = data.markIds
   const secret = data.secret
-  console.log()
-  console.log(responseId)
-  console.log(marks)
-  console.log(secret)
-  console.log()
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,

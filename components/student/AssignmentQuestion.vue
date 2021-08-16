@@ -33,10 +33,9 @@
           >
             <!-- Teacher mark -->
             <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
+              <template #activator="{ on }">
                 <v-chip
                   v-if="response.marked"
-                  v-bind="attrs"
                   :color="color(response.tm, question.maxMark)"
                   v-on="on"
                 >
@@ -51,12 +50,8 @@
             </v-tooltip>
             <!-- Self mark -->
             <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-chip
-                  v-bind="attrs"
-                  :color="color(response.sm, question.maxMark)"
-                  v-on="on"
-                >
+              <template #activator="{ on }">
+                <v-chip :color="color(response.sm, question.maxMark)" v-on="on">
                   <v-avatar left>
                     <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
                   </v-avatar>
@@ -75,7 +70,7 @@
           i == question.responses.length - 1 && question.responses[i].repeat
         "
         :key="i + 1"
-        class="px-0 px-md-3"
+        class="divide"
         @click="answer(question.id)"
       >
         <v-list-item-content>
@@ -96,7 +91,7 @@
     <!-- If no responses, question is unanswered -->
     <v-list-item
       v-if="question.responses.length === 0"
-      class="px-0 px-md-3"
+      class="divide"
       @click="answer(question.id)"
     >
       <v-list-item-content>
