@@ -52,9 +52,12 @@
             <span class="fix-width font-weight-medium">Due:</span>
             {{ assignment.dateDue | date }}
           </div>
-          <div class="text-subtitle-1">
+          <div class="text-subtitle-1 d-flex align-center">
             <span class="fix-width font-weight-medium">Score:</span>
-            {{ `${s.total}/${s.max} (${s.ave}%)` }}
+            {{ `${s.total}/${s.max}` }}
+            <v-chip small label :color="s.color" class="ml-2 font-weight-bold">
+              {{ s.ave }}%
+            </v-chip>
           </div>
         </div>
       </div>
@@ -86,7 +89,6 @@ export default {
       'assignment/getAssignment',
       this.$route.params.assignment
     )
-    console.log('%c' + 'Fetching..', 'color:red')
   },
   computed: {
     ...mapState({
@@ -94,10 +96,12 @@ export default {
       assignment: (state) => state.assignment.assignment,
     }),
     // Create an object containing overall score
+    // (including RAG colour-code)
     s() {
       let total = 0
       let max = 0
       let ave = 0
+      let color = ''
       // Each question contains an array of responses
       for (const q of this.assignment.questions) {
         const mm = parseInt(q.maxMark)
@@ -114,8 +118,12 @@ export default {
         max = x.reduce((a, b) => a + b, 0)
       } else {
         ave = Math.round((total / max) * 100)
+        // Add RAG color class
+        if (ave <= 33) color = 'red'
+        else if (ave > 66) color = 'green'
+        else color = 'orange'
       }
-      return { total, max, ave }
+      return { total, max, ave, color }
     },
   },
   created() {
@@ -128,7 +136,7 @@ export default {
 </script>
 
 <style scoped>
-/* align start/due dates */
+/* Align start/due dates */
 .fix-width {
   display: inline-block;
   width: 60px;

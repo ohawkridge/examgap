@@ -74,7 +74,7 @@
               :to="`/assignment/${assignment.id}`"
               class="divide"
             >
-              <v-list-item-content>
+              <v-list-item-content class="py-4">
                 <div class="d-flex align-center">
                   <div class="col1">
                     <span class="font-weight-medium">{{

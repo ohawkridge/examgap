@@ -37,13 +37,12 @@
                 <v-chip
                   v-if="response.marked"
                   :color="color(response.tm, question.maxMark)"
+                  label
                   v-on="on"
                 >
-                  <v-avatar left>
-                    <v-icon>{{ $icons.mdiSchoolOutline }}</v-icon>
-                  </v-avatar>
-                  <span class="font-weight-black">{{ response.tm }}</span>
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                  <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                  {{ response.tm }}
+                  <v-icon right> {{ $icons.mdiCheckboxMarkedOutline }} </v-icon>
                 </v-chip>
               </template>
               <span>Your teacher</span>
@@ -51,12 +50,14 @@
             <!-- Self mark -->
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-chip :color="color(response.sm, question.maxMark)" v-on="on">
-                  <v-avatar left>
-                    <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
-                  </v-avatar>
-                  <span class="font-weight-black"> {{ response.sm }}</span>
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                <v-chip
+                  :color="color(response.sm, question.maxMark)"
+                  label
+                  v-on="on"
+                >
+                  <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                  {{ response.sm }}
+                  <v-icon right> {{ $icons.mdiCheckboxMarkedOutline }} </v-icon>
                 </v-chip>
               </template>
               <span>You</span>
@@ -115,7 +116,7 @@
 import {
   mdiAccountOutline,
   mdiSchoolOutline,
-  mdiCheck,
+  mdiCheckboxMarkedOutline,
   mdiCommentTextOutline,
 } from '@mdi/js'
 
@@ -135,7 +136,7 @@ export default {
     this.$icons = {
       mdiAccountOutline,
       mdiSchoolOutline,
-      mdiCheck,
+      mdiCheckboxMarkedOutline,
       mdiCommentTextOutline,
     }
   },

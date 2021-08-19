@@ -3,12 +3,12 @@
     <!-- Skeletons -->
     <div v-if="$fetchState.pending">
       <v-skeleton-loader
-        type="chip"
+        type="button"
         :loading="$fetchState.pending"
         class="mt-4 mr-4 float-right"
       ></v-skeleton-loader>
       <v-skeleton-loader
-        type="chip"
+        type="button"
         :loading="$fetchState.pending"
         class="mt-4 mr-4 float-right"
       ></v-skeleton-loader>
@@ -82,13 +82,12 @@
                 <v-chip
                   :color="color(response.tm.length, response.question.maxMark)"
                   class="mr-4"
+                  label
                   v-on="on"
                 >
                   <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
-                  <span class="font-weight-black">{{
-                    response.tm.length
-                  }}</span>
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                  {{ response.tm.length }}
+                  <v-icon right> {{ $icons.mdiCheckboxMarkedOutline }} </v-icon>
                 </v-chip>
               </template>
               <span>Your teacher</span>
@@ -97,13 +96,12 @@
               <template #activator="{ on }">
                 <v-chip
                   :color="color(response.sm.length, response.question.maxMark)"
+                  label
                   v-on="on"
                 >
                   <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
-                  <span class="font-weight-black">{{
-                    response.sm.length
-                  }}</span>
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                  {{ response.sm.length }}
+                  <v-icon right> {{ $icons.mdiCheckboxMarkedOutline }} </v-icon>
                 </v-chip>
               </template>
               <span>You</span>
@@ -202,7 +200,7 @@ import {
   mdiAccountOutline,
   mdiCheckboxMarked,
   mdiArrowLeft,
-  mdiCheck,
+  mdiCheckboxMarkedOutline,
 } from '@mdi/js'
 
 export default {
@@ -224,7 +222,7 @@ export default {
       mdiAccountOutline,
       mdiCheckboxMarked,
       mdiArrowLeft,
-      mdiCheck,
+      mdiCheckboxMarkedOutline,
     }
   },
   mounted() {
