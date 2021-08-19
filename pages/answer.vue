@@ -116,7 +116,7 @@
             @change="checkMax()"
           >
           </v-checkbox>
-          <p class="mt-2">
+          <p class="mt-2 accent--text">
             Max. {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
           </p>
           <p class="text-subtitle-1 font-weight-medium my-4">
@@ -221,7 +221,7 @@ export default {
     ...mapGetters({ group: 'user/activeGroup' }),
     // Set assignment or independent revision?
     revising() {
-      return this.assignmentId === 0
+      return this.assignmentId === ''
     },
     wordCount() {
       let words = this.parse(this.answer).split(' ')
@@ -359,17 +359,6 @@ export default {
         this.marks.splice(-1, 1) // Uncheck box
       }
     },
-    // Save self marks to db
-    // async saveMarks() {
-    //   try {
-    //   } catch (err) {
-    //     console.error(err)
-    //     this.$snack.showMessage({
-    //       type: 'error',
-    //       msg: 'Error saving marks',
-    //     })
-    //   }
-    // },
     // Save student's response
     async save() {
       try {

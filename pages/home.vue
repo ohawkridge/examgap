@@ -119,8 +119,29 @@
             </v-list-item>
           </v-list>
         </v-tab-item>
-        <v-tab-item> </v-tab-item>
+        <v-tab-item>
+          <v-list class="py-0">
+            <v-list-item
+              v-for="(topic, i) in topics"
+              :key="i"
+              class="divide"
+              @click="revise(topic.id)"
+            >
+              <v-list-item-content>
+                <div class="d-flex align-center">
+                  <div id="r-col1" class="font-weight-medium">
+                    {{ topic.name }}
+                  </div>
+                  <div>
+                    <v-icon color="grey">{{ $icons.mdiCircleOutline }}</v-icon>
+                  </div>
+                </div>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-tab-item>
       </v-tabs-items>
+      <the-revision-mode-dialog />
     </template>
   </div>
 </template>
@@ -133,14 +154,17 @@ import {
   mdiArchiveOutline,
   mdiCalendarRangeOutline,
   mdiArrowRight,
+  mdiCircleOutline,
 } from '@mdi/js'
 import GroupCard from '@/components/teacher/GroupCard'
 import TheCreateClassCard from '@/components/teacher/TheCreateClassCard'
+import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 
 export default {
   components: {
     GroupCard,
     TheCreateClassCard,
+    TheRevisionModeDialog,
   },
   layout: 'app',
   computed: {
@@ -152,6 +176,7 @@ export default {
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
       loading: (state) => state.app.loading,
+      topics: (state) => state.topics.topics,
     }),
     // Remember active tab (in store)
     tab: {
@@ -170,6 +195,7 @@ export default {
       mdiArchiveOutline,
       mdiCalendarRangeOutline,
       mdiArrowRight,
+      mdiCircleOutline,
     }
   },
   mounted() {
@@ -180,6 +206,13 @@ export default {
     } else {
       this.$store.commit('app/setPageTitle', this.group.name)
     }
+  },
+  methods: {
+    revise(topicId) {
+      // Store topic id to increment count later
+      this.$store.commit('topics/setTopicId', topicId)
+      this.$nuxt.$emit('show-revise')
+    },
   },
 }
 </script>
@@ -197,5 +230,10 @@ export default {
 
 .col3 {
   width: 24px;
+}
+
+/* Revision */
+#r-col1 {
+  width: 340px;
 }
 </style>

@@ -34,7 +34,7 @@ exports.handler = async (event) => {
           ),
           // Independent revision—no assignment id
           assignment: q.If(
-            q.Equals(assignmentId, 0),
+            q.Equals(assignmentId, ''),
             '',
             q.Ref(q.Collection('Assignment'), assignmentId)
           ),

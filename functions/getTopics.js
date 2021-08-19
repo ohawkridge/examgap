@@ -32,6 +32,9 @@ exports.handler = async (event) => {
               count: q.Count(q.Match(q.Index('topic_questions'), q.Var('ref'))),
               // If this is a student, also get the number of
               // independent revision questions done in topic
+              // This works because the 'response_by_student_topic'
+              // index only finds responses where topic is set
+              // (topic isn't set for assigned questions)
               answered: q.If(
                 q.Not(teacher),
                 q.Count(

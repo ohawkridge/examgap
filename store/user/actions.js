@@ -58,6 +58,9 @@ const actions = {
       throw new Error(`getGroups\n ${response.statusText} (${response.status})`)
     }
     response = await response.json()
+    console.log()
+    console.dir(response)
+    console.log()
     commit('setGroups', response)
     // Onboard if no active groups
     if (rootGetters['user/activeGroupCount'] === 0) {

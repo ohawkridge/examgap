@@ -275,7 +275,6 @@ export const mutations = {
   setResponseId(state, responseId) {
     state.responseId = responseId
   },
-  // **_report.vue mutations**
   setMarking(state, marking) {
     state.marking = marking
   },
