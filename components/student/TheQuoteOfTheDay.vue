@@ -1,11 +1,10 @@
 <template>
-  <v-row class="justify-center text-center">
-    <v-col cols="7">
-      <p class="text-h5 font-weight-light mt-12">
-        {{ $store.state.user.quote }}
-      </p>
-    </v-col>
-  </v-row>
+  <div
+    class="text-caption text-right grey--text text--darken-1"
+    style="width: 34%"
+  >
+    {{ $store.state.user.quote.quote }}—{{ $store.state.user.quote.author }}
+  </div>
 </template>
 
 <script>

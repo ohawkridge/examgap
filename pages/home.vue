@@ -33,7 +33,6 @@
       >
         <v-tab class="text-capitalize">Assignments</v-tab>
         <v-tab class="text-capitalize">Revision</v-tab>
-        <v-tab class="text-capitalize">Quote</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
@@ -121,9 +120,6 @@
           </v-list>
         </v-tab-item>
         <v-tab-item> </v-tab-item>
-        <v-tab-item eager>
-          <the-quote-of-the-day />
-        </v-tab-item>
       </v-tabs-items>
     </template>
   </div>
@@ -138,13 +134,11 @@ import {
   mdiCalendarRangeOutline,
   mdiArrowRight,
 } from '@mdi/js'
-import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
 import GroupCard from '@/components/teacher/GroupCard'
 import TheCreateClassCard from '@/components/teacher/TheCreateClassCard'
 
 export default {
   components: {
-    TheQuoteOfTheDay,
     GroupCard,
     TheCreateClassCard,
   },

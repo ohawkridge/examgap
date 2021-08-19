@@ -3,33 +3,25 @@
     <v-menu offset-x open-on-hover>
       <template #activator="{ on }">
         <v-hover v-slot="{ hover }">
-          <v-icon class="mr-2" :color="hover ? 'primary' : 'grey'" v-on="on">{{
-            $icons.mdiEarth
-          }}</v-icon>
+          <span :class="hover ? 'primary--text' : ''" v-on="on">
+            {{ greeting.text }},
+          </span>
         </v-hover>
       </template>
       <v-card max-width="250">
-        <v-card-text class="text-body-1">
-          <span class="font-weight-medium">{{ greeting.text }}</span>
-          is how you say 'Hello' in
+        <v-card-text>
+          {{ greeting.text }} is how you say 'Hello' in
           <span class="font-weight-medium">{{ greeting.country }}.</span>
         </v-card-text>
       </v-card>
     </v-menu>
-    {{ greeting.text }}, {{ shortName }}
   </span>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { mdiEarth } from '@mdi/js'
-
 export default {
   name: 'TheStudentGreeting',
   computed: {
-    ...mapState({
-      username: (state) => state.user.username,
-    }),
     greeting() {
       const greetings = [
         { country: 'Arabic', text: 'Asalaam alaikum' },
@@ -69,16 +61,6 @@ export default {
       ]
       return greetings[Math.floor(Math.random() * greetings.length)]
     },
-    shortName() {
-      return this.username.includes('@')
-        ? this.username.substring(0, this.username.indexOf('@'))
-        : this.username
-    },
-  },
-  created() {
-    this.$icons = {
-      mdiEarth,
-    }
   },
 }
 </script>

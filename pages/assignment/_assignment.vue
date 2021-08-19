@@ -6,9 +6,9 @@
         <v-skeleton-loader
           type="text@3"
           :loading="true"
-          width="25%"
+          width="16%"
           class="float-right mt-4"
-          style="margin-right: 10%"
+          style="margin-right: 22%"
         ></v-skeleton-loader>
         <v-skeleton-loader
           type="list-item-avatar"

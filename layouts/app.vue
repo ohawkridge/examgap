@@ -5,6 +5,20 @@
         <nuxt-link to="/home">
           <the-logo />
         </nuxt-link>
+        <div class="pa-4">
+          <the-student-greeting v-if="!teacher" />
+          <nuxt-link
+            to="/profile"
+            class="
+              text-decoration-none
+              black--text
+              text-subtitle-1
+              font-weight-medium
+            "
+            >{{ username }}</nuxt-link
+          >
+          <v-chip small outlined> Student </v-chip>
+        </div>
         <v-list dense nav shaped>
           <v-list-item-group v-model="nav" color="primary">
             <v-list-group
@@ -53,7 +67,6 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
-        <!-- <the-student-greeting v-else /> -->
         <v-btn
           v-if="teacher && $route.name === 'home'"
           elevation="0"
@@ -64,6 +77,7 @@
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Class
         </v-btn>
+        <the-quote-of-the-day v-if="!teacher" />
         <v-btn
           v-if="teacher && $route.name === 'group-group'"
           elevation="0"
@@ -115,8 +129,9 @@ import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
-import CreateAssignment from '~/components/teacher/CreateAssignment.vue'
-// import TheStudentGreeting from '~/components/student/TheStudentGreeting'
+import CreateAssignment from '@/components/teacher/CreateAssignment'
+import TheStudentGreeting from '@/components/student/TheStudentGreeting'
+import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
 
 export default {
   name: 'App',
@@ -129,9 +144,9 @@ export default {
     TheFeedbackDialog,
     TheOnboardingSnackbar,
     TheLoadingOverlay,
-    // TheStudentGreeting,
-
+    TheStudentGreeting,
     CreateAssignment,
+    TheQuoteOfTheDay,
   },
   middleware: ['auth'],
   data() {
@@ -143,6 +158,7 @@ export default {
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
+      username: (state) => state.user.username,
       groups: (state) => state.user.groups,
       pageTitle: (state) => state.app.pageTitle,
     }),
