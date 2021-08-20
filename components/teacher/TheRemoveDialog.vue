@@ -1,29 +1,32 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <v-card class="modal danger">
+    <v-card>
       <v-card-title class="d-flex justify-center">
-        Remove student{{ selected.length | pluralize }}
+        Remove student{{ selected.length | pluralize }}?
       </v-card-title>
       <v-card-text>
         <ul class="mb-4">
           <li v-for="(user, i) in selected" :key="i">{{ user.username }}</li>
         </ul>
-        Are you sure? Removed students keep their accounts, but they won't
-        appear in this class anymore.
+        <p>
+          Removed students keep their accounts, but they won't appear in this
+          class anymore.
+        </p>
+        <div class="d-flex justify-end">
+          <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
+          <v-btn
+            color="error"
+            elevation="0"
+            rounded
+            class="ml-2"
+            :loading="loading"
+            :disabled="loading"
+            @click="removeStudents()"
+          >
+            Remove
+          </v-btn>
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="dialog = false"> Cancel </v-btn>
-        <v-btn
-          color="error"
-          elevation="0"
-          :loading="loading"
-          :disabled="loading"
-          @click="removeStudents()"
-        >
-          Remove student{{ selected.length | pluralize }}
-        </v-btn>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>

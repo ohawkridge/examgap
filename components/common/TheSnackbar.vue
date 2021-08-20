@@ -2,7 +2,7 @@
   <v-snackbar v-model="show" bottom left :timeout="timeout" :color="color">
     {{ message }}
     <template #action="{ attrs }">
-      <v-btn color="white" text v-bind="attrs" @click="show = false">
+      <v-btn color="white" text rounded v-bind="attrs" @click="show = false">
         Close
       </v-btn>
     </template>

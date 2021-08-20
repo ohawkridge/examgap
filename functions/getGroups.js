@@ -78,11 +78,19 @@ exports.handler = async (event) => {
                             ),
                             live: q.If(
                               q.LTE(
-                                q.Select(
-                                  ['data', 'dateDue'],
-                                  q.Var('instance')
+                                q.ToDate(
+                                  // Old assignments include a time which ToDate
+                                  // won't be able to parse so chop it off
+                                  q.SubString(
+                                    q.Select(
+                                      ['data', 'dateDue'],
+                                      q.Var('instance')
+                                    ),
+                                    0,
+                                    10
+                                  )
                                 ),
-                                q.Now()
+                                q.ToDate(q.Now())
                               ),
                               false,
                               true
@@ -135,8 +143,17 @@ exports.handler = async (event) => {
                         ),
                         live: q.If(
                           q.LTE(
-                            q.Select(['data', 'dateDue'], q.Var('instance')),
-                            q.Now()
+                            q.ToDate(
+                              q.SubString(
+                                q.Select(
+                                  ['data', 'dateDue'],
+                                  q.Var('instance')
+                                ),
+                                0,
+                                10
+                              )
+                            ),
+                            q.ToDate(q.Now())
                           ),
                           false,
                           true

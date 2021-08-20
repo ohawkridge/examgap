@@ -8,8 +8,8 @@
         background-color="transparent"
         style="border-bottom: 1px solid #d2d2d2 !important"
       >
-        <v-tab class="text-capitalize">Home</v-tab>
-        <v-tab class="text-capitalize">Archive</v-tab>
+        <v-tab>Home</v-tab>
+        <v-tab>Archive</v-tab>
       </v-tabs>
       <v-row class="pa-3">
         <template v-for="(group, i) in groups">
@@ -31,8 +31,8 @@
         background-color="transparent"
         style="border-bottom: 1px solid #d2d2d2 !important"
       >
-        <v-tab class="text-capitalize">Assignments</v-tab>
-        <v-tab class="text-capitalize">Revision</v-tab>
+        <v-tab>Assignments</v-tab>
+        <v-tab>Revision</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>

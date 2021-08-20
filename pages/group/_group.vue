@@ -6,10 +6,10 @@
       background-color="transparent"
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-tab class="text-capitalize">Assignments</v-tab>
-      <v-tab class="text-capitalize"> Students </v-tab>
-      <v-tab class="text-capitalize"> Grades </v-tab>
-      <v-tab class="text-capitalize"> Settings </v-tab>
+      <v-tab>Assignments</v-tab>
+      <v-tab> Students </v-tab>
+      <v-tab> Grades </v-tab>
+      <v-tab> Settings </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
@@ -39,23 +39,11 @@
                   <v-icon small class="mx-2">{{ $icons.mdiArrowRight }}</v-icon>
                   {{ assignment.dateDue | date }}
                 </div>
-                <div class="col3 ml-auto">
-                  <v-tooltip v-if="assignment.live" bottom>
-                    <template #activator="{ on }">
-                      <v-icon color="green" v-on="on">{{
-                        $icons.mdiCircleOutline
-                      }}</v-icon>
-                    </template>
-                    <span>Open</span>
-                  </v-tooltip>
-                  <v-tooltip v-else bottom>
-                    <template #activator="{ on }">
-                      <v-icon v-on="on">{{
-                        $icons.mdiCheckCircleOutline
-                      }}</v-icon>
-                    </template>
-                    <span>Complete</span>
-                  </v-tooltip>
+                <div class="col3 ml-auto d-flex justify-center">
+                  <v-chip v-if="assignment.live" label color="green" small>
+                    Open
+                  </v-chip>
+                  <v-chip v-else label color="red" small> Closed </v-chip>
                 </div>
               </div>
             </v-list-item-content>
@@ -144,11 +132,6 @@ export default {
       tab: null,
     }
   },
-  head() {
-    return {
-      title: this.group.name,
-    }
-  },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
     assignments() {
@@ -208,6 +191,6 @@ export default {
 }
 
 .col3 {
-  width: 24px;
+  width: 60px;
 }
 </style>

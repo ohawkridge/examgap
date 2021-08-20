@@ -27,12 +27,10 @@
           </div>
           <div class="d-flex justify-center mt-4">
             <small>
-              <v-icon small color="accent">{{
-                $icons.mdiCheckboxMarkedCircleOutline
-              }}</v-icon>
+              <v-icon small color="accent">{{ $icons.mdiCheck }}</v-icon>
               No payment info
               <v-icon small color="accent" class="ml-2">{{
-                $icons.mdiCheckboxMarkedCircleOutline
+                $icons.mdiCheck
               }}</v-icon>
               Set up in minutes
             </small>
@@ -76,11 +74,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <!-- <v-img src="/mark.png" alt="Marking"></v-img> -->
-          <video loop width="570" autoplay>
-            <source src="/demo.mov" type="video/mp4" />
-            Sorry, your browser doesn't support embedded videos.
-          </video>
+          <v-img src="/mark.png" alt="Marking" width="90%"></v-img>
         </v-col>
       </v-row>
       <v-row
@@ -91,8 +85,9 @@
             Diagnose strengths & weaknesses
           </p>
           <p class="text-body-1">
-            Marks are automatically recorded in a detailed grade book. This
-            helps you monitor progress to target intervention more effectively.
+            Marks are automatically recorded in a detailed grade
+            book—colour-coded against target grades. This helps you monitor
+            progress to target intervention more effectively.
           </p>
         </v-col>
         <v-col cols="12" md="6">
@@ -775,11 +770,10 @@
 
 <script>
 import {
-  mdiCheckboxMarkedCircleOutline,
+  mdiCheck,
   mdiNumeric1Circle,
   mdiNumeric2Circle,
   mdiNumeric3Circle,
-  mdiCheck,
   mdiCheckBold,
   mdiMicroscope,
   mdiTextToSpeech,
@@ -795,12 +789,11 @@ export default {
   layout: 'static',
   created() {
     this.$icons = {
-      mdiCheckboxMarkedCircleOutline,
+      mdiCheck,
       mdiNumeric1Circle,
       mdiNumeric2Circle,
       mdiNumeric3Circle,
       mdiMicroscope,
-      mdiCheck,
       mdiCheckBold,
       mdiTextToSpeech,
       mdiSortBoolDescendingVariant,
@@ -901,7 +894,7 @@ export default {
 
 /* --------- How ---------- */
 #how {
-  background-color: #0078a0 !important;
+  background-color: #0099cc !important;
   padding-top: 4em;
   padding-bottom: 6em;
 }
@@ -960,7 +953,7 @@ export default {
 
 /* ------ What else? ------ */
 #what {
-  background-color: #0078a0 !important;
+  background-color: #0099cc !important;
   padding-top: 4em;
   padding-bottom: 6em;
 }
@@ -982,7 +975,7 @@ export default {
 }
 
 .illum {
-  border-bottom: 6px solid #ef7a85;
+  border-bottom: 6px solid #db5461;
 }
 
 /* add vertical space between screenshots */
@@ -1002,7 +995,7 @@ export default {
   display: inline-flex;
   padding: 5px;
   border-radius: 50%;
-  background-color: #0078a0;
+  background-color: #0099cc;
 }
 
 #owen {

@@ -14,7 +14,6 @@
       <v-chip
         v-else
         :key="i"
-        class="font-weight-black"
         :color="ragX(item[obj], data.headers[i + 2].max, item.target)"
       >
         {{ item[obj] }}

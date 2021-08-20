@@ -71,6 +71,7 @@
           v-if="teacher && $route.name === 'home'"
           elevation="0"
           text
+          color="primary"
           rounded
           @click="$nuxt.$emit('show-create')"
         >
@@ -81,8 +82,9 @@
         <v-btn
           v-if="teacher && $route.name === 'group-group'"
           elevation="0"
-          rounded
+          text
           color="primary"
+          rounded
           @click="createAssignment()"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
