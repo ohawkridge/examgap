@@ -7,17 +7,24 @@
         </nuxt-link>
         <div class="pa-4">
           <the-student-greeting v-if="!teacher" />
-          <nuxt-link
-            to="/profile"
-            class="
-              text-decoration-none
-              black--text
-              text-subtitle-1
-              font-weight-medium
-            "
-            >{{ username }}</nuxt-link
-          >
-          <v-chip small outlined> Student </v-chip>
+          <nuxt-link to="/profile" class="black--text text-subtitle-2">{{
+            shortName
+          }}</nuxt-link>
+          <v-menu offset-y>
+            <template #activator="{ on }">
+              <v-btn class="float-right" icon v-on="on">
+                <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="logout()">
+                <v-list-item-title>Sign out</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-chip x-small outlined color="accent">
+            {{ teacher ? 'Teacher' : 'Student' }}
+          </v-chip>
         </div>
         <v-list dense nav shaped>
           <v-list-item-group v-model="nav" color="primary">
@@ -41,7 +48,7 @@
               </template>
             </v-list-group>
           </v-list-item-group>
-          <v-divider class="my-3" />
+          <!-- <v-divider class="my-3" /> -->
           <v-list-item nuxt to="/profile">
             <v-list-item-icon>
               <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
@@ -52,11 +59,11 @@
           </v-list-item>
         </v-list>
       </v-sheet>
-      <template #append>
+      <!-- <template #append>
         <div class="pa-4">
           <v-btn block text rounded @click="logout()"> Sign out </v-btn>
         </div>
-      </template>
+      </template> -->
     </v-navigation-drawer>
     <v-app-bar
       app
@@ -122,6 +129,7 @@ import {
   mdiCommentTextOutline,
   mdiFlashOutline,
   mdiAccountGroupOutline,
+  mdiDotsVertical,
 } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
@@ -168,6 +176,11 @@ export default {
       activeGroupCount: 'user/activeGroupCount',
       group: 'user/activeGroup',
     }),
+    shortName() {
+      return this.username.includes('@')
+        ? this.username.substring(0, this.username.indexOf('@'))
+        : this.username
+    },
   },
   created() {
     this.$icons = {
@@ -178,6 +191,7 @@ export default {
       mdiCommentTextOutline,
       mdiFlashOutline,
       mdiAccountGroupOutline,
+      mdiDotsVertical,
     }
   },
   methods: {

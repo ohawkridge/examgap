@@ -11,17 +11,33 @@
         <v-tab>Home</v-tab>
         <v-tab>Archive</v-tab>
       </v-tabs>
-      <v-row class="pa-3">
+      <!-- N.B. v-tab-items not needed; tabs filter one data -->
+      <v-list class="py-0">
         <template v-for="(group, i) in groups">
-          <group-card
+          <v-list-item
             v-if="group.active === (tab === 0 ? true : false)"
             :key="i"
-            :group="group"
-            :group-index="i"
-          />
+            class="divide"
+            @click="navTo(group.id)"
+          >
+            <v-list-item-content>
+              <div class="d-flex align-center">
+                <div class="col1 font-weight-medium">
+                  {{ group.name }}
+                  <div class="text-body-2">
+                    {{ group.course.name }} ({{ group.course.board }})
+                  </div>
+                </div>
+                <div class="col2 d-flex align-center">
+                  <v-chip label outlined small>
+                    {{ group.count }} student{{ group.count | pluralize }}
+                  </v-chip>
+                </div>
+              </div>
+            </v-list-item-content>
+          </v-list-item>
         </template>
-        <the-create-class-card />
-      </v-row>
+      </v-list>
     </template>
     <!-- **STUDENT** -->
     <template v-else>
@@ -156,14 +172,10 @@ import {
   mdiArrowRight,
   mdiCircleOutline,
 } from '@mdi/js'
-import GroupCard from '@/components/teacher/GroupCard'
-import TheCreateClassCard from '@/components/teacher/TheCreateClassCard'
 import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 
 export default {
   components: {
-    GroupCard,
-    TheCreateClassCard,
     TheRevisionModeDialog,
   },
   layout: 'app',
@@ -208,6 +220,11 @@ export default {
     }
   },
   methods: {
+    navTo(groupId) {
+      this.$store.commit('students/clearStudents')
+      this.$store.commit('user/setActiveGroupIndex', this.groupIndex)
+      this.$router.push(`/group/${groupId}`)
+    },
     revise(topicId) {
       // Store topic id to increment count later
       this.$store.commit('topics/setTopicId', topicId)
