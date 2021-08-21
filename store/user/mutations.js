@@ -1,7 +1,11 @@
 export default {
-  setActiveGroupIndex(state, i) {
-    // TheCreateClassDialog sends -1 as active group
-    state.activeGroupIndex = i === -1 ? state.groups.length - 1 : i
+  setActiveGroupId(state, id) {
+    // When a new class is created, TheCreateClassDialog sends -1
+    // If so, set the most recent group (last in array) as active
+    if (id === -1) {
+      id = state.groups[state.groups.length - 1].id
+    }
+    state.activeGroupId = id
   },
   addGroup(state, group) {
     state.groups.push(group)
@@ -15,7 +19,7 @@ export default {
   },
   addAssignment(state, assignment) {
     // Add assignment to *front* of assignments array
-    state.groups[state.activeGroupIndex].assignments.unshift({
+    state.groups[state.activeGroupId].assignments.unshift({
       dateDue: assignment.data.dateDue,
       id: assignment.ref['@ref'].id,
       name: assignment.data.name,
@@ -23,7 +27,7 @@ export default {
     })
   },
   deleteAssignment(state, assignmentId) {
-    const assignments = state.groups[state.activeGroupIndex].assignments
+    const assignments = state.groups[state.activeGroupId].assignments
     const i = assignments.findIndex((a) => a.id === assignmentId)
     assignments.splice(i, 1)
   },
@@ -40,7 +44,6 @@ export default {
     state.id = data.id
     state.username = data.username
     state.secret = data.secret
-    localStorage.setItem('secret', data.secret)
     state.teacher = data.teacher
     if (data.teacher) {
       // Teacher properties
@@ -68,9 +71,9 @@ export default {
     state.groups[i].course = { ...course }
   },
   setArchived(state) {
-    state.groups[state.activeGroupIndex].active = false
+    state.groups[state.activeGroupId].active = false
   },
   updateGroupName(state, name) {
-    state.groups[state.activeGroupIndex].name = name
+    state.groups[state.activeGroupId].name = name
   },
 }

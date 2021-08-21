@@ -26,7 +26,7 @@
             {{ teacher ? 'Teacher' : 'Student' }}
           </v-chip>
         </div>
-        <v-list dense nav shaped>
+        <v-list dense nav>
           <v-list-item-group v-model="nav" color="primary">
             <v-list-group
               :value="true"
@@ -39,7 +39,7 @@
                 <v-list-item
                   v-if="includeGroup(group)"
                   :key="i"
-                  @click="navTo(i, group.id)"
+                  @click="navTo(group.id)"
                 >
                   <v-list-item-content>
                     <v-list-item-title> {{ group.name }} </v-list-item-title>
@@ -48,7 +48,7 @@
               </template>
             </v-list-group>
           </v-list-item-group>
-          <!-- <v-divider class="my-3" /> -->
+          <v-divider class="my-4" />
           <v-list-item nuxt to="/profile">
             <v-list-item-icon>
               <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
@@ -195,8 +195,8 @@ export default {
     }
   },
   methods: {
-    navTo(index, groupId) {
-      this.$store.commit('user/setActiveGroupIndex', index)
+    navTo(groupId) {
+      this.$store.commit('user/setActiveGroupId', groupId)
       if (this.teacher) {
         this.$store.commit('students/clearStudents')
         this.$router.push(`/group/${groupId}`)
@@ -221,7 +221,6 @@ export default {
       return this.teacher ? group.active === true : true
     },
     logout() {
-      localStorage.removeItem('secret')
       localStorage.removeItem('examgap')
       this.$router.push('/')
       // Reload page to clear Vuex

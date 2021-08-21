@@ -1,6 +1,7 @@
 const getters = {
   activeGroup: (state) => {
-    return state.groups[state.activeGroupIndex]
+    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+    return state.groups[i]
   },
   activeGroupCount: (state) => {
     return state.groups.filter((group) => group.active).length

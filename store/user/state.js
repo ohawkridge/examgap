@@ -5,7 +5,7 @@ const state = () => ({
   secret: '',
   teacher: false,
   groups: [],
-  activeGroupIndex: 0,
+  activeGroupId: '',
   subscriptionDays: 'N/A', // Easier to calculate in Fauna
   // Teacher properties
   school: 'N/A',

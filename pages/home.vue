@@ -8,36 +8,65 @@
         background-color="transparent"
         style="border-bottom: 1px solid #d2d2d2 !important"
       >
-        <v-tab>Home</v-tab>
-        <v-tab>Archive</v-tab>
+        <v-tab class="text-capitalize">Home</v-tab>
+        <v-tab class="text-capitalize">Archive</v-tab>
       </v-tabs>
-      <!-- N.B. v-tab-items not needed; tabs filter one data -->
-      <v-list class="py-0">
-        <template v-for="(group, i) in groups">
-          <v-list-item
-            v-if="group.active === (tab === 0 ? true : false)"
-            :key="i"
-            class="divide"
-            @click="navTo(group.id)"
-          >
-            <v-list-item-content>
-              <div class="d-flex align-center">
-                <div class="col1 font-weight-medium">
-                  {{ group.name }}
-                  <div class="text-body-2">
-                    {{ group.course.name }} ({{ group.course.board }})
+      <!-- Home -->
+      <v-tabs-items v-model="tab">
+        <v-tab-item>
+          <v-list class="py-0">
+            <v-list-item
+              v-for="(group, i) in activeGroups"
+              :key="i"
+              class="divide"
+              @click="navTo(group.id)"
+            >
+              <v-list-item-content>
+                <div class="d-flex align-center">
+                  <div class="col1 font-weight-medium">
+                    {{ group.name }}
+                    <div class="text-body-2">
+                      {{ group.course.name }} ({{ group.course.board }})
+                    </div>
+                  </div>
+                  <div class="col2 d-flex align-center">
+                    <v-chip label outlined small>
+                      {{ group.count }} student{{ group.count | pluralize }}
+                    </v-chip>
                   </div>
                 </div>
-                <div class="col2 d-flex align-center">
-                  <v-chip label outlined small>
-                    {{ group.count }} student{{ group.count | pluralize }}
-                  </v-chip>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-tab-item>
+        <!-- Archive -->
+        <v-tab-item>
+          <v-list class="py-0">
+            <v-list-item
+              v-for="(group, i) in archiveGroups"
+              :key="i"
+              class="divide"
+              @click="navTo(group.id)"
+            >
+              <v-list-item-content>
+                <div class="d-flex align-center">
+                  <div class="col1 font-weight-medium">
+                    {{ group.name }}
+                    <div class="text-body-2">
+                      {{ group.course.name }} ({{ group.course.board }})
+                    </div>
+                  </div>
+                  <div class="col2 d-flex align-center">
+                    <v-chip label outlined small>
+                      {{ group.count }} student{{ group.count | pluralize }}
+                    </v-chip>
+                  </div>
                 </div>
-              </div>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
-      </v-list>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-tab-item>
+      </v-tabs-items>
     </template>
     <!-- **STUDENT** -->
     <template v-else>
@@ -47,8 +76,8 @@
         background-color="transparent"
         style="border-bottom: 1px solid #d2d2d2 !important"
       >
-        <v-tab>Assignments</v-tab>
-        <v-tab>Revision</v-tab>
+        <v-tab class="text-capitalize">Assignments</v-tab>
+        <v-tab class="text-capitalize">Revision</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
@@ -199,6 +228,12 @@ export default {
         this.$store.commit('app/setTab', value)
       },
     },
+    activeGroups() {
+      return this.groups.filter((g) => g.active)
+    },
+    archiveGroups() {
+      return this.groups.filter((g) => !g.active)
+    },
   },
   created() {
     this.$icons = {
@@ -211,22 +246,18 @@ export default {
     }
   },
   mounted() {
-    // For students, the home page is the first
-    // class in the student's classes menu
-    if (this.teacher) {
-      this.$store.commit('app/setPageTitle', 'Classes')
-    } else {
-      this.$store.commit('app/setPageTitle', this.group.name)
-    }
+    this.$store.commit(
+      'app/setPageTitle',
+      this.teacher ? 'Classes' : this.group.name
+    )
   },
   methods: {
     navTo(groupId) {
       this.$store.commit('students/clearStudents')
-      this.$store.commit('user/setActiveGroupIndex', this.groupIndex)
+      this.$store.commit('user/setActiveGroupId', groupId)
       this.$router.push(`/group/${groupId}`)
     },
     revise(topicId) {
-      // Store topic id to increment count later
       this.$store.commit('topics/setTopicId', topicId)
       this.$nuxt.$emit('show-revise')
     },

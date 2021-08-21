@@ -58,9 +58,6 @@ const actions = {
       throw new Error(`getGroups\n ${response.statusText} (${response.status})`)
     }
     response = await response.json()
-    console.log()
-    console.dir(response)
-    console.log()
     commit('setGroups', response)
     // Onboard if no active groups
     if (rootGetters['user/activeGroupCount'] === 0) {
@@ -118,7 +115,7 @@ const actions = {
     // Update local store
     // (mutations.js will find the actual index of new group)
     commit('addGroup', response)
-    commit('setActiveGroupIndex', -1)
+    commit('setActiveGroupId', -1)
     // Progress onboarding
     commit('app/setOnboardStep', 2, { root: true })
     // If on Archive, set back to Home

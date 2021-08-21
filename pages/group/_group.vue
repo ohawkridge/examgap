@@ -6,10 +6,10 @@
       background-color="transparent"
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-tab>Assignments</v-tab>
-      <v-tab> Students </v-tab>
-      <v-tab> Grades </v-tab>
-      <v-tab> Settings </v-tab>
+      <v-tab class="text-capitalize">Assignments</v-tab>
+      <v-tab class="text-capitalize"> Students </v-tab>
+      <v-tab class="text-capitalize"> Grades </v-tab>
+      <v-tab class="text-capitalize"> Settings </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
@@ -150,7 +150,6 @@ export default {
     }
   },
   async mounted() {
-    // Set page title
     this.$store.commit('app/setPageTitle', this.group.name)
     // Pre-fetch most recent assignment
     try {
