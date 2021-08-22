@@ -59,6 +59,11 @@ const actions = {
     }
     response = await response.json()
     commit('setGroups', response)
+    // By default, make student's first class active
+    if (!rootState.user.teacher) {
+      const id = rootState.user.groups[0].id
+      commit('setActiveGroupId', id)
+    }
     // Onboard if no active groups
     if (rootGetters['user/activeGroupCount'] === 0) {
       commit('app/setOnboardStep', 1, { root: true })

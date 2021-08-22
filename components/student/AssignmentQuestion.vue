@@ -42,7 +42,7 @@
                 >
                   <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
                   {{ response.tm }}
-                  <v-icon right> {{ $icons.mdiCheckboxMarkedOutline }} </v-icon>
+                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
                 </v-chip>
               </template>
               <span>Your teacher</span>
@@ -57,7 +57,7 @@
                 >
                   <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
                   {{ response.sm }}
-                  <v-icon right> {{ $icons.mdiCheckboxMarkedOutline }} </v-icon>
+                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
                 </v-chip>
               </template>
               <span>You</span>
@@ -116,7 +116,7 @@
 import {
   mdiAccountOutline,
   mdiSchoolOutline,
-  mdiCheckboxMarkedOutline,
+  mdiCheck,
   mdiCommentTextOutline,
 } from '@mdi/js'
 
@@ -136,7 +136,7 @@ export default {
     this.$icons = {
       mdiAccountOutline,
       mdiSchoolOutline,
-      mdiCheckboxMarkedOutline,
+      mdiCheck,
       mdiCommentTextOutline,
     }
   },

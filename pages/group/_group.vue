@@ -24,26 +24,31 @@
             <v-list-item-content>
               <div class="d-flex align-center">
                 <div class="col1">
-                  <span class="font-weight-medium"> {{ assignment.name }}</span>
-                  <div class="text-body-2">
+                  <span class="text-subtitle-1 font-weight-medium">
+                    {{ assignment.name }}</span
+                  >
+                  <div class="text-caption">
                     {{ assignment.num_questions }} Question{{
                       assignment.num_questions | pluralize
                     }}
                   </div>
                 </div>
-                <div class="col2 d-flex align-center">
-                  <v-icon class="mr-2">{{
+                <div class="col2 d-flex align-center text-body-2">
+                  <v-icon class="mr-1">{{
                     $icons.mdiCalendarRangeOutline
                   }}</v-icon>
+                  <span class="font-weight-medium mr-1">Start:</span>
                   {{ assignment.start | date }}
-                  <v-icon small class="mx-2">{{ $icons.mdiArrowRight }}</v-icon>
+                </div>
+                <div class="col2 d-flex align-center text-body-2">
+                  <span class="font-weight-medium mr-1 ml-3">Due:</span>
                   {{ assignment.dateDue | date }}
                 </div>
                 <div class="col3 ml-auto d-flex justify-center">
                   <v-chip v-if="assignment.live" label color="green" small>
-                    Open
+                    Upcoming
                   </v-chip>
-                  <v-chip v-else label color="red" small> Closed </v-chip>
+                  <v-chip v-else label color="red" small> Past </v-chip>
                 </div>
               </div>
             </v-list-item-content>
@@ -75,17 +80,22 @@
             <v-img
               src="/no-assign.svg"
               contain
-              max-width="200"
+              max-width="250"
               alt="Books and pens illustrations"
             />
           </div>
-          <p class="text-body-2 text-center mt-4" style="color: #000000de">
+          <p class="text-body-2 text-center" style="color: #000000de">
             No assignments yet
           </p>
           <div class="d-flex justify-center">
-            <v-btn elevation="0" color="primary" @click="createAssignment()">
+            <v-btn
+              elevation="0"
+              rounded
+              color="primary"
+              @click="createAssignment()"
+            >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-              Create assignment
+              Assignment
             </v-btn>
           </div>
         </div>
@@ -112,7 +122,6 @@ import {
   mdiDotsVertical,
   mdiInformationOutline,
   mdiPlus,
-  mdiArrowRight,
   mdiCheckCircleOutline,
   mdiCalendarRangeOutline,
   mdiCircleOutline,
@@ -143,7 +152,6 @@ export default {
       mdiDotsVertical,
       mdiInformationOutline,
       mdiPlus,
-      mdiArrowRight,
       mdiCheckCircleOutline,
       mdiCalendarRangeOutline,
       mdiCircleOutline,
@@ -184,12 +192,13 @@ export default {
   width: 300px;
 }
 
-/* Dates */
+/* Start/Due */
 .col2 {
-  width: 240px;
+  width: 190px;
 }
 
+/* Open/closed */
 .col3 {
-  width: 60px;
+  width: 80px;
 }
 </style>

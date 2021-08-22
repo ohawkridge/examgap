@@ -41,7 +41,7 @@
                 </template>
                 <span>Speak question</span>
               </v-tooltip>
-              <v-chip outlined>
+              <v-chip small outlined>
                 {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
               </v-chip>
             </div>

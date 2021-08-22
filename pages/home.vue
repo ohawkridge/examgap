@@ -80,6 +80,7 @@
         <v-tab class="text-capitalize">Revision</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
+        <!-- Assignments -->
         <v-tab-item>
           <!-- Skeletons -->
           <template v-if="loading">
@@ -119,51 +120,41 @@
               :to="`/assignment/${assignment.id}`"
               class="divide"
             >
-              <v-list-item-content class="py-4">
+              <v-list-item-content>
                 <div class="d-flex align-center">
                   <div class="col1">
-                    <span class="font-weight-medium">{{
+                    <span class="text-subtitle-1 font-weight-medium">{{
                       assignment.name
                     }}</span>
-                    <div class="text-body-2">
+                    <div class="text-caption">
                       {{ assignment.num_questions }} Question{{
                         assignment.num_questions | pluralize
                       }}
                     </div>
                   </div>
-                  <div class="col2 d-flex align-center">
-                    <v-icon class="mr-2">{{
+                  <div class="col2 d-flex align-center text-body-2">
+                    <v-icon class="mr-1">{{
                       $icons.mdiCalendarRangeOutline
                     }}</v-icon>
+                    <span class="font-weight-medium mr-1">Start:</span>
                     {{ assignment.start | date }}
-                    <v-icon small class="mx-2">{{
-                      $icons.mdiArrowRight
-                    }}</v-icon>
+                  </div>
+                  <div class="col2 d-flex align-center text-body-2">
+                    <span class="font-weight-medium mr-1 ml-3">Due:</span>
                     {{ assignment.dateDue | date }}
                   </div>
-                  <div class="col3 ml-auto">
-                    <v-tooltip v-if="assignment.live" bottom>
-                      <template #activator="{ on }">
-                        <v-icon color="green" v-on="on">{{
-                          $icons.mdiCircleOutline
-                        }}</v-icon>
-                      </template>
-                      <span>Open</span>
-                    </v-tooltip>
-                    <v-tooltip v-else bottom>
-                      <template #activator="{ on }">
-                        <v-icon v-on="on">{{
-                          $icons.mdiCheckCircleOutline
-                        }}</v-icon>
-                      </template>
-                      <span>Complete</span>
-                    </v-tooltip>
+                  <div class="col3 ml-auto d-flex justify-center">
+                    <v-chip v-if="assignment.live" label color="green" small>
+                      Upcoming
+                    </v-chip>
+                    <v-chip v-else label color="red" small> Past </v-chip>
                   </div>
                 </div>
               </v-list-item-content>
             </v-list-item>
           </v-list>
         </v-tab-item>
+        <!-- Revision -->
         <v-tab-item>
           <v-list class="py-0">
             <v-list-item
@@ -174,11 +165,21 @@
             >
               <v-list-item-content>
                 <div class="d-flex align-center">
-                  <div id="r-col1" class="font-weight-medium">
-                    {{ topic.name }}
-                  </div>
+                  <v-tooltip bottom>
+                    <template #activator="{ on }">
+                      <div id="r-col1" class="font-weight-medium" v-on="on">
+                        {{ topic.name }}
+                      </div>
+                    </template>
+                    <span>Click to revise</span>
+                  </v-tooltip>
                   <div>
-                    <v-icon color="grey">{{ $icons.mdiCircleOutline }}</v-icon>
+                    <v-icon
+                      v-for="j in topic.answered"
+                      :key="j"
+                      color="green"
+                      >{{ $icons.mdiCheckboxBlankCircle }}</v-icon
+                    >
                   </div>
                 </div>
               </v-list-item-content>
@@ -198,8 +199,8 @@ import {
   mdiHomeOutline,
   mdiArchiveOutline,
   mdiCalendarRangeOutline,
-  mdiArrowRight,
   mdiCircleOutline,
+  mdiCheckboxBlankCircle,
 } from '@mdi/js'
 import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 
@@ -241,8 +242,8 @@ export default {
       mdiHomeOutline,
       mdiArchiveOutline,
       mdiCalendarRangeOutline,
-      mdiArrowRight,
       mdiCircleOutline,
+      mdiCheckboxBlankCircle,
     }
   },
   mounted() {
@@ -266,18 +267,19 @@ export default {
 </script>
 
 <style scoped>
-/* Assignment name (students) */
+/* Assignment name */
 .col1 {
-  width: 400px;
+  width: 300px;
 }
 
-/* Dates */
+/* Start/Due */
 .col2 {
-  width: 240px;
+  width: 190px;
 }
 
+/* Open/closed */
 .col3 {
-  width: 24px;
+  width: 80px;
 }
 
 /* Revision */

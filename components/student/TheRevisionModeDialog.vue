@@ -32,9 +32,6 @@
             </template>
           </v-switch>
           <div>
-            <v-btn text rounded class="mr-2" @click="dialog = false">
-              Cancel
-            </v-btn>
             <v-btn
               color="primary"
               elevation="0"
