@@ -212,7 +212,7 @@ export default {
   computed: {
     ...mapGetters({
       assignments: 'user/assignments',
-      group: 'user/activeGroup',
+      group: 'group/activeGroup',
     }),
     ...mapState({
       teacher: (state) => state.user.teacher,
@@ -254,8 +254,7 @@ export default {
   },
   methods: {
     navTo(groupId) {
-      this.$store.commit('students/clearStudents')
-      this.$store.commit('user/setActiveGroupId', groupId)
+      this.$store.commit('group/setActiveGroupId', groupId)
       this.$router.push(`/group/${groupId}`)
     },
     revise(topicId) {

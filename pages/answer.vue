@@ -218,7 +218,7 @@ export default {
       assignmentId: (state) => state.assignment.assignmentId,
       reviseExamMode: (state) => state.user.reviseExamMode,
     }),
-    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapGetters({ group: 'group/activeGroup' }),
     // Set assignment or independent revision?
     revising() {
       return this.assignmentId === ''

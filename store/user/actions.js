@@ -65,7 +65,7 @@ const actions = {
       commit('setActiveGroupId', id)
     }
     // Onboard if no active groups
-    if (rootGetters['user/activeGroupCount'] === 0) {
+    if (rootGetters['group/activeGroupCount'] === 0) {
       commit('app/setOnboardStep', 1, { root: true })
     }
   },

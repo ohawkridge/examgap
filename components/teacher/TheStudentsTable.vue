@@ -213,9 +213,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapGetters({ group: 'group/activeGroup' }),
     ...mapState({
-      students: (state) => state.students.students,
+      students: (state) => state.group.students,
     }),
     xsBtns() {
       return this.$vuetify.breakpoint.name === 'xs' ? 'mt-2' : ''

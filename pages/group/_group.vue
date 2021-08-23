@@ -6,10 +6,10 @@
       background-color="transparent"
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-tab class="text-capitalize">Assignments</v-tab>
-      <v-tab class="text-capitalize"> Students </v-tab>
-      <v-tab class="text-capitalize"> Grades </v-tab>
-      <v-tab class="text-capitalize"> Settings </v-tab>
+      <v-tab> Assignments </v-tab>
+      <v-tab> Students </v-tab>
+      <v-tab> Grades </v-tab>
+      <v-tab> Settings </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
@@ -135,6 +135,11 @@ export default {
     TheGroupSettings,
     TheDeleteAssignmentDialog,
   },
+  beforeRouteLeave(to, from, next) {
+    // Clear store to avoid flash of old data next time
+    this.$store.commit('students/setStudents', [])
+    next()
+  },
   layout: 'app',
   data() {
     return {
@@ -142,7 +147,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapGetters({ group: 'group/activeGroup' }),
     assignments() {
       return this.group.assignments
     },

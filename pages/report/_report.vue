@@ -371,7 +371,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      group: 'user/activeGroup',
+      group: 'group/activeGroup',
       response: 'assignment/response',
     }),
     ...mapState({

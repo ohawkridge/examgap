@@ -84,7 +84,7 @@ export const actions = {
         text,
         topicId: rootState.topics.topicId, // If revising
         responseId: state.responseId,
-        groupId: rootGetters['user/activeGroup'].id,
+        groupId: rootGetters['group/activeGroup'].id,
       }),
       method: 'POST',
     })
@@ -218,11 +218,11 @@ export const actions = {
     commit('setAssignment', await response.json())
   },
   async getReport({ commit, rootState, rootGetters }, assignmentId) {
-    const numAssignments = rootGetters['user/activeGroup'].assignments.length
+    const numAssignments = rootGetters['group/activeGroup'].assignments.length
     if (numAssignments > 0) {
       // Pre-fetch most-recent assignment?
       if (assignmentId === -1) {
-        assignmentId = rootGetters['user/activeGroup'].assignments[0].id
+        assignmentId = rootGetters['group/activeGroup'].assignments[0].id
         console.log('%c' + `Prefetching ${assignmentId}`, 'color:purple')
       }
       const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)

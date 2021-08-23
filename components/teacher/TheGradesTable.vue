@@ -1,25 +1,51 @@
 <template>
-  <v-data-table
-    :headers="data.headers"
-    :items="data.data"
-    :loading="$fetchState.pending"
-    loading-text="Loading grades..."
-    no-data-text="No data yet"
-    hide-default-footer
-    disable-pagination
-    sort-by="username"
-  >
-    <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
-      <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
-      <v-chip
-        v-else
-        :key="i"
-        :color="ragX(item[obj], data.headers[i + 2].max, item.target)"
+  <div>
+    <div class="d-flex justify-end pa-4">
+      <v-tooltip bottom>
+        <template #activator="{ on }">
+          <v-btn elevation="0" rounded @click="exportTableToCSV()" v-on="on">
+            Csv
+            <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
+          </v-btn>
+        </template>
+        <span>Download csv</span>
+      </v-tooltip>
+      <v-btn
+        class="d-none d-sm-flex ml-2"
+        elevation="0"
+        rounded
+        @mouseover="scroll"
+        @mouseleave="stop"
+        @mouseup="stop"
       >
-        {{ item[obj] }}
-      </v-chip>
-    </template>
-  </v-data-table>
+        Scroll
+        <v-icon right>
+          {{ $icons.mdiArrowRight }}
+        </v-icon>
+      </v-btn>
+    </div>
+    <v-data-table
+      :headers="data.headers"
+      :items="data.data"
+      :loading="$fetchState.pending"
+      loading-text="Loading grades..."
+      no-data-text="No data yet"
+      hide-default-footer
+      disable-pagination
+      sort-by="username"
+    >
+      <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
+        <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
+        <v-chip
+          v-else
+          :key="i"
+          :color="ragX(item[obj], data.headers[i + 2].max, item.target)"
+        >
+          {{ item[obj] }}
+        </v-chip>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
@@ -33,10 +59,10 @@ import {
 
 export default {
   components: {},
-  // beforeRouteLeave(to, from, next) {
-  //   this.stop() // Stop scrolling
-  //   next()
-  // },
+  beforeRouteLeave(to, from, next) {
+    this.stop() // Stop scrolling
+    next()
+  },
   data() {
     return {
       data: [],
@@ -45,21 +71,18 @@ export default {
     }
   },
   async fetch() {
-    const url = new URL('/.netlify/functions/getGrades', this.$config.baseURL)
-    const data = await fetch(url, {
-      body: JSON.stringify({
-        secret: this.$store.state.user.secret,
-        groupId: this.group.id,
-      }),
-      method: 'POST',
-    })
-    if (!data.ok) {
-      throw new Error(`Error fetching grades ${data.status}`)
+    try {
+      await this.$store.dispatch('group/getGrades')
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching grades',
+      })
     }
-    this.data = await data.json()
   },
   computed: {
-    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapGetters({ group: 'group/activeGroup' }),
     // Convert 2d array from db: [["A*", 0.90], ["A", 0.82], ..]]
     // into an object so we can look up target grades
     rag() {

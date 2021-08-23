@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      group: 'user/activeGroup',
+      group: 'group/activeGroup',
     }),
     name: {
       get() {

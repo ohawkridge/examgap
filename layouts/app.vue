@@ -173,8 +173,8 @@ export default {
       pageTitle: (state) => state.app.pageTitle,
     }),
     ...mapGetters({
-      activeGroupCount: 'user/activeGroupCount',
-      group: 'user/activeGroup',
+      activeGroupCount: 'group/activeGroupCount',
+      group: 'group/activeGroup',
     }),
     shortName() {
       return this.username.includes('@')
@@ -196,13 +196,8 @@ export default {
   },
   methods: {
     navTo(groupId) {
-      this.$store.commit('user/setActiveGroupId', groupId)
-      if (this.teacher) {
-        this.$store.commit('students/clearStudents')
-        this.$router.push(`/group/${groupId}`)
-      } else {
-        this.$router.push('/home')
-      }
+      this.$store.commit('group/setActiveGroupId', groupId)
+      this.$router.push(this.teacher ? `/group/${groupId}` : '/home')
     },
     createAssignment() {
       // Clear any previous selections
