@@ -1,13 +1,13 @@
 <template>
-  <v-footer color="transparent" fixed>
+  <v-footer color="transparent" app inset>
     <v-container>
       <v-row class="text-caption">
-        <v-col cols="12" class="d-flex justify-end align-center">
+        <v-col cols="12" class="d-flex justify-space-between">
           support@examgap.com
-          <v-icon small class="ml-2 mr-1">{{
-            $icons.mdiArrowExpandHorizontal
-          }}</v-icon>
-          {{ $vuetify.breakpoint.name }} | {{ $route.name }}
+          <div>
+            <v-icon small>{{ $icons.mdiArrowExpandHorizontal }}</v-icon>
+            {{ $vuetify.breakpoint.name }}
+          </div>
         </v-col>
       </v-row>
     </v-container>

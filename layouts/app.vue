@@ -15,7 +15,7 @@
             </template>
             <template v-for="(group, i) in groups">
               <v-list-item
-                v-if="includeGroup(group)"
+                v-if="teacher && group.active"
                 :key="i"
                 @click="navTo(group.id)"
               >
@@ -94,8 +94,8 @@
       <the-join-dialog v-if="!teacher" />
       <the-feedback-dialog />
       <the-loading-overlay />
-      <!-- <the-footer /> -->
     </v-main>
+    <the-footer />
   </v-app>
 </template>
 
@@ -113,7 +113,7 @@ import {
 } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
-// import TheFooter from '@/components/common/TheFooter'
+import TheFooter from '@/components/common/TheFooter'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
@@ -128,13 +128,13 @@ export default {
   components: {
     TheLogo,
     TheSnackbar,
-    // TheFooter,
     TheJoinDialog,
     TheCreateClassDialog,
     TheFeedbackDialog,
     TheOnboardingSnackbar,
     TheLoadingOverlay,
     TheGreeting,
+    TheFooter,
     CreateAssignment,
     TheQuoteOfTheDay,
   },
@@ -182,12 +182,6 @@ export default {
         this.group.assignments.length < 3 ? 4 : 0
       )
       this.$router.push(`/course/${this.group.course.id}`)
-    },
-    // N.B. You *cannot* just filter groups (throws off i)
-    // For students, show all classes in nav
-    // For teachers, just show active classes
-    includeGroup(group) {
-      return this.teacher ? group.active === true : true
     },
     logout() {
       localStorage.removeItem('examgap')
