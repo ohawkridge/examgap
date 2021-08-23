@@ -213,7 +213,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'group/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({
       students: (state) => state.group.students,
     }),

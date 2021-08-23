@@ -91,7 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'group/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
   },
   created() {
     this.$icons = {

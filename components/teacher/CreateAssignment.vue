@@ -272,7 +272,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'group/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({
       secret: (state) => state.user.secret,
       selected: (state) => state.topics.selected, // Selected questions

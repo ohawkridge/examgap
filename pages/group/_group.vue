@@ -147,7 +147,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ group: 'group/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     assignments() {
       return this.group.assignments
     },

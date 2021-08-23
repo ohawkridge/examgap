@@ -173,8 +173,8 @@ export default {
       pageTitle: (state) => state.app.pageTitle,
     }),
     ...mapGetters({
-      activeGroupCount: 'group/activeGroupCount',
-      group: 'group/activeGroup',
+      activeGroupCount: 'user/activeGroupCount',
+      group: 'user/activeGroup',
     }),
     shortName() {
       return this.username.includes('@')

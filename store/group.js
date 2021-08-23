@@ -4,6 +4,8 @@ export const state = () => ({
   grades: [],
 })
 
+export const getters = {}
+
 export const actions = {
   async getGrades() {
     const url = new URL('/.netlify/functions/getGrades', this.$config.baseURL)
@@ -36,7 +38,7 @@ export const actions = {
       throw new Error(`Error adding students ${response.status}`)
     }
     // Update count on group
-    const count = rootGetters['group/activeGroup'].count + usernames.length
+    const count = rootGetters['user/activeGroup'].count + usernames.length
     commit('user/setCount', { groupId, count }, { root: true })
     // Refetch student data
     // (too complicated to insert new students)
@@ -64,7 +66,7 @@ export const actions = {
   },
   async getStudents({ rootState, commit, rootGetters }) {
     const url = new URL('/.netlify/functions/getStudents', this.$config.baseURL)
-    const groupId = rootGetters['group/activeGroup'].id
+    const groupId = rootGetters['user/activeGroup'].id
     let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
@@ -81,7 +83,7 @@ export const actions = {
     // This data might be fresher (group count set at login)
     // If so, update the student count for this group
     const count = response.length
-    if (count !== rootGetters['group/activeGroup'].count) {
+    if (count !== rootGetters['user/activeGroup'].count) {
       commit('user/setCount', { groupId, count }, { root: true })
     }
     commit('setStudents', response)
@@ -124,7 +126,7 @@ export const actions = {
     }
     commit('removeStudents', studentIds)
     // Remove students from group count
-    const count = rootGetters['group/activeGroup'].count - studentIds.length
+    const count = rootGetters['user/activeGroup'].count - studentIds.length
     commit('user/setCount', { groupId, count }, { root: true })
   },
 }

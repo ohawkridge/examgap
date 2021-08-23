@@ -41,7 +41,7 @@ export const actions = {
     // For students, courseId is not passed in
     // so get it from the current active group
     if (courseId === undefined) {
-      courseId = rootGetters['group/activeGroup'].course.id
+      courseId = rootGetters['user/activeGroup'].course.id
     }
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -72,7 +72,7 @@ export const actions = {
       body: JSON.stringify({
         secret: rootState.user.secret,
         topicId: state.topics[state.currentTopicIndex].id,
-        groupId: rootGetters['group/activeGroup'].id, // To find past assignments
+        groupId: rootGetters['user/activeGroup'].id, // To find past assignments
       }),
       method: 'POST',
     })

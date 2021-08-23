@@ -166,7 +166,7 @@ export default {
       selected: (state) => state.topics.selected,
       onboardStep: (state) => state.app.onboardStep,
     }),
-    ...mapGetters({ group: 'group/activeGroup' }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     currentTopicIndex: {
       get() {
         return this.$store.state.topics.currentTopicIndex
