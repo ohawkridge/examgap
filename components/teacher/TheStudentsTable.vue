@@ -1,9 +1,7 @@
 <template>
   <div>
-    <div class="d-flex justify-space-between pa-4">
-      <v-chip label outlined color="primary" small>
-        {{ students.length }} Students
-      </v-chip>
+    <div class="d-flex justify-space-between align-center pa-4">
+      <v-chip label outlined small> {{ students.length }} Students </v-chip>
       <div>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on }">

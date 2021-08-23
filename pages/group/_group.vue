@@ -23,11 +23,9 @@
           >
             <v-list-item-content>
               <div class="d-flex align-center">
-                <div class="col1">
-                  <span class="text-subtitle-1 font-weight-medium">
-                    {{ assignment.name }}</span
-                  >
-                  <div class="text-caption">
+                <div class="col1 font-weight-medium">
+                  {{ assignment.name }}
+                  <div class="text-body-2">
                     {{ assignment.num_questions }} Question{{
                       assignment.num_questions | pluralize
                     }}

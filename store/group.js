@@ -9,7 +9,7 @@ export const actions = {
     const data = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
-        groupId: rootGetters.activeGroup.id,
+        groupId: rootGetters['user/activeGroup'].id,
       }),
       method: 'POST',
     })

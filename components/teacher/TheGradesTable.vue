@@ -3,7 +3,13 @@
     <div class="d-flex justify-end pa-4">
       <v-tooltip bottom>
         <template #activator="{ on }">
-          <v-btn elevation="0" rounded @click="exportTableToCSV()" v-on="on">
+          <v-btn
+            elevation="0"
+            text
+            rounded
+            @click="exportTableToCSV()"
+            v-on="on"
+          >
             Csv
             <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
           </v-btn>
@@ -13,6 +19,7 @@
       <v-btn
         class="d-none d-sm-flex ml-2"
         elevation="0"
+        text
         rounded
         @mouseover="scroll"
         @mouseleave="stop"
@@ -25,8 +32,8 @@
       </v-btn>
     </div>
     <v-data-table
-      :headers="data.headers"
-      :items="data.data"
+      :headers="grades.headers"
+      :items="grades.data"
       :loading="$fetchState.pending"
       loading-text="Loading grades..."
       no-data-text="No data yet"
@@ -39,7 +46,7 @@
         <v-chip
           v-else
           :key="i"
-          :color="ragX(item[obj], data.headers[i + 2].max, item.target)"
+          :color="ragX(item[obj], grades.headers[i + 2].max, item.target)"
         >
           {{ item[obj] }}
         </v-chip>
@@ -99,7 +106,7 @@ export default {
     // These IDs are used in dynamic slot names
     assIds() {
       if (this.$fetchState.pending) return []
-      return this.data.headers.map((o) => o.value).slice(2)
+      return this.grades.headers.map((o) => o.value).slice(2)
     },
   },
   created() {
@@ -144,14 +151,14 @@ export default {
         : 'orange'
     },
     exportTableToCSV() {
-      for (const obj of this.data.headers) {
+      for (const obj of this.grades.headers) {
         this.csv += obj.text + ','
       }
       this.csv += '\n'
-      for (const obj of this.data.data) {
+      for (const obj of this.grades.data) {
         this.csv += obj.username + ',' // Username
-        for (let i = 1; i < Object.keys(this.data.headers).length; i++) {
-          this.csv += obj[this.data.headers[i].value] + ','
+        for (let i = 1; i < Object.keys(this.grades.headers).length; i++) {
+          this.csv += obj[this.grades.headers[i].value] + ','
         }
         this.csv += '\n'
       }
