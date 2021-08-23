@@ -6,9 +6,11 @@
           <span :class="hover ? 'primary--text' : ''" v-on="on">
             {{ greeting.text }},</span
           >
-          <nuxt-link to="/profile" class="text-subtitle-2">{{
-            shortName
-          }}</nuxt-link>
+          <nuxt-link
+            to="/profile"
+            class="grey--text text--darken-2 text-subtitle-2"
+            >{{ shortName }}</nuxt-link
+          >
         </v-hover>
       </template>
       <v-card max-width="250">
@@ -19,9 +21,11 @@
       </v-card>
     </v-menu>
     <template v-else>
-      <nuxt-link to="/profile" class="text-subtitle-2">{{
-        shortName
-      }}</nuxt-link>
+      <nuxt-link
+        to="/profile"
+        class="grey--text text--darken-2 text-subtitle-2"
+        >{{ shortName }}</nuxt-link
+      >
     </template>
     <div>
       <v-chip x-small label>
