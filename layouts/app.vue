@@ -26,7 +26,7 @@
             </template>
           </v-list-group>
         </v-list-item-group>
-        <v-divider class="my-4" />
+        <v-divider class="my-4 mx-2" />
         <v-list-item nuxt to="/profile">
           <v-list-item-icon>
             <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>

@@ -29,7 +29,7 @@
                       {{ group.course.name }} ({{ group.course.board }})
                     </div>
                   </div>
-                  <div class="col2 d-flex align-center">
+                  <div class="col2 d-flex align-center justify-center ml-auto">
                     <v-chip label outlined small>
                       {{ group.count }} student{{ group.count | pluralize }}
                     </v-chip>
