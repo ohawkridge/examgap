@@ -36,11 +36,11 @@
       >
         <template #append>
           <div id="fix-chip">
-            <v-chip v-if="subscribed" color="green">
+            <v-chip v-if="subscribed" label color="green">
               Subscribed
               <v-icon right>{{ $icons.mdiCheck }}</v-icon>
             </v-chip>
-            <v-chip v-else color="accent">
+            <v-chip v-else color="accent" label>
               Subscribe
               <v-icon right>{{ $icons.mdiFlashOutline }}</v-icon>
             </v-chip>
