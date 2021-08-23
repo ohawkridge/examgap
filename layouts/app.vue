@@ -1,67 +1,49 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" width="232" app>
-      <v-sheet class="pa-4">
+      <div class="pa-2">
         <nuxt-link to="/home">
           <the-logo />
         </nuxt-link>
-        <div class="pa-4">
-          <the-student-greeting v-if="!teacher" />
-          <nuxt-link to="/profile" class="black--text text-subtitle-2">{{
-            shortName
-          }}</nuxt-link>
-          <div>
-            <v-chip x-small>
-              {{ teacher ? 'Teacher' : 'Student' }}
-            </v-chip>
-          </div>
-        </div>
-        <v-list dense nav>
-          <v-list-item-group v-model="nav" color="primary">
-            <v-list-group
-              :value="true"
-              :prepend-icon="$icons.mdiAccountGroupOutline"
-            >
-              <template #activator>
-                <v-list-item-title>Classes</v-list-item-title>
-              </template>
-              <template v-for="(group, i) in groups">
-                <v-list-item
-                  v-if="includeGroup(group)"
-                  :key="i"
-                  @click="navTo(group.id)"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title> {{ group.name }} </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </v-list-group>
-          </v-list-item-group>
-          <v-divider class="my-4" />
-          <v-list-item nuxt to="/profile">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiAccountOutline }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Profile </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item @click="logout()">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiLogoutVariant }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Sign Out </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-sheet>
-      <!-- <template #append>
-        <div class="pa-4">
-          <v-btn block text rounded @click="logout()"> Sign out </v-btn>
-        </div>
-      </template> -->
+        <the-greeting />
+      </div>
+      <v-list dense nav>
+        <v-list-item-group v-model="nav" color="primary">
+          <v-list-group :value="true" :prepend-icon="$icons.mdiGoogleClassroom">
+            <template #activator>
+              <v-list-item-title>Classes</v-list-item-title>
+            </template>
+            <template v-for="(group, i) in groups">
+              <v-list-item
+                v-if="includeGroup(group)"
+                :key="i"
+                @click="navTo(group.id)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title> {{ group.name }} </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+          </v-list-group>
+        </v-list-item-group>
+        <v-divider class="my-4" />
+        <v-list-item nuxt to="/profile">
+          <v-list-item-icon>
+            <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title> Profile </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="logout()">
+          <v-list-item-icon>
+            <v-icon>{{ $icons.mdiLogoutVariant }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title> Sign Out </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
     <v-app-bar
       app
@@ -121,12 +103,12 @@
 import { mapState, mapGetters } from 'vuex'
 import {
   mdiPlus,
-  mdiAccountOutline,
+  mdiAccountCircleOutline,
   mdiChevronDown,
   mdiCheckCircleOutline,
   mdiCommentTextOutline,
   mdiFlashOutline,
-  mdiAccountGroupOutline,
+  mdiGoogleClassroom,
   mdiLogoutVariant,
 } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
@@ -138,7 +120,7 @@ import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import CreateAssignment from '@/components/teacher/CreateAssignment'
-import TheStudentGreeting from '@/components/student/TheStudentGreeting'
+import TheGreeting from '@/components/common/TheGreeting'
 import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
 
 export default {
@@ -152,7 +134,7 @@ export default {
     TheFeedbackDialog,
     TheOnboardingSnackbar,
     TheLoadingOverlay,
-    TheStudentGreeting,
+    TheGreeting,
     CreateAssignment,
     TheQuoteOfTheDay,
   },
@@ -166,7 +148,6 @@ export default {
   computed: {
     ...mapState({
       teacher: (state) => state.user.teacher,
-      username: (state) => state.user.username,
       groups: (state) => state.user.groups,
       pageTitle: (state) => state.app.pageTitle,
     }),
@@ -174,21 +155,16 @@ export default {
       activeGroupCount: 'user/activeGroupCount',
       group: 'user/activeGroup',
     }),
-    shortName() {
-      return this.username.includes('@')
-        ? this.username.substring(0, this.username.indexOf('@'))
-        : this.username
-    },
   },
   created() {
     this.$icons = {
       mdiPlus,
-      mdiAccountOutline,
+      mdiAccountCircleOutline,
       mdiChevronDown,
       mdiCheckCircleOutline,
       mdiCommentTextOutline,
       mdiFlashOutline,
-      mdiAccountGroupOutline,
+      mdiGoogleClassroom,
       mdiLogoutVariant,
     }
   },

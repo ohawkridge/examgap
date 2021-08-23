@@ -1,11 +1,14 @@
 <template>
-  <span>
-    <v-menu offset-x open-on-hover>
+  <div class="mt-4 ml-2">
+    <v-menu v-if="!teacher" offset-x open-on-hover>
       <template #activator="{ on }">
         <v-hover v-slot="{ hover }">
           <span :class="hover ? 'primary--text' : ''" v-on="on">
-            {{ greeting.text }},
-          </span>
+            {{ greeting.text }},</span
+          >
+          <nuxt-link to="/profile" class="text-subtitle-2">{{
+            shortName
+          }}</nuxt-link>
         </v-hover>
       </template>
       <v-card max-width="250">
@@ -15,13 +18,29 @@
         </v-card-text>
       </v-card>
     </v-menu>
-  </span>
+    <template v-else>
+      <nuxt-link to="/profile" class="text-subtitle-2">{{
+        shortName
+      }}</nuxt-link>
+    </template>
+    <div>
+      <v-chip x-small label>
+        {{ teacher ? 'Teacher' : 'Student' }}
+      </v-chip>
+    </div>
+  </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'TheStudentGreeting',
+  name: 'TheGreeting',
   computed: {
+    ...mapState({
+      teacher: (state) => state.user.teacher,
+      username: (state) => state.user.username,
+    }),
     greeting() {
       const greetings = [
         { country: 'Arabic', text: 'Asalaam alaikum' },
@@ -60,6 +79,11 @@ export default {
         { country: 'Zulu', text: 'Ngiyakwemukela' },
       ]
       return greetings[Math.floor(Math.random() * greetings.length)]
+    },
+    shortName() {
+      return this.username.includes('@')
+        ? this.username.substring(0, this.username.indexOf('@'))
+        : this.username
     },
   },
 }
