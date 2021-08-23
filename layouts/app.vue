@@ -15,7 +15,7 @@
             </template>
             <template v-for="(group, i) in groups">
               <v-list-item
-                v-if="teacher && group.active"
+                v-if="!teacher || (teacher && group.active)"
                 :key="i"
                 @click="navTo(group.id)"
               >

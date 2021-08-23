@@ -1,5 +1,5 @@
 <template>
-  <v-footer color="transparent" app inset>
+  <v-footer color="transparent" app inset absolute>
     <v-container>
       <v-row class="text-caption">
         <v-col cols="12" class="d-flex justify-space-between">
