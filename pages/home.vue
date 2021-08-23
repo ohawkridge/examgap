@@ -254,7 +254,7 @@ export default {
   },
   methods: {
     navTo(groupId) {
-      this.$store.commit('group/setActiveGroupId', groupId)
+      this.$store.commit('user/setActiveGroupId', groupId)
       this.$router.push(`/group/${groupId}`)
     },
     revise(topicId) {

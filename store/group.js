@@ -1,10 +1,7 @@
 export const state = () => ({
-  activeGroupId: '',
   students: [],
   grades: [],
 })
-
-export const getters = {}
 
 export const actions = {
   async getGrades() {
@@ -132,14 +129,6 @@ export const actions = {
 }
 
 export const mutations = {
-  setActiveGroupId(state, id) {
-    // When a new class is created, TheCreateClassDialog sends -1
-    // If so, set the most recent group (last in array) as active
-    if (id === -1) {
-      id = state.groups[state.groups.length - 1].id
-    }
-    state.activeGroupId = id
-  },
   setCount(state, { groupId, count }) {
     const i = state.groups.findIndex((g) => g.id === groupId)
     state.groups[i].count = count

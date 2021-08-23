@@ -176,35 +176,34 @@
               </v-tooltip>
               <the-info-dialog :response="response" />
               <v-spacer />
-              <v-tooltip bottom>
+              <v-tooltip v-if="marking" bottom>
                 <template #activator="{ on }">
-                  <v-chip color="primary" outlined class="mr-2" v-on="on">
+                  <v-chip
+                    label
+                    :color="color(marks.length, question.maxMark)"
+                    class="mr-2"
+                    v-on="on"
+                  >
                     <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
-                    <span v-if="marking" class="font-weight-black">{{
-                      marks.length
-                    }}</span>
+                    {{ marks.length }}
                     <v-icon right>{{ $icons.mdiCheck }}</v-icon>
                   </v-chip>
                 </template>
-                <span>Teacher mark</span>
+                <span>You</span>
               </v-tooltip>
-              <v-tooltip bottom>
+              <v-tooltip v-if="marking" bottom>
                 <template #activator="{ on }">
-                  <v-chip color="green darken-2" outlined v-on="on">
-                    <v-icon left color="green darken-2">{{
-                      $icons.mdiAccountOutline
-                    }}</v-icon>
-                    <span
-                      v-if="marking"
-                      class="green--text text--darken-2 font-weight-black"
-                      >{{ response.sm.length }}</span
-                    >
-                    <v-icon right color="green darken-2">{{
-                      $icons.mdiCheck
-                    }}</v-icon>
+                  <v-chip
+                    label
+                    :color="color(response.sm.length, question.maxMark)"
+                    v-on="on"
+                  >
+                    <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                    {{ response.sm.length }}
+                    <v-icon right>{{ $icons.mdiCheck }}</v-icon>
                   </v-chip>
                 </template>
-                <span>Self mark</span>
+                <span>Student</span>
               </v-tooltip>
             </v-col>
           </v-row>
@@ -267,9 +266,7 @@
                 <template #label>
                   <span
                     :class="
-                      response.sm.includes(mp.id)
-                        ? 'green--text text--darken-2'
-                        : ''
+                      response.sm.includes(mp.id) ? 'font-weight-bold' : ''
                     "
                   >
                     {{ mp.text }}
@@ -277,7 +274,7 @@
                 </template>
               </v-checkbox>
               <div class="d-flex justify-end">
-                <v-switch v-model="smartSort" hide-details>
+                <v-switch v-model="smartSort" inset hide-details>
                   <template #label>
                     <v-tooltip bottom>
                       <template #activator="{ on }">
@@ -450,6 +447,12 @@ export default {
     }
   },
   methods: {
+    color(n, max) {
+      console.log(`color`, n, max)
+      if (n / max <= 1 / 3) return 'red'
+      if (n / max > 2 / 3) return 'green'
+      return 'orange'
+    },
     copyMarkScheme() {
       this.markScheme = [...this.question.markScheme]
     },

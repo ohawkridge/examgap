@@ -196,7 +196,7 @@ export default {
   },
   methods: {
     navTo(groupId) {
-      this.$store.commit('group/setActiveGroupId', groupId)
+      this.$store.commit('user/setActiveGroupId', groupId)
       this.$router.push(this.teacher ? `/group/${groupId}` : '/home')
     },
     createAssignment() {

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <v-row
-      class="justify-center mt-0"
-      style="border-bottom: 1px solid #d2d2d2 !important"
-    >
+    <v-row class="justify-center mt-0">
       <v-col cols="12" md="10" class="d-flex justify-space-between">
         <v-btn text rounded @click="$router.go(-1)">
           <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>

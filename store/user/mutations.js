@@ -18,6 +18,14 @@ export default {
   setGroups(state, groups) {
     state.groups = groups
   },
+  setActiveGroupId(state, id) {
+    // When a new class is created, TheCreateClassDialog sends -1
+    // If so, set the most recent group (last in array) as active
+    if (id === -1) {
+      id = state.groups[state.groups.length - 1].id
+    }
+    state.activeGroupId = id
+  },
   addGroup(state, group) {
     state.groups.push(group)
   },
