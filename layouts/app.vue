@@ -51,7 +51,15 @@
       flat
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-tooltip bottom>
+        <template #activator="{ on }">
+          <v-app-bar-nav-icon
+            @click="drawer = !drawer"
+            v-on="on"
+          ></v-app-bar-nav-icon>
+        </template>
+        <span>{{ drawer ? 'Close menu' : 'Open menu' }}</span>
+      </v-tooltip>
       <v-container class="d-flex justify-space-between align-center">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
         <v-btn
