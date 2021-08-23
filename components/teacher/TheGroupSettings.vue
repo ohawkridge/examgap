@@ -55,7 +55,7 @@ export default {
         return this.group.name
       },
       set(name) {
-        this.$store.commit('user/updateGroupName', name)
+        this.$store.commit('group/updateGroupName', name)
       },
     },
   },

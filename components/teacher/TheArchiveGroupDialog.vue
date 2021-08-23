@@ -5,14 +5,12 @@
         Archive class
       </v-btn>
     </template>
-    <v-card class="">
+    <v-card>
       <v-card-title class="d-flex justify-center">
         Archive class?
       </v-card-title>
       <v-card-text>
-        <p>
-          Archived classes are moved to the 'ARCHIVE' section of your home page.
-        </p>
+        <p>Archived classes are moved to the 'ARCHIVE' tab on the home page.</p>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
           <v-btn
@@ -25,7 +23,7 @@
             class="ml-2"
             @click="archiveGroup()"
           >
-            Archive class
+            Archive
           </v-btn>
         </div>
       </v-card-text>

@@ -30,7 +30,7 @@
           <v-window-item :value="1">
             <v-card-text>
               <v-row v-if="students.length > 0">
-                <v-col cols="12" class="d-flex">
+                <v-col cols="12" class="pt-0">
                   <v-checkbox v-model="allSelected" class="mt-0" hide-details>
                     <template #label>
                       <strong>Select all</strong>

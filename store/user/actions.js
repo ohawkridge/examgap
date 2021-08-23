@@ -141,11 +141,15 @@ const actions = {
       throw new Error(`Error updating group ${response.status}`)
     }
     // Change props on actual group object (locally)
-    commit('setNameAndCourse', {
-      id: getters.activeGroup.id,
-      name: groupName,
-      course: await response.json(),
-    })
+    commit(
+      'group/setNameAndCourse',
+      {
+        id: getters.activeGroup.id,
+        name: groupName,
+        course: await response.json(),
+      },
+      { root: true }
+    )
     commit('app/setPageTitle', groupName, { root: true })
   },
   async createAssignment({ commit }, obj) {

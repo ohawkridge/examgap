@@ -135,7 +135,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
-    this.$store.commit('students/setStudents', [])
+    this.$store.commit('group/setStudents', [])
     next()
   },
   layout: 'app',

@@ -53,6 +53,7 @@
                     v-for="(assignment, j) in q.previous"
                     :key="j"
                     small
+                    label
                     outlined
                     class="ml-2"
                   >
