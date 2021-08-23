@@ -74,7 +74,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/mark.png" alt="Marking" width="90%"></v-img>
+          <v-img src="/mark.png" alt="Marking"></v-img>
         </v-col>
       </v-row>
       <v-row
@@ -118,9 +118,9 @@
             Independent revision
           </p>
           <p class="text-body-1">
-            Students can use Examgap for unlimited independent revision. It
-            makes a great supplement to paper-based revision guides and needs no
-            intervention from you.
+            Students can use Examgap for independent revision with no teacher
+            intervention. Supplement paper-based revision guides with essential
+            exam practise.
           </p>
         </v-col>
         <v-col cols="12" md="6">
@@ -224,20 +224,9 @@
     <v-container id="how-cont">
       <v-row class="justify-center">
         <v-col cols="12" md="4">
-          <v-card id="card1" rounded="lg" elevation="6" class="pa-6 how-card">
-            <v-card-title>
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#b7d1da"
-                class="mr-2"
-              >
-                <path :d="$icons.mdiNumeric1Circle"></path></svg
-              >Browse questions
-            </v-card-title>
-            <v-card-text class="text-body-1">
+          <v-card rounded="lg" elevation="6">
+            <v-card-text class="text-body-1 pa-6">
+              <p class="text-h6 text-center">Browse Questions</p>
               <p>
                 Browse questions organised by syllabus topic. All questions are
                 course and board specific—so you know they'll be relevant.
@@ -246,21 +235,9 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="4">
-          <v-card id="card2" rounded="lg" elevation="6" class="pa-6 how-card">
-            <v-card-title>
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#b7d1da"
-                class="mr-2"
-              >
-                <path :d="$icons.mdiNumeric2Circle"></path>
-              </svg>
-              Set assignments
-            </v-card-title>
-            <v-card-text class="text-body-1">
+          <v-card rounded="lg" elevation="6">
+            <v-card-text class="text-body-1 pa-6">
+              <p class="text-h6 text-center">Set Assignments</p>
               <p>
                 You can set assignments for the whole class or just selected
                 students. Use in class or as homework/revision.
@@ -269,21 +246,9 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="4">
-          <v-card id="card3" rounded="lg" elevation="6" class="pa-6 how-card">
-            <v-card-title>
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#b7d1da"
-                class="mr-2"
-              >
-                <path :d="$icons.mdiNumeric3Circle"></path>
-              </svg>
-              Mark & feedback
-            </v-card-title>
-            <v-card-text class="text-body-1">
+          <v-card rounded="lg" elevation="6">
+            <v-card-text class="text-body-1 pa-6">
+              <p class="text-h6 text-center">Mark & Feedback</p>
               <p>
                 Mark and feedback quickly with the automatic comment bank.
                 Reassign questions to students with a single click.
@@ -305,18 +270,18 @@
     </v-container>
     <v-container id="research">
       <v-row class="d-flex justify-center mb-10">
-        <v-col cols="12" md="5" class="text-body-1">
+        <v-col cols="12" md="5" class="font-italic">
           <div class="d-flex">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
-                $icons.mdiMicroscope
+                $icons.mdiFlaskOutline
               }}</v-icon>
             </div>
             "Use of low stakes testing can contribute to learning in valuable
             ways".
           </div>
         </v-col>
-        <v-col cols="12" md="5" class="text-body-1">
+        <v-col cols="12" md="5">
           <div class="d-flex research-item">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
@@ -329,18 +294,18 @@
         </v-col>
       </v-row>
       <v-row class="d-flex justify-center mb-10">
-        <v-col cols="12" md="5" class="text-body-1">
+        <v-col cols="12" md="5" class="font-italic">
           <div class="d-flex">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
-                $icons.mdiMicroscope
+                $icons.mdiFlaskOutline
               }}</v-icon>
             </div>
             "Learners who take a test shortly after studying &hellip; do better
             on a final test than those who do not.
           </div>
         </v-col>
-        <v-col cols="12" md="5" class="text-body-1">
+        <v-col cols="12" md="5">
           <div class="d-flex">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
@@ -353,11 +318,11 @@
         </v-col>
       </v-row>
       <v-row class="d-flex justify-center mb-10">
-        <v-col cols="12" md="5" class="text-body-1">
+        <v-col cols="12" md="5" class="font-italic">
           <div class="d-flex">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
-                $icons.mdiMicroscope
+                $icons.mdiFlaskOutline
               }}</v-icon>
             </div>
             "Teachers can use assessment to help them plan lessons, adapt
@@ -365,7 +330,7 @@
             re-teach"
           </div>
         </v-col>
-        <v-col cols="12" md="5" class="text-body-1">
+        <v-col cols="12" md="5">
           <div class="d-flex">
             <div>
               <v-icon class="ico-bg mr-2" color="white">{{
@@ -413,7 +378,7 @@
                     <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
                     </v-icon> -->
-                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -425,7 +390,7 @@
                     <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
                     </v-icon> -->
-                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -456,7 +421,7 @@
                   <td>
                     <span class="font-weight-bold">AQA</span>
                     <span class="text-caption">(8525)</span>
-                    <v-chip label color="accent" class="ml-2" outlined small
+                    <v-chip color="accent" class="ml-2" outlined small
                       >NEW</v-chip
                     >
                   </td>
@@ -481,7 +446,7 @@
                   <td>
                     <span class="font-weight-bold">OCR</span>
                     <span class="text-caption">(J277)</span>
-                    <v-chip label color="accent" class="ml-2" outlined small
+                    <v-chip color="accent" class="ml-2" outlined small
                       >NEW</v-chip
                     >
                   </td>
@@ -503,7 +468,7 @@
                     <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
                     </v-icon> -->
-                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -518,7 +483,7 @@
                     <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
                     </v-icon> -->
-                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -540,7 +505,7 @@
                     <span class="text-caption">(7517)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -549,7 +514,7 @@
                     <span class="text-caption">(H446)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -558,7 +523,7 @@
                     <span class="text-caption">(A500QS)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -567,7 +532,7 @@
                     <span class="text-caption">(9618)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip label class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -709,8 +674,8 @@
       <v-row>
         <v-col>
           <p class="sub-hero-text text-center">
-            Practise <span class="highlight">written answer</span> exam
-            questions online
+            Why practise <span class="highlight">written answer</span>
+            questions?
           </p>
         </v-col>
       </v-row>
@@ -719,36 +684,38 @@
           <v-img id="owen" src="/owen.jpg" alt="Portrait of Owen"></v-img>
         </v-col>
         <v-col cols="12" md="6">
-          <p class="text-body-1">
+          <p>
             Hi—I’m Owen, a Computer Science and I.T. teacher for fourteen years.
           </p>
-          <p class="text-body-1">
+          <p>
             We all know students need to practise exam-style questions. Yet most
             websites focus on multiple choice and gap fills. But GCSE papers
             aren’t multiple choice.
             <span class="font-weight-bold"
-              >A typical Computer Science paper is only 13% closed
+              >A typical Computer Science paper is only around 13% closed
               questions</span
             >. Therefore, it’s essential students practise written answer
             questions in order to do well.
           </p>
-          <p class="text-body-1">
+          <p>
             Frequent testing using existing question banks is a hassle. In my
             department, this meant finding and photocopying questions, marking
             them by hand and then painstakingly copying the results into a
             spreadsheet. Examgap streamlines this process with tick-box marking,
             an automated comment bank, and detailed grade book.
           </p>
-          <p class="text-body-1">
+          <p>
             If you’re a Computing teacher, please give Examgap a try. You can
-            <nuxt-link to="/trial"
+            <nuxt-link to="/trial" class="text-decoration-none"
               ><span class="font-weight-bold">try it for free</span></nuxt-link
             >
             with no payment information.
           </p>
           <p>
             If you have any questions or feedback my direct email is
-            <a href="mailto:owen@examgap.com">owen@examgap.com</a>.
+            <a href="mailto:owen@examgap.com" class="text-decoration-none"
+              >owen@examgap.com</a
+            >.
           </p>
           <p>&mdash;Cheers, Owen</p>
         </v-col>
@@ -771,18 +738,14 @@
 <script>
 import {
   mdiCheck,
-  mdiNumeric1Circle,
-  mdiNumeric2Circle,
-  mdiNumeric3Circle,
   mdiCheckBold,
-  mdiMicroscope,
+  mdiFlaskOutline,
   mdiTextToSpeech,
   mdiSortBoolDescendingVariant,
   mdiCommentTextMultipleOutline,
   mdiTargetAccount,
   mdiDownloadOutline,
   mdiRepeat,
-  mdiFlaskOutline,
 } from '@mdi/js'
 
 export default {
@@ -790,10 +753,7 @@ export default {
   created() {
     this.$icons = {
       mdiCheck,
-      mdiNumeric1Circle,
-      mdiNumeric2Circle,
-      mdiNumeric3Circle,
-      mdiMicroscope,
+      mdiFlaskOutline,
       mdiCheckBold,
       mdiTextToSpeech,
       mdiSortBoolDescendingVariant,
@@ -801,7 +761,6 @@ export default {
       mdiTargetAccount,
       mdiDownloadOutline,
       mdiRepeat,
-      mdiFlaskOutline,
     }
   },
 }
@@ -831,7 +790,7 @@ export default {
   background-color: #db5461;
   opacity: 0.3;
   width: 108%;
-  height: 1em;
+  height: 1.125em;
   position: absolute;
   filter: url(#marker-shape);
   left: -0.25em;
@@ -911,21 +870,6 @@ export default {
   top: -5em;
 }
 
-/* tilt cards on desktop */
-@media only screen and (min-width: 960px) {
-  #card1 {
-    transform: rotate(-1.5deg);
-  }
-
-  #card2 {
-    transform: rotate(1.3deg);
-  }
-
-  #card3 {
-    transform: rotate(-1deg);
-  }
-}
-
 /* ------- Research ------- */
 #research {
   padding-top: 4em;
@@ -975,7 +919,7 @@ export default {
 }
 
 .illum {
-  border-bottom: 6px solid #db5461;
+  border-bottom: 6px solid #efb2b8;
 }
 
 /* add vertical space between screenshots */

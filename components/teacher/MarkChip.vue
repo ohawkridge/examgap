@@ -13,7 +13,7 @@
             <v-icon right color="grey">{{ $icons.mdiCheck }}</v-icon>
           </v-chip>
         </template>
-        <span>Mark response</span>
+        <span>Mark</span>
       </v-tooltip>
       <!-- Teacher marked -->
       <v-tooltip v-else :key="i" bottom>
@@ -34,7 +34,7 @@
             $icons.mdiFlagOutline
           }}</v-icon>
         </template>
-        <span>Mark response</span>
+        <span>Mark</span>
       </v-tooltip>
     </template>
   </div>

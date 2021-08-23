@@ -11,7 +11,14 @@
               Improve your Computer Science results
             </p>
             <p>
-              <v-btn large color="primary" elevation="0" nuxt to="/trial">
+              <v-btn
+                large
+                rounded
+                color="primary"
+                elevation="0"
+                nuxt
+                to="/trial"
+              >
                 30-Day Free trial
               </v-btn>
             </p>
@@ -98,6 +105,7 @@
                 outlined
                 :loading="loading"
                 :disabled="loading"
+                rounded
                 class="float-right"
                 color="grey"
                 @click="send()"

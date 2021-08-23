@@ -112,7 +112,7 @@
                 </v-window-item>
               </v-window>
               <v-card-actions>
-                <v-btn :disabled="step === 1" text @click="step--">
+                <v-btn :disabled="step === 1" text rounded @click="step--">
                   Back
                 </v-btn>
                 <v-spacer />
@@ -120,6 +120,7 @@
                   v-if="step === 1"
                   elevation="0"
                   color="primary"
+                  rounded
                   @click="next()"
                 >
                   Next
@@ -129,6 +130,7 @@
                   elevation="0"
                   :loading="loading"
                   :disabled="loading"
+                  rounded
                   color="primary"
                   type="submit"
                 >

@@ -11,7 +11,7 @@
               class="mr-2"
               elevation="0"
               :block="$vuetify.breakpoint.name === 'xs'"
-              small
+              text
               rounded
               v-on="on"
               >Students<v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
@@ -52,7 +52,7 @@
               class="mr-2"
               :class="xsBtns"
               elevation="0"
-              small
+              text
               rounded
               :block="$vuetify.breakpoint.name === 'xs'"
               v-on="on"
@@ -69,7 +69,7 @@
               class="mr-2"
               :class="xsBtns"
               :block="$vuetify.breakpoint.name === 'xs'"
-              small
+              text
               rounded
               @click="exportTableToCSV()"
               v-on="on"
@@ -78,13 +78,13 @@
               <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
             </v-btn>
           </template>
-          <span>Download as csv</span>
+          <span>Download csv</span>
         </v-tooltip>
         <v-btn
           elevation="0"
           :block="$vuetify.breakpoint.name === 'xs'"
           :class="xsBtns"
-          small
+          text
           rounded
           @click="$fetch()"
         >

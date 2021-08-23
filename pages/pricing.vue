@@ -23,37 +23,44 @@
                   £129 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                  <v-icon color="primary" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   Improve your results
                 </p>
                 <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                  <v-icon color="primary" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   Unlock more 8-9 grades
                 </p>
                 <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                  <v-icon color="primary" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   Mark more efficiently
                 </p>
-                <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                <p class="mb-4">
+                  <v-icon color="primary" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   Diagnose weaknesses
                 </p>
                 <p class="text-caption mb-0">
-                  <nuxt-link nuxt to="/#boards"
+                  <nuxt-link nuxt to="/#boards" class="text-decoration-none"
                     >Which boards do you support?</nuxt-link
                   >
                 </p>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="primary" block elevation="0" nuxt to="/trial">
+                <v-btn
+                  color="primary"
+                  block
+                  rounded
+                  elevation="0"
+                  nuxt
+                  to="/trial"
+                >
                   Get a 30-day free trial
                 </v-btn>
               </v-card-actions>
@@ -72,37 +79,39 @@
                   £129 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                  <v-icon class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   Improve your results
                 </p>
                 <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                  <v-icon class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   Differentiate quickly
                 </p>
                 <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                  <v-icon class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   Support independent study
                 </p>
-                <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                <p class="mb-4">
+                  <v-icon class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   Create your own questions
                 </p>
                 <p class="text-caption mb-0">
-                  <nuxt-link nuxt to="/#boards"
+                  <nuxt-link nuxt to="/#boards" class="text-decoration-none"
                     >Which boards do you support?</nuxt-link
                   >
                 </p>
               </v-card-text>
               <v-card-actions>
-                <v-btn block outlined nuxt to="/trial"> Coming Soon </v-btn>
+                <v-btn block rounded outlined nuxt to="/trial">
+                  Coming Soon
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -121,13 +130,13 @@
                 </p>
                 <p>Also includes:</p>
                 <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                  <v-icon color="#e3f2fd" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   OCR Creative iMedia <span class="text-caption"> (J817) </span>
                 </p>
                 <p class="mb-2">
-                  <v-icon color="#b7d1da" class="mr-2">{{
+                  <v-icon color="#e3f2fd" class="mr-2">{{
                     $icons.mdiCheckboxMarkedCircleOutline
                   }}</v-icon>
                   BTEC Level 3 IT <span class="text-caption"> (Unit 1) </span>
@@ -259,6 +268,7 @@
               x-large
               color="white"
               outlined
+              rounded
               elevation="0"
               nuxt
               to="/trial"
@@ -267,12 +277,10 @@
             </v-btn>
             <div class="mt-4 white--text d-flex justify-center">
               <small>
-                <v-icon small color="accent">{{
-                  $icons.mdiCheckboxMarkedCircleOutline
-                }}</v-icon>
+                <v-icon small color="accent">{{ $icons.mdiCheck }}</v-icon>
                 No payment info
                 <v-icon small color="accent" class="ml-2">{{
-                  $icons.mdiCheckboxMarkedCircleOutline
+                  $icons.mdiCheck
                 }}</v-icon>
                 Improve your results
               </small>
@@ -301,9 +309,11 @@
           <p class="text-h6 text-center">What about multi-academy trusts?</p>
           <p>
             Please contact
-            <a href="mailto:support@examgap.com">support@examgap.com</a> for a
-            custom quote covering multiple schools. All quotes are provided free
-            with no obligation.
+            <a class="text-decoration-none" href="mailto:support@examgap.com"
+              >support@examgap.com</a
+            >
+            for a custom quote covering multiple schools. All quotes are
+            provided free with no obligation.
           </p>
         </v-col>
       </v-row>
@@ -333,17 +343,21 @@
           <p class="text-h6 text-center">Can I get a longer trial?</p>
           <p>
             Yes, no problem. Just email
-            <a href="mailto:support@examgap.com">support@examgap.com</a> or use
-            the contact form at the bottom of the page and let us know you'd
-            like more time.
+            <a class="text-decoration-none" href="mailto:support@examgap.com"
+              >support@examgap.com</a
+            >
+            or use the contact form at the bottom of the page and let us know
+            you'd like more time.
           </p>
         </v-col>
         <v-col cols="12" md="5">
           <p class="text-h6 text-center">What if I have more questions?</p>
           <p>
             You can email
-            <a href="mailto:support@examgap.com">support@examgap.com</a> with
-            questions or to arrange a phone call or demonstration.
+            <a class="text-decoration-none" href="mailto:support@examgap.com"
+              >support@examgap.com</a
+            >
+            with questions or to arrange a phone call or demonstration.
           </p>
         </v-col>
       </v-row>
@@ -378,7 +392,7 @@ export default {
 }
 
 .gcse {
-  border: 2px solid #0078a0;
+  border: 2px solid #0099cc;
 }
 
 @media only screen and (min-width: 600px) {
@@ -394,7 +408,7 @@ export default {
   display: inline-flex;
   padding: 2px;
   border-radius: 50%;
-  background-color: #0078a0;
+  background-color: #0099cc;
 }
 
 #features {
@@ -403,7 +417,7 @@ export default {
 }
 
 #try {
-  background-color: #0078a0;
+  background-color: #0099cc;
   margin-top: 4em;
   margin-bottom: 4em;
   padding-top: 4em;

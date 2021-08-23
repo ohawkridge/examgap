@@ -11,9 +11,9 @@
     "lint": "yarn lint:js"
   },
   "dependencies": {
-    "@honeybadger-io/js": "^3.2.2",
+    "@honeybadger-io/js": "^3.2.3",
     "faunadb": "^4.3.0",
-    "nuxt": "^2.15.7",
+    "nuxt": "^2.15.8",
     "tiptap-vuetify": "^2.24.0",
     "vuex-persistedstate": "^4.0.0"
   },
@@ -23,13 +23,13 @@
     "@nuxtjs/eslint-config": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/vuetify": "^1.12.1",
-    "aws-sdk": "^2.963.0",
+    "aws-sdk": "^2.973.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^2.0.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-vue": "^7.15.1",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-vue": "^7.16.0",
     "prettier": "^2.3.2"
   }
 }
