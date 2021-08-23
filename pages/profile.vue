@@ -38,7 +38,7 @@
           <div id="fix-chip">
             <v-chip v-if="subscribed" color="green">
               Subscribed
-              <v-icon right>{{ $icons.mdiCheckOutline }}</v-icon>
+              <v-icon right>{{ $icons.mdiCheck }}</v-icon>
             </v-chip>
             <v-chip v-else color="accent">
               Subscribe
@@ -89,7 +89,7 @@
 <script>
 import { mapState } from 'vuex'
 import {
-  mdiCheckOutline,
+  mdiCheck,
   mdiAlertCircleOutline,
   mdiAccountOutline,
   mdiLockOutline,
@@ -133,7 +133,7 @@ export default {
   },
   created() {
     this.$icons = {
-      mdiCheckOutline,
+      mdiCheck,
       mdiAlertCircleOutline,
       mdiAccountOutline,
       mdiLockOutline,

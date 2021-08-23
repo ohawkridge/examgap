@@ -93,7 +93,6 @@
             <div class="d-flex justify-end mt-4">
               <v-btn color="primary" rounded elevation="0" @click="selfMark()">
                 Mark
-                <v-icon right>{{ $icons.mdiArrowRight }}</v-icon>
               </v-btn>
             </div>
           </div>
@@ -162,7 +161,6 @@ import {
   mdiPause,
   mdiCloudCheckOutline,
   mdiCloudSyncOutline,
-  mdiArrowRight,
   mdiCheck,
 } from '@mdi/js'
 
@@ -260,7 +258,6 @@ export default {
       mdiPause,
       mdiCloudCheckOutline,
       mdiCloudSyncOutline,
-      mdiArrowRight,
       mdiCheck,
     }
   },

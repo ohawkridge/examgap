@@ -203,7 +203,7 @@ export default {
   },
   async fetch() {
     try {
-      await this.$store.dispatch('students/getStudents')
+      await this.$store.dispatch('group/getStudents')
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({

@@ -4,19 +4,19 @@ export const state = () => ({
 })
 
 export const actions = {
-  async getGrades() {
+  async getGrades({ commit, rootState, rootGetters }) {
     const url = new URL('/.netlify/functions/getGrades', this.$config.baseURL)
     const data = await fetch(url, {
       body: JSON.stringify({
-        secret: this.$store.state.user.secret,
-        groupId: this.group.id,
+        secret: rootState.user.secret,
+        groupId: rootGetters.activeGroup.id,
       }),
       method: 'POST',
     })
     if (!data.ok) {
       throw new Error(`Error fetching grades ${data.status}`)
     }
-    this.data = await data.json()
+    commit('setGrades', await data.json())
   },
   async addStudents(
     { rootState, commit, rootGetters, dispatch },
@@ -142,6 +142,9 @@ export const mutations = {
   },
   setStudents(state, students) {
     state.students = students
+  },
+  setGrades(state, grades) {
+    state.grades = grades
   },
   addAssignment(state, assignment) {
     // Add assignment to *front* of assignments array

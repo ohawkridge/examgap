@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import {
   mdiArrowRight,
   mdiDownloadOutline,
@@ -83,6 +83,9 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapState({
+      grades: (state) => state.group.grades,
+    }),
     // Convert 2d array from db: [["A*", 0.90], ["A", 0.82], ..]]
     // into an object so we can look up target grades
     rag() {

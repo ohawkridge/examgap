@@ -10,21 +10,11 @@
           <nuxt-link to="/profile" class="black--text text-subtitle-2">{{
             shortName
           }}</nuxt-link>
-          <v-menu offset-y>
-            <template #activator="{ on }">
-              <v-btn class="float-right" icon v-on="on">
-                <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item @click="logout()">
-                <v-list-item-title>Sign out</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-          <v-chip x-small outlined color="accent">
-            {{ teacher ? 'Teacher' : 'Student' }}
-          </v-chip>
+          <div>
+            <v-chip x-small>
+              {{ teacher ? 'Teacher' : 'Student' }}
+            </v-chip>
+          </div>
         </div>
         <v-list dense nav>
           <v-list-item-group v-model="nav" color="primary">
@@ -55,6 +45,14 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Profile </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="logout()">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiLogoutVariant }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Sign Out </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -129,7 +127,7 @@ import {
   mdiCommentTextOutline,
   mdiFlashOutline,
   mdiAccountGroupOutline,
-  mdiDotsVertical,
+  mdiLogoutVariant,
 } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
@@ -191,7 +189,7 @@ export default {
       mdiCommentTextOutline,
       mdiFlashOutline,
       mdiAccountGroupOutline,
-      mdiDotsVertical,
+      mdiLogoutVariant,
     }
   },
   methods: {
