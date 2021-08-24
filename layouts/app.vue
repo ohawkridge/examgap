@@ -51,16 +51,8 @@
       flat
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-tooltip bottom>
-        <template #activator="{ on }">
-          <v-app-bar-nav-icon
-            @click="drawer = !drawer"
-            v-on="on"
-          ></v-app-bar-nav-icon>
-        </template>
-        <span>{{ drawer ? 'Close menu' : 'Open menu' }}</span>
-      </v-tooltip>
-      <v-container class="d-flex justify-space-between align-center">
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-container class="d-flex justify-space-between align-center pr-xs-0">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
         <v-btn
           v-if="teacher && $route.name === 'home'"
@@ -68,6 +60,7 @@
           text
           color="primary"
           rounded
+          class="mob-right"
           @click="$nuxt.$emit('show-create')"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
@@ -200,3 +193,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.mob-right {
+  position: relative;
+  left: 12px;
+}
+</style>

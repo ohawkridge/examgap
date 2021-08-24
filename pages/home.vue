@@ -21,15 +21,18 @@
               class="divide"
               @click="navTo(group.id)"
             >
+              <!-- Can't force v-list-item-content to flex -->
               <v-list-item-content>
-                <div class="d-flex align-center">
-                  <div class="col1 font-weight-medium">
-                    {{ group.name }}
-                    <div class="text-body-2">
+                <div class="d-flex justify-space-between align-center">
+                  <div>
+                    <div class="text-subtitle-1 font-weight-medium">
+                      {{ group.name }}
+                    </div>
+                    <div class="text-body-2 grey--text text--darken-2">
                       {{ group.course.name }} ({{ group.course.board }})
                     </div>
                   </div>
-                  <div class="col2 d-flex align-center justify-center ml-auto">
+                  <div class="chip-col d-flex justify-center">
                     <v-chip label outlined small>
                       {{ group.count }} student{{ group.count | pluralize }}
                     </v-chip>
@@ -49,14 +52,16 @@
               @click="navTo(group.id)"
             >
               <v-list-item-content>
-                <div class="d-flex align-center">
-                  <div class="col1 font-weight-medium">
-                    {{ group.name }}
-                    <div class="text-body-2">
+                <div class="d-flex justify-space-between align-center">
+                  <div>
+                    <div class="text-subtitle-1 font-weight-medium">
+                      {{ group.name }}
+                    </div>
+                    <div class="text-body-2 grey--text text--darken-2">
                       {{ group.course.name }} ({{ group.course.board }})
                     </div>
                   </div>
-                  <div class="col2 d-flex align-center">
+                  <div class="chip-col d-flex justify-center">
                     <v-chip label outlined small>
                       {{ group.count }} student{{ group.count | pluralize }}
                     </v-chip>
@@ -264,6 +269,10 @@ export default {
 </script>
 
 <style scoped>
+.chip-col {
+  width: 94px;
+}
+
 /* Assignment name */
 .col1 {
   width: 300px;

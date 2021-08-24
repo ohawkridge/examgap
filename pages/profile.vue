@@ -1,89 +1,91 @@
 <template>
-  <v-row class="d-flex justify-center my-8">
-    <v-col cols="12" md="5">
-      <p class="text-h5 d-flex justify-space-between mb-3">Account</p>
-      <p class="font-weight-light mb-9">Manage your account details.</p>
-      <v-text-field
-        :value="$store.state.user.username"
-        label="Username"
-        outlined
-        hide-details
-        :class="teacher ? 'mb-8' : ''"
-        readonly
-      ></v-text-field>
-      <v-checkbox
-        v-if="!teacher"
-        v-model="$store.state.user.examMode"
-        label="Exam mode"
-        disabled
-        hide-details
-      >
-      </v-checkbox>
-      <p v-if="!teacher" class="text-caption">Set by your teacher</p>
-      <v-text-field
-        :value="$store.state.user.school"
-        label="School name"
-        outlined
-        readonly
-      ></v-text-field>
-      <v-text-field
-        v-if="teacher"
-        :value="`${expires} (${subscriptionDays} days)`"
-        :label="subscribed ? 'Subscription expires' : 'Trial expires'"
-        :error="subscriptionDays < 1"
-        outlined
-        readonly
-      >
-        <template #append>
-          <div id="fix-chip">
-            <v-chip v-if="subscribed" label color="green">
-              Subscribed
-              <v-icon right>{{ $icons.mdiCheck }}</v-icon>
-            </v-chip>
-            <v-chip v-else color="accent" label>
-              Subscribe
-              <v-icon right>{{ $icons.mdiFlashOutline }}</v-icon>
-            </v-chip>
-          </div>
-        </template>
-      </v-text-field>
-      <the-subscribe-dialog v-if="teacher" />
-      <v-divider class="my-12" />
-      <p class="text-h5 d-flex justify-space-between mb-3">Password</p>
-      <p class="font-weight-light mb-9">Update your password.</p>
-      <v-text-field
-        v-model="pass1"
-        type="password"
-        :rules="passwordRules"
-        label="New password* (min. 6 characters)"
-        required
-        validate-on-blur
-        outlined
-      ></v-text-field>
-      <v-text-field
-        v-model="pass2"
-        type="password"
-        :rules="passwordRules"
-        label="New password again*"
-        required
-        validate-on-blur
-        outlined
-        :error-messages="match"
-      ></v-text-field>
-      <small>*Indicates required field</small>
-      <v-btn
-        color="primary"
-        block
-        type="submit"
-        elevation="0"
-        rounded
-        :disabled="typeof match == 'string' || loading"
-        :loading="loading"
-        @click="updatePass()"
-        >Update Password</v-btn
-      >
-    </v-col>
-  </v-row>
+  <v-container>
+    <v-row class="d-flex justify-center">
+      <v-col cols="12" md="5">
+        <div class="text-h5 d-flex justify-space-between">Account</div>
+        <p class="font-weight-light mb-9">Manage your account details.</p>
+        <v-text-field
+          :value="$store.state.user.username"
+          label="Username"
+          outlined
+          hide-details
+          :class="teacher ? 'mb-8' : ''"
+          readonly
+        ></v-text-field>
+        <v-checkbox
+          v-if="!teacher"
+          v-model="$store.state.user.examMode"
+          label="Exam mode"
+          disabled
+          hide-details
+        >
+        </v-checkbox>
+        <p v-if="!teacher" class="text-caption">Set by your teacher</p>
+        <v-text-field
+          :value="$store.state.user.school"
+          label="School name"
+          outlined
+          readonly
+        ></v-text-field>
+        <v-text-field
+          v-if="teacher"
+          :value="`${expires} (${subscriptionDays} days)`"
+          :label="subscribed ? 'Subscription expires' : 'Trial expires'"
+          :error="subscriptionDays < 1"
+          outlined
+          readonly
+        >
+          <template #append>
+            <div id="fix-chip">
+              <v-chip v-if="subscribed" label color="green">
+                Subscribed
+                <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+              </v-chip>
+              <v-chip v-else color="accent" label>
+                Subscribe
+                <v-icon right>{{ $icons.mdiFlashOutline }}</v-icon>
+              </v-chip>
+            </div>
+          </template>
+        </v-text-field>
+        <the-subscribe-dialog v-if="teacher" />
+        <v-divider class="my-10" />
+        <div class="text-h5 d-flex justify-space-between">Password</div>
+        <p class="font-weight-light mb-9">Update your password.</p>
+        <v-text-field
+          v-model="pass1"
+          type="password"
+          :rules="passwordRules"
+          label="New password* (min. 6 characters)"
+          required
+          validate-on-blur
+          outlined
+        ></v-text-field>
+        <v-text-field
+          v-model="pass2"
+          type="password"
+          :rules="passwordRules"
+          label="New password again*"
+          required
+          validate-on-blur
+          outlined
+          :error-messages="match"
+        ></v-text-field>
+        <small>*Indicates required field</small>
+        <v-btn
+          color="primary"
+          block
+          type="submit"
+          elevation="0"
+          rounded
+          :disabled="typeof match == 'string' || loading"
+          :loading="loading"
+          @click="updatePass()"
+          >Update Password</v-btn
+        >
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
