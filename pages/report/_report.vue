@@ -1,34 +1,36 @@
 <template>
   <div>
-    <div class="pa-4 d-flex justify-space-between">
-      <div style="width: 60%">
-        <div class="text-h6">
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn
-                icon
-                class="mr-2"
-                nuxt
-                :to="`/group/${group.id}`"
-                v-on="on"
-              >
-                <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
-              </v-btn>
-            </template>
-            <span>Back</span>
-          </v-tooltip>
-          {{ $fetchState.pending ? 'Loading...' : assignment.name }}
-          <div class="text-subtitle-1 ml-12">
-            <span class="fix-width font-weight-medium">Start:</span>
-            {{ assignment.start | date }}
-          </div>
-          <div class="text-subtitle-1 ml-12">
-            <span class="fix-width font-weight-medium">Due:</span>
-            {{ assignment.dateDue | date }}
-          </div>
+    <v-row class="pa-3">
+      <v-col cols="12" sm="6" class="d-flex align-start pb-0">
+        <v-tooltip bottom>
+          <template #activator="{ on }">
+            <v-btn icon class="mr-2" nuxt :to="`/group/${group.id}`" v-on="on">
+              <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+            </v-btn>
+          </template>
+          <span>Back</span>
+        </v-tooltip>
+        <span class="text-h6">{{
+          $fetchState.pending ? 'Loading...' : assignment.name
+        }}</span>
+      </v-col>
+      <v-col cols="12" sm="6" class="pb-0">
+        <div class="d-flex align-center">
+          <span class="font-weight-medium fix-date">Start:</span>
+          <v-icon small class="mr-1" color="grey">{{
+            $icons.mdiCalendarStart
+          }}</v-icon>
+          {{ assignment.start | date }}
         </div>
-      </div>
-      <div style="width: 40%" class="d-flex justify-end">
+        <div class="d-flex align-center">
+          <span class="font-weight-medium fix-date">Due:</span>
+          <v-icon small class="mr-1" color="grey">{{
+            $icons.mdiCalendarEnd
+          }}</v-icon>
+          {{ assignment.dateDue | date }}
+        </div>
+      </v-col>
+      <v-col cols="12" class="d-flex justify-end">
         <the-delete-assignment-dialog
           v-if="!$fetchState.pending && group"
           :assignment-id="assignment.id"
@@ -38,8 +40,8 @@
         <v-btn elevation="0" text rounded class="ml-2" @click="refresh()">
           Refresh
         </v-btn>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
     <v-skeleton-loader
       v-if="$fetchState.pending"
       :loading="true"
@@ -58,10 +60,8 @@
           >
             <span v-if="i === 0">Username</span>
             <v-menu v-else offset-x open-on-hover>
-              <template #activator="{ on, attrs }">
-                <span v-bind="attrs" v-on="on">{{
-                  `Q${i} [${q.maxMark}]`
-                }}</span>
+              <template #activator="{ on }">
+                <span v-on="on">{{ `Q${i} [${q.maxMark}]` }}</span>
               </template>
               <v-card max-width="440">
                 <v-card-text class="text-body-2">
@@ -100,12 +100,12 @@
         </tr>
       </tbody>
     </table>
-    <div class="d-flex justify-end pa-4">
-      <span class="mr-2"> N/A&mdash;Not answered </span>
-      <v-icon>{{ $icons.mdiCheck }}</v-icon>
-      <span class="mr-2"> &mdash;Self mark </span>
-      <v-icon>{{ $icons.mdiCheckAll }}</v-icon>
-      &mdash;Teacher mark
+    <div class="d-flex justify-end align-center pa-4 text-caption">
+      N/A Not answered&nbsp;&nbsp;
+      <v-icon small class="mr-1">{{ $icons.mdiCheck }}</v-icon>
+      Self mark&nbsp;&nbsp;
+      <v-icon small class="mr-1">{{ $icons.mdiCheckAll }}</v-icon>
+      Teacher mark
     </div>
     <!-- Marking dialog -->
     <v-dialog
@@ -315,6 +315,8 @@ import {
   mdiCloudCheckOutline,
   mdiCloudSyncOutline,
   mdiRefresh,
+  mdiCalendarStart,
+  mdiCalendarEnd,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
@@ -439,6 +441,8 @@ export default {
       mdiCloudCheckOutline,
       mdiCloudSyncOutline,
       mdiRefresh,
+      mdiCalendarStart,
+      mdiCalendarEnd,
     }
   },
   mounted() {

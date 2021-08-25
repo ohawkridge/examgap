@@ -25,7 +25,7 @@
             @click="mark(i)"
             v-on="on"
           >
-            <span class="font-weight-bold">{{ response.tm.length }}</span>
+            {{ response.tm.length }}
             <v-icon right>{{
               response.repeat ? $icons.mdiRepeat : $icons.mdiCheckAll
             }}</v-icon>

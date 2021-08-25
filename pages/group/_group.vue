@@ -33,7 +33,7 @@
                   sm="3"
                   class="pb-0 pb-sm-3 d-flex align-center text-body-2"
                 >
-                  <span class="font-weight-medium mr-2 fix-date">Start:</span>
+                  <span class="font-weight-medium fix-date">Start:</span>
                   <v-icon small class="mr-1" color="grey">{{
                     $icons.mdiCalendarStart
                   }}</v-icon>
@@ -44,7 +44,7 @@
                   sm="3"
                   class="d-flex align-center text-body-2 pt-2"
                 >
-                  <span class="font-weight-medium mr-2 fix-date">Due:</span>
+                  <span class="font-weight-medium fix-date">Due:</span>
                   <v-icon small class="mr-1" color="grey">{{
                     $icons.mdiCalendarEnd
                   }}</v-icon>
@@ -211,10 +211,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-/* Align dates */
-.fix-date {
-  width: 40px;
-}
-</style>

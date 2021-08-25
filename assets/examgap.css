@@ -60,6 +60,11 @@ span.v-chip.theme--light.green {
   border-bottom: 1px solid #d2d2d2 !important;
 }
 
+/* make start/due fixed width */
+.fix-date {
+  width: 48px;
+}
+
 /* pretty pseudocode in questions */
 .code {
   background: #f4f4f4;
