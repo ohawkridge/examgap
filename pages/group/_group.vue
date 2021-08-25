@@ -22,35 +22,57 @@
             class="divide"
           >
             <v-list-item-content>
-              <div class="d-flex align-center">
-                <div class="col1 font-weight-medium">
-                  {{ assignment.name }}
-                  <div class="text-body-2">
-                    {{ assignment.num_questions }} Question{{
-                      assignment.num_questions | pluralize
-                    }}
-                  </div>
-                </div>
-                <div class="col2 d-flex align-center text-body-2">
-                  <v-icon class="mr-1">{{
-                    $icons.mdiCalendarRangeOutline
+              <v-row>
+                <v-col cols="12" sm="4" class="pb-0 pb-sm-3">
+                  <span class="text-subtitle-1 font-weight-medium">{{
+                    assignment.name
+                  }}</span>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="3"
+                  class="pb-0 pb-sm-3 d-flex align-center text-body-2"
+                >
+                  <span class="font-weight-medium mr-2 fix-date">Start:</span>
+                  <v-icon small class="mr-1" color="grey">{{
+                    $icons.mdiCalendarStart
                   }}</v-icon>
-                  <span class="font-weight-medium mr-1">Start:</span>
                   {{ assignment.start | date }}
-                </div>
-                <div class="col2 d-flex align-center text-body-2">
-                  <span class="font-weight-medium mr-1 ml-3">Due:</span>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="3"
+                  class="d-flex align-center text-body-2 pt-2"
+                >
+                  <span class="font-weight-medium mr-2 fix-date">Due:</span>
+                  <v-icon small class="mr-1" color="grey">{{
+                    $icons.mdiCalendarEnd
+                  }}</v-icon>
                   {{ assignment.dateDue | date }}
-                </div>
-                <div class="col3 ml-auto d-flex justify-center">
+                </v-col>
+                <v-col
+                  v-if="$vuetify.breakpoint.name !== 'xs'"
+                  cols="2"
+                  sm="2"
+                  class="d-flex justify-center align-center"
+                >
                   <v-chip v-if="assignment.live" label color="green" small>
                     Upcoming
                   </v-chip>
                   <v-chip v-else label color="red" small> Past </v-chip>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </v-list-item-content>
             <v-list-item-action>
+              <v-list-item-action-text
+                v-if="$vuetify.breakpoint.name === 'xs'"
+                class="mt-2"
+              >
+                <v-chip v-if="assignment.live" label color="green" small>
+                  Upcoming
+                </v-chip>
+                <v-chip v-else label color="red" small> Past </v-chip>
+              </v-list-item-action-text>
               <v-menu offset-y>
                 <template #activator="{ on }">
                   <v-btn
@@ -72,7 +94,6 @@
             </v-list-item-action>
           </v-list-item>
         </v-list>
-        <!-- Empty state -->
         <div v-if="assignments.length === 0">
           <div class="d-flex justify-center">
             <v-img
@@ -116,15 +137,16 @@ import { mapGetters } from 'vuex'
 import TheStudentsTable from '@/components/teacher/TheStudentsTable'
 import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
+import TheDeleteAssignmentDialog from '@/components/teacher/TheDeleteAssignmentDialog'
 import {
   mdiDotsVertical,
   mdiInformationOutline,
   mdiPlus,
   mdiCheckCircleOutline,
-  mdiCalendarRangeOutline,
+  mdiCalendarStart,
+  mdiCalendarEnd,
   mdiCircleOutline,
 } from '@mdi/js'
-import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 
 export default {
   components: {
@@ -156,7 +178,8 @@ export default {
       mdiInformationOutline,
       mdiPlus,
       mdiCheckCircleOutline,
-      mdiCalendarRangeOutline,
+      mdiCalendarStart,
+      mdiCalendarEnd,
       mdiCircleOutline,
     }
   },
@@ -190,18 +213,8 @@ export default {
 </script>
 
 <style scoped>
-/* Assignment name */
-.col1 {
-  width: 300px;
-}
-
-/* Start/Due */
-.col2 {
-  width: 190px;
-}
-
-/* Open/closed */
-.col3 {
-  width: 80px;
+/* Align dates */
+.fix-date {
+  width: 40px;
 }
 </style>

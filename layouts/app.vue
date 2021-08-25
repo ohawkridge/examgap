@@ -52,23 +52,47 @@
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-container class="d-flex justify-space-between align-center pr-xs-0">
+      <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
+        <the-quote-of-the-day v-if="!teacher" />
+        <!-- **TEACHER ACTIONS** -->
+        <!-- Create class -->
         <v-btn
-          v-if="teacher && $route.name === 'home'"
+          v-if="
+            teacher &&
+            $route.name === 'home' &&
+            $vuetify.breakpoint.name !== 'xs'
+          "
           elevation="0"
           text
           color="primary"
           rounded
-          class="mob-right"
           @click="$nuxt.$emit('show-create')"
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Class
         </v-btn>
-        <the-quote-of-the-day v-if="!teacher" />
         <v-btn
-          v-if="teacher && $route.name === 'group-group'"
+          v-if="
+            teacher &&
+            $route.name === 'home' &&
+            $vuetify.breakpoint.name === 'xs'
+          "
+          elevation="0"
+          icon
+          color="primary"
+          rounded
+          @click="$nuxt.$emit('show-create')"
+        >
+          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+        </v-btn>
+        <!-- Create assignment -->
+        <v-btn
+          v-if="
+            teacher &&
+            $route.name === 'group-group' &&
+            $vuetify.breakpoint.name !== 'xs'
+          "
           elevation="0"
           text
           color="primary"
@@ -77,6 +101,19 @@
         >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Assignment
+        </v-btn>
+        <v-btn
+          v-if="
+            teacher &&
+            $route.name === 'group-group' &&
+            $vuetify.breakpoint.name === 'xs'
+          "
+          elevation="0"
+          icon
+          color="primary"
+          @click="createAssignment()"
+        >
+          <v-icon>{{ $icons.mdiPlus }}</v-icon>
         </v-btn>
         <create-assignment v-if="$route.name === 'course-course'" />
         <v-btn v-if="$route.name === 'question-question'" rounded text>
@@ -195,8 +232,9 @@ export default {
 </script>
 
 <style scoped>
-.mob-right {
-  position: relative;
-  left: 12px;
+@media only screen and (max-width: 600px) {
+  .mob-right {
+    padding-right: 0px;
+  }
 }
 </style>
