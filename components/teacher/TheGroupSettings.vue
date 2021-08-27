@@ -1,32 +1,34 @@
 <template>
-  <v-row class="d-flex justify-center mt-8">
-    <v-col cols="12" md="5">
-      <p class="text-h5 d-flex justify-space-between mb-3">
-        Class details
-        <the-archive-group-dialog />
-      </p>
-      <p class="font-weight-light mb-9">Choose class name and course.</p>
-      <v-text-field
-        v-model="name"
-        :rules="nameRules"
-        label="Class name*"
-        value="Test"
-        outlined
-        autofocus
-      ></v-text-field>
-      <the-course-select :course-id="group.course.id" />
-      <v-btn
-        color="primary"
-        elevation="0"
-        rounded
-        :loading="loading"
-        :disabled="loading"
-        @click="save"
-      >
-        Save
-      </v-btn>
-    </v-col>
-  </v-row>
+  <v-container>
+    <v-row class="d-flex justify-center">
+      <v-col cols="12" md="5">
+        <div class="text-h5 d-flex justify-space-between">
+          Class details
+          <the-archive-group-dialog />
+        </div>
+        <p class="font-weight-light mb-9">Choose class name and course.</p>
+        <v-text-field
+          v-model="name"
+          :rules="nameRules"
+          label="Class name*"
+          value="Test"
+          outlined
+          autofocus
+        ></v-text-field>
+        <the-course-select :course-id="group.course.id" />
+        <v-btn
+          color="primary"
+          elevation="0"
+          rounded
+          :loading="loading"
+          :disabled="loading"
+          @click="save"
+        >
+          Save
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

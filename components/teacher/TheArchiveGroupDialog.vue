@@ -1,9 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="440">
     <template #activator="{ on }">
-      <v-btn elevation="0" text color="red" rounded v-on="on">
-        Archive class
-      </v-btn>
+      <v-btn elevation="0" text rounded v-on="on"> Archive class </v-btn>
     </template>
     <v-card>
       <v-card-title class="d-flex justify-center">
@@ -23,7 +21,7 @@
             class="ml-2"
             @click="archiveGroup()"
           >
-            Archive
+            Archive Class
           </v-btn>
         </div>
       </v-card-text>

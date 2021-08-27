@@ -1,25 +1,18 @@
 <template>
   <v-dialog v-model="dialog" max-width="440px">
-    <v-card class="modal">
+    <v-card>
       <v-card-title class="d-flex justify-center"> Add students </v-card-title>
       <v-card-text>
         <v-textarea
           v-model="usernames"
           outlined
           clearable
+          placeholder="18bloggsj@yourschool.org.uk"
+          hide-details
           label="Email addresses*"
+          class="mb-2"
           autofocus
         ></v-textarea>
-        <v-alert
-          :icon="$icons.mdiInformationOutline"
-          border="left"
-          dense
-          type="info"
-          text
-        >
-          <div>Enter student email addresses.</div>
-          <div class="font-weight-bold">One address per line.</div>
-        </v-alert>
         <v-text-field
           v-model="domain"
           label="Append email domain"
@@ -28,24 +21,34 @@
           hide-details
         >
           <template #append>
-            <v-btn class="fix-btn" text color="primary" @click="append()">
-              Append
-            </v-btn>
+            <v-btn class="fix-btn" text @click="append()"> Append </v-btn>
           </template>
         </v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="dialog = false">Cancel</v-btn>
-        <v-btn
-          color="primary"
-          elevation="0"
-          :loading="loading"
-          :disabled="loading"
-          @click="addStudents()"
-          >Add Students</v-btn
+        <v-alert
+          :icon="$icons.mdiInformationOutline"
+          border="left"
+          dense
+          type="info"
+          class="mt-2"
+          text
         >
-      </v-card-actions>
+          <div>Enter student email addresses. One address per line.</div>
+          <!-- <div class="font-weight-bold"></div> -->
+        </v-alert>
+        <div class="d-flex justify-end mt-2">
+          <v-btn text rounded @click="dialog = false">Cancel</v-btn>
+          <v-btn
+            color="primary"
+            elevation="0"
+            class="ml-2"
+            rounded
+            :loading="loading"
+            :disabled="loading"
+            @click="addStudents()"
+            >Add Students</v-btn
+          >
+        </div>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>

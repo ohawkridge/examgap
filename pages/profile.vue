@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col cols="12" md="5">
-        <div class="text-h5 d-flex justify-space-between">Account</div>
+        <div class="text-h5">Account</div>
         <p class="font-weight-light mb-9">Manage your account details.</p>
         <v-text-field
           :value="$store.state.user.username"

@@ -30,7 +30,7 @@
             class="ml-2"
             @click="deleteAssignment()"
           >
-            Delete</v-btn
+            Delete Assignment</v-btn
           >
         </div>
       </v-card-text>
