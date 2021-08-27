@@ -94,18 +94,17 @@
             </v-list-item-action>
           </v-list-item>
         </v-list>
-        <div v-if="assignments.length === 0">
+        <!-- Empty state -->
+        <div v-if="assignments.length === 0" class="pa-3">
           <div class="d-flex justify-center">
             <v-img
               src="/no-assign.svg"
               contain
-              max-width="250"
+              :max-width="$vuetify.breakpoint.name === 'xs' ? '50%' : '20%'"
               alt="Books and pens illustrations"
             />
           </div>
-          <p class="text-body-2 text-center" style="color: #000000de">
-            No assignments yet
-          </p>
+          <p class="text-center mt-2">No assignments yet.</p>
           <div class="d-flex justify-center">
             <v-btn
               elevation="0"
