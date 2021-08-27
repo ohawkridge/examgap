@@ -6,9 +6,11 @@ exports.handler = async (event) => {
   const username = data.username
   const school = data.school
   const password = data.password
-  // Configure client using login token
-  const keyedClient = new faunadb.Client({
-    secret: process.env.SECRET_KEY,
+  const ctx = process.env.CONTEXT
+  // Use ExamgapDev database in development
+  const secret = ctx === 'dev' ? process.env.DEV_KEY : process.env.SECRET_KEY
+  const client = new faunadb.Client({
+    secret,
   })
   try {
     const qry = q.If(
@@ -28,7 +30,7 @@ exports.handler = async (event) => {
         },
       })
     )
-    const data = await keyedClient.query(qry)
+    const data = await client.query(qry)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

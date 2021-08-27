@@ -5,9 +5,11 @@ exports.handler = async (event) => {
   const AWS = require('aws-sdk')
   const data = JSON.parse(event.body)
   const email = data.email
-  // Configure fauna client with login secret
+  const ctx = process.env.CONTEXT
+  // Use ExamgapDev database in development
+  const secret = ctx === 'dev' ? process.env.DEV_KEY : process.env.SECRET_KEY
   const client = new faunadb.Client({
-    secret: process.env.SECRET_KEY,
+    secret,
   })
   // Configure SES
   AWS.config.update({
