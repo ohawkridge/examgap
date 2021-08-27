@@ -16,7 +16,7 @@ exports.handler = async (event) => {
   const ses = new AWS.SES({ apiVersion: '2010-12-01' })
   const params = {
     Destination: {
-      ToAddresses: ['owen@examgap.com', 'owen.hawkridge@chauncy.org.uk'], // Must be array
+      ToAddresses: ['owen@examgap.com'], // Must be array
     },
     // ConfigurationSetName: <<ConfigurationSetName>>,
     Message: {

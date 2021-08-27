@@ -77,8 +77,8 @@ export const actions = {
       throw new Error(`Error getting students`)
     }
     response = await response.json()
-    // This data might be fresher (group count set at login)
-    // If so, update the student count for this group
+    // Update group if nec.
+    // (may have changed since login)
     const count = response.length
     if (count !== rootGetters['user/activeGroup'].count) {
       commit('user/setCount', { groupId, count }, { root: true })

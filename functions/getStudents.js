@@ -154,6 +154,35 @@ exports.handler = async (event, context, callback) => {
                         0
                       )
                     ),
+                    time: q.Let(
+                      {
+                        seconds: q.Sum(
+                          q.Map(
+                            q.Var('responses'),
+                            q.Lambda(
+                              'doc',
+                              q.Select(['data', 'timeTaken'], q.Var('doc'), 0)
+                            )
+                          )
+                        ),
+                      },
+                      {
+                        formatted: q.Concat(
+                          [
+                            q.ToString(q.Floor(q.Divide(q.Var('seconds'), 60))),
+                            q.If(
+                              q.LT(q.Modulo(q.Var('seconds'), 60), 10),
+                              q.Concat([
+                                '0',
+                                q.ToString(q.Modulo(q.Var('seconds'), 60)),
+                              ]),
+                              q.ToString(q.Modulo(q.Var('seconds'), 60))
+                            ),
+                          ],
+                          ':'
+                        ),
+                      }
+                    ),
                   }
                 )
               ),

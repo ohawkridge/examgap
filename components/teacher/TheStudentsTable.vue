@@ -185,6 +185,11 @@ export default {
         },
         { text: 'Revision Questions', align: 'center', value: 'data.revision' },
         {
+          text: 'Study Duration',
+          align: 'center',
+          value: 'data.time.formatted',
+        },
+        {
           text: 'Average (%)',
           align: 'center',
           value: 'data.average',

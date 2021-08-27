@@ -452,7 +452,6 @@ export default {
   },
   methods: {
     color(n, max) {
-      console.log(`color`, n, max)
       if (n / max <= 1 / 3) return 'red'
       if (n / max > 2 / 3) return 'green'
       return 'orange'

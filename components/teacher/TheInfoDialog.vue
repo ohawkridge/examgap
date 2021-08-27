@@ -10,29 +10,31 @@
         <span>More information</span>
       </v-tooltip>
     </template>
-    <v-card class="modal">
+    <v-card>
       <v-card-title class="d-flex justify-center">
         More information
       </v-card-title>
       <v-card-text>
         <ul>
           <li>
-            Response id: <code>{{ response.id }}</code>
+            Response id:
+            <code>{{ response.id }}</code>
             <v-btn icon small @click="copyId()">
               <v-icon small>
                 {{ $icons.mdiContentCopy }}
               </v-icon>
             </v-btn>
           </li>
-          <li>Time taken: {{ timeTaken }}</li>
+          <li>
+            Time taken: <span class="font-weight-medium">{{ timeTaken }}</span>
+          </li>
         </ul>
+        <div class="d-flex justify-end">
+          <v-btn color="primary" rounded elevation="0" @click="dialog = false">
+            Close
+          </v-btn>
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn color="primary" elevation="0" @click="dialog = false">
-          Close
-        </v-btn>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
