@@ -1,5 +1,6 @@
 export const state = () => ({
   tab: null, // Home or Archive tab? (teacher only)
+  groupTab: null, // Tab on _group.vue
   onboardStep: 0, // Don't onboard
   loading: false, // Global loading state
   pageTitle: 'Classes', // Global page title
@@ -8,6 +9,9 @@ export const state = () => ({
 export const mutations = {
   setTab(state, val) {
     state.tab = val
+  },
+  setGroupTab(state, val) {
+    state.groupTab = val
   },
   setOnboardStep(state, step) {
     state.onboardStep = step

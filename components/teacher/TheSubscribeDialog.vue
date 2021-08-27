@@ -26,14 +26,14 @@
         <v-checkbox v-model="selectedPackage" value="gcse" readonly>
           <template #label>
             <div>
-              GCSE Computer Science—<strong>£129</strong>
+              GCSE Computer Science—<strong>£79</strong>
               <span class="text-caption">(VAT included)</span>
             </div>
           </template>
         </v-checkbox>
         <!-- <v-checkbox v-model="selectedPackage" value="alevel">
           <template #label>
-            <div>A Level Computer Science—<strong>£129</strong></div>
+            <div>A Level Computer Science—<strong>£79</strong></div>
           </template>
         </v-checkbox> -->
         <div class="d-flex justify-end">

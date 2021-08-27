@@ -1,16 +1,6 @@
 <template>
   <v-dialog v-model="dialog" width="510">
-    <template #activator="{ on }">
-      <v-btn
-        :block="$vuetify.breakpoint.name === 'xs'"
-        elevation="0"
-        class="mr-2"
-        v-on="on"
-      >
-        Invite students
-      </v-btn>
-    </template>
-    <v-card class="modal">
+    <v-card>
       <v-card-title class="d-flex justify-center">
         Invite students
       </v-card-title>
@@ -19,7 +9,7 @@
         <p class="text-subtitle-1 font-weight-medium mb-2">Share invite link</p>
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>
-            <v-btn class="fix-btn" text color="primary" @click="copy()">
+            <v-btn class="fix-btn" text rounded @click="copy()">
               <v-icon left>{{ $icons.mdiContentCopy }}</v-icon>
               {{ copyBtn }}
             </v-btn>
@@ -30,33 +20,27 @@
         </p>
         <v-text-field :value="formattedLink" readonly outlined hide-details>
           <template #append>
-            <v-btn class="fix-btn" text color="primary" @click="overlay = true">
+            <v-btn class="fix-btn" text rounded @click="overlay = true">
               <v-icon left>{{ $icons.mdiFullscreen }}</v-icon>
               Show
             </v-btn>
           </template>
         </v-text-field>
-        <p class="mt-2">
-          Students can go to examgap.com/signup and use this code to join your
-          class.
-        </p>
+        <p class="mt-2">Students can go to examgap.com and click Join Class.</p>
         <p class="text-subtitle-1 font-weight-medium mb-2 mt-6">
           Create accounts
         </p>
         <p class="mb-0">
           On the
-          <nuxt-link :to="`/students/${group.id}`" class="text-decoration-none"
-            >Students</nuxt-link
-          >
-          screen, click Students, Add students.
+          <span class="font-weight-medium">'STUDENTS'</span>
+          tab, click Students, Add students.
         </p>
+        <div class="d-flex justify-end">
+          <v-btn color="primary" rounded elevation="0" @click="dialog = false">
+            Close
+          </v-btn>
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn color="primary" elevation="0" @click="dialog = false">
-          Close
-        </v-btn>
-      </v-card-actions>
     </v-card>
     <!-- Giant join code -->
     <v-overlay

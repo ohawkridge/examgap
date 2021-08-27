@@ -213,7 +213,7 @@ export default {
               username: this.email,
               password: this.pass1,
             })
-            this.$router.push(`/classes`)
+            this.$router.push(`/home`)
           }
         } catch (err) {
           console.error(err)

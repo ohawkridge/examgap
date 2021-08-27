@@ -1,17 +1,13 @@
 <template>
   <div class="mt-4 ml-2">
-    <v-menu v-if="!teacher" offset-x open-on-hover>
+    <v-menu v-if="!teacher" offset-y open-on-hover>
       <template #activator="{ on }">
-        <v-hover v-slot="{ hover }">
-          <span :class="hover ? 'primary--text' : ''" v-on="on">
-            {{ greeting.text }},</span
-          >
-          <nuxt-link
-            to="/profile"
-            class="grey--text text--darken-2 text-subtitle-2"
-            >{{ shortName }}</nuxt-link
-          >
-        </v-hover>
+        <span v-on="on"> {{ greeting.text }}, </span>
+        <nuxt-link
+          to="/profile"
+          class="font-weight-medium grey--text text--darken-2"
+          >{{ shortName }}</nuxt-link
+        >
       </template>
       <v-card max-width="250">
         <v-card-text>

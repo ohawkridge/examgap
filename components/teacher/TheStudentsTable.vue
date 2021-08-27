@@ -103,24 +103,26 @@
       loading-text="Loading students..."
     >
       <template #no-data>
-        <div class="mt-4">
+        <!-- Empty state -->
+        <div class="pa-3">
           <v-img
-            max-width="200"
-            contain
             src="/no-student.svg"
+            contain
+            :max-width="$vuetify.breakpoint.name === 'xs' ? '50%' : '20%'"
             alt="Graduation gap illustration"
             class="mx-auto"
           />
-          <p class="text-body-2 mt-4" style="color: #000000de">
-            No students yet
-          </p>
-          <v-btn
-            color="primary"
-            elevation="0"
-            @click="$nuxt.$emit('open-invite')"
-          >
-            Invite students
-          </v-btn>
+          <p class="text-center mt-2 black--text">No students yet.</p>
+          <div class="d-flex justify-center">
+            <v-btn
+              elevation="0"
+              rounded
+              color="primary"
+              @click="$nuxt.$emit('open-invite')"
+            >
+              Invite students
+            </v-btn>
+          </div>
         </div>
       </template>
       <template #[`item.target`]="props">

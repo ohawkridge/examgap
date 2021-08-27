@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       stringsForSteps: {
-        1: `To get started, click + ${this.mobile ? '' : 'Create'} Class.`,
+        1: `To get started, click the '+ Class' button.`,
         2: 'To add students, click Invite Students.',
         3: 'Click + Create Assignment to browse questions.',
         4: 'Click + to select questions to assign.',

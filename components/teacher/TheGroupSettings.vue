@@ -1,11 +1,8 @@
 <template>
   <v-container>
     <v-row class="d-flex justify-center">
-      <v-col cols="12" md="5">
-        <div class="text-h5 d-flex justify-space-between">
-          Class details
-          <the-archive-group-dialog />
-        </div>
+      <v-col cols="12" md="5" class="mt-sm-6">
+        <div class="text-h5">Class details</div>
         <p class="font-weight-light mb-9">Choose class name and course.</p>
         <v-text-field
           v-model="name"
@@ -16,16 +13,19 @@
           autofocus
         ></v-text-field>
         <the-course-select :course-id="group.course.id" />
-        <v-btn
-          color="primary"
-          elevation="0"
-          rounded
-          :loading="loading"
-          :disabled="loading"
-          @click="save"
-        >
-          Save
-        </v-btn>
+        <div class="d-flex justify-space-between">
+          <v-btn
+            color="primary"
+            elevation="0"
+            rounded
+            :loading="loading"
+            :disabled="loading"
+            @click="save"
+          >
+            Save
+          </v-btn>
+          <the-archive-group-dialog />
+        </div>
       </v-col>
     </v-row>
   </v-container>

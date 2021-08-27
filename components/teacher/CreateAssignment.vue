@@ -1,9 +1,17 @@
 <template>
-  <div>
-    <v-dialog v-model="dialog" width="700" transition="scroll-x-transition">
-      <template #activator="{ on }">
+  <v-dialog v-model="dialog" width="700" transition="scroll-x-transition">
+    <template #activator="{ on }">
+      <div>
         <v-btn
-          button
+          v-if="$vuetify.breakpoint.name === 'xs'"
+          icon
+          class="mr-2"
+          @click="$store.commit('topics/clearSelectedQuestions')"
+        >
+          <v-icon>{{ $icons.mdiCancel }}</v-icon>
+        </v-btn>
+        <v-btn
+          v-else
           text
           rounded
           class="mr-2"
@@ -12,6 +20,18 @@
           Clear
         </v-btn>
         <v-btn
+          v-if="$vuetify.breakpoint.name === 'xs'"
+          icon
+          color="primary"
+          :disabled="selected.length == 0"
+          elevation="0"
+          @click="$nuxt.$emit('show-assign')"
+          v-on="on"
+        >
+          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+        </v-btn>
+        <v-btn
+          v-else
           color="primary"
           :disabled="selected.length == 0"
           elevation="0"
@@ -22,188 +42,188 @@
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Assign ({{ selected.length }})</v-btn
         >
-      </template>
-      <v-card class="pa-md-3">
-        <v-card-title> Create assignment </v-card-title>
-        <v-card-subtitle> {{ subtitle }} </v-card-subtitle>
-        <v-window v-model="step">
-          <v-window-item :value="1">
-            <v-card-text>
-              <v-row v-if="students.length > 0">
-                <v-col cols="12" class="pt-0">
-                  <v-checkbox v-model="allSelected" class="mt-0" hide-details>
-                    <template #label>
-                      <strong>Select all</strong>
-                    </template>
-                  </v-checkbox>
-                </v-col>
-                <v-col
-                  v-for="(student, i) in students"
-                  :key="i"
-                  class="py-0"
-                  cols="12"
-                  md="6"
+      </div>
+    </template>
+    <v-card class="pa-md-3">
+      <v-card-title> Create assignment </v-card-title>
+      <v-card-subtitle> {{ subtitle }} </v-card-subtitle>
+      <v-window v-model="step">
+        <v-window-item :value="1">
+          <v-card-text>
+            <v-row v-if="students.length > 0">
+              <v-col cols="12" class="pt-0">
+                <v-checkbox v-model="allSelected" class="mt-0" hide-details>
+                  <template #label>
+                    <strong>Select all</strong>
+                  </template>
+                </v-checkbox>
+              </v-col>
+              <v-col
+                v-for="(student, i) in students"
+                :key="i"
+                class="py-0"
+                cols="12"
+                md="6"
+              >
+                <v-checkbox
+                  v-model="selectedStudents"
+                  :value="student.id"
+                  class="mb-n2"
+                  multiple
                 >
-                  <v-checkbox
-                    v-model="selectedStudents"
-                    :value="student.id"
-                    class="mb-n2"
-                    multiple
-                  >
-                    <template #label>
-                      {{ student.username }}&nbsp;
-                      <v-tooltip bottom>
-                        <template #activator="{ on }">
-                          <a
-                            :class="`on ${student.examMode ? '' : 'off'}`"
-                            href="#"
-                            v-on="on"
-                            @click.stop="toggleMode(student)"
-                            >EXAM</a
-                          >
-                        </template>
-                        <span
-                          >Exam mode {{ student.examMode ? 'on' : 'off' }}</span
+                  <template #label>
+                    {{ student.username }}&nbsp;
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <a
+                          :class="`on ${student.examMode ? '' : 'off'}`"
+                          href="#"
+                          v-on="on"
+                          @click.stop="toggleMode(student)"
+                          >EXAM</a
                         >
-                      </v-tooltip>
-                    </template>
-                  </v-checkbox>
-                </v-col>
+                      </template>
+                      <span
+                        >Exam mode {{ student.examMode ? 'on' : 'off' }}</span
+                      >
+                    </v-tooltip>
+                  </template>
+                </v-checkbox>
+              </v-col>
+              <v-col cols="12">
+                <v-alert
+                  border="left"
+                  text
+                  type="info"
+                  dense
+                  :icon="$icons.mdiInformationOutline"
+                >
+                  Turn off exam mode to show keywords and a minimum word count
+                  when answering questions.
+                </v-alert>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-window-item>
+        <v-window-item :value="2">
+          <v-card-text>
+            <v-form ref="form">
+              <v-row>
                 <v-col cols="12">
-                  <v-alert
-                    border="left"
-                    text
-                    type="info"
-                    dense
-                    :icon="$icons.mdiInformationOutline"
-                  >
-                    Turn off exam mode to show keywords and a minimum word count
-                    when answering questions.
-                  </v-alert>
+                  <v-text-field
+                    v-model="name"
+                    label="Assignment name*"
+                    required
+                    :rules="nameRules"
+                    outlined
+                    @focus="$event.target.select()"
+                  ></v-text-field>
                 </v-col>
               </v-row>
-            </v-card-text>
-          </v-window-item>
-          <v-window-item :value="2">
-            <v-card-text>
-              <v-form ref="form">
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="name"
-                      label="Assignment name*"
-                      required
-                      :rules="nameRules"
-                      outlined
-                      @focus="$event.target.select()"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="12" md="6" class="pb-0">
-                    <v-menu
-                      v-model="menu"
-                      min-width="290px"
-                      offset-y
-                      transition="scale-transition"
-                    >
-                      <template #activator="{ on }">
-                        <v-text-field
-                          v-model="startDate"
-                          label="Start date*"
-                          :append-icon="$icons.mdiCalendarStart"
-                          placeholder="YYYY-MM-DD"
-                          :rules="startDateRules"
-                          outlined
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="startDate"
-                        color="primary"
-                        :min="new Date().toISOString().substr(0, 10)"
-                        no-title
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <v-col cols="12" md="6" class="pb-0">
-                    <v-menu
-                      v-model="menu2"
-                      min-width="290px"
-                      offset-y
-                      transition="scale-transition"
-                    >
-                      <template #activator="{ on }">
-                        <v-text-field
-                          v-model="endDate"
-                          label="End date*"
-                          outlined
-                          :append-icon="$icons.mdiCalendarEnd"
-                          placeholder="YYYY-MM-DD"
-                          :rules="endDateRules"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="endDate"
-                        color="primary"
-                        :min="startDate"
-                        no-title
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    class="d-flex justify-space-between align-center"
+              <v-row>
+                <v-col cols="12" md="6" class="pb-0">
+                  <v-menu
+                    v-model="menu"
+                    min-width="290px"
+                    offset-y
+                    transition="scale-transition"
                   >
-                    <small>*Indicates required field</small>
-                    <div>
-                      <v-chip outlined class="mr-1 ml-1" @click="setStart(0)">
-                        Today
-                      </v-chip>
-                      <v-chip outlined class="mr-1" @click="setStart(7)">
-                        1 week
-                      </v-chip>
-                      <v-chip outlined @click="setStart(14)"> 2 weeks </v-chip>
-                    </div>
-                  </v-col>
-                </v-row>
-              </v-form>
-            </v-card-text>
-          </v-window-item>
-        </v-window>
-        <v-card-actions>
-          <v-btn v-if="step === 1" text rounded @click="dialog = false">
-            Cancel
-          </v-btn>
-          <v-btn v-if="step === 2" text rounded @click="step--"> Back </v-btn>
-          <v-spacer />
-          <v-btn
-            v-if="step === 1"
-            elevation="0"
-            rounded
-            color="primary"
-            @click="step++"
-          >
-            Next
-          </v-btn>
-          <v-btn
-            v-if="step === 2"
-            elevation="0"
-            rounded
-            :loading="loading"
-            :disabled="loading"
-            color="primary"
-            @click="create()"
-          >
-            Create assignment
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+                    <template #activator="{ on }">
+                      <v-text-field
+                        v-model="startDate"
+                        label="Start date*"
+                        :append-icon="$icons.mdiCalendarStart"
+                        placeholder="YYYY-MM-DD"
+                        :rules="startDateRules"
+                        outlined
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="startDate"
+                      color="primary"
+                      :min="new Date().toISOString().substr(0, 10)"
+                      no-title
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+                <v-col cols="12" md="6" class="pb-0">
+                  <v-menu
+                    v-model="menu2"
+                    min-width="290px"
+                    offset-y
+                    transition="scale-transition"
+                  >
+                    <template #activator="{ on }">
+                      <v-text-field
+                        v-model="endDate"
+                        label="End date*"
+                        outlined
+                        :append-icon="$icons.mdiCalendarEnd"
+                        placeholder="YYYY-MM-DD"
+                        :rules="endDateRules"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="endDate"
+                      color="primary"
+                      :min="startDate"
+                      no-title
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                  cols="12"
+                  class="d-flex justify-space-between align-center"
+                >
+                  <small>*Indicates required field</small>
+                  <div>
+                    <v-chip outlined class="mr-1 ml-1" @click="setStart(0)">
+                      Today
+                    </v-chip>
+                    <v-chip outlined class="mr-1" @click="setStart(7)">
+                      1 week
+                    </v-chip>
+                    <v-chip outlined @click="setStart(14)"> 2 weeks </v-chip>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-card-text>
+        </v-window-item>
+      </v-window>
+      <v-card-actions>
+        <v-btn v-if="step === 1" text rounded @click="dialog = false">
+          Cancel
+        </v-btn>
+        <v-btn v-if="step === 2" text rounded @click="step--"> Back </v-btn>
+        <v-spacer />
+        <v-btn
+          v-if="step === 1"
+          elevation="0"
+          rounded
+          color="primary"
+          @click="step++"
+        >
+          Next
+        </v-btn>
+        <v-btn
+          v-if="step === 2"
+          elevation="0"
+          rounded
+          :loading="loading"
+          :disabled="loading"
+          color="primary"
+          @click="create()"
+        >
+          Create assignment
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -214,6 +234,7 @@ import {
   mdiArrowRight,
   mdiPlus,
   mdiCalendarEnd,
+  mdiCancel,
 } from '@mdi/js'
 
 export default {
@@ -305,6 +326,7 @@ export default {
       mdiArrowRight,
       mdiPlus,
       mdiCalendarEnd,
+      mdiCancel,
     }
   },
   beforeDestroy() {

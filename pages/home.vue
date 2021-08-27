@@ -14,7 +14,7 @@
       <!-- Home -->
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <v-list class="py-0">
+          <v-list v-if="activeGroups.length > 0" class="py-0">
             <v-list-item
               v-for="(group, i) in activeGroups"
               :key="i"
@@ -41,10 +41,33 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
+          <!-- Empty state -->
+          <template v-else>
+            <div class="d-flex justify-center pa-3">
+              <v-img
+                src="/no-class.svg"
+                contain
+                :max-width="$vuetify.breakpoint.name === 'xs' ? '50%' : '20%'"
+                alt="Empty chair illustration"
+              />
+            </div>
+            <p class="text-center mt-2">No classes yet.</p>
+            <div class="d-flex justify-center">
+              <v-btn
+                elevation="0"
+                rounded
+                color="primary"
+                @click="$nuxt.$emit('show-create')"
+              >
+                <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+                Class
+              </v-btn>
+            </div>
+          </template>
         </v-tab-item>
         <!-- Archive -->
         <v-tab-item>
-          <v-list class="py-0">
+          <v-list v-if="archiveGroups.length > 0" class="py-0">
             <v-list-item
               v-for="(group, i) in archiveGroups"
               :key="i"
@@ -70,6 +93,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
+          <p v-else class="pa-3 text-center">No archived classes.</p>
         </v-tab-item>
       </v-tabs-items>
     </template>

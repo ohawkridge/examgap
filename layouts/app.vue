@@ -9,7 +9,19 @@
       </div>
       <v-list dense nav>
         <v-list-item-group v-model="nav" color="primary">
-          <v-list-group :value="true" :prepend-icon="$icons.mdiGoogleClassroom">
+          <v-list-item v-if="groups.length === 0" @click="navHome()">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiGoogleClassroom }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Classes </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-group
+            v-else
+            :value="true"
+            :prepend-icon="$icons.mdiGoogleClassroom"
+          >
             <template #activator>
               <v-list-item-title>Classes</v-list-item-title>
             </template>
@@ -25,24 +37,32 @@
               </v-list-item>
             </template>
           </v-list-group>
+          <v-divider class="my-4 mx-2" />
+          <v-list-item nuxt to="/feedback">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Send feedback </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item nuxt to="/profile">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Profile </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="logout()">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiLogoutVariant }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Sign Out </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list-item-group>
-        <v-divider class="my-4 mx-2" />
-        <v-list-item nuxt to="/profile">
-          <v-list-item-icon>
-            <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title> Profile </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="logout()">
-          <v-list-item-icon>
-            <v-icon>{{ $icons.mdiLogoutVariant }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title> Sign Out </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -55,14 +75,20 @@
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
         <the-quote-of-the-day v-if="!teacher" />
-        <!-- **TEACHER ACTIONS** -->
+        <!-- **ACTIONS** -->
         <!-- Create class -->
         <v-btn
-          v-if="
-            teacher &&
-            $route.name === 'home' &&
-            $vuetify.breakpoint.name !== 'xs'
-          "
+          v-if="createClass && $vuetify.breakpoint.name === 'xs'"
+          elevation="0"
+          icon
+          color="primary"
+          rounded
+          @click="$nuxt.$emit('show-create')"
+        >
+          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="createClass && $vuetify.breakpoint.name !== 'xs'"
           elevation="0"
           text
           color="primary"
@@ -72,27 +98,18 @@
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Class
         </v-btn>
+        <!-- Create assignment -->
         <v-btn
-          v-if="
-            teacher &&
-            $route.name === 'home' &&
-            $vuetify.breakpoint.name === 'xs'
-          "
+          v-if="createAss && $vuetify.breakpoint.name === 'xs'"
           elevation="0"
           icon
           color="primary"
-          rounded
-          @click="$nuxt.$emit('show-create')"
+          @click="createAssignment()"
         >
           <v-icon>{{ $icons.mdiPlus }}</v-icon>
         </v-btn>
-        <!-- Create assignment -->
         <v-btn
-          v-if="
-            teacher &&
-            $route.name === 'group-group' &&
-            $vuetify.breakpoint.name !== 'xs'
-          "
+          v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
           elevation="0"
           text
           color="primary"
@@ -102,21 +119,47 @@
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Assignment
         </v-btn>
+        <!-- Add students -->
         <v-btn
-          v-if="
-            teacher &&
-            $route.name === 'group-group' &&
-            $vuetify.breakpoint.name === 'xs'
-          "
+          v-if="addStudents && $vuetify.breakpoint.name === 'xs'"
           elevation="0"
           icon
           color="primary"
-          @click="createAssignment()"
+          @click="$nuxt.$emit('open-invite')"
         >
           <v-icon>{{ $icons.mdiPlus }}</v-icon>
         </v-btn>
+        <v-btn
+          v-if="addStudents && $vuetify.breakpoint.name !== 'xs'"
+          elevation="0"
+          text
+          color="primary"
+          rounded
+          @click="$nuxt.$emit('open-invite')"
+        >
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Student
+        </v-btn>
+        <!-- + Assign (x) -->
         <create-assignment v-if="$route.name === 'course-course'" />
-        <v-btn v-if="$route.name === 'question-question'" rounded text>
+        <!-- Create question -->
+        <v-btn
+          v-if="createQ && $vuetify.breakpoint.name === 'xs'"
+          color="primary"
+          icon
+          nuxt
+          to="/author"
+        >
+          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="createQ && $vuetify.breakpoint.name !== 'xs'"
+          color="primary"
+          rounded
+          text
+          nuxt
+          to="/author"
+        >
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Question
         </v-btn>
@@ -130,7 +173,6 @@
       <the-onboarding-snackbar v-if="teacher" />
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
-      <the-feedback-dialog />
       <the-loading-overlay />
     </v-main>
     <the-footer />
@@ -148,12 +190,12 @@ import {
   mdiFlashOutline,
   mdiGoogleClassroom,
   mdiLogoutVariant,
+  mdiCommentAlertOutline,
 } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
-import TheFeedbackDialog from '@/components/common/TheFeedbackDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
@@ -168,7 +210,6 @@ export default {
     TheSnackbar,
     TheJoinDialog,
     TheCreateClassDialog,
-    TheFeedbackDialog,
     TheOnboardingSnackbar,
     TheLoadingOverlay,
     TheGreeting,
@@ -193,6 +234,27 @@ export default {
       activeGroupCount: 'user/activeGroupCount',
       group: 'user/activeGroup',
     }),
+    // Page title action logic
+    createClass() {
+      return this.teacher && this.$route.name === 'home'
+    },
+    addStudents() {
+      return (
+        this.teacher &&
+        this.$route.name === 'group-group' &&
+        this.$store.state.app.groupTab === 1
+      )
+    },
+    createAss() {
+      return (
+        this.teacher &&
+        this.$route.name === 'group-group' &&
+        this.$store.state.app.groupTab !== 1
+      )
+    },
+    createQ() {
+      return this.$route.name === 'question-question'
+    },
   },
   created() {
     this.$icons = {
@@ -204,12 +266,18 @@ export default {
       mdiFlashOutline,
       mdiGoogleClassroom,
       mdiLogoutVariant,
+      mdiCommentAlertOutline,
     }
   },
   methods: {
     navTo(groupId) {
       this.$store.commit('user/setActiveGroupId', groupId)
       this.$router.push(this.teacher ? `/group/${groupId}` : '/home')
+    },
+    navHome() {
+      // Make 'Classes' a link to home in empty state
+      this.$store.commit('app/setTab', 0)
+      this.$router.push('/home')
     },
     createAssignment() {
       // Clear any previous selections
@@ -222,8 +290,8 @@ export default {
       this.$router.push(`/course/${this.group.course.id}`)
     },
     logout() {
-      localStorage.removeItem('examgap')
       this.$router.push('/')
+      localStorage.removeItem('examgap')
       // Reload page to clear Vuex
       this.$router.go()
     },

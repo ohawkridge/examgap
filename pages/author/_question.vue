@@ -1,12 +1,10 @@
 <template>
-  <v-row class="d-flex justify-center mt-sm-3">
-    <v-col cols="12" md="10" lg="9">
-      <v-card class="pa-md-3">
-        <v-card-title>
-          {{ $route.params.question ? 'Edit' : 'Create' }} question
-        </v-card-title>
-        <v-card-text>
-          <TextEditor ref="question" :initial="question.text" class="mb-6" />
+  <div>
+    <v-container>
+      <v-row class="d-flex justify-center">
+        <v-col cols="12" md="10" lg="8" class="mt-sm-6">
+          <p class="text-subtitle-1 font-weight-medium">Question text</p>
+          <text-editor ref="question" :initial="question.text" class="mb-6" />
           <v-text-field
             v-if="question !== undefined"
             v-model="question.maxMark"
@@ -20,13 +18,13 @@
             class="num-field mb-6"
             required
           ></v-text-field>
-          <p class="text-subtitle-1 font-weight-bold">Model answer</p>
-          <TextEditor
+          <p class="text-subtitle-1 font-weight-medium">Model answer</p>
+          <text-editor
             ref="model"
             :initial="question.modelAnswer"
             class="mb-6"
           />
-          <p class="text-subtitle-1 font-weight-bold">Keywords</p>
+          <p class="text-subtitle-1 font-weight-medium">Keywords</p>
           <v-text-field
             v-model="question.keywords"
             outlined
@@ -34,7 +32,7 @@
             persistent-hint
             placeholder="E.g. RAM, instructions, processor"
           ></v-text-field>
-          <p class="text-subtitle-1 font-weight-bold">Mark scheme</p>
+          <p class="text-subtitle-1 font-weight-medium">Mark scheme</p>
           <v-text-field
             v-for="i in question.marks.length"
             :key="i"
@@ -70,13 +68,13 @@
               </v-tooltip>
             </template>
           </v-text-field>
-          <p class="text-subtitle-1 font-weight-bold">Marking guidance</p>
-          <TextEditor
+          <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
+          <text-editor
             ref="guidance"
             :initial="question.guidance"
             class="mb-6"
           />
-          <p class="text-subtitle-1 font-weight-bold">Topics</p>
+          <p class="text-subtitle-1 font-weight-medium">Topics</p>
           <v-autocomplete
             v-model="question.selectedTopics"
             :items="topics"
@@ -92,21 +90,24 @@
           >
           </v-autocomplete>
           <div class="d-flex justify-end">
-            <v-btn text class="mr-2" @click="$router.go(-1)"> Cancel </v-btn>
+            <v-btn text rounded class="mr-2" @click="$router.go(-1)">
+              Cancel
+            </v-btn>
             <v-btn
               color="primary"
               :disabled="loading"
               :loading="loading"
               elevation="0"
+              rounded
               @click="save()"
             >
-              Save question
+              Save
             </v-btn>
           </div>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -186,6 +187,12 @@ export default {
       mdiMinus,
     }
   },
+  mounted() {
+    this.$store.commit(
+      'app/setPageTitle',
+      `${this.$route.params.question ? 'Edit' : 'Create'} question`
+    )
+  },
   methods: {
     // Remove mark from mark scheme
     remove(id) {
@@ -246,7 +253,7 @@ export default {
 <style scoped>
 /* reduce max. mark field width */
 .num-field {
-  width: 34%;
+  width: 30%;
 }
 @media only screen and (min-width: 960px) {
   .num-field {

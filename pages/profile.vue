@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="d-flex justify-center">
-      <v-col cols="12" md="5">
+      <v-col cols="12" md="5" class="mt-sm-6">
         <div class="text-h5">Account</div>
         <p class="font-weight-light mb-9">Manage your account details.</p>
         <v-text-field
@@ -37,14 +37,14 @@
         >
           <template #append>
             <div id="fix-chip">
-              <v-chip v-if="subscribed" label color="green">
+              <v-chip v-if="subscribed" label color="#db5461" outlined>
                 Subscribed
                 <v-icon right>{{ $icons.mdiCheck }}</v-icon>
               </v-chip>
-              <v-chip v-else color="accent" label>
+              <!-- <v-chip v-else color="yellow" label>
                 Subscribe
                 <v-icon right>{{ $icons.mdiFlashOutline }}</v-icon>
-              </v-chip>
+              </v-chip> -->
             </div>
           </template>
         </v-text-field>

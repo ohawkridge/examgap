@@ -95,8 +95,8 @@
           </v-list-item>
         </v-list>
         <!-- Empty state -->
-        <div v-if="assignments.length === 0" class="pa-3">
-          <div class="d-flex justify-center">
+        <template v-if="assignments.length === 0">
+          <div class="d-flex justify-center pa-3">
             <v-img
               src="/no-assign.svg"
               contain
@@ -116,7 +116,7 @@
               Assignment
             </v-btn>
           </div>
-        </div>
+        </template>
       </v-tab-item>
       <v-tab-item>
         <the-students-table />
@@ -128,6 +128,7 @@
         <the-group-settings />
       </v-tab-item>
     </v-tabs-items>
+    <the-invite-dialog :group="group" />
   </div>
 </template>
 
@@ -137,6 +138,7 @@ import TheStudentsTable from '@/components/teacher/TheStudentsTable'
 import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheDeleteAssignmentDialog from '@/components/teacher/TheDeleteAssignmentDialog'
+import TheInviteDialog from '@/components/teacher/TheInviteDialog'
 import {
   mdiDotsVertical,
   mdiInformationOutline,
@@ -153,6 +155,7 @@ export default {
     TheGradesTable,
     TheGroupSettings,
     TheDeleteAssignmentDialog,
+    TheInviteDialog,
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
@@ -160,15 +163,19 @@ export default {
     next()
   },
   layout: 'app',
-  data() {
-    return {
-      tab: null,
-    }
-  },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
     assignments() {
       return this.group.assignments
+    },
+    // Store tab state so we can access it in app.vue
+    tab: {
+      get() {
+        return this.$store.state.app.groupTab
+      },
+      set(value) {
+        this.$store.commit('app/setGroupTab', value)
+      },
     },
   },
   created() {
@@ -184,16 +191,20 @@ export default {
   },
   async mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)
+    if (this.group.count === 0) {
+      this.tab = 1
+    }
     // Pre-fetch most recent assignment
     try {
       await this.$store.dispatch('assignment/getReport', -1)
     } catch (err) {
       console.error(err)
     }
+    // Onboard if nec.
     if (this.group.count === 0) {
       this.$store.commit('app/setOnboardStep', 2)
     }
-    // In case _report.vue crashes deactivate marking
+    // (In case _report.vue crashes deactivate marking)
     this.$store.commit('assignment/setMarking', false)
   },
   methods: {

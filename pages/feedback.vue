@@ -1,56 +1,53 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440">
-    <v-card class="modal">
-      <v-card-title class="d-flex justify-center"> Send feedback </v-card-title>
-      <v-card-text>
+  <v-container>
+    <v-row class="justify-center">
+      <v-col cols="12" md="7" lg="5" class="mt-sm-6">
         <v-form ref="form">
+          <div class="text-h5">Feedback</div>
+          <p class="font-weight-light mb-9">
+            Thanks for helping to make Examgap better.
+          </p>
           <v-textarea
             v-model="feedback"
             :rules="rules"
+            clearable
             label="Feedback*"
             auto-grow
-            placeholder="Thanks for helping make Examgap better."
             outlined
             autofocus
           ></v-textarea>
         </v-form>
         <small>*Indicates required field</small>
-        <div class="d-flex justify-end">
-          <v-btn text rounded @click="dialog = false">Cancel</v-btn>
+        <div>
           <v-btn
             color="primary"
             elevation="0"
             :loading="loading"
             :disabled="loading"
             rounded
-            class="ml-2"
+            class="mt-2"
             @click="send()"
           >
             Send
           </v-btn>
         </div>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 export default {
+  layout: 'app',
   data() {
     return {
-      dialog: false,
-      loading: false,
       feedback: '',
+      loading: false,
       rules: [(value) => !!value || 'This field is required.'],
     }
   },
-  beforeDestroy() {
-    this.$nuxt.$off('show-feedback')
-  },
   mounted() {
-    this.$nuxt.$on('show-feedback', () => {
-      this.dialog = true
-    })
+    this.$store.commit('app/setPageTitle', 'Send feedback')
   },
   methods: {
     async send() {
@@ -98,8 +95,8 @@ export default {
             type: 'success',
             msg: 'Feedback sent',
           })
-        } catch (e) {
-          console.error(e)
+        } catch (err) {
+          console.error(err)
           this.$snack.showMessage({
             type: 'error',
             msg: 'Error sending feedback',
@@ -108,6 +105,7 @@ export default {
           this.loading = false
           this.dialog = false
           this.$refs.form.reset()
+          this.$route.push('/home')
         }
       }
     },

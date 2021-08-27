@@ -20,7 +20,7 @@
               </v-card-subtitle>
               <v-card-text class="text-body-1">
                 <p class="text-h4 font-weight-bold">
-                  £129 <span class="text-overline">/ YEAR</span>
+                  £79 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
                   <v-icon color="primary" class="mr-2">{{
@@ -76,7 +76,7 @@
               </v-card-subtitle>
               <v-card-text class="text-body-1">
                 <p class="text-h4 font-weight-bold">
-                  £129 <span class="text-overline">/ YEAR</span>
+                  £79 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
                   <v-icon class="mr-2">{{
