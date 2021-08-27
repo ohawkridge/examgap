@@ -120,7 +120,8 @@
               color="primary"
               @click="$nuxt.$emit('open-invite')"
             >
-              Invite students
+              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+              Student
             </v-btn>
           </div>
         </div>
@@ -144,21 +145,15 @@
       </template>
     </v-data-table>
     <!-- Action components -->
-    <the-add-students-dialog :group-id="group.id" />
-    <the-remove-dialog :selected="selected" :group-id="group.id" />
+    <the-add-students-dialog />
+    <the-remove-dialog :selected="selected" />
     <the-copy-student-dialog :selected="selected" />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import {
-  mdiChevronDown,
-  mdiDownloadOutline,
-  mdiAccountGroupOutline,
-  mdiTextBoxOutline,
-  mdiRefresh,
-} from '@mdi/js'
+import { mdiChevronDown, mdiDownloadOutline, mdiPlus } from '@mdi/js'
 import TheAddStudentsDialog from '@/components/teacher/TheAddStudentsDialog'
 import TheRemoveDialog from '@/components/teacher/TheRemoveDialog'
 import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog'
@@ -230,9 +225,7 @@ export default {
     this.$icons = {
       mdiChevronDown,
       mdiDownloadOutline,
-      mdiAccountGroupOutline,
-      mdiTextBoxOutline,
-      mdiRefresh,
+      mdiPlus,
     }
   },
   methods: {

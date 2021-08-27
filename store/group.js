@@ -18,11 +18,10 @@ export const actions = {
     }
     commit('setGrades', await data.json())
   },
-  async addStudents(
-    { rootState, commit, rootGetters, dispatch },
-    { usernames, groupId }
-  ) {
+  async addStudents({ rootState, commit, rootGetters, dispatch }, usernames) {
     const url = new URL('/.netlify/functions/addStudents', this.$config.baseURL)
+    const groupId = rootGetters['user/activeGroup'].id
+    console.log(`addStudents() on`, groupId)
     const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
@@ -36,7 +35,7 @@ export const actions = {
     }
     // Update count on group
     const count = rootGetters['user/activeGroup'].count + usernames.length
-    commit('user/setCount', { groupId, count }, { root: true })
+    commit('setCount', { groupId, count })
     // Refetch student data
     // (too complicated to insert new students)
     await dispatch('getStudents')
@@ -81,7 +80,7 @@ export const actions = {
     // (may have changed since login)
     const count = response.length
     if (count !== rootGetters['user/activeGroup'].count) {
-      commit('user/setCount', { groupId, count }, { root: true })
+      commit('setCount', { groupId, count })
     }
     commit('setStudents', response)
   },
@@ -102,14 +101,12 @@ export const actions = {
     // Update local store
     commit('setTarget', { target, groupId, studentId })
   },
-  async removeStudents(
-    { commit, rootState, rootGetters },
-    { groupId, studentIds }
-  ) {
+  async removeStudents({ commit, rootState, rootGetters }, studentIds) {
     const url = new URL(
       '/.netlify/functions/removeGroupStudent',
       this.$config.baseURL
     )
+    const groupId = rootGetters['user/activeGroup'].id
     const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
@@ -124,7 +121,7 @@ export const actions = {
     commit('removeStudents', studentIds)
     // Remove students from group count
     const count = rootGetters['user/activeGroup'].count - studentIds.length
-    commit('user/setCount', { groupId, count }, { root: true })
+    commit('setCount', { groupId, count })
   },
 }
 

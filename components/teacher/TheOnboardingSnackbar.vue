@@ -18,7 +18,7 @@ export default {
     return {
       stringsForSteps: {
         1: `To get started, click the '+ Class' button.`,
-        2: 'To add students, click Invite Students.',
+        2: `To add students, click '+ Student'.`,
         3: 'Click + Create Assignment to browse questions.',
         4: 'Click + to select questions to assign.',
         5: "When you're ready, click + Assign.",

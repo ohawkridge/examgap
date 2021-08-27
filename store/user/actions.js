@@ -69,24 +69,6 @@ const actions = {
       commit('app/setOnboardStep', 1, { root: true })
     }
   },
-  // TODO Won't need?
-  // For students, get new streamed assignment
-  async getAssignment({ commit, rootState }, assignmentId) {
-    const url = new URL(
-      '/.netlify/functions/getNewAssignment',
-      this.$config.baseURL
-    )
-    let response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        assignmentId,
-      }),
-      method: 'POST',
-    })
-    response = await response.json()
-    commit('newAssignment', response, { root: true })
-    commit('snackbar/showSnack', { msg: 'New assignment' }, { root: true })
-  },
   async archiveGroup({ commit, rootState, getters }) {
     const url = new URL(
       '/.netlify/functions/archiveClass',
@@ -209,9 +191,9 @@ const actions = {
     }
     // Commit mutation to update count on new group
     // so, for example, counts are correct on classes.vue
-    commit('setCount', {
+    commit('group/setCount', {
       groupId,
-      numCopied: studentIds.length,
+      count: studentIds.length,
     })
   },
 }

@@ -40,10 +40,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    groupId: {
-      type: String,
-      default: '',
-    },
   },
   data() {
     return {
@@ -65,10 +61,7 @@ export default {
         this.loading = true
         // Just get ids from student data objects
         const studentIds = this.selected.map((o) => o.id)
-        await this.$store.dispatch('students/removeStudents', {
-          groupId: this.groupId,
-          studentIds,
-        })
+        await this.$store.dispatch('group/removeStudents', studentIds)
         this.$snack.showMessage({
           type: 'success',
           msg: `Student${this.selected.length !== 1 ? 's' : ''} removed`,

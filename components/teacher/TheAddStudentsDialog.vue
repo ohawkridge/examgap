@@ -58,12 +58,6 @@ import { mdiInformationOutline } from '@mdi/js'
 
 export default {
   name: 'TheAddStudentsDialog',
-  props: {
-    groupId: {
-      type: String,
-      default: '',
-    },
-  },
   data() {
     return {
       dialog: false,
@@ -110,10 +104,7 @@ export default {
     async addStudents() {
       try {
         this.loading = true
-        await this.$store.dispatch('students/addStudents', {
-          usernames: this.userNamesArray,
-          groupId: this.groupId,
-        })
+        await this.$store.dispatch('group/addStudents', this.userNamesArray)
         this.$snack.showMessage({
           type: 'success',
           msg: `Student${this.userNamesArray.length !== 1 ? 's' : ''} added`,
