@@ -74,7 +74,9 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
-        <the-quote-of-the-day v-if="!teacher" />
+        <the-quote-of-the-day
+          v-if="!teacher && $vuetify.breakpoint.name !== 'xs'"
+        />
         <!-- **ACTIONS** -->
         <!-- Create class -->
         <v-btn

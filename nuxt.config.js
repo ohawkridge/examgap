@@ -29,6 +29,7 @@ export default {
       { rel: 'icon', href: '/apple-touch-icon.png' },
       { rel: 'manifest', href: '/site.webmanifest' },
     ],
+    script: [{ src: 'https://cdn.headwayapp.co/widget.js' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

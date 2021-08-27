@@ -2,10 +2,13 @@
   <v-footer color="transparent" app inset absolute>
     <v-container>
       <v-row class="text-caption grey--text text--darken-2">
-        <v-col cols="12" class="d-flex justify-space-between">
+        <v-col cols="12" class="d-flex justify-space-between align-center">
           support@examgap.com
-          <div>
-            <v-icon small>{{ $icons.mdiArrowExpandHorizontal }}</v-icon>
+          <div class="d-flex align-center">
+            <div id="headway"></div>
+            <v-icon small class="mr-1">{{
+              $icons.mdiArrowExpandHorizontal
+            }}</v-icon>
             {{ $vuetify.breakpoint.name }}
           </div>
         </v-col>
@@ -23,6 +26,14 @@ export default {
     this.$icons = {
       mdiArrowExpandHorizontal,
     }
+  },
+  mounted() {
+    const config = {
+      selector: '#headway',
+      account: 'yE6G2x',
+    }
+    // eslint-disable-next-line no-undef
+    Headway.init(config)
   },
 }
 </script>
