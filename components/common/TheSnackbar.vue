@@ -1,11 +1,6 @@
 <template>
-  <v-snackbar v-model="show" bottom left :timeout="timeout" :color="color">
+  <v-snackbar v-model="show" bottom right app :timeout="timeout" :color="color">
     {{ message }}
-    <template #action="{ attrs }">
-      <v-btn color="white" text rounded v-bind="attrs" @click="show = false">
-        Close
-      </v-btn>
-    </template>
   </v-snackbar>
 </template>
 
@@ -17,7 +12,7 @@ export default {
       show: false,
       message: '',
       color: '',
-      timeout: 6000,
+      timeout: 5000,
     }
   },
   created() {

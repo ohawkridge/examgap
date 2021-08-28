@@ -20,22 +20,20 @@ export const actions = {
   },
   async addStudents({ rootState, commit, rootGetters, dispatch }, usernames) {
     const url = new URL('/.netlify/functions/addStudents', this.$config.baseURL)
-    const groupId = rootGetters['user/activeGroup'].id
-    console.log(`addStudents() on`, groupId)
     const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
         usernames,
-        groupId,
+        groupId: rootGetters['user/activeGroup'].id,
       }),
       method: 'POST',
     })
     if (!response.ok) {
       throw new Error(`Error adding students ${response.status}`)
     }
-    // Update count on group
-    const count = rootGetters['user/activeGroup'].count + usernames.length
-    commit('setCount', { groupId, count })
+    // Update count for group
+    const newCount = rootGetters['user/activeGroup'].count + usernames.length
+    commit('user/setCount', newCount, { root: true })
     // Refetch student data
     // (too complicated to insert new students)
     await dispatch('getStudents')
@@ -80,7 +78,7 @@ export const actions = {
     // (may have changed since login)
     const count = response.length
     if (count !== rootGetters['user/activeGroup'].count) {
-      commit('setCount', { groupId, count })
+      commit('user/setCount', count, { root: true })
     }
     commit('setStudents', response)
   },
@@ -121,15 +119,11 @@ export const actions = {
     commit('removeStudents', studentIds)
     // Remove students from group count
     const count = rootGetters['user/activeGroup'].count - studentIds.length
-    commit('setCount', { groupId, count })
+    commit('user/setCount', count, { root: true })
   },
 }
 
 export const mutations = {
-  setCount(state, { groupId, count }) {
-    const i = state.groups.findIndex((g) => g.id === groupId)
-    state.groups[i].count = count
-  },
   setTarget(state, { target, groupId, studentId }) {
     const i = state.students.findIndex((s) => s.id === studentId)
     state.students[i].target[groupId] = target
@@ -164,8 +158,5 @@ export const mutations = {
   },
   setArchived(state) {
     state.groups[state.activeGroupId].active = false
-  },
-  updateGroupName(state, name) {
-    state.groups[state.activeGroupId].name = name
   },
 }

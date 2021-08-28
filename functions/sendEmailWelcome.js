@@ -28,7 +28,7 @@ exports.handler = async (event) => {
                   <p>Thanks for your interest in Examgap and for taking the time to try it. I hope you find it useful.</p>
                   <p>There’s no team behind Examgap—just me. I created it to use in my department and it’s become a regular part of my teaching.</p>
                   <p>If you encounter a problem, have questions or feedback, please let me know.</p>
-                  <p>PS—I know setup can be a pain. Reply with a list of student email addresses for each class you'd like and I'll set them up for you.</p>
+                  <p>PS—I know setup can be a pain. Reply with a list of student email addresses for each class you'd like and I'll gladly set them up for you.</p>
                   <p>Thanks again.</p>
                   <p>—Cheers, Owen</p>
                   </body>

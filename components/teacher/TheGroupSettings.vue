@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="d-flex justify-center">
-      <v-col cols="12" md="5" class="mt-sm-6">
+      <v-col cols="12" sm="10" md="6" lg="4" class="mt-sm-6">
         <div class="text-h5">Class details</div>
         <p class="font-weight-light mb-9">Choose class name and course.</p>
         <v-text-field
@@ -57,7 +57,8 @@ export default {
         return this.group.name
       },
       set(name) {
-        this.$store.commit('group/updateGroupName', name)
+        this.$store.commit('user/setGroupName', name)
+        this.$store.commit('app/setPageTitle', name)
       },
     },
   },
@@ -80,7 +81,6 @@ export default {
           groupName: this.name,
         })
         this.$snack.showMessage({
-          type: 'success',
           msg: 'Changes saved',
         })
       } catch (err) {

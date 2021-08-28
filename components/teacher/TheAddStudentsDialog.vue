@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440px">
+  <v-dialog v-model="dialog" max-width="480px">
     <v-card>
       <v-card-title class="d-flex justify-center"> Add students </v-card-title>
       <v-card-text>

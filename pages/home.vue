@@ -204,7 +204,7 @@
                     <v-icon
                       v-for="j in topic.answered"
                       :key="j"
-                      color="accent"
+                      color="green"
                       >{{ $icons.mdiCheckboxBlankCircle }}</v-icon
                     >
                   </div>

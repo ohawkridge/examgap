@@ -26,6 +26,19 @@ export default {
     }
     state.activeGroupId = id
   },
+  // Update count of students in class
+  // (E.g., if student added/copied/removed)
+  setCount(state, count) {
+    // Find the active group
+    // (saves passing in groupId as an extra parameter)
+    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+    // Update the count
+    state.groups[i].count = count
+  },
+  setGroupName(state, name) {
+    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+    state.groups[i].name = name
+  },
   addGroup(state, group) {
     state.groups.push(group)
   },

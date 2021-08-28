@@ -1,155 +1,178 @@
 <template>
   <div>
-    <v-row class="justify-center my-4">
-      <v-col cols="12" md="10">
-        <div v-if="!marking">
-          <!-- Skeletons -->
-          <div v-if="$fetchState.pending">
-            <v-skeleton-loader type="paragraph" :loading="true">
-            </v-skeleton-loader>
-            <v-skeleton-loader type="paragraph" class="mt-4" :loading="true">
-            </v-skeleton-loader>
-            <v-skeleton-loader type="chip" class="float-right" :loading="true">
-            </v-skeleton-loader>
-            <v-skeleton-loader
-              type="image"
-              :loading="true"
-              class="clear-right pt-4"
-            >
-            </v-skeleton-loader>
-            <v-skeleton-loader
-              type="chip"
-              :loading="true"
-              class="float-right pt-4"
-            >
-            </v-skeleton-loader>
-          </div>
-          <div v-else>
-            <div id="question" v-html="question.text"></div>
-            <div class="d-flex justify-space-between mb-4">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    icon
-                    :disabled="speakDisabled"
-                    class="mr-2"
-                    @click="speak()"
-                    v-on="on"
-                  >
-                    <v-icon>{{ $icons.mdiTextToSpeech }}</v-icon>
-                  </v-btn>
-                </template>
-                <span>Speak question</span>
-              </v-tooltip>
-              <v-chip small outlined>
-                {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
-              </v-chip>
+    <v-container>
+      <v-row class="justify-center">
+        <v-col cols="12" md="10" lg="8" class="mt-sm-6">
+          <div v-if="!marking">
+            <!-- Skeletons -->
+            <div v-if="$fetchState.pending">
+              <v-skeleton-loader type="paragraph" :loading="true">
+              </v-skeleton-loader>
+              <v-skeleton-loader type="paragraph" class="mt-4" :loading="true">
+              </v-skeleton-loader>
+              <v-skeleton-loader
+                type="chip"
+                class="float-right"
+                :loading="true"
+              >
+              </v-skeleton-loader>
+              <v-skeleton-loader
+                type="image"
+                :loading="true"
+                class="clear-right pt-4"
+              >
+              </v-skeleton-loader>
+              <v-skeleton-loader
+                type="chip"
+                :loading="true"
+                class="float-right pt-4"
+              >
+              </v-skeleton-loader>
             </div>
-            <v-textarea
-              v-model="answer"
-              outlined
-              color="primary"
-              auto-grow
-              :append-icon="
-                saving
-                  ? $icons.mdiCloudSyncOutline
-                  : $icons.mdiCloudCheckOutline
-              "
-              label="Your answer"
-              hide-details
-              class="mb-2"
-              @input="update()"
-            >
-            </v-textarea>
-            <div v-if="showHelp" class="d-flex justify-space-between">
-              <div>
-                <v-chip
-                  v-for="(word, i) in keywords"
-                  :key="i"
-                  class="mr-2 mb-2"
-                  :color="used(word) ? 'green' : 'red'"
-                  small
-                >
-                  {{ word }}
-                  <v-icon v-if="used(word)" right>
-                    {{ $icons.mdiCheck }}
-                  </v-icon>
+            <div v-else>
+              <div id="question" v-html="question.text"></div>
+              <div class="d-flex justify-space-between mb-4">
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      icon
+                      :disabled="speakDisabled"
+                      class="mr-2"
+                      @click="speak()"
+                      v-on="on"
+                    >
+                      <v-icon>{{ $icons.mdiTextToSpeech }}</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Speak question</span>
+                </v-tooltip>
+                <v-chip small outlined>
+                  {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-progress-circular
-                    :value="progress"
-                    :color="color"
-                    size="32"
-                    v-on="on"
+              <v-textarea
+                v-model="answer"
+                outlined
+                color="primary"
+                auto-grow
+                :append-icon="
+                  saving
+                    ? $icons.mdiCloudSyncOutline
+                    : $icons.mdiCloudCheckOutline
+                "
+                label="Your answer"
+                hide-details
+                class="mb-2"
+                @input="update()"
+              >
+              </v-textarea>
+              <div v-if="showHelp" class="d-flex justify-space-between">
+                <div>
+                  <v-chip
+                    v-for="(word, i) in keywords"
+                    :key="i"
+                    class="mr-2 mb-2"
+                    :color="used(word) ? 'green' : 'red'"
+                    small
                   >
-                    {{ wordCount }}
-                  </v-progress-circular>
-                </template>
-                <span>Words</span>
-              </v-tooltip>
+                    {{ word }}
+                    <v-icon v-if="used(word)" right>
+                      {{ $icons.mdiCheck }}
+                    </v-icon>
+                  </v-chip>
+                </div>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-progress-circular
+                      :value="progress"
+                      :color="color"
+                      size="32"
+                      v-on="on"
+                    >
+                      {{ wordCount }}
+                    </v-progress-circular>
+                  </template>
+                  <span>Words</span>
+                </v-tooltip>
+              </div>
+              <div class="d-flex justify-end mt-4">
+                <v-btn
+                  color="primary"
+                  rounded
+                  elevation="0"
+                  @click="selfMark()"
+                >
+                  Mark
+                </v-btn>
+              </div>
             </div>
-            <div class="d-flex justify-end mt-4">
-              <v-btn color="primary" rounded elevation="0" @click="selfMark()">
-                Mark
+          </div>
+          <!-- **MARKING** -->
+          <div v-else>
+            <div>
+              <p class="text-subtitle-1 font-weight-medium mb-4">Your answer</p>
+              <p class="breaks" v-text="answer"></p>
+            </div>
+            <p class="text-subtitle-1 font-weight-medium mb-4">Mark scheme</p>
+            <v-checkbox
+              v-for="(m, i) in question.marks"
+              :key="i"
+              v-model="marks"
+              color="success"
+              hide-details
+              :label="m.text"
+              :value="m.id"
+              @change="checkMax()"
+            >
+            </v-checkbox>
+            <p class="mt-2 accent--text">
+              Max. {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
+            </p>
+            <p class="text-subtitle-1 font-weight-medium my-4">
+              Marking guidance
+            </p>
+            <div
+              v-if="question.guidance !== ''"
+              v-html="question.guidance"
+            ></div>
+            <p v-else>None</p>
+            <div class="d-flex justify-end">
+              <v-btn color="primary" rounded elevation="0" @click="done()">
+                Done
               </v-btn>
             </div>
           </div>
-        </div>
-        <!-- **MARKING** -->
-        <div v-else>
-          <div>
-            <p class="text-subtitle-1 font-weight-medium mb-4">Your answer</p>
-            <p class="breaks" v-text="answer"></p>
-          </div>
-          <p class="text-subtitle-1 font-weight-medium mb-4">Mark scheme</p>
-          <v-checkbox
-            v-for="(m, i) in question.marks"
-            :key="i"
-            v-model="marks"
-            color="success"
-            hide-details
-            :label="m.text"
-            :value="m.id"
-            @change="checkMax()"
-          >
-          </v-checkbox>
-          <p class="mt-2 accent--text">
-            Max. {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
-          </p>
-          <p class="text-subtitle-1 font-weight-medium my-4">
-            Marking guidance
-          </p>
-          <div v-if="question.guidance !== ''" v-html="question.guidance"></div>
-          <p v-else>None</p>
-          <div class="d-flex justify-end">
-            <v-btn color="primary" rounded elevation="0" @click="done()">
-              Done
-            </v-btn>
-          </div>
-        </div>
-        <!-- Confirm dialog -->
-        <v-dialog v-model="confirmDialog" width="440">
-          <v-card>
-            <v-card-title class="d-flex justify-center">
-              Are you sure?
-            </v-card-title>
-            <v-card-text>
-              <p>Once you've seen the mark scheme, you can't go back.</p>
-              <div class="d-flex justify-end">
-                <v-btn text rounded class="mr-2" @click="confirmDialog = false"
-                  >Go back</v-btn
-                >
-                <v-btn color="primary" rounded elevation="0" @click="confirm()">
-                  Mark</v-btn
-                >
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-      </v-col>
-    </v-row>
+          <!-- Confirm dialog -->
+          <v-dialog v-model="confirmDialog" width="440">
+            <v-card>
+              <v-card-title class="d-flex justify-center">
+                Are you sure?
+              </v-card-title>
+              <v-card-text>
+                <p>Once you've seen the mark scheme, you can't go back.</p>
+                <div class="d-flex justify-end">
+                  <v-btn
+                    text
+                    rounded
+                    class="mr-2"
+                    @click="confirmDialog = false"
+                    >Go back</v-btn
+                  >
+                  <v-btn
+                    color="primary"
+                    rounded
+                    elevation="0"
+                    @click="confirm()"
+                  >
+                    Mark</v-btn
+                  >
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -171,7 +194,7 @@ export default {
     this.synth.cancel()
     // Save self marks
     if (this.marking || confirm(`Really leave without marking?`)) {
-      // If this is revision, increment count for topic
+      // If revising, increment count for topic
       if (this.responseId !== '' && this.revising) {
         this.$store.commit('topics/incrementTopicCount')
       }
@@ -214,6 +237,7 @@ export default {
     ...mapState({
       question: (state) => state.assignment.question,
       assignmentId: (state) => state.assignment.assignmentId,
+      responseId: (state) => state.assignment.responseId,
       reviseExamMode: (state) => state.user.reviseExamMode,
     }),
     ...mapGetters({ group: 'user/activeGroup' }),
@@ -356,7 +380,7 @@ export default {
         this.marks.splice(-1, 1) // Uncheck box
       }
     },
-    // Save student's response
+    // Save response
     async save() {
       try {
         this.saving = true
