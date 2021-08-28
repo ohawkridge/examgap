@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="dialog" width="400">
-    <v-card class="modal">
+  <v-dialog v-model="dialog" max-width="440">
+    <v-card>
       <v-card-title class="d-flex justify-center">
         <svg
           height="92"
@@ -15,13 +15,12 @@
       <v-card-text>
         <p class="text-h6 text-center">{{ title }}</p>
         <p class="text-center">{{ subtitle }}</p>
+        <div class="d-flex justify-end">
+          <v-btn color="primary" rounded elevation="0" @click="dialog = false">
+            Close
+          </v-btn>
+        </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn color="primary" elevation="0" @click="dialog = false">
-          Close
-        </v-btn>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>

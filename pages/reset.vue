@@ -18,7 +18,7 @@
               :prepend-inner-icon="$icons.mdiAccountOutline"
               label="Email"
               color="primary"
-              type="text"
+              type="email"
               placeholder="joe.bloggs@yourschool.org.uk"
               validate-on-blur
               required
@@ -30,11 +30,9 @@
               border="left"
               text
               dense
-              type="info"
               :icon="$icons.mdiInformationOutline"
             >
-              <span class="font-weight-bold">Student?</span> Your teacher can
-              reset your password.
+              Students—your teacher can reset your password.
             </v-alert>
             <v-alert
               v-if="failed"
@@ -50,6 +48,7 @@
               elevation="0"
               block
               large
+              rounded
               :loading="loading"
               :disabled="loading"
               type="submit"
@@ -58,7 +57,7 @@
           </v-form>
         </v-col>
       </v-row>
-      <TheSuccessDialog
+      <the-success-dialog
         title="Password reset"
         subtitle="A new password has been sent to your email."
       />
