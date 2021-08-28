@@ -137,26 +137,4 @@ export const mutations = {
   setGrades(state, grades) {
     state.grades = grades
   },
-  addAssignment(state, assignment) {
-    // Add assignment to *front* of assignments array
-    state.groups[state.activeGroupId].assignments.unshift({
-      dateDue: assignment.data.dateDue,
-      id: assignment.ref['@ref'].id,
-      name: assignment.data.name,
-      start: assignment.data.start,
-    })
-  },
-  deleteAssignment(state, assignmentId) {
-    const assignments = state.groups[state.activeGroupId].assignments
-    const i = assignments.findIndex((a) => a.id === assignmentId)
-    assignments.splice(i, 1)
-  },
-  setNameAndCourse(state, { id, name, course }) {
-    const i = state.groups.findIndex((g) => g.id === id)
-    state.groups[i].name = name
-    state.groups[i].course = { ...course }
-  },
-  setArchived(state) {
-    state.groups[state.activeGroupId].active = false
-  },
 }

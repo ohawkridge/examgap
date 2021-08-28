@@ -21,8 +21,8 @@ export default {
         2: `To add students, click '+ Student'.`,
         3: 'Click + Create Assignment to browse questions.',
         4: 'Click + to select questions to assign.',
-        5: "When you're ready, click + Assign.",
-        6: 'Click on a mark to open marking view.',
+        5: `When you're ready, click '+ Assign'.`,
+        6: `Click self marks (once answered), to open marking view.`,
       },
     }
   },

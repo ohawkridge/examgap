@@ -362,10 +362,6 @@ export default {
         .toISOString()
         .substr(0, 10)
     },
-    next() {
-      this.dialog = false
-      this.dialog2 = true
-    },
     async toggleMode(student) {
       try {
         // Update local data first because of latency

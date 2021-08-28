@@ -51,4 +51,29 @@ export default {
   setRevisionExamMode(state, val) {
     state.reviseExamMode = val
   },
+  addAssignment(state, assignment) {
+    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+    // Add assignment to *front* of assignments array
+    state.groups[i].assignments.unshift({
+      dateDue: assignment.data.dateDue,
+      id: assignment.ref['@ref'].id,
+      name: assignment.data.name,
+      start: assignment.data.start,
+    })
+  },
+  deleteAssignment(state, assignmentId) {
+    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+    const assignments = state.groups[i].assignments
+    const j = assignments.findIndex((a) => a.id === assignmentId)
+    assignments.splice(j, 1)
+  },
+  setNameAndCourse(state, { name, course }) {
+    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+    state.groups[i].name = name
+    state.groups[i].course = { ...course }
+  },
+  setArchived(state) {
+    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+    state.groups[i].active = false
+  },
 }
