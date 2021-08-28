@@ -127,84 +127,85 @@
         </v-toolbar>
         <v-container>
           <v-row id="div2">
-            <v-col cols="12" class="d-flex align-center">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn icon @click="next(-1)" v-on="on">
-                    <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
-                  </v-btn>
-                </template>
-                <span>Previous</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn icon @click="next(1)" v-on="on">
-                    <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
-                  </v-btn>
-                </template>
-                <span>Next</span>
-              </v-tooltip>
-              <v-tooltip v-if="marking" bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    icon
-                    class="ml-2"
-                    :color="response.flagged ? 'accent' : ''"
-                    @click="flag()"
-                    v-on="on"
-                  >
-                    <v-icon>{{ $icons.mdiFlagOutline }}</v-icon>
-                  </v-btn>
-                </template>
-                <span>{{
-                  response.flagged ? 'Remove flag' : 'Flag response'
-                }}</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    icon
-                    class="ml-2"
-                    :color="response.repeat ? 'accent' : ''"
-                    @click="reassign()"
-                    v-on="on"
-                  >
-                    <v-icon>{{ $icons.mdiRepeat }}</v-icon>
-                  </v-btn>
-                </template>
-                <span>Reassign question</span>
-              </v-tooltip>
-              <the-info-dialog :response="response" />
-              <v-spacer />
-              <v-tooltip v-if="marking" bottom>
-                <template #activator="{ on }">
-                  <v-chip
-                    label
-                    :color="color(marks.length, question.maxMark)"
-                    class="mr-2"
-                    v-on="on"
-                  >
-                    <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
-                    {{ marks.length }}
-                    <v-icon right>{{ $icons.mdiCheck }}</v-icon>
-                  </v-chip>
-                </template>
-                <span>You</span>
-              </v-tooltip>
-              <v-tooltip v-if="marking" bottom>
-                <template #activator="{ on }">
-                  <v-chip
-                    label
-                    :color="color(response.sm.length, question.maxMark)"
-                    v-on="on"
-                  >
-                    <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
-                    {{ response.sm.length }}
-                    <v-icon right>{{ $icons.mdiCheck }}</v-icon>
-                  </v-chip>
-                </template>
-                <span>Student</span>
-              </v-tooltip>
+            <v-col cols="12" class="d-flex align-center justify-space-between">
+              <div>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn icon @click="next(-1)" v-on="on">
+                      <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Previous</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn icon @click="next(1)" v-on="on">
+                      <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Next</span>
+                </v-tooltip>
+                <v-tooltip v-if="marking" bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      icon
+                      class="ml-2"
+                      :color="response.flagged ? 'accent' : ''"
+                      @click="flag()"
+                      v-on="on"
+                    >
+                      <v-icon>{{ $icons.mdiFlagOutline }}</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ response.flagged ? 'Remove flag' : 'Flag' }}</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      icon
+                      class="ml-2"
+                      :color="response.repeat ? 'accent' : ''"
+                      @click="reassign()"
+                      v-on="on"
+                    >
+                      <v-icon>{{ $icons.mdiRepeat }}</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Reassign</span>
+                </v-tooltip>
+                <the-info-dialog :response="response" />
+              </div>
+              <div>
+                <v-tooltip v-if="marking" bottom>
+                  <template #activator="{ on }">
+                    <v-chip
+                      label
+                      :color="color(marks.length, question.maxMark)"
+                      class="mr-2"
+                      v-on="on"
+                    >
+                      <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                      {{ marks.length }}
+                      <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+                    </v-chip>
+                  </template>
+                  <span>You</span>
+                </v-tooltip>
+                <v-tooltip v-if="marking" bottom>
+                  <template #activator="{ on }">
+                    <v-chip
+                      label
+                      :color="color(response.sm.length, question.maxMark)"
+                      v-on="on"
+                    >
+                      <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                      {{ response.sm.length }}
+                      <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+                    </v-chip>
+                  </template>
+                  <span>Student</span>
+                </v-tooltip>
+              </div>
             </v-col>
           </v-row>
           <v-row>
@@ -218,7 +219,7 @@
               </div>
             </v-col>
             <v-col cols="12" md="4">
-              <p v-if="marking" class="text-subtitle-1 font-weight-medium">
+              <p v-if="marking" class="text-subtitle-1">
                 {{ response.username }}
               </p>
               <p
@@ -229,9 +230,11 @@
               <p class="text-subtitle-1">Feedback</p>
               <!-- N.B. update is debounced method -->
               <v-textarea
+                id="feedback"
                 v-model="feedback"
                 outlined
                 rows="4"
+                hide-details
                 auto-grow
                 :append-icon="
                   savingFeedback
@@ -265,6 +268,7 @@
               >
                 <template #label>
                   <span
+                    class="text-body-2"
                     :class="
                       response.sm.includes(mp.id) ? 'font-weight-bold' : ''
                     "
@@ -273,18 +277,9 @@
                   </span>
                 </template>
               </v-checkbox>
-              <div class="d-flex justify-end">
-                <v-switch v-model="smartSort" inset hide-details>
-                  <template #label>
-                    <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <span v-on="on">Smart sort</span>
-                      </template>
-                      <span>Self marks first</span>
-                    </v-tooltip>
-                  </template>
-                </v-switch>
-              </div>
+              <v-switch v-model="smartSort" inset>
+                <template #label> Self marks first </template>
+              </v-switch>
               <p class="text-subtitle-1">Guidance</p>
               <p
                 v-if="question.guidance"
@@ -524,7 +519,7 @@ export default {
       try {
         await this.$store.dispatch('assignment/flagResponse')
         this.$snack.showMessage({
-          msg: this.response.flagged ? 'Flagged' : 'Flag removed',
+          msg: this.response.flagged ? 'Response flagged' : 'Flag removed',
         })
       } catch (err) {
         console.error(err)
@@ -622,8 +617,9 @@ div.v-list {
   border-bottom: 1px solid #e3dede !important;
 }
 
-.fix-width {
-  display: inline-block;
-  width: 60px;
+.v-textarea {
+  font-size: 0.875rem !important;
+  letter-spacing: 0.0178571429em !important;
+  line-height: 1.25rem !important;
 }
 </style>

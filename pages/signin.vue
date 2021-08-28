@@ -17,7 +17,7 @@
               :prepend-inner-icon="$icons.mdiAccountOutline"
               label="Username"
               color="primary"
-              type="text"
+              type="email"
               required
               outlined
               :rules="userRules"

@@ -53,6 +53,7 @@
                           validate-on-blur
                           :rules="emailRules"
                           label="School email*"
+                          type="email"
                           placeholder="17bloggsj@yourschool.org.uk"
                           required
                         >

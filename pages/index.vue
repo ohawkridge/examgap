@@ -65,7 +65,7 @@
       <v-row class="d-flex align-center justify-center">
         <v-col cols="12" md="6" class="pad-r">
           <p class="text-h5 text-md-h4 font-weight-bold">
-            Spend less time marking
+            Mark more efficiently
           </p>
           <p class="text-body-1">
             Examgap makes marking more efficient. See responses side-by-side
@@ -800,13 +800,13 @@ export default {
 }
 
 .summary {
-  font-size: 1.3em !important;
+  font-size: 1.35em !important;
   letter-spacing: 0.0125em;
 }
 @media only screen and (max-width: 600px) {
   .summary {
-    font-size: 1em !important;
-    line-height: 1.5em;
+    font-size: 1.125em !important;
+    letter-spacing: 0.0125em;
   }
 }
 
@@ -818,13 +818,13 @@ export default {
 
 @media only screen and (min-width: 600px) {
   .pad-l {
-    padding-left: 5em;
+    padding-left: 7em;
   }
 }
 
 @media only screen and (min-width: 600px) {
   .pad-r {
-    padding-right: 5em;
+    padding-right: 7em;
   }
 }
 

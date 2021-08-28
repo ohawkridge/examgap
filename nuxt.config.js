@@ -75,7 +75,7 @@ export default {
       themes: {
         light: {
           primary: '#0099cc',
-          accent: '#efb2b8',
+          accent: '#db5461', // Dark red
           secondary: '#e3f2fd',
           green: '#c9edc2', // Fix all chips?
         },

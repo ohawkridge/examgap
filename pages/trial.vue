@@ -35,6 +35,7 @@
                 outlined
                 :rules="emailRules"
                 label="Email*"
+                type="email"
                 required
               >
               </v-text-field>

@@ -105,7 +105,7 @@ export default {
           this.loading = false
           this.dialog = false
           this.$refs.form.reset()
-          this.$route.push('/home')
+          this.$router.push('/home')
         }
       }
     },

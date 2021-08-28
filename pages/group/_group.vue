@@ -191,7 +191,9 @@ export default {
   },
   async mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)
+    console.log(`count =`, this.group.count)
     if (this.group.count === 0) {
+      console.log('tab was set')
       this.tab = 1
     }
     // Pre-fetch most recent assignment
