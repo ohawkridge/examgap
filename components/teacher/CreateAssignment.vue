@@ -222,6 +222,7 @@ export default {
         throw new Error(`Error fetching students ${response.status}`)
       }
       this.students = await response.json()
+      this.allSelected = true // Select all by default
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -260,14 +261,7 @@ export default {
       mdiCalendarEnd,
     }
   },
-  beforeDestroy() {
-    this.$nuxt.$off('show-assign')
-  },
   mounted() {
-    this.$nuxt.$on('show-assign', () => {
-      this.allSelected = true // Select all by default
-      this.dialog = true
-    })
     // If group has no students, skip step 1
     if (this.group.count === 0) {
       this.step = 2
