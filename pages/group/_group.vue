@@ -31,21 +31,17 @@
                 <v-col
                   cols="12"
                   sm="3"
-                  class="pb-0 pb-sm-3 d-flex align-center text-body-2"
+                  class="d-flex align-center text-body-2 pb-0 pb-sm-3"
                 >
                   <span class="font-weight-medium fix-date">Start:</span>
-                  <v-icon small class="mr-1" color="grey">{{
+                  <v-icon small class="mx-1">{{
                     $icons.mdiCalendarStart
                   }}</v-icon>
                   {{ assignment.start | date }}
                 </v-col>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  class="d-flex align-center text-body-2 pt-2"
-                >
+                <v-col cols="12" sm="3" class="d-flex align-center text-body-2">
                   <span class="font-weight-medium fix-date">Due:</span>
-                  <v-icon small class="mr-1" color="grey">{{
+                  <v-icon small class="mx-1">{{
                     $icons.mdiCalendarEnd
                   }}</v-icon>
                   {{ assignment.dateDue | date }}

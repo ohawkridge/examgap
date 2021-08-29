@@ -9,6 +9,10 @@ Vue.filter('date', function (dateStr) {
   if (dateStr === 'N/A' || dateStr === '-') {
     return 'N/A'
   }
+  // Some old due dates include timezone
+  if (dateStr.length > 10) {
+    dateStr = dateStr.substring(0, 10)
+  }
   const date = new Date(dateStr)
   return date.toString().substring(0, 15)
 })

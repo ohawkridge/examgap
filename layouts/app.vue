@@ -9,6 +9,7 @@
       </div>
       <v-list dense nav>
         <v-list-item-group v-model="nav" color="primary">
+          <!-- No classes -->
           <v-list-item v-if="groups.length === 0" @click="navHome()">
             <v-list-item-icon>
               <v-icon>{{ $icons.mdiGoogleClassroom }}</v-icon>
@@ -54,16 +55,13 @@
               <v-list-item-title> Profile </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="logout()">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiLogoutVariant }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Sign Out </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
         </v-list-item-group>
       </v-list>
+      <template #append>
+        <div class="pa-2">
+          <v-btn block elevation="0" plain @click="logout()"> Sign out </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
     <v-app-bar
       app

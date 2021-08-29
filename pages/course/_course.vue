@@ -88,53 +88,57 @@
                 </v-list-item-action>
               </v-list-item>
             </template>
-            <v-list-item v-if="noQuestions" disabled>
-              <v-list-item-title> No questions yet </v-list-item-title>
+            <v-list-item v-if="noQuestions">
+              <v-list-item-content>
+                <v-list-item-title> No questions yet </v-list-item-title>
+                <v-list-item-subtitle>
+                  <nuxt-link to="/author">Create question</nuxt-link>
+                </v-list-item-subtitle>
+              </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
         </v-list>
       </v-col>
       <v-col cols="12" md="4">
         <!-- Skeletons -->
-        <v-skeleton-loader
-          v-if="$fetchState.pending || loading"
-          :loading="true"
-          type="question"
-          :types="{ question: 'paragraph' }"
-          class="pa-5"
-        >
-        </v-skeleton-loader>
-        <v-skeleton-loader
-          v-if="$fetchState.pending || loading"
-          :loading="true"
-          type="question"
-          :types="{ question: 'paragraph' }"
-          class="px-5 mb-4"
-        >
-        </v-skeleton-loader>
-        <v-skeleton-loader
-          v-if="$fetchState.pending || loading"
-          :loading="true"
-          type="chip"
-          class="px-5 d-flex justify-end"
-        >
-        </v-skeleton-loader>
+        <template v-if="$fetchState.pending || loading">
+          <v-skeleton-loader
+            :loading="true"
+            type="question"
+            :types="{ question: 'paragraph' }"
+            class="pa-5"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="question"
+            :types="{ question: 'paragraph' }"
+            class="px-5 mb-4"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="chip"
+            class="px-5 d-flex justify-end"
+          >
+          </v-skeleton-loader>
+        </template>
         <div v-else class="pa-3">
           <p>
-            <v-tooltip bottom>
-              <template #activator="{ on }">
-                <nuxt-link
-                  :to="`/question/${question.id}`"
-                  class="text-decoration-none"
-                  v-on="on"
-                  >{{ question.id }}</nuxt-link
-                >
-              </template>
-              <span>View</span>
-            </v-tooltip>
+            <nuxt-link :to="`/question/${question.id}`">
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <span v-on="on">{{ question.id }}</span>
+                </template>
+                <span>View question</span>
+              </v-tooltip>
+            </nuxt-link>
           </p>
           <div v-html="question.text"></div>
-          <div class="d-flex justify-end mt-4">
+          <div
+            v-if="Object.keys(question).length !== 0"
+            class="d-flex justify-end mt-4"
+          >
             <v-chip outlined small
               >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-chip>
