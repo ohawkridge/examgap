@@ -7,10 +7,8 @@
           v-model="usernames"
           outlined
           clearable
-          placeholder="18bloggsj@yourschool.org.uk"
-          hide-details
+          placeholder="One address per line"
           label="Email addresses*"
-          class="mb-2"
           autofocus
         ></v-textarea>
         <v-text-field
@@ -18,24 +16,14 @@
           label="Append email domain"
           placeholder="yourschool.org.uk"
           outlined
-          hide-details
         >
           <template #append>
-            <v-btn class="fix-btn" text @click="append()"> Append </v-btn>
+            <v-btn class="fix-btn" text rounded @click="append()">
+              Append
+            </v-btn>
           </template>
         </v-text-field>
-        <v-alert
-          :icon="$icons.mdiInformationOutline"
-          border="left"
-          dense
-          type="info"
-          class="mt-2"
-          text
-        >
-          <div>Enter student email addresses. One address per line.</div>
-          <!-- <div class="font-weight-bold"></div> -->
-        </v-alert>
-        <div class="d-flex justify-end mt-2">
+        <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false">Cancel</v-btn>
           <v-btn
             color="primary"

@@ -210,6 +210,11 @@ export default {
         this.loading = false
       }
     },
+    selected() {
+      if (this.onboardStep !== 0 && this.selected.length > 0) {
+        this.$store.commit('app/setOnboardStep', 5)
+      }
+    },
   },
   created() {
     this.$icons = {

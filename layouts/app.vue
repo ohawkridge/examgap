@@ -119,27 +119,6 @@
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Assignment
         </v-btn>
-        <!-- Add students -->
-        <v-btn
-          v-if="addStudents && $vuetify.breakpoint.name === 'xs'"
-          elevation="0"
-          icon
-          color="primary"
-          @click="$nuxt.$emit('open-invite')"
-        >
-          <v-icon>{{ $icons.mdiPlus }}</v-icon>
-        </v-btn>
-        <v-btn
-          v-if="addStudents && $vuetify.breakpoint.name !== 'xs'"
-          elevation="0"
-          text
-          color="primary"
-          rounded
-          @click="$nuxt.$emit('open-invite')"
-        >
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Student
-        </v-btn>
         <!-- + Assign (x) -->
         <create-assignment v-if="$route.name === 'course-course'" />
         <!-- Create question -->
@@ -238,19 +217,8 @@ export default {
     createClass() {
       return this.teacher && this.$route.name === 'home'
     },
-    addStudents() {
-      return (
-        this.teacher &&
-        this.$route.name === 'group-group' &&
-        this.$store.state.app.groupTab === 1
-      )
-    },
     createAss() {
-      return (
-        this.teacher &&
-        this.$route.name === 'group-group' &&
-        this.$store.state.app.groupTab !== 1
-      )
+      return this.teacher && this.$route.name === 'group-group'
     },
     createQ() {
       return this.$route.name === 'question-question'

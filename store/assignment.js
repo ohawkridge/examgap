@@ -220,7 +220,9 @@ export const actions = {
   async getReport({ commit, rootState, rootGetters }, assignmentId) {
     const numAssignments = rootGetters['user/activeGroup'].assignments.length
     if (numAssignments > 0) {
-      // Pre-fetch most-recent assignment?
+      // _group.vue sends -1 if attempting to
+      // pre-fetch most-recent assignment.
+      // Replace with actual most recent id
       if (assignmentId === -1) {
         assignmentId = rootGetters['user/activeGroup'].assignments[0].id
         console.log('%c' + `Prefetching ${assignmentId}`, 'color:purple')

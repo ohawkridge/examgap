@@ -1,11 +1,17 @@
 <template>
-  <v-dialog v-model="dialog" width="510">
+  <v-dialog v-model="dialog" width="440">
     <v-card>
       <v-card-title class="d-flex justify-center">
         Invite students
       </v-card-title>
       <v-card-text>
         <p>There are three ways to add students:</p>
+        <p class="text-subtitle-1 font-weight-medium mb-2">Manual creation</p>
+        <p>
+          On the
+          <span class="font-weight-medium">'STUDENTS'</span>
+          tab, click Students ⌄, Add students.
+        </p>
         <p class="text-subtitle-1 font-weight-medium mb-2">Share invite link</p>
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>
@@ -27,14 +33,6 @@
           </template>
         </v-text-field>
         <p class="mt-2">Students can go to examgap.com and click Join Class.</p>
-        <p class="text-subtitle-1 font-weight-medium mb-2 mt-6">
-          Create accounts
-        </p>
-        <p class="mb-0">
-          On the
-          <span class="font-weight-medium">'STUDENTS'</span>
-          tab, click Students, Add students.
-        </p>
         <div class="d-flex justify-end">
           <v-btn color="primary" rounded elevation="0" @click="dialog = false">
             Close
@@ -84,14 +82,10 @@ export default {
     },
   },
   watch: {
+    // Reset text on Copy button
     dialog() {
       if (!this.dialog) {
-        // Reset text on Copy button
         this.copyBtn = 'Copy'
-      }
-      if (!this.dialog && this.group.assignments.length < 2) {
-        // Continue onboarding
-        this.$store.commit('app/setOnboardStep', 3)
       }
     },
   },
@@ -102,10 +96,10 @@ export default {
     }
   },
   beforeDestroy() {
-    this.$nuxt.$off('open-invite')
+    this.$nuxt.$off('show-invite')
   },
   mounted() {
-    this.$nuxt.$on('open-invite', () => {
+    this.$nuxt.$on('show-invite', () => {
       this.dialog = true
     })
   },
@@ -114,7 +108,6 @@ export default {
       await navigator.clipboard.writeText(this.link)
       this.copyBtn = 'Copied'
       this.$snack.showMessage({
-        type: '',
         msg: 'Copied to clipboard',
       })
     },

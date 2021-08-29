@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <v-container>
     <v-row class="justify-center">
       <v-col cols="12" md="10" class="d-flex justify-space-between">
         <p class="text-h6">{{ group.name }} logins</p>
         <div>
-          <v-btn elevation="0" text rounded nuxt :to="`/students/${group.id}`">
+          <v-btn elevation="0" text rounded nuxt :to="`/group/${group.id}`">
             Back
           </v-btn>
           <v-btn
@@ -27,12 +27,16 @@
           type="info"
           text
         >
-          If you created student accounts by inputting their email addresses,
-          the default password is <b>password</b>. Otherwise, students chose
-          their own passwords when they signed up. You can reset student
-          passwords on the
-          <nuxt-link nuxt :to="`/group/${group.id}`">Students</nuxt-link>
-          screen.
+          If you created accounts by entering student's email addresses, the
+          password is '<b>password</b>'. Otherwise, students chose their own
+          passwords when they signed up. You can reset student passwords on the
+          <nuxt-link
+            nuxt
+            :to="`/group/${group.id}`"
+            class="text-decoration-none"
+            >'STUDENTS'</nuxt-link
+          >
+          tab.
         </v-alert>
       </v-col>
     </v-row>
@@ -61,7 +65,7 @@
         click Students, Add students&hellip;
       </p>
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script>

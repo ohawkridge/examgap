@@ -1,9 +1,8 @@
 <template>
-  <v-snackbar :value="onboardStep > 0" :vertical="true" timeout="-1">
-    <span class="font-weight-bold">({{ onboardStep }}/{{ numSteps }})</span>
+  <v-snackbar :value="onboardStep > 0" multi-line timeout="-1">
     {{ stringsForSteps[onboardStep] }}
-    <template #action="{ attrs }">
-      <v-btn color="secondary" plain v-bind="attrs" @click="close()">
+    <template #action>
+      <v-btn color="accent" plain @click="close()">
         <span class="text-uppercase">Close</span>
       </v-btn>
     </template>
@@ -18,11 +17,11 @@ export default {
     return {
       stringsForSteps: {
         1: `To get started, click the '+ Class' button.`,
-        2: `To add students, click '+ Student'.`,
-        3: 'Click + Create Assignment to browse questions.',
+        2: `To add students, click 'Invite Students', or use the 'Students ⌄' menu.`,
+        3: `Click '+ Assignment' to browse questions.`,
         4: 'Click + to select questions to assign.',
         5: `When you're ready, click '+ Assign'.`,
-        6: `Click self marks (once answered), to open marking view.`,
+        6: `Once answered, click self marks to open marking view.`,
       },
     }
   },
@@ -30,12 +29,6 @@ export default {
     ...mapState({
       onboardStep: (state) => state.app.onboardStep,
     }),
-    mobile() {
-      return this.$vuetify.breakpoint.name === 'xs'
-    },
-    numSteps() {
-      return Object.keys(this.stringsForSteps).length
-    },
   },
   methods: {
     close() {

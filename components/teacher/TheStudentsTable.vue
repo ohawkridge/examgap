@@ -1,12 +1,24 @@
 <template>
   <div>
-    <div class="d-flex justify-space-between align-center pa-4">
-      <v-chip label outlined small> {{ students.length }} Students </v-chip>
+    <div
+      class="flex-xs-column d-sm-flex justify-space-between align-center pa-4"
+    >
+      <v-btn
+        elevation="0"
+        rounded
+        outlined
+        :block="$vuetify.breakpoint.name === 'xs'"
+        color="primary"
+        class="mb-2 mb-sm-0"
+        @click="$nuxt.$emit('show-invite')"
+      >
+        Invite Students
+      </v-btn>
       <div>
         <v-menu offset-y open-on-hover>
           <template #activator="{ on }">
             <v-btn
-              class="mr-2"
+              class="mr-2 mb-2 mb-sm-0"
               elevation="0"
               :block="$vuetify.breakpoint.name === 'xs'"
               text
@@ -47,7 +59,7 @@
             <v-btn
               nuxt
               :to="`/logins/${group.id}`"
-              class="mr-2"
+              class="mr-2 mb-2 mb-sm-0"
               :class="xsBtns"
               elevation="0"
               text
@@ -64,7 +76,7 @@
           <template #activator="{ on }">
             <v-btn
               elevation="0"
-              class="mr-2"
+              class="mr-2 mb-2 mb-sm-0"
               :class="xsBtns"
               :block="$vuetify.breakpoint.name === 'xs'"
               text
@@ -98,7 +110,6 @@
       item-key="id"
       hide-default-footer
       show-select
-      disable-pagination
       :loading="$fetchState.pending"
       loading-text="Loading students..."
     >
@@ -118,7 +129,7 @@
               elevation="0"
               rounded
               color="primary"
-              @click="$nuxt.$emit('open-invite')"
+              @click="$nuxt.$emit('show-invite')"
             >
               <v-icon left>{{ $icons.mdiPlus }}</v-icon>
               Student
@@ -144,6 +155,9 @@
         </v-edit-dialog>
       </template>
     </v-data-table>
+    <v-chip label outlined small class="ma-4">
+      {{ students.length }} Students
+    </v-chip>
     <!-- Action components -->
     <the-add-students-dialog />
     <the-remove-dialog :selected="selected" />

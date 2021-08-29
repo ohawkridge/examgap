@@ -16,17 +16,13 @@
       </v-col>
       <v-col cols="12" sm="6" class="pb-0">
         <div class="d-flex align-center">
-          <span class="font-weight-medium fix-date">Start:</span>
-          <v-icon small class="mr-1" color="grey">{{
-            $icons.mdiCalendarStart
-          }}</v-icon>
+          <span class="font-weight-medium fix-date-always">Start:</span>
+          <v-icon small class="mr-1">{{ $icons.mdiCalendarStart }}</v-icon>
           {{ assignment.start | date }}
         </div>
         <div class="d-flex align-center">
-          <span class="font-weight-medium fix-date">Due:</span>
-          <v-icon small class="mr-1" color="grey">{{
-            $icons.mdiCalendarEnd
-          }}</v-icon>
+          <span class="font-weight-medium fix-date-always">Due:</span>
+          <v-icon small class="mr-1">{{ $icons.mdiCalendarEnd }}</v-icon>
           {{ assignment.dateDue | date }}
         </div>
       </v-col>
@@ -90,8 +86,9 @@
             <p>
               <v-btn
                 color="primary"
+                rounded
                 elevation="0"
-                @click="$nuxt.$emit('open-invite')"
+                @click="$nuxt.$emit('show-invite')"
               >
                 Invite students</v-btn
               >
