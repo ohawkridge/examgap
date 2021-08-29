@@ -76,6 +76,27 @@
           v-if="!teacher && $vuetify.breakpoint.name !== 'xs'"
         />
         <!-- **ACTIONS** -->
+        <!-- Create assignment -->
+        <v-btn
+          v-if="createAss && $vuetify.breakpoint.name === 'xs'"
+          elevation="0"
+          icon
+          color="primary"
+          @click="createAssignment()"
+        >
+          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
+          elevation="0"
+          text
+          color="primary"
+          rounded
+          @click="createAssignment()"
+        >
+          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          Assignment
+        </v-btn>
         <!-- Create class -->
         <v-btn
           v-if="createClass && $vuetify.breakpoint.name === 'xs'"
@@ -222,6 +243,17 @@ export default {
       this.$store.commit('app/setTab', 0)
       this.$router.push('/home')
     },
+    createAssignment() {
+      // Clear any previous selections
+      this.$store.commit('topics/clearSelectedQuestions')
+      // Continue onboarding if user hasn't set assignments
+      this.$store.commit(
+        'app/setOnboardStep',
+        this.group.assignments.length < 3 ? 4 : 0
+      )
+      this.$router.push(`/course/${this.group.course.id}`)
+    },
+
     logout() {
       this.$router.push('/')
       localStorage.removeItem('examgap')

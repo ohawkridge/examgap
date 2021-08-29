@@ -14,7 +14,6 @@
         :disabled="selected.length == 0"
         elevation="0"
         rounded
-        @click="$nuxt.$emit('show-assign')"
         v-on="on"
       >
         <v-icon left>{{ $icons.mdiPlus }}</v-icon>

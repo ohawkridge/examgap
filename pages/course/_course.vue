@@ -9,7 +9,7 @@
         <create-assignment />
       </v-col>
     </v-row>
-    <v-container>
+    <v-container fluid>
       <v-row>
         <v-col cols="12" md="3">
           <v-skeleton-loader

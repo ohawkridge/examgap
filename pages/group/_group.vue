@@ -13,7 +13,7 @@
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-list class="py-0">
+        <v-list v-if="assignments.length > 0" class="py-0">
           <v-list-item
             v-for="(assignment, i) in assignments"
             :key="i"
