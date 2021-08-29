@@ -35,23 +35,12 @@ exports.handler = async (event) => {
           students,
           q.Lambda(
             'id',
-            q.Do(
-              // Create doc in AssignmentStudent
-              q.Create(q.Collection('AssignmentStudent'), {
-                data: {
-                  assignment: q.Select('ref', q.Var('assignment')),
-                  student: q.Ref(q.Collection('User'), q.Var('id')),
-                },
-              }),
-              // TODO Won't need this?
-              // Update student's user doc with the new assignment id
-              // (Document streaming watches this for new assignments)
-              q.Update(q.Ref(q.Collection('User'), q.Var('id')), {
-                data: {
-                  newAssignment: q.Select(['ref', 'id'], q.Var('assignment')),
-                },
-              })
-            )
+            q.Create(q.Collection('AssignmentStudent'), {
+              data: {
+                assignment: q.Select('ref', q.Var('assignment')),
+                student: q.Ref(q.Collection('User'), q.Var('id')),
+              },
+            })
           )
         ),
         assignment: q.Var('assignment'),

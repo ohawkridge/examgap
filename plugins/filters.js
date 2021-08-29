@@ -20,3 +20,11 @@ Vue.filter('date', function (dateStr) {
 Vue.filter('strip', function (html) {
   return html.replace(/<[^>]*>?/gm, '')
 })
+
+// For email usernames, shorten to just
+// the portion before the '@' sign
+Vue.filter('name', function (username) {
+  return username.includes('@')
+    ? username.substring(0, username.indexOf('@'))
+    : username
+})

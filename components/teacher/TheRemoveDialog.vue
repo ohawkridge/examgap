@@ -9,8 +9,8 @@
           <li v-for="(user, i) in selected" :key="i">{{ user.username }}</li>
         </ul>
         <p>
-          Removed students keep their accounts, but they won't appear in this
-          class anymore.
+          Removing a student won't delete their account, but they won't appear
+          in this class anymore.
         </p>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
@@ -23,7 +23,7 @@
             :disabled="loading"
             @click="removeStudents()"
           >
-            Remove
+            Remove Student{{ selected.length | pluralize }}
           </v-btn>
         </div>
       </v-card-text>

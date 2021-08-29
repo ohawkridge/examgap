@@ -1,227 +1,169 @@
 <template>
-  <v-dialog v-model="dialog" width="700" transition="scroll-x-transition">
+  <v-dialog v-model="dialog" width="700">
     <template #activator="{ on }">
-      <div>
-        <v-btn
-          v-if="$vuetify.breakpoint.name === 'xs'"
-          icon
-          class="mr-2"
-          @click="$store.commit('topics/clearSelectedQuestions')"
-        >
-          <v-icon>{{ $icons.mdiCancel }}</v-icon>
-        </v-btn>
-        <v-btn
-          v-else
-          text
-          rounded
-          class="mr-2"
-          @click="$store.commit('topics/clearSelectedQuestions')"
-        >
-          Clear
-        </v-btn>
-        <v-btn
-          v-if="$vuetify.breakpoint.name === 'xs'"
-          icon
-          color="primary"
-          :disabled="selected.length == 0"
-          elevation="0"
-          @click="$nuxt.$emit('show-assign')"
-          v-on="on"
-        >
-          <v-icon>{{ $icons.mdiPlus }}</v-icon>
-        </v-btn>
-        <v-btn
-          v-else
-          color="primary"
-          :disabled="selected.length == 0"
-          elevation="0"
-          rounded
-          @click="$nuxt.$emit('show-assign')"
-          v-on="on"
-        >
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Assign ({{ selected.length }})</v-btn
-        >
-      </div>
+      <v-btn
+        text
+        rounded
+        class="mr-2"
+        @click="$store.commit('topics/clearSelectedQuestions')"
+      >
+        Clear
+      </v-btn>
+      <v-btn
+        color="primary"
+        :disabled="selected.length == 0"
+        elevation="0"
+        rounded
+        @click="$nuxt.$emit('show-assign')"
+        v-on="on"
+      >
+        <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+        Assign ({{ selected.length }})</v-btn
+      >
     </template>
-    <v-card class="pa-md-3">
+    <!-- Select students -->
+    <v-card v-if="step === 1">
       <v-card-title> Create assignment </v-card-title>
-      <v-card-subtitle> {{ subtitle }} </v-card-subtitle>
-      <v-window v-model="step">
-        <v-window-item :value="1">
-          <v-card-text>
-            <v-row v-if="students.length > 0">
-              <v-col cols="12" class="pt-0">
-                <v-checkbox v-model="allSelected" class="mt-0" hide-details>
-                  <template #label>
-                    <strong>Select all</strong>
-                  </template>
-                </v-checkbox>
-              </v-col>
-              <v-col
-                v-for="(student, i) in students"
-                :key="i"
-                class="py-0"
-                cols="12"
-                md="6"
-              >
-                <v-checkbox
-                  v-model="selectedStudents"
-                  :value="student.id"
-                  class="mb-n2"
-                  multiple
-                >
-                  <template #label>
-                    {{ student.username }}&nbsp;
-                    <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <a
-                          :class="`on ${student.examMode ? '' : 'off'}`"
-                          href="#"
-                          v-on="on"
-                          @click.stop="toggleMode(student)"
-                          >EXAM</a
-                        >
-                      </template>
-                      <span
-                        >Exam mode {{ student.examMode ? 'on' : 'off' }}</span
-                      >
-                    </v-tooltip>
-                  </template>
-                </v-checkbox>
-              </v-col>
-              <v-col cols="12">
-                <v-alert
-                  border="left"
-                  text
-                  type="info"
-                  dense
-                  :icon="$icons.mdiInformationOutline"
-                >
-                  Turn off exam mode to show keywords and a minimum word count
-                  when answering questions.
-                </v-alert>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-window-item>
-        <v-window-item :value="2">
-          <v-card-text>
-            <v-form ref="form">
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="name"
-                    label="Assignment name*"
-                    required
-                    :rules="nameRules"
-                    outlined
-                    @focus="$event.target.select()"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="6" class="pb-0">
-                  <v-menu
-                    v-model="menu"
-                    min-width="290px"
-                    offset-y
-                    transition="scale-transition"
+      <v-card-subtitle> Select students for this assignment. </v-card-subtitle>
+      <v-card-text>
+        <div class="d-flex">
+          <v-alert text type="info" dense :icon="$icons.mdiInformationOutline">
+            In exam mode, keywords and minimum word count are hidden.
+          </v-alert>
+        </div>
+        <v-checkbox v-model="allSelected" class="mt-0">
+          <template #label>
+            <strong>Select all</strong>
+          </template>
+        </v-checkbox>
+        <div id="students" class="mb-4">
+          <v-checkbox
+            v-for="(student, i) in students"
+            :key="i"
+            v-model="selectedStudents"
+            :value="student.id"
+            hide-details
+            multiple
+            class="mt-0 mb-6"
+          >
+            <template #label>
+              {{ student.username | name }}
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <a
+                    class="ml-2"
+                    :class="`on ${student.examMode ? '' : 'off'}`"
+                    href="#"
+                    v-on="on"
+                    @click.stop="toggleMode(student)"
+                    >EXAM</a
                   >
-                    <template #activator="{ on }">
-                      <v-text-field
-                        v-model="startDate"
-                        label="Start date*"
-                        :append-icon="$icons.mdiCalendarStart"
-                        placeholder="YYYY-MM-DD"
-                        :rules="startDateRules"
-                        outlined
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="startDate"
-                      color="primary"
-                      :min="new Date().toISOString().substr(0, 10)"
-                      no-title
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-                <v-col cols="12" md="6" class="pb-0">
-                  <v-menu
-                    v-model="menu2"
-                    min-width="290px"
-                    offset-y
-                    transition="scale-transition"
-                  >
-                    <template #activator="{ on }">
-                      <v-text-field
-                        v-model="endDate"
-                        label="End date*"
-                        outlined
-                        :append-icon="$icons.mdiCalendarEnd"
-                        placeholder="YYYY-MM-DD"
-                        :rules="endDateRules"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="endDate"
-                      color="primary"
-                      :min="startDate"
-                      no-title
-                    ></v-date-picker>
-                  </v-menu>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col
-                  cols="12"
-                  class="d-flex justify-space-between align-center"
-                >
-                  <small>*Indicates required field</small>
-                  <div>
-                    <v-chip outlined class="mr-1 ml-1" @click="setStart(0)">
-                      Today
-                    </v-chip>
-                    <v-chip outlined class="mr-1" @click="setStart(7)">
-                      1 week
-                    </v-chip>
-                    <v-chip outlined @click="setStart(14)"> 2 weeks </v-chip>
-                  </div>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-card-text>
-        </v-window-item>
-      </v-window>
-      <v-card-actions>
-        <v-btn v-if="step === 1" text rounded @click="dialog = false">
-          Cancel
-        </v-btn>
-        <v-btn v-if="step === 2" text rounded @click="step--"> Back </v-btn>
-        <v-spacer />
-        <v-btn
-          v-if="step === 1"
-          elevation="0"
-          rounded
-          color="primary"
-          @click="step++"
-        >
-          Next
-        </v-btn>
-        <v-btn
-          v-if="step === 2"
-          elevation="0"
-          rounded
-          :loading="loading"
-          :disabled="loading"
-          color="primary"
-          @click="create()"
-        >
-          Create assignment
-        </v-btn>
-      </v-card-actions>
+                </template>
+                <span>Exam mode {{ student.examMode ? 'on' : 'off' }}</span>
+              </v-tooltip>
+            </template>
+          </v-checkbox>
+        </div>
+        <div class="d-flex justify-end">
+          <v-btn text rounded class="mr-2" @click="dialog = false">
+            Cancel
+          </v-btn>
+          <v-btn elevation="0" rounded color="primary" @click="step++">
+            Next
+          </v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+    <!-- Name & date -->
+    <v-card v-if="step === 2">
+      <v-card-title> Create assignment </v-card-title>
+      <v-card-subtitle>
+        Name the assignment and set a due date.
+      </v-card-subtitle>
+      <v-card-text>
+        <v-form ref="form">
+          <v-text-field
+            v-model="name"
+            label="Assignment name*"
+            required
+            :rules="nameRules"
+            outlined
+            @focus="$event.target.select()"
+          ></v-text-field>
+          <div class="d-flex justify-space-between">
+            <v-menu
+              v-model="menu"
+              min-width="290px"
+              offset-y
+              transition="scale-transition"
+            >
+              <template #activator="{ on }">
+                <v-text-field
+                  v-model="startDate"
+                  label="Start date*"
+                  :append-icon="$icons.mdiCalendarStart"
+                  placeholder="YYYY-MM-DD"
+                  :rules="startDateRules"
+                  outlined
+                  class="mr-2"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="startDate"
+                color="primary"
+                :min="new Date().toISOString().substr(0, 10)"
+                no-title
+              ></v-date-picker>
+            </v-menu>
+            <v-menu
+              v-model="menu2"
+              min-width="290px"
+              offset-y
+              transition="scale-transition"
+            >
+              <template #activator="{ on }">
+                <v-text-field
+                  v-model="endDate"
+                  label="Due date*"
+                  outlined
+                  :append-icon="$icons.mdiCalendarEnd"
+                  placeholder="YYYY-MM-DD"
+                  :rules="endDateRules"
+                  class="ml-2"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="endDate"
+                color="primary"
+                :min="startDate"
+                no-title
+              ></v-date-picker>
+            </v-menu>
+          </div>
+          <div class="d-flex justify-end">
+            <v-chip outlined class="mr-1 ml-1" @click="setStart(0)">
+              Today
+            </v-chip>
+            <v-chip outlined class="mr-1" @click="setStart(7)"> 1 week </v-chip>
+            <v-chip outlined @click="setStart(14)"> 2 weeks </v-chip>
+          </div>
+          <div class="d-flex justify-end mt-4">
+            <v-btn text rounded class="mr-2" @click="step--"> Back </v-btn>
+            <v-btn
+              elevation="0"
+              rounded
+              :loading="loading"
+              :disabled="loading"
+              color="primary"
+              @click="create()"
+            >
+              Create assignment
+            </v-btn>
+          </div>
+        </v-form>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>
@@ -231,10 +173,8 @@ import { mapState, mapGetters } from 'vuex'
 import {
   mdiCalendarStart,
   mdiInformationOutline,
-  mdiArrowRight,
   mdiPlus,
   mdiCalendarEnd,
-  mdiCancel,
 } from '@mdi/js'
 
 export default {
@@ -242,7 +182,6 @@ export default {
     return {
       step: 1,
       dialog: false,
-      valid: true,
       loading: false,
       students: [],
       selectedStudents: [],
@@ -261,8 +200,8 @@ export default {
         (d) => !!d || 'Date is required',
         (d) =>
           d >= new Date().toISOString().substr(0, 10) ||
-          'End date cannot be in the past',
-        (d) => d >= this.startDate || 'End date must be after start date',
+          'Due date cannot be in the past',
+        (d) => d >= this.startDate || 'Due date must be after start date',
       ],
     }
   },
@@ -313,20 +252,13 @@ export default {
         }
       },
     },
-    subtitle() {
-      return this.step === 1
-        ? 'Select students for this assignment.'
-        : 'Name the assignment and set start/end dates.'
-    },
   },
   created() {
     this.$icons = {
       mdiCalendarStart,
       mdiInformationOutline,
-      mdiArrowRight,
       mdiPlus,
       mdiCalendarEnd,
-      mdiCancel,
     }
   },
   beforeDestroy() {
@@ -456,5 +388,19 @@ export default {
   -ms-transform: rotate(-15deg);
   -o-transform: rotate(-15deg);
   transform: rotate(-15deg);
+}
+
+/* Arrange checkboxes into columns */
+#students {
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  column-count: 2;
+}
+@media only screen and (max-width: 600px) {
+  #students {
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+    column-count: 1;
+  }
 }
 </style>

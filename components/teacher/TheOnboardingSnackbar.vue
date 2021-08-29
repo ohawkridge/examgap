@@ -20,7 +20,7 @@ export default {
         2: `To add students, click 'Invite Students', or use the 'Students ⌄' menu.`,
         3: `Click '+ Assignment' to browse questions.`,
         4: 'Click + to select questions to assign.',
-        5: `When you're ready, click '+ Assign'.`,
+        5: `When your selection is complete, click '+ Assign'.`,
         6: `Once answered, click self marks to open marking view.`,
       },
     }

@@ -4,7 +4,7 @@
       <template #activator="{ on }">
         <span v-on="on"> {{ greeting.text }}, </span>
         <nuxt-link to="/profile" class="text-subtitle-2 font-weight-medium">{{
-          shortName
+          username | name
         }}</nuxt-link>
       </template>
       <v-card max-width="250">
@@ -16,7 +16,7 @@
     </v-menu>
     <template v-else>
       <nuxt-link to="/profile" class="text-subtitle-2 font-weight-medium">{{
-        shortName
+        username | name
       }}</nuxt-link>
     </template>
     <div>
@@ -75,11 +75,6 @@ export default {
         { country: 'Zulu', text: 'Ngiyakwemukela' },
       ]
       return greetings[Math.floor(Math.random() * greetings.length)]
-    },
-    shortName() {
-      return this.username.includes('@')
-        ? this.username.substring(0, this.username.indexOf('@'))
-        : this.username
     },
   },
 }

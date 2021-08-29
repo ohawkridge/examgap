@@ -98,29 +98,6 @@
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Class
         </v-btn>
-        <!-- Create assignment -->
-        <v-btn
-          v-if="createAss && $vuetify.breakpoint.name === 'xs'"
-          elevation="0"
-          icon
-          color="primary"
-          @click="createAssignment()"
-        >
-          <v-icon>{{ $icons.mdiPlus }}</v-icon>
-        </v-btn>
-        <v-btn
-          v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
-          elevation="0"
-          text
-          color="primary"
-          rounded
-          @click="createAssignment()"
-        >
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Assignment
-        </v-btn>
-        <!-- + Assign (x) -->
-        <create-assignment v-if="$route.name === 'course-course'" />
         <!-- Create question -->
         <v-btn
           v-if="createQ && $vuetify.breakpoint.name === 'xs'"
@@ -178,7 +155,6 @@ import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
-import CreateAssignment from '@/components/teacher/CreateAssignment'
 import TheGreeting from '@/components/common/TheGreeting'
 import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
 
@@ -193,7 +169,6 @@ export default {
     TheLoadingOverlay,
     TheGreeting,
     TheFooter,
-    CreateAssignment,
     TheQuoteOfTheDay,
   },
   middleware: ['auth'],
@@ -246,16 +221,6 @@ export default {
       // Make 'Classes' a link to home in empty state
       this.$store.commit('app/setTab', 0)
       this.$router.push('/home')
-    },
-    createAssignment() {
-      // Clear any previous selections
-      this.$store.commit('topics/clearSelectedQuestions')
-      // Continue onboarding if user hasn't set assignments
-      this.$store.commit(
-        'app/setOnboardStep',
-        this.group.assignments.length < 3 ? 4 : 0
-      )
-      this.$router.push(`/course/${this.group.course.id}`)
     },
     logout() {
       this.$router.push('/')
