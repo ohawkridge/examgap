@@ -83,6 +83,7 @@
                 label="Your email*"
                 outlined
                 dark
+                type="email"
                 required
                 :rules="[rules.required, rules.email]"
               ></v-text-field>

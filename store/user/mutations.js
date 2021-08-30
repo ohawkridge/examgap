@@ -53,12 +53,14 @@ export default {
   },
   addAssignment(state, assignment) {
     const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
-    // Add assignment to *front* of assignments array
+    // Add assignment to *front* of assignments array for group
     state.groups[i].assignments.unshift({
       dateDue: assignment.data.dateDue,
       id: assignment.ref['@ref'].id,
       name: assignment.data.name,
       start: assignment.data.start,
+      num_questions: assignment.data.questions.length,
+      live: true,
     })
   },
   deleteAssignment(state, assignmentId) {

@@ -81,6 +81,7 @@ export default {
           groupName: this.name,
         })
         this.$snack.showMessage({
+          type: 'success',
           msg: 'Changes saved',
         })
       } catch (err) {

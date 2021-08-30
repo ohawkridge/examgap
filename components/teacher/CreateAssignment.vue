@@ -104,6 +104,7 @@
                   placeholder="YYYY-MM-DD"
                   :rules="startDateRules"
                   outlined
+                  readonly
                   class="mr-2"
                   v-on="on"
                 ></v-text-field>
@@ -130,6 +131,7 @@
                   placeholder="YYYY-MM-DD"
                   :rules="endDateRules"
                   class="ml-2"
+                  readonly
                   v-on="on"
                 ></v-text-field>
               </template>

@@ -23,10 +23,15 @@
           >
             <v-list-item-content>
               <v-row>
-                <v-col cols="12" sm="4" class="pb-0 pb-sm-3">
-                  <span class="text-subtitle-1 font-weight-medium">{{
-                    assignment.name
-                  }}</span>
+                <v-col cols="12" sm="5" class="pb-0 pb-sm-3">
+                  <div class="text-subtitle-1 font-weight-medium">
+                    {{ assignment.name }}
+                  </div>
+                  <div class="text-body-2">
+                    {{ assignment.num_questions }} Question{{
+                      assignment.num_questions | pluralize
+                    }}
+                  </div>
                 </v-col>
                 <v-col
                   cols="12"
@@ -49,23 +54,40 @@
                 <v-col
                   v-if="$vuetify.breakpoint.name !== 'xs'"
                   cols="2"
-                  sm="2"
+                  sm="1"
                   class="d-flex justify-center align-center"
                 >
-                  <v-chip v-if="assignment.live" label color="green" small>
-                    Upcoming
+                  <v-chip
+                    v-if="isHidden(assignment.start)"
+                    label
+                    color="orange"
+                    small
+                  >
+                    Hidden
+                  </v-chip>
+                  <v-chip v-else-if="assignment.live" label color="green" small>
+                    Open
                   </v-chip>
                   <v-chip v-else label color="red" small> Past </v-chip>
                 </v-col>
               </v-row>
             </v-list-item-content>
             <v-list-item-action>
+              <!-- On mobile, chip moves into item-action (less space) -->
               <v-list-item-action-text
                 v-if="$vuetify.breakpoint.name === 'xs'"
                 class="mt-2"
               >
-                <v-chip v-if="assignment.live" label color="green" small>
-                  Upcoming
+                <v-chip
+                  v-if="isHidden(assignment.start)"
+                  label
+                  color="orange"
+                  small
+                >
+                  Hidden
+                </v-chip>
+                <v-chip v-else-if="assignment.live" label color="green" small>
+                  Open
                 </v-chip>
                 <v-chip v-else label color="red" small> Past </v-chip>
               </v-list-item-action-text>
@@ -213,6 +235,9 @@ export default {
         this.assignments.length < 3 ? 4 : 0
       )
       this.$router.push(`/course/${this.group.course.id}`)
+    },
+    isHidden(startDate) {
+      return new Date(startDate) > new Date()
     },
   },
 }

@@ -378,7 +378,7 @@
                     <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
                     </v-icon> -->
-                    <v-chip class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -390,7 +390,7 @@
                     <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
                     </v-icon> -->
-                    <v-chip class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small label>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -412,7 +412,7 @@
                     <span class="text-caption">(8520)</span>
                   </td>
                   <td class="text-center">
-                    <v-icon color="green">
+                    <v-icon color="#4caf50">
                       {{ $icons.mdiCheckBold }}
                     </v-icon>
                   </td>
@@ -421,12 +421,12 @@
                   <td>
                     <span class="font-weight-bold">AQA</span>
                     <span class="text-caption">(8525)</span>
-                    <v-chip color="accent" class="ml-2" outlined small
+                    <v-chip color="accent" class="ml-2" outlined small label
                       >NEW</v-chip
                     >
                   </td>
                   <td class="text-center">
-                    <v-icon color="green">
+                    <v-icon color="#4caf50">
                       {{ $icons.mdiCheckBold }}
                     </v-icon>
                   </td>
@@ -437,7 +437,7 @@
                     <span class="text-caption">(J276)</span>
                   </td>
                   <td class="text-center">
-                    <v-icon color="green">
+                    <v-icon color="#4caf50">
                       {{ $icons.mdiCheckBold }}
                     </v-icon>
                   </td>
@@ -446,12 +446,12 @@
                   <td>
                     <span class="font-weight-bold">OCR</span>
                     <span class="text-caption">(J277)</span>
-                    <v-chip color="accent" class="ml-2" outlined small
+                    <v-chip color="accent" class="ml-2" outlined small label
                       >NEW</v-chip
                     >
                   </td>
                   <td class="text-center">
-                    <v-icon color="green">
+                    <v-icon color="#4caf50">
                       {{ $icons.mdiCheckBold }}
                     </v-icon>
                   </td>
@@ -468,7 +468,7 @@
                     <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
                     </v-icon> -->
-                    <v-chip class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -483,7 +483,7 @@
                     <!-- <v-icon color="green">
                       {{ $icons.mdiCheckBold }}
                     </v-icon> -->
-                    <v-chip class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small label>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -505,7 +505,7 @@
                     <span class="text-caption">(7517)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -514,7 +514,7 @@
                     <span class="text-caption">(H446)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -523,7 +523,7 @@
                     <span class="text-caption">(A500QS)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -532,7 +532,7 @@
                     <span class="text-caption">(9618)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip class="ml-2" outlined small>SOON</v-chip>
+                    <v-chip class="ml-2" outlined small label>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -547,7 +547,7 @@
         <v-row>
           <v-col cols="12" class="d-flex align-center justify-center">
             <p id="what-text" class="text-h4 text-md-h2">
-              <span class="illum">W</span>hat else you got?
+              <span class="illum">F</span>eatures for teachers
             </p>
           </v-col>
         </v-row>
@@ -566,9 +566,7 @@
             </div>
             <div>
               <p class="font-weight-bold">Audio Descriptions</p>
-              <p class="font-weight-light">
-                Automatically read every question out loud.
-              </p>
+              <p class="font-weight-light">Every question can be read aloud.</p>
             </div>
           </v-col>
           <v-col cols="12" sm="6" md="4" class="d-flex">
@@ -586,7 +584,7 @@
             <div>
               <p class="font-weight-bold">Smart Sort</p>
               <p class="font-weight-light">
-                Sort mark scheme by self marks to speed up marking.
+                Sort mark schemes by student's self marks to speed up marking.
               </p>
             </div>
           </v-col>
@@ -605,7 +603,8 @@
             <div>
               <p class="font-weight-bold">Comment Bank</p>
               <p class="font-weight-light">
-                Built automatically for each question. Reuse comments.
+                Built automatically for each question. Reuse comments with one
+                click.
               </p>
             </div></v-col
           >
@@ -662,7 +661,7 @@
             <div>
               <p class="font-weight-bold">Reassign Questions</p>
               <p class="font-weight-light">
-                Reassign questions to students with a single click.
+                Reassign questions to students who have underachieved.
               </p>
             </div></v-col
           >
