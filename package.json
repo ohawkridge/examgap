@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@honeybadger-io/js": "^3.2.3",
-    "faunadb": "^4.3.0",
+    "faunadb": "^4.4.0",
     "nuxt": "^2.15.8",
     "tiptap-vuetify": "^2.24.0",
     "vuex-persistedstate": "^4.0.0"

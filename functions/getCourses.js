@@ -23,6 +23,7 @@ exports.handler = async (event, context, callback) => {
               name: q.Select(['data', 'shortName'], q.Var('instance')),
               board: q.Select(['data', 'board'], q.Var('instance')),
               cat: q.Select(['data', 'cat'], q.Var('instance')),
+              active: q.Select(['data', 'active'], q.Var('instance')),
             }
           )
         )
@@ -44,13 +45,14 @@ exports.handler = async (event, context, callback) => {
         out.push(course)
       }
     }
+    // Not doing Scottish courses (yet)
     // N5
-    out.push({ header: 'N5 COURSES' }, { divider: true })
-    for (const course of data) {
-      if (course.cat === 'N5') {
-        out.push(course)
-      }
-    }
+    // out.push({ header: 'N5 COURSES' }, { divider: true })
+    // for (const course of data) {
+    //   if (course.cat === 'N5') {
+    //     out.push(course)
+    //   }
+    // }
     // A level
     out.push({ header: 'A LEVEL COURSES' }, { divider: true })
     for (const course of data) {
@@ -70,6 +72,7 @@ exports.handler = async (event, context, callback) => {
       body: JSON.stringify(out),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

@@ -255,8 +255,8 @@ export default {
     },
 
     logout() {
-      this.$router.push('/')
       localStorage.removeItem('examgap')
+      this.$router.push('/signin')
       // Reload page to clear Vuex
       this.$router.go()
     },
