@@ -24,7 +24,12 @@
         }}</v-chip>
       </template>
     </v-select>
-    <v-checkbox v-model="showAll" label="Show all" class="mt-0" hide-details>
+    <v-checkbox
+      v-model="showAll"
+      label="Show developing courses"
+      class="mt-0"
+      hide-details
+    >
     </v-checkbox>
   </div>
 </template>
