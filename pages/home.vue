@@ -93,7 +93,7 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <p v-else class="pa-3 text-center">No archived classes.</p>
+          <p v-else class="pa-3 text-center">No archived classes</p>
         </v-tab-item>
       </v-tabs-items>
     </template>
