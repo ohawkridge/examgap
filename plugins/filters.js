@@ -18,7 +18,11 @@ Vue.filter('date', function (dateStr) {
 })
 
 Vue.filter('strip', function (html) {
-  return html.replace(/<[^>]*>?/gm, '')
+  // Supposedly safer than regex
+  const div = document.createElement('div')
+  div.innerHTML = html
+  return div.textContent || div.innerText || ''
+  // return html.replace(/<[^>]*>?/gm, '')
 })
 
 // For email usernames, shorten to just
