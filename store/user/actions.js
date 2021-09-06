@@ -37,10 +37,11 @@ const actions = {
     response = await response.json()
     commit('setUser', response)
     await dispatch('getGroups')
-    // For students only, get revision topics
+    // For students only, get revision topics and Quote of the Day
     if (!state.teacher) {
       const courseId = getters.activeGroup.course.id
       await dispatch('topics/getTopics', courseId, { root: true })
+      await dispatch('getQuote')
     }
     commit('app/setLoading', false, { root: true })
   },

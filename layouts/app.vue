@@ -72,9 +72,14 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
-        <the-quote-of-the-day
+        <span
           v-if="!teacher && $vuetify.breakpoint.name !== 'xs'"
-        />
+          class="text-caption grey--text text--darken-1"
+        >
+          {{ $store.state.user.quote.quote }}—{{
+            $store.state.user.quote.author
+          }}
+        </span>
         <!-- **ACTIONS** -->
         <!-- Create assignment -->
         <v-btn
@@ -177,7 +182,6 @@ import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheGreeting from '@/components/common/TheGreeting'
-import TheQuoteOfTheDay from '@/components/student/TheQuoteOfTheDay'
 
 export default {
   name: 'App',
@@ -190,7 +194,6 @@ export default {
     TheLoadingOverlay,
     TheGreeting,
     TheFooter,
-    TheQuoteOfTheDay,
   },
   middleware: ['auth'],
   data() {
