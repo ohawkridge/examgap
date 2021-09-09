@@ -135,7 +135,10 @@
           </template>
           <div v-else class="pa-3">
             <p>
-              <nuxt-link :to="`/question/${question.id}`">
+              <nuxt-link
+                v-if="question !== undefined"
+                :to="`/question/${question.id}`"
+              >
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <span v-on="on">{{ question.id }}</span>

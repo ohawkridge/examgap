@@ -1,11 +1,14 @@
 <template>
   <div class="mt-4 ml-2">
+    <!-- Student has foreign greeting -->
     <v-menu v-if="!teacher" offset-y open-on-hover>
       <template #activator="{ on }">
         <span v-on="on"> {{ greeting.text }}, </span>
-        <nuxt-link to="/profile" class="text-subtitle-2 font-weight-medium">{{
-          username | name
-        }}</nuxt-link>
+        <nuxt-link
+          to="/profile"
+          class="text-subtitle-2 font-weight-medium name"
+          >{{ username | name }}</nuxt-link
+        >
       </template>
       <v-card max-width="250">
         <v-card-text>
@@ -14,10 +17,13 @@
         </v-card-text>
       </v-card>
     </v-menu>
+    <!-- Teacher -->
     <template v-else>
-      <nuxt-link to="/profile" class="text-subtitle-2 font-weight-medium">{{
-        username | name
-      }}</nuxt-link>
+      <nuxt-link
+        to="/profile"
+        class="text-subtitle-2 font-weight-medium name"
+        >{{ username | name }}</nuxt-link
+      >
     </template>
     <div>
       <v-chip x-small label>
@@ -79,3 +85,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.name {
+  font-size: 1em !important;
+}
+</style>
