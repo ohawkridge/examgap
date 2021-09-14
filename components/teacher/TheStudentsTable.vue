@@ -155,8 +155,8 @@
         </v-edit-dialog>
       </template>
     </v-data-table>
-    <v-chip label outlined small class="ma-4">
-      {{ students.length }} Students
+    <v-chip v-if="students.length > 0" label outlined small class="ma-4">
+      {{ students.length }} Student{{ students.length | pluralize }}
     </v-chip>
     <!-- Action components -->
     <the-add-students-dialog />
