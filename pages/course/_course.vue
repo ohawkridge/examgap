@@ -138,12 +138,13 @@
               <nuxt-link
                 v-if="question !== undefined"
                 :to="`/question/${question.id}`"
+                class="text-decoration-none"
               >
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <span v-on="on">{{ question.id }}</span>
                   </template>
-                  <span>View question</span>
+                  <span>View</span>
                 </v-tooltip>
               </nuxt-link>
             </p>

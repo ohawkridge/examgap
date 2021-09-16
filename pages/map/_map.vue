@@ -31,7 +31,9 @@
         </div>
       </v-col>
     </v-row>
-    <v-btn color="primary" rounded elevation="0" @click="save()"> Save </v-btn>
+    <v-btn color="primary" rounded elevation="0" class="mt-4" @click="save()">
+      Save
+    </v-btn>
   </div>
 </template>
 
@@ -65,7 +67,7 @@ export default {
   },
   mounted() {
     this.questionId = this.$route.params.map
-    this.$store.commit('app/setPageTitle', 'Map Question')
+    this.$store.commit('app/setPageTitle', 'Topics')
   },
   methods: {
     async getQuestion(questionId = this.$route.params.map) {

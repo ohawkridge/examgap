@@ -1,68 +1,137 @@
 <template>
   <div>
-    <v-container>
-      <v-row class="justify-center">
-        <v-col cols="12" md="10" class="d-flex justify-space-between">
-          <v-btn text rounded @click="$router.go(-1)">
-            <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
-            Back
+    <v-row
+      class="pt-3 justify-center"
+      style="border-bottom: 1px solid #d2d2d2 !important"
+    >
+      <v-col
+        cols="12"
+        md="10"
+        class="d-flex justify-space-between align-center"
+      >
+        <v-btn text rounded @click="$router.go(-1)">
+          <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
+          Back
+        </v-btn>
+        <div>
+          <v-btn
+            elevation="0"
+            rounded
+            text
+            nuxt
+            :to="`/map/${question.id}`"
+            class="mr-2"
+          >
+            Topics
           </v-btn>
-          <div>
-            <v-btn
-              elevation="0"
-              rounded
-              text
-              nuxt
-              :to="`/map/${question.id}`"
-              class="mr-2"
-            >
-              Map Topics
-            </v-btn>
-            <v-btn
-              elevation="0"
-              rounded
-              text
-              nuxt
-              :to="`/author/${question.id}`"
-            >
-              Edit
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="10">
+          <v-btn elevation="0" rounded text nuxt :to="`/author/${question.id}`">
+            Edit
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
+      <v-col cols="12" md="10">
+        <!-- Skeletons -->
+        <template v-if="$fetchState.pending">
+          <v-skeleton-loader :loading="true" type="paragraph" v-bind="attrs">
+          </v-skeleton-loader>
+          <v-skeleton-loader :loading="true" type="paragraph" v-bind="attrs">
+          </v-skeleton-loader>
           <v-skeleton-loader
-            v-if="$fetchState.pending"
             :loading="true"
-            type="card"
+            type="chip"
+            v-bind="attrs"
+            class="float-right"
+            style="transform: scale(0.7)"
           >
           </v-skeleton-loader>
-          <template v-else>
-            <div v-html="question.text"></div>
-            <div class="d-flex justify-end">
-              <v-chip outlined small
-                >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
-              </v-chip>
-            </div>
-            <p class="text-subtitle-1 font-weight-medium">Mark Scheme</p>
-            <ul class="mb-4">
-              <li v-for="(mark, i) in question.marks" :key="i">
-                {{ mark.text }}
-              </li>
-            </ul>
-            <p class="text-subtitle-1 font-weight-medium">Guidance</p>
-            <div v-if="question.guidance" v-html="question.guidance"></div>
-            <p v-else>None</p>
-            <p class="text-subtitle-1 font-weight-medium mt-4">Model Answer</p>
-            <div v-html="question.modelAnswer"></div>
-            <p class="text-subtitle-1 font-weight-medium mt-4">Keywords</p>
-            <p v-if="question.keywords !== ''">{{ question.keywords }}</p>
-            <p v-else>None</p>
-          </template>
-        </v-col>
-      </v-row>
-    </v-container>
+          <v-skeleton-loader
+            :loading="true"
+            type="heading"
+            width="50%"
+            v-bind="attrs"
+            style="clear: right"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="text"
+            v-bind="attrs"
+            width="60%"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="text"
+            v-bind="attrs"
+            width="48%"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="text"
+            v-bind="attrs"
+            width="28%"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="text"
+            v-bind="attrs"
+            width="49%"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="heading"
+            width="42%"
+            v-bind="attrs"
+            class="pt-4"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader :loading="true" type="sentences" v-bind="attrs">
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="heading"
+            width="20%"
+            v-bind="attrs"
+            class="pt-4"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="text"
+            width="33%"
+            v-bind="attrs"
+          >
+          </v-skeleton-loader>
+        </template>
+        <template v-else>
+          <div class="mt-4" v-html="question.text"></div>
+          <div class="d-flex justify-end">
+            <v-chip outlined small
+              >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
+            </v-chip>
+          </div>
+          <p class="text-subtitle-1 font-weight-medium">Mark Scheme</p>
+          <ul class="mb-4">
+            <li v-for="(mark, i) in question.marks" :key="i">
+              {{ mark.text }}
+            </li>
+          </ul>
+          <p class="text-subtitle-1 font-weight-medium">Guidance</p>
+          <div v-if="question.guidance" v-html="question.guidance"></div>
+          <p v-else>None</p>
+          <p class="text-subtitle-1 font-weight-medium mt-4">Model Answer</p>
+          <div v-html="question.modelAnswer"></div>
+          <p class="text-subtitle-1 font-weight-medium mt-4">Keywords</p>
+          <p v-if="question.keywords !== ''">{{ question.keywords }}</p>
+          <p v-else>None</p>
+        </template>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -74,6 +143,9 @@ export default {
   data() {
     return {
       question: {},
+      attrs: {
+        class: 'mb-4',
+      },
     }
   },
   async fetch() {
