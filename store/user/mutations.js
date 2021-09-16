@@ -1,4 +1,8 @@
 export default {
+  // Fix login?
+  clearUserId(state) {
+    state.id = ''
+  },
   setUser(state, data) {
     // Common properties
     state.id = data.id

@@ -172,12 +172,7 @@ import { mapState, mapGetters } from 'vuex'
 import {
   mdiPlus,
   mdiAccountCircleOutline,
-  mdiChevronDown,
-  mdiCheckCircleOutline,
-  mdiCommentTextOutline,
-  mdiFlashOutline,
   mdiGoogleClassroom,
-  mdiLogoutVariant,
   mdiCommentAlertOutline,
 } from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
@@ -233,12 +228,7 @@ export default {
     this.$icons = {
       mdiPlus,
       mdiAccountCircleOutline,
-      mdiChevronDown,
-      mdiCheckCircleOutline,
-      mdiCommentTextOutline,
-      mdiFlashOutline,
       mdiGoogleClassroom,
-      mdiLogoutVariant,
       mdiCommentAlertOutline,
     }
   },
@@ -264,9 +254,10 @@ export default {
     },
 
     logout() {
+      // Clear user id so auth.js will fail and redirect to /signin
+      this.$store.commit('user/clearUserId')
       localStorage.removeItem('examgap')
-      this.$router.push('/signin')
-      // Reload page to clear Vuex
+      // Reload the page to clear memory
       this.$router.go()
     },
   },
