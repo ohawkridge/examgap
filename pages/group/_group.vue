@@ -23,7 +23,7 @@
           >
             <v-list-item-content>
               <v-row>
-                <v-col cols="12" sm="5" class="pb-0 pb-sm-3">
+                <v-col cols="12" sm="4" class="pb-0 pb-sm-3">
                   <div class="text-subtitle-1 font-weight-medium">
                     {{ assignment.name }}
                   </div>
@@ -54,7 +54,7 @@
                 <v-col
                   v-if="$vuetify.breakpoint.name !== 'xs'"
                   cols="2"
-                  sm="1"
+                  sm="2"
                   class="d-flex justify-center align-center"
                 >
                   <v-chip
@@ -67,8 +67,12 @@
                   </v-chip>
                   <v-chip v-else-if="assignment.live" label color="green" small>
                     Open
+                    <v-icon right>{{ $icons.mdiTimerSandFull }}</v-icon>
                   </v-chip>
-                  <v-chip v-else label color="red" small> Past </v-chip>
+                  <v-chip v-else label color="red" small>
+                    Past
+                    <v-icon right>{{ $icons.mdiTimerSandEmpty }}</v-icon>
+                  </v-chip>
                 </v-col>
               </v-row>
             </v-list-item-content>
@@ -165,6 +169,8 @@ import {
   mdiCalendarStart,
   mdiCalendarEnd,
   mdiCircleOutline,
+  mdiTimerSandEmpty,
+  mdiTimerSandFull,
 } from '@mdi/js'
 
 export default {
@@ -205,6 +211,8 @@ export default {
       mdiCalendarStart,
       mdiCalendarEnd,
       mdiCircleOutline,
+      mdiTimerSandEmpty,
+      mdiTimerSandFull,
     }
   },
   async mounted() {
