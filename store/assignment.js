@@ -299,7 +299,13 @@ export const mutations = {
     response.feedback = feedback
   },
   setTeacherMarks(state, { response, markIds }) {
-    response.tm = markIds
+    // Reactivity issue?
+    // Mutation operates on object passed in
+    response.tm = []
+    for (const t of markIds) {
+      response.tm.push(t)
+    }
+    // response.tm = markIds
   },
   setMarked(state, response) {
     response.marked = true

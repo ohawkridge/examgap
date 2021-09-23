@@ -1,41 +1,62 @@
 <template>
   <div>
     <v-row class="pa-3">
-      <v-col cols="12" sm="6" class="d-flex align-start pb-0">
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn icon class="mr-2" nuxt :to="`/group/${group.id}`" v-on="on">
-              <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+      <v-col cols="12">
+        <div class="d-flex justify-space-between">
+          <div class="d-flex align-center">
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <v-btn
+                  icon
+                  class="mr-2"
+                  nuxt
+                  :to="`/group/${group.id}`"
+                  v-on="on"
+                >
+                  <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+                </v-btn>
+              </template>
+              <span>Back</span>
+            </v-tooltip>
+            <span class="text-h6">{{
+              $fetchState.pending ? 'Loading...' : assignment.name
+            }}</span>
+          </div>
+          <div v-if="$vuetify.breakpoint.name !== 'xs'">
+            <the-delete-assignment-dialog
+              v-if="!$fetchState.pending && group"
+              :assignment-id="assignment.id"
+              :group-id="group.id"
+              type="btn"
+            />
+            <v-btn elevation="0" text rounded class="ml-2" @click="refresh()">
+              Refresh
             </v-btn>
-          </template>
-          <span>Back</span>
-        </v-tooltip>
-        <span class="text-h6">{{
-          $fetchState.pending ? 'Loading...' : assignment.name
-        }}</span>
-      </v-col>
-      <v-col cols="12" sm="6" class="pb-0">
-        <div class="d-flex align-center">
-          <span class="font-weight-medium fix-date-always">Start:</span>
-          <v-icon small class="mr-1">{{ $icons.mdiCalendarStart }}</v-icon>
-          {{ assignment.start | date }}
+          </div>
         </div>
-        <div class="d-flex align-center">
-          <span class="font-weight-medium fix-date-always">Due:</span>
-          <v-icon small class="mr-1">{{ $icons.mdiCalendarEnd }}</v-icon>
-          {{ assignment.dateDue | date }}
+        <div class="mt-4 ml-11">
+          <div class="d-flex align-center mb-2">
+            <span class="font-weight-medium fix-date-always">Start:</span>
+            <v-icon small class="mr-1">{{ $icons.mdiCalendarStart }}</v-icon>
+            {{ assignment.start | date }}
+          </div>
+          <div class="d-flex align-center">
+            <span class="font-weight-medium fix-date-always">Due:</span>
+            <v-icon small class="mr-1">{{ $icons.mdiCalendarEnd }}</v-icon>
+            {{ assignment.dateDue | date }}
+          </div>
         </div>
-      </v-col>
-      <v-col cols="12" class="d-flex justify-end">
-        <the-delete-assignment-dialog
-          v-if="!$fetchState.pending && group"
-          :assignment-id="assignment.id"
-          :group-id="group.id"
-          type="btn"
-        />
-        <v-btn elevation="0" text rounded class="ml-2" @click="refresh()">
-          Refresh
-        </v-btn>
+        <div v-if="$vuetify.breakpoint.name === 'xs'">
+          <!-- <the-delete-assignment-dialog
+            v-if="!$fetchState.pending && group"
+            :assignment-id="assignment.id"
+            :group-id="group.id"
+            type="btn"
+          /> -->
+          <!-- <v-btn elevation="0" text block rounded @click="refresh()">
+            Refresh
+          </v-btn> -->
+        </div>
       </v-col>
     </v-row>
     <v-skeleton-loader
@@ -76,8 +97,57 @@
           <td>
             {{ student.name }}
           </td>
-          <td v-for="(item, j) in student.data" :key="j" class="text-center">
-            <MarkChip :data="item" :student-index="i" :question-index="j" />
+          <td v-for="(data, j) in student.data" :key="j" class="text-center">
+            <!-- Formerly MarkChip.vue components -->
+            <!-- Nested values as props not working reliably -->
+            <div :class="flex(data)">
+              <!-- Not answered -->
+              <div
+                v-if="data[Object.keys(data)[0]].length === 0"
+                class="my-auto"
+              >
+                N/A
+              </div>
+              <!-- Loop through responses (see note below) -->
+              <template
+                v-for="(response, k) in data[Object.keys(data)[0]]"
+                v-else
+              >
+                <!-- Self marked -->
+                <v-tooltip v-if="!response.marked" :key="k" bottom>
+                  <template #activator="{ on }">
+                    <v-chip outlined @click="mark(i, j, k)" v-on="on">
+                      {{ response.sm.length }}
+                      <v-icon right color="grey">{{ $icons.mdiCheck }}</v-icon>
+                    </v-chip>
+                  </template>
+                  <span>Mark</span>
+                </v-tooltip>
+                <!-- Teacher marked -->
+                <v-tooltip v-else :key="k" bottom>
+                  <template #activator="{ on }">
+                    <v-chip
+                      :class="marginBottom(data[Object.keys(data)[0]], k)"
+                      class="green"
+                      @click="mark(i, j, k)"
+                      v-on="on"
+                    >
+                      {{ response.tm.length }}
+                      <v-icon right>{{
+                        response.repeat ? $icons.mdiRepeat : $icons.mdiCheckAll
+                      }}</v-icon>
+                    </v-chip>
+                    <v-icon
+                      v-if="response.flagged"
+                      color="accent"
+                      class="fix-flag"
+                      >{{ $icons.mdiFlagOutline }}</v-icon
+                    >
+                  </template>
+                  <span>Mark</span>
+                </v-tooltip>
+              </template>
+            </div>
           </td>
         </tr>
         <tr v-if="assignment.students.length === 0">
@@ -312,14 +382,12 @@ import {
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
-import MarkChip from '@/components/teacher/MarkChip'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
 import TheDeleteAssignmentDialog from '@/components/teacher/TheDeleteAssignmentDialog'
 
 export default {
   components: {
     TheDeleteAssignmentDialog,
-    MarkChip,
     TheInfoDialog,
   },
   layout: 'app',
@@ -333,6 +401,8 @@ export default {
       marks: [], // v-model for checkboxes
       infoDialog: false,
       forceRefresh: false,
+      pStart: { x: 0, y: 0 }, // Pull to refresh
+      pStop: { x: 0, y: 0 },
     }
   },
   async fetch() {
@@ -437,13 +507,71 @@ export default {
       mdiCalendarEnd,
     }
   },
+  beforeDestroy() {
+    document.removeEventListener('touchstart', this.swipeStart())
+    document.removeEventListener('touchend', this.swipeEnd())
+  },
   mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)
     if (this.group.assignments.length < 3) {
       this.$store.commit('app/setOnboardStep', 6)
     }
+    document.addEventListener(
+      'touchstart',
+      (e) => {
+        this.swipeStart(e)
+      },
+      false
+    )
+    document.addEventListener(
+      'touchend',
+      (e) => {
+        this.swipeEnd(e)
+      },
+      false
+    )
   },
   methods: {
+    swipeStart(e) {
+      if (e !== undefined) {
+        if (typeof e.targetTouches !== 'undefined') {
+          const touch = e.targetTouches[0]
+          this.pStart.x = touch.screenX
+          this.pStart.y = touch.screenY
+        } else {
+          this.pStart.x = e.screenX
+          this.pStart.y = e.screenY
+        }
+      }
+    },
+    swipeEnd(e) {
+      if (e !== undefined) {
+        if (typeof e.changedTouches !== 'undefined') {
+          const touch = e.changedTouches[0]
+          this.pStop.x = touch.screenX
+          this.pStop.y = touch.screenY
+        } else {
+          this.pStop.x = e.screenX
+          this.pStop.y = e.screenY
+        }
+        this.swipeCheck()
+      }
+    },
+    swipeCheck() {
+      const changeY = this.pStart.y - this.pStop.y
+      const changeX = this.pStart.x - this.pStop.x
+      if (this.isPullDown(changeY, changeX)) {
+        this.refresh()
+      }
+    },
+    isPullDown(dY, dX) {
+      // methods of checking slope, length, direction of line created by swipe action
+      return (
+        dY < 0 &&
+        ((Math.abs(dX) <= 100 && Math.abs(dY) >= 300) ||
+          (Math.abs(dX) / Math.abs(dY) <= 0.3 && dY >= 60))
+      )
+    },
     color(n, max) {
       if (n / max <= 1 / 3) return 'red'
       if (n / max > 2 / 3) return 'green'
@@ -578,6 +706,27 @@ export default {
         return 1
       }
     },
+    // Commit mutations setting indices
+    // into _report.vue data structure
+    mark(i, j, k) {
+      this.$store.commit('assignment/setStudentIndex', i)
+      this.$store.commit('assignment/setQuestionIndex', j)
+      this.$store.commit('assignment/setResponseIndex', k)
+      this.$store.commit('assignment/setMarking', true)
+      // Onboarding complete ✓
+      this.$store.commit('app/setOnboardStep', 0)
+    },
+    // Add margin bottom to reassigned responses
+    // (except for last one)
+    marginBottom(responses, i) {
+      return responses.length > 1 && i < responses.length - 1 ? 'mb-2' : ''
+    },
+    // Use flex columns if >1 response
+    flex(data) {
+      return data[Object.keys(data)[0]].length > 1
+        ? 'd-flex flex-column align-center'
+        : ''
+    },
   },
 }
 </script>
@@ -619,5 +768,11 @@ div.v-list {
   font-size: 0.875rem !important;
   letter-spacing: 0.0178571429em !important;
   line-height: 1.25rem !important;
+}
+
+/* Adjust flags to keep chips aligned */
+.fix-flag {
+  margin-left: -25px;
+  left: 24px;
 }
 </style>

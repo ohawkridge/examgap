@@ -109,6 +109,7 @@
       checkbox-color="primary"
       item-key="id"
       hide-default-footer
+      disable-pagination
       show-select
       :loading="$fetchState.pending"
       loading-text="Loading students..."
