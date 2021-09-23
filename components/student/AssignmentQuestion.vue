@@ -18,7 +18,7 @@
             </v-list-item-subtitle>
             <div
               v-if="response.feedback !== ''"
-              class="my-3 mb-md-0 font-italic d-flex grey--text text-darken-3"
+              class="my-3 mb-md-0 font-italic grey--text text-darken-3"
             >
               <v-icon small class="mr-2">
                 {{ $icons.mdiCommentTextOutline }}
@@ -75,7 +75,7 @@
         @click="answer(question.id)"
       >
         <v-list-item-content>
-          <v-col cols="12" md="9" class="pa-0 pa-md-3 mb-2">
+          <v-col cols="12" md="9" class="pa-0 pa-md-3">
             <v-list-item-title>
               {{ question.text | strip }}
             </v-list-item-title>
@@ -96,7 +96,7 @@
       @click="answer(question.id)"
     >
       <v-list-item-content>
-        <v-col cols="12" md="9" class="pa-0 pa-md-3 mb-2">
+        <v-col cols="12" md="9" class="pa-0 pa-md-3">
           <v-list-item-title>
             {{ question.text | strip }}
           </v-list-item-title>

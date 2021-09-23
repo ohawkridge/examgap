@@ -137,7 +137,14 @@
             ></div>
             <p v-else>None</p>
             <div class="d-flex justify-end">
-              <v-btn color="primary" rounded elevation="0" @click="done()">
+              <v-btn
+                color="primary"
+                rounded
+                elevation="0"
+                :loading="loading"
+                :disabled="loading"
+                @click="done()"
+              >
                 Done
               </v-btn>
             </div>
@@ -218,8 +225,8 @@ export default {
       speakDisabled: false,
       prefVoice: false,
       saving: false,
-      finishClicked: false,
       confirmDialog: false,
+      loading: false,
     }
   },
   async fetch() {
@@ -368,6 +375,7 @@ export default {
     done() {
       // Just change the route
       // beforeRouteLeave handles saving marks etc.
+      this.loading = true
       const route = this.revising ? `/home` : `/assignment/${this.assignmentId}`
       this.$router.push(route)
     },

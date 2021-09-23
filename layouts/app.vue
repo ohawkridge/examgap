@@ -7,7 +7,7 @@
         </nuxt-link>
         <the-greeting />
       </div>
-      <div class="pa-2 d-flex justify-center">
+      <div v-if="teacher" class="pa-2 d-flex justify-center">
         <v-btn nuxt to="/author" elevation="0" color="primary" rounded>
           <v-icon left>{{ $icons.mdiPlus }}</v-icon>
           Question

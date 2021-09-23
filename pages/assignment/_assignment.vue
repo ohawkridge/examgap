@@ -44,15 +44,17 @@
           </p>
         </div>
         <div style="width: 40%">
-          <div class="text-subtitle-1">
+          <div class="d-flex align-center mb-2">
             <span class="fix-width font-weight-medium">Start:</span>
+            <v-icon small class="mr-1">{{ $icons.mdiCalendarStart }}</v-icon>
             {{ assignment.start | date }}
           </div>
-          <div class="text-subtitle-1">
+          <div class="d-flex align-center mb-2">
             <span class="fix-width font-weight-medium">Due:</span>
+            <v-icon small class="mr-1">{{ $icons.mdiCalendarEnd }}</v-icon>
             {{ assignment.dateDue | date }}
           </div>
-          <div class="text-subtitle-1 d-flex align-center">
+          <div class="d-flex align-center">
             <span class="fix-width font-weight-medium">Score:</span>
             {{ `${s.total}/${s.max}` }}
             <v-chip small label :color="s.color" class="ml-2 font-weight-bold">
@@ -75,7 +77,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import { mdiArrowLeft, mdiMedalOutline } from '@mdi/js'
+import {
+  mdiArrowLeft,
+  mdiMedalOutline,
+  mdiCalendarStart,
+  mdiCalendarEnd,
+} from '@mdi/js'
 import AssignmentQuestion from '@/components/student/AssignmentQuestion'
 
 export default {
@@ -106,8 +113,11 @@ export default {
       for (const q of this.assignment.questions) {
         const mm = parseInt(q.maxMark)
         for (const r of q.responses) {
-          total += r.tm
-          max += mm
+          // Only count teacher marked responses
+          if (r.marked) {
+            total += r.tm
+            max += mm
+          }
         }
       }
       // If max is 0, student probably hasn't answered any questions
@@ -130,6 +140,8 @@ export default {
     this.$icons = {
       mdiArrowLeft,
       mdiMedalOutline,
+      mdiCalendarStart,
+      mdiCalendarEnd,
     }
   },
 }
