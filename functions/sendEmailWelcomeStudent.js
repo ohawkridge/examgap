@@ -22,13 +22,14 @@ exports.handler = async (event) => {
           Data: `<html>
                   <body>
                   <p>Dear Student,</p>
-                  <p>You’re receiving this email because your teacher has created a new account for you at <a href="https://www.examgap.com" title="Open Examgap.com">Examgap.com</a>.</p>
-                  <p>Examgap is a site that helps you improve your results by practising exam questions online. Your teacher will set assignments, but you can revise on your own too.</p>
+                  <p>You or your teacher have successfully created your account at <a href="https://www.examgap.com" title="Open Examgap.com">Examgap.com</a>.</p>
+                  <p>Examgap is a site that helps you improve your results by practising exam questions online.</p>
+                  <p>Your teacher will set assignments, but you can revise on your own too.</p>
                   <p>
                   +----------------------------------+<br />
-                  >> <a href="https://www.examgap.com/signin" title="Sign in to Examgap">Sign in to Examgap</a><br /><br />
                   Username: ${email}<br />
-                  Password: password<br />
+                  Password: password<br /><br />
+                  >> <a href="https://www.examgap.com/signin" title="Sign in to Examgap">Sign in to Examgap</a>
                   +----------------------------------+<br />
                   </p>
                   </body>
