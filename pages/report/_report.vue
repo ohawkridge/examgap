@@ -22,16 +22,37 @@
               $fetchState.pending ? 'Loading...' : assignment.name
             }}</span>
           </div>
-          <div v-if="$vuetify.breakpoint.name !== 'xs'">
-            <the-delete-assignment-dialog
-              v-if="!$fetchState.pending && group"
-              :assignment-id="assignment.id"
-              :group-id="group.id"
-              type="btn"
-            />
-            <v-btn elevation="0" text rounded class="ml-2" @click="refresh()">
-              Refresh
-            </v-btn>
+          <div>
+            <div v-if="$vuetify.breakpoint.name !== 'xs'">
+              <the-delete-assignment-dialog
+                v-if="!$fetchState.pending && group"
+                :assignment-id="assignment.id"
+                :group-id="group.id"
+                type="btn"
+              />
+              <v-btn elevation="0" text rounded class="ml-2" @click="refresh()">
+                Refresh
+              </v-btn>
+            </div>
+            <v-menu v-else>
+              <template #activator="{ on }">
+                <v-btn icon v-on="on">
+                  <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title @click="refresh()"
+                    >Refresh</v-list-item-title
+                  >
+                </v-list-item>
+                <the-delete-assignment-dialog
+                  v-if="!$fetchState.pending && group"
+                  :assignment-id="assignment.id"
+                  :group-id="group.id"
+                />
+              </v-list>
+            </v-menu>
           </div>
         </div>
         <div class="mt-4 ml-11">
@@ -45,17 +66,6 @@
             <v-icon small class="mr-1">{{ $icons.mdiCalendarEnd }}</v-icon>
             {{ assignment.dateDue | date }}
           </div>
-        </div>
-        <div v-if="$vuetify.breakpoint.name === 'xs'">
-          <!-- <the-delete-assignment-dialog
-            v-if="!$fetchState.pending && group"
-            :assignment-id="assignment.id"
-            :group-id="group.id"
-            type="btn"
-          /> -->
-          <!-- <v-btn elevation="0" text block rounded @click="refresh()">
-            Refresh
-          </v-btn> -->
         </div>
       </v-col>
     </v-row>
@@ -379,6 +389,7 @@ import {
   mdiRefresh,
   mdiCalendarStart,
   mdiCalendarEnd,
+  mdiDotsVertical,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
@@ -505,6 +516,7 @@ export default {
       mdiRefresh,
       mdiCalendarStart,
       mdiCalendarEnd,
+      mdiDotsVertical,
     }
   },
   beforeDestroy() {
@@ -630,8 +642,10 @@ export default {
     // Navigate forwards (1) or backwards (-1) through responses
     next(n) {
       // Save marks *before* moving on
+      // Also save feedback (in case debounce is too slow)
       if (this.response !== undefined) {
         this.saveMarks()
+        this.saveFeedback()
       }
       this.$store.commit('assignment/next', n)
       // Keep advancing/retreating until we find next response
@@ -677,8 +691,8 @@ export default {
       try {
         this.savingFeedback = true
         await this.$store.dispatch('assignment/saveFeedback', this.feedback)
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error saving feedback',
