@@ -7,19 +7,13 @@
             <the-logo />
           </nuxt-link>
           <div class="d-flex">
-            <v-btn text class="mr-2 d-none d-sm-flex" nuxt to="/pricing" rounded
+            <v-btn text rounded class="d-none d-sm-flex mr-2" nuxt to="/pricing"
               >Pricing</v-btn
             >
             <v-btn text rounded class="d-none d-sm-flex mr-2" nuxt to="/signup"
               >Join class</v-btn
             >
-            <v-btn
-              color="primary"
-              outlined
-              rounded
-              class="d-none d-sm-flex"
-              nuxt
-              to="/signin"
+            <v-btn text rounded class="d-none d-sm-flex" nuxt to="/signin"
               >Sign in</v-btn
             >
             <v-btn

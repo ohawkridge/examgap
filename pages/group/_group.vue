@@ -23,37 +23,25 @@
           >
             <v-list-item-content>
               <v-row>
-                <v-col cols="12" sm="4" class="pb-0 pb-sm-3">
+                <v-col cols="12" sm="5" class="pb-0 pb-sm-3">
                   <div class="text-subtitle-1 font-weight-medium">
                     {{ assignment.name }}
                   </div>
-                  <div class="text-body-2">
+                  <div class="text-body-2 grey--text text--darken-2">
                     {{ assignment.num_questions }} Question{{
                       assignment.num_questions | pluralize
                     }}
                   </div>
                 </v-col>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  class="d-flex align-center text-body-2 pb-0 pb-sm-3"
-                >
-                  <span class="font-weight-medium fix-date">Start:</span>
-                  <v-icon small class="mx-1">{{
-                    $icons.mdiCalendarStart
-                  }}</v-icon>
-                  {{ assignment.start | date }}
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="3"
-                  class="d-flex align-center text-body-2 pt-1"
-                >
-                  <span class="font-weight-medium fix-date">Due:</span>
-                  <v-icon small class="mx-1">{{
-                    $icons.mdiCalendarEnd
-                  }}</v-icon>
-                  {{ assignment.dateDue | date }}
+                <v-col cols="12" sm="5" class="d-flex align-center text-body-2">
+                  <div class="justify-date">
+                    <span class="font-weight-medium fix-date mr-1">Start:</span>
+                    {{ assignment.start | date }}
+                  </div>
+                  <div>
+                    <span class="font-weight-medium fix-date mr-1">Due:</span>
+                    {{ assignment.dateDue | date }}
+                  </div>
                 </v-col>
                 <v-col
                   v-if="$vuetify.breakpoint.name !== 'xs'"
@@ -71,12 +59,8 @@
                   </v-chip>
                   <v-chip v-else-if="assignment.live" label color="green" small>
                     Open
-                    <v-icon right>{{ $icons.mdiTimerSandFull }}</v-icon>
                   </v-chip>
-                  <v-chip v-else label color="red" small>
-                    Past
-                    <v-icon right>{{ $icons.mdiTimerSandEmpty }}</v-icon>
-                  </v-chip>
+                  <v-chip v-else label color="red" small> Past </v-chip>
                 </v-col>
               </v-row>
             </v-list-item-content>
@@ -173,8 +157,6 @@ import {
   mdiCalendarStart,
   mdiCalendarEnd,
   mdiCircleOutline,
-  mdiTimerSandEmpty,
-  mdiTimerSandFull,
 } from '@mdi/js'
 
 export default {
@@ -215,8 +197,6 @@ export default {
       mdiCalendarStart,
       mdiCalendarEnd,
       mdiCircleOutline,
-      mdiTimerSandEmpty,
-      mdiTimerSandFull,
     }
   },
   async mounted() {
@@ -254,3 +234,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.justify-date {
+  width: 190px;
+}
+</style>

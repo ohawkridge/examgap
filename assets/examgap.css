@@ -66,9 +66,6 @@ span.v-chip.theme--light.green {
     width: 48px;
   }
 }
-.fix-date-always {
-  width: 48px;
-}
 
 /* pretty pseudocode in questions */
 .code {

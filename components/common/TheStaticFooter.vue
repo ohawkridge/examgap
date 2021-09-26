@@ -14,7 +14,7 @@
               <v-btn
                 large
                 rounded
-                color="primary"
+                color="#F4D06F"
                 elevation="0"
                 nuxt
                 to="/trial"

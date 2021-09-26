@@ -5,7 +5,6 @@
         <v-col cols="12" class="d-flex justify-space-between align-center">
           support@examgap.com
           <div class="d-flex align-center">
-            <div id="headway"></div>
             <v-icon small class="mr-1">{{
               $icons.mdiArrowExpandHorizontal
             }}</v-icon>

@@ -64,9 +64,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     treeShake: true,
-    defaultAssets: {
-      icons: false,
-    },
+    defaultAssets: false,
     icons: {
       iconfont: 'mdiSvg',
     },
@@ -75,9 +73,9 @@ export default {
       themes: {
         light: {
           primary: '#0099cc',
-          accent: '#db5461', // Dark red
-          secondary: '#e3f2fd',
-          green: '#c9edc2', // Fix all chips?
+          accent: '#f9b9b7', // Pink
+          secondary: '#f4d06f', // Yellow
+          // green: '#c9edc2', // Fix all chips?
         },
       },
     },

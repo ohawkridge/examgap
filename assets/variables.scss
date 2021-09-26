@@ -3,16 +3,15 @@
 // The variables you want to modify
 // $font-size-root: 20px;
 
+// Stop using web fonts
+$body-font-family: system-ui, sans-serif;
+
+// https://colourcontrast.cc/0099cc/18191a
 .v-application .text-h1,
 .text-h2,
 .text-h3,
 .text-h4,
 .text-h5,
 .text-h6 {
-  color: #333333;
-}
-
-button,
-a.v-btn {
-  text-transform: capitalize !important;
+  color: #001011;
 }
