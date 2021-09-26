@@ -33,12 +33,21 @@
                     }}
                   </div>
                 </v-col>
-                <v-col cols="12" sm="5" class="d-flex align-center text-body-2">
-                  <div class="justify-date">
+                <v-col
+                  cols="12"
+                  sm="5"
+                  class="
+                    d-flex
+                    flex-column flex-sm-row
+                    align-center
+                    text-body-2
+                  "
+                >
+                  <div class="justify-date" style="margin-right: auto">
                     <span class="font-weight-medium fix-date mr-1">Start:</span>
                     {{ assignment.start | date }}
                   </div>
-                  <div>
+                  <div style="margin-right: auto">
                     <span class="font-weight-medium fix-date mr-1">Due:</span>
                     {{ assignment.dateDue | date }}
                   </div>
@@ -236,7 +245,9 @@ export default {
 </script>
 
 <style scoped>
-.justify-date {
-  width: 190px;
+@media only screen and (min-width: 600px) {
+  .justify-date {
+    width: 190px;
+  }
 }
 </style>
