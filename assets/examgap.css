@@ -63,8 +63,11 @@ span.v-chip.theme--light.green {
 /* make start/due labels fixed width on mobile */
 @media only screen and (max-width: 600px) {
   .fix-date {
-    width: 48px;
+    width: 44px;
   }
+}
+.fix-date-always {
+  width: 48px;
 }
 
 /* pretty pseudocode in questions */

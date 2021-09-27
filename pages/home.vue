@@ -155,7 +155,7 @@
                     <div class="text-subtitle-1 font-weight-medium">
                       {{ assignment.name }}
                     </div>
-                    <div class="text-body-2">
+                    <div class="text-body-2 grey--text text--darken-2">
                       {{ assignment.num_questions }} Question{{
                         assignment.num_questions | pluralize
                       }}
@@ -163,30 +163,29 @@
                   </v-col>
                   <v-col
                     cols="12"
-                    sm="3"
-                    class="d-flex align-center text-body-2 pb-0 pb-sm-3"
+                    sm="5"
+                    class="
+                      d-flex
+                      flex-column flex-sm-row
+                      align-center
+                      text-body-2
+                    "
                   >
-                    <span class="font-weight-medium fix-date">Start:</span>
-                    <v-icon small class="mx-1">{{
-                      $icons.mdiCalendarStart
-                    }}</v-icon>
-                    {{ assignment.start | date }}
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="3"
-                    class="d-flex align-center text-body-2"
-                  >
-                    <span class="font-weight-medium fix-date">Due:</span>
-                    <v-icon small class="mx-1">{{
-                      $icons.mdiCalendarEnd
-                    }}</v-icon>
-                    {{ assignment.dateDue | date }}
+                    <div class="d-flex justify-date" style="margin-right: auto">
+                      <span class="font-weight-medium fix-date mr-1"
+                        >Start:</span
+                      >
+                      {{ assignment.start | date }}
+                    </div>
+                    <div class="d-flex" style="margin-right: auto">
+                      <span class="font-weight-medium fix-date mr-1">Due:</span>
+                      {{ assignment.dateDue | date }}
+                    </div>
                   </v-col>
                   <v-col
                     v-if="$vuetify.breakpoint.name !== 'xs'"
                     cols="2"
-                    sm="1"
+                    sm="2"
                     class="d-flex justify-center align-center"
                   >
                     <v-chip v-if="assignment.live" label color="green" small>
@@ -251,12 +250,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import {
-  mdiPlus,
-  mdiCheckboxBlankCircle,
-  mdiCalendarEnd,
-  mdiCalendarStart,
-} from '@mdi/js'
+import { mdiPlus, mdiCheckboxBlankCircle } from '@mdi/js'
 import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 
 export default {
@@ -295,8 +289,6 @@ export default {
     this.$icons = {
       mdiPlus,
       mdiCheckboxBlankCircle,
-      mdiCalendarEnd,
-      mdiCalendarStart,
     }
   },
   mounted() {
@@ -341,5 +333,11 @@ export default {
 /* Revision */
 #r-col1 {
   width: 340px;
+}
+
+@media only screen and (min-width: 600px) {
+  .justify-date {
+    width: 190px;
+  }
 }
 </style>

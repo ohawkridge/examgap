@@ -46,12 +46,10 @@
         <div style="width: 40%">
           <div class="d-flex align-center mb-2">
             <span class="fix-width font-weight-medium">Start:</span>
-            <v-icon small class="mr-1">{{ $icons.mdiCalendarStart }}</v-icon>
             {{ assignment.start | date }}
           </div>
           <div class="d-flex align-center mb-2">
             <span class="fix-width font-weight-medium">Due:</span>
-            <v-icon small class="mr-1">{{ $icons.mdiCalendarEnd }}</v-icon>
             {{ assignment.dateDue | date }}
           </div>
           <div class="d-flex align-center">
@@ -77,12 +75,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import {
-  mdiArrowLeft,
-  mdiMedalOutline,
-  mdiCalendarStart,
-  mdiCalendarEnd,
-} from '@mdi/js'
+import { mdiArrowLeft } from '@mdi/js'
 import AssignmentQuestion from '@/components/student/AssignmentQuestion'
 
 export default {
@@ -123,7 +116,7 @@ export default {
       // If max is 0, student probably hasn't answered any questions
       // Use questions to find max instead and avoid DIV0 in ave.
       if (max === 0) {
-        ave = '--'
+        ave = '-'
         const x = this.assignment.questions.map((q) => parseInt(q.maxMark))
         max = x.reduce((a, b) => a + b, 0)
       } else {
@@ -139,9 +132,6 @@ export default {
   created() {
     this.$icons = {
       mdiArrowLeft,
-      mdiMedalOutline,
-      mdiCalendarStart,
-      mdiCalendarEnd,
     }
   },
 }

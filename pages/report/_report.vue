@@ -56,14 +56,12 @@
           </div>
         </div>
         <div class="mt-4 ml-11">
-          <div class="d-flex align-center mb-2">
+          <div class="d-flex mb-2">
             <span class="font-weight-medium fix-date-always">Start:</span>
-            <v-icon small class="mr-1">{{ $icons.mdiCalendarStart }}</v-icon>
             {{ assignment.start | date }}
           </div>
-          <div class="d-flex align-center">
+          <div class="d-flex">
             <span class="font-weight-medium fix-date-always">Due:</span>
-            <v-icon small class="mr-1">{{ $icons.mdiCalendarEnd }}</v-icon>
             {{ assignment.dateDue | date }}
           </div>
         </div>
@@ -387,8 +385,6 @@ import {
   mdiCloudCheckOutline,
   mdiCloudSyncOutline,
   mdiRefresh,
-  mdiCalendarStart,
-  mdiCalendarEnd,
   mdiDotsVertical,
 } from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
@@ -514,8 +510,6 @@ export default {
       mdiCloudCheckOutline,
       mdiCloudSyncOutline,
       mdiRefresh,
-      mdiCalendarStart,
-      mdiCalendarEnd,
       mdiDotsVertical,
     }
   },
