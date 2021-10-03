@@ -29,7 +29,13 @@ export default {
       { rel: 'icon', href: '/apple-touch-icon.png' },
       { rel: 'manifest', href: '/site.webmanifest' },
     ],
-    script: [{ src: 'https://cdn.headwayapp.co/widget.js' }],
+    script: [
+      { src: 'https://cdn.headwayapp.co/widget.js' },
+      {
+        src: 'https://kit.fontawesome.com/21b98c68ec.js',
+        crossorigin: 'anonymous',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -67,17 +73,15 @@ export default {
     defaultAssets: {
       icons: false,
     },
-    icons: {
-      iconfont: 'mdiSvg',
-    },
     theme: {
       dark: false,
       themes: {
         light: {
-          primary: '#0099cc',
-          accent: '#f9b9b7', // Pink
-          secondary: '#f4d06f', // Yellow
-          // green: '#c9edc2', // Fix all chips?
+          primary: '#0099cc', // Washed azure
+          accent: '#ef7a85', // Pink
+          pink: '#f9b9b7', // Light pink
+          yell: '#f4d06f', // Yellow
+          heading: '#001f2a', // Text headings
         },
       },
     },

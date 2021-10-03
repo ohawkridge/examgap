@@ -8,33 +8,22 @@
           </p>
         </v-col>
         <v-col cols="12" md="7">
-          <p class="summary text-center mb-8">
+          <p class="sub-hero text-center mb-8">
             Most learning tools focus on multiple-choice and gap fills. Examgap
             is a powerful yet simple system for practising
             <span class="highlight">written answer</span> exam questions.
           </p>
           <div class="d-flex justify-center">
-            <v-btn
-              x-large
-              color="#F4D06F"
-              rounded
-              elevation="0"
-              nuxt
-              to="/trial"
-            >
-              <span class="h-color">Get a 30-day free trial</span>
+            <v-btn x-large color="yell" rounded elevation="0" nuxt to="/trial">
+              <span class="heading--text">Get a 30-day free trial</span>
             </v-btn>
           </div>
           <div class="d-flex justify-center mt-4">
             <small>
-              <v-icon small color="primary">{{
-                $icons.mdiCheckboxMarkedCircleOutline
-              }}</v-icon>
+              <i class="fa-regular fa-check ico-pink"></i>
               No payment info
-              <v-icon small color="primary" class="ml-2">{{
-                $icons.mdiCheckboxMarkedCircleOutline
-              }}</v-icon>
-              Set up in minutes
+              <i class="fa-regular fa-check ico-pink ml-2"></i>
+              Improve your results
             </small>
           </div>
         </v-col>
@@ -76,7 +65,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/mark.png" alt="Marking"></v-img>
+          <v-img src="/mark.png" alt="Marking" eager></v-img>
         </v-col>
       </v-row>
       <v-row
@@ -93,7 +82,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/grades.png" alt="Grades"></v-img>
+          <v-img src="/grades.png" alt="Grades" eager></v-img>
         </v-col>
       </v-row>
       <v-row class="d-flex align-center justify-center pad-vert">
@@ -109,7 +98,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/diff.png" alt="Differentiation"></v-img>
+          <v-img src="/diff.png" alt="Differentiation" eager></v-img>
         </v-col>
       </v-row>
       <v-row
@@ -126,7 +115,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/revision.png" alt="Independent revision"></v-img>
+          <v-img src="/revision.png" alt="Independent revision eager"></v-img>
         </v-col>
       </v-row>
     </v-container>
@@ -135,6 +124,11 @@
       <v-row class="d-flex justify-center">
         <v-col cols="12" md="9">
           <p class="text-h5 font-weight-bold text-md-h4 text-center">
+            <i
+              class="fa-regular fa-bullhorn mr-2 fa-rotate-by"
+              style="--fa-rotate-angle: -20deg"
+              >></i
+            >
             What teachers say&hellip;
           </p>
         </v-col>
@@ -182,17 +176,10 @@
           </div>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="justify-center">
         <v-col
-          cols="12"
-          class="
-            testamonial
-            long-test
-            d-flex
-            align-center
-            justify-center
-            pa-md-10
-          "
+          cols="8"
+          class="testamonial d-flex align-center justify-center pa-md-10"
         >
           <div>
             <p class="text-h6 text-center">
@@ -260,61 +247,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-container>
-      <v-row>
-        <v-col cols="12">
-          <p class="sub-hero-text text-center">
-            Make a <span class="highlight">positive impact</span> on assessment
-          </p>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container id="research">
-      <v-row class="d-flex justify-center mb-10">
-        <v-col cols="12" md="4">
-          <v-alert text :icon="$icons.mdiFormatQuoteOpenOutline" class="mb-4">
-            Use of low stakes testing can contribute to learning in valuable
-            ways.<sup>*</sup>
-          </v-alert>
-          <v-alert text :icon="$icons.mdiFormatQuoteOpenOutline" class="mb-4">
-            Use of low stakes testing can contribute to learning in valuable
-            ways.<sup>*</sup>
-          </v-alert>
-          <v-alert text :icon="$icons.mdiFormatQuoteOpenOutline">
-            Learners who take a test shortly after studying &hellip; do better
-            on a final test than those who do not.<sup>*</sup>
-          </v-alert>
-        </v-col>
-        <v-col cols="12" md="5" offset-md="1">
-          <svg
-            height="42"
-            width="42"
-            viewBox="0 0 24 24"
-            role="img"
-            fill="#000"
-          >
-            <path :d="$icons.mdiFlaskOutline"></path>
-          </svg>
-          <p class="text-h6">Backed by research</p>
-          <p class="text-body-1">
-            Examgap facilitates frequent low stakes testing. It lets students
-            gain confidence as they learn. It makes it easy to set exam
-            questions for your students—giving them more opportunities for
-            retrieval practise. And its detailed grade book helps inform your
-            planning to target intervention effectively.
-          </p>
-        </v-col>
-      </v-row>
-      <v-row class="d-flex justify-center">
-        <v-col cols="12" md="10">
-          <v-divider />
-          <p class="text-caption">
-            <sup>*</sup>Ofsted 2019, Education inspection framework: Overview of
-            research
-          </p>
-        </v-col>
-      </v-row>
-    </v-container>
     <v-container id="boards">
       <v-row>
         <v-col cols="12">
@@ -339,10 +271,7 @@
                     <span class="text-caption">(0984)</span>
                   </td>
                   <td class="text-center">
-                    <!-- <v-icon color="green">
-                      {{ $icons.mdiCheckBold }}
-                    </v-icon> -->
-                    <v-chip class="ml-2" outlined small label>Soon</v-chip>
+                    <v-chip outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -351,10 +280,7 @@
                     <span class="text-caption">(4CP0)</span>
                   </td>
                   <td class="text-center">
-                    <!-- <v-icon color="green">
-                      {{ $icons.mdiCheckBold }}
-                    </v-icon> -->
-                    <v-chip class="ml-2" outlined small label>Soon</v-chip>
+                    <v-chip outlined small label>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -376,9 +302,7 @@
                     <span class="text-caption">(8520)</span>
                   </td>
                   <td class="text-center">
-                    <v-icon color="#4caf50">
-                      {{ $icons.mdiCheck }}
-                    </v-icon>
+                    <i class="fa-regular fa-check ico-green fa-xl"></i>
                   </td>
                 </tr>
                 <tr>
@@ -386,13 +310,11 @@
                     <span class="font-weight-bold">AQA</span>
                     <span class="text-caption">(8525)</span>
                     <v-chip color="primary" class="ml-2" outlined small label
-                      >New</v-chip
+                      >NEW</v-chip
                     >
                   </td>
                   <td class="text-center">
-                    <v-icon color="#4caf50">
-                      {{ $icons.mdiCheck }}
-                    </v-icon>
+                    <i class="fa-regular fa-check ico-green fa-xl"></i>
                   </td>
                 </tr>
                 <tr>
@@ -401,9 +323,7 @@
                     <span class="text-caption">(J276)</span>
                   </td>
                   <td class="text-center">
-                    <v-icon color="#4caf50">
-                      {{ $icons.mdiCheck }}
-                    </v-icon>
+                    <i class="fa-regular fa-check ico-green fa-xl"></i>
                   </td>
                 </tr>
                 <tr>
@@ -411,43 +331,29 @@
                     <span class="font-weight-bold">OCR</span>
                     <span class="text-caption">(J277)</span>
                     <v-chip color="primary" class="ml-2" outlined small label
-                      >New</v-chip
+                      >NEW</v-chip
                     >
                   </td>
                   <td class="text-center">
-                    <v-icon color="#4caf50">
-                      {{ $icons.mdiCheck }}
-                    </v-icon>
+                    <i class="fa-regular fa-check ico-green fa-xl"></i>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <span class="font-weight-bold">Pearson Edexcel</span>
                     <span class="text-caption">(1CP2)</span>
-                    <!-- <v-chip label color="accent" class="ml-2" outlined small
-                      >NEW</v-chip
-                    > -->
                   </td>
                   <td class="text-center">
-                    <!-- <v-icon color="green">
-                      {{ $icons.mdiCheckBold }}
-                    </v-icon> -->
-                    <v-chip class="ml-2" outlined small label>Soon</v-chip>
+                    <v-chip outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <span class="font-weight-bold">WJEC Eduqas</span>
                     <span class="text-caption">(C500QS)</span>
-                    <!-- <v-chip label color="accent" class="ml-2" outlined small
-                      >NEW</v-chip
-                    > -->
                   </td>
                   <td class="text-center">
-                    <!-- <v-icon color="green">
-                      {{ $icons.mdiCheckBold }}
-                    </v-icon> -->
-                    <v-chip class="ml-2" outlined small label>Soon</v-chip>
+                    <v-chip outlined small label>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -469,7 +375,7 @@
                     <span class="text-caption">(7517)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip class="ml-2" outlined small label>Soon</v-chip>
+                    <v-chip outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -478,7 +384,7 @@
                     <span class="text-caption">(H446)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip class="ml-2" outlined small label>Soon</v-chip>
+                    <v-chip outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -487,7 +393,7 @@
                     <span class="text-caption">(A500QS)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip class="ml-2" outlined small label>Soon</v-chip>
+                    <v-chip outlined small label>SOON</v-chip>
                   </td>
                 </tr>
                 <tr>
@@ -496,7 +402,7 @@
                     <span class="text-caption">(9618)</span>
                   </td>
                   <td class="text-center">
-                    <v-chip class="ml-2" outlined small label>Soon</v-chip>
+                    <v-chip outlined small label>SOON</v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -505,130 +411,168 @@
         </v-col>
       </v-row>
     </v-container>
-    <!-- What else you got? -->
+    <v-container id="try" fluid>
+      <v-row class="d-flex justify-center text-center">
+        <v-col class="12" md="8">
+          <p
+            class="
+              text-h5 text-md-h4
+              font-weight-bold
+              white--text
+              text-center
+              mb-8
+            "
+          >
+            Try Examgap free in your department
+          </p>
+          <v-btn x-large color="yell" rounded elevation="0" nuxt to="/trial">
+            <span class="heading--text">Get a 30-day free trial</span>
+          </v-btn>
+          <div class="mt-4 white--text d-flex justify-center">
+            <small>
+              <i class="fa-regular fa-check ico-pink"></i>
+              No payment info
+              <i class="fa-regular fa-check ico-pink ml-2"></i>
+              Set up in minutes
+            </small>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- Research -->
+    <v-container id="research">
+      <v-row class="d-flex justify-center border-left">
+        <v-col cols="12" md="9">
+          <p class="text-h5 font-weight-bold text-md-h4 mb-0 text-center">
+            <i
+              class="fa-regular fa-microscope fa-rotate-by mr-2"
+              style="--fa-rotate-angle: 20deg"
+            ></i>
+            Backed by research
+          </p>
+        </v-col>
+      </v-row>
+      <v-row class="border-bottom justify-center">
+        <v-col
+          cols="8"
+          class="d-flex align-center justify-center quote pa-md-10 border-left"
+        >
+          <div>
+            <p class="text-h6 text-center">
+              "Teachers can use assessment to help them plan lessons, adapt
+              lessons to measured gaps in knowledge and skills, and if necessary
+              re-teach."<sup>*</sup>
+            </p>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex align-center pa-md-10 quote border-bottom"
+        >
+          <div>
+            <p class="text-h6 text-center">
+              "Use of low stakes testing can contribute to learning in valuable
+              ways."<sup>*</sup>
+            </p>
+          </div>
+        </v-col>
+        <v-col
+          cols="12"
+          md="6"
+          class="
+            d-flex
+            align-center
+            pa-md-10
+            testamonial
+            border-left border-bottom
+            quote
+          "
+        >
+          <div>
+            <p class="text-h6 text-center">
+              "Learners who take a test shortly after studying &hellip; do
+              better on a final test than those who do not."<sup>*</sup>
+            </p>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row class="d-flex justify-center">
+        <v-col cols="12" md="10">
+          <p class="text-caption text-center">
+            <sup>*</sup>Ofsted 2019, Education inspection framework: Overview of
+            research
+          </p>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- Feature for teachers -->
     <div id="what">
       <v-container>
         <v-row>
           <v-col cols="12" class="d-flex align-center justify-center">
-            <p id="what-text" class="text-h4 text-md-h2">
-              <span class="illum">F</span>eatures for teachers
+            <p class="text-h5 text-md-h4 text-xl">
+              <span class="illum2">F</span>eatures for teachers
             </p>
           </v-col>
         </v-row>
-        <v-row class="white--text">
-          <v-col cols="12" sm="6" md="4" class="d-flex">
-            <div class="mr-3">
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#fff"
-              >
-                <path :d="$icons.mdiTextToSpeech"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="font-weight-bold">Audio Descriptions</p>
-              <p class="font-weight-light">Every question can be read aloud.</p>
-            </div>
-          </v-col>
-          <v-col cols="12" sm="6" md="4" class="d-flex">
-            <div class="mr-3">
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#fff"
-              >
-                <path :d="$icons.mdiSortBoolDescendingVariant"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="font-weight-bold">Smart Sort</p>
-              <p class="font-weight-light">
-                Sort mark schemes by student's self marks to speed up marking.
-              </p>
-            </div>
-          </v-col>
-          <v-col cols="12" sm="6" md="4" class="d-flex">
-            <div class="mr-3">
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#fff"
-              >
-                <path :d="$icons.mdiCommentTextMultipleOutline"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="font-weight-bold">Comment Bank</p>
-              <p class="font-weight-light">
-                Built automatically for each question. Reuse comments with one
-                click.
-              </p>
-            </div></v-col
+        <v-row class="heading--text">
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            class="d-flex justify-center flex-column align-center"
           >
-          <v-col cols="12" sm="6" md="4" class="d-flex">
-            <div class="mr-3">
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#fff"
-              >
-                <path :d="$icons.mdiTargetAccount"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="font-weight-bold">Target Setting</p>
-              <p class="font-weight-light">
-                See whether or not your students are on target.
-              </p>
-            </div></v-col
-          >
-          <v-col cols="12" sm="6" md="4" class="d-flex">
-            <div class="mr-3">
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#fff"
-              >
-                <path :d="$icons.mdiDownloadOutline"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="font-weight-bold">Export Data</p>
-              <p class="font-weight-light">
-                Export all your student data in CSV format.
-              </p>
-            </div>
+            <i class="fa-regular fa-ear-listen fa-3x mb-4"></i>
+            <p class="font-weight-bold text-center">Audio descriptions</p>
           </v-col>
-          <v-col cols="12" sm="6" md="4" class="d-flex">
-            <div class="mr-3">
-              <svg
-                height="42"
-                width="42"
-                viewBox="0 0 24 24"
-                role="img"
-                fill="#fff"
-              >
-                <path :d="$icons.mdiRepeat"></path>
-              </svg>
-            </div>
-            <div>
-              <p class="font-weight-bold">Reassign Questions</p>
-              <p class="font-weight-light">
-                Reassign questions to students who have underperformed.
-              </p>
-            </div></v-col
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            class="d-flex justify-center flex-column align-center"
           >
+            <i class="fa-regular fa-arrow-up-big-small fa-3x mb-4"></i>
+            <p class="font-weight-bold">Smart sort</p>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            class="d-flex justify-center flex-column align-center"
+          >
+            <i class="fa-regular fa-comment-lines fa-3x mb-4"></i>
+            <p class="font-weight-bold">Comment bank</p>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            class="d-flex justify-center flex-column align-center"
+          >
+            <i class="fa-regular fa-bullseye-arrow fa-3x mb-4"></i>
+            <p class="font-weight-bold">Target setting</p>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            class="d-flex justify-center flex-column align-center"
+          >
+            <i class="fa-regular fa-down-to-line fa-3x mb-4"></i>
+            <p class="font-weight-bold">Export data</p>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            class="d-flex justify-center flex-column align-center"
+          >
+            <i class="fa-regular fa-repeat fa-3x mb-4"></i>
+            <p class="font-weight-bold">Reassign questions</p>
+          </v-col>
         </v-row>
       </v-container>
     </div>
@@ -636,53 +580,60 @@
     <v-container id="written">
       <v-row>
         <v-col>
-          <p class="sub-hero-text text-center">
-            Why focus on <span class="highlight">written answer</span>
-            questions?
+          <p class="text-h5 text-md-h4 text-center text-xl">
+            Why focus on
+            <span class="highlight">written answer</span> questions?
           </p>
         </v-col>
       </v-row>
       <v-row class="d-flex justify-center flex-md-row-reverse">
         <v-col cols="12" md="3">
-          <v-img id="owen" src="/owen.jpg" alt="Portrait of Owen"></v-img>
+          <v-img id="owen" src="/owen.jpg" alt="Portrait of Owen" eager></v-img>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="5" class="text-body-1">
           <p>
-            Hi—I’m Owen. I've been a teacher for over fourteen years. I built
+            Hi—I’m Owen. I've been a teacher for over fourteen years. I created
             Examgap to use in my department.
           </p>
           <p>
             We all know students need to practise exam-style questions. Yet most
             websites focus on multiple choice and gap fills. But GCSE papers
-            aren’t multiple choice.
-            <span class="font-weight-bold"
-              >A typical Computer Science paper is only around 13% closed
-              questions</span
-            >. Therefore, it’s essential students practise written answer
-            questions in order to do well.
-          </p>
-          <p>
-            Frequent testing using existing question banks is a hassle. In my
-            department, this meant finding and photocopying questions, marking
-            them by hand and then painstakingly copying the results into a
-            spreadsheet. Examgap streamlines this process with tick-box marking,
-            an automated comment bank, and detailed grade book.
-          </p>
-          <p>
-            If you’re a Computing teacher, please give Examgap a try. You can
-            <nuxt-link to="/trial" class="text-decoration-none"
-              ><span class="font-weight-bold">try it for free</span></nuxt-link
+            aren’t multiple choice†. Therefore,
+            <span class="font-weight-medium"
+              >it’s essential students practise written answer questions in
+              order to do well.</span
             >
-            with no payment information.
           </p>
           <p>
-            If you have any questions or feedback, let me know—<a
+            Frequent testing with existing question banks is a hassle. You have
+            to print and photocopy the questions, mark them by hand and
+            painstakingly transcribe the results into a spreadsheet. Examgap
+            streamlines this process with:
+          </p>
+          <ul class="mb-4">
+            <li>Tick-box marking</li>
+            <li>Automated comment bank</li>
+            <li>Detailed grade book</li>
+          </ul>
+          <p>
+            If you’re a Computing teacher,
+            <nuxt-link to="/trial" class="text-decoration-none"
+              >try it for free</nuxt-link
+            >. No payment information needed.
+          </p>
+          <p>
+            If you have any questions, get in touch—<a
               href="mailto:owen@examgap.com"
               class="text-decoration-none"
               >owen@examgap.com</a
             >.
           </p>
           <p>&mdash;Cheers, Owen</p>
+          <v-divider />
+          <p class="text-caption">
+            † A typical Computer Science paper is only about 13% closed
+            questions.
+          </p>
         </v-col>
       </v-row>
     </v-container>
@@ -701,50 +652,19 @@
 </template>
 
 <script>
-import {
-  mdiCheck,
-  mdiCheckBold,
-  mdiCheckboxMarkedCircleOutline,
-  mdiFlaskOutline,
-  mdiTextToSpeech,
-  mdiSortBoolDescendingVariant,
-  mdiCommentTextMultipleOutline,
-  mdiTargetAccount,
-  mdiDownloadOutline,
-  mdiRepeat,
-  mdiFormatQuoteOpenOutline,
-  mdiFinance,
-} from '@mdi/js'
-
-export default {
-  layout: 'static',
-  created() {
-    this.$icons = {
-      mdiCheck,
-      mdiFlaskOutline,
-      mdiCheckBold,
-      mdiTextToSpeech,
-      mdiSortBoolDescendingVariant,
-      mdiCommentTextMultipleOutline,
-      mdiTargetAccount,
-      mdiDownloadOutline,
-      mdiRepeat,
-      mdiCheckboxMarkedCircleOutline,
-      mdiFormatQuoteOpenOutline,
-      mdiFinance,
-    }
-  },
-}
+export default { layout: 'static' }
 </script>
 
 <style scoped>
-/* --------- Hero --------- */
+/* ######### Hero ######### */
+
 #hero-text {
+  color: #002e3e;
   line-height: 1.25em;
   padding-top: 0.6em;
 }
 
-/* more padding on desktop */
+/* increase padding on desktop */
 @media only screen and (min-width: 960px) {
   #hero-text {
     padding-top: 1em;
@@ -752,65 +672,56 @@ export default {
   }
 }
 
-.highlight {
-  position: relative;
-  white-space: nowrap;
-}
-.highlight:before {
-  content: '';
-  /* background-color: #db5461; */
-  background-color: #0099cc;
-  opacity: 0.3;
-  width: 108%;
-  height: 1.125em;
-  position: absolute;
-  filter: url(#marker-shape);
-  left: -0.25em;
-  top: 0.1em;
-  padding: 0 0.25em;
-  transform: rotate(-1deg);
-}
-
-/* Desktop */
-.summary {
+.sub-hero {
   font-size: 1.4em !important;
   letter-spacing: 0.0125em;
 }
-/* Mobile */
+
+/* reduce font size on mobile */
 @media only screen and (max-width: 600px) {
-  .summary {
+  .sub-hero {
     font-size: 1.125em !important;
-    letter-spacing: 0.0125em;
   }
 }
 
-/* ------- Why use? ------- */
+/* ####### Why use? ####### */
+
 #why {
   margin-top: 3em;
   margin-bottom: 3em;
 }
 
+/* add space between screenshots */
+.pad-vert {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+@media only screen and (min-width: 960px) {
+  .pad-vert {
+    padding-top: 3em;
+    padding-bottom: 3em;
+  }
+}
+
+/* more whitespace on desktop */
 @media only screen and (min-width: 600px) {
   .pad-l {
     padding-left: 7em;
   }
-}
-
-@media only screen and (min-width: 600px) {
   .pad-r {
     padding-right: 7em;
   }
 }
 
-/* ----- Testamonials ----- */
+/* ##### Testamonials ##### */
+
 .testamonial {
   height: 300px;
 }
-@media only screen and (max-width: 600px) {
-  .long-test {
-    height: 400px;
-    padding-bottom: 5em;
-  }
+
+.quote {
+  height: 200px;
 }
 
 /* add borders on desktop */
@@ -823,9 +734,14 @@ export default {
   .border-left {
     border-left: 1px solid rgb(224, 224, 224) !important;
   }
+
+  .border-bottom {
+    border-bottom: 1px solid rgb(224, 224, 224) !important;
+  }
 }
 
-/* --------- How ---------- */
+/* ####### How works ###### */
+
 #how {
   background-color: #0099cc !important;
   padding-top: 4em;
@@ -844,23 +760,12 @@ export default {
   top: -5em;
 }
 
-/* ------- Research ------- */
-#research {
-  padding-top: 4em;
-  padding-bottom: 4em;
-}
-@media only screen and (max-width: 600px) {
-  #research {
-    padding-top: 2em;
-    padding-bottom: 2em;
-  }
-}
-
-/* -------- Boards -------- */
+/* ######## Boards ######## */
 #boards {
   padding-top: 3em;
-  padding-bottom: 8em;
+  padding-bottom: 3em;
 }
+
 /* reduce spacing on mobile */
 @media only screen and (max-width: 600px) {
   #boards {
@@ -869,63 +774,94 @@ export default {
   }
 }
 
-/* ------ What else? ------ */
-#what {
-  background-color: #0099cc !important;
+/* ######### Try ########## */
+
+#try {
+  background-color: #0099cc;
+  margin-top: 4em;
+  margin-bottom: 4em;
   padding-top: 4em;
+  padding-bottom: 4em;
+}
+
+/* ####### Research ####### */
+
+#research {
+  padding-top: 3em;
   padding-bottom: 6em;
 }
 
-#what-text {
-  color: #f1f3f8;
-  line-height: 1.375em;
-  font-weight: 800;
-  margin-bottom: 1em;
+/* #### Feat. for teach ### */
+
+#what {
+  background-color: #f9b9b7;
+  padding-top: 3em;
+  padding-bottom: 4em;
 }
 
-/* --------- Misc --------- */
-
-/* large headings */
-.sub-hero-text {
+/* ######### Misc ######### */
+.text-xl {
+  color: #001f2a;
   line-height: 1.375em;
-  font-size: 2.125em;
-  font-weight: 800;
+  font-weight: bold;
+}
+
+.highlight {
+  position: relative;
+  white-space: nowrap;
+}
+.highlight:before {
+  content: '';
+  width: 108%;
+  background-color: #0099cc;
+  opacity: 0.3;
+  height: 1.125em;
+  position: absolute;
+  filter: url(#marker-shape);
+  left: -0.25em;
+  top: 0.1em;
+  padding: 0 0.25em;
+  transform: rotate(-1deg);
+}
+
+.highlighty {
+  position: relative;
+  white-space: nowrap;
+}
+.highlighty:before {
+  content: '';
+  width: 108%;
+  background-color: #f4d06f;
+  opacity: 0.3;
+  height: 1.125em;
+  position: absolute;
+  filter: url(#marker-shape);
+  left: -0.25em;
+  top: 0.1em;
+  padding: 0 0.25em;
+  transform: rotate(-1deg);
 }
 
 .illum {
   border-bottom: 6px solid #f9b9b7;
 }
 
-/* add vertical space between screenshots */
-.pad-vert {
-  padding-top: 1em;
-  padding-bottom: 1em;
-}
-@media only screen and (min-width: 960px) {
-  .pad-vert {
-    padding-top: 3em;
-    padding-bottom: 3em;
-  }
+.illum2 {
+  border-bottom: 6px solid #0099cc;
 }
 
-/* icon circles */
-.ico-bg {
-  display: inline-flex;
-  padding: 5px;
-  border-radius: 50%;
-  background-color: #0099cc;
-}
-
-#owen {
-  border-radius: 50%;
-}
+/* ######### Owen ######### */
 
 #written {
   padding-top: 6em;
   padding-bottom: 3em;
 }
 
-/* ----- Featured in  ----- */
+#owen {
+  border-radius: 50%;
+}
+
+/* ###### Riomhheolas ##### */
 #featured {
   padding-top: 3em;
   padding-bottom: 3em;

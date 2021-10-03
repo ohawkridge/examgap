@@ -56,7 +56,8 @@
               :loading="loading"
               :disabled="loading"
               type="submit"
-              >Sign In</v-btn
+            >
+              <span class="heading--text">Sign In</span></v-btn
             >
             <div class="mt-3 d-flex justify-space-between">
               <nuxt-link to="/reset" class="text-decoration-none"

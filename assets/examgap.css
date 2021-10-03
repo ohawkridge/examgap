@@ -132,3 +132,16 @@ span.v-chip.theme--light.green {
   border-top-right-radius: 4px;
   background-color: #b7d1da;
 }
+
+/* --------- Icon colours --------- */
+.ico-blue {
+  color: #0099cc;
+}
+
+.ico-pink {
+  color: #ef7a85;
+}
+
+.ico-green {
+  color: #4caf50;
+}

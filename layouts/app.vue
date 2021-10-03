@@ -9,8 +9,8 @@
       </div>
       <div v-if="teacher" class="pa-2 d-flex justify-center">
         <v-btn nuxt to="/author" elevation="0" color="primary" rounded>
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
-          Question
+          <v-icon left color="heading">{{ $icons.mdiPlus }}</v-icon>
+          <span class="heading--text">Question</span>
         </v-btn>
       </div>
       <v-list dense nav>

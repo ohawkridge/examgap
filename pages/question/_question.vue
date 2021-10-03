@@ -1,9 +1,6 @@
 <template>
   <div>
-    <v-row
-      class="pt-3 justify-center"
-      style="border-bottom: 1px solid #d2d2d2 !important"
-    >
+    <v-row class="pt-3 justify-center">
       <v-col
         cols="12"
         md="10"
