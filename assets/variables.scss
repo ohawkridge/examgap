@@ -12,3 +12,8 @@
 .text-h6 {
   color: #001f2a;
 }
+
+// Don't underline links
+a:link {
+  text-decoration: none;
+}

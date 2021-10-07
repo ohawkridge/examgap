@@ -39,7 +39,7 @@
                   Diagnose weaknesses
                 </p>
                 <p class="text-caption mb-0">
-                  <nuxt-link nuxt to="/#boards" class="text-decoration-none"
+                  <nuxt-link nuxt to="/#boards"
                     >Which boards do you support?</nuxt-link
                   >
                 </p>
@@ -71,23 +71,23 @@
                   £79 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
+                  <i class="fa-regular fa-circle-check mr-2 ico-grey"></i>
                   Improve your results
                 </p>
                 <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
+                  <i class="fa-regular fa-circle-check mr-2 ico-grey"></i>
                   Differentiate quickly
                 </p>
                 <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
+                  <i class="fa-regular fa-circle-check mr-2 ico-grey"></i>
                   Support independent study
                 </p>
                 <p class="mb-4">
-                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
+                  <i class="fa-regular fa-circle-check mr-2 ico-grey"></i>
                   Create your own questions
                 </p>
                 <p class="text-caption mb-0">
-                  <nuxt-link nuxt to="/#boards" class="text-decoration-none"
+                  <nuxt-link nuxt to="/#boards" class="grey--text"
                     >Which boards do you support?</nuxt-link
                   >
                 </p>
@@ -259,9 +259,7 @@
           <p class="text-h6 text-center">What about multi-academy trusts?</p>
           <p>
             Please contact
-            <a class="text-decoration-none" href="mailto:support@examgap.com"
-              >support@examgap.com</a
-            >
+            <a href="mailto:support@examgap.com">support@examgap.com</a>
             for a custom quote covering multiple schools. All quotes are
             provided free with no obligation.
           </p>
@@ -293,9 +291,7 @@
           <p class="text-h6 text-center">Can I get a longer trial?</p>
           <p>
             Yes, no problem. Just email
-            <a class="text-decoration-none" href="mailto:support@examgap.com"
-              >support@examgap.com</a
-            >
+            <a href="mailto:support@examgap.com">support@examgap.com</a>
             or use the contact form at the bottom of the page and let us know
             you'd like more time.
           </p>
@@ -304,9 +300,7 @@
           <p class="text-h6 text-center">What if I have more questions?</p>
           <p>
             You can email
-            <a class="text-decoration-none" href="mailto:support@examgap.com"
-              >support@examgap.com</a
-            >
+            <a href="mailto:support@examgap.com">support@examgap.com</a>
             with questions or to arrange a phone call or demonstration.
           </p>
         </v-col>
@@ -327,6 +321,9 @@ export default {
 </script>
 
 <style scoped>
+#choose p {
+  color: #002e3e;
+}
 @media only screen and (min-width: 600px) {
   #choose {
     margin-bottom: 2em;

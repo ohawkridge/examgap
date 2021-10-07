@@ -15,7 +15,7 @@
             all visitors, users and others who access or use the Service.
             <strong>The Service is provided on an as-is basis.</strong>
           </p>
-          <p>
+          <p class="mb-8">
             By accessing or using the Service you agree to be bound by these
             Terms. If you disagree with any part of the terms then you may not
             access the Service. Terms of service for Examgap based on the T&C
@@ -29,7 +29,7 @@
             the Terms, which may result in immediate termination of your account
             on our Service.
           </p>
-          <p>
+          <p class="mb-8">
             You are responsible for safeguarding the password that you use to
             access the Service and for any activities or actions under your
             password. You agree not to disclose your password to any third
@@ -51,7 +51,7 @@
             limitation, ownership provisions, warranty disclaimers, indemnity
             and limitations of liability.
           </p>
-          <p>
+          <p class="mb-8">
             Upon termination, your right to use the Service will immediately
             cease. If you wish to terminate your account, you may simply
             discontinue using the Service. In compliance with the General Data
@@ -64,7 +64,7 @@
             laws of United Kingdom, without regard to its conflict of law
             provisions.
           </p>
-          <p>
+          <p class="mb-8">
             Our failure to enforce any right or provision of these Terms will
             not be considered a waiver of those rights. If any provision of
             these Terms is held to be invalid or unenforceable by a court, the
@@ -74,7 +74,7 @@
             have between us regarding the Service.
           </p>
           <p class="text-h6">Changes</p>
-          <p>
+          <p class="mb-8">
             Examgap reserves the right, at its sole discretion, to modify or
             replace these Terms at any time. If a revision is material we will
             try to provide at least 30 days notice prior to any new terms taking
@@ -85,7 +85,7 @@
             using the Service.
           </p>
           <p class="text-h6">Third Party Services</p>
-          <p>
+          <p class="mb-8">
             Examgap will always seek to minimise or eliminate the need for third
             party services, for example, for analytics. Our service has no
             desire or need to track users. However, it may use third party
@@ -98,7 +98,7 @@
             <nuxt-link to="/privacy">privacy policy</nuxt-link>.
           </p>
           <p class="text-h6">Contact</p>
-          <p>
+          <p class="mb-8">
             If you have any questions about these Terms, please email
             <a href="mailto:support@examgap.com">support@examgap.com</a>.
           </p>

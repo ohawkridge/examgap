@@ -122,11 +122,13 @@
     <!-- Testamonials -->
     <v-container fluid>
       <v-row class="d-flex justify-center">
-        <v-col cols="12" md="9">
-          <p class="text-h5 font-weight-bold text-md-h4 text-center">
+        <v-col cols="12" md="10" lg="9">
+          <p class="text-h5 text-md-h4 font-weight-bold text-center">
             What teachers say&hellip;
           </p>
-          <v-img src="/zap2.svg" width="60%" class="centre" />
+          <div class="d-flex justify-center">
+            <img src="/zap2.svg" width="60%" alt="" />
+          </div>
         </v-col>
       </v-row>
       <v-row class="justify-center">
@@ -220,9 +222,9 @@
                   <div class="d-flex justify-center">
                     <i class="fa-light fa-circle-1 ico-blue fa-4x centre"></i>
                   </div>
-                  <p class="text-h6 text-center mt-4">Choose your questions</p>
+                  <p class="text-h6 text-center mt-4">Choose questions</p>
                   <p class="text-center">
-                    Browse questions organised by syllabus topic. All questions
+                    Choose questions organised by syllabus topic. All questions
                     are course and board specific—so you know they'll be
                     relevant.
                   </p>
@@ -231,9 +233,9 @@
                   <div class="d-flex justify-center">
                     <i class="fa-light fa-circle-2 ico-blue fa-4x centre"></i>
                   </div>
-                  <p class="text-h6 text-center mt-4">Set an assignment</p>
+                  <p class="text-h6 text-center mt-4">Set assignments</p>
                   <p class="text-center">
-                    You can set assignments for the whole class or just selected
+                    Set assignments for the whole class or just selected
                     students. Use in class or as homework/revision.
                   </p>
                 </v-col>
@@ -452,7 +454,9 @@
           <p class="text-h5 text-md-h4 font-weight-bold text-center">
             Backed by research
           </p>
-          <v-img src="/zap.svg" width="60%" class="centre" />
+          <div class="d-flex justify-center">
+            <img src="/zap.svg" width="60%" alt="" />
+          </div>
         </v-col>
       </v-row>
       <v-row>
@@ -503,9 +507,8 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
-          <v-divider />
-          <p class="text-caption">
+        <v-col cols="12">
+          <p class="text-caption text-center">
             <sup>*</sup>Ofsted 2019, Education inspection framework: Overview of
             research
           </p>
@@ -518,7 +521,7 @@
         <v-row>
           <v-col cols="12" class="d-flex align-center justify-center">
             <p class="text-h5 text-md-h4 text-xl">
-              <span class="illum2">F</span>eatures for teachers
+              <span class="illum2">T</span>houghtful features
             </p>
           </v-col>
         </v-row>
@@ -565,7 +568,7 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-down-to-line fa-3x mb-4"></i>
+            <i class="fa-regular fa-arrow-down-to-line fa-3x mb-4"></i>
             <p class="font-weight-bold">Export data</p>
           </v-col>
           <v-col
@@ -621,14 +624,12 @@
           </ul>
           <p>
             If you’re a Computing teacher,
-            <nuxt-link to="/trial" class="text-decoration-none"
-              >try it for free</nuxt-link
-            >. No payment information needed.
+            <nuxt-link to="/trial">try it for free</nuxt-link>. No payment
+            information needed.
           </p>
           <p>
             If you have any questions, get in touch—<a
               href="mailto:owen@examgap.com"
-              class="text-decoration-none"
               >owen@examgap.com</a
             >.
           </p>

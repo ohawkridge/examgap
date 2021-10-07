@@ -26,12 +26,7 @@
           If you created accounts by entering student's email addresses, the
           password is '<b>password</b>'. Otherwise, students chose their own
           passwords when they signed up. You can reset student passwords on the
-          <nuxt-link
-            nuxt
-            :to="`/group/${group.id}`"
-            class="text-decoration-none"
-            >'STUDENTS'</nuxt-link
-          >
+          <nuxt-link nuxt :to="`/group/${group.id}`">'STUDENTS'</nuxt-link>
           tab.
         </v-alert>
       </v-col>

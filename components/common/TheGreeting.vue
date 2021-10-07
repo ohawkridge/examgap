@@ -6,7 +6,7 @@
         <span v-on="on"> {{ greeting.text }}, </span>
         <nuxt-link
           to="/profile"
-          class="text-subtitle-2 font-weight-medium name text-decoration-none"
+          class="text-subtitle-2 font-weight-medium name"
           >{{ username | name }}</nuxt-link
         >
       </template>
@@ -21,7 +21,7 @@
     <template v-else>
       <nuxt-link
         to="/profile"
-        class="text-subtitle-2 font-weight-medium name text-decoration-none"
+        class="text-subtitle-2 font-weight-medium name"
         >{{ username | name }}</nuxt-link
       >
     </template>

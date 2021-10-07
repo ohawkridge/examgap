@@ -5,7 +5,7 @@
         <the-logo />
       </nuxt-link>
       <v-spacer />
-      <nuxt-link to="/signin" class="text-decoration-none">Sign In</nuxt-link>
+      <nuxt-link to="/signin">Sign In</nuxt-link>
     </v-container>
     <v-container class="fill-height">
       <v-row class="d-flex justify-center">

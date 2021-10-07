@@ -17,9 +17,7 @@
             <p>This will automatically be reported.</p>
             <p>
               If the problem persists, email
-              <a class="text-decoration-none" href="mailto:support@examgap.com"
-                >support@examgap.com</a
-              >.
+              <a href="mailto:support@examgap.com">support@examgap.com</a>.
             </p>
             <p>
               <v-btn

@@ -135,7 +135,6 @@
               <nuxt-link
                 v-if="question !== undefined"
                 :to="`/question/${question.id}`"
-                class="text-decoration-none"
               >
                 <v-tooltip bottom>
                   <template #activator="{ on }">

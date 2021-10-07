@@ -26,17 +26,13 @@
             <ul class="no-bullet">
               <li>
                 <i class="fa-regular fa-paper-plane ico ico-grey mr-1"></i>
-                <a
-                  href="mailto:support@examgap.com"
-                  class="text-decoration-none grey--text"
+                <a href="mailto:support@examgap.com" class="grey--text"
                   >support@examgap.com</a
                 >
               </li>
               <li>
                 <i class="fa-brands fa-twitter ico ico-grey mr-1"></i>
-                <a
-                  href="https://twitter.com/examgap"
-                  class="text-decoration-none grey--text"
+                <a href="https://twitter.com/examgap" class="grey--text"
                   >@examgap</a
                 >
               </li>
@@ -46,32 +42,26 @@
             <p class="text-h6 grey--text">Product</p>
             <ul class="no-bullet">
               <li>
-                <nuxt-link to="/#how" class="text-decoration-none grey--text"
-                  >How it works</nuxt-link
+                <nuxt-link to="/#how" class="grey--text"
+                  >How does it work?</nuxt-link
                 >
               </li>
               <li>
-                <nuxt-link to="/pricing" class="text-decoration-none grey--text"
-                  >Pricing</nuxt-link
-                >
+                <nuxt-link to="/pricing" class="grey--text">Pricing</nuxt-link>
               </li>
             </ul>
             <p class="text-h6 grey--text pt-4">Legal</p>
             <ul class="no-bullet">
               <li>
-                <nuxt-link to="/terms" class="text-decoration-none grey--text"
+                <nuxt-link to="/terms" class="grey--text"
                   >Terms of service</nuxt-link
                 >
               </li>
               <li>
-                <nuxt-link to="/privacy" class="text-decoration-none grey--text"
-                  >Privacy</nuxt-link
-                >
+                <nuxt-link to="/privacy" class="grey--text">Privacy</nuxt-link>
               </li>
               <li>
-                <nuxt-link to="/gdpr" class="text-decoration-none grey--text"
-                  >GDPR</nuxt-link
-                >
+                <nuxt-link to="/gdpr" class="grey--text">GDPR</nuxt-link>
               </li>
             </ul>
           </v-col>

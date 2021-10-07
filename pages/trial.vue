@@ -6,10 +6,7 @@
       </nuxt-link>
       <v-spacer />
       <span class="grey--text"
-        >Student?
-        <nuxt-link to="/signup" class="text-decoration-none"
-          >Join class</nuxt-link
-        ></span
+        >Student? <nuxt-link to="/signup">Join class</nuxt-link></span
       >
     </v-container>
     <v-main>
@@ -71,9 +68,7 @@
               <small> *Indicates required field </small>
               <p class="mt-2">
                 By registering you accept our
-                <a href="/terms" target="_blank" class="text-decoration-none"
-                  >terms of service</a
-                >
+                <a href="/terms" target="_blank">terms of service</a>
                 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i>.
               </p>
               <v-btn

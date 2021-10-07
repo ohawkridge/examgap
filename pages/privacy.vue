@@ -20,7 +20,7 @@
             share your information with anyone except as described in this
             privacy policy.
           </p>
-          <p>
+          <p class="mb-8">
             The terms used in this privacy policy have the same meanings as in
             the Terms and Conditions, which are accessible
             <nuxt-link to="/terms">here</nuxt-link> unless otherwise defined in
@@ -41,7 +41,7 @@
             Examgap may use third party analytics services for the purposes of
             improving the Service (more below).
           </p>
-          <p>
+          <p class="mb-8">
             Examgap uses Hotjar in order to better understand users’ needs and
             to optimize this service and experience. Hotjar is a technology
             service that helps us better understand our users’ experience (e.g.,
@@ -64,7 +64,7 @@
             section of Hotjar’s support site.
           </p>
           <p class="text-h6">Log Data</p>
-          <p>
+          <p class="mb-8">
             We want to inform you that whenever you use my Service, in a case of
             an error in the Service we collect data and information (possibly
             including through third party products) called Log Data. This Log
@@ -74,20 +74,21 @@
             and date of your use of the Service, and other statistics.
           </p>
           <p class="text-h6">Cookies</p>
-          <p>
+          <p class="mb-8">
             Cookies are files with small amounts of data that are commonly used
-            on modern websites. Examgap may use cookies and/or local storage.
-            Cookies are sent to your browser from a server and are stored on
-            your device's internal memory. This Service may explicitly set first
-            party cookies in order for the Service to function properly.
-            However, the Service may use third party code and libraries that use
-            cookies to collect information and to improve their services. You
-            have the option to either accept or refuse these cookies. If you
-            choose to refuse our (first party) cookies, it is unlikely this
-            Service will function correctly.
+            on modern websites. Examgap does not use cookies. However, third
+            party analytics and monitoring tools may do so. Examgap does use
+            local storage. Cookies are sent to your browser from a server and
+            are stored on your device's internal memory.
+            <span class="font-weight-bold"
+              >This Service does not explicitly set first party cookies</span
+            >
+            in order for the Service to function. However, the Service may use
+            third party code and libraries that use cookies to collect
+            information and to improve the Service.
           </p>
           <p class="text-h6">Security</p>
-          <p>
+          <p class="mb-8">
             We value your trust in providing us your personal information, thus
             we strive to use commercially acceptable means of protecting it. But
             remember that no method of transmission over the internet, or method
@@ -98,7 +99,7 @@
             are hashed, not stored, using industry-standard methods.
           </p>
           <p class="text-h6">Children’s privacy</p>
-          <p>
+          <p class="mb-8">
             This Service is aimed at secondary school teachers and their pupils.
             It does not generally address anyone under the age of 13, however
             some younger secondary pupils may fall into this category. The
@@ -111,7 +112,7 @@
             <a href="mailto:support@examgap.com">support@examgap.com</a>.
           </p>
           <p class="text-h6">Changes</p>
-          <p>
+          <p class="mb-8">
             We may update this policy from time to time. Thus, you are advised
             to review this page periodically for any changes. We will notify you
             of any changes by posting the new Privacy policy on this page.
@@ -119,20 +120,21 @@
             effective immediately after they are posted on this page.
           </p>
           <p class="text-h6">Contact</p>
-          <p>
+          <p class="mb-8">
             If you have any questions or suggestions about this policy do not
             hesitate to
             <a href="mailto:support@examgap.com">contact us</a>.
           </p>
           <p class="text-h6">Changes to this policy</p>
           <ul>
-            <li>8 Jan 2021—Added Hotjar paragraph.</li>
-            <li>25 Aug 2020—Formatting updates.</li>
-            <li>22 Dec 2019—Style updates.</li>
-            <li>3 Mar 2019—Style changes. Removed some unneeded phrases.</li>
+            <li>7 Oct. 2021—Examgap does not use first party cookies.</li>
+            <li>8 Jan. 2021—Added Hotjar paragraph.</li>
+            <li>25 Aug. 2020—Formatting updates.</li>
+            <li>22 Dec. 2019—Style updates.</li>
+            <li>3 Mar. 2019—Style changes. Removed some unneeded phrases.</li>
             <li>
-              8 Feb 2019— Removed unneeded sections (Service Providers, Links to
-              Other Sites). Editing for grammar. Additional security
+              8 Feb. 2019— Removed unneeded sections (Service Providers, Links
+              to Other Sites). Editing for grammar. Additional security
               information. GDPR information moved to
               <nuxt-link to="/gdpr">dedicated page</nuxt-link>.
             </li>

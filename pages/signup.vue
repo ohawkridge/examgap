@@ -5,7 +5,7 @@
         <the-logo />
       </nuxt-link>
       <v-spacer />
-      <nuxt-link to="/" class="text-decoration-none">Back home</nuxt-link>
+      <nuxt-link to="/">Back home</nuxt-link>
     </v-container>
     <v-container class="fill-height">
       <v-row class="d-flex justify-center">
@@ -106,9 +106,7 @@
                       class="mt-2 mb-0"
                     >
                       Email already registered.
-                      <nuxt-link to="/signin" class="text-decoration-none"
-                        >Sign in</nuxt-link
-                      >
+                      <nuxt-link to="/signin">Sign in</nuxt-link>
                       instead
                     </v-alert>
                   </v-card-text>
