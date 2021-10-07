@@ -63,7 +63,7 @@
       <v-row style="border-bottom: 1px solid #d2d2d2 !important">
         <v-col class="d-flex justify-space-between align-center">
           <v-btn rounded text nuxt :to="`/assignment/${response.assignmentId}`">
-            <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
+            <i class="fa-regular fa-arrow-left mr-2"></i>
             Back
           </v-btn>
           <div>
@@ -75,9 +75,9 @@
                   label
                   v-on="on"
                 >
-                  <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                  <i class="fa-regular fa-user-graduate mr-2"></i>
                   {{ response.tm.length }}
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                  <i class="fa-regular fa-check ml-2"></i>
                 </v-chip>
               </template>
               <span>Your teacher</span>
@@ -89,9 +89,9 @@
                   label
                   v-on="on"
                 >
-                  <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                  <i class="fa-regular fa-circle-user mr-2"></i>
                   {{ response.sm.length }}
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                  <i class="fa-regular fa-check ml-2"></i>
                 </v-chip>
               </template>
               <span>You</span>
@@ -130,7 +130,7 @@
                   <th class="text-center">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
-                        <v-icon v-on="on">{{ $icons.mdiSchoolOutline }}</v-icon>
+                        <i class="fa-regular fa-user-graduate" v-on="on"></i>
                       </template>
                       <span>Your teacher</span>
                     </v-tooltip>
@@ -138,9 +138,7 @@
                   <th class="text-center">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
-                        <v-icon v-on="on">{{
-                          $icons.mdiAccountOutline
-                        }}</v-icon>
+                        <i class="fa-regular fa-circle-user" v-on="on"></i>
                       </template>
                       <span>You</span>
                     </v-tooltip>
@@ -151,18 +149,16 @@
               <tbody>
                 <tr v-for="(mark, i) in response.question.markScheme" :key="i">
                   <td class="text-center">
-                    <v-icon
+                    <i
                       v-if="response.tm.includes(mark.id)"
-                      color="primary"
-                      >{{ $icons.mdiCheckboxMarked }}</v-icon
-                    >
+                      class="fa-regular fa-square-check ico-blue"
+                    ></i>
                   </td>
                   <td class="text-center">
-                    <v-icon
+                    <i
                       v-if="response.sm.includes(mark.id)"
-                      color="green"
-                      >{{ $icons.mdiCheckboxMarked }}</v-icon
-                    >
+                      class="fa-regular fa-square-check ico-green"
+                    ></i>
                   </td>
                   <td>{{ mark.text }}</td>
                 </tr>
@@ -185,13 +181,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import {
-  mdiSchoolOutline,
-  mdiAccountOutline,
-  mdiCheckboxMarked,
-  mdiArrowLeft,
-  mdiCheck,
-} from '@mdi/js'
 
 export default {
   layout: 'app',
@@ -205,15 +194,6 @@ export default {
     ...mapState({
       response: (state) => state.assignment.response,
     }),
-  },
-  created() {
-    this.$icons = {
-      mdiSchoolOutline,
-      mdiAccountOutline,
-      mdiCheckboxMarked,
-      mdiArrowLeft,
-      mdiCheck,
-    }
   },
   mounted() {
     this.$store.commit('app/setPageTitle', 'Review')

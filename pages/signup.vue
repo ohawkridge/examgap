@@ -31,13 +31,13 @@
                       @input="formatCode"
                     >
                     </v-text-field>
+                    <!-- ICONX -->
                     <v-alert
                       v-if="invalidCode"
                       border="left"
                       text
                       dense
                       type="error"
-                      :icon="$icons.mdiAlertOutline"
                     >
                       Invalid code. Please try again
                     </v-alert>
@@ -91,16 +91,18 @@
                     <p class="mt-2 mb-0">
                       By registering you accept our
                       <a href="/terms" target="_blank">terms of service</a>
-                      <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
+                      <i
+                        class="fa-regular fa-arrow-up-right-from-square fa-sm"
+                      ></i
                       >.
                     </p>
+                    <!-- ICONX -->
                     <v-alert
                       v-if="emailInUse"
                       border="left"
                       text
                       dense
                       type="error"
-                      :icon="$icons.mdiAlertOutline"
                       class="mt-2 mb-0"
                     >
                       Email already registered.
@@ -148,7 +150,6 @@
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
-import { mdiOpenInNew, mdiAlertOutline, mdiInformationOutline } from '@mdi/js'
 export default {
   components: {
     TheLogo,
@@ -191,13 +192,6 @@ export default {
     match() {
       return this.pass1 === this.pass2 ? [] : "Passwords don't match"
     },
-  },
-  created() {
-    this.$icons = {
-      mdiOpenInNew,
-      mdiAlertOutline,
-      mdiInformationOutline,
-    }
   },
   mounted() {
     // Get code from query string

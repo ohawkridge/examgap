@@ -12,10 +12,10 @@
         <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
           <p class="text-h5 font-weight-bold text-center">Reset Password</p>
           <!-- Prevent submit btn posting form -->
+          <!-- ICONX -->
           <v-form ref="form" @submit.prevent="reset">
             <v-text-field
               v-model="username"
-              :prepend-inner-icon="$icons.mdiAccountOutline"
               label="Email"
               color="primary"
               type="email"
@@ -26,21 +26,10 @@
               :rules="userRules"
               autofocus
             ></v-text-field>
-            <v-alert
-              border="left"
-              text
-              dense
-              :icon="$icons.mdiInformationOutline"
-            >
+            <v-alert border="left" text dense>
               Students—your teacher can reset your password.
             </v-alert>
-            <v-alert
-              v-if="failed"
-              border="left"
-              text
-              type="error"
-              :icon="$icons.mdiAlertOutline"
-            >
+            <v-alert v-if="failed" border="left" text type="error">
               Username not found. Please try again
             </v-alert>
             <v-btn
@@ -68,7 +57,6 @@
 <script>
 import TheLogo from '@/components/common/TheLogo'
 import TheSuccessDialog from '@/components/common/TheSuccessDialog'
-import { mdiAlertOutline, mdiInformationOutline } from '@mdi/js'
 
 export default {
   components: {
@@ -94,12 +82,6 @@ export default {
   head() {
     return {
       title: 'Reset your password',
-    }
-  },
-  created() {
-    this.$icons = {
-      mdiAlertOutline,
-      mdiInformationOutline,
     }
   },
   methods: {

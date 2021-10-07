@@ -60,8 +60,8 @@
               href="https://help.hotjar.com/hc/en-us/categories/115001323967-About-Hotjar"
               target="_blank"
               >about Hotjar</a
-            >’<v-icon small>{{ $icons.mdiOpenInNew }}</v-icon> section of
-            Hotjar’s support site.
+            >’<i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i>
+            section of Hotjar’s support site.
           </p>
           <p class="text-h6">Log Data</p>
           <p>
@@ -144,18 +144,11 @@
 </template>
 
 <script>
-import { mdiOpenInNew } from '@mdi/js'
-
 export default {
   layout: 'static',
   head() {
     return {
       title: 'Privacy Policy',
-    }
-  },
-  created() {
-    this.$icons = {
-      mdiOpenInNew,
     }
   },
 }

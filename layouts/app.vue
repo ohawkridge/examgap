@@ -9,7 +9,7 @@
       </div>
       <div v-if="teacher" class="pa-2 d-flex justify-center">
         <v-btn nuxt to="/author" elevation="0" color="primary" rounded>
-          <v-icon left color="heading">{{ $icons.mdiPlus }}</v-icon>
+          <i class="fa-regular fa-plus"></i>
           <span class="heading--text">Question</span>
         </v-btn>
       </div>
@@ -18,17 +18,14 @@
           <!-- No classes -->
           <v-list-item v-if="groups.length === 0" @click="navHome()">
             <v-list-item-icon>
-              <v-icon>{{ $icons.mdiGoogleClassroom }}</v-icon>
+              <i class="fa-regular fa-users"></i>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Classes </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-group
-            v-else
-            :value="true"
-            :prepend-icon="$icons.mdiGoogleClassroom"
-          >
+          <!-- ICONX -->
+          <v-list-group v-else :value="true">
             <template #activator>
               <v-list-item-title>Classes</v-list-item-title>
             </template>
@@ -47,7 +44,7 @@
           <v-divider class="my-4 mx-2" />
           <v-list-item nuxt to="/feedback">
             <v-list-item-icon>
-              <v-icon>{{ $icons.mdiCommentAlertOutline }}</v-icon>
+              <i class="fa-regular fa-comment-exclamation"></i>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Send feedback </v-list-item-title>
@@ -55,7 +52,7 @@
           </v-list-item>
           <v-list-item nuxt to="/profile">
             <v-list-item-icon>
-              <v-icon>{{ $icons.mdiAccountCircleOutline }}</v-icon>
+              <i class="fa-regular fa-circle-user"></i>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Profile </v-list-item-title>
@@ -95,7 +92,7 @@
           color="primary"
           @click="createAssignment()"
         >
-          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+          <i class="fa-regular fa-plus"></i>
         </v-btn>
         <v-btn
           v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
@@ -105,7 +102,7 @@
           rounded
           @click="createAssignment()"
         >
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          <i class="fa-regular fa-plus mr-2"></i>
           Assignment
         </v-btn>
         <!-- Create class -->
@@ -117,7 +114,7 @@
           rounded
           @click="$nuxt.$emit('show-create')"
         >
-          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+          <i class="fa-regular fa-plus"></i>
         </v-btn>
         <v-btn
           v-if="createClass && $vuetify.breakpoint.name !== 'xs'"
@@ -127,7 +124,7 @@
           rounded
           @click="$nuxt.$emit('show-create')"
         >
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          <i class="fa-regular fa-plus mr-2"></i>
           Class
         </v-btn>
         <!-- Create question -->
@@ -138,7 +135,7 @@
           nuxt
           to="/author"
         >
-          <v-icon>{{ $icons.mdiPlus }}</v-icon>
+          <i class="fa-regular fa-plus"></i>
         </v-btn>
         <v-btn
           v-if="createQ && $vuetify.breakpoint.name !== 'xs'"
@@ -148,7 +145,7 @@
           nuxt
           to="/author"
         >
-          <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+          <i class="fa-regular fa-plus"></i>
           Question
         </v-btn>
         <!-- TODO -->
@@ -169,12 +166,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import {
-  mdiPlus,
-  mdiAccountCircleOutline,
-  mdiGoogleClassroom,
-  mdiCommentAlertOutline,
-} from '@mdi/js'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
@@ -223,14 +214,6 @@ export default {
     createQ() {
       return this.$route.name === 'question-question'
     },
-  },
-  created() {
-    this.$icons = {
-      mdiPlus,
-      mdiAccountCircleOutline,
-      mdiGoogleClassroom,
-      mdiCommentAlertOutline,
-    }
   },
   methods: {
     navTo(groupId) {

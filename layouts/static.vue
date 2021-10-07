@@ -22,7 +22,7 @@
               class="d-flex d-sm-none"
               @click="menu = !menu"
             >
-              <v-icon>{{ $icons.mdiMenu }}</v-icon>
+              <i class="fa-regular fa-bars fa-lg"></i>
             </v-btn>
           </div>
         </v-col>
@@ -38,7 +38,7 @@
         class="d-flex d-sm-none"
         @click="menu = false"
       >
-        <v-icon>{{ $icons.mdiClose }}</v-icon>
+        <i class="fa-regular fa-xmark fa-lg"></i>
       </v-btn>
       <div class="d-flex flex-column">
         <v-btn text large rounded class="mb-6" nuxt to="/pricing"
@@ -61,7 +61,6 @@
 <script>
 import TheLogo from '@/components/common/TheLogo'
 import TheStaticFooter from '@/components/common/TheStaticFooter'
-import { mdiMenu, mdiClose } from '@mdi/js'
 
 export default {
   name: 'Static',
@@ -79,16 +78,11 @@ export default {
       this.menu = false
     },
   },
-  created() {
-    this.$icons = {
-      mdiMenu,
-      mdiClose,
-    }
-  },
 }
 </script>
 
 <style scoped>
+/* Move close button in overlay */
 #close {
   position: fixed;
   top: 12px;

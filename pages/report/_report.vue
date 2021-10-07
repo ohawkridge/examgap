@@ -13,7 +13,7 @@
                   :to="`/group/${group.id}`"
                   v-on="on"
                 >
-                  <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+                  <i class="fa-regular fa-arrow-left"></i>
                 </v-btn>
               </template>
               <span>Back</span>
@@ -37,7 +37,7 @@
             <v-menu v-else>
               <template #activator="{ on }">
                 <v-btn icon v-on="on">
-                  <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
+                  <i class="fa-regular fa-ellipsis-vertical"></i>
                 </v-btn>
               </template>
               <v-list>
@@ -126,7 +126,7 @@
                   <template #activator="{ on }">
                     <v-chip outlined @click="mark(i, j, k)" v-on="on">
                       {{ response.sm.length }}
-                      <v-icon right color="grey">{{ $icons.mdiCheck }}</v-icon>
+                      <i class="fa-regular fa-check ml-2"></i>
                     </v-chip>
                   </template>
                   <span>Mark</span>
@@ -141,16 +141,16 @@
                       v-on="on"
                     >
                       {{ response.tm.length }}
-                      <v-icon right>{{
-                        response.repeat ? $icons.mdiRepeat : $icons.mdiCheckAll
-                      }}</v-icon>
+                      <i
+                        v-if="response.repeat"
+                        class="fa-regular fa-repeat ml-2"
+                      ></i>
+                      <i v-else class="fa-regular fa-check-double ml-2"></i>
                     </v-chip>
-                    <v-icon
+                    <i
                       v-if="response.flagged"
-                      color="accent"
-                      class="fix-flag"
-                      >{{ $icons.mdiFlagOutline }}</v-icon
-                    >
+                      class="fa-regular fa-flag ico-pink fix-flag"
+                    ></i>
                   </template>
                   <span>Mark</span>
                 </v-tooltip>
@@ -177,9 +177,9 @@
     </table>
     <div class="d-flex justify-end align-center pa-4 text-caption">
       N/A Not answered&nbsp;&nbsp;
-      <v-icon small class="mr-1">{{ $icons.mdiCheck }}</v-icon>
+      <i class="fa-regular fa-check fa-sm mr-1"></i>
       Self mark&nbsp;&nbsp;
-      <v-icon small class="mr-1">{{ $icons.mdiCheckAll }}</v-icon>
+      <i class="fa-regular fa-check-double fa-sm mr-1"></i>
       Teacher mark
     </div>
     <!-- Marking dialog -->
@@ -192,7 +192,7 @@
       <v-card tile>
         <v-toolbar dark dense color="primary">
           <v-btn icon dark @click="close()">
-            <v-icon>{{ $icons.mdiClose }}</v-icon>
+            <i class="fa-regular fa-xmark"></i>
           </v-btn>
           <v-toolbar-title>Marking</v-toolbar-title>
           <v-spacer />
@@ -207,7 +207,7 @@
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <v-btn icon @click="next(-1)" v-on="on">
-                      <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+                      <i class="fa-regular fa-arrow-left"></i>
                     </v-btn>
                   </template>
                   <span>Previous</span>
@@ -215,7 +215,7 @@
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <v-btn icon @click="next(1)" v-on="on">
-                      <v-icon>{{ $icons.mdiArrowRight }}</v-icon>
+                      <i class="fa-regular fa-arrow-right"></i>
                     </v-btn>
                   </template>
                   <span>Next</span>
@@ -229,7 +229,7 @@
                       @click="flag()"
                       v-on="on"
                     >
-                      <v-icon>{{ $icons.mdiFlagOutline }}</v-icon>
+                      <i class="fa-regular fa-flag"></i>
                     </v-btn>
                   </template>
                   <span>{{ response.flagged ? 'Remove flag' : 'Flag' }}</span>
@@ -243,7 +243,7 @@
                       @click="reassign()"
                       v-on="on"
                     >
-                      <v-icon>{{ $icons.mdiRepeat }}</v-icon>
+                      <i class="fa-regular fa-repeat"></i>
                     </v-btn>
                   </template>
                   <span>Reassign</span>
@@ -259,9 +259,9 @@
                       class="mr-2"
                       v-on="on"
                     >
-                      <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                      <i class="fa-regular fa-user-graduate"></i>
                       {{ marks.length }}
-                      <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+                      <i class="fa-regular fa-check"></i>
                     </v-chip>
                   </template>
                   <span>You</span>
@@ -273,9 +273,9 @@
                       :color="color(response.sm.length, question.maxMark)"
                       v-on="on"
                     >
-                      <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                      <i class="fa-regular fa-circle-user mr-2"></i>
                       {{ response.sm.length }}
-                      <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+                      <i class="fa-regular fa-check"></i>
                     </v-chip>
                   </template>
                   <span>Student</span>
@@ -304,6 +304,7 @@
               ></p>
               <p class="text-subtitle-1">Feedback</p>
               <!-- N.B. update is debounced method -->
+              <!-- ICONX -->
               <v-textarea
                 id="feedback"
                 v-model="feedback"
@@ -311,11 +312,6 @@
                 rows="4"
                 hide-details
                 auto-grow
-                :append-icon="
-                  savingFeedback
-                    ? $icons.mdiCloudSyncOutline
-                    : $icons.mdiCloudCheckOutline
-                "
                 @input="update()"
               ></v-textarea>
               <v-list dense>
@@ -371,22 +367,6 @@
 </template>
 
 <script>
-import {
-  mdiCheck,
-  mdiCheckAll,
-  mdiArrowRight,
-  mdiFlagOutline,
-  mdiAccountOutline,
-  mdiSchoolOutline,
-  mdiClose,
-  mdiArrowLeft,
-  mdiRepeat,
-  mdiContentCopy,
-  mdiCloudCheckOutline,
-  mdiCloudSyncOutline,
-  mdiRefresh,
-  mdiDotsVertical,
-} from '@mdi/js'
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
@@ -494,24 +474,6 @@ export default {
         this.copyMarkScheme()
       }
     },
-  },
-  created() {
-    this.$icons = {
-      mdiCheck,
-      mdiCheckAll,
-      mdiArrowRight,
-      mdiFlagOutline,
-      mdiAccountOutline,
-      mdiSchoolOutline,
-      mdiClose,
-      mdiArrowLeft,
-      mdiRepeat,
-      mdiContentCopy,
-      mdiCloudCheckOutline,
-      mdiCloudSyncOutline,
-      mdiRefresh,
-      mdiDotsVertical,
-    }
   },
   beforeDestroy() {
     document.removeEventListener('touchstart', this.swipeStart())

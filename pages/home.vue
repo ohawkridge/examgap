@@ -59,7 +59,7 @@
                 color="primary"
                 @click="$nuxt.$emit('show-create')"
               >
-                <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+                <i class="fa-regular fa-plus mr-2"></i>
                 Class
               </v-btn>
             </div>
@@ -230,12 +230,11 @@
                     <span>Click to revise</span>
                   </v-tooltip>
                   <div>
-                    <v-icon
+                    <i
                       v-for="j in topic.answered"
                       :key="j"
-                      color="green"
-                      >{{ $icons.mdiCheckboxBlankCircle }}</v-icon
-                    >
+                      class="fa-regular fa-circle-check ico-green"
+                    ></i>
                   </div>
                 </div>
               </v-list-item-content>
@@ -250,7 +249,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { mdiPlus, mdiCheckboxBlankCircle } from '@mdi/js'
 import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 
 export default {
@@ -284,12 +282,6 @@ export default {
     archiveGroups() {
       return this.groups.filter((g) => !g.active)
     },
-  },
-  created() {
-    this.$icons = {
-      mdiPlus,
-      mdiCheckboxBlankCircle,
-    }
   },
   mounted() {
     this.$store.commit(

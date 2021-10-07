@@ -64,14 +64,8 @@
                   </v-text-field>
                 </v-col>
               </v-row>
-              <v-alert
-                v-if="emailInUse"
-                border="left"
-                text
-                dense
-                type="error"
-                :icon="$icons.mdiAlertOutline"
-              >
+              <!-- ICONX -->
+              <v-alert v-if="emailInUse" border="left" text dense type="error">
                 Email is already registered
               </v-alert>
               <small> *Indicates required field </small>
@@ -80,8 +74,7 @@
                 <a href="/terms" target="_blank" class="text-decoration-none"
                   >terms of service</a
                 >
-                <v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
-                >.
+                <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i>.
               </p>
               <v-btn
                 color="primary"
@@ -104,7 +97,6 @@
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
-import { mdiOpenInNew, mdiAlertOutline } from '@mdi/js'
 export default {
   components: {
     TheLogo,
@@ -140,12 +132,6 @@ export default {
     match() {
       return this.pass1 === this.pass2 ? [] : 'Passwords do not match'
     },
-  },
-  created() {
-    this.$icons = {
-      mdiOpenInNew,
-      mdiAlertOutline,
-    }
   },
   methods: {
     async register() {

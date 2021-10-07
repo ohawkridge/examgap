@@ -42,8 +42,6 @@
 </template>
 
 <script>
-import { mdiInformationOutline } from '@mdi/js'
-
 export default {
   name: 'TheAddStudentsDialog',
   data() {
@@ -61,11 +59,6 @@ export default {
         .map((name) => name.trim().replace(',', '').toLowerCase())
         .filter((name) => name !== '')
     },
-  },
-  created() {
-    this.$icons = {
-      mdiInformationOutline,
-    }
   },
   mounted() {
     this.$nuxt.$on('open-add', () => {

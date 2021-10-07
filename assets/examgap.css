@@ -134,6 +134,11 @@ span.v-chip.theme--light.green {
 }
 
 /* --------- Icon colours --------- */
+.ico {
+  position: relative;
+  top: 2px;
+}
+
 .ico-blue {
   color: #0099cc;
 }
@@ -142,6 +147,14 @@ span.v-chip.theme--light.green {
   color: #ef7a85;
 }
 
+.ico-light-pink {
+  color: #f9b9b7;
+}
+
 .ico-green {
   color: #4caf50;
+}
+
+.ico-grey {
+  color: #9e9e9e;
 }

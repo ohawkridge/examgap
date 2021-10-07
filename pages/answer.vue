@@ -41,7 +41,7 @@
                       @click="speak()"
                       v-on="on"
                     >
-                      <v-icon>{{ $icons.mdiTextToSpeech }}</v-icon>
+                      <i class="fa-regular fa-ear-listen"></i>
                     </v-btn>
                   </template>
                   <span>Speak question</span>
@@ -50,16 +50,12 @@
                   {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
+              <!-- ICONX -->
               <v-textarea
                 v-model="answer"
                 outlined
                 color="primary"
                 auto-grow
-                :append-icon="
-                  saving
-                    ? $icons.mdiCloudSyncOutline
-                    : $icons.mdiCloudCheckOutline
-                "
                 label="Your answer"
                 hide-details
                 class="mb-2"
@@ -76,9 +72,7 @@
                     small
                   >
                     {{ word }}
-                    <v-icon v-if="used(word)" right>
-                      {{ $icons.mdiCheck }}
-                    </v-icon>
+                    <i v-if="used(word)" class="fa-regular fa-check ml-2"></i>
                   </v-chip>
                 </div>
                 <v-tooltip bottom>
@@ -186,13 +180,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
-import {
-  mdiTextToSpeech,
-  mdiPause,
-  mdiCloudCheckOutline,
-  mdiCloudSyncOutline,
-  mdiCheck,
-} from '@mdi/js'
 
 export default {
   async beforeRouteLeave(to, from, next) {
@@ -282,15 +269,6 @@ export default {
       if (this.question.keywords === '') return ''
       return this.question.keywords.split(',').map((kw) => kw.trim())
     },
-  },
-  created() {
-    this.$icons = {
-      mdiTextToSpeech,
-      mdiPause,
-      mdiCloudCheckOutline,
-      mdiCloudSyncOutline,
-      mdiCheck,
-    }
   },
   mounted() {
     this.$store.commit('app/setPageTitle', 'Question')

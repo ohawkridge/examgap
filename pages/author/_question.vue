@@ -42,27 +42,24 @@
           >
             <template #append>
               <v-tooltip top>
-                <template #activator="{ on, attrs }">
-                  <v-icon
-                    v-bind="attrs"
-                    class="mr-1"
+                <template #activator="{ on }">
+                  <i
                     :disabled="question.marks.length === 13"
-                    v-on="on"
+                    class="fa-regular fa-plus mr-1"
                     @click="question.marks.push({ id: '', text: '' })"
-                    >{{ $icons.mdiPlus }}</v-icon
-                  >
+                    v-on="on"
+                  ></i>
                 </template>
                 <span>Add mark</span>
               </v-tooltip>
               <v-tooltip top>
-                <template #activator="{ on, attrs }">
-                  <v-icon
-                    v-bind="attrs"
+                <template #activator="{ on }">
+                  <i
                     :disabled="question.marks.length === 1"
-                    v-on="on"
+                    class="fa-regular fa-minus"
                     @click="remove(question.marks[i - 1].id)"
-                    >{{ $icons.mdiMinus }}</v-icon
-                  >
+                    v-on="on"
+                  ></i>
                 </template>
                 <span>Remove mark</span>
               </v-tooltip>
@@ -113,7 +110,6 @@
 <script>
 import { mapState } from 'vuex'
 import TextEditor from '@/components/teacher/TextEditor'
-import { mdiPlus, mdiMinus } from '@mdi/js'
 
 export default {
   components: {
@@ -180,12 +176,6 @@ export default {
     ...mapState({
       secret: (state) => state.user.secret,
     }),
-  },
-  created() {
-    this.$icons = {
-      mdiPlus,
-      mdiMinus,
-    }
   },
   mounted() {
     this.$store.commit(

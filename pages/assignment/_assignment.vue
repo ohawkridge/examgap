@@ -30,7 +30,7 @@
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn nuxt to="/home" icon class="mr-2" v-on="on">
-                  <v-icon>{{ $icons.mdiArrowLeft }}</v-icon>
+                  <i class="fa-regular fa-arrow-left"></i>
                 </v-btn>
               </template>
               <span>Back</span>
@@ -75,7 +75,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { mdiArrowLeft } from '@mdi/js'
 import AssignmentQuestion from '@/components/student/AssignmentQuestion'
 
 export default {
@@ -128,11 +127,6 @@ export default {
       }
       return { total, max, ave, color }
     },
-  },
-  created() {
-    this.$icons = {
-      mdiArrowLeft,
-    }
   },
 }
 </script>

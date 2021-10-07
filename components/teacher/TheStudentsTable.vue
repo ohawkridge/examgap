@@ -24,7 +24,8 @@
               text
               rounded
               v-on="on"
-              >Students<v-icon right>{{ $icons.mdiChevronDown }}</v-icon>
+              >Students
+              <i class="fa-regular fa-chevron-down ml-2"></i>
             </v-btn>
           </template>
           <v-list>
@@ -85,7 +86,7 @@
               v-on="on"
             >
               Csv
-              <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
+              <i class="fa-regular fa-arrow-down-to-line ml-2"></i>
             </v-btn>
           </template>
           <span>Download csv</span>
@@ -132,7 +133,7 @@
               color="primary"
               @click="$nuxt.$emit('show-invite')"
             >
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+              <i class="fa-regular fa-plus mr-2"></i>
               Student
             </v-btn>
           </div>
@@ -168,7 +169,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { mdiChevronDown, mdiDownloadOutline, mdiPlus } from '@mdi/js'
 import TheAddStudentsDialog from '@/components/teacher/TheAddStudentsDialog'
 import TheRemoveDialog from '@/components/teacher/TheRemoveDialog'
 import TheCopyStudentDialog from '@/components/teacher/TheCopyStudentDialog'
@@ -235,13 +235,6 @@ export default {
     xsBtns() {
       return this.$vuetify.breakpoint.name === 'xs' ? 'mt-2' : ''
     },
-  },
-  created() {
-    this.$icons = {
-      mdiChevronDown,
-      mdiDownloadOutline,
-      mdiPlus,
-    }
   },
   methods: {
     async save(studentId, target) {

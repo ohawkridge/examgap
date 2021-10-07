@@ -6,12 +6,12 @@
         <p>You will now see a practise exam question. Remember&hellip;</p>
         <ul class="no-bullet">
           <li class="mb-2">
-            <v-icon class="mr-2 mb-1">{{ $icons.mdiTimerOutline }}</v-icon
-            >Take your time
+            <i class="fa-regular fa-timer"></i>
+            Take your time
           </li>
           <li>
-            <v-icon class="mr-2 mb-1">{{ $icons.mdiBullseyeArrow }}</v-icon
-            >Mark yourself accurately
+            <i class="fa-regular fa-bullseye-arrow"></i>
+            Mark yourself accurately
           </li>
         </ul>
         <div class="d-flex justify-space-between align-center mt-4">
@@ -50,8 +50,6 @@
 </template>
 
 <script>
-import { mdiTimerOutline, mdiBullseyeArrow } from '@mdi/js'
-
 export default {
   name: 'TheRevisionModeDialog',
   data() {
@@ -76,12 +74,6 @@ export default {
   },
   beforeDestroy() {
     this.$nuxt.$off('show-revise')
-  },
-  created() {
-    this.$icons = {
-      mdiTimerOutline,
-      mdiBullseyeArrow,
-    }
   },
   mounted() {
     this.$nuxt.$on('show-revise', () => {

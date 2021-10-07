@@ -81,14 +81,11 @@
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-btn icon v-on="on" @click.stop="add(q.id)">
-                          <v-icon
-                            :color="selected.includes(q.id) ? 'accent' : ''"
-                            >{{
-                              selected.includes(q.id)
-                                ? $icons.mdiMinus
-                                : $icons.mdiPlus
-                            }}</v-icon
-                          >
+                          <i
+                            v-if="selected.includes(q.id)"
+                            class="fa-regular fa-plus"
+                          ></i>
+                          <i v-else class="fa-regular fa-minus ico-pink"></i>
                         </v-btn>
                       </template>
                       <span>
@@ -166,7 +163,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { mdiPlus, mdiMinus } from '@mdi/js'
 import CreateAssignment from '@/components/teacher/CreateAssignment'
 
 export default {
@@ -232,12 +228,6 @@ export default {
         this.$store.commit('app/setOnboardStep', 5)
       }
     },
-  },
-  created() {
-    this.$icons = {
-      mdiPlus,
-      mdiMinus,
-    }
   },
   mounted() {
     this.$store.commit(

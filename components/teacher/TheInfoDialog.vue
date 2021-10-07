@@ -4,7 +4,7 @@
       <v-tooltip bottom>
         <template #activator="{ on: tool }">
           <v-btn class="ml-2" icon v-on="{ ...tool, ...dial }">
-            <v-icon>{{ $icons.mdiInformationOutline }}</v-icon>
+            <i class="fa-regular fa-circle-info"></i>
           </v-btn>
         </template>
         <span>More information</span>
@@ -20,9 +20,7 @@
             Response id:
             <code>{{ response.id }}</code>
             <v-btn icon small @click="copyId()">
-              <v-icon small>
-                {{ $icons.mdiContentCopy }}
-              </v-icon>
+              <i class="fa-regular fa-copy fa-sm"></i>
             </v-btn>
           </li>
           <li>
@@ -40,8 +38,6 @@
 </template>
 
 <script>
-import { mdiInformationOutline, mdiContentCopy } from '@mdi/js'
-
 export default {
   props: {
     response: {
@@ -63,12 +59,6 @@ export default {
         t - Math.floor(t / 60) * 60
       ).padStart(2, '0')}`
     },
-  },
-  created() {
-    this.$icons = {
-      mdiInformationOutline,
-      mdiContentCopy,
-    }
   },
   methods: {
     // Copy response id to clipboard

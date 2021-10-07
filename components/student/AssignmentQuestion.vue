@@ -20,9 +20,7 @@
               v-if="response.feedback !== ''"
               class="my-3 mb-md-0 font-italic grey--text text-darken-3"
             >
-              <v-icon small class="mr-2">
-                {{ $icons.mdiCommentTextOutline }}
-              </v-icon>
+              <i class="fa-regular fa-comment-lines mr-2"></i>
               {{ response.feedback }}
             </div>
           </v-col>
@@ -40,9 +38,9 @@
                   label
                   v-on="on"
                 >
-                  <v-icon left>{{ $icons.mdiSchoolOutline }}</v-icon>
+                  <i class="fa-regular fa-user-graduate mr-2"></i>
                   {{ response.tm }}
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
+                  <i class="fa-regular fa-check ml-2"></i>
                 </v-chip>
               </template>
               <span>Your teacher</span>
@@ -55,9 +53,8 @@
                   label
                   v-on="on"
                 >
-                  <v-icon left>{{ $icons.mdiAccountOutline }}</v-icon>
+                  <i class="fa-regular fa-circle-user mr-2"></i>
                   {{ response.sm }}
-                  <v-icon right> {{ $icons.mdiCheck }} </v-icon>
                 </v-chip>
               </template>
               <span>You</span>
@@ -113,13 +110,6 @@
 </template>
 
 <script>
-import {
-  mdiAccountOutline,
-  mdiSchoolOutline,
-  mdiCheck,
-  mdiCommentTextOutline,
-} from '@mdi/js'
-
 export default {
   name: 'AssignmentQuestion',
   props: {
@@ -131,14 +121,6 @@ export default {
       type: String,
       default: () => {},
     },
-  },
-  created() {
-    this.$icons = {
-      mdiAccountOutline,
-      mdiSchoolOutline,
-      mdiCheck,
-      mdiCommentTextOutline,
-    }
   },
   methods: {
     answer(questionId) {

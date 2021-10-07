@@ -39,12 +39,8 @@
             <div id="fix-chip">
               <v-chip v-if="subscribed" label color="#db5461" outlined>
                 Subscribed
-                <v-icon right>{{ $icons.mdiCheck }}</v-icon>
+                <i class="fa-regular fa-check ml-2"></i>
               </v-chip>
-              <!-- <v-chip v-else color="yellow" label>
-                Subscribe
-                <v-icon right>{{ $icons.mdiFlashOutline }}</v-icon>
-              </v-chip> -->
             </div>
           </template>
         </v-text-field>
@@ -90,13 +86,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import {
-  mdiCheck,
-  mdiAlertCircleOutline,
-  mdiAccountOutline,
-  mdiLockOutline,
-  mdiFlashOutline,
-} from '@mdi/js'
 import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 
 export default {
@@ -133,14 +122,7 @@ export default {
       return this.pass1 === this.pass2 ? [] : 'Passwords do not match'
     },
   },
-  created() {
-    this.$icons = {
-      mdiCheck,
-      mdiAlertCircleOutline,
-      mdiAccountOutline,
-      mdiLockOutline,
-      mdiFlashOutline,
-    }
+  mounted() {
     this.$store.commit('app/setPageTitle', 'Profile')
   },
   methods: {

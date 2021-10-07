@@ -37,8 +37,7 @@
             <nuxt-link to="/privacy">privacy policy</nuxt-link> and visit
             <a href="https://www.allaboutcookies.org" target="_blank"
               >allaboutcookies.org</a
-            ><v-icon small>{{ $icons.mdiOpenInNew }}</v-icon
-            >.
+            ><i class="fa-regular fa-arrow-up-right-from-square"></i>.
           </p>
           <p class="text-h6">SSL (TLS) encryption</p>
           <p>
@@ -70,18 +69,11 @@
 </template>
 
 <script>
-import { mdiOpenInNew } from '@mdi/js'
-
 export default {
   layout: 'static',
   head() {
     return {
       title: 'GDPR Compliance',
-    }
-  },
-  created() {
-    this.$icons = {
-      mdiOpenInNew,
     }
   },
 }

@@ -16,7 +16,7 @@
         rounded
         v-on="on"
       >
-        <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+        <i class="fa-regular fa-plus mr-2"></i>
         Assign ({{ selected.length }})</v-btn
       >
     </template>
@@ -26,7 +26,7 @@
       <v-card-subtitle> Select students for this assignment. </v-card-subtitle>
       <v-card-text>
         <div class="d-flex">
-          <v-alert text type="info" dense :icon="$icons.mdiInformationOutline">
+          <v-alert text type="info" dense>
             In exam mode, keywords and minimum word count are hidden.
           </v-alert>
         </div>
@@ -100,7 +100,6 @@
                 <v-text-field
                   v-model="startDate"
                   label="Start date*"
-                  :append-icon="$icons.mdiCalendarStart"
                   placeholder="YYYY-MM-DD"
                   :rules="startDateRules"
                   outlined
@@ -127,7 +126,6 @@
                   v-model="endDate"
                   label="Due date*"
                   outlined
-                  :append-icon="$icons.mdiCalendarEnd"
                   placeholder="YYYY-MM-DD"
                   :rules="endDateRules"
                   class="ml-2"
@@ -171,12 +169,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import {
-  mdiCalendarStart,
-  mdiInformationOutline,
-  mdiPlus,
-  mdiCalendarEnd,
-} from '@mdi/js'
 
 export default {
   data() {
@@ -254,14 +246,6 @@ export default {
         }
       },
     },
-  },
-  created() {
-    this.$icons = {
-      mdiCalendarStart,
-      mdiInformationOutline,
-      mdiPlus,
-      mdiCalendarEnd,
-    }
   },
   mounted() {
     // If group has no students, skip step 1

@@ -7,7 +7,7 @@
         class="d-flex justify-space-between align-center"
       >
         <v-btn text rounded @click="$router.go(-1)">
-          <v-icon left>{{ $icons.mdiArrowLeft }}</v-icon>
+          <i class="fa-regular fa-arrow-left mr-2"></i>
           Back
         </v-btn>
         <div>
@@ -133,8 +133,6 @@
 </template>
 
 <script>
-import { mdiArrowLeft } from '@mdi/js'
-
 export default {
   layout: 'app',
   data() {
@@ -168,11 +166,6 @@ export default {
         type: 'error',
         msg: 'Error loading question',
       })
-    }
-  },
-  created() {
-    this.$icons = {
-      mdiArrowLeft,
     }
   },
   mounted() {

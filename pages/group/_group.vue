@@ -101,7 +101,7 @@
                     @mousedown.stop
                     @touchstart.native.stop
                   >
-                    <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
+                    <i class="fa-regular fa-ellipsis-vertical"></i>
                   </v-btn>
                 </template>
                 <v-list>
@@ -131,7 +131,7 @@
               color="primary"
               @click="createAssignment()"
             >
-              <v-icon left>{{ $icons.mdiPlus }}</v-icon>
+              <i class="fa-regular fa-plus"></i>
               Assignment
             </v-btn>
           </div>
@@ -158,15 +158,6 @@ import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheDeleteAssignmentDialog from '@/components/teacher/TheDeleteAssignmentDialog'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
-import {
-  mdiDotsVertical,
-  mdiInformationOutline,
-  mdiPlus,
-  mdiCheckCircleOutline,
-  mdiCalendarStart,
-  mdiCalendarEnd,
-  mdiCircleOutline,
-} from '@mdi/js'
 
 export default {
   components: {
@@ -196,17 +187,6 @@ export default {
         this.$store.commit('app/setGroupTab', value)
       },
     },
-  },
-  created() {
-    this.$icons = {
-      mdiDotsVertical,
-      mdiInformationOutline,
-      mdiPlus,
-      mdiCheckCircleOutline,
-      mdiCalendarStart,
-      mdiCalendarEnd,
-      mdiCircleOutline,
-    }
   },
   async mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)

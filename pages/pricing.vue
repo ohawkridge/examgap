@@ -23,27 +23,19 @@
                   £79 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
-                  <v-icon color="primary" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
+                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
                   Improve your results
                 </p>
                 <p class="mb-2">
-                  <v-icon color="primary" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
+                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
                   Unlock more 8-9 grades
                 </p>
                 <p class="mb-2">
-                  <v-icon color="primary" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
+                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
                   Mark more efficiently
                 </p>
                 <p class="mb-4">
-                  <v-icon color="primary" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
+                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
                   Diagnose weaknesses
                 </p>
                 <p class="text-caption mb-0">
@@ -79,27 +71,19 @@
                   £79 <span class="text-overline">/ YEAR</span>
                 </p>
                 <p class="mb-2">
-                  <v-icon class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
+                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
                   Improve your results
                 </p>
                 <p class="mb-2">
-                  <v-icon class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
+                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
                   Differentiate quickly
                 </p>
                 <p class="mb-2">
-                  <v-icon class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
+                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
                   Support independent study
                 </p>
                 <p class="mb-4">
-                  <v-icon class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
+                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
                   Create your own questions
                 </p>
                 <p class="text-caption mb-0">
@@ -115,38 +99,6 @@
               </v-card-actions>
             </v-card>
           </v-col>
-          <!-- <v-col cols="12" md="4" order="2" order-md="2">
-            <v-card class="pa-3" outlined rounded="lg" disabled>
-              <v-card-title class="font-weight-black text-h6">
-                The Complete Package
-              </v-card-title>
-              <v-card-subtitle> GCSE and A Level</v-card-subtitle>
-              <v-card-text class="text-body-1">
-                <p class="text-h4 font-weight-bold">
-                  £199 <span class="text-overline">/ YEAR</span>
-                  <v-chip color="accent" class="float-right mt-2"
-                    >Save £59</v-chip
-                  >
-                </p>
-                <p>Also includes:</p>
-                <p class="mb-2">
-                  <v-icon color="#e3f2fd" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
-                  OCR Creative iMedia <span class="text-caption"> (J817) </span>
-                </p>
-                <p class="mb-2">
-                  <v-icon color="#e3f2fd" class="mr-2">{{
-                    $icons.mdiCheckboxMarkedCircleOutline
-                  }}</v-icon>
-                  BTEC Level 3 IT <span class="text-caption"> (Unit 1) </span>
-                </p>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn block outlined nuxt to="/trial"> Coming soon </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col> -->
         </v-row>
       </v-container>
     </div>
@@ -162,7 +114,7 @@
         <v-col cols="12" md="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
+              <i class="fa-regular fa-check fa-4x"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -176,7 +128,7 @@
         <v-col cols="12" md="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
+              <i class="fa-regular fa-check fa-4x"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -192,7 +144,7 @@
         <v-col cols="12" md="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
+              <i class="fa-regular fa-check fa-4x"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -208,7 +160,7 @@
         <v-col cols="12" md="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
+              <i class="fa-regular fa-check fa-4x"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -222,7 +174,7 @@
         <v-col cols="12" md="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
+              <i class="fa-regular fa-check fa-4x"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -236,7 +188,7 @@
         <v-col cols="12" md="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <v-icon class="ico-bg" dark>{{ $icons.mdiCheck }}</v-icon>
+              <i class="fa-regular fa-check fa-4x"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -277,11 +229,9 @@
             </v-btn>
             <div class="mt-4 white--text d-flex justify-center">
               <small>
-                <v-icon small color="accent">{{ $icons.mdiCheck }}</v-icon>
+                <i class="fa-regular fa-check ico-pink"></i>
                 No payment info
-                <v-icon small color="accent" class="ml-2">{{
-                  $icons.mdiCheck
-                }}</v-icon>
+                <i class="fa-regular fa-check ico-pink ml-2"></i>
                 Improve your results
               </small>
             </div>
@@ -366,19 +316,11 @@
 </template>
 
 <script>
-import { mdiCheck, mdiCheckboxMarkedCircleOutline } from '@mdi/js'
-
 export default {
   layout: 'static',
   head() {
     return {
       title: 'Pricing',
-    }
-  },
-  created() {
-    this.$icons = {
-      mdiCheck,
-      mdiCheckboxMarkedCircleOutline,
     }
   },
 }
@@ -402,14 +344,14 @@ export default {
   }
 }
 
-.ico-bg {
+/* .ico-bg {
   position: relative;
   top: -28px;
   display: inline-flex;
   padding: 2px;
   border-radius: 50%;
   background-color: #0099cc;
-}
+} */
 
 #features {
   margin-top: 4em;

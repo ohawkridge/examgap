@@ -11,7 +11,7 @@
             v-on="on"
           >
             Csv
-            <v-icon right>{{ $icons.mdiDownloadOutline }}</v-icon>
+            <i class="fa-regular fa-arrow-down-to-line ml-2"></i>
           </v-btn>
         </template>
         <span>Download csv</span>
@@ -26,9 +26,7 @@
         @mouseup="stop"
       >
         Scroll
-        <v-icon right>
-          {{ $icons.mdiArrowRight }}
-        </v-icon>
+        <i class="fa-regular fa-arrow-right ml-2"></i>
       </v-btn>
     </div>
     <v-data-table
@@ -57,12 +55,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import {
-  mdiArrowRight,
-  mdiDownloadOutline,
-  mdiInformationOutline,
-  mdiChartBoxOutline,
-} from '@mdi/js'
 
 export default {
   components: {},
@@ -108,14 +100,6 @@ export default {
       if (this.$fetchState.pending) return []
       return this.grades.headers.map((o) => o.value).slice(2)
     },
-  },
-  created() {
-    this.$icons = {
-      mdiArrowRight,
-      mdiDownloadOutline,
-      mdiInformationOutline,
-      mdiChartBoxOutline,
-    }
   },
   methods: {
     // Helper function due to dynamic argument expression constraints

@@ -20,13 +20,9 @@
       </v-col>
     </v-row>
     <v-row v-if="usernames.length > 0" class="justify-center">
+      <!-- ICONX -->
       <v-col cols="12" md="10">
-        <v-alert
-          :icon="$icons.mdiInformationOutline"
-          border="left"
-          type="info"
-          text
-        >
+        <v-alert border="left" type="info" text>
           If you created accounts by entering student's email addresses, the
           password is '<b>password</b>'. Otherwise, students chose their own
           passwords when they signed up. You can reset student passwords on the
@@ -70,7 +66,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { mdiInformationOutline } from '@mdi/js'
 export default {
   layout: 'print',
   async asyncData({ store, params, $config: { baseURL } }) {
@@ -96,11 +91,6 @@ export default {
   },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-  },
-  created() {
-    this.$icons = {
-      mdiInformationOutline,
-    }
   },
   mounted() {
     window.print()

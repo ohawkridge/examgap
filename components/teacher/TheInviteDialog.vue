@@ -16,7 +16,7 @@
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text rounded @click="copy()">
-              <v-icon left>{{ $icons.mdiContentCopy }}</v-icon>
+              <i class="fa-regular fa-copy"></i>
               {{ copyBtn }}
             </v-btn>
           </template>
@@ -27,7 +27,7 @@
         <v-text-field :value="formattedLink" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text rounded @click="overlay = true">
-              <v-icon left>{{ $icons.mdiFullscreen }}</v-icon>
+              <i class="fa-regular fa-maximize mr-2"></i>
               Show
             </v-btn>
           </template>
@@ -54,8 +54,6 @@
 </template>
 
 <script>
-import { mdiFullscreen, mdiContentCopy } from '@mdi/js'
-
 export default {
   props: {
     group: {
@@ -88,12 +86,6 @@ export default {
         this.copyBtn = 'Copy'
       }
     },
-  },
-  created() {
-    this.$icons = {
-      mdiFullscreen,
-      mdiContentCopy,
-    }
   },
   beforeDestroy() {
     this.$nuxt.$off('show-invite')

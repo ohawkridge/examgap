@@ -25,7 +25,7 @@
             <p class="text-h6 grey--text">Contact</p>
             <ul class="no-bullet">
               <li>
-                <v-icon color="grey">{{ $icons.mdiEmailOutline }}</v-icon>
+                <i class="fa-regular fa-paper-plane ico ico-grey mr-1"></i>
                 <a
                   href="mailto:support@examgap.com"
                   class="text-decoration-none grey--text"
@@ -33,7 +33,7 @@
                 >
               </li>
               <li>
-                <v-icon color="grey">{{ $icons.mdiTwitter }}</v-icon>
+                <i class="fa-brands fa-twitter ico ico-grey mr-1"></i>
                 <a
                   href="https://twitter.com/examgap"
                   class="text-decoration-none grey--text"
@@ -112,7 +112,6 @@
                 @click="send()"
               >
                 Send
-                <v-icon right>{{ $icons.mdiSendOutline }}</v-icon>
               </v-btn>
             </v-form>
           </v-col>
@@ -133,7 +132,6 @@
 </template>
 
 <script>
-import { mdiEmailOutline, mdiTwitter, mdiSendOutline } from '@mdi/js'
 import TheSuccessDialog from '@/components/common/TheSuccessDialog'
 
 export default {
@@ -155,13 +153,6 @@ export default {
           return pattern.test(value) || 'Invalid e-mail.'
         },
       },
-    }
-  },
-  created() {
-    this.$icons = {
-      mdiEmailOutline,
-      mdiTwitter,
-      mdiSendOutline,
     }
   },
   methods: {

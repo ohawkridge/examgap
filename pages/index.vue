@@ -20,9 +20,9 @@
           </div>
           <div class="d-flex justify-center mt-4">
             <small>
-              <i class="fa-regular fa-check ico-pink"></i>
+              <i class="fa-regular fa-circle-check ico-blue"></i>
               No payment info
-              <i class="fa-regular fa-check ico-pink ml-2"></i>
+              <i class="fa-regular fa-circle-check ico-blue ml-2"></i>
               Improve your results
             </small>
           </div>
@@ -124,27 +124,23 @@
       <v-row class="d-flex justify-center">
         <v-col cols="12" md="9">
           <p class="text-h5 font-weight-bold text-md-h4 text-center">
-            <i
-              class="fa-regular fa-bullhorn mr-2 fa-rotate-by"
-              style="--fa-rotate-angle: -20deg"
-              >></i
-            >
             What teachers say&hellip;
           </p>
+          <v-img src="/zap2.svg" width="60%" class="centre" />
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="justify-center">
         <v-col
           cols="12"
           md="6"
-          class="d-flex align-center testamonial border-top-bottom pa-md-10"
+          class="d-flex justify-center align-center testamonial pa-md-10"
         >
-          <div>
-            <p class="text-h6 text-center">
+          <div class="text-center">
+            <p class="text-h6">
               "Examgap supports my teaching at GCSE. It's especially good for
               high achievers."
             </p>
-            <p class="text-body-1 text-center">
+            <p>
               <span class="font-weight-medium">Alan</span>&mdash;<i
                 >Chauncy School, The Ware Academy for Visual Arts, Mathematics
                 &amp; Computing
@@ -152,25 +148,31 @@
             </p>
           </div>
         </v-col>
+      </v-row>
+      <v-row class="justify-center">
         <v-col
           cols="12"
           md="6"
           class="
-            d-flex
-            align-center
             testamonial
-            border-left border-top-bottom
+            d-flex
+            justify-center
+            align-center
+            justify-center
             pa-md-10
           "
         >
-          <div>
-            <p class="text-h6 text-center">
-              "[The Examgap process], done regularly, creates a cycle of
-              continuous improvement and can lead to better exam results."
+          <div class="text-center">
+            <p class="text-h6">
+              "Students found Examgap really helped structure answers. Immediate
+              feedback, combined with comparing self-assessment to the teacher's
+              assessment allowed students to identify mistakes when writing
+              answers."
             </p>
-            <p class="text-body-1 text-center">
-              <span class="font-weight-medium">Grace</span>&mdash;<i
-                >St. Mary's CE High School</i
+            <p>
+              <span class="font-weight-medium">Andy</span>&mdash;<i
+                >The Hertfordshire &amp; Essex High School and Science
+                College</i
               >
             </p>
           </div>
@@ -178,20 +180,18 @@
       </v-row>
       <v-row class="justify-center">
         <v-col
-          cols="8"
-          class="testamonial d-flex align-center justify-center pa-md-10"
+          cols="12"
+          md="6"
+          class="d-flex justify-center align-center testamonial pa-md-10"
         >
-          <div>
-            <p class="text-h6 text-center">
-              "Students found Examgap really helped structure answers. Immediate
-              feedback, combined with comparing self-assessment to the teacher's
-              assessment allowed students to identify mistakes when writing
-              answers."
+          <div class="text-center">
+            <p class="text-h6">
+              "[The Examgap process], done regularly, creates a cycle of
+              continuous improvement and can lead to better exam results."
             </p>
-            <p class="text-body-1 text-center">
-              <span class="font-weight-medium">Andy</span>&mdash;<i
-                >The Hertfordshire &amp; Essex High School and Science
-                College</i
+            <p>
+              <span class="font-weight-medium">Grace</span>&mdash;<i
+                >St. Mary's CE High School</i
               >
             </p>
           </div>
@@ -204,7 +204,7 @@
         <v-row>
           <v-col cols="12" class="d-flex align-center justify-center pb-0">
             <p id="how-text" class="text-h4 text-md-h2">
-              <span class="illum">H</span>ow it works
+              <span class="illum">H</span>ow does it work?
             </p>
           </v-col>
         </v-row>
@@ -212,37 +212,43 @@
     </div>
     <v-container id="how-cont">
       <v-row class="justify-center">
-        <v-col cols="12" md="4">
-          <v-card rounded="lg" elevation="6">
-            <v-card-text class="text-body-1 pa-6">
-              <p class="text-h6 text-center">Browse Questions</p>
-              <p>
-                Browse questions organised by syllabus topic. All questions are
-                course and board specific—so you know they'll be relevant.
-              </p>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="12" md="4">
-          <v-card rounded="lg" elevation="6">
-            <v-card-text class="text-body-1 pa-6">
-              <p class="text-h6 text-center">Set Assignments</p>
-              <p>
-                You can set assignments for the whole class or just selected
-                students. Use in class or as homework/revision.
-              </p>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="12" md="4">
-          <v-card rounded="lg" elevation="6">
-            <v-card-text class="text-body-1 pa-6">
-              <p class="text-h6 text-center">Mark & Feedback</p>
-              <p>
-                Mark and feedback quickly with the automatic comment bank.
-                Reassign questions to students with a single click.
-              </p>
-            </v-card-text>
+        <v-col cols="12">
+          <v-card rounded="lg" elevation="6" class="pa-6">
+            <v-container>
+              <v-row>
+                <v-col cols="12" md="4">
+                  <div class="d-flex justify-center">
+                    <i class="fa-light fa-circle-1 ico-blue fa-4x centre"></i>
+                  </div>
+                  <p class="text-h6 text-center mt-4">Choose your questions</p>
+                  <p class="text-center">
+                    Browse questions organised by syllabus topic. All questions
+                    are course and board specific—so you know they'll be
+                    relevant.
+                  </p>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <div class="d-flex justify-center">
+                    <i class="fa-light fa-circle-2 ico-blue fa-4x centre"></i>
+                  </div>
+                  <p class="text-h6 text-center mt-4">Set an assignment</p>
+                  <p class="text-center">
+                    You can set assignments for the whole class or just selected
+                    students. Use in class or as homework/revision.
+                  </p>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <div class="d-flex justify-center">
+                    <i class="fa-light fa-circle-3 ico-blue fa-4x centre"></i>
+                  </div>
+                  <p class="text-h6 text-center mt-4">Mark and feedback</p>
+                  <p class="text-center">
+                    Mark and feedback quickly with features designed to making
+                    marking efficient and pain free.
+                  </p>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-card>
         </v-col>
       </v-row>
@@ -430,9 +436,9 @@
           </v-btn>
           <div class="mt-4 white--text d-flex justify-center">
             <small>
-              <i class="fa-regular fa-check ico-pink"></i>
+              <i class="fa-regular fa-circle-check ico-light-pink"></i>
               No payment info
-              <i class="fa-regular fa-check ico-pink ml-2"></i>
+              <i class="fa-regular fa-circle-check ico-light-pink ml-2"></i>
               Set up in minutes
             </small>
           </div>
@@ -441,36 +447,29 @@
     </v-container>
     <!-- Research -->
     <v-container id="research">
-      <v-row class="d-flex justify-center border-left">
-        <v-col cols="12" md="9">
-          <p class="text-h5 font-weight-bold text-md-h4 mb-0 text-center">
-            <i
-              class="fa-regular fa-microscope fa-rotate-by mr-2"
-              style="--fa-rotate-angle: 20deg"
-            ></i>
+      <v-row>
+        <v-col cols="12">
+          <p class="text-h5 text-md-h4 font-weight-bold text-center">
             Backed by research
           </p>
-        </v-col>
-      </v-row>
-      <v-row class="border-bottom justify-center">
-        <v-col
-          cols="8"
-          class="d-flex align-center justify-center quote pa-md-10 border-left"
-        >
-          <div>
-            <p class="text-h6 text-center">
-              "Teachers can use assessment to help them plan lessons, adapt
-              lessons to measured gaps in knowledge and skills, and if necessary
-              re-teach."<sup>*</sup>
-            </p>
-          </div>
+          <v-img src="/zap.svg" width="60%" class="centre" />
         </v-col>
       </v-row>
       <v-row>
         <v-col
-          cols="12"
-          md="6"
-          class="d-flex align-center pa-md-10 quote border-bottom"
+          cols="6"
+          class="d-flex align-center justify-center quote pa-md-10"
+        >
+          <div>
+            <p class="text-h6 text-center">
+              "There is clear evidence that . . . assessment can have a positive
+              impact on learning and teaching."<sup>*</sup>
+            </p>
+          </div>
+        </v-col>
+        <v-col
+          cols="6"
+          class="d-flex align-center justify-center quote pa-md-10"
         >
           <div>
             <p class="text-h6 text-center">
@@ -479,29 +478,34 @@
             </p>
           </div>
         </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" md="6" class="d-flex align-center pa-md-10 quote">
+          <div>
+            <p class="text-h6 text-center">
+              "Teachers can use assessment to help them plan lessons, adapt
+              lessons to measured gaps in knowledge and skills, and if necessary
+              re-teach."<sup>*</sup>
+            </p>
+          </div>
+        </v-col>
         <v-col
           cols="12"
           md="6"
-          class="
-            d-flex
-            align-center
-            pa-md-10
-            testamonial
-            border-left border-bottom
-            quote
-          "
+          class="d-flex align-center pa-md-10 testamonial quote"
         >
           <div>
             <p class="text-h6 text-center">
-              "Learners who take a test shortly after studying &hellip; do
-              better on a final test than those who do not."<sup>*</sup>
+              "Learners who take a test shortly after studying . . . do better
+              on a final test than those who do not."<sup>*</sup>
             </p>
           </div>
         </v-col>
       </v-row>
-      <v-row class="d-flex justify-center">
-        <v-col cols="12" md="10">
-          <p class="text-caption text-center">
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-divider />
+          <p class="text-caption">
             <sup>*</sup>Ofsted 2019, Education inspection framework: Overview of
             research
           </p>
@@ -534,8 +538,8 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-arrow-up-big-small fa-3x mb-4"></i>
-            <p class="font-weight-bold">Smart sort</p>
+            <i class="fa-regular fa-traffic-light fa-3x mb-4"></i>
+            <p class="font-weight-bold">Smart colour coding</p>
           </v-col>
           <v-col
             cols="12"
@@ -570,7 +574,7 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-repeat fa-3x mb-4"></i>
+            <i class="fa-regular fa-arrows-repeat fa-3x mb-4"></i>
             <p class="font-weight-bold">Reassign questions</p>
           </v-col>
         </v-row>
@@ -717,27 +721,17 @@ export default { layout: 'static' }
 /* ##### Testamonials ##### */
 
 .testamonial {
-  height: 300px;
+  height: 250px;
+}
+@media only screen and (max-width: 600px) {
+  .testamonial {
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
 }
 
 .quote {
   height: 200px;
-}
-
-/* add borders on desktop */
-@media only screen and (min-width: 600px) {
-  .border-top-bottom {
-    border-top: 1px solid rgb(224, 224, 224) !important;
-    border-bottom: 1px solid rgb(224, 224, 224) !important;
-  }
-
-  .border-left {
-    border-left: 1px solid rgb(224, 224, 224) !important;
-  }
-
-  .border-bottom {
-    border-bottom: 1px solid rgb(224, 224, 224) !important;
-  }
 }
 
 /* ####### How works ###### */
@@ -865,5 +859,10 @@ export default { layout: 'static' }
 #featured {
   padding-top: 3em;
   padding-bottom: 3em;
+}
+
+.centre {
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

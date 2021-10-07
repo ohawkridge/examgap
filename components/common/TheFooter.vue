@@ -5,9 +5,7 @@
         <v-col cols="12" class="d-flex justify-space-between align-center">
           support@examgap.com
           <div class="d-flex align-center">
-            <v-icon small class="mr-1">{{
-              $icons.mdiArrowExpandHorizontal
-            }}</v-icon>
+            <i class="fa-regular fa-display mr-1"></i>
             {{ $vuetify.breakpoint.name }}
           </div>
         </v-col>
@@ -17,15 +15,8 @@
 </template>
 
 <script>
-import { mdiArrowExpandHorizontal } from '@mdi/js'
-
 export default {
   name: 'TheFooter',
-  created() {
-    this.$icons = {
-      mdiArrowExpandHorizontal,
-    }
-  },
   mounted() {
     const config = {
       selector: '#headway',

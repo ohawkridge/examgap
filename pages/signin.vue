@@ -12,9 +12,9 @@
         <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
           <p class="text-h5 font-weight-bold text-center">Sign In</p>
           <v-form ref="form" @submit.prevent="login()">
+            <!-- ICONX -->
             <v-text-field
               v-model="username"
-              :prepend-inner-icon="$icons.mdiAccountOutline"
               label="Username"
               color="primary"
               type="email"
@@ -25,10 +25,6 @@
             ></v-text-field>
             <v-text-field
               v-model="pw"
-              :prepend-inner-icon="$icons.mdiLockOutline"
-              :append-icon="
-                show ? $icons.mdiEyeOutline : $icons.mdiEyeOffOutline
-              "
               :type="show ? 'text' : 'password'"
               color="primary"
               label="Password"
@@ -37,14 +33,7 @@
               :rules="passRules"
               @click:append="show = !show"
             ></v-text-field>
-            <v-alert
-              v-if="failed"
-              border="left"
-              text
-              dense
-              type="error"
-              :icon="$icons.mdiAlertOutline"
-            >
+            <v-alert v-if="failed" border="left" text dense type="error">
               Username or password incorrect
             </v-alert>
             <v-btn
@@ -76,13 +65,6 @@
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
-import {
-  mdiAccountOutline,
-  mdiAlertOutline,
-  mdiLockOutline,
-  mdiEyeOutline,
-  mdiEyeOffOutline,
-} from '@mdi/js'
 
 export default {
   components: {
@@ -105,15 +87,6 @@ export default {
   head() {
     return {
       title: 'Sign In',
-    }
-  },
-  created() {
-    this.$icons = {
-      mdiAccountOutline,
-      mdiAlertOutline,
-      mdiLockOutline,
-      mdiEyeOutline,
-      mdiEyeOffOutline,
     }
   },
   methods: {
