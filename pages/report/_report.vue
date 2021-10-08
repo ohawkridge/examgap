@@ -304,7 +304,6 @@
               ></p>
               <p class="text-subtitle-1">Feedback</p>
               <!-- N.B. update is debounced method -->
-              <!-- ICONX -->
               <v-textarea
                 id="feedback"
                 v-model="feedback"
@@ -312,6 +311,11 @@
                 rows="4"
                 hide-details
                 auto-grow
+                :append-icon="
+                  savingFeedback
+                    ? 'fa-regular fa-cloud-arrow-up'
+                    : 'fa-regular fa-cloud-check'
+                "
                 @input="update()"
               ></v-textarea>
               <v-list dense>

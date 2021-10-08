@@ -28,7 +28,7 @@
             class="mt-2"
             @click="send()"
           >
-            Send
+            <span class="heading--text">Send</span>
           </v-btn>
         </div>
       </v-col>

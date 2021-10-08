@@ -14,15 +14,14 @@
             class="ml-2"
             @click="print()"
           >
-            Print
+            <span class="heading--text">Print</span>
           </v-btn>
         </div>
       </v-col>
     </v-row>
     <v-row v-if="usernames.length > 0" class="justify-center">
-      <!-- ICONX -->
       <v-col cols="12" md="10">
-        <v-alert border="left" type="info" text>
+        <v-alert border="top" icon="fa-circle-info" type="info" text>
           If you created accounts by entering student's email addresses, the
           password is '<b>password</b>'. Otherwise, students chose their own
           passwords when they signed up. You can reset student passwords on the

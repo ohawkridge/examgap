@@ -61,8 +61,13 @@
                   </v-text-field>
                 </v-col>
               </v-row>
-              <!-- ICONX -->
-              <v-alert v-if="emailInUse" border="left" text dense type="error">
+              <v-alert
+                v-if="emailInUse"
+                icon="fa-exclamation-circle"
+                border="top"
+                text
+                type="error"
+              >
                 Email is already registered
               </v-alert>
               <small> *Indicates required field </small>
@@ -80,6 +85,7 @@
                 :loading="loading"
                 :disabled="loading"
                 type="submit"
+                class="heading--text"
                 >Register</v-btn
               >
             </v-form>

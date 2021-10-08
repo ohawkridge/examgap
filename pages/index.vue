@@ -127,7 +127,7 @@
             What teachers say&hellip;
           </p>
           <div class="d-flex justify-center">
-            <img src="/zap2.svg" width="60%" alt="" />
+            <img src="/zap2.svg" class="zap" alt="" />
           </div>
         </v-col>
       </v-row>
@@ -455,13 +455,14 @@
             Backed by research
           </p>
           <div class="d-flex justify-center">
-            <img src="/zap.svg" width="60%" alt="" />
+            <img src="/zap.svg" class="zap" alt="" />
           </div>
         </v-col>
       </v-row>
       <v-row>
         <v-col
-          cols="6"
+          cols="12"
+          md="6"
           class="d-flex align-center justify-center quote pa-md-10"
         >
           <div>
@@ -472,7 +473,8 @@
           </div>
         </v-col>
         <v-col
-          cols="6"
+          cols="12"
+          md="6"
           class="d-flex align-center justify-center quote pa-md-10"
         >
           <div>
@@ -587,14 +589,14 @@
     <v-container id="written">
       <v-row>
         <v-col>
-          <p class="text-h5 text-md-h4 text-center text-xl">
+          <p class="text-h5 text-md-h4 text-center text-xl mb-0 mb-sm-4">
             Why focus on
             <span class="highlight">written answer</span> questions?
           </p>
         </v-col>
       </v-row>
       <v-row class="d-flex justify-center flex-md-row-reverse">
-        <v-col cols="12" md="3">
+        <v-col cols="6" md="3">
           <v-img id="owen" src="/owen.jpg" alt="Portrait of Owen" eager></v-img>
         </v-col>
         <v-col cols="12" md="5" class="text-body-1">
@@ -734,6 +736,11 @@ export default { layout: 'static' }
 .quote {
   height: 200px;
 }
+@media only screen and (max-width: 600px) {
+  .quote {
+    height: 150px;
+  }
+}
 
 /* ####### How works ###### */
 
@@ -794,6 +801,23 @@ export default { layout: 'static' }
   padding-bottom: 4em;
 }
 
+/* ######### Owen ######### */
+
+#written {
+  padding-top: 6em;
+  padding-bottom: 3em;
+}
+
+#owen {
+  border-radius: 50%;
+}
+
+/* ###### Riomhheolas ##### */
+#featured {
+  padding-top: 3em;
+  padding-bottom: 3em;
+}
+
 /* ######### Misc ######### */
 .text-xl {
   color: #001f2a;
@@ -845,21 +869,13 @@ export default { layout: 'static' }
   border-bottom: 6px solid #0099cc;
 }
 
-/* ######### Owen ######### */
-
-#written {
-  padding-top: 6em;
-  padding-bottom: 3em;
+.zap {
+  width: 60%;
 }
-
-#owen {
-  border-radius: 50%;
-}
-
-/* ###### Riomhheolas ##### */
-#featured {
-  padding-top: 3em;
-  padding-bottom: 3em;
+@media only screen and (max-width: 600px) {
+  .zap {
+    width: 100%;
+  }
 }
 
 .centre {

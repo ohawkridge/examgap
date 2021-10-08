@@ -12,21 +12,20 @@
         <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
           <p class="text-h5 font-weight-bold text-center">Reset Password</p>
           <!-- Prevent submit btn posting form -->
-          <!-- ICONX -->
           <v-form ref="form" @submit.prevent="reset">
             <v-text-field
               v-model="username"
-              label="Email"
+              label="Username or email"
+              placeholder="joe.bloggs@yourschool.org.uk"
               color="primary"
               type="email"
-              placeholder="joe.bloggs@yourschool.org.uk"
               validate-on-blur
               required
               outlined
               :rules="userRules"
               autofocus
             ></v-text-field>
-            <v-alert border="left" text dense>
+            <v-alert border="top" icon="fa-regular fa-circle-info" text>
               Students—your teacher can reset your password.
             </v-alert>
             <v-alert v-if="failed" border="left" text type="error">
@@ -41,13 +40,12 @@
               :loading="loading"
               :disabled="loading"
               type="submit"
-              >Reset password</v-btn
+              ><span class="heading--text">Reset password</span></v-btn
             >
           </v-form>
         </v-col>
       </v-row>
       <the-success-dialog
-        title="Password reset"
         subtitle="A new password has been sent to your email."
       />
     </v-container>

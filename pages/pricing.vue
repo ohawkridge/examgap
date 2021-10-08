@@ -4,41 +4,49 @@
       <v-container class="pa-4">
         <v-row id="choose">
           <v-col cols="12">
-            <p class="text-h5 text-md-h3 font-weight-black text-center">
-              Choose your Computing package
+            <p class="text-h4 text-md-h2 font-weight-black text-center">
+              Try it free for 30 days
+            </p>
+            <p class="sub-hero text-center mb-0">
+              Written answer exam practise.
+            </p>
+            <p class="sub-hero text-center mb-0">
+              Frequent low stakes testing to improve results.
             </p>
           </v-col>
         </v-row>
         <v-row class="d-flex justify-center">
-          <v-col cols="12" md="4">
-            <v-card class="gcse pa-3" outlined rounded="lg">
+          <v-col cols="12" md="5" sm="7">
+            <v-card class="gcse pa-5" outlined rounded="lg" hover>
               <v-card-title class="text-h6 font-weight-black">
-                GCSE
+                GCSE 9-1 Computer Science
               </v-card-title>
-              <v-card-subtitle class="text-overline">
-                9-1 Computer Science
-              </v-card-subtitle>
               <v-card-text class="text-body-1">
-                <p class="text-h4 font-weight-bold">
-                  £79 <span class="text-overline">/ YEAR</span>
+                <p class="text-h3 font-weight-bold mb-2">
+                  £7 <span class="text-overline">/MONTH</span>
                 </p>
-                <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
+                <p class="text-body-2">(Billed annually—£84/year)</p>
+                <p class="d-flex align-center">
+                  <i
+                    class="
+                      fa-regular fa-chart-line-up fa-lg
+                      mr-4
+                      ico-blue ico-bg
+                    "
+                  ></i>
                   Improve your results
                 </p>
-                <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
+                <p class="d-flex align-center">
+                  <i
+                    class="fa-regular fa-lock-open fa-lg mr-4 ico-blue ico-bg"
+                  ></i>
                   Unlock more 8-9 grades
                 </p>
-                <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
-                  Mark more efficiently
+                <p class="d-flex align-center">
+                  <i class="fa-regular fa-gift fa-lg mr-4 ico-blue ico-bg"></i>
+                  Thoughtful features
                 </p>
-                <p class="mb-4">
-                  <i class="fa-regular fa-circle-check mr-2 ico-blue"></i>
-                  Diagnose weaknesses
-                </p>
-                <p class="text-caption mb-0">
+                <p class="text-body-2">
                   <nuxt-link nuxt to="/#boards"
                     >Which boards do you support?</nuxt-link
                   >
@@ -46,55 +54,14 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn
-                  color="primary"
+                  color="yell"
                   block
                   rounded
                   elevation="0"
                   nuxt
                   to="/trial"
                 >
-                  Get a 30-day free trial
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-card class="pa-3" outlined rounded="lg" disabled>
-              <v-card-title class="font-weight-black text-h6">
-                A Level
-              </v-card-title>
-              <v-card-subtitle class="text-overline">
-                Coming Soon
-              </v-card-subtitle>
-              <v-card-text class="text-body-1">
-                <p class="text-h4 font-weight-bold">
-                  £79 <span class="text-overline">/ YEAR</span>
-                </p>
-                <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-grey"></i>
-                  Improve your results
-                </p>
-                <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-grey"></i>
-                  Differentiate quickly
-                </p>
-                <p class="mb-2">
-                  <i class="fa-regular fa-circle-check mr-2 ico-grey"></i>
-                  Support independent study
-                </p>
-                <p class="mb-4">
-                  <i class="fa-regular fa-circle-check mr-2 ico-grey"></i>
-                  Create your own questions
-                </p>
-                <p class="text-caption mb-0">
-                  <nuxt-link nuxt to="/#boards" class="grey--text"
-                    >Which boards do you support?</nuxt-link
-                  >
-                </p>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn block rounded outlined nuxt to="/trial">
-                  Coming Soon
+                  <span class="heading--text">Get a 30-day free trial</span>
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -111,10 +78,10 @@
         </v-col>
       </v-row>
       <v-row class="d-flex justify-center text-center">
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4" lg="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-4x"></i>
+              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -125,10 +92,10 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4" lg="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-4x"></i>
+              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -141,10 +108,10 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4" lg="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-4x"></i>
+              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -157,10 +124,10 @@
         </v-col>
       </v-row>
       <v-row class="d-flex justify-center text-center mt-4">
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4" lg="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-4x"></i>
+              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -171,10 +138,10 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4" lg="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-4x"></i>
+              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -185,10 +152,10 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4" lg="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-4x"></i>
+              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -216,22 +183,14 @@
             >
               Try Examgap for free
             </p>
-            <v-btn
-              x-large
-              color="white"
-              outlined
-              rounded
-              elevation="0"
-              nuxt
-              to="/trial"
-            >
-              Get a 30-day free trial
+            <v-btn x-large color="yell" rounded elevation="0" nuxt to="/trial">
+              <span class="heading--text">Get a 30-day free trial</span>
             </v-btn>
             <div class="mt-4 white--text d-flex justify-center">
               <small>
-                <i class="fa-regular fa-check ico-pink"></i>
+                <i class="fa-regular fa-check-circle ico-light-pink"></i>
                 No payment info
-                <i class="fa-regular fa-check ico-pink ml-2"></i>
+                <i class="fa-regular fa-check-circle ico-light-pink ml-2"></i>
                 Improve your results
               </small>
             </div>
@@ -330,25 +289,39 @@ export default {
   }
 }
 
+.sub-hero {
+  font-size: 1.4em !important;
+  letter-spacing: 0.0125em;
+}
+
 .gcse {
-  border: 2px solid #0099cc;
+  background-color: #fafafa;
 }
 
 @media only screen and (min-width: 600px) {
   #hero {
     padding-top: 4em;
-    padding-bottom: 3em;
+    padding-bottom: 1em;
   }
 }
 
-/* .ico-bg {
+.ico-bg {
+  border: 1px solid #4dbfe6;
+  display: inline-flex;
+  padding: 7px;
+  border-radius: 50%;
+  background-color: rgba(0, 153, 204, 0.2);
+}
+
+.ico-bg2 {
   position: relative;
   top: -28px;
   display: inline-flex;
-  padding: 2px;
+  padding: 5px;
   border-radius: 50%;
   background-color: #0099cc;
-} */
+  color: #ffffff;
+}
 
 #features {
   margin-top: 4em;

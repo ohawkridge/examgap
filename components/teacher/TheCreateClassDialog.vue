@@ -26,7 +26,7 @@
             class="ml-2"
             @click="createGroup()"
           >
-            Create class
+            <span class="heading--text">Create class</span>
           </v-btn>
         </div>
       </v-card-text>

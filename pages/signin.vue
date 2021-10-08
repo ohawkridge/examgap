@@ -12,7 +12,6 @@
         <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
           <p class="text-h5 font-weight-bold text-center">Sign In</p>
           <v-form ref="form" @submit.prevent="login()">
-            <!-- ICONX -->
             <v-text-field
               v-model="username"
               label="Username"
@@ -21,6 +20,7 @@
               required
               outlined
               :rules="userRules"
+              prepend-inner-icon="fa-regular fa-user"
               autofocus
             ></v-text-field>
             <v-text-field
@@ -28,13 +28,20 @@
               :type="show ? 'text' : 'password'"
               color="primary"
               label="Password"
+              prepend-inner-icon="fa-regular fa-lock-keyhole"
               required
               outlined
               :rules="passRules"
               @click:append="show = !show"
             ></v-text-field>
-            <v-alert v-if="failed" border="left" text dense type="error">
-              Username or password incorrect
+            <v-alert
+              v-if="failed"
+              icon="fa-exclamation-circle"
+              border="top"
+              text
+              type="error"
+            >
+              Username or password incorrect.
             </v-alert>
             <v-btn
               color="primary"

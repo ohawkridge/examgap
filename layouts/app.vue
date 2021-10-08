@@ -8,9 +8,9 @@
         <the-greeting />
       </div>
       <div v-if="teacher" class="pa-2 d-flex justify-center">
-        <v-btn nuxt to="/author" elevation="0" color="primary" rounded>
-          <i class="fa-regular fa-plus"></i>
-          <span class="heading--text">Question</span>
+        <v-btn nuxt to="/author" elevation="0" color="primary" rounded outlined>
+          <i class="fa-regular fa-plus ico-blue mr-2"></i>
+          Question
         </v-btn>
       </div>
       <v-list dense nav>
@@ -24,8 +24,12 @@
               <v-list-item-title> Classes </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <!-- ICONX -->
-          <v-list-group v-else :value="true">
+          <v-list-group
+            v-else
+            append-icon="fa-regular fa-chevron-down"
+            :value="true"
+            prepend-icon="fa-regular fa-screen-users fa-lg"
+          >
             <template #activator>
               <v-list-item-title>Classes</v-list-item-title>
             </template>
@@ -44,7 +48,7 @@
           <v-divider class="my-4 mx-2" />
           <v-list-item nuxt to="/feedback">
             <v-list-item-icon>
-              <i class="fa-regular fa-comment-exclamation"></i>
+              <i class="fa-regular fa-comment-exclamation fa-xl"></i>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Send feedback </v-list-item-title>
@@ -52,7 +56,7 @@
           </v-list-item>
           <v-list-item nuxt to="/profile">
             <v-list-item-icon>
-              <i class="fa-regular fa-circle-user"></i>
+              <i class="fa-regular fa-circle-user fa-xl"></i>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Profile </v-list-item-title>
@@ -72,7 +76,9 @@
       flat
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = !drawer">
+        <i class="fa-regular fa-bars fa-xl"></i>
+      </v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
         <span

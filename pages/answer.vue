@@ -50,7 +50,6 @@
                   {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
-              <!-- ICONX -->
               <v-textarea
                 v-model="answer"
                 outlined
@@ -58,6 +57,11 @@
                 auto-grow
                 label="Your answer"
                 hide-details
+                :append-icon="
+                  saving
+                    ? 'fa-regular fa-cloud-arrow-up'
+                    : 'fa-regular fa-cloud-check'
+                "
                 class="mb-2"
                 @input="update()"
               >

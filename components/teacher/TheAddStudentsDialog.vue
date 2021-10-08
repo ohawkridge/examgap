@@ -33,7 +33,7 @@
             :loading="loading"
             :disabled="loading"
             @click="addStudents()"
-            >Add Students</v-btn
+            ><span class="heading--text">Add Students</span></v-btn
           >
         </div>
       </v-card-text>

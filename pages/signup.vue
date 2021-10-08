@@ -31,12 +31,11 @@
                       @input="formatCode"
                     >
                     </v-text-field>
-                    <!-- ICONX -->
                     <v-alert
                       v-if="invalidCode"
-                      border="left"
+                      icon="fa-exclamation-circle"
+                      border="top"
                       text
-                      dense
                       type="error"
                     >
                       Invalid code. Please try again
@@ -96,12 +95,11 @@
                       ></i
                       >.
                     </p>
-                    <!-- ICONX -->
                     <v-alert
                       v-if="emailInUse"
-                      border="left"
+                      icon="fa-exclamation-circle"
+                      border="top"
                       text
-                      dense
                       type="error"
                       class="mt-2 mb-0"
                     >
@@ -124,7 +122,7 @@
                   rounded
                   @click="next()"
                 >
-                  Next
+                  <span class="heading--text">Next</span>
                 </v-btn>
                 <v-btn
                   v-if="step === 2"
@@ -154,15 +152,14 @@ export default {
   },
   data() {
     return {
-      emailRules: [(v) => true],
-      // emailRules: [
-      //   (v) => !!v || 'E-mail is required',
-      //   (v) => {
-      //     const pattern =
-      //       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      //     return pattern.test(v) || 'Invalid e-mail.'
-      //   },
-      // ],
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => {
+          const pattern =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(v) || 'Invalid e-mail.'
+        },
+      ],
       passwordRules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 4) || 'Password must be at least 4 characters',

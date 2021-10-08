@@ -21,7 +21,7 @@
     <template v-else>
       <nuxt-link
         to="/profile"
-        class="text-subtitle-2 font-weight-medium name"
+        class="text-subtitle-2 font-weight-medium name heading--text"
         >{{ username | name }}</nuxt-link
       >
     </template>
