@@ -10,13 +10,13 @@
         <p>
           On the
           <span class="font-weight-medium">'STUDENTS'</span>
-          tab, click Students ⌄, Add students.
+          tab, click Students → Add students.
         </p>
         <p class="text-subtitle-1 font-weight-medium mb-2">Share invite link</p>
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text rounded @click="copy()">
-              <font-awesome-icon icon="fa-light fa-copy" />
+              <font-awesome-icon icon="fa-light fa-copy" class="mr-2" />
               {{ copyBtn }}
             </v-btn>
           </template>
@@ -27,12 +27,12 @@
         <v-text-field :value="formattedLink" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text rounded @click="overlay = true">
-              <font-awesome-icon icon="fa-light fa-maximize mr-2" />
+              <font-awesome-icon icon="fa-light fa-maximize" class="mr-2" />
               Show
             </v-btn>
           </template>
         </v-text-field>
-        <p class="mt-2">Students can go to examgap.com and click Join Class.</p>
+        <p class="mt-2">Students can go to examgap.com and click JOIN CLASS.</p>
         <div class="d-flex justify-end">
           <v-btn color="primary" rounded elevation="0" @click="dialog = false">
             <span class="heading--text">Close</span>
@@ -48,7 +48,7 @@
       @click.native="overlay = !overlay"
     >
       <div>Join Class</div>
-      <div class="secondary--text">{{ formattedLink }}</div>
+      <div>{{ formattedLink }}</div>
     </v-overlay>
   </v-dialog>
 </template>

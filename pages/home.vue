@@ -230,10 +230,11 @@
                     <span>Click to revise</span>
                   </v-tooltip>
                   <div>
-                    <i
+                    <font-awesome-icon
                       v-for="j in topic.answered"
                       :key="j"
-                      class="fa-light fa-circle-check ico-green"
+                      icon="fa-light fa-circle-check"
+                      class="ico-green"
                     />
                   </div>
                 </div>

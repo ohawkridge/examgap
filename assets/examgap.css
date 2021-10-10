@@ -157,3 +157,8 @@ span.v-chip.theme--light.green {
 .ico-heading {
   color: #001f2a;
 }
+
+#HW_badge {
+  background: #ef7a85 !important;
+  color: black;
+}

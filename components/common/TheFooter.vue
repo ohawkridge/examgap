@@ -5,7 +5,10 @@
         <v-col cols="12" class="d-flex justify-space-between align-center">
           support@examgap.com
           <div class="d-flex align-center">
-            <font-awesome-icon icon="fa-light fa-arrows-left-right mr-1" />
+            <font-awesome-icon
+              icon="fa-light fa-arrows-left-right"
+              class="mr-1"
+            />
             {{ $vuetify.breakpoint.name }}
           </div>
         </v-col>
@@ -17,13 +20,5 @@
 <script>
 export default {
   name: 'TheFooter',
-  mounted() {
-    const config = {
-      selector: '#headway',
-      account: 'yE6G2x',
-    }
-    // eslint-disable-next-line no-undef
-    Headway.init(config)
-  },
 }
 </script>

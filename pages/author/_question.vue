@@ -43,9 +43,15 @@
             <template #append>
               <v-tooltip top>
                 <template #activator="{ on }">
-                  <i
+                  <!-- <i
                     :disabled="question.marks.length === 13"
                     class="fa-light fa-plus mr-1"
+                    @click="question.marks.push({ id: '', text: '' })"
+                    v-on="on"
+                  /> -->
+                  <!-- TODO disabled? -->
+                  <font-awesome-icon
+                    icon="fa-light fa-plus"
                     @click="question.marks.push({ id: '', text: '' })"
                     v-on="on"
                   />

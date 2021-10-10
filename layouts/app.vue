@@ -9,7 +9,7 @@
       </div>
       <div v-if="teacher" class="pa-2 d-flex justify-center">
         <v-btn nuxt to="/author" elevation="0" color="primary" rounded outlined>
-          <font-awesome-icon icon="fa-light fa-plus ico-blue mr-2" />
+          <font-awesome-icon icon="fa-light fa-plus" class="ico-blue mr-2" />
           Question
         </v-btn>
       </div>
@@ -79,7 +79,7 @@
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer">
-        <font-awesome-icon icon="fa-light fa-bars fa-xl" />
+        <font-awesome-icon icon="fa-light fa-bars" class="fa-lg" />
       </v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
@@ -110,7 +110,7 @@
           rounded
           @click="createAssignment()"
         >
-          <font-awesome-icon icon="fa-light fa-plus mr-2" />
+          <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
           Assignment
         </v-btn>
         <!-- Create class -->
@@ -132,7 +132,7 @@
           rounded
           @click="$nuxt.$emit('show-create')"
         >
-          <font-awesome-icon icon="fa-light fa-plus mr-2" />
+          <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
           Class
         </v-btn>
         <!-- Create question -->
@@ -153,7 +153,7 @@
           nuxt
           to="/author"
         >
-          <font-awesome-icon icon="fa-light fa-plus" />
+          <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
           Question
         </v-btn>
         <!-- TODO -->

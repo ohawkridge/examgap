@@ -84,6 +84,14 @@ export default {
       return greetings[Math.floor(Math.random() * greetings.length)]
     },
   },
+  mounted() {
+    const config = {
+      selector: '#headway',
+      account: 'yE6G2x',
+    }
+    // eslint-disable-next-line no-undef
+    Headway.init(config)
+  },
 }
 </script>
 

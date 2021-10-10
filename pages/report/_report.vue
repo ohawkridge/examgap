@@ -126,7 +126,10 @@
                   <template #activator="{ on }">
                     <v-chip outlined @click="mark(i, j, k)" v-on="on">
                       {{ response.sm.length }}
-                      <font-awesome-icon icon="fa-light fa-check ml-2" />
+                      <font-awesome-icon
+                        icon="fa-light fa-check"
+                        class="ml-2"
+                      />
                     </v-chip>
                   </template>
                   <span>Mark</span>
@@ -141,11 +144,16 @@
                       v-on="on"
                     >
                       {{ response.tm.length }}
-                      <i
+                      <font-awesome-icon
                         v-if="response.repeat"
-                        class="fa-light fa-repeat ml-2"
+                        icon="fa-light fa-repeat"
+                        class="ml-2"
                       />
-                      <i v-else class="fa-light fa-check-double ml-2" />
+                      <font-awesome-icon
+                        v-else
+                        icon="fa-light fa-check-double"
+                        class="ml-2"
+                      />
                     </v-chip>
                     <i
                       v-if="response.flagged"
@@ -177,9 +185,9 @@
     </table>
     <div class="d-flex justify-end align-center pa-4 text-caption">
       N/A Not answered&nbsp;&nbsp;
-      <font-awesome-icon icon="fa-light fa-check fa-sm mr-1" />
+      <font-awesome-icon icon="fa-light fa-check" class="fa-sm mr-1" />
       Self mark&nbsp;&nbsp;
-      <font-awesome-icon icon="fa-light fa-check-double fa-sm mr-1" />
+      <font-awesome-icon icon="fa-light fa-check-double" class="fa-sm mr-1" />
       Teacher mark
     </div>
     <!-- Marking dialog -->

@@ -20,27 +20,36 @@
               required
               outlined
               :rules="userRules"
-              prepend-inner-icon="fa-user"
               autofocus
-            ></v-text-field>
+            >
+              <font-awesome-icon
+                slot="prepend-inner"
+                icon="fa-light fa-user"
+                class="fa-lg"
+              />
+            </v-text-field>
             <v-text-field
               v-model="pw"
               :type="show ? 'text' : 'password'"
               color="primary"
               label="Password"
-              prepend-inner-icon="fa-light fa-lock-keyhole"
               required
               outlined
               :rules="passRules"
               @click:append="show = !show"
-            ></v-text-field>
-            <v-alert
-              v-if="failed"
-              icon="fa-exclamation-circle"
-              border="top"
-              text
-              type="error"
             >
+              <font-awesome-icon
+                slot="prepend-inner"
+                icon="fa-light fa-lock-keyhole"
+                class="fa-lg"
+              />
+            </v-text-field>
+            <v-alert v-if="failed" border="top" text type="error">
+              <font-awesome-icon
+                slot="prepend"
+                icon="fa-light fa-circle-exclamation"
+                class="mr-2 fa-lg"
+              />
               Username or password incorrect.
             </v-alert>
             <v-btn

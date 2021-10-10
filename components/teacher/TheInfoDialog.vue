@@ -20,7 +20,7 @@
             Response id:
             <code>{{ response.id }}</code>
             <v-btn icon small @click="copyId()">
-              <font-awesome-icon icon="fa-light fa-copy fa-sm" />
+              <font-awesome-icon icon="fa-light fa-copy" class="fa-sm" />
             </v-btn>
           </li>
           <li>

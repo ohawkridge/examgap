@@ -41,7 +41,7 @@
             <div id="fix-chip">
               <v-chip v-if="subscribed" label color="#db5461" outlined>
                 Subscribed
-                <font-awesome-icon icon="fa-light fa-check ml-2" />
+                <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
               </v-chip>
             </div>
           </template>

@@ -27,6 +27,11 @@
       <v-card-text>
         <div class="d-flex">
           <v-alert text type="info" dense>
+            <font-awesome-icon
+              slot="prepend"
+              icon="fa-light fa-circle-info"
+              class="mr-2"
+            />
             In exam mode, keywords and minimum word count are hidden.
           </v-alert>
         </div>

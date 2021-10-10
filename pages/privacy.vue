@@ -61,7 +61,8 @@
               target="_blank"
               >about Hotjar</a
             >’<font-awesome-icon
-              icon="fa-light fa-arrow-up-right-from-square fa-sm"
+              icon="fa-light fa-arrow-up-right-from-square"
+              class="fa-sm"
             />
             section of Hotjar’s support site.
           </p>

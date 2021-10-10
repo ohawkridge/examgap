@@ -25,7 +25,7 @@
               rounded
               v-on="on"
               >Students
-              <font-awesome-icon icon="fa-light fa-chevron-down ml-2" />
+              <font-awesome-icon icon="fa-light fa-chevron-down" class="ml-2" />
             </v-btn>
           </template>
           <v-list>
@@ -86,7 +86,10 @@
               v-on="on"
             >
               Csv
-              <font-awesome-icon icon="fa-light fa-arrow-down-to-line ml-2" />
+              <font-awesome-icon
+                icon="fa-light fa-arrow-down-to-line"
+                class="ml-2"
+              />
             </v-btn>
           </template>
           <span>Download csv</span>
@@ -125,7 +128,7 @@
             alt="Graduation gap illustration"
             class="mx-auto"
           />
-          <p class="text-center mt-2 black--text">No students yet.</p>
+          <p class="text-center mt-2 black--text">No students yet</p>
           <div class="d-flex justify-center">
             <v-btn
               elevation="0"
@@ -133,8 +136,7 @@
               color="primary"
               @click="$nuxt.$emit('show-invite')"
             >
-              <font-awesome-icon icon="fa-light fa-plus mr-2" />
-              Student
+              Invite students
             </v-btn>
           </div>
         </div>

@@ -31,14 +31,13 @@
                       @input="formatCode"
                     >
                     </v-text-field>
-                    <v-alert
-                      v-if="invalidCode"
-                      icon="fa-exclamation-circle"
-                      border="top"
-                      text
-                      type="error"
-                    >
-                      Invalid code. Please try again
+                    <v-alert v-if="invalidCode" border="top" text type="error">
+                      <font-awesome-icon
+                        slot="prepend"
+                        icon="fa-light fa-circle-exclamation"
+                        class="mr-2 fa-lg"
+                      />
+                      Invalid code. Please try again.
                     </v-alert>
                   </v-card-text>
                 </v-window-item>
@@ -90,19 +89,23 @@
                     <p class="mt-2 mb-0">
                       By registering you accept our
                       <a href="/terms" target="_blank">terms of service</a>
-                      <i
-                        class="fa-light fa-arrow-up-right-from-square fa-sm"
-                      ></i
-                      >.
+                      <font-awesome-icon
+                        icon="fa-light fa-arrow-up-right-from-square"
+                        class="fa-sm"
+                      />.
                     </p>
                     <v-alert
                       v-if="emailInUse"
-                      icon="fa-exclamation-circle"
                       border="top"
                       text
                       type="error"
                       class="mt-2 mb-0"
                     >
+                      <font-awesome-icon
+                        slot="prepend"
+                        icon="fa-light fa-circle-exclamation"
+                        class="mr-2 fa-lg"
+                      />
                       Email already registered.
                       <nuxt-link to="/signin">Sign in</nuxt-link>
                       instead

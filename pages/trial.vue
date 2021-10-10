@@ -61,21 +61,21 @@
                   </v-text-field>
                 </v-col>
               </v-row>
-              <v-alert
-                v-if="emailInUse"
-                icon="fa-exclamation-circle"
-                border="top"
-                text
-                type="error"
-              >
-                Email is already registered
+              <v-alert v-if="emailInUse" border="top" text type="error">
+                <font-awesome-icon
+                  slot="prepend"
+                  icon="fa-light fa-circle-exclamation"
+                  class="mr-2 fa-lg"
+                />
+                Email is already registered.
               </v-alert>
               <small> *Indicates required field </small>
               <p class="mt-2">
                 By registering you accept our
                 <a href="/terms" target="_blank">terms of service</a>
                 <font-awesome-icon
-                  icon="fa-light fa-arrow-up-right-from-square fa-sm"
+                  icon="fa-light fa-arrow-up-right-from-square"
+                  class="fa-sm"
                 />.
               </p>
               <v-btn

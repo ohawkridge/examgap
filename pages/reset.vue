@@ -25,11 +25,21 @@
               :rules="userRules"
               autofocus
             ></v-text-field>
-            <v-alert border="top" icon="fa-light fa-circle-info" text>
-              Students—your teacher can reset your password.
+            <v-alert border="top" text>
+              <font-awesome-icon
+                slot="prepend"
+                icon="fa-light fa-circle-info"
+                class="mr-2 fa-lg"
+              />
+              Student? Your teacher can reset your password.
             </v-alert>
             <v-alert v-if="failed" border="left" text type="error">
-              Username not found. Please try again
+              <font-awesome-icon
+                slot="prepend"
+                icon="fa-light fa-circle-exclamation"
+                class="mr-2 fa-lg"
+              />
+              Username not found. Please try again.
             </v-alert>
             <v-btn
               color="primary"

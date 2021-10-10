@@ -77,7 +77,7 @@
                 >
                   <font-awesome-icon icon="fa-light fa-user-graduate mr-2" />
                   {{ response.tm.length }}
-                  <font-awesome-icon icon="fa-light fa-check ml-2" />
+                  <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
                 </v-chip>
               </template>
               <span>Your teacher</span>
@@ -91,7 +91,7 @@
                 >
                   <font-awesome-icon icon="fa-light fa-circle-user mr-2" />
                   {{ response.sm.length }}
-                  <font-awesome-icon icon="fa-light fa-check ml-2" />
+                  <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
                 </v-chip>
               </template>
               <span>You</span>
@@ -155,15 +155,17 @@
               <tbody>
                 <tr v-for="(mark, i) in response.question.markScheme" :key="i">
                   <td class="text-center">
-                    <i
+                    <font-awesome-icon
                       v-if="response.tm.includes(mark.id)"
-                      class="fa-light fa-square-check ico-blue"
+                      icon="fa-light fa-square-check"
+                      class="ico-blue"
                     />
                   </td>
                   <td class="text-center">
-                    <i
+                    <font-awesome-icon
                       v-if="response.sm.includes(mark.id)"
-                      class="fa-light fa-square-check ico-green"
+                      icon="fa-light fa-square-check"
+                      class="ico-green"
                     />
                   </td>
                   <td>{{ mark.text }}</td>

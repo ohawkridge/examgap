@@ -11,7 +11,10 @@
             v-on="on"
           >
             Csv
-            <font-awesome-icon icon="fa-light fa-arrow-down-to-line ml-2" />
+            <font-awesome-icon
+              icon="fa-light fa-arrow-down-to-line"
+              class="ml-2"
+            />
           </v-btn>
         </template>
         <span>Download csv</span>
@@ -26,7 +29,7 @@
         @mouseup="stop"
       >
         Scroll
-        <font-awesome-icon icon="fa-light fa-arrow-right ml-2" />
+        <font-awesome-icon icon="fa-light fa-arrow-right" class="ml-2" />
       </v-btn>
     </div>
     <v-data-table

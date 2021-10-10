@@ -81,11 +81,17 @@
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-btn icon v-on="on" @click.stop="add(q.id)">
-                          <i
+                          <font-awesome-icon
                             v-if="selected.includes(q.id)"
-                            class="fa-light fa-minus fa-xl ico-pink"
+                            icon="fa-light fa-minus"
+                            class="fa-xl ico-pink"
+                            @click="question.marks.push({ id: '', text: '' })"
                           />
-                          <i v-else class="fa-light fa-plus fa-xl" />
+                          <font-awesome-icon
+                            v-else
+                            icon="fa-light fa-plus"
+                            class="fa-xl"
+                          />
                         </v-btn>
                       </template>
                       <span>

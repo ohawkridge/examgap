@@ -44,7 +44,8 @@ export default {
     { src: '@/plugins/tiptapVuetify.js' },
     { src: '@/plugins/honeybadger.js', mode: 'client' },
     { src: '@/plugins/persistedState.js', mode: 'client' },
-    { src: '@/plugins/fontawesome.js' },
+    { src: '@/plugins/vuetify.js' },
+    // { src: '@/plugins/fontawesome.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

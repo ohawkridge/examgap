@@ -76,7 +76,11 @@
                     small
                   >
                     {{ word }}
-                    <i v-if="used(word)" class="fa-light fa-check ml-2" />
+                    <font-awesome-icon
+                      v-if="used(word)"
+                      icon="fa-light fa-check"
+                      class="ml-2"
+                    />
                   </v-chip>
                 </div>
                 <v-tooltip bottom>

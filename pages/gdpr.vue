@@ -38,7 +38,8 @@
             <a href="https://www.allaboutcookies.org" target="_blank"
               >allaboutcookies.org</a
             ><font-awesome-icon
-              icon="fa-light fa-arrow-up-right-from-square fa-sm ml-1"
+              icon="fa-light fa-arrow-up-right-from-square"
+              class="fa-sm ml-1"
             />.
           </p>
           <p class="text-h6">SSL (TLS) encryption</p>
