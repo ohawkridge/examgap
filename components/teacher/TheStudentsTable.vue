@@ -25,7 +25,7 @@
               rounded
               v-on="on"
               >Students
-              <i class="fa-regular fa-chevron-down ml-2"></i>
+              <font-awesome-icon icon="fa-light fa-chevron-down ml-2" />
             </v-btn>
           </template>
           <v-list>
@@ -86,7 +86,7 @@
               v-on="on"
             >
               Csv
-              <i class="fa-regular fa-arrow-down-to-line ml-2"></i>
+              <font-awesome-icon icon="fa-light fa-arrow-down-to-line ml-2" />
             </v-btn>
           </template>
           <span>Download csv</span>
@@ -133,7 +133,7 @@
               color="primary"
               @click="$nuxt.$emit('show-invite')"
             >
-              <i class="fa-regular fa-plus mr-2"></i>
+              <font-awesome-icon icon="fa-light fa-plus mr-2" />
               Student
             </v-btn>
           </div>

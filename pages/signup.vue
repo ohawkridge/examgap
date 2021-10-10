@@ -91,7 +91,7 @@
                       By registering you accept our
                       <a href="/terms" target="_blank">terms of service</a>
                       <i
-                        class="fa-regular fa-arrow-up-right-from-square fa-sm"
+                        class="fa-light fa-arrow-up-right-from-square fa-sm"
                       ></i
                       >.
                     </p>

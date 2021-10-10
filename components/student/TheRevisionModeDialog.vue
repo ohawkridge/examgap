@@ -6,11 +6,11 @@
         <p>You will now see a practise exam question. Remember&hellip;</p>
         <ul class="no-bullet">
           <li class="mb-2">
-            <i class="fa-regular fa-timer"></i>
+            <font-awesome-icon icon="fa-light fa-timer" />
             Take your time
           </li>
           <li>
-            <i class="fa-regular fa-bullseye-arrow"></i>
+            <font-awesome-icon icon="fa-light fa-bullseye-arrow" />
             Mark yourself accurately
           </li>
         </ul>

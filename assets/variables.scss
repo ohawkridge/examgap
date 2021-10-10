@@ -17,3 +17,9 @@
 a:link {
   text-decoration: none;
 }
+
+// Stop svg icons appearing massive until svg-core css is loaded
+.svg-inline--fa {
+  display: inline-block;
+  height: 1em;
+}

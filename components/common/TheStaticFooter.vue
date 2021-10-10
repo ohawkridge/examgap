@@ -25,13 +25,15 @@
             <p class="text-h6 grey--text">Contact</p>
             <ul class="no-bullet">
               <li>
-                <i class="fa-regular fa-paper-plane ico ico-grey mr-1"></i>
+                <font-awesome-icon
+                  icon="fa-light fa-paper-plane"
+                  class="ico-grey mr-1"
+                />
                 <a href="mailto:support@examgap.com" class="grey--text"
                   >support@examgap.com</a
                 >
               </li>
               <li>
-                <i class="fa-brands fa-twitter ico ico-grey mr-1"></i>
                 <a href="https://twitter.com/examgap" class="grey--text"
                   >@examgap</a
                 >

@@ -74,7 +74,9 @@
               <p class="mt-2">
                 By registering you accept our
                 <a href="/terms" target="_blank">terms of service</a>
-                <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i>.
+                <font-awesome-icon
+                  icon="fa-light fa-arrow-up-right-from-square fa-sm"
+                />.
               </p>
               <v-btn
                 color="primary"

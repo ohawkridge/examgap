@@ -60,7 +60,9 @@
               href="https://help.hotjar.com/hc/en-us/categories/115001323967-About-Hotjar"
               target="_blank"
               >about Hotjar</a
-            >’<i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i>
+            >’<font-awesome-icon
+              icon="fa-light fa-arrow-up-right-from-square fa-sm"
+            />
             section of Hotjar’s support site.
           </p>
           <p class="text-h6">Log Data</p>

@@ -3,10 +3,10 @@
     <!-- Student has foreign greeting -->
     <v-menu v-if="!teacher" offset-y open-on-hover>
       <template #activator="{ on }">
-        <span v-on="on"> {{ greeting.text }}, </span>
+        <p class="mb-0" v-on="on">{{ greeting.text }},</p>
         <nuxt-link
           to="/profile"
-          class="text-subtitle-2 font-weight-medium name"
+          class="text-subtitle-2 font-weight-medium heading--text name"
           >{{ username | name }}</nuxt-link
         >
       </template>

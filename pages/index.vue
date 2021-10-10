@@ -20,9 +20,15 @@
           </div>
           <div class="d-flex justify-center mt-4">
             <small>
-              <i class="fa-regular fa-circle-check ico-blue"></i>
+              <font-awesome-icon
+                icon="fa-light fa-circle-check"
+                class="ico-blue"
+              />
               No payment info
-              <i class="fa-regular fa-circle-check ico-blue ml-2"></i>
+              <font-awesome-icon
+                icon="fa-light fa-circle-check"
+                class="ico-blue ml-2"
+              />
               Improve your results
             </small>
           </div>
@@ -220,7 +226,10 @@
               <v-row>
                 <v-col cols="12" md="4">
                   <div class="d-flex justify-center">
-                    <i class="fa-light fa-circle-1 ico-blue fa-4x centre"></i>
+                    <font-awesome-icon
+                      icon="fa-light fa-circle-1"
+                      class="ico-blue fa-4x"
+                    />
                   </div>
                   <p class="text-h6 text-center mt-4">Choose questions</p>
                   <p class="text-center">
@@ -231,7 +240,10 @@
                 </v-col>
                 <v-col cols="12" md="4">
                   <div class="d-flex justify-center">
-                    <i class="fa-light fa-circle-2 ico-blue fa-4x centre"></i>
+                    <font-awesome-icon
+                      icon="fa-light fa-circle-2"
+                      class="ico-blue fa-4x"
+                    />
                   </div>
                   <p class="text-h6 text-center mt-4">Set assignments</p>
                   <p class="text-center">
@@ -241,7 +253,10 @@
                 </v-col>
                 <v-col cols="12" md="4">
                   <div class="d-flex justify-center">
-                    <i class="fa-light fa-circle-3 ico-blue fa-4x centre"></i>
+                    <font-awesome-icon
+                      icon="fa-light fa-circle-3"
+                      class="ico-blue fa-4x"
+                    />
                   </div>
                   <p class="text-h6 text-center mt-4">Mark and feedback</p>
                   <p class="text-center">
@@ -310,7 +325,10 @@
                     <span class="text-caption">(8520)</span>
                   </td>
                   <td class="text-center">
-                    <i class="fa-regular fa-check ico-green fa-xl"></i>
+                    <font-awesome-icon
+                      icon="fa-light fa-check"
+                      class="ico-green fa-xl"
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -322,7 +340,10 @@
                     >
                   </td>
                   <td class="text-center">
-                    <i class="fa-regular fa-check ico-green fa-xl"></i>
+                    <font-awesome-icon
+                      icon="fa-light fa-check"
+                      class="ico-green fa-xl"
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -331,7 +352,10 @@
                     <span class="text-caption">(J276)</span>
                   </td>
                   <td class="text-center">
-                    <i class="fa-regular fa-check ico-green fa-xl"></i>
+                    <font-awesome-icon
+                      icon="fa-light fa-check"
+                      class="ico-green fa-xl"
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -343,7 +367,10 @@
                     >
                   </td>
                   <td class="text-center">
-                    <i class="fa-regular fa-check ico-green fa-xl"></i>
+                    <font-awesome-icon
+                      icon="fa-light fa-check"
+                      class="ico-green fa-xl"
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -438,9 +465,15 @@
           </v-btn>
           <div class="mt-4 white--text d-flex justify-center">
             <small>
-              <i class="fa-regular fa-circle-check ico-light-pink"></i>
+              <font-awesome-icon
+                icon="fa-light fa-circle-check"
+                class="ico-light-pink"
+              />
               No payment info
-              <i class="fa-regular fa-circle-check ico-light-pink ml-2"></i>
+              <font-awesome-icon
+                icon="fa-light fa-circle-check"
+                class="ico-light-pink ml-2"
+              />
               Set up in minutes
             </small>
           </div>
@@ -534,7 +567,10 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-ear-listen fa-3x mb-4"></i>
+            <font-awesome-icon
+              icon="fa-light fa-ear-listen"
+              class="fa-3x mb-4"
+            />
             <p class="font-weight-bold text-center">Audio descriptions</p>
           </v-col>
           <v-col
@@ -543,7 +579,10 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-traffic-light fa-3x mb-4"></i>
+            <font-awesome-icon
+              icon="fa-light fa-traffic-light"
+              class="fa-3x mb-4"
+            />
             <p class="font-weight-bold">Smart colour coding</p>
           </v-col>
           <v-col
@@ -552,7 +591,10 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-comment-lines fa-3x mb-4"></i>
+            <font-awesome-icon
+              icon="fa-light fa-comment-lines"
+              class="fa-3x mb-4"
+            />
             <p class="font-weight-bold">Comment bank</p>
           </v-col>
           <v-col
@@ -561,7 +603,10 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-bullseye-arrow fa-3x mb-4"></i>
+            <font-awesome-icon
+              icon="fa-light fa-bullseye-arrow"
+              class="fa-3x mb-4"
+            />
             <p class="font-weight-bold">Target setting</p>
           </v-col>
           <v-col
@@ -570,7 +615,10 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-arrow-down-to-line fa-3x mb-4"></i>
+            <font-awesome-icon
+              icon="fa-light fa-arrow-down-to-line"
+              class="fa-3x mb-4"
+            />
             <p class="font-weight-bold">Export data</p>
           </v-col>
           <v-col
@@ -579,7 +627,10 @@
             md="4"
             class="d-flex justify-center flex-column align-center"
           >
-            <i class="fa-regular fa-arrows-repeat fa-3x mb-4"></i>
+            <font-awesome-icon
+              icon="fa-light fa-arrows-repeat"
+              class="fa-3x mb-4"
+            />
             <p class="font-weight-bold">Reassign questions</p>
           </v-col>
         </v-row>
@@ -876,10 +927,5 @@ export default { layout: 'static' }
   .zap {
     width: 100%;
   }
-}
-
-.centre {
-  margin-left: auto;
-  margin-right: auto;
 }
 </style>

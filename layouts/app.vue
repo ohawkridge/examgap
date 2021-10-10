@@ -9,7 +9,7 @@
       </div>
       <div v-if="teacher" class="pa-2 d-flex justify-center">
         <v-btn nuxt to="/author" elevation="0" color="primary" rounded outlined>
-          <i class="fa-regular fa-plus ico-blue mr-2"></i>
+          <font-awesome-icon icon="fa-light fa-plus ico-blue mr-2" />
           Question
         </v-btn>
       </div>
@@ -17,8 +17,8 @@
         <v-list-item-group v-model="nav" color="primary">
           <!-- No classes -->
           <v-list-item v-if="groups.length === 0" @click="navHome()">
-            <v-list-item-icon>
-              <i class="fa-regular fa-users"></i>
+            <v-list-item-icon class="d-flex justify-center align-center">
+              <font-awesome-icon icon="fa-light fa-users fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Classes </v-list-item-title>
@@ -26,11 +26,13 @@
           </v-list-item>
           <v-list-group
             v-else
-            append-icon="fa-regular fa-chevron-down"
+            append-icon="fa-light fa-chevron-down"
             :value="true"
-            prepend-icon="fa-regular fa-screen-users fa-lg"
           >
             <template #activator>
+              <v-list-item-icon class="d-flex justify-center align-center">
+                <font-awesome-icon icon="fa-light fa-users fa-lg" />
+              </v-list-item-icon>
               <v-list-item-title>Classes</v-list-item-title>
             </template>
             <template v-for="(group, i) in groups">
@@ -47,16 +49,16 @@
           </v-list-group>
           <v-divider class="my-4 mx-2" />
           <v-list-item nuxt to="/feedback">
-            <v-list-item-icon>
-              <i class="fa-regular fa-comment-exclamation fa-xl"></i>
+            <v-list-item-icon class="d-flex justify-center align-center">
+              <font-awesome-icon icon="fa-light fa-comment-exclamation fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Send feedback </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item nuxt to="/profile">
-            <v-list-item-icon>
-              <i class="fa-regular fa-circle-user fa-xl"></i>
+            <v-list-item-icon class="d-flex justify-center align-center">
+              <font-awesome-icon icon="fa-light fa-circle-user fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Profile </v-list-item-title>
@@ -77,7 +79,7 @@
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer">
-        <i class="fa-regular fa-bars fa-xl"></i>
+        <font-awesome-icon icon="fa-light fa-bars fa-xl" />
       </v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
@@ -98,7 +100,7 @@
           color="primary"
           @click="createAssignment()"
         >
-          <i class="fa-regular fa-plus"></i>
+          <font-awesome-icon icon="fa-light fa-plus" />
         </v-btn>
         <v-btn
           v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
@@ -108,7 +110,7 @@
           rounded
           @click="createAssignment()"
         >
-          <i class="fa-regular fa-plus mr-2"></i>
+          <font-awesome-icon icon="fa-light fa-plus mr-2" />
           Assignment
         </v-btn>
         <!-- Create class -->
@@ -120,7 +122,7 @@
           rounded
           @click="$nuxt.$emit('show-create')"
         >
-          <i class="fa-regular fa-plus"></i>
+          <font-awesome-icon icon="fa-light fa-plus" />
         </v-btn>
         <v-btn
           v-if="createClass && $vuetify.breakpoint.name !== 'xs'"
@@ -130,7 +132,7 @@
           rounded
           @click="$nuxt.$emit('show-create')"
         >
-          <i class="fa-regular fa-plus mr-2"></i>
+          <font-awesome-icon icon="fa-light fa-plus mr-2" />
           Class
         </v-btn>
         <!-- Create question -->
@@ -141,7 +143,7 @@
           nuxt
           to="/author"
         >
-          <i class="fa-regular fa-plus"></i>
+          <font-awesome-icon icon="fa-light fa-plus" />
         </v-btn>
         <v-btn
           v-if="createQ && $vuetify.breakpoint.name !== 'xs'"
@@ -151,7 +153,7 @@
           nuxt
           to="/author"
         >
-          <i class="fa-regular fa-plus"></i>
+          <font-awesome-icon icon="fa-light fa-plus" />
           Question
         </v-btn>
         <!-- TODO -->

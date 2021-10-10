@@ -83,9 +83,9 @@
                         <v-btn icon v-on="on" @click.stop="add(q.id)">
                           <i
                             v-if="selected.includes(q.id)"
-                            class="fa-regular fa-plus"
-                          ></i>
-                          <i v-else class="fa-regular fa-minus ico-pink"></i>
+                            class="fa-light fa-minus fa-xl ico-pink"
+                          />
+                          <i v-else class="fa-light fa-plus fa-xl" />
                         </v-btn>
                       </template>
                       <span>
@@ -96,11 +96,11 @@
                 </v-list-item>
               </template>
               <v-list-item v-if="noQuestions">
+                <v-list-item-icon>
+                  <font-awesome-icon icon="fa-light fa-circle-info" />
+                </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title> No questions yet </v-list-item-title>
-                  <v-list-item-subtitle>
-                    <nuxt-link to="/author">Create question</nuxt-link>
-                  </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>

@@ -59,7 +59,7 @@
                 color="primary"
                 @click="$nuxt.$emit('show-create')"
               >
-                <i class="fa-regular fa-plus mr-2"></i>
+                <font-awesome-icon icon="fa-light fa-plus mr-2" />
                 Class
               </v-btn>
             </div>
@@ -151,7 +151,7 @@
             >
               <v-list-item-content>
                 <v-row>
-                  <v-col cols="12" sm="5" class="pb-0 pb-sm-3">
+                  <v-col cols="12" sm="4" class="pb-0 pb-sm-3">
                     <div class="text-subtitle-1 font-weight-medium">
                       {{ assignment.name }}
                     </div>
@@ -171,13 +171,13 @@
                       text-body-2
                     "
                   >
-                    <div class="d-flex justify-date" style="margin-right: auto">
+                    <div class="justify-date">
                       <span class="font-weight-medium fix-date mr-1"
                         >Start:</span
                       >
                       {{ assignment.start | date }}
                     </div>
-                    <div class="d-flex" style="margin-right: auto">
+                    <div>
                       <span class="font-weight-medium fix-date mr-1">Due:</span>
                       {{ assignment.dateDue | date }}
                     </div>
@@ -185,7 +185,7 @@
                   <v-col
                     v-if="$vuetify.breakpoint.name !== 'xs'"
                     cols="2"
-                    sm="2"
+                    sm="3"
                     class="d-flex justify-center align-center"
                   >
                     <v-chip v-if="assignment.live" label color="green" small>
@@ -233,8 +233,8 @@
                     <i
                       v-for="j in topic.answered"
                       :key="j"
-                      class="fa-regular fa-circle-check ico-green"
-                    ></i>
+                      class="fa-light fa-circle-check ico-green"
+                    />
                   </div>
                 </div>
               </v-list-item-content>

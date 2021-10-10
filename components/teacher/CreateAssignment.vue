@@ -16,7 +16,7 @@
         rounded
         v-on="on"
       >
-        <i class="fa-regular fa-plus mr-2"></i>
+        <font-awesome-icon icon="fa-light fa-plus mr-2" />
         Assign ({{ selected.length }})</v-btn
       >
     </template>

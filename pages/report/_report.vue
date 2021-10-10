@@ -13,7 +13,7 @@
                   :to="`/group/${group.id}`"
                   v-on="on"
                 >
-                  <i class="fa-regular fa-arrow-left"></i>
+                  <font-awesome-icon icon="fa-light fa-arrow-left" />
                 </v-btn>
               </template>
               <span>Back</span>
@@ -37,7 +37,7 @@
             <v-menu v-else>
               <template #activator="{ on }">
                 <v-btn icon v-on="on">
-                  <i class="fa-regular fa-ellipsis-vertical"></i>
+                  <font-awesome-icon icon="fa-light fa-ellipsis-vertical" />
                 </v-btn>
               </template>
               <v-list>
@@ -126,7 +126,7 @@
                   <template #activator="{ on }">
                     <v-chip outlined @click="mark(i, j, k)" v-on="on">
                       {{ response.sm.length }}
-                      <i class="fa-regular fa-check ml-2"></i>
+                      <font-awesome-icon icon="fa-light fa-check ml-2" />
                     </v-chip>
                   </template>
                   <span>Mark</span>
@@ -143,14 +143,14 @@
                       {{ response.tm.length }}
                       <i
                         v-if="response.repeat"
-                        class="fa-regular fa-repeat ml-2"
-                      ></i>
-                      <i v-else class="fa-regular fa-check-double ml-2"></i>
+                        class="fa-light fa-repeat ml-2"
+                      />
+                      <i v-else class="fa-light fa-check-double ml-2" />
                     </v-chip>
                     <i
                       v-if="response.flagged"
-                      class="fa-regular fa-flag ico-pink fix-flag"
-                    ></i>
+                      class="fa-light fa-flag ico-pink fix-flag"
+                    />
                   </template>
                   <span>Mark</span>
                 </v-tooltip>
@@ -177,9 +177,9 @@
     </table>
     <div class="d-flex justify-end align-center pa-4 text-caption">
       N/A Not answered&nbsp;&nbsp;
-      <i class="fa-regular fa-check fa-sm mr-1"></i>
+      <font-awesome-icon icon="fa-light fa-check fa-sm mr-1" />
       Self mark&nbsp;&nbsp;
-      <i class="fa-regular fa-check-double fa-sm mr-1"></i>
+      <font-awesome-icon icon="fa-light fa-check-double fa-sm mr-1" />
       Teacher mark
     </div>
     <!-- Marking dialog -->
@@ -192,7 +192,7 @@
       <v-card tile>
         <v-toolbar dark dense color="primary">
           <v-btn icon dark @click="close()">
-            <i class="fa-regular fa-xmark"></i>
+            <font-awesome-icon icon="fa-light fa-xmark" />
           </v-btn>
           <v-toolbar-title>Marking</v-toolbar-title>
           <v-spacer />
@@ -207,7 +207,7 @@
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <v-btn icon @click="next(-1)" v-on="on">
-                      <i class="fa-regular fa-arrow-left"></i>
+                      <font-awesome-icon icon="fa-light fa-arrow-left" />
                     </v-btn>
                   </template>
                   <span>Previous</span>
@@ -215,7 +215,7 @@
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <v-btn icon @click="next(1)" v-on="on">
-                      <i class="fa-regular fa-arrow-right"></i>
+                      <font-awesome-icon icon="fa-light fa-arrow-right" />
                     </v-btn>
                   </template>
                   <span>Next</span>
@@ -229,7 +229,7 @@
                       @click="flag()"
                       v-on="on"
                     >
-                      <i class="fa-regular fa-flag"></i>
+                      <font-awesome-icon icon="fa-light fa-flag" />
                     </v-btn>
                   </template>
                   <span>{{ response.flagged ? 'Remove flag' : 'Flag' }}</span>
@@ -243,7 +243,7 @@
                       @click="reassign()"
                       v-on="on"
                     >
-                      <i class="fa-regular fa-repeat"></i>
+                      <font-awesome-icon icon="fa-light fa-repeat" />
                     </v-btn>
                   </template>
                   <span>Reassign</span>
@@ -259,9 +259,9 @@
                       class="mr-2"
                       v-on="on"
                     >
-                      <i class="fa-regular fa-user-graduate"></i>
+                      <font-awesome-icon icon="fa-light fa-user-graduate" />
                       {{ marks.length }}
-                      <i class="fa-regular fa-check"></i>
+                      <font-awesome-icon icon="fa-light fa-check" />
                     </v-chip>
                   </template>
                   <span>You</span>
@@ -273,9 +273,9 @@
                       :color="color(response.sm.length, question.maxMark)"
                       v-on="on"
                     >
-                      <i class="fa-regular fa-circle-user mr-2"></i>
+                      <font-awesome-icon icon="fa-light fa-circle-user mr-2" />
                       {{ response.sm.length }}
-                      <i class="fa-regular fa-check"></i>
+                      <font-awesome-icon icon="fa-light fa-check" />
                     </v-chip>
                   </template>
                   <span>Student</span>
@@ -313,8 +313,8 @@
                 auto-grow
                 :append-icon="
                   savingFeedback
-                    ? 'fa-regular fa-cloud-arrow-up'
-                    : 'fa-regular fa-cloud-check'
+                    ? 'fa-light fa-cloud-arrow-up'
+                    : 'fa-light fa-cloud-check'
                 "
                 @input="update()"
               ></v-textarea>

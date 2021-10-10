@@ -37,8 +37,9 @@
             about cookies, you can visit
             <a href="https://www.allaboutcookies.org" target="_blank"
               >allaboutcookies.org</a
-            ><i class="fa-regular fa-arrow-up-right-from-square fa-sm ml-1"></i
-            >.
+            ><font-awesome-icon
+              icon="fa-light fa-arrow-up-right-from-square fa-sm ml-1"
+            />.
           </p>
           <p class="text-h6">SSL (TLS) encryption</p>
           <p class="mb-8">

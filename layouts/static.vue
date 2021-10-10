@@ -22,7 +22,7 @@
               class="d-flex d-sm-none"
               @click="menu = !menu"
             >
-              <i class="fa-regular fa-bars fa-lg"></i>
+              <font-awesome-icon icon="fa-light fa-bars" class="fa-lg" />
             </v-btn>
           </div>
         </v-col>
@@ -38,7 +38,7 @@
         class="d-flex d-sm-none"
         @click="menu = false"
       >
-        <i class="fa-regular fa-xmark fa-lg"></i>
+        <font-awesome-icon icon="fa-light fa-xmark" class="fa-lg" />
       </v-btn>
       <div class="d-flex flex-column">
         <v-btn text large rounded class="mb-6" nuxt to="/pricing"

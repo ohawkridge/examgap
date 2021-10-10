@@ -20,7 +20,7 @@
               v-if="response.feedback !== ''"
               class="my-3 mb-md-0 font-italic grey--text text-darken-3"
             >
-              <i class="fa-regular fa-comment-lines mr-2"></i>
+              <font-awesome-icon icon="fa-light fa-comment-lines mr-2" />
               {{ response.feedback }}
             </div>
           </v-col>
@@ -38,9 +38,9 @@
                   label
                   v-on="on"
                 >
-                  <i class="fa-regular fa-user-graduate mr-2"></i>
+                  <font-awesome-icon icon="fa-light fa-user-graduate mr-2" />
                   {{ response.tm }}
-                  <i class="fa-regular fa-check ml-2"></i>
+                  <font-awesome-icon icon="fa-light fa-check ml-2" />
                 </v-chip>
               </template>
               <span>Your teacher</span>
@@ -53,7 +53,7 @@
                   label
                   v-on="on"
                 >
-                  <i class="fa-regular fa-circle-user mr-2"></i>
+                  <font-awesome-icon icon="fa-light fa-circle-user mr-2" />
                   {{ response.sm }}
                 </v-chip>
               </template>

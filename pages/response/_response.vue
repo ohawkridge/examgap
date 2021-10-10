@@ -63,7 +63,7 @@
       <v-row style="border-bottom: 1px solid #d2d2d2 !important">
         <v-col class="d-flex justify-space-between align-center">
           <v-btn rounded text nuxt :to="`/assignment/${response.assignmentId}`">
-            <i class="fa-regular fa-arrow-left mr-2"></i>
+            <font-awesome-icon icon="fa-light fa-arrow-left mr-2" />
             Back
           </v-btn>
           <div>
@@ -75,9 +75,9 @@
                   label
                   v-on="on"
                 >
-                  <i class="fa-regular fa-user-graduate mr-2"></i>
+                  <font-awesome-icon icon="fa-light fa-user-graduate mr-2" />
                   {{ response.tm.length }}
-                  <i class="fa-regular fa-check ml-2"></i>
+                  <font-awesome-icon icon="fa-light fa-check ml-2" />
                 </v-chip>
               </template>
               <span>Your teacher</span>
@@ -89,9 +89,9 @@
                   label
                   v-on="on"
                 >
-                  <i class="fa-regular fa-circle-user mr-2"></i>
+                  <font-awesome-icon icon="fa-light fa-circle-user mr-2" />
                   {{ response.sm.length }}
-                  <i class="fa-regular fa-check ml-2"></i>
+                  <font-awesome-icon icon="fa-light fa-check ml-2" />
                 </v-chip>
               </template>
               <span>You</span>
@@ -130,7 +130,10 @@
                   <th class="text-center">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
-                        <i class="fa-regular fa-user-graduate" v-on="on"></i>
+                        <font-awesome-icon
+                          icon="fa-light fa-user-graduate"
+                          v-on="on"
+                        />
                       </template>
                       <span>Your teacher</span>
                     </v-tooltip>
@@ -138,7 +141,10 @@
                   <th class="text-center">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
-                        <i class="fa-regular fa-circle-user" v-on="on"></i>
+                        <font-awesome-icon
+                          icon="fa-light fa-circle-user"
+                          v-on="on"
+                        />
                       </template>
                       <span>You</span>
                     </v-tooltip>
@@ -151,14 +157,14 @@
                   <td class="text-center">
                     <i
                       v-if="response.tm.includes(mark.id)"
-                      class="fa-regular fa-square-check ico-blue"
-                    ></i>
+                      class="fa-light fa-square-check ico-blue"
+                    />
                   </td>
                   <td class="text-center">
                     <i
                       v-if="response.sm.includes(mark.id)"
-                      class="fa-regular fa-square-check ico-green"
-                    ></i>
+                      class="fa-light fa-square-check ico-green"
+                    />
                   </td>
                   <td>{{ mark.text }}</td>
                 </tr>

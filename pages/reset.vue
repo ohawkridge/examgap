@@ -25,7 +25,7 @@
               :rules="userRules"
               autofocus
             ></v-text-field>
-            <v-alert border="top" icon="fa-regular fa-circle-info" text>
+            <v-alert border="top" icon="fa-light fa-circle-info" text>
               Students—your teacher can reset your password.
             </v-alert>
             <v-alert v-if="failed" border="left" text type="error">

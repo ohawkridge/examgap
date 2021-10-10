@@ -27,23 +27,24 @@
                 </p>
                 <p class="text-body-2">(Billed annually—£84/year)</p>
                 <p class="d-flex align-center">
-                  <i
-                    class="
-                      fa-regular fa-chart-line-up fa-lg
-                      mr-4
-                      ico-blue ico-bg
-                    "
-                  ></i>
+                  <font-awesome-icon
+                    icon="fa-light fa-chart-line-up"
+                    class="fa-lg mr-4 ico-blue ico-bg"
+                  />
                   Improve your results
                 </p>
                 <p class="d-flex align-center">
-                  <i
-                    class="fa-regular fa-lock-open fa-lg mr-4 ico-blue ico-bg"
-                  ></i>
+                  <font-awesome-icon
+                    icon="fa-light fa-lock-open"
+                    class="fa-lg mr-4 ico-blue ico-bg"
+                  />
                   Unlock more 8-9 grades
                 </p>
                 <p class="d-flex align-center">
-                  <i class="fa-regular fa-gift fa-lg mr-4 ico-blue ico-bg"></i>
+                  <font-awesome-icon
+                    icon="fa-light fa-gift"
+                    class="fa-lg mr-4 ico-blue ico-bg"
+                  />
                   Thoughtful features
                 </p>
                 <p class="text-body-2">
@@ -81,7 +82,10 @@
         <v-col cols="12" md="4" lg="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
+              <font-awesome-icon
+                icon="fa-light fa-check"
+                class="fa-xl ico-bg2"
+              />
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -95,7 +99,10 @@
         <v-col cols="12" md="4" lg="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
+              <font-awesome-icon
+                icon="fa-light fa-check"
+                class="fa-xl ico-bg2"
+              />
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -111,7 +118,10 @@
         <v-col cols="12" md="4" lg="3">
           <v-card class="rounded-lg pa-3" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
+              <font-awesome-icon
+                icon="fa-light fa-check"
+                class="fa-xl ico-bg2"
+              />
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -127,7 +137,10 @@
         <v-col cols="12" md="4" lg="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
+              <font-awesome-icon
+                icon="fa-light fa-check"
+                class="fa-xl ico-bg2"
+              />
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -141,7 +154,10 @@
         <v-col cols="12" md="4" lg="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
+              <font-awesome-icon
+                icon="fa-light fa-check"
+                class="fa-xl ico-bg2"
+              />
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -155,7 +171,10 @@
         <v-col cols="12" md="4" lg="3">
           <v-card class="pa-3 rounded-lg" outlined>
             <div class="d-flex justify-center">
-              <i class="fa-regular fa-check fa-xl ico-bg2"></i>
+              <font-awesome-icon
+                icon="fa-light fa-check"
+                class="fa-xl ico-bg2"
+              />
             </div>
             <v-card-text
               class="text-h6 d-flex justify-center py-0 font-weight-bold"
@@ -188,9 +207,15 @@
             </v-btn>
             <div class="mt-4 white--text d-flex justify-center">
               <small>
-                <i class="fa-regular fa-check-circle ico-light-pink"></i>
+                <font-awesome-icon
+                  icon="fa-light fa-check-circle"
+                  class="ico-light-pink"
+                />
                 No payment info
-                <i class="fa-regular fa-check-circle ico-light-pink ml-2"></i>
+                <font-awesome-icon
+                  icon="fa-light fa-check-circle"
+                  class="ico-light-pink ml-2"
+                />
                 Improve your results
               </small>
             </div>

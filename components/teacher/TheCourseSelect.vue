@@ -9,7 +9,7 @@
       item-value="id"
       :rules="courseRules"
       label="Select course*"
-      append-icon="fa-regular fa-chevron-down"
+      append-icon="fa-light fa-chevron-down"
       outlined
       @change="$nuxt.$emit('select-course', selectedCourse)"
     >
@@ -29,8 +29,8 @@
       v-model="showAll"
       label="Show developing courses"
       class="mt-0"
-      on-icon="fa-regular fa-square-check"
-      off-icon="fa-regular fa-square"
+      on-icon="fa-light fa-square"
+      off-icon="fa-light fa-square-check"
       hide-details
     >
     </v-checkbox>

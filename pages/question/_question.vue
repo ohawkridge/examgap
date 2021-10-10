@@ -7,7 +7,7 @@
         class="d-flex justify-space-between align-center"
       >
         <v-btn text rounded @click="$router.go(-1)">
-          <i class="fa-regular fa-arrow-left mr-2"></i>
+          <font-awesome-icon icon="fa-light fa-arrow-left mr-2" />
           Back
         </v-btn>
         <div>

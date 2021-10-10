@@ -5,7 +5,7 @@
         <v-col cols="12" class="d-flex justify-space-between align-center">
           support@examgap.com
           <div class="d-flex align-center">
-            <i class="fa-regular fa-arrows-left-right mr-1"></i>
+            <font-awesome-icon icon="fa-light fa-arrows-left-right mr-1" />
             {{ $vuetify.breakpoint.name }}
           </div>
         </v-col>

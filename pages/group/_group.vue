@@ -23,7 +23,7 @@
           >
             <v-list-item-content>
               <v-row>
-                <v-col cols="12" sm="5" class="pb-0 pb-sm-3">
+                <v-col cols="12" sm="4" class="pb-0 pb-sm-3">
                   <div class="text-subtitle-1 font-weight-medium">
                     {{ assignment.name }}
                   </div>
@@ -43,11 +43,11 @@
                     text-body-2
                   "
                 >
-                  <div class="justify-date" style="margin-right: auto">
+                  <div class="justify-date">
                     <span class="font-weight-medium fix-date mr-1">Start:</span>
                     {{ assignment.start | date }}
                   </div>
-                  <div style="margin-right: auto">
+                  <div>
                     <span class="font-weight-medium fix-date mr-1">Due:</span>
                     {{ assignment.dateDue | date }}
                   </div>
@@ -55,7 +55,7 @@
                 <v-col
                   v-if="$vuetify.breakpoint.name !== 'xs'"
                   cols="2"
-                  sm="2"
+                  sm="3"
                   class="d-flex justify-center align-center"
                 >
                   <v-chip
@@ -101,7 +101,7 @@
                     @mousedown.stop
                     @touchstart.native.stop
                   >
-                    <i class="fa-regular fa-ellipsis-vertical"></i>
+                    <font-awesome-icon icon="fa-light fa-ellipsis-vertical" />
                   </v-btn>
                 </template>
                 <v-list>
@@ -131,7 +131,7 @@
               color="primary"
               @click="createAssignment()"
             >
-              <i class="fa-regular fa-plus"></i>
+              <font-awesome-icon icon="fa-light fa-plus" />
               Assignment
             </v-btn>
           </div>

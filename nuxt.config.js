@@ -29,13 +29,7 @@ export default {
       { rel: 'icon', href: '/apple-touch-icon.png' },
       { rel: 'manifest', href: '/site.webmanifest' },
     ],
-    script: [
-      { src: 'https://cdn.headwayapp.co/widget.js' },
-      {
-        src: 'https://kit.fontawesome.com/21b98c68ec.js',
-        crossorigin: 'anonymous',
-      },
-    ],
+    script: [{ src: 'https://cdn.headwayapp.co/widget.js' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -50,6 +44,7 @@ export default {
     { src: '@/plugins/tiptapVuetify.js' },
     { src: '@/plugins/honeybadger.js', mode: 'client' },
     { src: '@/plugins/persistedState.js', mode: 'client' },
+    { src: '@/plugins/fontawesome.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -61,6 +56,17 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    // https://www.npmjs.com/package/@nuxtjs/fontawesome
+    // '@nuxtjs/fontawesome',
+    // {
+    //   component: 'fa',
+    //   suffix: true,
+    //   proIcons: {
+    //     // if you have bought the Pro packages
+    //     // list the icons you want to add, not listed icons will be tree-shaked
+    //     light: ['faCircleCheck'],
+    //   },
+    // },
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

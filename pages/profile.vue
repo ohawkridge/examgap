@@ -17,10 +17,12 @@
           v-model="$store.state.user.examMode"
           label="Exam mode"
           disabled
+          on-icon="fa-light fa-square-check"
+          off-icon="fa-light fa-square"
           hide-details
         >
         </v-checkbox>
-        <p v-if="!teacher" class="text-caption">Set by your teacher</p>
+        <p v-if="!teacher" class="text-caption mb-6">Set by your teacher</p>
         <v-text-field
           :value="$store.state.user.school"
           label="School name"
@@ -39,7 +41,7 @@
             <div id="fix-chip">
               <v-chip v-if="subscribed" label color="#db5461" outlined>
                 Subscribed
-                <i class="fa-regular fa-check ml-2"></i>
+                <font-awesome-icon icon="fa-light fa-check ml-2" />
               </v-chip>
             </div>
           </template>
@@ -77,7 +79,7 @@
           :disabled="typeof match == 'string' || loading"
           :loading="loading"
           @click="updatePass()"
-          >Update Password</v-btn
+          ><span class="heading--text">Update Password</span></v-btn
         >
       </v-col>
     </v-row>

@@ -20,7 +20,7 @@
               required
               outlined
               :rules="userRules"
-              prepend-inner-icon="fa-regular fa-user"
+              prepend-inner-icon="fa-user"
               autofocus
             ></v-text-field>
             <v-text-field
@@ -28,7 +28,7 @@
               :type="show ? 'text' : 'password'"
               color="primary"
               label="Password"
-              prepend-inner-icon="fa-regular fa-lock-keyhole"
+              prepend-inner-icon="fa-light fa-lock-keyhole"
               required
               outlined
               :rules="passRules"

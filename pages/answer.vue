@@ -41,7 +41,7 @@
                       @click="speak()"
                       v-on="on"
                     >
-                      <i class="fa-regular fa-ear-listen"></i>
+                      <font-awesome-icon icon="fa-light fa-ear-listen" />
                     </v-btn>
                   </template>
                   <span>Speak question</span>
@@ -59,8 +59,8 @@
                 hide-details
                 :append-icon="
                   saving
-                    ? 'fa-regular fa-cloud-arrow-up'
-                    : 'fa-regular fa-cloud-check'
+                    ? 'fa-light fa-cloud-arrow-up'
+                    : 'fa-light fa-cloud-check'
                 "
                 class="mb-2"
                 @input="update()"
@@ -76,7 +76,7 @@
                     small
                   >
                     {{ word }}
-                    <i v-if="used(word)" class="fa-regular fa-check ml-2"></i>
+                    <i v-if="used(word)" class="fa-light fa-check ml-2" />
                   </v-chip>
                 </div>
                 <v-tooltip bottom>

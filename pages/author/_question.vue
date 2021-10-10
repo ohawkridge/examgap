@@ -45,10 +45,10 @@
                 <template #activator="{ on }">
                   <i
                     :disabled="question.marks.length === 13"
-                    class="fa-regular fa-plus mr-1"
+                    class="fa-light fa-plus mr-1"
                     @click="question.marks.push({ id: '', text: '' })"
                     v-on="on"
-                  ></i>
+                  />
                 </template>
                 <span>Add mark</span>
               </v-tooltip>
@@ -56,10 +56,10 @@
                 <template #activator="{ on }">
                   <i
                     :disabled="question.marks.length === 1"
-                    class="fa-regular fa-minus"
+                    class="fa-light fa-minus"
                     @click="remove(question.marks[i - 1].id)"
                     v-on="on"
-                  ></i>
+                  />
                 </template>
                 <span>Remove mark</span>
               </v-tooltip>
