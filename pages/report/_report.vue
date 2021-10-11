@@ -74,7 +74,7 @@
       v-if="$fetchState.pending"
       :loading="true"
       type="table"
-      :types="{ table: 'table-thead, table-tbody, table-tfoot' }"
+      :types="{ table: 'table-thead, table-tbody' }"
       class="pa-4"
     >
     </v-skeleton-loader>
@@ -112,19 +112,14 @@
             <!-- Formerly MarkChip.vue components -->
             <!-- Nested values as props not working reliably -->
             <div :class="flex(data)">
-              <!-- Not answered -->
-              <div
-                v-if="data[Object.keys(data)[0]].length === 0"
-                class="my-auto"
-              >
-                N/A
-              </div>
+              <!-- *** NOT ANSWERED *** -->
+              <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div>
               <!-- Loop through responses (see note below) -->
               <template
                 v-for="(response, k) in data[Object.keys(data)[0]]"
                 v-else
               >
-                <!-- Self marked -->
+                <!-- *** SELF MARKED *** -->
                 <v-tooltip v-if="!response.marked" :key="k" bottom>
                   <template #activator="{ on }">
                     <v-chip outlined @click="mark(i, j, k)" v-on="on">
@@ -137,7 +132,7 @@
                   </template>
                   <span>Mark</span>
                 </v-tooltip>
-                <!-- Teacher marked -->
+                <!-- *** TEACHER MARKED *** -->
                 <v-tooltip v-else :key="k" bottom>
                   <template #activator="{ on }">
                     <v-chip
@@ -158,9 +153,10 @@
                         class="ml-2"
                       />
                     </v-chip>
-                    <i
+                    <font-awesome-icon
                       v-if="response.flagged"
-                      class="fa-light fa-flag ico-pink fix-flag"
+                      icon="fa-light fa-flag"
+                      class="ico-red fix-flag fa-lg"
                     />
                   </template>
                   <span>Mark</span>
@@ -229,7 +225,10 @@
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <v-btn icon @click="next(1)" v-on="on">
-                      <font-awesome-icon icon="fa-light fa-arrow-right" />
+                      <font-awesome-icon
+                        icon="fa-light fa-arrow-right"
+                        class="fa-lg"
+                      />
                     </v-btn>
                   </template>
                   <span>Next</span>
@@ -239,11 +238,14 @@
                     <v-btn
                       icon
                       class="ml-2"
-                      :color="response.flagged ? 'accent' : ''"
+                      :color="response.flagged ? 'red' : ''"
                       @click="flag()"
                       v-on="on"
                     >
-                      <font-awesome-icon icon="fa-light fa-flag" />
+                      <font-awesome-icon
+                        icon="fa-light fa-flag"
+                        class="fa-lg"
+                      />
                     </v-btn>
                   </template>
                   <span>{{ response.flagged ? 'Remove flag' : 'Flag' }}</span>
@@ -253,11 +255,14 @@
                     <v-btn
                       icon
                       class="ml-2"
-                      :color="response.repeat ? 'accent' : ''"
+                      :color="response.repeat ? 'red' : ''"
                       @click="reassign()"
                       v-on="on"
                     >
-                      <font-awesome-icon icon="fa-light fa-repeat" />
+                      <font-awesome-icon
+                        icon="fa-light fa-repeat"
+                        class="fa-lg"
+                      />
                     </v-btn>
                   </template>
                   <span>Reassign</span>
@@ -273,9 +278,15 @@
                       class="mr-2"
                       v-on="on"
                     >
-                      <font-awesome-icon icon="fa-light fa-user-graduate" />
+                      <font-awesome-icon
+                        icon="fa-light fa-user-graduate"
+                        class="mr-2"
+                      />
                       {{ marks.length }}
-                      <font-awesome-icon icon="fa-light fa-check" />
+                      <font-awesome-icon
+                        icon="fa-light fa-check"
+                        class="ml-2"
+                      />
                     </v-chip>
                   </template>
                   <span>You</span>
@@ -287,9 +298,12 @@
                       :color="color(response.sm.length, question.maxMark)"
                       v-on="on"
                     >
-                      <font-awesome-icon icon="fa-light fa-circle-user mr-2" />
+                      <font-awesome-icon icon="fa-light fa-user" class="mr-2" />
                       {{ response.sm.length }}
-                      <font-awesome-icon icon="fa-light fa-check" />
+                      <font-awesome-icon
+                        icon="fa-light fa-check"
+                        class="ml-2"
+                      />
                     </v-chip>
                   </template>
                   <span>Student</span>
@@ -647,7 +661,9 @@ export default {
       try {
         await this.$store.dispatch('assignment/reassign')
         this.$snack.showMessage({
-          msg: this.response.repeat ? 'Reassigned' : 'Cancelled',
+          msg: this.response.repeat
+            ? 'Question reassigned'
+            : 'Reassignment cancelled',
         })
       } catch (err) {
         console.error(err)
@@ -760,7 +776,9 @@ div.v-list {
 
 /* Adjust flags to keep chips aligned */
 .fix-flag {
-  margin-left: -25px;
-  left: 24px;
+  position: relative;
+  top: 4px;
+  margin-left: 8px;
+  margin-right: -30px;
 }
 </style>

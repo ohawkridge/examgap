@@ -138,12 +138,12 @@ span.v-chip.theme--light.green {
   color: #0099cc;
 }
 
-.ico-pink {
-  color: #ef7a85;
-}
-
 .ico-light-pink {
   color: #f9b9b7;
+}
+
+.ico-red {
+  color: #f44336;
 }
 
 .ico-green {

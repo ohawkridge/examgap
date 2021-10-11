@@ -80,7 +80,7 @@
                           <font-awesome-icon
                             v-if="selected.includes(q.id)"
                             icon="fa-light fa-minus"
-                            class="fa-xl ico-pink"
+                            class="fa-xl ico-red"
                             @click="question.marks.push({ id: '', text: '' })"
                           />
                           <font-awesome-icon
