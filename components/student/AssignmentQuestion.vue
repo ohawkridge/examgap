@@ -38,7 +38,10 @@
                   label
                   v-on="on"
                 >
-                  <font-awesome-icon icon="fa-light fa-user-graduate mr-2" />
+                  <font-awesome-icon
+                    icon="fa-light fa-user-graduate"
+                    class="mr-2"
+                  />
                   {{ response.tm }}
                   <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
                 </v-chip>
@@ -53,8 +56,9 @@
                   label
                   v-on="on"
                 >
-                  <font-awesome-icon icon="fa-light fa-circle-user mr-2" />
+                  <font-awesome-icon icon="fa-light fa-user" class="mr-2" />
                   {{ response.sm }}
+                  <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
                 </v-chip>
               </template>
               <span>You</span>

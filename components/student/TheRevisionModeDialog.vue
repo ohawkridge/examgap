@@ -40,7 +40,7 @@
               :loading="loading"
               @click="start()"
             >
-              Start
+              <span class="heading--text">Start</span>
             </v-btn>
           </div>
         </div>

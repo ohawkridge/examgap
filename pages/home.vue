@@ -234,7 +234,7 @@
                       v-for="j in topic.answered"
                       :key="j"
                       icon="fa-light fa-circle-check"
-                      class="ico-green"
+                      class="ico-green fa-lg"
                     />
                   </div>
                 </div>

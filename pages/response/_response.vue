@@ -60,10 +60,13 @@
       ></v-skeleton-loader>
     </div>
     <template v-else>
-      <v-row style="border-bottom: 1px solid #d2d2d2 !important">
+      <v-row>
         <v-col class="d-flex justify-space-between align-center">
           <v-btn rounded text nuxt :to="`/assignment/${response.assignmentId}`">
-            <font-awesome-icon icon="fa-light fa-arrow-left" class="mr-2" />
+            <font-awesome-icon
+              icon="fa-light fa-arrow-left"
+              class="mr-2 fa-lg"
+            />
             Back
           </v-btn>
           <div>
@@ -75,7 +78,10 @@
                   label
                   v-on="on"
                 >
-                  <font-awesome-icon icon="fa-light fa-user-graduate mr-2" />
+                  <font-awesome-icon
+                    icon="fa-light fa-user-graduate"
+                    class="mr-2"
+                  />
                   {{ response.tm.length }}
                   <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
                 </v-chip>
@@ -89,7 +95,7 @@
                   label
                   v-on="on"
                 >
-                  <font-awesome-icon icon="fa-light fa-circle-user mr-2" />
+                  <font-awesome-icon icon="fa-light fa-user" class="mr-2" />
                   {{ response.sm.length }}
                   <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
                 </v-chip>
@@ -132,6 +138,7 @@
                       <template #activator="{ on }">
                         <font-awesome-icon
                           icon="fa-light fa-user-graduate"
+                          class="fa-lg"
                           v-on="on"
                         />
                       </template>
@@ -142,7 +149,8 @@
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <font-awesome-icon
-                          icon="fa-light fa-circle-user"
+                          icon="fa-light fa-user"
+                          class="fa-lg"
                           v-on="on"
                         />
                       </template>
@@ -157,15 +165,15 @@
                   <td class="text-center">
                     <font-awesome-icon
                       v-if="response.tm.includes(mark.id)"
-                      icon="fa-light fa-square-check"
-                      class="ico-blue"
+                      icon="fa-light fa-check"
+                      class="ico-blue fa-xl"
                     />
                   </td>
                   <td class="text-center">
                     <font-awesome-icon
                       v-if="response.sm.includes(mark.id)"
-                      icon="fa-light fa-square-check"
-                      class="ico-green"
+                      icon="fa-light fa-check"
+                      class="ico-green fa-xl"
                     />
                   </td>
                   <td>{{ mark.text }}</td>
@@ -202,9 +210,6 @@ export default {
     ...mapState({
       response: (state) => state.assignment.response,
     }),
-  },
-  mounted() {
-    this.$store.commit('app/setPageTitle', 'Review')
   },
   methods: {
     color(n, max) {

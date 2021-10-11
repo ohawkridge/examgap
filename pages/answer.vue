@@ -37,14 +37,16 @@
                     <v-btn
                       icon
                       :disabled="speakDisabled"
-                      class="mr-2"
                       @click="speak()"
                       v-on="on"
                     >
-                      <font-awesome-icon icon="fa-light fa-ear-listen" />
+                      <font-awesome-icon
+                        icon="fa-light fa-ear-listen"
+                        class="fa-lg"
+                      />
                     </v-btn>
                   </template>
-                  <span>Speak question</span>
+                  <span>Listen to question</span>
                 </v-tooltip>
                 <v-chip small outlined>
                   {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
@@ -104,7 +106,7 @@
                   elevation="0"
                   @click="selfMark()"
                 >
-                  Mark
+                  <span class="heading--text">Mark</span>
                 </v-btn>
               </div>
             </div>
@@ -147,7 +149,7 @@
                 :disabled="loading"
                 @click="done()"
               >
-                Done
+                <span class="heading--text">Done</span>
               </v-btn>
             </div>
           </div>
