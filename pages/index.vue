@@ -211,7 +211,7 @@
       <v-container>
         <v-row>
           <v-col cols="12" class="d-flex align-center justify-center pb-0">
-            <p id="how-text" class="text-h4 text-md-h2">
+            <p id="how-text" class="text-h4 text-md-h2 heading--text">
               <span class="illum">H</span>ow does it work?
             </p>
           </v-col>
@@ -453,7 +453,7 @@
             class="
               text-h5 text-md-h4
               font-weight-bold
-              white--text
+              heading--text
               text-center
               mb-8
             "
