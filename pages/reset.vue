@@ -33,7 +33,7 @@
               />
               Student? Your teacher can reset your password.
             </v-alert>
-            <v-alert v-if="failed" border="left" text type="error">
+            <v-alert v-if="failed" border="top" text type="error">
               <font-awesome-icon
                 slot="prepend"
                 icon="fa-light fa-circle-exclamation"

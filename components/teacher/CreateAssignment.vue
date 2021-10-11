@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" width="700">
-    <template #activator="{ on }">
+    <template #activator="{ on: dialogx }">
       <v-btn
         text
         rounded
@@ -9,16 +9,26 @@
       >
         Clear
       </v-btn>
-      <v-btn
-        color="primary"
-        :disabled="selected.length == 0"
-        elevation="0"
-        rounded
-        v-on="on"
-      >
-        <font-awesome-icon icon="fa-light fa-plus mr-2" />
-        Assign ({{ selected.length }})</v-btn
-      >
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltip }">
+          <v-btn
+            color="primary"
+            :disabled="selected.length == 0"
+            elevation="0"
+            rounded
+            v-on="{ ...tooltip, ...dialogx }"
+          >
+            <font-awesome-icon
+              icon="fa-light fa-plus"
+              class="mr-2 ico-heading"
+            />
+            <span class="heading--text"
+              >Assign ({{ selected.length }})</span
+            ></v-btn
+          >
+        </template>
+        <span>Create assignment</span>
+      </v-tooltip>
     </template>
     <!-- Select students -->
     <v-card v-if="step === 1">
@@ -26,7 +36,7 @@
       <v-card-subtitle> Select students for this assignment. </v-card-subtitle>
       <v-card-text>
         <div class="d-flex">
-          <v-alert text type="info" dense>
+          <v-alert text type="info" border="top">
             <font-awesome-icon
               slot="prepend"
               icon="fa-light fa-circle-info"
@@ -73,7 +83,7 @@
             Cancel
           </v-btn>
           <v-btn elevation="0" rounded color="primary" @click="step++">
-            Next
+            <span class="heading--text">Next</span>
           </v-btn>
         </div>
       </v-card-text>
@@ -111,7 +121,13 @@
                   readonly
                   class="mr-2"
                   v-on="on"
-                ></v-text-field>
+                >
+                  <font-awesome-icon
+                    slot="append"
+                    icon="fa-light fa-calendar"
+                    class="fa-lg"
+                  />
+                </v-text-field>
               </template>
               <v-date-picker
                 v-model="startDate"
@@ -136,7 +152,13 @@
                   class="ml-2"
                   readonly
                   v-on="on"
-                ></v-text-field>
+                >
+                  <font-awesome-icon
+                    slot="append"
+                    icon="fa-light fa-calendar"
+                    class="fa-lg"
+                  />
+                </v-text-field>
               </template>
               <v-date-picker
                 v-model="endDate"
@@ -163,7 +185,7 @@
               color="primary"
               @click="create()"
             >
-              Create assignment
+              <span class="heading--text">Create assignment</span>
             </v-btn>
           </div>
         </v-form>

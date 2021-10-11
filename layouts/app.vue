@@ -24,16 +24,14 @@
               <v-list-item-title> Classes </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-group
-            v-else
-            append-icon="fa-light fa-chevron-down"
-            :value="true"
-          >
+          <v-list-group v-else :value="true">
             <template #activator>
               <v-list-item-icon class="d-flex justify-center align-center">
-                <font-awesome-icon icon="fa-light fa-users fa-lg" />
+                <font-awesome-icon icon="fa-light fa-user-group fa-lg" />
               </v-list-item-icon>
-              <v-list-item-title>Classes</v-list-item-title>
+              <v-list-item-content>
+                <v-list-item-title>Classes</v-list-item-title>
+              </v-list-item-content>
             </template>
             <template v-for="(group, i) in groups">
               <v-list-item
@@ -78,9 +76,7 @@
       flat
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-app-bar-nav-icon @click="drawer = !drawer">
-        <font-awesome-icon icon="fa-light fa-bars" class="fa-lg" />
-      </v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = !drawer"> </v-app-bar-nav-icon>
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
         <span

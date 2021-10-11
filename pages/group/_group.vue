@@ -101,7 +101,10 @@
                     @mousedown.stop
                     @touchstart.native.stop
                   >
-                    <font-awesome-icon icon="fa-light fa-ellipsis-vertical" />
+                    <font-awesome-icon
+                      icon="fa-light fa-ellipsis-vertical"
+                      class="fa-lg"
+                    />
                   </v-btn>
                 </template>
                 <v-list>

@@ -1,11 +1,7 @@
 <template>
   <div>
     <v-row class="pa-3">
-      <v-col
-        cols="12"
-        class="d-flex justify-end align-center"
-        style="border-bottom: 1px solid #d2d2d2 !important"
-      >
+      <v-col cols="12" class="d-flex justify-end align-center">
         <create-assignment />
       </v-col>
     </v-row>
