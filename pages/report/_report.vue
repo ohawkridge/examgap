@@ -13,7 +13,10 @@
                   :to="`/group/${group.id}`"
                   v-on="on"
                 >
-                  <font-awesome-icon icon="fa-light fa-arrow-left" />
+                  <font-awesome-icon
+                    icon="fa-light fa-arrow-left"
+                    class="fa-lg"
+                  />
                 </v-btn>
               </template>
               <span>Back</span>
@@ -215,7 +218,10 @@
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <v-btn icon @click="next(-1)" v-on="on">
-                      <font-awesome-icon icon="fa-light fa-arrow-left" />
+                      <font-awesome-icon
+                        icon="fa-light fa-arrow-left"
+                        class="fa-lg"
+                      />
                     </v-btn>
                   </template>
                   <span>Previous</span>

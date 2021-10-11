@@ -6,7 +6,8 @@ Vue.filter('pluralize', function (count) {
 
 Vue.filter('date', function (dateStr) {
   // Old assignments don't have start date !!
-  if (dateStr === 'N/A' || dateStr === '-') {
+  // _report.vue crashed once when dateStr was undefined
+  if (dateStr === 'N/A' || dateStr === '-' || dateStr === undefined) {
     return 'N/A'
   }
   // Some old due dates include timezone

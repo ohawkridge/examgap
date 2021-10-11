@@ -3,7 +3,7 @@
     <v-select
       v-model="selectedCourse"
       :loading="$fetchState.pending"
-      :items="filteredCourses"
+      :items="showAll ? courses : filteredCourses"
       no-data-text="No courses available"
       item-text="name"
       item-value="id"
@@ -29,8 +29,6 @@
       v-model="showAll"
       label="Show developing courses"
       class="mt-0"
-      on-icon="fa-light fa-square"
-      off-icon="fa-light fa-square-check"
       hide-details
     >
     </v-checkbox>
@@ -78,14 +76,22 @@ export default {
         type: 'error',
         msg: 'Error fetching courses',
       })
+    } finally {
+      this.betaCourse()
     }
   },
   computed: {
+    // Only show names of 'active' (i.e., saleable) courses
     filteredCourses() {
-      if (!this.showAll) {
-        return this.courses.filter((c) => !('name' in c) || c.active)
+      return this.courses.filter((c) => !('name' in c) || c.active)
+    },
+  },
+  methods: {
+    // If user is on a 'beta' course, automatically tick showAll
+    betaCourse() {
+      if (!this.filteredCourses.some((c) => c.id === this.courseId)) {
+        this.showAll = true
       }
-      return this.courses
     },
   },
 }

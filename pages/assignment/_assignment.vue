@@ -30,7 +30,10 @@
             <v-tooltip bottom>
               <template #activator="{ on }">
                 <v-btn nuxt to="/home" icon class="mr-2" v-on="on">
-                  <font-awesome-icon icon="fa-light fa-arrow-left" />
+                  <font-awesome-icon
+                    icon="fa-light fa-arrow-left"
+                    class="fa-lg"
+                  />
                 </v-btn>
               </template>
               <span>Back</span>

@@ -63,7 +63,7 @@
       <v-row style="border-bottom: 1px solid #d2d2d2 !important">
         <v-col class="d-flex justify-space-between align-center">
           <v-btn rounded text nuxt :to="`/assignment/${response.assignmentId}`">
-            <font-awesome-icon icon="fa-light fa-arrow-left mr-2" />
+            <font-awesome-icon icon="fa-light fa-arrow-left" class="mr-2" />
             Back
           </v-btn>
           <div>
