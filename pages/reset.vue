@@ -12,7 +12,7 @@
         <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
           <p class="text-h5 font-weight-bold text-center">Reset Password</p>
           <!-- Prevent submit btn posting form -->
-          <v-form ref="form" @submit.prevent="reset">
+          <v-form ref="form" @submit.prevent="reset()">
             <v-text-field
               v-model="username"
               label="Username or email"
@@ -89,7 +89,7 @@ export default {
   },
   head() {
     return {
-      title: 'Reset your password',
+      title: 'Reset password',
     }
   },
   methods: {

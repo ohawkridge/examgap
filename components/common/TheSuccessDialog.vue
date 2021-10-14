@@ -1,8 +1,11 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440">
+  <v-dialog :v-model="dialog" max-width="440">
     <v-card>
       <v-card-title class="d-flex justify-center py-8">
-        <font-awesome-icon icon="fa-light fa-circle-check fa-4x ico-green" />
+        <font-awesome-icon
+          icon="fa-light fa-circle-check"
+          class="fa-4x ico-green"
+        />
       </v-card-title>
       <v-card-text>
         <p class="text-h6 text-center">{{ title }}</p>

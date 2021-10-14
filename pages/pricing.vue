@@ -23,29 +23,31 @@
               </v-card-title>
               <v-card-text class="text-body-1">
                 <p class="text-h3 font-weight-bold mb-2">
-                  £7 <span class="text-overline">/MONTH</span>
+                  £7 <span class="text-overline">/ MONTH</span>
                 </p>
                 <p class="text-body-2">(Billed annually—£84/year)</p>
                 <p class="d-flex align-center">
                   <font-awesome-icon
                     icon="fa-light fa-chart-line-up"
-                    class="fa-lg mr-4 ico-blue ico-bg"
+                    class="ico-blue ico-bg"
                   />
-                  Improve your results
+                  <span class="ml-4 text-subtitle-1">Improve your results</span>
                 </p>
                 <p class="d-flex align-center">
                   <font-awesome-icon
                     icon="fa-light fa-lock-open"
-                    class="fa-lg mr-4 ico-blue ico-bg"
+                    class="ico-blue ico-bg"
                   />
-                  Unlock more 8-9 grades
+                  <span class="ml-4 text-subtitle-1"
+                    >Unlock more 8-9 grades</span
+                  >
                 </p>
                 <p class="d-flex align-center">
                   <font-awesome-icon
                     icon="fa-light fa-gift"
-                    class="fa-lg mr-4 ico-blue ico-bg"
+                    class="ico-blue ico-bg"
                   />
-                  Thoughtful features
+                  <span class="ml-4 text-subtitle-1">Thoughtful features</span>
                 </p>
                 <p class="text-body-2">
                   <nuxt-link nuxt to="/#boards"
@@ -333,9 +335,14 @@ export default {
 .ico-bg {
   border: 1px solid #4dbfe6;
   display: inline-flex;
-  padding: 7px;
+  padding: 10px;
   border-radius: 50%;
   background-color: rgba(0, 153, 204, 0.2);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .ico-bg2 {

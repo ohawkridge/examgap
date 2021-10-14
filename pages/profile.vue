@@ -17,8 +17,6 @@
           v-model="$store.state.user.examMode"
           label="Exam mode"
           disabled
-          on-icon="fa-light fa-square-check"
-          off-icon="fa-light fa-square"
           hide-details
         >
         </v-checkbox>
@@ -41,7 +39,10 @@
             <div id="fix-chip">
               <v-chip v-if="subscribed" label color="#db5461" outlined>
                 Subscribed
-                <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
+                <font-awesome-icon
+                  icon="fa-light fa-badge-check"
+                  class="ml-2"
+                />
               </v-chip>
             </div>
           </template>

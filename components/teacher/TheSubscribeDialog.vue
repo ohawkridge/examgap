@@ -2,7 +2,9 @@
   <v-dialog v-model="dialog" max-width="440">
     <template #activator="{ on }">
       <v-btn color="primary" block rounded elevation="0" v-on="on">
-        {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
+        <span class="heading--text">{{
+          subscribed ? 'Renew Subscription' : 'Subscribe'
+        }}</span>
       </v-btn>
     </template>
     <v-card>
@@ -47,7 +49,7 @@
             class="ml-2"
             @click="request()"
           >
-            Request invoice
+            <span class="heading--text">Request invoice</span>
           </v-btn>
         </div>
       </v-card-text>
