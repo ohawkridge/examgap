@@ -330,7 +330,58 @@
                 class="breaks text-body-2"
                 v-text="response.text"
               ></p>
-              <p class="text-subtitle-1">Feedback</p>
+              <p
+                class="
+                  text-subtitle-1
+                  d-flex
+                  justify-space-between
+                  align-center
+                "
+              >
+                Feedback
+                <v-menu open-on-hover offset-y>
+                  <template #activator="{ on }">
+                    <v-btn color="primary" icon v-on="on">
+                      <font-awesome-icon
+                        icon="fa-light fa-comment-smile"
+                        class="fa-lg"
+                      />
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item @click="insert('😀')">
+                      <v-list-item-content>
+                        <v-list-item-title> 😀 </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item @click="insert('😕')">
+                      <v-list-item-content>
+                        <v-list-item-title> 😕 </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item @click="insert('🤔')">
+                      <v-list-item-content>
+                        <v-list-item-title> 🤔 </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item @click="insert('👍')">
+                      <v-list-item-content>
+                        <v-list-item-title> 👍 </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item @click="insert('🎉')">
+                      <v-list-item-content>
+                        <v-list-item-title> 🎉 </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item @click="insert('👀')">
+                      <v-list-item-content>
+                        <v-list-item-title> 👀 </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </p>
               <!-- N.B. update is debounced method -->
               <v-textarea
                 id="feedback"
@@ -532,6 +583,10 @@ export default {
     )
   },
   methods: {
+    // Insert emoji into feedback
+    insert(char) {
+      this.feedback = this.feedback + char
+    },
     swipeStart(e) {
       if (e !== undefined) {
         if (typeof e.targetTouches !== 'undefined') {
