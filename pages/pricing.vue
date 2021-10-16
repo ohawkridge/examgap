@@ -8,10 +8,7 @@
               Try it free for 30 days
             </p>
             <p class="sub-hero text-center mb-0">
-              Written answer exam practise.
-            </p>
-            <p class="sub-hero text-center mb-0">
-              Frequent low stakes testing to improve results.
+              Frequent low stakes testing for you and your department.
             </p>
           </v-col>
         </v-row>
@@ -26,28 +23,32 @@
                   £7 <span class="text-overline">/ MONTH</span>
                 </p>
                 <p class="text-body-2">(Billed annually—£84/year)</p>
-                <p class="d-flex align-center">
-                  <font-awesome-icon
-                    icon="fa-light fa-chart-line-up"
-                    class="ico-blue ico-bg"
+                <p class="d-flex align-center text-subtitle-1">
+                  <img
+                    src="/ico-results.svg"
+                    class="mr-4"
+                    width="40px"
+                    title="User chart"
                   />
-                  <span class="ml-4 text-subtitle-1">Improve your results</span>
+                  Improve your results
                 </p>
-                <p class="d-flex align-center">
-                  <font-awesome-icon
-                    icon="fa-light fa-lock-open"
-                    class="ico-blue ico-bg"
+                <p class="d-flex align-center text-subtitle-1">
+                  <img
+                    src="/ico-lock.svg"
+                    class="mr-4"
+                    width="40px"
+                    title="Lock open"
                   />
-                  <span class="ml-4 text-subtitle-1"
-                    >Unlock more 8-9 grades</span
-                  >
+                  Unlock more 8-9 grades
                 </p>
-                <p class="d-flex align-center">
-                  <font-awesome-icon
-                    icon="fa-light fa-gift"
-                    class="ico-blue ico-bg"
+                <p class="d-flex align-center text-subtitle-1">
+                  <img
+                    src="/ico-gifts.svg"
+                    class="mr-4"
+                    width="40px"
+                    title="Gifts"
                   />
-                  <span class="ml-4 text-subtitle-1">Thoughtful features</span>
+                  Thoughtful features
                 </p>
                 <p class="text-body-2">
                   <nuxt-link nuxt to="/#boards"
@@ -76,7 +77,7 @@
       <v-row class="d-flex justify-center md-pad">
         <v-col cols="12" md="9">
           <p class="text-h5 text-md-h4 font-weight-bold text-center mb-10">
-            All packages include:
+            All packages include
           </p>
         </v-col>
       </v-row>
@@ -335,7 +336,7 @@ export default {
 .ico-bg {
   border: 1px solid #4dbfe6;
   display: inline-flex;
-  padding: 10px;
+  padding: 6px;
   border-radius: 50%;
   background-color: rgba(0, 153, 204, 0.2);
   width: 24px;

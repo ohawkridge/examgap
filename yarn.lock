@@ -1096,9 +1096,9 @@
     "@fortawesome/fontawesome-common-types" "^0.3.0-beta2"
 
 "@fortawesome/vue-fontawesome@^2.0.2":
-  version "2.0.2"
-  resolved "https://npm.fontawesome.com/@fortawesome/vue-fontawesome/-/2.0.2/vue-fontawesome-2.0.2.tgz#5b86cd2fb7b4c17e5dede722c1c2855c97eceaea"
-  integrity sha512-ecpKSBUWXsxRJVi/dbOds4tkKwEcBQ1JSDZFzE2jTFpF8xIh3OgTX8POIor6bOltjibr3cdEyvnDjecMwUmxhQ==
+  version "2.0.5"
+  resolved "https://npm.fontawesome.com/@fortawesome/vue-fontawesome/-/2.0.5/vue-fontawesome-2.0.5.tgz#147ed42f788f22bb44c2b1afd9e93e33add5798d"
+  integrity sha512-BktJiEuZhU+HxANJ37Pek6y+LRVVFgcU5CDd6b+t6XKj30QrYrh3ICsC5FQm5MuAdh3CPpYT99ywjk5v6nWteA==
 
 "@honeybadger-io/js@^3.2.5":
   version "3.2.5"
@@ -2284,10 +2284,10 @@ autoprefixer@^9.6.1:
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
-aws-sdk@^2.1003.0:
-  version "2.1007.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1007.0.tgz#f50f69db535d3e30b4706420ed0061d9f5eafcdc"
-  integrity sha512-I/o2R7RTh6NGRilsBrJHg7r9WprU9EavozZ43qMQcppaLAeZrECBbGfpfRyhfrj7885+KS+WOu1SGn6bsSd2VQ==
+aws-sdk@^2.1009.0:
+  version "2.1009.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1009.0.tgz#d96217a19f259c2448f91cf24973d390de16f8e0"
+  integrity sha512-qKbmt+vzQ7ZSnfEvA+u6d7CkV09AcAGnxZAiNgOAEn8GFFEtERy6C39VoAuWfON/B2avJDYvtRocjVmAxWpgjQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"

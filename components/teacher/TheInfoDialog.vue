@@ -29,7 +29,7 @@
         </ul>
         <div class="d-flex justify-end">
           <v-btn color="primary" rounded elevation="0" @click="dialog = false">
-            Close
+            <span class="heading--text">Close</span>
           </v-btn>
         </div>
       </v-card-text>

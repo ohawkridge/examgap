@@ -71,7 +71,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/mark.png" alt="Marking" eager></v-img>
+          <v-img src="/mark.png" alt="Marking"></v-img>
         </v-col>
       </v-row>
       <v-row
@@ -88,7 +88,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/grades.png" alt="Grades" eager></v-img>
+          <v-img src="/grades.png" alt="Grades"></v-img>
         </v-col>
       </v-row>
       <v-row class="d-flex align-center justify-center pad-vert">
@@ -104,7 +104,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/diff.png" alt="Differentiation" eager></v-img>
+          <v-img src="/diff.png" alt="Differentiation"></v-img>
         </v-col>
       </v-row>
       <v-row
@@ -121,7 +121,7 @@
           </p>
         </v-col>
         <v-col cols="12" md="6">
-          <v-img src="/revision.png" alt="Independent revision eager"></v-img>
+          <v-img src="/revision.png" alt="Independent revision"></v-img>
         </v-col>
       </v-row>
     </v-container>
@@ -648,7 +648,7 @@
       </v-row>
       <v-row class="d-flex justify-center flex-md-row-reverse">
         <v-col cols="6" md="3">
-          <v-img id="owen" src="/owen.jpg" alt="Portrait of Owen" eager></v-img>
+          <v-img id="owen" src="/owen.jpg" alt="Portrait of Owen"></v-img>
         </v-col>
         <v-col cols="12" md="5" class="text-body-1">
           <p>

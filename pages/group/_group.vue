@@ -134,8 +134,11 @@
               color="primary"
               @click="createAssignment()"
             >
-              <font-awesome-icon icon="fa-light fa-plus" />
-              Assignment
+              <font-awesome-icon
+                icon="fa-light fa-plus"
+                class="mr-2 ico-heading"
+              />
+              <span class="heading--text">Assignment</span>
             </v-btn>
           </div>
         </template>

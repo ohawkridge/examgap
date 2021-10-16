@@ -77,7 +77,7 @@ exports.handler = async (event) => {
                               q.Select(['data', 'questions'], q.Var('instance'))
                             ),
                             live: q.If(
-                              q.LTE(
+                              q.LT(
                                 q.ToDate(
                                   // Old assignments include a time which ToDate
                                   // won't be able to parse so chop it off

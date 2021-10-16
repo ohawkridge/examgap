@@ -59,8 +59,11 @@
                 color="primary"
                 @click="$nuxt.$emit('show-create')"
               >
-                <font-awesome-icon icon="fa-light fa-plus mr-2" />
-                Class
+                <font-awesome-icon
+                  icon="fa-light fa-plus"
+                  class="ico-grey mr-2"
+                />
+                <span class="heading--text">Class</span>
               </v-btn>
             </div>
           </template>

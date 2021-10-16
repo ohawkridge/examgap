@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {
+  FontAwesomeIcon,
+  FontAwesomeLayers,
+} from '@fortawesome/vue-fontawesome'
 import { fal } from '@fortawesome/pro-light-svg-icons'
 
 // Register component globally
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
+// https://github.com/FortAwesome/vue-fontawesome
+// Search for 'layers'
+Vue.component('FontAwesomeLayers', FontAwesomeLayers)
 library.add(fal)
 
 Vue.use(Vuetify)
@@ -51,7 +57,19 @@ const CUSTOM_ICONS = {
   expand: {
     component: FontAwesomeIcon,
     props: {
-      icon: ['fal', 'chevron-down'],
+      icon: ['fal', 'angle-down'],
+    },
+  },
+  dropdown: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'caret-down'],
+    },
+  },
+  delete: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'xmark'],
     },
   },
 }

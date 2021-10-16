@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 104 104" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1.3899,0,0,1.41245,-4.40417,-8.67647)">
+        <ellipse cx="40.581" cy="42.958" rx="35.974" ry="35.4" style="fill:rgb(213,237,245);stroke:rgb(13,71,90);stroke-width:2.14px;"/>
+    </g>
+    <g id="lock-keyhole-open.svg" transform="matrix(0.0909965,0,0,0.0909965,52,52)">
+        <g transform="matrix(1,0,0,1,-288,-256)">
+            <path d="M448,0C377.41,0 320,57.41 320,128L320,224L64,224C28.65,224 0,252.7 0,288L0,448C0,483.35 28.65,512 64,512L384,512C419.35,512 448,483.35 448,448L448,288C448,252.65 419.35,224 384,224L352,224L352,128C352,75.06 395.06,32 448,32C500.94,32 544,75.06 544,128L544,208C544,216.8 551.2,224 560,224C568.8,224 576,216.8 576,208L576,128C576,57.41 518.6,0 448,0ZM384,256C401.64,256 416,270.36 416,288L416,448C416,465.64 401.64,480 384,480L64,480C46.36,480 32,465.64 32,448L32,288C32,270.36 46.36,256 64,256L384,256ZM224,416C232.844,416 240,408.844 240,400L240,336C240,327.2 232.8,320 224,320C215.2,320 208,327.156 208,336L208,400C208,408.8 215.2,416 224,416Z" style="fill:rgb(13,71,91);fill-rule:nonzero;"/>
+        </g>
+    </g>
+</svg>

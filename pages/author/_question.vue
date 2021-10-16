@@ -32,38 +32,45 @@
             persistent-hint
             placeholder="E.g. RAM, instructions, processor"
           ></v-text-field>
-          <p class="text-subtitle-1 font-weight-medium">Mark scheme</p>
-          <v-text-field
-            v-for="i in question.marks.length"
-            :key="i"
-            v-model="question.marks[i - 1].text"
-            outlined
-            placeholder="One mark for..."
+          <p
+            class="
+              text-subtitle-1
+              font-weight-medium
+              mt-3
+              d-flex
+              justify-space-between
+              align-end
+            "
           >
-            <template #append>
-              <v-tooltip top>
+            Mark scheme
+            <v-btn v-if="question.marks.length < 13" color="primary" icon>
+              <v-tooltip bottom>
                 <template #activator="{ on }">
-                  <!-- <i
-                    :disabled="question.marks.length === 13"
-                    class="fa-light fa-plus mr-1"
-                    @click="question.marks.push({ id: '', text: '' })"
-                    v-on="on"
-                  /> -->
-                  <!-- TODO disabled? -->
                   <font-awesome-icon
                     icon="fa-light fa-plus"
-                    @click="question.marks.push({ id: '', text: '' })"
+                    class="fa-lg"
+                    @click="add()"
                     v-on="on"
                   />
                 </template>
                 <span>Add mark</span>
               </v-tooltip>
-              <v-tooltip top>
+            </v-btn>
+          </p>
+          <v-text-field
+            v-for="(mark, i) in question.marks"
+            :key="i"
+            v-model="mark.text"
+            outlined
+            placeholder="One mark for..."
+          >
+            <template #append>
+              <v-tooltip v-if="question.marks.length > 1" bottom>
                 <template #activator="{ on }">
-                  <i
-                    :disabled="question.marks.length === 1"
-                    class="fa-light fa-minus"
-                    @click="remove(question.marks[i - 1].id)"
+                  <font-awesome-icon
+                    icon="fa-light fa-minus"
+                    class="fa-lg"
+                    @click="remove(i)"
                     v-on="on"
                   />
                 </template>
@@ -87,7 +94,7 @@
             chips
             small-chips
             deletable-chips
-            hint="Map to course topics"
+            hint="Select all that apply"
             persistent-hint
             multiple
           >
@@ -104,7 +111,7 @@
               rounded
               @click="save()"
             >
-              Save
+              <span class="heading--text">Save</span>
             </v-btn>
           </div>
         </v-col>
@@ -184,25 +191,17 @@ export default {
     }),
   },
   mounted() {
-    this.$store.commit(
-      'app/setPageTitle',
-      `${this.$route.params.question ? 'Edit' : 'Create'} question`
-    )
+    const EC = this.$route.params.question ? 'Edit' : 'Create'
+    this.$store.commit('app/setPageTitle', `${EC} question`)
   },
   methods: {
-    // Remove mark from mark scheme
-    remove(id) {
-      // For new questions, remove the last mark added, otherwise
-      // find the mark to remove by searching for its ID
-      if (id === '') {
-        this.question.marks.pop()
-      } else {
-        for (let i = 0; i < this.question.marks.length; i++) {
-          if (this.question.marks[i].id === id) {
-            this.question.marks.splice(i, 1)
-          }
-        }
-      }
+    // Add empty point to mark scheme
+    add() {
+      this.question.marks.push({ id: '', text: '' })
+    },
+    // Remove point from mark scheme
+    remove(i) {
+      this.question.marks.splice(i, 1)
     },
     async save() {
       this.loading = true
@@ -232,8 +231,8 @@ export default {
           msg: `Question ${this.editing ? 'saved' : 'created'}`,
         })
         this.$router.push(`/question/${response.id}`)
-      } catch (e) {
-        console.error(e)
+      } catch (err) {
+        console.error(err)
         this.$snack.showMessage({
           type: 'error',
           msg: 'Error saving question',
@@ -257,7 +256,7 @@ export default {
   }
 }
 
-/* round editor corners */
+/* round Editor corners */
 .tiptap-vuetify-editor {
   border: 1px solid rgba(0, 0, 0, 0.42);
   border-radius: 4px !important;
