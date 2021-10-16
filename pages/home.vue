@@ -292,6 +292,7 @@ export default {
       'app/setPageTitle',
       this.teacher ? 'Classes' : this.group.name
     )
+    this.$honeybadger.notify('Someone just logged in.')
   },
   methods: {
     navTo(groupId) {

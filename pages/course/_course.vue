@@ -247,8 +247,7 @@ export default {
 
 <style scoped>
 #q-list {
-  border: 1px dashed darkgoldenrod;
-  max-height: 500px;
+  max-height: 800px;
   overflow-y: scroll;
 }
 </style>
