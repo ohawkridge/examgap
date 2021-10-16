@@ -118,28 +118,29 @@
         </v-list>
         <!-- Empty state -->
         <template v-if="assignments.length === 0">
-          <div class="d-flex justify-center pa-3">
+          <div class="pa-3">
             <v-img
               src="/no-assign.svg"
               contain
               :max-width="$vuetify.breakpoint.name === 'xs' ? '50%' : '20%'"
               alt="Books and pens illustrations"
+              class="mx-auto"
             />
-          </div>
-          <p class="text-center mt-2">No assignments yet.</p>
-          <div class="d-flex justify-center">
-            <v-btn
-              elevation="0"
-              rounded
-              color="primary"
-              @click="createAssignment()"
-            >
-              <font-awesome-icon
-                icon="fa-light fa-plus"
-                class="mr-2 ico-heading"
-              />
-              <span class="heading--text">Assignment</span>
-            </v-btn>
+            <p class="text-center mt-2 black--text">No assignments yet</p>
+            <div class="d-flex justify-center">
+              <v-btn
+                elevation="0"
+                rounded
+                color="primary"
+                @click="createAssignment()"
+              >
+                <font-awesome-icon
+                  icon="fa-light fa-plus"
+                  class="mr-2 ico-heading"
+                />
+                <span class="heading--text">Assignment</span>
+              </v-btn>
+            </div>
           </div>
         </template>
       </v-tab-item>

@@ -244,8 +244,9 @@ export default {
       // Clear user id so auth.js will fail and redirect to /signin
       this.$store.commit('user/clearUserId')
       localStorage.removeItem('examgap')
+      this.$router.push('/signin')
       // Reload the page to clear memory
-      this.$router.go()
+      this.$router.go(0)
     },
   },
 }

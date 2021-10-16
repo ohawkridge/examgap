@@ -48,7 +48,7 @@
             :types="{ list: 'list-item-two-line@8' }"
           >
           </v-skeleton-loader>
-          <v-list v-else>
+          <v-list v-else id="q-list">
             <v-list-item-group v-model="selectedQuestion">
               <template v-for="(q, i) in questions">
                 <v-list-item :key="i" :value="i">
@@ -244,3 +244,11 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+#q-list {
+  border: 1px dashed darkgoldenrod;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+</style>

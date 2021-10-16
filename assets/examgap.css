@@ -158,7 +158,9 @@ span.v-chip.theme--light.green {
   color: #001f2a;
 }
 
+/* -------- Headway widget -------- */
+
 #HW_badge {
   background: #ef7a85 !important;
-  color: black;
+  color: #001f2a;
 }

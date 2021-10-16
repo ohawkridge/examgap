@@ -51,7 +51,7 @@
                 alt="Empty chair illustration"
               />
             </div>
-            <p class="text-center mt-2">No classes yet.</p>
+            <p class="text-center mt-2">No classes yet</p>
             <div class="d-flex justify-center">
               <v-btn
                 elevation="0"

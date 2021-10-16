@@ -8,7 +8,10 @@
               Try it free for 30 days
             </p>
             <p class="sub-hero text-center mb-0">
-              Frequent low stakes testing for you and your department.
+              Frequent low stakes testing.
+            </p>
+            <p class="sub-hero text-center mb-0">
+              Assessment with a positive impact.
             </p>
           </v-col>
         </v-row>
