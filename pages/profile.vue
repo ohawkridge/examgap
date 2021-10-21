@@ -37,11 +37,11 @@
         >
           <template #append>
             <div id="fix-chip">
-              <v-chip v-if="subscribed" label color="#db5461" outlined>
+              <v-chip v-if="subscribed" color="green" outlined>
                 Subscribed
                 <font-awesome-icon
                   icon="fa-light fa-badge-check"
-                  class="ml-2"
+                  class="ml-2 fa-lg"
                 />
               </v-chip>
             </div>

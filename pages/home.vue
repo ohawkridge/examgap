@@ -237,7 +237,7 @@
                       v-for="j in topic.answered"
                       :key="j"
                       icon="fa-light fa-circle-check"
-                      class="ico-green fa-lg"
+                      class="ico-green fa-lg mr-2"
                     />
                   </div>
                 </div>
@@ -292,7 +292,6 @@ export default {
       'app/setPageTitle',
       this.teacher ? 'Classes' : this.group.name
     )
-    this.$honeybadger.notify('Someone just logged in.')
   },
   methods: {
     navTo(groupId) {

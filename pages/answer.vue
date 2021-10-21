@@ -53,7 +53,7 @@
                 </v-chip>
               </div>
               <v-textarea
-                v-model="answer"
+                v-model.trim="answer"
                 outlined
                 color="primary"
                 auto-grow
@@ -212,7 +212,7 @@ export default {
   layout: 'app',
   data() {
     return {
-      answer: ``,
+      answer: '',
       saved: {},
       marking: false,
       marks: [],

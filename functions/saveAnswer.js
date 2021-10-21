@@ -32,13 +32,14 @@ exports.handler = async (event) => {
             '',
             q.Ref(q.Collection('Topic'), topicId)
           ),
-          // Independent revision—no assignment id
+          // No assignment id for revision
           assignment: q.If(
             q.Equals(assignmentId, ''),
             '',
             q.Ref(q.Collection('Assignment'), assignmentId)
           ),
-          group: q.Ref(q.Collection('Assignment'), groupId),
+          // All responses need group
+          group: q.Ref(q.Collection('Group'), groupId),
           startTime: q.Now(),
           timeTaken: 0,
         },

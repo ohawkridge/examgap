@@ -72,6 +72,12 @@ const CUSTOM_ICONS = {
       icon: ['fal', 'xmark'],
     },
   },
+  clear: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'xmark'],
+    },
+  },
 }
 
 export default new Vuetify({

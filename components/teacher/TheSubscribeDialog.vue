@@ -28,7 +28,7 @@
         <v-checkbox v-model="selectedPackage" value="gcse" readonly>
           <template #label>
             <div>
-              GCSE Computer Science—<strong>£79</strong>
+              GCSE Computer Science—<strong>£84</strong>
               <span class="text-caption">(VAT included)</span>
             </div>
           </template>

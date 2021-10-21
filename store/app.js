@@ -1,4 +1,4 @@
-export const state = () => ({
+const getDefaultState = () => ({
   tab: null, // Home or Archive tab? (teacher only)
   groupTab: null, // Tab on _group.vue
   onboardStep: 0, // Don't onboard
@@ -6,7 +6,16 @@ export const state = () => ({
   pageTitle: 'Classes', // Global page title
 })
 
-export const mutations = {
+// eslint-disable-next-line no-unused-vars
+const state = getDefaultState()
+
+const actions = {
+  resetState({ commit }) {
+    commit('resetState')
+  },
+}
+
+const mutations = {
   setTab(state, val) {
     state.tab = val
   },
@@ -22,4 +31,13 @@ export const mutations = {
   setPageTitle(state, title) {
     state.pageTitle = title
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  },
+}
+
+export default {
+  state: getDefaultState,
+  mutations,
+  actions,
 }

@@ -1,13 +1,14 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const groupId = data.groupId
   const namesOnly = data.namesOnly
+  const secret = data.secret
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Select(
@@ -59,7 +60,7 @@ exports.handler = async (event, context, callback) => {
                 q.Let(
                   {
                     // Get all responses by this student
-                    // Get whole doc to filter assignments/revision
+                    // (Whole doc so we can filter assignments/revision)
                     responses: q.Select(
                       'data',
                       q.Map(

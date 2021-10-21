@@ -199,7 +199,7 @@
       <v-card tile>
         <v-toolbar dark dense color="primary">
           <v-btn icon dark @click="close()">
-            <font-awesome-icon icon="fa-light fa-xmark" />
+            <font-awesome-icon icon="fa-light fa-xmark" class="fa-xl" />
           </v-btn>
           <v-toolbar-title>Marking</v-toolbar-title>
           <v-spacer />
@@ -341,7 +341,7 @@
                 Feedback
                 <v-menu open-on-hover offset-y>
                   <template #activator="{ on }">
-                    <v-btn color="primary" icon v-on="on">
+                    <v-btn icon v-on="on">
                       <font-awesome-icon
                         icon="fa-light fa-comment-smile"
                         class="fa-lg"
@@ -385,18 +385,15 @@
               <!-- N.B. update is debounced method -->
               <v-textarea
                 id="feedback"
+                ref="fbArea"
                 v-model="feedback"
                 outlined
                 rows="4"
                 hide-details
                 auto-grow
-                :append-icon="
-                  savingFeedback
-                    ? 'fa-light fa-cloud-arrow-up'
-                    : 'fa-light fa-cloud-check'
-                "
-                @input="update()"
-              ></v-textarea>
+              >
+                <font-awesome-icon slot="append" :icon="icon()" class="fa-lg" />
+              </v-textarea>
               <v-list dense>
                 <v-list-item
                   v-for="(comment, i) in commentBank"
@@ -451,7 +448,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { debounce } from 'lodash'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
 import TheDeleteAssignmentDialog from '@/components/teacher/TheDeleteAssignmentDialog'
 
@@ -464,7 +460,7 @@ export default {
   data() {
     return {
       commentBank: [],
-      feedback: '',
+      debouncedFeedback: '',
       savingFeedback: false,
       smartSort: false,
       markScheme: [], // Copied via question.markScheme
@@ -473,6 +469,7 @@ export default {
       forceRefresh: false,
       pStart: { x: 0, y: 0 }, // Pull to refresh
       pStop: { x: 0, y: 0 },
+      timeout: null,
     }
   },
   async fetch() {
@@ -513,6 +510,18 @@ export default {
       responseIndex: (state) => state.assignment.responseIndex,
       marking: (state) => state.assignment.marking,
     }),
+    feedback: {
+      get() {
+        return this.debouncedFeedback
+      },
+      set(val) {
+        if (this.timeout) clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => {
+          this.debouncedFeedback = val
+          this.saveFeedback()
+        }, 1500)
+      },
+    },
     // Questions included in assignment headers (for hover preview)
     // +1 because index 0 contains Vuetify table metadata
     question() {
@@ -583,9 +592,28 @@ export default {
     )
   },
   methods: {
+    icon() {
+      return this.savingFeedback
+        ? 'fa-light fa-cloud-arrow-up'
+        : 'fa-light fa-cloud-check'
+    },
     // Insert emoji into feedback
+    // https://codepen.io/1da2/pen/RwWbROE
     insert(char) {
-      this.feedback = this.feedback + char
+      const textarea = this.$refs.fbArea.$refs.input
+      const sentence = textarea.value
+      const len = sentence.length
+      let pos = textarea.selectionStart
+      if (pos === undefined) {
+        pos = 0
+      }
+      const before = sentence.substr(0, pos)
+      const after = sentence.substr(pos, len)
+      this.feedback = before + char + after
+      this.$nextTick().then(() => {
+        textarea.selectionStart = pos + char.length
+      })
+      this.saveFeedback()
     },
     swipeStart(e) {
       if (e !== undefined) {
@@ -728,10 +756,6 @@ export default {
         })
       }
     },
-    // Debounce feedback area
-    update: debounce(function () {
-      this.saveFeedback()
-    }, 2000),
     async saveFeedback() {
       try {
         this.savingFeedback = true

@@ -1,4 +1,4 @@
-export const state = () => ({
+const getDefaultState = () => ({
   assignmentId: '',
   questionId: '',
   responseId: '', // debounced saved answer
@@ -13,6 +13,9 @@ export const state = () => ({
   question: {}, // The question to answer
 })
 
+// eslint-disable-next-line no-unused-vars
+const state = getDefaultState()
+
 // getAssignment() returns a massive data structure
 // (see file in Examgap/json). Its two main keys are:
 // headers and students. studentIndex gets us
@@ -23,7 +26,7 @@ export const state = () => ({
 // If the question has been reassigned, they could have more
 // than one response. This getter returns a single
 // response object.
-export const getters = {
+const getters = {
   response: (state) => {
     if (!state.marking) return {}
     return state.assignment.students[state.studentIndex].data[
@@ -34,7 +37,10 @@ export const getters = {
   },
 }
 
-export const actions = {
+const actions = {
+  resetState({ commit }) {
+    commit('resetState')
+  },
   async getQuestion({ state, commit, rootState }) {
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
     let response = await fetch(url, {
@@ -257,7 +263,7 @@ export const actions = {
   },
 }
 
-export const mutations = {
+const mutations = {
   setAssignment(state, data) {
     state.assignment = data
   },
@@ -323,4 +329,14 @@ export const mutations = {
         : (state.studentIndex -= 1)
     }
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  },
+}
+
+export default {
+  state: getDefaultState,
+  actions,
+  mutations,
+  getters,
 }

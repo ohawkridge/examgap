@@ -4,7 +4,7 @@
       <v-tooltip bottom>
         <template #activator="{ on: tool }">
           <v-btn class="ml-2" icon v-on="{ ...tool, ...dial }">
-            <font-awesome-icon icon="fa-light fa-info" />
+            <font-awesome-icon icon="fa-light fa-circle-info" class="fa-lg" />
           </v-btn>
         </template>
         <span>More information</span>

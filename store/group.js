@@ -1,9 +1,16 @@
-export const state = () => ({
+const getDefaultState = () => ({
   students: [],
   grades: [],
 })
 
-export const actions = {
+// Initial state
+// eslint-disable-next-line no-unused-vars
+const state = getDefaultState()
+
+const actions = {
+  resetState({ commit }) {
+    commit('resetState')
+  },
   async getGrades({ commit, rootState, rootGetters }) {
     const url = new URL('/.netlify/functions/getGrades', this.$config.baseURL)
     const data = await fetch(url, {
@@ -123,7 +130,7 @@ export const actions = {
   },
 }
 
-export const mutations = {
+const mutations = {
   setTarget(state, { target, groupId, studentId }) {
     const i = state.students.findIndex((s) => s.id === studentId)
     state.students[i].target[groupId] = target
@@ -137,4 +144,13 @@ export const mutations = {
   setGrades(state, grades) {
     state.grades = grades
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  },
+}
+
+export default {
+  state: getDefaultState,
+  actions,
+  mutations,
 }

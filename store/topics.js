@@ -1,4 +1,4 @@
-export const state = () => ({
+const getDefaultState = () => ({
   topics: [],
   questions: [],
   question: {}, // Question detail (not _course.vue preview)
@@ -7,7 +7,10 @@ export const state = () => ({
   currentTopicIndex: 0,
 })
 
-export const getters = {
+// eslint-disable-next-line no-unused-vars
+const state = getDefaultState()
+
+const getters = {
   // Get count of revision questions answered for a topic
   // topicId = '' until a revision topic is chosen
   topicCount: (state, getters, rootState) => {
@@ -16,7 +19,10 @@ export const getters = {
   },
 }
 
-export const actions = {
+const actions = {
+  resetState({ commit }) {
+    commit('resetState')
+  },
   async getQuestion({ commit, rootState }, questionId) {
     // Clear previous question
     commit('setQuestion', {})
@@ -112,4 +118,14 @@ export const mutations = {
   clearSelectedQuestions(state) {
     state.selected = []
   },
+  resetState(state) {
+    Object.assign(state, getDefaultState())
+  },
+}
+
+export default {
+  state: getDefaultState,
+  mutations,
+  actions,
+  getters,
 }

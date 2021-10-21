@@ -67,7 +67,7 @@ export default {
   },
   mounted() {
     this.questionId = this.$route.params.map
-    this.$store.commit('app/setPageTitle', 'Topics')
+    this.$store.commit('app/setPageTitle', 'Question topics')
   },
   methods: {
     async getQuestion(questionId = this.$route.params.map) {

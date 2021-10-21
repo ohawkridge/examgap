@@ -241,12 +241,16 @@ export default {
     },
 
     logout() {
-      // Clear user id so auth.js will fail and redirect to /signin
-      this.$store.commit('user/clearUserId')
-      localStorage.removeItem('examgap')
+      // Clear all stores
+      this.$store.dispatch('snackbar/resetState')
+      this.$store.dispatch('topics/resetState')
+      this.$store.dispatch('assignment/resetState')
+      this.$store.dispatch('group/resetState')
+      this.$store.dispatch('app/resetState')
+      this.$store.dispatch('user/resetState')
+      // Clear local storage
+      localStorage.clear()
       this.$router.push('/signin')
-      // Reload the page to clear memory
-      this.$router.go(0)
     },
   },
 }
