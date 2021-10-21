@@ -57,17 +57,6 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
-    // https://www.npmjs.com/package/@nuxtjs/fontawesome
-    // '@nuxtjs/fontawesome',
-    // {
-    //   component: 'fa',
-    //   suffix: true,
-    //   proIcons: {
-    //     // if you have bought the Pro packages
-    //     // list the icons you want to add, not listed icons will be tree-shaked
-    //     light: ['faCircleCheck'],
-    //   },
-    // },
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

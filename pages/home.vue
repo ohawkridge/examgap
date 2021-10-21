@@ -166,7 +166,7 @@
                   </v-col>
                   <v-col
                     cols="12"
-                    sm="5"
+                    sm="6"
                     class="
                       d-flex
                       flex-column flex-sm-row
@@ -174,13 +174,13 @@
                       text-body-2
                     "
                   >
-                    <div class="justify-date">
+                    <div class="justify-date left">
                       <span class="font-weight-medium fix-date mr-1"
                         >Start:</span
                       >
                       {{ assignment.start | date }}
                     </div>
-                    <div>
+                    <div class="left">
                       <span class="font-weight-medium fix-date mr-1">Due:</span>
                       {{ assignment.dateDue | date }}
                     </div>
@@ -188,27 +188,44 @@
                   <v-col
                     v-if="$vuetify.breakpoint.name !== 'xs'"
                     cols="2"
-                    sm="3"
+                    sm="2"
                     class="d-flex justify-center align-center"
                   >
-                    <v-chip v-if="assignment.live" label color="green" small>
+                    <v-chip v-if="assignment.live" color="green" small>
                       Open
+                      <font-awesome-icon
+                        icon="fa-light fa-hourglass"
+                        class="ml-2"
+                      />
                     </v-chip>
-                    <v-chip v-else label color="red" small> Past </v-chip>
+                    <v-chip v-else small>
+                      Past
+                      <font-awesome-icon
+                        icon="fa-light fa-hourglass-end"
+                        class="ml-2"
+                      />
+                    </v-chip>
                   </v-col>
                 </v-row>
               </v-list-item-content>
-              <v-list-item-action>
-                <!-- On mobile, chip moves into item-action (less space) -->
-                <v-list-item-action-text
-                  v-if="$vuetify.breakpoint.name === 'xs'"
-                  class="mt-2"
-                >
-                  <v-chip v-if="assignment.live" label color="green" small>
-                    Open
-                  </v-chip>
-                  <v-chip v-else label color="red" small> Past </v-chip>
+              <!-- item-action mobile only -->
+              <v-list-item-action v-if="$vuetify.breakpoint.name === 'xs'">
+                <v-list-item-action-text>
+                  <template v-if="assignment.live"> Open </template>
+                  <template v-else> Past </template>
                 </v-list-item-action-text>
+                <template v-if="assignment.live">
+                  <font-awesome-icon
+                    icon="fa-light fa-hourglass"
+                    class="ico-green fa-lg"
+                  />
+                </template>
+                <template v-else>
+                  <font-awesome-icon
+                    icon="fa-light fa-hourglass-end"
+                    class="ico-grey fa-lg"
+                  />
+                </template>
               </v-list-item-action>
             </v-list-item>
           </v-list>
@@ -334,6 +351,13 @@ export default {
 @media only screen and (min-width: 600px) {
   .justify-date {
     width: 190px;
+  }
+}
+
+/* Align Start/Due left in flex-columns */
+@media only screen and (max-width: 600px) {
+  .left {
+    margin-right: auto;
   }
 }
 </style>

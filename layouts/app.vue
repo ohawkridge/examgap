@@ -96,7 +96,7 @@
           color="primary"
           @click="createAssignment()"
         >
-          <font-awesome-icon icon="fa-light fa-plus" />
+          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
         </v-btn>
         <v-btn
           v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
@@ -106,7 +106,7 @@
           rounded
           @click="createAssignment()"
         >
-          <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
           Assignment
         </v-btn>
         <!-- Create class -->
@@ -118,7 +118,7 @@
           rounded
           @click="$nuxt.$emit('show-create')"
         >
-          <font-awesome-icon icon="fa-light fa-plus" />
+          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
         </v-btn>
         <v-btn
           v-if="createClass && $vuetify.breakpoint.name !== 'xs'"
@@ -128,7 +128,7 @@
           rounded
           @click="$nuxt.$emit('show-create')"
         >
-          <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
           Class
         </v-btn>
         <!-- Create question -->
@@ -139,7 +139,7 @@
           nuxt
           to="/author"
         >
-          <font-awesome-icon icon="fa-light fa-plus" />
+          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
         </v-btn>
         <v-btn
           v-if="createQ && $vuetify.breakpoint.name !== 'xs'"
@@ -149,7 +149,7 @@
           nuxt
           to="/author"
         >
-          <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
           Question
         </v-btn>
         <!-- TODO -->
@@ -245,8 +245,8 @@ export default {
       this.$store.dispatch('snackbar/resetState')
       this.$store.dispatch('topics/resetState')
       this.$store.dispatch('assignment/resetState')
-      this.$store.dispatch('group/resetState')
       this.$store.dispatch('app/resetState')
+      this.$store.dispatch('group/resetState')
       this.$store.dispatch('user/resetState')
       // Clear local storage
       localStorage.clear()

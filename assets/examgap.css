@@ -150,8 +150,13 @@ span.v-chip.theme--light.green {
   color: #4caf50;
 }
 
+.ico-orange {
+  color: #ffc107;
+}
+
 .ico-grey {
-  color: #9e9e9e;
+  /* color: #9e9e9e; */
+  color: #bdbdbd;
 }
 
 .ico-heading {
