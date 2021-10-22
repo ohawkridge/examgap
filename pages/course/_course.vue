@@ -177,7 +177,7 @@ export default {
   },
   async fetch() {
     // Dispatch store action to get topics
-    // N.B. This also fetches the first topic's questions
+    // N.B. This action later dispatches topics/getQuestions
     await this.$store.dispatch('topics/getTopics', this.$route.params.course)
   },
   computed: {

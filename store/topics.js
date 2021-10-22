@@ -108,6 +108,8 @@ export const mutations = {
     state.question = question
   },
   setQuestions(state, questions) {
+    // Debug issue with data doubling
+    state.questions = []
     state.questions = questions
   },
   updateSelected(state, questionId) {
