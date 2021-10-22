@@ -86,6 +86,7 @@ const actions = {
       throw new Error(`${response.statusText} ${response.status}`)
     }
     response = await response.json()
+    console.log(`ACTION getQuestions n:`, response.length)
     commit('setQuestions', response)
   },
 }
@@ -110,6 +111,7 @@ export const mutations = {
   setQuestions(state, questions) {
     // Debug issue with data doubling
     state.questions = []
+    console.log(`questions cleared? n:`, state.questions.length)
     state.questions = questions
     console.log('%c' + 'SET state.questions', 'color:red')
     console.log(`n:`, state.questions.length)

@@ -158,6 +158,11 @@
           </div>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col>
+          <p class="red--text">Debug #questions: {{ questions.length }}</p>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
