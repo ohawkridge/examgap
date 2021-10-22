@@ -6,8 +6,6 @@ exports.handler = async (event) => {
   const studentIds = data.studentIds
   const groupId = data.groupId
   const secret = data.secret
-  console.log(studentIds)
-  console.log(groupId)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
@@ -27,7 +25,6 @@ exports.handler = async (event) => {
       )
     )
     const data = await keyedClient.query(qry)
-    console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),
