@@ -111,6 +111,8 @@ export const mutations = {
     // Debug issue with data doubling
     state.questions = []
     state.questions = questions
+    console.log('%c' + 'SET state.questions', 'color:red')
+    console.log(`n:`, state.questions.length)
   },
   updateSelected(state, questionId) {
     state.selected.includes(questionId)
