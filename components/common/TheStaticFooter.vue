@@ -33,9 +33,10 @@
                   >support@examgap.com</a
                 >
               </li>
-              <li>
+              <li style="display: inline-block">
+                <img id="twit" src="/twitter.svg" width="16" class="mr-1" />
                 <a href="https://twitter.com/examgap" class="grey--text"
-                  >@examgap</a
+                  >examgap</a
                 >
               </li>
             </ul>
@@ -43,6 +44,9 @@
           <v-col cols="12" md="4">
             <p class="text-h6 grey--text">Product</p>
             <ul class="no-bullet">
+              <li>
+                <a href="https://examgap.blog" class="grey--text">Blog</a>
+              </li>
               <li>
                 <nuxt-link to="/#how" class="grey--text"
                   >How does it work?</nuxt-link
@@ -198,5 +202,10 @@ export default {
 
 li {
   padding-bottom: 0.375em;
+}
+
+#twit {
+  position: relative;
+  top: 4px;
 }
 </style>

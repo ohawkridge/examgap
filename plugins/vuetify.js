@@ -1,17 +1,12 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  FontAwesomeIcon,
-  FontAwesomeLayers,
-} from '@fortawesome/vue-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fal } from '@fortawesome/pro-light-svg-icons'
 
 // Register component globally
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 // https://github.com/FortAwesome/vue-fontawesome
-// Search for 'layers'
-Vue.component('FontAwesomeLayers', FontAwesomeLayers)
 library.add(fal)
 
 Vue.use(Vuetify)
