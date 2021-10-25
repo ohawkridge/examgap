@@ -2,7 +2,7 @@
   <div>
     <v-row class="pa-3">
       <v-col cols="12" class="d-flex justify-end align-center">
-        <create-assignment />
+        <create-assignment class="mr-3" />
       </v-col>
     </v-row>
     <v-container fluid>
@@ -30,11 +30,6 @@
                       topic.count
                     }}</span>
                   </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item v-if="$fetchState.error" color="error">
-                <v-list-item-content>
-                  <v-list-item-title>Error loading topics</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -178,7 +173,15 @@ export default {
   async fetch() {
     // Dispatch store action to get topics
     // N.B. This action later dispatches topics/getQuestions
-    await this.$store.dispatch('topics/getTopics', this.$route.params.course)
+    try {
+      await this.$store.dispatch('topics/getTopics', this.$route.params.course)
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error loading topics',
+      })
+    }
   },
   computed: {
     ...mapState({
