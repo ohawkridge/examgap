@@ -43,7 +43,7 @@
             "
           >
             Mark scheme
-            <v-btn v-if="question.marks.length < 13" color="primary" icon>
+            <v-btn v-if="question.marks.length < 24" color="primary" icon>
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <font-awesome-icon
