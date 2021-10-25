@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-row class="pa-3">
+    <v-row class="pa-3 pr-6">
       <v-col cols="12" class="d-flex justify-end align-center">
-        <create-assignment class="mr-3" />
+        <create-assignment />
       </v-col>
     </v-row>
     <v-container fluid>
