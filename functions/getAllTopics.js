@@ -1,11 +1,13 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
+  const secret = data.secret
+  const allCourses = data.allCourses
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Select(
@@ -23,11 +25,25 @@ exports.handler = async (event, context, callback) => {
           ),
           [],
           q.Map(
-            q.Paginate(q.Documents(q.Collection('Course'))),
+            q.Paginate(
+              // Show all course topics in autocomplete?
+              q.If(
+                allCourses,
+                q.Documents(q.Collection('Course')),
+                q.Filter(
+                  q.Documents(q.Collection('Course')),
+                  q.Lambda(
+                    'cRef',
+                    q.Select(['data', 'active'], q.Get(q.Var('cRef')), false)
+                  )
+                )
+              )
+            ),
             q.Lambda(
               'ref',
               q.Prepend(
                 {
+                  // TODO Could be more efficient
                   header: q.UpperCase(
                     q.Concat([
                       q.Select(['data', 'board'], q.Get(q.Var('ref'))),
@@ -35,6 +51,7 @@ exports.handler = async (event, context, callback) => {
                       q.Select(['data', 'shortName'], q.Get(q.Var('ref'))),
                     ])
                   ),
+                  active: q.Select(['data', 'active'], q.Get(q.Var('ref'))),
                 },
                 q.Select(
                   ['data'],
@@ -61,12 +78,12 @@ exports.handler = async (event, context, callback) => {
       )
     )
     const data = await keyedClient.query(qry)
-    // console.log(JSON.stringify(data, null, 2))
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     }
   } catch (err) {
-    return { statusCode: 500, body: err.toString() }
+    console.error(err.description)
+    return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

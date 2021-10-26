@@ -90,6 +90,7 @@
             :items="topics"
             item-value="id"
             item-text="name"
+            :loading="$fetchState.pending || ACLoading"
             outlined
             chips
             small-chips
@@ -99,6 +100,13 @@
             multiple
           >
           </v-autocomplete>
+          <v-checkbox
+            v-model="showAll"
+            label="Show developing courses"
+            class="mt-0"
+            hide-details
+          >
+          </v-checkbox>
           <div class="d-flex justify-end">
             <v-btn text rounded class="mr-2" @click="$router.go(-1)">
               Cancel
@@ -129,52 +137,86 @@ export default {
     TextEditor,
   },
   layout: 'app',
-  async asyncData({ $config: { baseURL }, store, params }) {
-    const url = new URL('/.netlify/functions/getAllTopics', baseURL)
-    let topics = await fetch(url, {
-      body: JSON.stringify({
-        secret: store.state.user.secret,
-      }),
-      method: 'POST',
-    })
-    if (!topics.ok) {
-      throw new Error(`Error fetching topics ${topics.status}`)
-    }
-    topics = await topics.json()
-    if (params.question !== undefined) {
-      // Get existing question
-      const url = new URL('/.netlify/functions/getQuestion', baseURL)
-      let question = await fetch(url, {
-        body: JSON.stringify({
-          secret: store.state.user.secret,
-          questionId: params.question,
-        }),
-        method: 'POST',
-      })
-      if (!question.ok) {
-        throw new Error(`Error fetching question ${question.status}`)
-      }
-      question = await question.json()
-      return { topics, question }
-    }
-    // Return an empty question object
-    const question = {
-      id: '',
-      text: '',
-      maxMark: 1,
-      modelAnswer: '',
-      guidance: '',
-      keywords: '',
-      marks: [{ id: '', text: '' }], // Create first empty mark
-      selectedTopics: [],
-    }
+  // async asyncData({ store, params }) {
+  //   // Factored out getTopics()
+  //   const topics = await this.getTopics()
+  //   if (params.question !== undefined) {
+  //     // Get existing question
+  //     const url = new URL('/.netlify/functions/getQuestion', baseURL)
+  //     let question = await fetch(url, {
+  //       body: JSON.stringify({
+  //         secret: store.state.user.secret,
+  //         questionId: params.question,
+  //       }),
+  //       method: 'POST',
+  //     })
+  //     if (!question.ok) {
+  //       throw new Error(`Error fetching question ${question.status}`)
+  //     }
+  //     question = await question.json()
+  //     return { topics, question }
+  //   }
+  //   // Return an empty question object
+  //   const question = {
+  //     id: '',
+  //     text: '',
+  //     maxMark: 1,
+  //     modelAnswer: '',
+  //     guidance: '',
+  //     keywords: '',
+  //     marks: [{ id: '', text: '' }], // Create first empty mark
+  //     selectedTopics: [],
+  //   }
 
-    return { topics, question }
-  },
+  //   return { topics, question }
+  // },
   data() {
     return {
       loading: false,
+      ACLoading: false,
       maxMarkRules: [(v) => (v && v < 13) || 'Max. 12 marks'],
+      showAll: false,
+      question: {
+        id: '',
+        text: '',
+        maxMark: 1,
+        modelAnswer: '',
+        guidance: '',
+        keywords: '',
+        marks: [{ id: '', text: '' }], // Create first empty mark
+        selectedTopics: [],
+      },
+    }
+  },
+  async fetch() {
+    try {
+      // Get course topics for autocomplete
+      await this.$store.dispatch('topics/getACTopics', this.showAll)
+      // Get existing question if editing
+      if (this.editing) {
+        const url = new URL(
+          '/.netlify/functions/getQuestion',
+          this.$config.baseURL
+        )
+        let question = await fetch(url, {
+          body: JSON.stringify({
+            secret: this.secret,
+            questionId: this.$route.params.question,
+          }),
+          method: 'POST',
+        })
+        if (!question.ok) {
+          throw new Error(`Error fetching question ${question.status}`)
+        }
+        question = await question.json()
+        this.question = { ...question }
+      }
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching topics',
+      })
     }
   },
   head() {
@@ -188,14 +230,22 @@ export default {
     },
     ...mapState({
       secret: (state) => state.user.secret,
+      topics: (state) => state.topics.autoCompleteTopics,
     }),
+  },
+  watch: {
+    async showAll() {
+      this.ACLoading = true
+      await this.$store.dispatch('topics/getACTopics', this.showAll)
+      this.ACLoading = false
+    },
   },
   mounted() {
     const EC = this.$route.params.question ? 'Edit' : 'Create'
     this.$store.commit('app/setPageTitle', `${EC} question`)
   },
   methods: {
-    // Add empty point to mark scheme
+    // Add point to mark scheme
     add() {
       this.question.marks.push({ id: '', text: '' })
     },

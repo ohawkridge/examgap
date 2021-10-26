@@ -35,8 +35,12 @@ const getters = {
       (a) => a.start === 'N/A' || new Date(a.start) <= new Date()
     )
   },
+  // TheCopyStudentDialog.vue
   // Return a list of the user's groups formatted for v-select
   selectGroups: (state, getters) => {
+    if (getters.activeGroup === undefined) {
+      return []
+    }
     const groups = state.groups.map((group) => {
       const obj = {
         text: group.name,

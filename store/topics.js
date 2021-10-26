@@ -5,6 +5,7 @@ const getDefaultState = () => ({
   selected: [],
   topicId: '',
   currentTopicIndex: 0,
+  autoCompleteTopics: [],
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -22,6 +23,24 @@ const getters = {
 const actions = {
   resetState({ commit }) {
     commit('resetState')
+  },
+  async getACTopics({ commit, rootState }, allCourses) {
+    const url = new URL(
+      '/.netlify/functions/getAllTopics',
+      this.$config.baseURL
+    )
+    let topics = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        allCourses,
+      }),
+      method: 'POST',
+    })
+    if (!topics.ok) {
+      throw new Error(`Error fetching topics ${topics.status}`)
+    }
+    topics = await topics.json()
+    commit('setACTopics', topics)
   },
   async getQuestion({ commit, rootState }, questionId) {
     // Clear previous question
@@ -109,6 +128,9 @@ export const mutations = {
   },
   setQuestions(state, questions) {
     state.questions = questions
+  },
+  setACTopics(state, topics) {
+    state.autoCompleteTopics = topics
   },
   updateSelected(state, questionId) {
     state.selected.includes(questionId)
