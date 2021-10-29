@@ -20,7 +20,7 @@ export default {
         2: `To add students, click 'INVITE STUDENTS', or click Students → Add students.`,
         3: `Click '+ ASSIGNMENT' to browse questions.`,
         4: `Click '+' next to the questions you want.`,
-        5: `Click '+ ASSIGN (${this.selected.length}' to continue assignment.`,
+        5: `When you're ready, click '+ ASSIGN' at the top.`,
         6: `Once answered, click self marks to open marking view.`,
       },
     }
@@ -28,8 +28,13 @@ export default {
   computed: {
     ...mapState({
       onboardStep: (state) => state.app.onboardStep,
-      selected: (state) => state.topics.selected,
+      // N.B. You can access this inside dictionary above
     }),
+  },
+  watch: {
+    onboardStep() {
+      console.log(`debug`, this.selected)
+    },
   },
   methods: {
     close() {

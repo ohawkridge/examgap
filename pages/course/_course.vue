@@ -172,9 +172,16 @@ export default {
   },
   async fetch() {
     // Dispatch store action to get topics
-    // N.B. This action later dispatches topics/getQuestions
+    // N.B. This action dispatches topics/getQuestions
     try {
-      await this.$store.dispatch('topics/getTopics', this.$route.params.course)
+      // TODO Experiment with pre-fetching this
+      // Is too slow otherwise !
+      if (this.topics.length === 0) {
+        await this.$store.dispatch(
+          'topics/getTopics',
+          this.$route.params.course
+        )
+      }
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({

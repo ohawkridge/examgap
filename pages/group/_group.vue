@@ -200,9 +200,18 @@ export default {
     }
     // Pre-fetch most recent assignment
     try {
+      console.time('Fetch last assignment')
       await this.$store.dispatch('assignment/getReport', -1)
+      console.timeEnd('Fetch last assignment')
+      console.time('Fetch topics')
+      await this.$store.dispatch('topics/getTopics')
+      console.timeEnd('Fetch topics')
     } catch (err) {
       console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error pre-fetching data',
+      })
     }
     // Onboard if nec.
     if (this.group.count === 0) {

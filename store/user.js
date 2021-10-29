@@ -188,6 +188,8 @@ const actions = {
     }
     commit('setNameAndCourse', obj)
     commit('app/setPageTitle', groupName, { root: true })
+    // Clear pre-fetched topic data
+    commit('topics/resetState', null, { root: true })
   },
   async createAssignment({ commit }, obj) {
     const url = new URL(

@@ -5,7 +5,9 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
+    sourceType: 'module',
+    requireConfigFile: false,
   },
   extends: [
     '@nuxtjs',
@@ -13,7 +15,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:nuxt/recommended',
   ],
-  plugins: ['prettier'],
+  plugins: ['prettier', '@babel'],
   globals: {
     $nuxt: true,
   },

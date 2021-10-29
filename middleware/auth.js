@@ -1,7 +1,7 @@
 // Middleware for all app.vue pages
 export default function ({ redirect, store }) {
   if (process.browser) {
-    console.log('auth.js (client-side)')
+    // console.log('auth.js (client-side)')
   } else {
     console.log('%c' + 'auth.js (server-side)', 'color:red')
   }
