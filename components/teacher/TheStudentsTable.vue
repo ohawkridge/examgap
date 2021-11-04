@@ -147,12 +147,14 @@
           <!-- Different targets for each group -->
           {{ props.item.target[`${group.id}`] }}
           <template #input>
+            <div class="mt-4 text-h6">Target</div>
             <v-text-field
               :value="props.item.target[`${group.id}`]"
               :rules="targetRules"
-              placeholder="E.g., 7"
-              :loading="loading"
-              label="Set target"
+              single-line
+              label="Target"
+              placeholder="5"
+              class="mb-4"
               @keyup.enter="save(props.item.id, $event.target.value)"
             ></v-text-field>
           </template>
@@ -215,7 +217,6 @@ export default {
         },
       ],
       csv: '',
-      loading: false,
     }
   },
   async fetch() {
@@ -240,18 +241,17 @@ export default {
   },
   methods: {
     async save(studentId, target) {
-      // For iMedia allow 2 characters, for everyone else just
-      // take the first character even if the input is longer
+      // For iMedia allow 2 characters
+      // For everyone else, take first character only
       const len = this.group.course.id === '263317987221570048' ? 2 : 1
-      target = target.substring(0, len)
       try {
-        this.loading = true
-        await this.$store.dispatch('students/saveTarget', {
-          target,
+        await this.$store.dispatch('group/saveTarget', {
+          target: target.substring(0, len),
           groupId: this.group.id,
           studentId,
         })
         this.$snack.showMessage({
+          type: 'success',
           msg: 'Target saved',
         })
       } catch (err) {
@@ -260,8 +260,6 @@ export default {
           type: 'error',
           msg: 'Error saving target',
         })
-      } finally {
-        this.loading = false
       }
     },
     async reset() {

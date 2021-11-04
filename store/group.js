@@ -90,6 +90,9 @@ const actions = {
     commit('setStudents', response)
   },
   async saveTarget({ commit, rootState }, { target, groupId, studentId }) {
+    if (target === '') {
+      target = '-'
+    }
     const url = new URL(
       '/.netlify/functions/updateTarget',
       this.$config.baseURL
