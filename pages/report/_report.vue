@@ -464,6 +464,7 @@ export default {
     return {
       commentBank: [],
       debouncedFeedback: '',
+      timeout: null,
       savingFeedback: false,
       smartSort: false,
       markScheme: [], // Copied via question.markScheme
@@ -472,7 +473,6 @@ export default {
       forceRefresh: false,
       pStart: { x: 0, y: 0 }, // Pull to refresh
       pStop: { x: 0, y: 0 },
-      timeout: null,
     }
   },
   async fetch() {

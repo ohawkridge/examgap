@@ -162,7 +162,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { debounce } from 'lodash'
 import TheConfirmDialog from '@/components/student/TheConfirmDialog.vue'
 
 export default {
@@ -189,7 +188,8 @@ export default {
   layout: 'app',
   data() {
     return {
-      answer: '',
+      debouncedAnswer: '',
+      timeout: null,
       saved: {},
       marks: [],
       synth: null,
@@ -220,6 +220,18 @@ export default {
       examMode: (state) => state.user.examMode,
       marking: (state) => state.assignment.marking,
     }),
+    answer: {
+      get() {
+        return this.debouncedAnswer
+      },
+      set(val) {
+        if (this.timeout) clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => {
+          this.debouncedAnswer = val
+          this.saveFeedback()
+        }, 1800)
+      },
+    },
     ...mapGetters({ group: 'user/activeGroup' }),
     // Set assignment or independent revision?
     revising() {
@@ -288,12 +300,6 @@ export default {
         this.$store.commit('app/setPageTitle', 'Marking')
       }
     },
-    // Debounce answer area
-    // N.B. If the first call to saveAnswer doesn't complete
-    // within 1800ms you may get duplicate responses
-    update: debounce(function () {
-      this.save()
-    }, 1800),
     // Get SpeechSynthesisVoice objects if supported
     // https://wicg.github.io/speech-api/#utterance-attributes
     getVoices() {
