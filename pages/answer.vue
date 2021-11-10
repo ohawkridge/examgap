@@ -111,7 +111,7 @@
               </div>
             </div>
           </div>
-          <!-- **MARKING** -->
+          <!-- **SELF MARKING** -->
           <div v-else>
             <div>
               <p class="text-subtitle-1 font-weight-medium mb-4">Your answer</p>
@@ -129,7 +129,7 @@
               @change="checkMax()"
             >
             </v-checkbox>
-            <p class="mt-2 accent--text">
+            <p class="mt-2 red--text">
               Max. {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </p>
             <p class="text-subtitle-1 font-weight-medium my-4">
@@ -153,34 +153,7 @@
               </v-btn>
             </div>
           </div>
-          <!-- Confirm dialog -->
-          <v-dialog v-model="confirmDialog" width="440">
-            <v-card>
-              <v-card-title class="d-flex justify-center">
-                Are you sure?
-              </v-card-title>
-              <v-card-text>
-                <p>Once you've seen the mark scheme, you can't go back.</p>
-                <div class="d-flex justify-end">
-                  <v-btn
-                    text
-                    rounded
-                    class="mr-2"
-                    @click="confirmDialog = false"
-                    >Go back</v-btn
-                  >
-                  <v-btn
-                    color="primary"
-                    rounded
-                    elevation="0"
-                    @click="confirm()"
-                  >
-                    Mark</v-btn
-                  >
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
+          <the-confirm-dialog />
         </v-col>
       </v-row>
     </v-container>
@@ -190,8 +163,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { debounce } from 'lodash'
+import TheConfirmDialog from '@/components/student/TheConfirmDialog.vue'
 
 export default {
+  components: {
+    TheConfirmDialog,
+  },
   async beforeRouteLeave(to, from, next) {
     // Cancel speaking
     this.speaking = undefined
@@ -214,15 +191,12 @@ export default {
     return {
       answer: '',
       saved: {},
-      marking: false,
       marks: [],
-      examMode: false,
       synth: null,
       voices: [],
       speakDisabled: false,
       prefVoice: false,
       saving: false,
-      confirmDialog: false,
       loading: false,
     }
   },
@@ -243,6 +217,8 @@ export default {
       assignmentId: (state) => state.assignment.assignmentId,
       responseId: (state) => state.assignment.responseId,
       reviseExamMode: (state) => state.user.reviseExamMode,
+      examMode: (state) => state.user.examMode,
+      marking: (state) => state.assignment.marking,
     }),
     ...mapGetters({ group: 'user/activeGroup' }),
     // Set assignment or independent revision?
@@ -289,9 +265,6 @@ export default {
       this.voices = window.speechSynthesis.getVoices()
     }
     this.synth.getVoices()
-    // Copy mode from store so it doesn't change
-    // while the student is answering a question
-    this.examMode = this.$store.state.user.examMode
     // Add tooltips for command words
     const commandWords = this.group.course.commands
     if (commandWords !== '') {
@@ -306,19 +279,12 @@ export default {
     }
   },
   methods: {
-    // Confirm enter self-marking
-    // (even if answer isn't great)
-    confirm() {
-      this.marking = true
-      this.confirmDialog = false
-      this.$store.commit('app/setPageTitle', 'Marking')
-    },
     // Ask for confirmation if answer is blank or very short
     selfMark() {
       if (this.wordCount === 0 || this.wordCount < this.question.minWords / 3) {
-        this.confirmDialog = true
+        this.$nuxt.$emit('show-confirm')
       } else {
-        this.marking = true
+        this.$store.commit('assignment/setMarking', true)
         this.$store.commit('app/setPageTitle', 'Marking')
       }
     },

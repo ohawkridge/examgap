@@ -62,6 +62,9 @@ export default {
       },
     },
   },
+  beforeDestroy() {
+    this.$nuxt.$off('select-course')
+  },
   mounted() {
     // Listen for select change event
     this.$nuxt.$on('select-course', (id) => {

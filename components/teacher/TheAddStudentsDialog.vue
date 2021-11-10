@@ -60,13 +60,13 @@ export default {
         .filter((name) => name !== '')
     },
   },
+  beforeDestroy() {
+    this.$nuxt.$off('open-add')
+  },
   mounted() {
     this.$nuxt.$on('open-add', () => {
       this.dialog = true
     })
-  },
-  beforeDestroy() {
-    this.$nuxt.$off('open-add')
   },
   methods: {
     append() {

@@ -49,6 +49,9 @@ export default {
       code: '',
     }
   },
+  beforeDestroy() {
+    this.$nuxt.$off('join-class')
+  },
   mounted() {
     this.$nuxt.$on('join-class', () => {
       this.dialog = true

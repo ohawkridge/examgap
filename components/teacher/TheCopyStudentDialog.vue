@@ -61,6 +61,9 @@ export default {
       return this.selected.map((student) => student.id)
     },
   },
+  beforeDestroy() {
+    this.$nuxt.$off('open-copy')
+  },
   mounted() {
     this.$nuxt.$on('open-copy', () => {
       this.dialog = true

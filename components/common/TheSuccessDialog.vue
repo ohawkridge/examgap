@@ -37,6 +37,9 @@ export default {
       dialog: false,
     }
   },
+  beforeDestroy() {
+    this.$nuxt.$off('show-success')
+  },
   mounted() {
     this.$nuxt.$on('show-success', () => {
       this.dialog = true
