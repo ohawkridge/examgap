@@ -4,12 +4,10 @@
       v-model="selectedCourse"
       :loading="$fetchState.pending"
       :items="showAll ? courses : filteredCourses"
-      no-data-text="No courses available"
       item-text="name"
       item-value="id"
       :rules="courseRules"
       label="Select course*"
-      append-icon="fa-light fa-chevron-down"
       outlined
       @change="$nuxt.$emit('select-course', selectedCourse)"
     >
@@ -76,22 +74,12 @@ export default {
         type: 'error',
         msg: 'Error fetching courses',
       })
-    } finally {
-      this.betaCourse()
     }
   },
   computed: {
-    // Only show names of 'active' (i.e., saleable) courses
+    // Only show names of 'active' courses
     filteredCourses() {
       return this.courses.filter((c) => !('name' in c) || c.active)
-    },
-  },
-  methods: {
-    // If user is on a 'beta' course, automatically tick showAll
-    betaCourse() {
-      if (!this.filteredCourses.some((c) => c.id === this.courseId)) {
-        this.showAll = true
-      }
     },
   },
 }
