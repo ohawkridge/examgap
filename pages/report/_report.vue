@@ -395,7 +395,7 @@
                 hide-details
                 auto-grow
               >
-                <font-awesome-icon slot="append" :icon="icon()" class="fa-lg" />
+                <font-awesome-icon slot="append" :icon="icon" class="fa-lg" />
               </v-textarea>
               <v-list dense>
                 <v-list-item
@@ -513,6 +513,11 @@ export default {
       responseIndex: (state) => state.assignment.responseIndex,
       marking: (state) => state.assignment.marking,
     }),
+    icon() {
+      return this.savingFeedback
+        ? 'fa-light fa-cloud-arrow-up'
+        : 'fa-light fa-cloud-check'
+    },
     feedback: {
       get() {
         return this.debouncedFeedback
@@ -595,11 +600,6 @@ export default {
     )
   },
   methods: {
-    icon() {
-      return this.savingFeedback
-        ? 'fa-light fa-cloud-arrow-up'
-        : 'fa-light fa-cloud-check'
-    },
     // Insert emoji into feedback
     // https://codepen.io/1da2/pen/RwWbROE
     insert(char) {

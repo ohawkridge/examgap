@@ -31,7 +31,7 @@
             </div>
             <div v-else>
               <div id="question" v-html="question.text"></div>
-              <div class="d-flex justify-space-between mb-4">
+              <div class="d-flex justify-space-between align-center mb-4">
                 <v-tooltip bottom>
                   <template #activator="{ on }">
                     <v-btn
@@ -46,7 +46,7 @@
                       />
                     </v-btn>
                   </template>
-                  <span>Listen to question</span>
+                  <span>Hear question</span>
                 </v-tooltip>
                 <v-chip small outlined>
                   {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
@@ -59,14 +59,9 @@
                 auto-grow
                 label="Your answer"
                 hide-details
-                :append-icon="
-                  saving
-                    ? 'fa-light fa-cloud-arrow-up'
-                    : 'fa-light fa-cloud-check'
-                "
                 class="mb-2"
-                @input="update()"
               >
+                <font-awesome-icon slot="append" :icon="icon" class="fa-lg" />
               </v-textarea>
               <div v-if="showHelp" class="d-flex justify-space-between">
                 <div>
@@ -78,11 +73,13 @@
                     small
                   >
                     {{ word }}
-                    <font-awesome-icon
-                      v-if="used(word)"
-                      icon="fa-light fa-check"
-                      class="ml-2"
-                    />
+                    <v-scroll-x-transition>
+                      <font-awesome-icon
+                        v-if="used(word)"
+                        icon="fa-light fa-check"
+                        class="ml-2"
+                      />
+                    </v-scroll-x-transition>
                   </v-chip>
                 </div>
                 <v-tooltip bottom>
@@ -220,6 +217,12 @@ export default {
       examMode: (state) => state.user.examMode,
       marking: (state) => state.assignment.marking,
     }),
+    // Debouce saving icon
+    icon() {
+      return this.saving
+        ? 'fa-light fa-cloud-arrow-up'
+        : 'fa-light fa-cloud-check'
+    },
     answer: {
       get() {
         return this.debouncedAnswer
@@ -228,7 +231,7 @@ export default {
         if (this.timeout) clearTimeout(this.timeout)
         this.timeout = setTimeout(() => {
           this.debouncedAnswer = val
-          this.saveFeedback()
+          this.save()
         }, 1800)
       },
     },
