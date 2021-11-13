@@ -6,7 +6,7 @@
         md="10"
         class="d-flex justify-space-between align-center"
       >
-        <v-btn text rounded @click="$router.go(-1)">
+        <v-btn elevation="0" rounded @click="$router.go(-1)">
           <font-awesome-icon icon="fa-light fa-arrow-left" class="mr-2" />
           Back
         </v-btn>
@@ -14,14 +14,13 @@
           <v-btn
             elevation="0"
             rounded
-            text
             nuxt
             :to="`/map/${question.id}`"
             class="mr-2"
           >
             Topics
           </v-btn>
-          <v-btn elevation="0" rounded text nuxt :to="`/author/${question.id}`">
+          <v-btn elevation="0" rounded nuxt :to="`/author/${question.id}`">
             Edit
           </v-btn>
         </div>

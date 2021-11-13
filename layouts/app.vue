@@ -10,15 +10,16 @@
       <v-list dense nav>
         <v-list-item-group v-model="nav" color="primary">
           <!-- No classes -->
-          <v-list-item v-if="groups.length === 0" @click="navHome()">
+          <!-- TODO Test with no classes -->
+          <!-- <v-list-item v-if="groups.length === 0" @click="navHome()">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-users fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Classes </v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
-          <v-list-group v-else :value="true">
+          </v-list-item> -->
+          <v-list-group :value="true">
             <template #activator>
               <v-list-item-icon class="d-flex justify-center align-center">
                 <font-awesome-icon icon="fa-light fa-user-group fa-lg" />
@@ -39,6 +40,14 @@
               </v-list-item>
             </template>
           </v-list-group>
+          <v-list-item @click="$nuxt.$emit('show-create')">
+            <v-list-item-icon class="d-flex justify-center align-center">
+              <font-awesome-icon icon="fa-light fa-plus fa-lg" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Create class </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-divider class="my-4 mx-2" />
           <v-list-item nuxt to="/feedback">
             <v-list-item-icon class="d-flex justify-center align-center">
@@ -95,7 +104,6 @@
         <v-btn
           v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
           elevation="0"
-          outlined
           color="primary"
           rounded
           @click="createAssignment()"
@@ -146,6 +154,27 @@
           <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
           Question
         </v-btn>
+        <template v-if="$route.name === 'course-course'">
+          <div>
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <v-btn
+                  icon
+                  class="mr-2"
+                  @click="$store.commit('topics/clearSelectedQuestions')"
+                  v-on="on"
+                >
+                  <font-awesome-icon
+                    icon="fa-light fa-trash-can-xmark"
+                    class="fa-lg"
+                  />
+                </v-btn>
+              </template>
+              <span>Clear all</span>
+            </v-tooltip>
+            <create-assignment />
+          </div>
+        </template>
         <!-- TODO -->
         <!-- <v-btn elevation="0" text rounded> Join Class </v-btn> -->
       </v-container>
@@ -172,6 +201,7 @@ import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheGreeting from '@/components/common/TheGreeting'
+import CreateAssignment from '@/components/teacher/CreateAssignment'
 
 export default {
   name: 'App',
@@ -184,6 +214,7 @@ export default {
     TheLoadingOverlay,
     TheGreeting,
     TheFooter,
+    CreateAssignment,
   },
   middleware: ['auth'],
   data() {

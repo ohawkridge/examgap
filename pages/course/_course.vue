@@ -1,86 +1,86 @@
 <template>
-  <div>
-    <v-row class="pa-3 pr-6">
-      <v-col cols="12" class="d-flex justify-end align-center">
-        <create-assignment />
+  <v-container fluid>
+    <v-row>
+      <v-col cols="12" md="3">
+        <v-skeleton-loader
+          v-if="$fetchState.pending"
+          :loading="true"
+          type="list"
+          :types="{ list: 'list-item-two-line@6' }"
+        >
+        </v-skeleton-loader>
+        <v-list v-else nav>
+          <v-list-item-group v-model="currentTopicIndex" color="primary">
+            <v-list-item
+              v-for="(topic, i) in topics"
+              :key="i"
+              color="primary"
+              :title="`${topic.name} (${topic.count})`"
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ topic.name }}
+                  <span class="grey--text text--lighten-1">{{
+                    topic.count
+                  }}</span>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
       </v-col>
-    </v-row>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-skeleton-loader
-            v-if="$fetchState.pending"
-            :loading="true"
-            type="list"
-            :types="{ list: 'list-item-two-line@6' }"
-          >
-          </v-skeleton-loader>
-          <v-list v-else nav>
-            <v-list-item-group v-model="currentTopicIndex" color="primary">
-              <v-list-item
-                v-for="(topic, i) in topics"
-                :key="i"
-                color="primary"
-                :title="`${topic.name} (${topic.count})`"
-              >
+      <v-col cols="12" md="5">
+        <v-skeleton-loader
+          v-if="$fetchState.pending || loading"
+          :loading="true"
+          type="list"
+          :types="{ list: 'list-item-two-line@8' }"
+        >
+        </v-skeleton-loader>
+        <v-list v-else id="q-list">
+          <v-list-item-group v-model="selectedQuestion">
+            <template v-for="(q, i) in questions">
+              <v-list-item :key="i" :value="i">
                 <v-list-item-content>
-                  <v-list-item-title>
-                    {{ topic.name }}
-                    <span class="grey--text text--lighten-1">{{
-                      topic.count
-                    }}</span>
-                  </v-list-item-title>
+                  <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
+                    <v-chip
+                      v-for="(assignment, j) in q.previous"
+                      :key="j"
+                      small
+                      label
+                      outlined
+                      class="ml-2"
+                    >
+                      <v-tooltip bottom>
+                        <template #activator="{ on }">
+                          <span v-on="on"> {{ assignment.date | date }}</span>
+                        </template>
+                        <span>{{ assignment.name }}</span>
+                      </v-tooltip></v-chip
+                    >
+                  </v-list-item-subtitle>
                 </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-col>
-        <v-col cols="12" md="5">
-          <v-skeleton-loader
-            v-if="$fetchState.pending || loading"
-            :loading="true"
-            type="list"
-            :types="{ list: 'list-item-two-line@8' }"
-          >
-          </v-skeleton-loader>
-          <v-list v-else id="q-list">
-            <v-list-item-group v-model="selectedQuestion">
-              <template v-for="(q, i) in questions">
-                <v-list-item :key="i" :value="i">
-                  <v-list-item-content>
-                    <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
-                      <v-chip
-                        v-for="(assignment, j) in q.previous"
-                        :key="j"
-                        small
-                        label
-                        outlined
-                        class="ml-2"
-                      >
-                        <v-tooltip bottom>
-                          <template #activator="{ on }">
-                            <span v-on="on"> {{ assignment.date | date }}</span>
-                          </template>
-                          <span>{{ assignment.name }}</span>
-                        </v-tooltip></v-chip
-                      >
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-tooltip bottom>
+                <v-list-item-action>
+                  <v-scroll-x-transition>
+                    <font-awesome-icon
+                      v-if="selected.includes(q.id)"
+                      icon="fa-light fa-check"
+                      class="fa-xl ico-green"
+                    />
+                  </v-scroll-x-transition>
+                  <!-- <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-btn icon v-on="on" @click.stop="add(q.id)">
                           <font-awesome-icon
                             v-if="selected.includes(q.id)"
-                            icon="fa-light fa-minus"
-                            class="fa-xl ico-red"
-                            @click="question.marks.push({ id: '', text: '' })"
+                            icon="fa-light fa-circle-check"
+                            class="fa-xl ico-green"
                           />
                           <font-awesome-icon
                             v-else
-                            icon="fa-light fa-plus"
+                            icon="fa-light fa-circle"
                             class="fa-xl"
                           />
                         </v-btn>
@@ -88,81 +88,102 @@
                       <span>
                         {{ selected.includes(q.id) ? 'Remove' : 'Add' }}
                       </span>
-                    </v-tooltip>
-                  </v-list-item-action>
-                </v-list-item>
-              </template>
-              <v-list-item v-if="noQuestions">
-                <v-list-item-icon>
-                  <font-awesome-icon icon="fa-light fa-circle-info" />
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title> No questions yet </v-list-item-title>
-                </v-list-item-content>
+                    </v-tooltip> -->
+                </v-list-item-action>
               </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-col>
-        <v-col cols="12" md="4">
-          <!-- Skeletons -->
-          <template v-if="$fetchState.pending || loading">
-            <v-skeleton-loader
-              :loading="true"
-              type="question"
-              :types="{ question: 'paragraph' }"
-              class="pa-5"
+            </template>
+            <v-list-item v-if="noQuestions">
+              <v-list-item-icon>
+                <font-awesome-icon icon="fa-light fa-circle-info" />
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title> No questions yet </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-col>
+      <v-col cols="12" md="4">
+        <!-- Skeletons -->
+        <template v-if="$fetchState.pending || loading">
+          <v-skeleton-loader
+            :loading="true"
+            type="question"
+            :types="{ question: 'paragraph' }"
+            class="pa-5"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="question"
+            :types="{ question: 'paragraph' }"
+            class="px-5 mb-4"
+          >
+          </v-skeleton-loader>
+          <v-skeleton-loader
+            :loading="true"
+            type="chip"
+            class="px-5 d-flex justify-end"
+          >
+          </v-skeleton-loader>
+        </template>
+        <div v-else class="pa-3">
+          <div class="d-flex justify-space-between mb-3">
+            <span v-if="question !== undefined" class="font-weight-medium">
+              {{ question.maxMark }} Mark{{
+                question.maxMark | pluralize
+              }}</span
             >
-            </v-skeleton-loader>
-            <v-skeleton-loader
-              :loading="true"
-              type="question"
-              :types="{ question: 'paragraph' }"
-              class="px-5 mb-4"
-            >
-            </v-skeleton-loader>
-            <v-skeleton-loader
-              :loading="true"
-              type="chip"
-              class="px-5 d-flex justify-end"
-            >
-            </v-skeleton-loader>
-          </template>
-          <div v-else class="pa-3">
-            <p>
-              <nuxt-link
-                v-if="question !== undefined"
+            <div v-if="question !== undefined">
+              <v-btn
+                nuxt
                 :to="`/question/${question.id}`"
+                rounded
+                elevation="0"
+                small
+                class="mr-2"
               >
-                <v-tooltip bottom>
-                  <template #activator="{ on }">
-                    <span v-on="on">{{ question.id }}</span>
-                  </template>
-                  <span>View</span>
-                </v-tooltip>
-              </nuxt-link>
-            </p>
-            <div v-html="question.text"></div>
-            <div
-              v-if="Object.keys(question).length !== 0"
-              class="d-flex justify-end mt-4"
-            >
-              <v-chip outlined small label
-                >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
-              </v-chip>
+                View question
+              </v-btn>
+              <v-tooltip v-if="selected.includes(question.id)" bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    rounded
+                    elevation="0"
+                    small
+                    color="green"
+                    dark
+                    v-on="on"
+                    @click="add()"
+                  >
+                    Added
+                    <font-awesome-icon
+                      icon="fa-light fa-check ico-green"
+                      class="ml-2"
+                    />
+                  </v-btn>
+                </template>
+                <span> Remove </span>
+              </v-tooltip>
+              <v-btn v-else rounded elevation="0" small @click="add()">
+                Add
+                <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
+              </v-btn>
             </div>
           </div>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+          <div v-html="question.text"></div>
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import CreateAssignment from '@/components/teacher/CreateAssignment'
+// import CreateAssignment from '@/components/teacher/CreateAssignment'
 
 export default {
-  components: { CreateAssignment },
+  // components: { CreateAssignment },
   layout: 'app',
   data() {
     return {
@@ -224,6 +245,7 @@ export default {
     async currentTopicIndex() {
       try {
         this.loading = true
+        this.selectedQuestion = 0
         await this.$store.dispatch('topics/getQuestions')
       } catch (err) {
         this.$snack.showMessage({
@@ -248,8 +270,8 @@ export default {
   },
   methods: {
     // Add/remove questions from assignment
-    add(id) {
-      this.$store.commit('topics/updateSelected', id)
+    add() {
+      this.$store.commit('topics/updateSelected', this.question.id)
     },
   },
 }

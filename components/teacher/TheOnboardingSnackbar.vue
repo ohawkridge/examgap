@@ -31,11 +31,6 @@ export default {
       // N.B. You can access this inside dictionary above
     }),
   },
-  watch: {
-    onboardStep() {
-      console.log(`debug`, this.selected)
-    },
-  },
   methods: {
     close() {
       this.$store.commit('app/setOnboardStep', 0)

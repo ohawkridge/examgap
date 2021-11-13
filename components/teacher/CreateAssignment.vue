@@ -1,14 +1,6 @@
 <template>
   <v-dialog v-model="dialog" width="700">
     <template #activator="{ on: dialogx }">
-      <v-btn
-        text
-        rounded
-        class="mr-2"
-        @click="$store.commit('topics/clearSelectedQuestions')"
-      >
-        Clear
-      </v-btn>
       <v-tooltip bottom>
         <template #activator="{ on: tooltip }">
           <v-btn
