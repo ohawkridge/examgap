@@ -63,7 +63,7 @@
                   icon="fa-light fa-plus"
                   class="ico-grey mr-2"
                 />
-                <span class="heading--text">Class</span>
+                Class
               </v-btn>
             </div>
           </template>

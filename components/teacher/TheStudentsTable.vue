@@ -3,58 +3,58 @@
     <div
       class="flex-xs-column d-sm-flex justify-space-between align-center pa-4"
     >
-      <v-btn
-        elevation="0"
-        rounded
-        outlined
-        :block="$vuetify.breakpoint.name === 'xs'"
-        color="primary"
-        class="mb-2 mb-sm-0"
-        @click="$nuxt.$emit('show-invite')"
-      >
-        Invite Students
-      </v-btn>
+      <v-menu offset-y open-on-hover>
+        <template #activator="{ on }">
+          <v-btn
+            class="mr-2 mb-2 mb-sm-0"
+            elevation="0"
+            :block="$vuetify.breakpoint.name === 'xs'"
+            text
+            rounded
+            v-on="on"
+          >
+            Actions
+            <font-awesome-icon icon="fa-light fa-angle-down" class="ml-2" />
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item :disabled="selected.length === 0" @click="reset()">
+            <v-list-item-title>
+              Reset password{{ selected.length | pluralize }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="$nuxt.$emit('open-add')">
+            <v-list-item-title>Add students</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            :disabled="selected.length === 0"
+            @click="$nuxt.$emit('open-remove')"
+          >
+            <v-list-item-title>
+              Remove student{{ selected.length | pluralize }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            :disabled="selected.length === 0"
+            @click="$nuxt.$emit('open-copy')"
+          >
+            <v-list-item-title>
+              Copy student{{ selected.length | pluralize }}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <div>
-        <v-menu offset-y open-on-hover>
-          <template #activator="{ on }">
-            <v-btn
-              class="mr-2 mb-2 mb-sm-0"
-              elevation="0"
-              :block="$vuetify.breakpoint.name === 'xs'"
-              text
-              rounded
-              v-on="on"
-              >Students
-              <font-awesome-icon icon="fa-light fa-chevron-down" class="ml-2" />
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item :disabled="selected.length === 0" @click="reset()">
-              <v-list-item-title>
-                Reset password{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="$nuxt.$emit('open-add')">
-              <v-list-item-title>Add students</v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="$nuxt.$emit('open-remove')"
-            >
-              <v-list-item-title>
-                Remove student{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="$nuxt.$emit('open-copy')"
-            >
-              <v-list-item-title>
-                Copy student{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <v-btn
+          elevation="0"
+          rounded
+          text
+          :block="$vuetify.breakpoint.name === 'xs'"
+          class="mb-2 mb-sm-0"
+          @click="$nuxt.$emit('show-invite')"
+        >
+          Invite Students
+        </v-btn>
         <v-tooltip bottom>
           <template #activator="{ on }">
             <v-btn
@@ -136,7 +136,7 @@
               color="primary"
               @click="$nuxt.$emit('show-invite')"
             >
-              <span class="heading--text">Invite students</span>
+              Invite students
             </v-btn>
           </div>
         </div>

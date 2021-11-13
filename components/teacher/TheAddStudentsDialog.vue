@@ -46,7 +46,7 @@
             :loading="loading"
             :disabled="loading || userNamesArray.length === 0"
             @click="addStudents()"
-            ><span class="heading--text">Add Students</span></v-btn
+            >Add Students</v-btn
           >
         </div>
       </v-card-text>

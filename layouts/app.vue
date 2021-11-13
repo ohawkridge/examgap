@@ -7,12 +7,6 @@
         </nuxt-link>
         <the-greeting />
       </div>
-      <div v-if="teacher" class="pa-2 d-flex justify-center">
-        <v-btn nuxt to="/author" elevation="0" color="primary" rounded outlined>
-          <font-awesome-icon icon="fa-light fa-plus" class="ico-blue mr-2" />
-          Question
-        </v-btn>
-      </div>
       <v-list dense nav>
         <v-list-item-group v-model="nav" color="primary">
           <!-- No classes -->
@@ -101,7 +95,7 @@
         <v-btn
           v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
           elevation="0"
-          text
+          outlined
           color="primary"
           rounded
           @click="createAssignment()"

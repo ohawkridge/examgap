@@ -12,7 +12,7 @@
         <p class="text-center">{{ subtitle }}</p>
         <div class="d-flex justify-end">
           <v-btn color="primary" rounded elevation="0" @click="dialog = false">
-            <span class="heading--text">Close</span>
+            Close
           </v-btn>
         </div>
       </v-card-text>

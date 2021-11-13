@@ -80,7 +80,7 @@
           :disabled="typeof match == 'string' || loading"
           :loading="loading"
           @click="updatePass()"
-          ><span class="heading--text">Update Password</span></v-btn
+          >Update Password</v-btn
         >
       </v-col>
     </v-row>

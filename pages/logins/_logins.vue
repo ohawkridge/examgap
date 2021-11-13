@@ -14,7 +14,7 @@
             class="ml-2"
             @click="print()"
           >
-            <span class="heading--text">Print</span>
+            Print
           </v-btn>
         </div>
       </v-col>

@@ -49,7 +49,7 @@
             class="ml-2"
             @click="request()"
           >
-            <span class="heading--text">Request invoice</span>
+            Request invoice
           </v-btn>
         </div>
       </v-card-text>

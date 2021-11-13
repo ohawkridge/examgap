@@ -18,14 +18,9 @@
             rounded
             v-on="{ ...tooltip, ...dialogx }"
           >
-            <font-awesome-icon
-              icon="fa-light fa-plus"
-              class="mr-2 ico-heading"
-            />
-            <span class="heading--text"
-              >Assign ({{ selected.length }})</span
-            ></v-btn
-          >
+            <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+            Assign ({{ selected.length }})
+          </v-btn>
         </template>
         <span>Create assignment</span>
       </v-tooltip>
@@ -83,7 +78,7 @@
             Cancel
           </v-btn>
           <v-btn elevation="0" rounded color="primary" @click="step++">
-            <span class="heading--text">Next</span>
+            Next
           </v-btn>
         </div>
       </v-card-text>
@@ -185,7 +180,7 @@
               color="primary"
               @click="create()"
             >
-              <span class="heading--text">Create assignment</span>
+              Create assignment
             </v-btn>
           </div>
         </v-form>

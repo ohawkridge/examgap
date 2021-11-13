@@ -52,7 +52,7 @@ const CUSTOM_ICONS = {
   expand: {
     component: FontAwesomeIcon,
     props: {
-      icon: ['fal', 'angle-down'],
+      icon: ['fal', 'caret-down'],
     },
   },
   dropdown: {
