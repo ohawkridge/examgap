@@ -33,7 +33,7 @@
                 :group-id="group.id"
                 type="btn"
               />
-              <v-btn elevation="0" text rounded class="ml-2" @click="refresh()">
+              <v-btn elevation="0" rounded class="ml-2" @click="refresh()">
                 Refresh
               </v-btn>
             </div>
@@ -114,18 +114,18 @@
           <td v-for="(data, j) in student.data" :key="j" class="text-center">
             <!-- Formerly MarkChip.vue components -->
             <!-- Nested values as props not working reliably -->
-            <div :class="flex(data)">
+            <div
+              v-if="data[Object.keys(data)[0]].length > 0"
+              :class="flex(data)"
+            >
               <!-- *** NOT ANSWERED *** -->
-              <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div>
+              <!-- <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div> -->
               <!-- Loop through responses (see note below) -->
-              <template
-                v-for="(response, k) in data[Object.keys(data)[0]]"
-                v-else
-              >
+              <template v-for="(response, k) in data[Object.keys(data)[0]]">
                 <!-- *** SELF MARKED *** -->
                 <v-tooltip v-if="!response.marked" :key="k" bottom>
                   <template #activator="{ on }">
-                    <v-chip outlined @click="mark(i, j, k)" v-on="on">
+                    <v-chip @click="mark(i, j, k)" v-on="on">
                       {{ response.sm.length }}
                       <font-awesome-icon
                         icon="fa-light fa-check"
@@ -186,7 +186,7 @@
       </tbody>
     </table>
     <div class="d-flex justify-end align-center pa-4 text-caption">
-      N/A Not answered&nbsp;&nbsp;
+      <!-- N/A Not answered&nbsp;&nbsp; -->
       <font-awesome-icon icon="fa-light fa-check" class="fa-sm mr-1" />
       Self mark&nbsp;&nbsp;
       <font-awesome-icon icon="fa-light fa-check-double" class="fa-sm mr-1" />

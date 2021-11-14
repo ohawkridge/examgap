@@ -112,7 +112,7 @@
           Assignment
         </v-btn>
         <!-- Create class -->
-        <v-btn
+        <!-- <v-btn
           v-if="createClass && $vuetify.breakpoint.name === 'xs'"
           elevation="0"
           icon
@@ -132,7 +132,7 @@
         >
           <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
           Class
-        </v-btn>
+        </v-btn> -->
         <!-- Create question -->
         <v-btn
           v-if="createQ && $vuetify.breakpoint.name === 'xs'"

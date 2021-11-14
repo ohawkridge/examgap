@@ -6,7 +6,7 @@
           <v-list-item-title class="red--text"> Delete </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-btn v-else text rounded color="red" @click="dialog = true">
+      <v-btn v-else rounded text color="red" @click="dialog = true">
         Delete
       </v-btn>
     </template>
