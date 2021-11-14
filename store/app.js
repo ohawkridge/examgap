@@ -3,7 +3,7 @@ const getDefaultState = () => ({
   groupTab: null, // Tab on _group.vue
   onboardStep: 0, // Don't onboard
   loading: false, // Global loading state
-  pageTitle: 'Classes', // Global page title
+  pageTitle: 'Welcome back', // Global page title
 })
 
 // eslint-disable-next-line no-unused-vars

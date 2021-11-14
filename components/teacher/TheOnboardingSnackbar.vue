@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       stringsForSteps: {
-        1: `To get started, click '+ CLASS'.`,
+        1: `To get started, click '+ Create class'.`,
         2: `To add students, click 'INVITE STUDENTS', or click Students → Add students.`,
         3: `Click '+ ASSIGNMENT' to browse questions.`,
         4: `Select questions for this assignment.`,
