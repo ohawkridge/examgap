@@ -8,18 +8,25 @@
         <the-greeting />
       </div>
       <v-list dense nav>
+        <v-list-item @click="$nuxt.$emit('show-create')">
+          <v-list-item-icon class="d-flex justify-center align-center">
+            <font-awesome-icon icon="fa-light fa-plus fa-lg" />
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title> Create class </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item-group v-model="nav" color="primary">
           <!-- No classes -->
-          <!-- TODO Test with no classes -->
-          <!-- <v-list-item v-if="groups.length === 0" @click="navHome()">
+          <v-list-item v-if="groups.length === 0" @click="navHome()">
             <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-users fa-lg" />
+              <font-awesome-icon icon="fa-light fa-user-group fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Classes </v-list-item-title>
             </v-list-item-content>
-          </v-list-item> -->
-          <v-list-group :value="true">
+          </v-list-item>
+          <v-list-group v-else :value="true">
             <template #activator>
               <v-list-item-icon class="d-flex justify-center align-center">
                 <font-awesome-icon icon="fa-light fa-user-group fa-lg" />
@@ -40,12 +47,12 @@
               </v-list-item>
             </template>
           </v-list-group>
-          <v-list-item @click="$nuxt.$emit('show-create')">
+          <v-list-item disabled>
             <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-plus fa-lg" />
+              <font-awesome-icon icon="fa-light fa-box-archive fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title> Create class </v-list-item-title>
+              <v-list-item-title> Archive </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-divider class="my-4 mx-2" />
@@ -97,7 +104,7 @@
           elevation="0"
           icon
           color="primary"
-          @click="createAssignment()"
+          @click="$router.push(`/course/${group.course.id}`)"
         >
           <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
         </v-btn>
@@ -106,33 +113,11 @@
           elevation="0"
           color="primary"
           rounded
-          @click="createAssignment()"
+          @click="$router.push(`/course/${group.course.id}`)"
         >
           <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
           Assignment
         </v-btn>
-        <!-- Create class -->
-        <!-- <v-btn
-          v-if="createClass && $vuetify.breakpoint.name === 'xs'"
-          elevation="0"
-          icon
-          color="primary"
-          rounded
-          @click="$nuxt.$emit('show-create')"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
-        </v-btn>
-        <v-btn
-          v-if="createClass && $vuetify.breakpoint.name !== 'xs'"
-          elevation="0"
-          text
-          color="primary"
-          rounded
-          @click="$nuxt.$emit('show-create')"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
-          Class
-        </v-btn> -->
         <!-- Create question -->
         <v-btn
           v-if="createQ && $vuetify.breakpoint.name === 'xs'"
@@ -172,7 +157,22 @@
               </template>
               <span>Clear all</span>
             </v-tooltip>
-            <create-assignment />
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <v-btn
+                  color="primary"
+                  :disabled="selected.length == 0"
+                  elevation="0"
+                  rounded
+                  v-on="on"
+                  @click="$nuxt.$emit('create-ass')"
+                >
+                  <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+                  Assign ({{ selected.length }})
+                </v-btn>
+              </template>
+              <span>Create assignment</span>
+            </v-tooltip>
           </div>
         </template>
         <!-- TODO -->
@@ -201,7 +201,6 @@ import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheGreeting from '@/components/common/TheGreeting'
-import CreateAssignment from '@/components/teacher/CreateAssignment'
 
 export default {
   name: 'App',
@@ -214,7 +213,6 @@ export default {
     TheLoadingOverlay,
     TheGreeting,
     TheFooter,
-    CreateAssignment,
   },
   middleware: ['auth'],
   data() {
@@ -228,6 +226,7 @@ export default {
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
       pageTitle: (state) => state.app.pageTitle,
+      selected: (state) => state.topics.selected,
     }),
     ...mapGetters({
       activeGroupCount: 'user/activeGroupCount',
@@ -254,17 +253,6 @@ export default {
       this.$store.commit('app/setTab', 0)
       this.$router.push('/home')
     },
-    createAssignment() {
-      // Clear any previous selections
-      this.$store.commit('topics/clearSelectedQuestions')
-      // Continue onboarding if user hasn't set assignments
-      this.$store.commit(
-        'app/setOnboardStep',
-        this.group.assignments.length < 3 ? 4 : 0
-      )
-      this.$router.push(`/course/${this.group.course.id}`)
-    },
-
     logout() {
       // Clear all stores
       this.$store.dispatch('snackbar/resetState')

@@ -581,7 +581,7 @@ export default {
   },
   mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)
-    if (this.group.assignments.length < 3) {
+    if (this.group.assignments.length === 1) {
       this.$store.commit('app/setOnboardStep', 6)
     }
     document.addEventListener(

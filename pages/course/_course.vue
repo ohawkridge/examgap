@@ -175,15 +175,16 @@
         </div>
       </v-col>
     </v-row>
+    <the-create-assignment-dialog />
   </v-container>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-// import CreateAssignment from '@/components/teacher/CreateAssignment'
+import TheCreateAssignmentDialog from '@/components/teacher/TheCreateAssignmentDialog'
 
 export default {
-  // components: { CreateAssignment },
+  components: { TheCreateAssignmentDialog },
   layout: 'app',
   data() {
     return {
@@ -263,10 +264,11 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit(
-      'app/setPageTitle',
-      `${this.group.course.name} (${this.group.course.board})`
-    )
+    const title = `${this.group.course.name} (${this.group.course.board})`
+    this.$store.commit('app/setPageTitle', title)
+    // Onboard if never set an assignment
+    const step = this.group.assignments.length === 0 ? 4 : 0
+    this.$store.commit('app/setOnboardStep', step)
   },
   methods: {
     // Add/remove questions from assignment

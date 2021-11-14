@@ -197,12 +197,20 @@ export default {
     }
     // Pre-fetch most recent assignment
     try {
-      console.time('Fetch last assignment')
+      console.log(
+        '%c' + 'Prefetch',
+        'color:#001f2a;background-color:#f4d06f;padding:4px;'
+      )
+      console.time('Last assignment')
       await this.$store.dispatch('assignment/getReport', -1)
       console.timeEnd('Fetch last assignment')
-      console.time('Fetch topics')
+      console.log(
+        '%c' + 'Prefetch',
+        'color:#001f2a;background-color:#f4d06f;padding:4px;'
+      )
+      console.time('_course data')
       await this.$store.dispatch('topics/getTopics')
-      console.timeEnd('Fetch topics')
+      console.timeEnd('_course data')
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
