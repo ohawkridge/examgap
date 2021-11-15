@@ -118,6 +118,7 @@ span.v-chip.theme--light.green {
 }
 
 /* align assignment Start: + Due: */
+/* TODO Move to scope */
 .align-date {
   display: inline-block;
   width: 128px;

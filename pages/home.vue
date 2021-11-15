@@ -14,7 +14,15 @@
         <v-row class="justify-center">
           <v-col cols="12" md="10" class="d-flex justify-space-around pb-10">
             <template v-for="(group, i) in activeGroups">
-              <v-btn :key="i" elevation="0" large rounded>
+              <v-btn
+                :key="i"
+                elevation="0"
+                large
+                rounded
+                outlined
+                color="primary darken-1"
+                @click="navTo(group)"
+              >
                 {{ group.name }}
               </v-btn>
             </template>
@@ -33,21 +41,22 @@
         </v-row>
         <v-row class="justify-center">
           <v-col cols="12" md="9">
-            <template v-for="(assignment, i) in recent">
-              <v-card :key="i" outlined class="mb-3" hover>
-                <v-card-title>
-                  {{ assignment.name }}
-                </v-card-title>
-                <v-card-subtitle> Group </v-card-subtitle>
-                <v-card-text>
-                  <div>
-                    <span class="align-date">Start:</span>{{ assignment.start }}
-                  </div>
-                  <div>
-                    <span class="align-date">Due:</span>{{ assignment.dateDue }}
-                  </div>
-                </v-card-text>
+            <!-- Skeletons -->
+            <!-- TODO Finish -->
+            <template v-if="$fetchState.pending">
+              <v-card
+                v-for="i in 3"
+                :key="i"
+                height="152"
+                outlined
+                class="mb-4"
+              >
+                <v-skeleton-loader type="heading" :loading="true" class="pa-3">
+                </v-skeleton-loader>
               </v-card>
+            </template>
+            <template v-for="(assignment, i) in recent" v-else>
+              <teacher-assignment-card :key="i" :assignment="assignment" />
             </template>
           </v-col>
         </v-row>
@@ -232,12 +241,27 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
+import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 
 export default {
   components: {
     TheRevisionModeDialog,
+    TeacherAssignmentCard,
   },
   layout: 'app',
+  async fetch() {
+    if (this.teacher) {
+      try {
+        await this.$store.dispatch('assignment/getRecentAssignments')
+      } catch (err) {
+        console.error(err)
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error fetching assignments',
+        })
+      }
+    }
+  },
   computed: {
     ...mapGetters({
       assignments: 'user/assignments',
@@ -273,9 +297,9 @@ export default {
     )
   },
   methods: {
-    navTo(groupId) {
-      this.$store.commit('user/setActiveGroupId', groupId)
-      this.$router.push(`/group/${groupId}`)
+    navTo(group) {
+      this.$store.commit('user/setActiveGroupId', group.id)
+      this.$router.push(`/course/${group.course.id}`)
     },
     revise(topicId) {
       this.$store.commit('topics/setTopicId', topicId)

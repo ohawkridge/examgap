@@ -32,9 +32,14 @@ exports.handler = async (event) => {
               instance: q.Get(q.Var('ref')),
             },
             {
+              id: q.Select(['ref', 'id'], q.Var('instance')),
               name: q.Select(['data', 'name'], q.Var('instance')),
               start: q.Select(['data', 'start'], q.Var('instance')),
               dueDate: q.Select(['data', 'dateDue'], q.Var('instance')),
+              group: q.Select(
+                ['data', 'name'],
+                q.Get(q.Select(['data', 'group'], q.Var('instance')))
+              ),
               count: q.Count(
                 q.Match(
                   q.Index('assignment_students'),
