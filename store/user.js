@@ -94,6 +94,7 @@ const actions = {
     }
     response = await response.json()
     commit('setUser', response)
+    await dispatch('assignment/getRecentAssignments', state.id, { root: true })
     await dispatch('getGroups')
     // For students only, get revision topics and Quote of the Day
     if (!state.teacher) {

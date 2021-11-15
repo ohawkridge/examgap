@@ -2,103 +2,64 @@
   <div>
     <!-- **TEACHER** -->
     <template v-if="teacher">
-      <v-tabs
-        v-model="tab"
-        centered
-        background-color="transparent"
-        style="border-bottom: 1px solid #d2d2d2 !important"
-      >
-        <v-tab>Home</v-tab>
-        <v-tab>Archive</v-tab>
-      </v-tabs>
-      <!-- Home -->
-      <v-tabs-items v-model="tab">
-        <v-tab-item>
-          <v-list v-if="activeGroups.length > 0" class="py-0">
-            <v-list-item
-              v-for="(group, i) in activeGroups"
-              :key="i"
-              class="divide"
-              @click="navTo(group.id)"
-            >
-              <!-- Can't force v-list-item-content to flex -->
-              <v-list-item-content>
-                <div class="d-flex justify-space-between align-center">
-                  <div>
-                    <div class="text-subtitle-1 font-weight-medium">
-                      {{ group.name }}
-                    </div>
-                    <div class="text-body-2 grey--text text--darken-2">
-                      {{ group.course.name }} ({{ group.course.board }})
-                    </div>
-                  </div>
-                  <div class="chip-col d-flex justify-center">
-                    <v-chip label outlined small>
-                      {{ group.count }} student{{ group.count | pluralize }}
-                    </v-chip>
-                  </div>
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <!-- Empty state -->
-          <template v-else>
-            <div class="d-flex justify-center pa-3">
-              <v-img
-                src="/no-class.svg"
-                contain
-                :max-width="$vuetify.breakpoint.name === 'xs' ? '50%' : '20%'"
-                alt="Empty chair illustration"
-              />
-            </div>
-            <p class="text-center mt-2">No classes yet</p>
-            <div class="d-flex justify-center">
-              <v-btn
-                elevation="0"
-                rounded
-                color="primary"
-                @click="$nuxt.$emit('show-create')"
-              >
-                <font-awesome-icon
-                  icon="fa-light fa-plus"
-                  class="ico-grey mr-2"
-                />
-                Class
+      <v-container>
+        <v-row class="justify-center">
+          <v-col cols="12" md="10" class="pt-10">
+            <p class="text-h5">
+              <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+              Add new assignment for&hellip;
+            </p>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center">
+          <v-col cols="12" md="10" class="d-flex justify-space-around pb-10">
+            <template v-for="(group, i) in activeGroups">
+              <v-btn :key="i" elevation="0" large rounded>
+                {{ group.name }}
               </v-btn>
-            </div>
-          </template>
-        </v-tab-item>
-        <!-- Archive -->
-        <v-tab-item>
-          <v-list v-if="archiveGroups.length > 0" class="py-0">
-            <v-list-item
-              v-for="(group, i) in archiveGroups"
-              :key="i"
-              class="divide"
-              @click="navTo(group.id)"
-            >
-              <v-list-item-content>
-                <div class="d-flex justify-space-between align-center">
+            </template>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center">
+          <v-col cols="12" md="10">
+            <p class="text-h5">
+              <font-awesome-icon
+                icon="fa-light fa-clock-rotate-left"
+                class="mr-2"
+              />
+              Recent assignments
+            </p>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center">
+          <v-col cols="12" md="9">
+            <template v-for="(assignment, i) in recent">
+              <v-card :key="i" outlined class="mb-3" hover>
+                <v-card-title>
+                  {{ assignment.name }}
+                </v-card-title>
+                <v-card-subtitle> Group </v-card-subtitle>
+                <v-card-text>
                   <div>
-                    <div class="text-subtitle-1 font-weight-medium">
-                      {{ group.name }}
-                    </div>
-                    <div class="text-body-2 grey--text text--darken-2">
-                      {{ group.course.name }} ({{ group.course.board }})
-                    </div>
+                    <span class="align-date">Start:</span>{{ assignment.start }}
                   </div>
-                  <div class="chip-col d-flex justify-center">
-                    <v-chip label outlined small>
-                      {{ group.count }} student{{ group.count | pluralize }}
-                    </v-chip>
+                  <div>
+                    <span class="align-date">Due:</span>{{ assignment.dateDue }}
                   </div>
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <p v-else class="pa-3 text-center">No archived classes</p>
-        </v-tab-item>
-      </v-tabs-items>
+                </v-card-text>
+              </v-card>
+            </template>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center">
+          <v-col cols="12" md="10">
+            <p class="text-h5">
+              <font-awesome-icon icon="fa-light fa-chart-line" class="mr-2" />
+              Stats
+            </p>
+          </v-col>
+        </v-row>
+      </v-container>
     </template>
     <!-- **STUDENT** -->
     <template v-else>
@@ -287,6 +248,7 @@ export default {
       groups: (state) => state.user.groups,
       loading: (state) => state.app.loading,
       topics: (state) => state.topics.topics,
+      recent: (state) => state.assignment.recentAssignments,
     }),
     // Remember active tab (in store)
     tab: {
@@ -307,7 +269,7 @@ export default {
   mounted() {
     this.$store.commit(
       'app/setPageTitle',
-      this.teacher ? 'Classes' : this.group.name
+      this.teacher ? 'Home' : this.group.name
     )
   },
   methods: {
