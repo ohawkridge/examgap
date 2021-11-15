@@ -60,10 +60,11 @@ exports.handler = async (event, context, callback) => {
         out.push(course)
       }
     }
-    // IT
-    out.push({ header: 'IT COURSES' }, { divider: true })
+    // Nov 2021. Got rid of IT and added 'Other'
+    // This was to add Andy's GCSE Business
+    out.push({ header: 'OTHER COURSES' }, { divider: true })
     for (const course of data) {
-      if (course.cat === 'IT') {
+      if (course.cat === 'Other') {
         out.push(course)
       }
     }
