@@ -85,9 +85,7 @@
             </v-list-item-subtitle>
           </v-col>
           <v-col cols="12" md="3" class="d-flex justify-center">
-            <v-btn rounded elevation="0" color="primary">
-              <span class="heading--text"> Reassigned </span>
-            </v-btn>
+            <v-btn rounded elevation="0" color="primary"> Reassigned </v-btn>
           </v-col>
         </v-list-item-content>
       </v-list-item>
@@ -108,9 +106,7 @@
           </v-list-item-subtitle>
         </v-col>
         <v-col cols="12" md="3" class="d-flex justify-center">
-          <v-btn rounded elevation="0" color="primary">
-            <span class="heading--text"> Answer </span>
-          </v-btn>
+          <v-btn rounded elevation="0" color="primary"> Answer </v-btn>
         </v-col>
       </v-list-item-content>
     </v-list-item>

@@ -50,7 +50,7 @@
               :loading="loading"
               :disabled="loading"
               type="submit"
-              ><span class="heading--text">Reset password</span></v-btn
+              >Reset password</v-btn
             >
           </v-form>
         </v-col>

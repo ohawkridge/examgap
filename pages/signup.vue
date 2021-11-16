@@ -125,7 +125,7 @@
                   rounded
                   @click="next()"
                 >
-                  <span class="heading--text">Next</span>
+                  Next
                 </v-btn>
                 <v-btn
                   v-if="step === 2"

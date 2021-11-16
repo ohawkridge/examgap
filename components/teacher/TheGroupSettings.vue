@@ -22,7 +22,7 @@
             :disabled="loading"
             @click="save"
           >
-            <span class="heading--text">Save</span>
+            Save
           </v-btn>
           <the-archive-group-dialog />
         </div>

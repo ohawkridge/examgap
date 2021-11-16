@@ -87,7 +87,6 @@
                 :loading="loading"
                 :disabled="loading"
                 type="submit"
-                class="heading--text"
                 >Register</v-btn
               >
             </v-form>

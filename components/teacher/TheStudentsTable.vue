@@ -136,7 +136,7 @@
               color="primary"
               @click="$nuxt.$emit('show-invite')"
             >
-              <span class="heading--text">Invite students</span>
+              Invite students
             </v-btn>
           </div>
         </div>

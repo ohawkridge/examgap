@@ -103,7 +103,7 @@
                   elevation="0"
                   @click="selfMark()"
                 >
-                  <span class="heading--text">Mark</span>
+                  Mark
                 </v-btn>
               </div>
             </div>
@@ -146,7 +146,7 @@
                 :disabled="loading"
                 @click="done()"
               >
-                <span class="heading--text">Done</span>
+                Done
               </v-btn>
             </div>
           </div>

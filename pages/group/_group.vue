@@ -138,7 +138,7 @@
                   icon="fa-light fa-plus"
                   class="mr-2 ico-heading"
                 />
-                <span class="heading--text">Assignment</span>
+                Assignment
               </v-btn>
             </div>
           </div>

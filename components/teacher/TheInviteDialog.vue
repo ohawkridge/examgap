@@ -35,7 +35,7 @@
         <p class="mt-2">Students can go to examgap.com and click JOIN CLASS.</p>
         <div class="d-flex justify-end">
           <v-btn color="primary" rounded elevation="0" @click="dialog = false">
-            <span class="heading--text">Close</span>
+            Close
           </v-btn>
         </div>
       </v-card-text>

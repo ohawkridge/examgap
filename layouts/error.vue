@@ -26,7 +26,7 @@
                 color="primary"
                 @click="$router.go(-1)"
               >
-                <span class="heading--text">Try going back</span>
+                Try going back
               </v-btn>
             </p>
           </v-col>
