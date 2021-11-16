@@ -25,7 +25,7 @@ const CUSTOM_ICONS = {
       icon: ['fal', 'bars'],
     },
   },
-  check: {
+  complete: {
     component: FontAwesomeIcon,
     props: {
       icon: ['fal', 'check'],

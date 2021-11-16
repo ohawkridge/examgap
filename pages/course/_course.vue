@@ -29,7 +29,7 @@
           </v-list-item-group>
         </v-list>
       </v-col>
-      <v-col cols="12" md="5">
+      <v-col cols="12" md="4">
         <v-skeleton-loader
           v-if="$fetchState.pending || loading"
           :loading="true"
@@ -66,29 +66,10 @@
                   <v-scroll-x-transition>
                     <font-awesome-icon
                       v-if="selected.includes(q.id)"
-                      icon="fa-light fa-check"
+                      icon="fa-light fa-circle-check"
                       class="fa-xl ico-green"
                     />
                   </v-scroll-x-transition>
-                  <!-- <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <v-btn icon v-on="on" @click.stop="add(q.id)">
-                          <font-awesome-icon
-                            v-if="selected.includes(q.id)"
-                            icon="fa-light fa-circle-check"
-                            class="fa-xl ico-green"
-                          />
-                          <font-awesome-icon
-                            v-else
-                            icon="fa-light fa-circle"
-                            class="fa-xl"
-                          />
-                        </v-btn>
-                      </template>
-                      <span>
-                        {{ selected.includes(q.id) ? 'Remove' : 'Add' }}
-                      </span>
-                    </v-tooltip> -->
                 </v-list-item-action>
               </v-list-item>
             </template>
@@ -103,7 +84,7 @@
           </v-list-item-group>
         </v-list>
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="5">
         <!-- Skeletons -->
         <template v-if="$fetchState.pending || loading">
           <v-skeleton-loader
@@ -129,12 +110,9 @@
         </template>
         <div v-else class="pa-3">
           <div class="d-flex justify-space-between mb-3">
-            <span v-if="question !== undefined" class="font-weight-medium">
-              {{ question.maxMark }} Mark{{
-                question.maxMark | pluralize
-              }}</span
+            <div
+              v-if="question !== undefined && Object.keys(question).length > 0"
             >
-            <div v-if="question !== undefined">
               <v-btn
                 nuxt
                 :to="`/question/${question.id}`"
@@ -145,33 +123,76 @@
               >
                 View question
               </v-btn>
-              <v-tooltip v-if="selected.includes(question.id)" bottom>
+              <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-btn
                     rounded
                     elevation="0"
                     small
-                    color="green"
-                    dark
+                    :color="selected.includes(question.id) ? 'green' : ''"
+                    :dark="selected.includes(question.id) ? true : false"
                     v-on="on"
                     @click="add()"
                   >
-                    Added
+                    {{ selected.includes(question.id) ? 'Added' : 'Add' }}
+                    <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
+                  </v-btn>
+                </template>
+                <span>
+                  {{ selected.includes(question.id) ? 'Remove' : 'Add' }}
+                </span>
+              </v-tooltip>
+            </div>
+            <div>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    icon
+                    small
+                    v-on="on"
+                    @click="$store.commit('topics/clearSelectedQuestions')"
+                  >
                     <font-awesome-icon
-                      icon="fa-light fa-check ico-green"
-                      class="ml-2"
+                      icon="fa-light fa-trash-can-xmark"
+                      class="xx"
                     />
                   </v-btn>
                 </template>
-                <span> Remove </span>
+                <span> Clear </span>
               </v-tooltip>
-              <v-btn v-else rounded elevation="0" small @click="add()">
-                Add
-                <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
-              </v-btn>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    color="primary"
+                    :disabled="selected.length == 0"
+                    elevation="0"
+                    rounded
+                    class="ml-2"
+                    small
+                    v-on="on"
+                    @click="$nuxt.$emit('create-ass')"
+                  >
+                    <!-- <font-awesome-icon icon="fa-light fa-plus" class="mr-2" /> -->
+                    Assign ({{ selected.length }})
+                  </v-btn>
+                </template>
+                <span
+                  >Assign {{ selected.length }} question{{
+                    selected.length | pluralize
+                  }}</span
+                >
+              </v-tooltip>
             </div>
           </div>
           <div v-html="question.text"></div>
+          <div
+            v-if="Object.keys(question).length > 0"
+            class="d-flex justify-end mt-4"
+          >
+            <v-chip outlined small label
+              >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
+            </v-chip>
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -283,5 +304,11 @@ export default {
 #q-list {
   max-height: 800px;
   overflow-y: scroll;
+}
+
+/* Force icon to right size */
+.xx {
+  height: 18px;
+  width: 18px;
 }
 </style>

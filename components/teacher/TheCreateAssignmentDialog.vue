@@ -42,10 +42,10 @@
                           >EXAM</a
                         >
                       </template>
-                      <span v-if="student.examMode === 'on'"
-                        >Exam mode ON (hide keywords)
+                      <span v-if="student.examMode"
+                        >Exam mode OFF (show keywords)
                       </span>
-                      <span v-else>Exam mode OFF (show keywords) </span>
+                      <span v-else>Exam mode ON (hide keywords) </span>
                     </v-tooltip>
                   </template>
                 </v-checkbox>
@@ -93,7 +93,7 @@
                       >
                         <font-awesome-icon
                           slot="append"
-                          icon="fa-light fa-calendar"
+                          icon="fa-light fa-calendar-days"
                           class="fa-lg"
                         />
                       </v-text-field>
@@ -124,7 +124,7 @@
                       >
                         <font-awesome-icon
                           slot="append"
-                          icon="fa-light fa-calendar"
+                          icon="fa-light fa-calendar-days"
                           class="fa-lg"
                         />
                       </v-text-field>

@@ -47,7 +47,7 @@
               </v-list-item>
             </template>
           </v-list-group>
-          <v-list-item disabled>
+          <v-list-item nuxt :to="`/archive`">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-box-archive fa-lg" />
             </v-list-item-icon>
@@ -86,97 +86,24 @@
       flat
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-app-bar-nav-icon @click="drawer = !drawer"> </v-app-bar-nav-icon>
+      <v-tooltip bottom>
+        <template #activator="{ on }">
+          <v-app-bar-nav-icon @click="drawer = !drawer" v-on="on">
+          </v-app-bar-nav-icon>
+        </template>
+        <span>{{ drawer ? 'Hide menu' : 'Show menu' }}</span>
+      </v-tooltip>
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
-        <span
+        <!-- TODO Move quote -->
+        <!-- <span
           v-if="!teacher && $vuetify.breakpoint.name !== 'xs'"
           class="text-caption grey--text text--darken-1"
         >
           {{ $store.state.user.quote.quote }}—{{
             $store.state.user.quote.author
           }}
-        </span>
-        <!-- **ACTIONS** -->
-        <!-- Create assignment -->
-        <v-btn
-          v-if="createAss && $vuetify.breakpoint.name === 'xs'"
-          elevation="0"
-          icon
-          color="primary"
-          @click="$router.push(`/course/${group.course.id}`)"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
-        </v-btn>
-        <v-btn
-          v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
-          elevation="0"
-          color="primary"
-          rounded
-          @click="$router.push(`/course/${group.course.id}`)"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
-          Assignment
-        </v-btn>
-        <!-- Create question -->
-        <v-btn
-          v-if="createQ && $vuetify.breakpoint.name === 'xs'"
-          color="primary"
-          icon
-          nuxt
-          to="/author"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
-        </v-btn>
-        <v-btn
-          v-if="createQ && $vuetify.breakpoint.name !== 'xs'"
-          color="primary"
-          rounded
-          text
-          nuxt
-          to="/author"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
-          Question
-        </v-btn>
-        <template v-if="$route.name === 'course-course'">
-          <div>
-            <v-tooltip bottom>
-              <template #activator="{ on }">
-                <v-btn
-                  icon
-                  class="mr-2"
-                  @click="$store.commit('topics/clearSelectedQuestions')"
-                  v-on="on"
-                >
-                  <font-awesome-icon
-                    icon="fa-light fa-trash-can-xmark"
-                    class="fa-lg"
-                  />
-                </v-btn>
-              </template>
-              <span>Clear all</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template #activator="{ on }">
-                <v-btn
-                  color="primary"
-                  :disabled="selected.length == 0"
-                  elevation="0"
-                  rounded
-                  v-on="on"
-                  @click="$nuxt.$emit('create-ass')"
-                >
-                  <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
-                  Assign ({{ selected.length }})
-                </v-btn>
-              </template>
-              <span>Create assignment</span>
-            </v-tooltip>
-          </div>
-        </template>
-        <!-- TODO -->
-        <!-- <v-btn elevation="0" text rounded> Join Class </v-btn> -->
+        </span> -->
       </v-container>
     </v-app-bar>
     <v-main>

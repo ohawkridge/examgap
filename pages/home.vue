@@ -7,24 +7,29 @@
           <v-col cols="12" md="10" class="pt-10">
             <p class="text-h5">
               <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
-              Add new assignment for&hellip;
+              Add assignment for&hellip;
             </p>
           </v-col>
         </v-row>
         <v-row class="justify-center">
           <v-col cols="12" md="10" class="d-flex justify-space-around pb-10">
             <template v-for="(group, i) in activeGroups">
-              <v-btn
-                :key="i"
-                elevation="0"
-                large
-                rounded
-                outlined
-                color="primary darken-1"
-                @click="navTo(group)"
-              >
-                {{ group.name }}
-              </v-btn>
+              <v-tooltip :key="i" bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    elevation="0"
+                    large
+                    rounded
+                    outlined
+                    color="primary darken-1"
+                    @click="navTo(group)"
+                    v-on="on"
+                  >
+                    {{ group.name }}
+                  </v-btn>
+                </template>
+                <span>Add assignment</span>
+              </v-tooltip>
             </template>
           </v-col>
         </v-row>
