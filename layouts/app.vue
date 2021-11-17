@@ -56,6 +56,14 @@
             </v-list-item-content>
           </v-list-item>
           <v-divider class="my-4 mx-2" />
+          <v-list-item nuxt to="/author">
+            <v-list-item-icon class="d-flex justify-center align-center">
+              <font-awesome-icon icon="fa-light fa-pen-line fa-lg" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Create question </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item nuxt to="/feedback">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-comment-exclamation fa-lg" />
@@ -96,15 +104,6 @@
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
         <div id="headway"></div>
-        <!-- TODO Move quote -->
-        <!-- <span
-          v-if="!teacher && $vuetify.breakpoint.name !== 'xs'"
-          class="text-caption grey--text text--darken-1"
-        >
-          {{ $store.state.user.quote.quote }}—{{
-            $store.state.user.quote.author
-          }}
-        </span> -->
       </v-container>
     </v-app-bar>
     <v-main>
