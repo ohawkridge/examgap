@@ -29,7 +29,6 @@
       <v-chip x-small label>
         {{ teacher ? 'Teacher' : 'Student' }}
       </v-chip>
-      <div id="headway" style="height: 32px"></div>
     </div>
   </div>
 </template>

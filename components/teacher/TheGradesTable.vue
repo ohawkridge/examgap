@@ -1,15 +1,9 @@
 <template>
-  <div>
-    <div class="d-flex justify-end pa-4">
+  <v-container>
+    <div class="d-flex justify-end">
       <v-tooltip bottom>
         <template #activator="{ on }">
-          <v-btn
-            elevation="0"
-            text
-            rounded
-            @click="exportTableToCSV()"
-            v-on="on"
-          >
+          <v-btn elevation="0" rounded @click="exportTableToCSV()" v-on="on">
             Csv
             <font-awesome-icon
               icon="fa-light fa-arrow-down-to-line"
@@ -22,7 +16,6 @@
       <v-btn
         class="d-none d-sm-flex ml-2"
         elevation="0"
-        text
         rounded
         @mouseover="scroll"
         @mouseleave="stop"
@@ -53,7 +46,7 @@
         </v-chip>
       </template>
     </v-data-table>
-  </div>
+  </v-container>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-row class="pa-3">
+  <v-container>
+    <v-row class="mb-4">
       <v-col cols="12">
         <div class="d-flex justify-space-between">
           <div class="d-flex align-center">
@@ -15,7 +15,7 @@
                 >
                   <font-awesome-icon
                     icon="fa-light fa-arrow-left"
-                    class="fa-lg"
+                    class="ico-btn"
                   />
                 </v-btn>
               </template>
@@ -62,12 +62,20 @@
           </div>
         </div>
         <div class="mt-4 ml-11">
-          <div class="d-flex mb-2">
-            <span class="font-weight-medium fix-date-always">Start:</span>
+          <div class="d-flex align-center mb-3">
+            <span class="font-weight-medium date-wid">Start:</span>
+            <font-awesome-icon
+              icon="fa-light fa-hourglass-start"
+              class="mr-1 ico-green"
+            />
             {{ assignment.start | date }}
           </div>
-          <div class="d-flex">
-            <span class="font-weight-medium fix-date-always">Due:</span>
+          <div class="d-flex align-center">
+            <span class="font-weight-medium date-wid">Due:</span>
+            <font-awesome-icon
+              icon="fa-light fa-hourglass-end"
+              class="mr-1 ico-red"
+            />
             {{ assignment.dateDue | date }}
           </div>
         </div>
@@ -446,7 +454,7 @@
         </v-container>
       </v-card>
     </v-dialog>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -862,5 +870,14 @@ div.v-list {
   top: 4px;
   margin-left: 8px;
   margin-right: -30px;
+}
+
+.date-wid {
+  width: 52px;
+}
+
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>

@@ -10,7 +10,9 @@
         Archive class?
       </v-card-title>
       <v-card-text>
-        <p>Archived classes are moved to the 'ARCHIVE' tab on the home page.</p>
+        <p>
+          Archived classes are moved to the 'Archive' section of the sidebar.
+        </p>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
           <v-btn

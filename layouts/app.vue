@@ -95,6 +95,7 @@
       </v-tooltip>
       <v-container class="d-flex justify-space-between align-center mob-right">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
+        <div id="headway"></div>
         <!-- TODO Move quote -->
         <!-- <span
           v-if="!teacher && $vuetify.breakpoint.name !== 'xs'"

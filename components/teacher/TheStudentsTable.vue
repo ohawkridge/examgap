@@ -1,15 +1,12 @@
 <template>
-  <div>
-    <div
-      class="flex-xs-column d-sm-flex justify-space-between align-center pa-4"
-    >
+  <v-container>
+    <div class="flex-xs-column d-sm-flex justify-space-between align-center">
       <v-menu offset-y open-on-hover>
         <template #activator="{ on }">
           <v-btn
             class="mr-2 mb-2 mb-sm-0"
             elevation="0"
             :block="$vuetify.breakpoint.name === 'xs'"
-            text
             rounded
             v-on="on"
           >
@@ -48,9 +45,8 @@
         <v-btn
           elevation="0"
           rounded
-          text
           :block="$vuetify.breakpoint.name === 'xs'"
-          class="mb-2 mb-sm-0"
+          class="mb-2 mb-sm-0 mr-2"
           @click="$nuxt.$emit('show-invite')"
         >
           Invite Students
@@ -58,12 +54,10 @@
         <v-tooltip bottom>
           <template #activator="{ on }">
             <v-btn
-              nuxt
               :to="`/logins/${group.id}`"
               class="mr-2 mb-2 mb-sm-0"
               :class="xsBtns"
               elevation="0"
-              text
               rounded
               :block="$vuetify.breakpoint.name === 'xs'"
               v-on="on"
@@ -80,7 +74,6 @@
               class="mr-2 mb-2 mb-sm-0"
               :class="xsBtns"
               :block="$vuetify.breakpoint.name === 'xs'"
-              text
               rounded
               @click="exportTableToCSV()"
               v-on="on"
@@ -98,7 +91,6 @@
           elevation="0"
           :block="$vuetify.breakpoint.name === 'xs'"
           :class="xsBtns"
-          text
           rounded
           @click="$fetch()"
         >
@@ -168,7 +160,7 @@
     <the-add-students-dialog />
     <the-remove-dialog :selected="selected" />
     <the-copy-student-dialog :selected="selected" />
-  </div>
+  </v-container>
 </template>
 
 <script>
