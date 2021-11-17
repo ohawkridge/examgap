@@ -195,11 +195,20 @@ export default {
           value: 'username',
         },
         {
-          text: 'Assignment Questions',
+          text: 'Questions Assigned',
           align: 'center',
           value: 'data.assignment',
         },
-        { text: 'Revision Questions', align: 'center', value: 'data.revision' },
+        {
+          text: 'Questions Completed',
+          align: 'center',
+          value: 'data.completed',
+        },
+        {
+          text: 'Independent Questions',
+          align: 'center',
+          value: 'data.revision',
+        },
         {
           text: 'Study Duration',
           align: 'center',
