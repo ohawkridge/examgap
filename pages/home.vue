@@ -304,6 +304,7 @@ export default {
   methods: {
     navTo(group) {
       this.$store.commit('user/setActiveGroupId', group.id)
+      this.$store.commit('topics/clearSelectedQuestions')
       this.$router.push(`/course/${group.course.id}`)
     },
     revise(topicId) {
