@@ -5,6 +5,7 @@ exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const secret = data.secret
   const teacher = data.teacher
+  const active = data.active
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
@@ -16,11 +17,18 @@ exports.handler = async (event) => {
       q.Select(
         'data',
         q.Map(
+          // Active or archived groups?
           q.Filter(
             q.Paginate(
               q.Match(q.Index('teacher_groups_2'), q.CurrentIdentity())
             ),
-            q.Lambda('ref', q.Select(['data', 'active'], q.Get(q.Var('ref'))))
+            q.Lambda(
+              'ref',
+              q.Equals(
+                q.Select(['data', 'active'], q.Get(q.Var('ref'))),
+                active
+              )
+            )
           ),
           q.Lambda(
             'ref',

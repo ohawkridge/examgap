@@ -5,6 +5,7 @@ const getDefaultState = () => ({
   secret: '',
   teacher: false,
   groups: [],
+  archivedGroups: [],
   activeGroupId: '',
   subscriptionDays: 'N/A', // Calculated in Fauna
   // Teacher properties
@@ -22,7 +23,12 @@ const state = getDefaultState()
 
 const getters = {
   activeGroup: (state) => {
-    return state.groups.find((g) => g.id === state.activeGroupId)
+    const found = state.groups.find((g) => g.id === state.activeGroupId)
+    // Group must be archived
+    if (!found) {
+      return state.archivedGroups.find((g) => g.id === state.activeGroupId)
+    }
+    return found
   },
   // From all group assignments, find the most
   // recent in reverse chronological order
@@ -62,7 +68,7 @@ const getters = {
 }
 
 const actions = {
-  resetState({ commit, state }) {
+  resetState({ commit }) {
     commit('resetState')
   },
   async getQuote({ commit, rootState }) {
@@ -112,12 +118,14 @@ const actions = {
     commit('app/setLoading', false, { root: true })
   },
   // Get groups and assignments
-  async getGroups({ rootState, commit, rootGetters }) {
+  // If !active, get archived groups
+  async getGroups({ rootState, commit }, active = true) {
     const url = new URL('/.netlify/functions/getGroups', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
         teacher: rootState.user.teacher,
+        active,
       }),
       method: 'POST',
     })
@@ -125,7 +133,8 @@ const actions = {
       throw new Error(`getGroups\n ${response.statusText} (${response.status})`)
     }
     response = await response.json()
-    commit('setGroups', response)
+    // Active or archived groups?
+    active ? commit('setGroups', response) : commit('setArchive', response)
     // By default, make student's first class active
     if (!rootState.user.teacher) {
       const id = rootState.user.groups[0].id
@@ -150,7 +159,21 @@ const actions = {
     })
     commit('setArchived')
   },
-  async createGroup({ commit, rootState, getters }, { courseId, groupName }) {
+  async restoreGroup({ commit, rootState, getters }, groupId) {
+    const url = new URL(
+      '/.netlify/functions/restoreClass',
+      this.$config.baseURL
+    )
+    await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        groupId,
+      }),
+      method: 'POST',
+    })
+    commit('setRestored', groupId)
+  },
+  async createGroup({ commit, rootState }, { courseId, groupName }) {
     const url = new URL('/.netlify/functions/createGroup', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -283,6 +306,9 @@ const mutations = {
   setGroups(state, groups) {
     state.groups = groups
   },
+  setArchive(state, groups) {
+    state.archivedGroups = groups
+  },
   setActiveGroupId(state, id) {
     // When a new class is created, TheCreateClassDialog sends -1
     // If so, set the most recent group (last in array) as active
@@ -341,7 +367,20 @@ const mutations = {
   },
   setArchived(state) {
     const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
-    state.groups[i].active = false
+    const temp = Object.assign({}, state.archivedGroups[i])
+    temp.active = false
+    state.groups.push(temp)
+    state.groups.splice(i, 1)
+  },
+  setRestored(state, groupId) {
+    // Find group in archive
+    const i = state.archivedGroups.findIndex((g) => g.id === groupId)
+    // Add a copy to current active array
+    const temp = Object.assign({}, state.archivedGroups[i])
+    temp.active = true
+    state.groups.push(temp)
+    // Remove from archived array
+    state.archivedGroups.splice(i, 1)
   },
   resetState(state) {
     Object.assign(state, getDefaultState())

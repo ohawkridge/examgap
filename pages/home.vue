@@ -12,7 +12,7 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="12" md="10" class="d-flex justify-space-around pb-10">
+          <v-col cols="12" md="10" class="d-flex justify-start pb-10">
             <template v-for="(group, i) in groups">
               <v-tooltip :key="i" bottom>
                 <template #activator="{ on }">
@@ -22,6 +22,7 @@
                     rounded
                     outlined
                     color="primary darken-1"
+                    class="mr-3"
                     @click="addAssign(group)"
                     v-on="on"
                   >

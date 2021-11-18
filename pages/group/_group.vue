@@ -15,23 +15,35 @@
       <v-tab-item>
         <v-container>
           <the-empty-assignments-state v-if="group.assignments.length === 0" />
-          <v-row class="justify-center">
-            <v-col cols="12" md="10" class="d-flex justify-end align-center">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    color="primary"
-                    elevation="0"
-                    rounded
-                    @click="addAssign()"
-                    v-on="on"
-                  >
-                    <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
-                    Assignment
-                  </v-btn>
-                </template>
+          <v-row v-else class="justify-center">
+            <v-col cols="12" md="10">
+              <div
+                v-if="!group.active"
+                class="d-flex align-center justify-space-between"
+              >
+                <v-chip color="red" label class="mr-2">
+                  <font-awesome-icon
+                    icon="fa-light fa-box-archive"
+                    class="mr-2 fa-lg"
+                  />
+                  Archived
+                </v-chip>
+                <the-restore-group-dialog :group-id="group.id" />
+              </div>
+              <div v-else class="d-flex justify-end align-center">
+                <!-- <template #activator="{ on }"> -->
+                <v-btn
+                  color="primary"
+                  elevation="0"
+                  rounded
+                  @click="addAssign()"
+                >
+                  <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+                  Assignment
+                </v-btn>
                 <span>Add assignment</span>
-              </v-tooltip>
+                <!-- </template> -->
+              </div>
             </v-col>
           </v-row>
           <v-row class="justify-center">
@@ -67,6 +79,7 @@ import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
 import TheEmptyAssignmentsState from '@/components/teacher/TheEmptyAssignmentsState'
 import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
+import TheRestoreGroupDialog from '~/components/teacher/TheRestoreGroupDialog.vue'
 
 export default {
   components: {
@@ -76,6 +89,7 @@ export default {
     TheInviteDialog,
     TheEmptyAssignmentsState,
     TeacherAssignmentCard,
+    TheRestoreGroupDialog,
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
@@ -135,6 +149,7 @@ export default {
       this.$store.commit('topics/clearSelectedQuestions')
       this.$router.push(`/course/${this.group.course.id}`)
     },
+    restore() {},
   },
 }
 </script>
