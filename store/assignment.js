@@ -42,24 +42,6 @@ const actions = {
   resetState({ commit }) {
     commit('resetState')
   },
-  async getRecentAssignments({ state, commit, rootState }) {
-    const url = new URL(
-      '/.netlify/functions/getRecentAssignments',
-      this.$config.baseURL
-    )
-    let response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        teacherId: rootState.user.id,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error(`Error fetching assignments ${response.status}`)
-    }
-    response = await response.json()
-    commit('setRecentAssignments', response)
-  },
   async getQuestion({ state, commit, rootState }) {
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
     let response = await fetch(url, {

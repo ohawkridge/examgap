@@ -83,3 +83,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.ico-btn {
+  height: 24px;
+  width: 24px;
+}
+</style>

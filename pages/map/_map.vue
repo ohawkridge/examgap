@@ -1,13 +1,13 @@
 <template>
-  <div class="pa-4 mt-8">
-    <v-row>
-      <v-col cols="6">
+  <v-container>
+    <v-row class="mt-2">
+      <v-col cols="12" md="6">
         <v-text-field
           v-model="questionId"
           outlined
           label="Question Id"
           clearable
-          @blur="getQuestion(questionId)"
+          @input="getQuestion(questionId)"
         ></v-text-field>
         <v-autocomplete
           v-model="selectedTopics"
@@ -24,17 +24,29 @@
           multiple
         >
         </v-autocomplete>
+        <v-checkbox
+          v-model="allCourses"
+          label="Show developing courses"
+          hide-details
+        >
+        </v-checkbox>
+        <v-btn
+          color="primary"
+          rounded
+          elevation="0"
+          class="mt-4"
+          @click="save()"
+        >
+          Save
+        </v-btn>
       </v-col>
-      <v-col cols="6">
+      <v-col cols="12" md="6">
         <div v-html="question">
           <p class="text-h6">Preview</p>
         </div>
       </v-col>
     </v-row>
-    <v-btn color="primary" rounded elevation="0" class="mt-4" @click="save()">
-      Save
-    </v-btn>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -46,6 +58,7 @@ export default {
       topics: [],
       question: '',
       selectedTopics: [],
+      allCourses: false,
     }
   },
   async fetch() {
@@ -56,6 +69,7 @@ export default {
     const topics = await fetch(url, {
       body: JSON.stringify({
         secret: this.$store.state.user.secret,
+        allCourses: this.allCourses,
       }),
       method: 'POST',
     })
@@ -65,38 +79,45 @@ export default {
     this.topics = await topics.json()
     this.getQuestion()
   },
+  watch: {
+    allCourses() {
+      this.$fetch()
+    },
+  },
   mounted() {
     this.questionId = this.$route.params.map
     this.$store.commit('app/setPageTitle', 'Question topics')
   },
   methods: {
     async getQuestion(questionId = this.$route.params.map) {
-      // In case you paste with extra whitespace
-      questionId = questionId.trim()
-      try {
-        const url = new URL(
-          '/.netlify/functions/getQuestion',
-          this.$config.baseURL
-        )
-        let response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.$store.state.user.secret,
-            questionId,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error getting question ${response.status}`)
+      if (questionId !== null && questionId !== '') {
+        // In case you paste with extra whitespace
+        questionId = questionId.trim()
+        try {
+          const url = new URL(
+            '/.netlify/functions/getQuestion',
+            this.$config.baseURL
+          )
+          let response = await fetch(url, {
+            body: JSON.stringify({
+              secret: this.$store.state.user.secret,
+              questionId,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error getting question ${response.status}`)
+          }
+          response = await response.json()
+          this.question = response.text
+          this.selectedTopics = response.selectedTopics
+        } catch (err) {
+          console.error(err)
+          this.$snack.showMessage({
+            type: 'error',
+            msg: 'Error getting question',
+          })
         }
-        response = await response.json()
-        this.question = response.text
-        this.selectedTopics = response.selectedTopics
-      } catch (err) {
-        console.error(err)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error getting question',
-        })
       }
     },
     async save() {
@@ -118,7 +139,7 @@ export default {
         }
         this.$snack.showMessage({
           type: 'success',
-          msg: 'Changes saved',
+          msg: 'Topics saved',
         })
       } catch (err) {
         console.error(err)

@@ -16,7 +16,12 @@ exports.handler = async (event) => {
       q.Select(
         'data',
         q.Map(
-          q.Paginate(q.Match(q.Index('teacher_groups_2'), q.CurrentIdentity())),
+          q.Filter(
+            q.Paginate(
+              q.Match(q.Index('teacher_groups_2'), q.CurrentIdentity())
+            ),
+            q.Lambda('ref', q.Select(['data', 'active'], q.Get(q.Var('ref'))))
+          ),
           q.Lambda(
             'ref',
             q.Let(
@@ -73,9 +78,6 @@ exports.handler = async (event) => {
                               ['data', 'dateDue'],
                               q.Var('instance')
                             ),
-                            num_questions: q.Count(
-                              q.Select(['data', 'questions'], q.Var('instance'))
-                            ),
                             live: q.If(
                               q.LT(
                                 q.ToDate(
@@ -94,6 +96,29 @@ exports.handler = async (event) => {
                               ),
                               false,
                               true
+                            ),
+                            group: q.Let(
+                              {
+                                instance: q.Get(
+                                  q.Select(['data', 'group'], q.Var('instance'))
+                                ),
+                              },
+                              {
+                                id: q.Select(['ref', 'id'], q.Var('instance')),
+                                name: q.Select(
+                                  ['data', 'name'],
+                                  q.Var('instance')
+                                ),
+                              }
+                            ),
+                            numStudents: q.Count(
+                              q.Match(
+                                q.Index('assignment_students'),
+                                q.Select('ref', q.Var('instance'))
+                              )
+                            ),
+                            num_questions: q.Count(
+                              q.Select(['data', 'questions'], q.Var('instance'))
                             ),
                           }
                         )

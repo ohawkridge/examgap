@@ -11,24 +11,50 @@
       <v-tab> Grades </v-tab>
       <v-tab> Settings </v-tab>
     </v-tabs>
-    <v-container>
-      <v-tabs-items v-model="tab">
-        <v-tab-item>
-          <!-- <the-empty-assignments-state v-if="ssignments.length === 0" /> -->
-          <the-empty-assignments-state v-if="true" />
-          <template v-else> </template>
-        </v-tab-item>
-        <v-tab-item>
-          <the-students-table />
-        </v-tab-item>
-        <v-tab-item>
-          <the-grades-table />
-        </v-tab-item>
-        <v-tab-item>
-          <the-group-settings />
-        </v-tab-item>
-      </v-tabs-items>
-    </v-container>
+    <v-tabs-items v-model="tab">
+      <v-tab-item>
+        <v-container>
+          <the-empty-assignments-state v-if="group.assignments.length === 0" />
+          <v-row class="justify-center">
+            <v-col cols="12" md="10" class="d-flex justify-end align-center">
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    color="primary"
+                    elevation="0"
+                    rounded
+                    @click="addAssign()"
+                    v-on="on"
+                  >
+                    <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+                    Assignment
+                  </v-btn>
+                </template>
+                <span>Add assignment</span>
+              </v-tooltip>
+            </v-col>
+          </v-row>
+          <v-row class="justify-center">
+            <v-col cols="12" md="10">
+              <teacher-assignment-card
+                v-for="assignment in group.assignments"
+                :key="assignment.id"
+                :assignment="assignment"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-tab-item>
+      <v-tab-item>
+        <the-students-table />
+      </v-tab-item>
+      <v-tab-item>
+        <the-grades-table />
+      </v-tab-item>
+      <v-tab-item>
+        <the-group-settings />
+      </v-tab-item>
+    </v-tabs-items>
     <the-invite-dialog :group="group" />
   </div>
 </template>
@@ -40,6 +66,7 @@ import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
 import TheEmptyAssignmentsState from '@/components/teacher/TheEmptyAssignmentsState'
+import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 
 export default {
   components: {
@@ -48,6 +75,7 @@ export default {
     TheGroupSettings,
     TheInviteDialog,
     TheEmptyAssignmentsState,
+    TeacherAssignmentCard,
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
@@ -57,9 +85,6 @@ export default {
   layout: 'app',
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-    assignments() {
-      return this.group.assignments
-    },
     // Store tab state so we can access it in app.vue
     tab: {
       get() {
@@ -81,16 +106,16 @@ export default {
         '%c' + 'Prefetch',
         'color:#001f2a;background-color:#f4d06f;padding:4px;'
       )
-      console.time('Last assignment')
+      console.time('_report (latest)')
       await this.$store.dispatch('assignment/getReport', -1)
-      console.timeEnd('Fetch last assignment')
+      console.timeEnd('_report (latest)')
       console.log(
         '%c' + 'Prefetch',
         'color:#001f2a;background-color:#f4d06f;padding:4px;'
       )
-      console.time('_course data')
+      console.time('_course')
       await this.$store.dispatch('topics/getTopics')
-      console.timeEnd('_course data')
+      console.timeEnd('_course')
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -104,6 +129,12 @@ export default {
     }
     // (In case _report.vue crashes deactivate marking)
     this.$store.commit('assignment/setMarking', false)
+  },
+  methods: {
+    addAssign() {
+      this.$store.commit('topics/clearSelectedQuestions')
+      this.$router.push(`/course/${this.group.course.id}`)
+    },
   },
 }
 </script>

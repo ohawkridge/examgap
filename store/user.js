@@ -22,11 +22,19 @@ const state = getDefaultState()
 
 const getters = {
   activeGroup: (state) => {
-    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
-    return state.groups[i]
+    return state.groups.find((g) => g.id === state.activeGroupId)
   },
-  activeGroupCount: (state) => {
-    return state.groups.filter((group) => group.active).length
+  // From all group assignments, find the most
+  // recent in reverse chronological order
+  recentAssignments: (state) => {
+    let allAssignments = []
+    for (const group of state.groups) {
+      allAssignments = allAssignments.concat(group.assignments)
+    }
+    allAssignments.sort(function (a, b) {
+      return a.start < b.start
+    })
+    return allAssignments.slice(0, 5)
   },
   // Filter out post-dated assignments
   assignments: (state, getters) => {
@@ -94,7 +102,6 @@ const actions = {
     }
     response = await response.json()
     commit('setUser', response)
-    await dispatch('assignment/getRecentAssignments', state.id, { root: true })
     await dispatch('getGroups')
     // For students only, get revision topics and Quote of the Day
     if (!state.teacher) {
@@ -125,7 +132,7 @@ const actions = {
       commit('setActiveGroupId', id)
     }
     // Onboard if no active groups
-    if (rootGetters['user/activeGroupCount'] === 0) {
+    if (rootState.user.groups.length === 0) {
       commit('app/setOnboardStep', 1, { root: true })
     }
   },

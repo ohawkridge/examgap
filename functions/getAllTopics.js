@@ -78,6 +78,7 @@ exports.handler = async (event) => {
       )
     )
     const data = await keyedClient.query(qry)
+    // console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

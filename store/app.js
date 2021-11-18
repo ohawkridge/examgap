@@ -1,5 +1,4 @@
 const getDefaultState = () => ({
-  tab: null, // Home or Archive tab? (teacher only)
   groupTab: null, // Tab on _group.vue
   onboardStep: 0, // Don't onboard
   loading: false, // Global loading state
@@ -16,9 +15,6 @@ const actions = {
 }
 
 const mutations = {
-  setTab(state, val) {
-    state.tab = val
-  },
   setGroupTab(state, val) {
     state.groupTab = val
   },

@@ -64,18 +64,10 @@
         <div class="mt-4 ml-11">
           <div class="d-flex align-center mb-3">
             <span class="font-weight-medium date-wid">Start:</span>
-            <font-awesome-icon
-              icon="fa-light fa-hourglass-start"
-              class="mr-1 ico-green"
-            />
             {{ assignment.start | date }}
           </div>
           <div class="d-flex align-center">
             <span class="font-weight-medium date-wid">Due:</span>
-            <font-awesome-icon
-              icon="fa-light fa-hourglass-end"
-              class="mr-1 ico-red"
-            />
             {{ assignment.dateDue | date }}
           </div>
         </div>
@@ -876,6 +868,7 @@ div.v-list {
   width: 52px;
 }
 
+/* Does not work external */
 .ico-btn {
   height: 24px;
   width: 24px;

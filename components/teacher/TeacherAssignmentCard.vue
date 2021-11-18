@@ -1,24 +1,50 @@
 <template>
   <v-card
     outlined
-    class="mb-4 ass-card"
+    class="mb-4"
+    :class="assignment.live ? 'open-card' : 'past-card'"
     hover
-    nuxt
-    :to="`/report/${assignment.id}`"
+    @click="navTo(assignment)"
   >
-    <v-card-title>
+    <v-card-title class="d-flex justify-space-between">
       {{ assignment.name }}
+      <v-menu offset-y>
+        <template #activator="{ on }">
+          <v-btn icon @click.stop="">
+            <font-awesome-icon
+              icon="fa-light fa-ellipsis-vertical"
+              class="ico-btn"
+              v-on="on"
+            />
+          </v-btn>
+        </template>
+        <v-list>
+          <!-- TODO -->
+          <!-- <v-list-item class="px-0">
+            <v-list-item-title>
+              Edit
+            </v-list-item-title>
+          </v-list-item> -->
+          <v-list-item class="px-0">
+            <v-list-item-title>
+              <the-delete-assignment-dialog :assignment-id="assignment.id" />
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-card-title>
     <v-card-subtitle>
-      {{ assignment.group }}
+      {{ assignment.group.name }}
     </v-card-subtitle>
     <v-card-text class="text-body-1">
       <div>
         <span class="align-date font-weight-bold">Start:</span
         >{{ assignment.start | date }}
       </div>
-      <v-chip label outlined color="primary darken-1" small class="float-right">
-        {{ assignment.count }} Student{{ assignment.count | pluralize }}
+      <v-chip label outlined small class="float-right">
+        {{ assignment.numStudents }} Student{{
+          assignment.numStudents | pluralize
+        }}
       </v-chip>
       <div>
         <span class="align-date font-weight-bold">Due:</span
@@ -29,23 +55,44 @@
 </template>
 
 <script>
+import TheDeleteAssignmentDialog from './TheDeleteAssignmentDialog.vue'
+
 export default {
+  components: {
+    TheDeleteAssignmentDialog,
+  },
   props: {
     assignment: {
       type: Object,
       default: () => {},
     },
   },
+  methods: {
+    navTo(assignment) {
+      this.$store.commit('user/setActiveGroupId', assignment.group.id)
+      this.$router.push(`/report/${assignment.id}`)
+    },
+  },
 }
 </script>
 
 <style scoped>
-.ass-card {
-  border-left: 4px solid #0099cc;
+.open-card {
+  border-left: 4px solid #4caf50;
+}
+
+.past-card {
+  border-left: 4px solid #e0e0e0;
 }
 
 .align-date {
   display: inline-block;
-  width: 80px;
+  width: 72px;
+}
+
+/* Does not work external */
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>

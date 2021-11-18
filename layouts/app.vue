@@ -36,11 +36,7 @@
               </v-list-item-content>
             </template>
             <template v-for="(group, i) in groups">
-              <v-list-item
-                v-if="!teacher || (teacher && group.active)"
-                :key="i"
-                @click="navTo(group.id)"
-              >
+              <v-list-item :key="i" @click="navTo(group.id)">
                 <v-list-item-content>
                   <v-list-item-title> {{ group.name }} </v-list-item-title>
                 </v-list-item-content>
@@ -156,7 +152,6 @@ export default {
       selected: (state) => state.topics.selected,
     }),
     ...mapGetters({
-      activeGroupCount: 'user/activeGroupCount',
       group: 'user/activeGroup',
     }),
     // Page title action logic

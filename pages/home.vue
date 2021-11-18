@@ -13,7 +13,7 @@
         </v-row>
         <v-row class="justify-center">
           <v-col cols="12" md="10" class="d-flex justify-space-around pb-10">
-            <template v-for="(group, i) in activeGroups">
+            <template v-for="(group, i) in groups">
               <v-tooltip :key="i" bottom>
                 <template #activator="{ on }">
                   <v-btn
@@ -22,7 +22,7 @@
                     rounded
                     outlined
                     color="primary darken-1"
-                    @click="navTo(group)"
+                    @click="addAssign(group)"
                     v-on="on"
                   >
                     {{ group.name }}
@@ -48,7 +48,7 @@
           <v-col cols="12" md="9">
             <!-- Skeletons -->
             <!-- TODO Finish -->
-            <template v-if="$fetchState.pending">
+            <template v-if="loading">
               <v-card
                 v-for="i in 3"
                 :key="i"
@@ -254,22 +254,9 @@ export default {
     TeacherAssignmentCard,
   },
   layout: 'app',
-  async fetch() {
-    if (this.teacher) {
-      try {
-        await this.$store.dispatch('assignment/getRecentAssignments')
-      } catch (err) {
-        console.error(err)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error fetching assignments',
-        })
-      }
-    }
-  },
   computed: {
     ...mapGetters({
-      assignments: 'user/assignments',
+      recent: 'user/recentAssignments',
       group: 'user/activeGroup',
     }),
     ...mapState({
@@ -277,7 +264,6 @@ export default {
       groups: (state) => state.user.groups,
       loading: (state) => state.app.loading,
       topics: (state) => state.topics.topics,
-      recent: (state) => state.assignment.recentAssignments,
     }),
     // Remember active tab (in store)
     tab: {
@@ -288,12 +274,6 @@ export default {
         this.$store.commit('app/setTab', value)
       },
     },
-    activeGroups() {
-      return this.groups.filter((g) => g.active)
-    },
-    archiveGroups() {
-      return this.groups.filter((g) => !g.active)
-    },
   },
   mounted() {
     this.$store.commit(
@@ -302,7 +282,7 @@ export default {
     )
   },
   methods: {
-    navTo(group) {
+    addAssign(group) {
       this.$store.commit('user/setActiveGroupId', group.id)
       this.$store.commit('topics/clearSelectedQuestions')
       this.$router.push(`/course/${group.course.id}`)
