@@ -112,25 +112,18 @@
     >
       <template #no-data>
         <!-- Empty state -->
-        <div class="pa-3">
+        <div style="height: 60vh" class="mt-10">
           <v-img
             src="/no-student.svg"
             contain
-            :max-width="$vuetify.breakpoint.name === 'xs' ? '50%' : '20%'"
-            alt="Graduation gap illustration"
+            max-width="200"
+            alt="Mortar board illustration"
             class="mx-auto"
           />
-          <p class="text-center mt-2 black--text">No students yet</p>
-          <div class="d-flex justify-center">
-            <v-btn
-              elevation="0"
-              rounded
-              color="primary"
-              @click="$nuxt.$emit('show-invite')"
-            >
-              Invite students
-            </v-btn>
-          </div>
+          <p class="text-h6 mt-8">No students yet</p>
+          <p>
+            Click 'INVITE STUDENTS', or Actions → Add students to get started.
+          </p>
         </div>
       </template>
       <template #[`item.target`]="props">

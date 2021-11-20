@@ -1,7 +1,22 @@
 <template>
   <v-dialog v-model="dialog" width="440">
-    <template #activator="{ on }">
-      <v-btn rounded elevation="0" v-on="on"> Restore </v-btn>
+    <template #activator="{ on: dial }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tool }">
+          <v-chip color="error" label class="mr-2" v-on="{ ...tool, ...dial }">
+            <font-awesome-icon
+              icon="fa-light fa-circle-check"
+              class="mr-2 fa-lg"
+            />
+            Archived
+            <font-awesome-icon
+              icon="fa-light fa-box-archive"
+              class="ml-2 fa-lg"
+            />
+          </v-chip>
+        </template>
+        <span>Restore class</span>
+      </v-tooltip>
     </template>
     <v-card>
       <v-card-title class="d-flex justify-center">

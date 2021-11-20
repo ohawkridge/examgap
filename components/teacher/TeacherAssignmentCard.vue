@@ -1,11 +1,5 @@
 <template>
-  <v-card
-    outlined
-    class="mb-4"
-    :class="assignment.live ? 'open-card' : 'past-card'"
-    hover
-    @click="navTo(assignment)"
-  >
+  <v-card outlined class="mb-4" hover @click="nav()">
     <v-card-title class="d-flex justify-space-between">
       {{ assignment.name }}
       <v-menu offset-y>
@@ -68,23 +62,15 @@ export default {
     },
   },
   methods: {
-    navTo(assignment) {
-      this.$store.commit('user/setActiveGroupId', assignment.group.id)
-      this.$router.push(`/report/${assignment.id}`)
+    nav() {
+      this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
+      this.$router.push(`/report/${this.assignment.id}`)
     },
   },
 }
 </script>
 
 <style scoped>
-.open-card {
-  border-left: 4px solid #4caf50;
-}
-
-.past-card {
-  border-left: 4px solid #e0e0e0;
-}
-
 .align-date {
   display: inline-block;
   width: 72px;

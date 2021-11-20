@@ -57,7 +57,7 @@ export default {
         return this.group.name
       },
       set(name) {
-        this.$store.commit('user/setGroupName', name)
+        this.$store.commit('user/setGroupName', { group: this.group, name })
         this.$store.commit('app/setPageTitle', name)
       },
     },

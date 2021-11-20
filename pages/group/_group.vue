@@ -13,43 +13,52 @@
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
+        <!-- ASSIGNMENTS xx -->
         <v-container>
-          <the-empty-assignments-state v-if="group.assignments.length === 0" />
-          <v-row v-else class="justify-center">
-            <v-col cols="12" md="10">
-              <div
+          <v-row class="justify-center">
+            <v-col
+              cols="12"
+              md="10"
+              class="d-flex justify-space-between align-center"
+            >
+              <the-restore-group-dialog
                 v-if="!group.active"
-                class="d-flex align-center justify-space-between"
-              >
-                <v-chip color="red" label class="mr-2">
-                  <font-awesome-icon
-                    icon="fa-light fa-box-archive"
-                    class="mr-2 fa-lg"
-                  />
-                  Archived
-                </v-chip>
-                <the-restore-group-dialog :group-id="group.id" />
-              </div>
-              <div v-else class="d-flex justify-end align-center">
-                <!-- <template #activator="{ on }"> -->
-                <v-btn
+                :group-id="group.id"
+              />
+              <template v-else>
+                <v-btn-toggle
+                  v-model="upcoming"
                   color="primary"
-                  elevation="0"
+                  mandatory
                   rounded
-                  @click="addAssign()"
+                  borderless
                 >
-                  <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
-                  Assignment
-                </v-btn>
-                <span>Add assignment</span>
-                <!-- </template> -->
-              </div>
+                  <v-btn> Upcoming </v-btn>
+                  <v-btn min-width="110"> Past </v-btn>
+                </v-btn-toggle>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      color="primary"
+                      elevation="0"
+                      rounded
+                      @click="addAssign()"
+                      v-on="on"
+                    >
+                      <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+                      Assignment
+                    </v-btn>
+                  </template>
+                  <span>Add assignment</span>
+                </v-tooltip>
+              </template>
             </v-col>
           </v-row>
-          <v-row class="justify-center">
+          <the-empty-assignments-state v-if="assignments.length === 0" />
+          <v-row v-else class="justify-center">
             <v-col cols="12" md="10">
               <teacher-assignment-card
-                v-for="assignment in group.assignments"
+                v-for="assignment in assignments"
                 :key="assignment.id"
                 :assignment="assignment"
               />
@@ -97,9 +106,23 @@ export default {
     next()
   },
   layout: 'app',
+  data() {
+    return {
+      upcoming: 0,
+    }
+  },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-    // Store tab state so we can access it in app.vue
+    // Show all assignments for archived groups
+    // Otherwise, show assignments based on toggle
+    assignments() {
+      if (!this.group.active) {
+        return this.group.assignments
+      } else {
+        return this.group.assignments.filter((a) => a.live === !this.upcoming)
+      }
+    },
+    // Remember tab state
     tab: {
       get() {
         return this.$store.state.app.groupTab
@@ -149,7 +172,6 @@ export default {
       this.$store.commit('topics/clearSelectedQuestions')
       this.$router.push(`/course/${this.group.course.id}`)
     },
-    restore() {},
   },
 }
 </script>

@@ -1,6 +1,24 @@
 <template>
   <v-container>
-    <v-row class="justify-center mt-2">
+    <v-row v-if="groups.length === 0" style="height: 60vh">
+      <v-col cols="12" class="d-flex justify-center align-center">
+        <div class="text-center">
+          <v-img
+            src="/no-class.svg"
+            max-width="200"
+            contain
+            class="mx-auto"
+            alt="Mortar board illustrations"
+          />
+          <p class="text-h6 mt-8">No archived classes</p>
+          <p>
+            Choose an active class from the sidebar or
+            <nuxt-link to="/home">go home</nuxt-link>.
+          </p>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row v-else class="justify-center mt-2">
       <v-col v-for="(group, i) in groups" :key="i" cols="12" md="4">
         <v-card hover outlined @click="navTo(group.id)">
           <v-card-title>

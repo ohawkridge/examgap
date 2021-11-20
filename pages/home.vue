@@ -22,7 +22,7 @@
                     rounded
                     outlined
                     color="primary darken-1"
-                    class="mr-3"
+                    class="mr-4"
                     @click="addAssign(group)"
                     v-on="on"
                   >
@@ -113,7 +113,7 @@
             </div>
           </template>
           <v-list v-else class="py-0">
-            <v-list-item v-if="assignments.length === 0" class="divide">
+            <v-list-item v-if="group.assignments.length === 0" class="divide">
               <v-list-item-content>
                 <div class="d-flex align-center">
                   <div class="col1 font-weight-medium">No assignments yet.</div>
@@ -121,7 +121,7 @@
               </v-list-item-content>
             </v-list-item>
             <v-list-item
-              v-for="(assignment, i) in assignments"
+              v-for="(assignment, i) in group.assignments"
               v-else
               :key="i"
               nuxt

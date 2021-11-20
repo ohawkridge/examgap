@@ -18,7 +18,8 @@
         </v-list-item>
         <v-list-item-group v-model="nav" color="primary">
           <!-- No classes -->
-          <v-list-item v-if="groups.length === 0" @click="navHome()">
+          <!-- TODO Test -->
+          <v-list-item v-if="groups.length === 0">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-user-group fa-lg" />
             </v-list-item-icon>
@@ -169,11 +170,6 @@ export default {
     navTo(groupId) {
       this.$store.commit('user/setActiveGroupId', groupId)
       this.$router.push(this.teacher ? `/group/${groupId}` : '/home')
-    },
-    navHome() {
-      // Make 'Classes' a link to home in empty state
-      this.$store.commit('app/setTab', 0)
-      this.$router.push('/home')
     },
     logout() {
       // Clear all stores
