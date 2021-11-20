@@ -44,7 +44,7 @@
               </v-list-item>
             </template>
           </v-list-group>
-          <v-list-item nuxt :to="`/archive`">
+          <v-list-item v-if="teacher" nuxt :to="`/archive`">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-box-archive fa-lg" />
             </v-list-item-icon>
@@ -53,7 +53,7 @@
             </v-list-item-content>
           </v-list-item>
           <v-divider class="my-4 mx-2" />
-          <v-list-item nuxt to="/author">
+          <v-list-item v-if="teacher" nuxt to="/author">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-pen-line fa-lg" />
             </v-list-item-icon>

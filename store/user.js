@@ -344,7 +344,7 @@ const mutations = {
       id: assignment.ref['@ref'].id,
       name: assignment.data.name,
       start: assignment.data.start,
-      num_questions: assignment.data.questions.length,
+      numQuestions: assignment.data.questions.length,
       live: true,
     })
   },

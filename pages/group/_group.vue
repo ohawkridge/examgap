@@ -30,7 +30,6 @@
                   v-model="upcoming"
                   color="primary"
                   mandatory
-                  rounded
                   borderless
                 >
                   <v-btn> Upcoming </v-btn>

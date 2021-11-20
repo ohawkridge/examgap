@@ -125,7 +125,7 @@ exports.handler = async (event) => {
                                 q.Select('ref', q.Var('instance'))
                               )
                             ),
-                            num_questions: q.Count(
+                            numQuestions: q.Count(
                               q.Select(['data', 'questions'], q.Var('instance'))
                             ),
                           }
@@ -171,7 +171,7 @@ exports.handler = async (event) => {
                         ),
                         // Need group to filter assignments later
                         group: q.Select(['data', 'group'], q.Var('instance')),
-                        num_questions: q.Count(
+                        numQuestions: q.Count(
                           q.Select(['data', 'questions'], q.Var('instance'))
                         ),
                         live: q.If(

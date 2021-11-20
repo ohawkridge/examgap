@@ -25,7 +25,7 @@
         >{{ username | name }}</nuxt-link
       >
     </template>
-    <div class="d-flex justify-space-between align-center">
+    <div class="d-flex justify-space-between align-center mt-2">
       <v-chip x-small label>
         {{ teacher ? 'Teacher' : 'Student' }}
       </v-chip>
