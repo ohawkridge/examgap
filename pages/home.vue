@@ -74,7 +74,7 @@
         <v-tab>Revision</v-tab>
       </v-tabs>
       <v-tabs-items v-model="tab">
-        <!-- Assignments -->
+        <!-- Assignments xx -->
         <v-tab-item>
           <v-container>
             <v-row class="justify-center">
@@ -97,37 +97,17 @@
             <the-empty-assignment-state v-else />
           </v-container>
         </v-tab-item>
-        <!-- Revision -->
+        <!-- Revision xx -->
         <v-tab-item>
-          <v-list class="py-0">
-            <v-list-item
-              v-for="(topic, i) in topics"
-              :key="i"
-              class="divide"
-              @click="revise(topic.id)"
-            >
-              <v-list-item-content>
-                <div class="d-flex align-center">
-                  <v-tooltip bottom>
-                    <template #activator="{ on }">
-                      <div class="font-weight-medium" v-on="on">
-                        {{ topic.name }}
-                      </div>
-                    </template>
-                    <span>Click to revise</span>
-                  </v-tooltip>
-                  <div>
-                    <font-awesome-icon
-                      v-for="j in topic.answered"
-                      :key="j"
-                      icon="fa-light fa-circle-check"
-                      class="ico-green fa-lg mr-2"
-                    />
-                  </div>
-                </div>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+          <v-container>
+            <v-row class="pt-8">
+              <revision-topic-card
+                v-for="(topic, i) in topics"
+                :key="i"
+                :topic="topic"
+              />
+            </v-row>
+          </v-container>
         </v-tab-item>
       </v-tabs-items>
       <the-revision-mode-dialog />
@@ -141,6 +121,7 @@ import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
 import TheEmptyAssignmentState from '~/components/student/TheEmptyAssignmentState.vue'
+import RevisionTopicCard from '~/components/student/RevisionTopicCard.vue'
 
 export default {
   components: {
@@ -148,6 +129,7 @@ export default {
     TeacherAssignmentCard,
     StudentAssignmentCard,
     TheEmptyAssignmentState,
+    RevisionTopicCard,
   },
   layout: 'app',
   data() {

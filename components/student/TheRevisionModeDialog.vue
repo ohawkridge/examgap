@@ -1,16 +1,19 @@
 <template>
-  <v-dialog v-model="dialog" width="440">
+  <v-dialog v-model="dialog" max-width="440">
     <v-card>
       <v-card-title class="d-flex justify-center"> Revision mode </v-card-title>
-      <v-card-text>
-        <p>You will now see a practise exam question. Remember&hellip;</p>
+      <v-card-text class="text-body-1">
+        <p>You will now see a practise exam question.</p>
         <ul class="no-bullet">
           <li class="mb-2">
-            <font-awesome-icon icon="fa-light fa-timer" />
+            <font-awesome-icon icon="fa-light fa-timer" class="fa-lg mr-2" />
             Take your time
           </li>
           <li>
-            <font-awesome-icon icon="fa-light fa-bullseye-arrow" />
+            <font-awesome-icon
+              icon="fa-light fa-bullseye-arrow"
+              class="fa-lg mr-2"
+            />
             Mark yourself accurately
           </li>
         </ul>
