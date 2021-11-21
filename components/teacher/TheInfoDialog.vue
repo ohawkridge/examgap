@@ -4,7 +4,7 @@
       <v-tooltip bottom>
         <template #activator="{ on: tool }">
           <v-btn class="ml-2" icon v-on="{ ...tool, ...dial }">
-            <font-awesome-icon icon="fa-light fa-circle-info" class="fa-lg" />
+            <font-awesome-icon icon="fa-light fa-circle-info" class="ico-btn" />
           </v-btn>
         </template>
         <span>More information</span>
@@ -20,7 +20,7 @@
             Response id:
             <code>{{ response.id }}</code>
             <v-btn icon small @click="copyId()">
-              <font-awesome-icon icon="fa-light fa-copy" />
+              <font-awesome-icon icon="fa-light fa-copy" class="xx" />
             </v-btn>
           </li>
           <li>
@@ -71,3 +71,15 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.ico-btn {
+  height: 24px;
+  width: 24px;
+}
+
+.xx {
+  height: 18px;
+  width: 18px;
+}
+</style>

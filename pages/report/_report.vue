@@ -192,7 +192,7 @@
       <font-awesome-icon icon="fa-light fa-check-double" class="fa-sm mr-1" />
       Teacher mark
     </div>
-    <!-- Marking dialog -->
+    <!-- Marking dialog xx -->
     <v-dialog
       v-model="marking"
       fullscreen
@@ -202,7 +202,7 @@
       <v-card tile>
         <v-toolbar dark dense color="primary">
           <v-btn icon dark @click="close()">
-            <font-awesome-icon icon="fa-light fa-xmark" class="fa-xl" />
+            <font-awesome-icon icon="fa-light fa-xmark" class="ico-btn" />
           </v-btn>
           <v-toolbar-title>Marking</v-toolbar-title>
           <v-spacer />
@@ -219,7 +219,7 @@
                     <v-btn icon @click="next(-1)" v-on="on">
                       <font-awesome-icon
                         icon="fa-light fa-arrow-left"
-                        class="fa-lg"
+                        class="ico-btn"
                       />
                     </v-btn>
                   </template>
@@ -230,7 +230,7 @@
                     <v-btn icon @click="next(1)" v-on="on">
                       <font-awesome-icon
                         icon="fa-light fa-arrow-right"
-                        class="fa-lg"
+                        class="ico-btn"
                       />
                     </v-btn>
                   </template>
@@ -247,7 +247,7 @@
                     >
                       <font-awesome-icon
                         icon="fa-light fa-flag"
-                        class="fa-lg"
+                        class="ico-btn"
                       />
                     </v-btn>
                   </template>
@@ -264,7 +264,7 @@
                     >
                       <font-awesome-icon
                         icon="fa-light fa-repeat"
-                        class="fa-lg"
+                        class="ico-btn"
                       />
                     </v-btn>
                   </template>

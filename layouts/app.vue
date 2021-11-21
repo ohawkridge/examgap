@@ -87,8 +87,8 @@
     </v-navigation-drawer>
     <v-app-bar
       app
-      color="#fafafa"
       flat
+      color="white"
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
       <v-tooltip bottom>
@@ -103,12 +103,13 @@
         <div id="headway"></div>
       </v-container>
     </v-app-bar>
-    <v-main>
+    <v-main style="background-color: #fafafa">
       <nuxt />
       <the-snackbar />
       <the-onboarding-snackbar v-if="teacher" />
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
+      <the-loading-overlay />
     </v-main>
     <the-footer />
   </v-app>
@@ -123,6 +124,7 @@ import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheGreeting from '@/components/common/TheGreeting'
+import TheLoadingOverlay from '~/components/common/TheLoadingOverlay.vue'
 
 export default {
   name: 'App',
@@ -133,6 +135,7 @@ export default {
     TheCreateClassDialog,
     TheOnboardingSnackbar,
     TheGreeting,
+    TheLoadingOverlay,
     TheFooter,
   },
   middleware: ['auth'],

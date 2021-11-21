@@ -11,7 +11,7 @@
       <v-tab> Grades </v-tab>
       <v-tab> Settings </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tab">
+    <v-tabs-items v-model="tab" style="background-color: #fafafa">
       <v-tab-item>
         <!-- ASSIGNMENTS xx -->
         <v-container>

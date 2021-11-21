@@ -1,17 +1,18 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const groupId = data.groupId
+  const secret = data.secret
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Update(q.Ref(q.Collection('Group'), groupId), {
       data: {
-        active: false,
+        active: true,
       },
     })
     const data = await keyedClient.query(qry)

@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <v-row v-if="groups.length === 0" style="height: 60vh">
+    <!-- Empty state xx -->
+    <v-row
+      v-if="groups.length === 0 && !$fetchState.pending"
+      style="height: 60vh"
+    >
       <v-col cols="12" class="d-flex justify-center align-center">
         <div class="text-center">
           <v-img
@@ -20,7 +24,7 @@
     </v-row>
     <v-row v-else class="justify-center mt-2">
       <v-col v-for="(group, i) in groups" :key="i" cols="12" md="4">
-        <v-card hover outlined @click="navTo(group.id)">
+        <v-card hover outlined @click="nav(group.id)">
           <v-card-title>
             {{ group.name }}
           </v-card-title>
@@ -69,7 +73,7 @@ export default {
     this.$store.commit('app/setPageTitle', 'Archive')
   },
   methods: {
-    navTo(groupId) {
+    nav(groupId) {
       this.$store.commit('user/setActiveGroupId', groupId)
       this.$router.push(`/group/${groupId}`)
     },

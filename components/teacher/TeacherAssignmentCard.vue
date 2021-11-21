@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined class="mb-4" hover @click="nav()">
+  <v-card class="mb-4" hover @click="nav()">
     <v-card-title class="d-flex justify-space-between">
       {{ assignment.name }}
       <v-menu offset-y>
@@ -21,7 +21,7 @@
           </v-list-item> -->
           <v-list-item class="px-0">
             <v-list-item-title>
-              <the-delete-assignment-dialog :assignment-id="assignment.id" />
+              <the-delete-assignment-dialog :assignment="assignment" />
             </v-list-item-title>
           </v-list-item>
         </v-list>

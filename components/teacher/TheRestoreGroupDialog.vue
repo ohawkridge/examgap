@@ -5,12 +5,12 @@
         <template #activator="{ on: tool }">
           <v-chip color="error" label class="mr-2" v-on="{ ...tool, ...dial }">
             <font-awesome-icon
-              icon="fa-light fa-circle-check"
+              icon="fa-light fa-box-archive"
               class="mr-2 fa-lg"
             />
             Archived
             <font-awesome-icon
-              icon="fa-light fa-box-archive"
+              icon="fa-light fa-circle-check"
               class="ml-2 fa-lg"
             />
           </v-chip>
@@ -23,7 +23,10 @@
         Restore class?
       </v-card-title>
       <v-card-text>
-        <p>Restore this class from the archive?</p>
+        <p>
+          Restored classes can get new assignments and appear in the 'Classes'
+          sidebar.
+        </p>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
           <v-btn

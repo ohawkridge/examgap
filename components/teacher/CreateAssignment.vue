@@ -340,7 +340,7 @@ export default {
             students: this.selectedStudents,
             questions: this.selected,
           })
-          this.$router.push(`/report/${this.group.assignments[0].id}`)
+          this.$router.push(`/group/${this.group.id}`)
           this.$snack.showMessage({
             type: 'success',
             msg: 'Assignment created',

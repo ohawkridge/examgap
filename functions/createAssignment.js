@@ -43,11 +43,48 @@ exports.handler = async (event) => {
             })
           )
         ),
-        assignment: q.Var('assignment'),
+        // Merge assignment with additional needed fields for UI cards
+        assignment: q.Merge(q.Select('data', q.Var('assignment')), {
+          id: q.Select(['ref', 'id'], q.Var('assignment')),
+          numStudents: q.Count(
+            q.Match(
+              q.Index('assignment_students'),
+              q.Select('ref', q.Var('assignment'))
+            )
+          ),
+          numQuestions: q.Count(
+            q.Select(['data', 'questions'], q.Var('assignment'))
+          ),
+          live: q.If(
+            q.LT(
+              q.ToDate(
+                // Old assignments include a time which ToDate
+                // won't be able to parse so chop it off
+                q.SubString(
+                  q.Select(['data', 'dateDue'], q.Var('assignment')),
+                  0,
+                  10
+                )
+              ),
+              q.ToDate(q.Now())
+            ),
+            false,
+            true
+          ),
+          group: q.Let(
+            {
+              instance: q.Get(q.Select(['data', 'group'], q.Var('assignment'))),
+            },
+            {
+              id: q.Select(['ref', 'id'], q.Var('instance')),
+              name: q.Select(['data', 'name'], q.Var('instance')),
+            }
+          ),
+        }),
       }
     )
     const response = await keyedClient.query(qry)
-    // console.log(response)
+    console.log(response.assignment)
     return {
       statusCode: 200,
       body: JSON.stringify(response.assignment),

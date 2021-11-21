@@ -86,17 +86,13 @@ const actions = {
     commit('setQuote', response)
   },
   // Try to obtain user document with credentials
-  async getUser(
-    { state, getters, dispatch, commit },
-    { username, password, database = 'prod' }
-  ) {
+  async getUser({ state, getters, dispatch, commit }, { username, password }) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
         username,
         password,
-        database,
       }),
       method: 'POST',
     })
@@ -113,13 +109,14 @@ const actions = {
     if (!state.teacher) {
       const courseId = getters.activeGroup.course.id
       await dispatch('topics/getTopics', courseId, { root: true })
-      await dispatch('getQuote')
+      // await dispatch('getQuote')
     }
     commit('app/setLoading', false, { root: true })
   },
   // Get groups and assignments
   // If !active, get archived groups
   async getGroups({ rootState, commit }, active = true) {
+    commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getGroups', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -144,6 +141,7 @@ const actions = {
     if (rootState.user.groups.length === 0) {
       commit('app/setOnboardStep', 1, { root: true })
     }
+    commit('app/setLoading', false, { root: true })
   },
   async archiveGroup({ commit, rootState, getters }) {
     const url = new URL(
@@ -159,7 +157,8 @@ const actions = {
     })
     commit('setArchived')
   },
-  async restoreGroup({ commit, rootState, getters }, groupId) {
+  async restoreGroup({ commit, rootState }, groupId) {
+    console.log('Restoring', groupId)
     const url = new URL(
       '/.netlify/functions/restoreClass',
       this.$config.baseURL
@@ -221,22 +220,22 @@ const actions = {
     // Clear pre-fetched topic data
     commit('topics/resetState', null, { root: true })
   },
-  async createAssignment({ commit }, obj) {
+  async createAssignment({ commit, getters }, obj) {
     const url = new URL(
       '/.netlify/functions/createAssignment',
       this.$config.baseURL
     )
-    let response = await fetch(url, {
+    let newAssObj = await fetch(url, {
       body: JSON.stringify(obj),
       method: 'POST',
     })
-    if (!response.ok) {
-      throw new Error(`Error creating assignment ${response.status}`)
+    if (!newAssObj.ok) {
+      throw new Error(`Error creating assignment ${newAssObj.status}`)
     }
-    response = await response.json()
+    newAssObj = await newAssObj.json()
     // Clear any previously selected questions
     commit('topics/clearSelectedQuestions', null, { root: true })
-    commit('addAssignment', response)
+    commit('addAssignment', { newAssObj, group: getters.activeGroup })
   },
   async deleteAssignment({ commit, rootState, getters }, assignmentId) {
     const url = new URL(
@@ -336,17 +335,9 @@ const mutations = {
   setRevisionExamMode(state, val) {
     state.reviseExamMode = val
   },
-  addAssignment(state, assignment) {
-    const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+  addAssignment(state, { newAssObj, group }) {
     // Add assignment to *front* of assignments array for group
-    state.groups[i].assignments.unshift({
-      dateDue: assignment.data.dateDue,
-      id: assignment.ref['@ref'].id,
-      name: assignment.data.name,
-      start: assignment.data.start,
-      numQuestions: assignment.data.questions.length,
-      live: true,
-    })
+    group.assignments.unshift({ ...newAssObj })
   },
   deleteAssignment(state, { group, assignmentId }) {
     // group = current active group passed by action

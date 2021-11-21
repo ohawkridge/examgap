@@ -15,24 +15,25 @@
         Delete assignment?
       </v-card-title>
       <v-card-text>
-        <p>
-          This assignment and all the responses that go with it will be deleted.
-          This action <em>cannot</em> be undone.
-        </p>
-        <div class="d-flex justify-end">
-          <v-btn text rounded @click="dialog = false">Cancel</v-btn>
-          <v-btn
-            color="error"
-            elevation="0"
-            rounded
-            :loading="loading"
-            :disabled="loading"
-            class="ml-2"
-            @click="deleteAssignment()"
-          >
-            Delete Assignment</v-btn
-          >
-        </div>
+        <!-- TODO Does not work -->
+        <v-form @submit.prevent="deleteAssignment()">
+          <p>
+            This assignment and all the responses that go with it will be
+            deleted. This action <em>cannot</em> be undone.
+          </p>
+          <div class="d-flex justify-end">
+            <v-btn text rounded @click="dialog = false">Cancel</v-btn>
+            <v-btn
+              color="error"
+              elevation="0"
+              rounded
+              class="ml-2"
+              type="submit"
+            >
+              Delete Assignment</v-btn
+            >
+          </div>
+        </v-form>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -41,9 +42,9 @@
 <script>
 export default {
   props: {
-    assignmentId: {
-      type: String,
-      default: '',
+    assignment: {
+      type: Object,
+      default: () => {},
     },
     type: {
       type: String,
@@ -60,10 +61,11 @@ export default {
     async deleteAssignment() {
       try {
         this.loading = true
-        await this.$store.dispatch('user/deleteAssignment', this.assignmentId)
-        // If on assignment detail, go back to _group.vue
-        if (this.$route.name !== 'group-group') {
-          this.$router.push(`/group/${this.groupId}`)
+        await this.$store.dispatch('user/deleteAssignment', this.assignment.id)
+        // If on _report.vue, go back to _group.vue
+        // Otherwise, stay put
+        if (this.$route.name !== 'report-report') {
+          this.$router.push(`/group/${this.assignment.group.id}`)
         }
         this.$snack.showMessage({
           type: 'success',
