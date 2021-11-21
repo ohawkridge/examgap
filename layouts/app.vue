@@ -98,10 +98,15 @@
         </template>
         <span>{{ drawer ? 'Hide menu' : 'Show menu' }}</span>
       </v-tooltip>
-      <v-container class="d-flex justify-space-between align-center">
-        <span class="font-weight-medium"> {{ pageTitle }} </span>
+      <div
+        class="d-flex justify-space-between align-center"
+        style="width: 100%"
+      >
+        <span class="text-subtitle-1 font-weight-medium">
+          {{ pageTitle }}
+        </span>
         <div id="headway"></div>
-      </v-container>
+      </div>
     </v-app-bar>
     <v-main style="background-color: #fafafa">
       <nuxt />

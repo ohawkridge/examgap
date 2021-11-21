@@ -20,6 +20,11 @@
               cols="12"
               md="10"
               class="d-flex justify-space-between align-center"
+              :class="
+                $vuetify.breakpoint.name === 'xs'
+                  ? 'flex-column flex-column-reverse'
+                  : ''
+              "
             >
               <the-restore-group-dialog
                 v-if="!group.active"
@@ -36,6 +41,8 @@
                       color="primary"
                       elevation="0"
                       rounded
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      :class="$vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''"
                       @click="addAssign()"
                       v-on="on"
                     >

@@ -4,7 +4,7 @@
       <template #activator="{ on }">
         <v-card
           outlined
-          class="mb-4"
+          :class="$vuetify.breakpoint.name === 'xs' ? '' : 'mb-4'"
           hover
           height="100"
           @click="revise()"

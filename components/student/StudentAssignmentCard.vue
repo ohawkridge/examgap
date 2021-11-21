@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined class="mb-4" hover @click="nav()">
+  <v-card outlined class="mb-4 ass-card" hover @click="nav()">
     <v-card-title class="d-flex justify-space-between">
       {{ assignment.name }}
     </v-card-title>
@@ -41,5 +41,15 @@ export default {
 .align-date {
   display: inline-block;
   width: 72px;
+}
+@media only screen and (max-width: 600px) {
+  .align-date {
+    display: inline-block;
+    width: 60px;
+  }
+}
+
+.ass-card {
+  border-left: 3px solid #0099cc;
 }
 </style>

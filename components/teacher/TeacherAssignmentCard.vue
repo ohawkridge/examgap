@@ -124,6 +124,12 @@ export default {
   display: inline-block;
   width: 72px;
 }
+@media only screen and (max-width: 600px) {
+  .align-date {
+    display: inline-block;
+    width: 60px;
+  }
+}
 
 /* Does not work external */
 .ico-btn {

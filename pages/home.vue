@@ -12,7 +12,7 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="12" md="10" class="d-flex justify-start pb-10">
+          <v-col cols="12" md="10">
             <template v-for="(group, i) in groups">
               <v-tooltip :key="i" bottom>
                 <template #activator="{ on }">
@@ -21,8 +21,9 @@
                     large
                     rounded
                     outlined
+                    :block="$vuetify.breakpoint.name === 'xs'"
                     color="primary darken-1"
-                    class="mr-4"
+                    :class="$vuetify.breakpoint.name !== 'xs' ? 'mr-4' : 'mb-3'"
                     @click="addAssign(group)"
                     v-on="on"
                   >
@@ -75,10 +76,18 @@
       </v-tabs>
       <v-tabs-items v-model="tab">
         <!-- Assignments xx -->
-        <v-tab-item>
+        <v-tab-item style="background-color: #fafafa">
           <v-container>
             <v-row class="justify-center">
-              <v-col cols="12" md="10">
+              <v-col
+                cols="12"
+                md="10"
+                :class="
+                  $vuetify.breakpoint.name === 'xs'
+                    ? 'd-flex justify-center'
+                    : ''
+                "
+              >
                 <v-btn-toggle v-model="upcoming" color="primary" mandatory>
                   <v-btn outlined> Upcoming </v-btn>
                   <v-btn outlined min-width="110"> Past </v-btn>
@@ -98,9 +107,9 @@
           </v-container>
         </v-tab-item>
         <!-- Revision xx -->
-        <v-tab-item>
+        <v-tab-item style="background-color: #fafafa">
           <v-container>
-            <v-row class="pt-8">
+            <v-row class="pt-3 md-pt-8">
               <revision-topic-card
                 v-for="(topic, i) in topics"
                 :key="i"

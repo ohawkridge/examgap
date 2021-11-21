@@ -41,15 +41,15 @@
                 <v-btn icon v-on="on">
                   <font-awesome-icon
                     icon="fa-light fa-ellipsis-vertical"
-                    class="fa-lg"
+                    class="ico-btn"
                   />
                 </v-btn>
               </template>
               <v-list>
                 <v-list-item>
-                  <v-list-item-title @click="refresh()"
-                    >Refresh</v-list-item-title
-                  >
+                  <v-list-item-title @click="refresh()">
+                    Refresh
+                  </v-list-item-title>
                 </v-list-item>
                 <the-delete-assignment-dialog
                   v-if="!$fetchState.pending && group"
@@ -61,7 +61,7 @@
           </div>
         </div>
         <div class="mt-4 ml-11">
-          <div class="d-flex align-center mb-3">
+          <div class="d-flex align-center mb-1">
             <span class="font-weight-medium date-wid">Start:</span>
             {{ assignment.start | date }}
           </div>
@@ -333,48 +333,6 @@
                 "
               >
                 Feedback
-                <v-menu open-on-hover offset-y>
-                  <template #activator="{ on }">
-                    <v-btn icon v-on="on">
-                      <font-awesome-icon
-                        icon="fa-light fa-comment-smile"
-                        class="fa-lg"
-                      />
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item @click="insert('😀')">
-                      <v-list-item-content>
-                        <v-list-item-title> 😀 </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item @click="insert('😕')">
-                      <v-list-item-content>
-                        <v-list-item-title> 😕 </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item @click="insert('🤔')">
-                      <v-list-item-content>
-                        <v-list-item-title> 🤔 </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item @click="insert('👍')">
-                      <v-list-item-content>
-                        <v-list-item-title> 👍 </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item @click="insert('🎉')">
-                      <v-list-item-content>
-                        <v-list-item-title> 🎉 </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item @click="insert('👀')">
-                      <v-list-item-content>
-                        <v-list-item-title> 👀 </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
               </p>
               <!-- N.B. update is debounced method -->
               <v-textarea
@@ -594,24 +552,6 @@ export default {
     )
   },
   methods: {
-    // Insert emoji into feedback
-    // https://codepen.io/1da2/pen/RwWbROE
-    insert(char) {
-      const textarea = this.$refs.fbArea.$refs.input
-      const sentence = textarea.value
-      const len = sentence.length
-      let pos = textarea.selectionStart
-      if (pos === undefined) {
-        pos = 0
-      }
-      const before = sentence.substr(0, pos)
-      const after = sentence.substr(pos, len)
-      this.feedback = before + char + after
-      this.$nextTick().then(() => {
-        textarea.selectionStart = pos + char.length
-      })
-      this.saveFeedback()
-    },
     swipeStart(e) {
       if (e !== undefined) {
         if (typeof e.targetTouches !== 'undefined') {
