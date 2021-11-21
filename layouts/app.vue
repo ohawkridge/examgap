@@ -8,7 +8,7 @@
         <the-greeting />
       </div>
       <v-list dense nav>
-        <v-list-item @click="$nuxt.$emit('show-create')">
+        <v-list-item v-if="teacher" @click="$nuxt.$emit('show-create')">
           <v-list-item-icon class="d-flex justify-center align-center">
             <font-awesome-icon icon="fa-light fa-plus fa-lg" />
           </v-list-item-icon>
@@ -98,7 +98,7 @@
         </template>
         <span>{{ drawer ? 'Hide menu' : 'Show menu' }}</span>
       </v-tooltip>
-      <v-container class="d-flex justify-space-between align-center mob-right">
+      <v-container class="d-flex justify-space-between align-center">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
         <div id="headway"></div>
       </v-container>
@@ -109,7 +109,6 @@
       <the-onboarding-snackbar v-if="teacher" />
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
-      <the-loading-overlay />
     </v-main>
     <the-footer />
   </v-app>
@@ -123,7 +122,6 @@ import TheFooter from '@/components/common/TheFooter'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
-import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheGreeting from '@/components/common/TheGreeting'
 
 export default {
@@ -134,7 +132,6 @@ export default {
     TheJoinDialog,
     TheCreateClassDialog,
     TheOnboardingSnackbar,
-    TheLoadingOverlay,
     TheGreeting,
     TheFooter,
   },
@@ -186,11 +183,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-@media only screen and (max-width: 600px) {
-  .mob-right {
-    padding-right: 0px;
-  }
-}
-</style>

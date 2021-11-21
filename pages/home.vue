@@ -47,35 +47,7 @@
         </v-row>
         <v-row class="justify-center">
           <v-col cols="12" md="9">
-            <!-- Skeletons -->
-            <template v-if="loading">
-              <v-sheet v-for="i in 3" :key="i" elevation="1" class="pa-4 mb-4">
-                <v-skeleton-loader
-                  type="heading"
-                  class="mt-2"
-                  :loading="true"
-                ></v-skeleton-loader>
-                <v-skeleton-loader
-                  type="text"
-                  :loading="true"
-                  width="20%"
-                  class="mt-3"
-                ></v-skeleton-loader>
-                <v-skeleton-loader
-                  type="text"
-                  :loading="true"
-                  width="35%"
-                  class="mt-8"
-                ></v-skeleton-loader>
-                <v-skeleton-loader
-                  type="text"
-                  :loading="true"
-                  width="35%"
-                  class="mt-3"
-                ></v-skeleton-loader>
-              </v-sheet>
-            </template>
-            <template v-for="(assignment, i) in recent" v-else>
+            <template v-for="(assignment, i) in recent">
               <teacher-assignment-card :key="i" :assignment="assignment" />
             </template>
           </v-col>
@@ -107,60 +79,22 @@
           <v-container>
             <v-row class="justify-center">
               <v-col cols="12" md="10">
-                <v-btn-toggle
-                  v-model="upcoming"
-                  color="primary"
-                  mandatory
-                  borderless
-                >
-                  <v-btn> Upcoming </v-btn>
-                  <v-btn min-width="110"> Past </v-btn>
+                <v-btn-toggle v-model="upcoming" color="primary" mandatory>
+                  <v-btn outlined> Upcoming </v-btn>
+                  <v-btn outlined min-width="110"> Past </v-btn>
                 </v-btn-toggle>
               </v-col>
             </v-row>
-            <v-row class="justify-center">
+            <v-row v-if="assignments.length > 0" class="justify-center">
               <v-col cols="12" md="10">
-                <!-- Skeletons -->
-                <template v-if="loading">
-                  <v-sheet
-                    v-for="i in 3"
-                    :key="i"
-                    elevation="1"
-                    class="pa-4 mb-4"
-                  >
-                    <v-skeleton-loader
-                      type="heading"
-                      class="mt-2"
-                      :loading="true"
-                    ></v-skeleton-loader>
-                    <v-skeleton-loader
-                      type="text"
-                      :loading="true"
-                      width="20%"
-                      class="mt-3"
-                    ></v-skeleton-loader>
-                    <v-skeleton-loader
-                      type="text"
-                      :loading="true"
-                      width="35%"
-                      class="mt-8"
-                    ></v-skeleton-loader>
-                    <v-skeleton-loader
-                      type="text"
-                      :loading="true"
-                      width="35%"
-                      class="mt-3"
-                    ></v-skeleton-loader>
-                  </v-sheet>
-                </template>
                 <student-assignment-card
                   v-for="(assignment, i) in assignments"
-                  v-else
                   :key="i"
                   :assignment="assignment"
                 />
               </v-col>
             </v-row>
+            <the-empty-assignment-state v-else />
           </v-container>
         </v-tab-item>
         <!-- Revision -->
@@ -206,12 +140,14 @@ import { mapState, mapGetters } from 'vuex'
 import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
+import TheEmptyAssignmentState from '~/components/student/TheEmptyAssignmentState.vue'
 
 export default {
   components: {
     TheRevisionModeDialog,
     TeacherAssignmentCard,
     StudentAssignmentCard,
+    TheEmptyAssignmentState,
   },
   layout: 'app',
   data() {
@@ -227,10 +163,10 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
-      loading: (state) => state.app.loading,
       topics: (state) => state.topics.topics,
     }),
     assignments() {
+      if (this.group === undefined) return []
       return this.group.assignments.filter((a) => a.live === !this.upcoming)
     },
     // Remember active tab

@@ -29,6 +29,11 @@ export default {
       default: () => {},
     },
   },
+  methods: {
+    nav() {
+      this.$router.push(`/assignment/${this.assignment.id}`)
+    },
+  },
 }
 </script>
 

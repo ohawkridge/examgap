@@ -26,14 +26,9 @@
                 :group-id="group.id"
               />
               <template v-else>
-                <v-btn-toggle
-                  v-model="upcoming"
-                  color="primary"
-                  mandatory
-                  borderless
-                >
-                  <v-btn> Upcoming </v-btn>
-                  <v-btn min-width="110"> Past </v-btn>
+                <v-btn-toggle v-model="upcoming" color="primary" mandatory>
+                  <v-btn outlined> Upcoming </v-btn>
+                  <v-btn outlined min-width="110"> Past </v-btn>
                 </v-btn-toggle>
                 <v-tooltip bottom>
                   <template #activator="{ on }">
