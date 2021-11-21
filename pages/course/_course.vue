@@ -9,7 +9,7 @@
           :types="{ list: 'list-item-two-line@6' }"
         >
         </v-skeleton-loader>
-        <v-list v-else nav>
+        <v-list v-else id="topics" nav>
           <v-list-item-group v-model="currentTopicIndex" color="primary">
             <v-list-item
               v-for="(topic, i) in topics"
@@ -37,7 +37,7 @@
           :types="{ list: 'list-item-two-line@8' }"
         >
         </v-skeleton-loader>
-        <v-list v-else id="q-list">
+        <v-list v-else id="questions">
           <v-list-item-group v-model="selectedQuestion">
             <template v-for="(q, i) in questions">
               <v-list-item :key="i" :value="i">
@@ -75,7 +75,7 @@
             </template>
             <v-list-item v-if="noQuestions">
               <v-list-item-icon>
-                <font-awesome-icon icon="fa-light fa-circle-info" />
+                <font-awesome-icon icon="fa-light fa-circle-info" class="xx" />
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title> No questions yet </v-list-item-title>
@@ -117,6 +117,7 @@
                 nuxt
                 :to="`/question/${question.id}`"
                 rounded
+                text
                 elevation="0"
                 small
                 class="mr-2"
@@ -129,6 +130,7 @@
                     rounded
                     elevation="0"
                     small
+                    :text="selected.includes(question.id) ? false : true"
                     :color="selected.includes(question.id) ? 'green' : ''"
                     :dark="selected.includes(question.id) ? true : false"
                     v-on="on"
@@ -301,12 +303,16 @@ export default {
 </script>
 
 <style scoped>
-#q-list {
-  max-height: 800px;
+#topics {
+  background-color: #fafafa;
+}
+
+#questions {
+  background-color: #fafafa;
+  max-height: 700px;
   overflow-y: scroll;
 }
 
-/* Force icon to right size */
 .xx {
   height: 18px;
   width: 18px;

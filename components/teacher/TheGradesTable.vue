@@ -1,51 +1,66 @@
 <template>
   <v-container>
-    <div class="d-flex justify-end">
-      <v-tooltip bottom>
-        <template #activator="{ on }">
-          <v-btn elevation="0" rounded @click="exportTableToCSV()" v-on="on">
-            Csv
-            <font-awesome-icon
-              icon="fa-light fa-arrow-down-to-line"
-              class="ml-2"
-            />
+    <v-row>
+      <v-col cols="12">
+        <div class="d-flex justify-end">
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                elevation="0"
+                rounded
+                text
+                @click="exportTableToCSV()"
+                v-on="on"
+              >
+                Csv
+                <font-awesome-icon
+                  icon="fa-light fa-arrow-down-to-line"
+                  class="ml-2"
+                />
+              </v-btn>
+            </template>
+            <span>Download csv</span>
+          </v-tooltip>
+          <v-btn
+            class="d-none d-sm-flex ml-2"
+            elevation="0"
+            rounded
+            text
+            @mouseover="scroll"
+            @mouseleave="stop"
+            @mouseup="stop"
+          >
+            Scroll
+            <font-awesome-icon icon="fa-light fa-arrow-right" class="ml-2" />
           </v-btn>
-        </template>
-        <span>Download csv</span>
-      </v-tooltip>
-      <v-btn
-        class="d-none d-sm-flex ml-2"
-        elevation="0"
-        rounded
-        @mouseover="scroll"
-        @mouseleave="stop"
-        @mouseup="stop"
-      >
-        Scroll
-        <font-awesome-icon icon="fa-light fa-arrow-right" class="ml-2" />
-      </v-btn>
-    </div>
-    <v-data-table
-      :headers="grades.headers"
-      :items="grades.data"
-      :loading="$fetchState.pending"
-      loading-text="Loading grades..."
-      no-data-text="No data yet"
-      hide-default-footer
-      disable-pagination
-      sort-by="username"
-    >
-      <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
-        <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
-        <v-chip
-          v-else
-          :key="i"
-          :color="ragX(item[obj], grades.headers[i + 2].max, item.target)"
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-data-table
+          :headers="grades.headers"
+          :items="grades.data"
+          :loading="$fetchState.pending"
+          loading-text="Loading grades..."
+          no-data-text="No data yet"
+          hide-default-footer
+          disable-pagination
+          sort-by="username"
         >
-          {{ item[obj] }}
-        </v-chip>
-      </template>
-    </v-data-table>
+          <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
+            <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
+            <v-chip
+              v-else
+              :key="i"
+              :color="ragX(item[obj], grades.headers[i + 2].max, item.target)"
+            >
+              {{ item[obj] }}
+            </v-chip>
+          </template>
+        </v-data-table>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

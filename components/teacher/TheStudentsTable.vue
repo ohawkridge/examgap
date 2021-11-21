@@ -1,155 +1,169 @@
 <template>
   <v-container>
-    <div class="flex-xs-column d-sm-flex justify-space-between align-center">
-      <v-menu offset-y open-on-hover>
-        <template #activator="{ on }">
+    <v-row>
+      <v-col
+        cols="12"
+        class="flex-xs-column d-sm-flex justify-space-between align-center"
+      >
+        <v-menu offset-y open-on-hover>
+          <template #activator="{ on }">
+            <v-btn
+              class="mr-2 mb-2 mb-sm-0"
+              elevation="0"
+              :block="$vuetify.breakpoint.name === 'xs'"
+              rounded
+              text
+              v-on="on"
+            >
+              Actions
+              <font-awesome-icon icon="fa-light fa-angle-down" class="ml-2" />
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item :disabled="selected.length === 0" @click="reset()">
+              <v-list-item-title>
+                Reset password{{ selected.length | pluralize }}
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="$nuxt.$emit('open-add')">
+              <v-list-item-title>Add students</v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              :disabled="selected.length === 0"
+              @click="$nuxt.$emit('open-remove')"
+            >
+              <v-list-item-title>
+                Remove student{{ selected.length | pluralize }}
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              :disabled="selected.length === 0"
+              @click="$nuxt.$emit('open-copy')"
+            >
+              <v-list-item-title>
+                Copy student{{ selected.length | pluralize }}
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <div>
           <v-btn
-            class="mr-2 mb-2 mb-sm-0"
+            elevation="0"
+            rounded
+            text
+            :block="$vuetify.breakpoint.name === 'xs'"
+            class="mb-2 mb-sm-0 mr-2"
+            @click="$nuxt.$emit('show-invite')"
+          >
+            Invite Students
+          </v-btn>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                :to="`/logins/${group.id}`"
+                class="mr-2 mb-2 mb-sm-0"
+                :class="xsBtns"
+                elevation="0"
+                rounded
+                text
+                :block="$vuetify.breakpoint.name === 'xs'"
+                v-on="on"
+              >
+                Logins
+              </v-btn>
+            </template>
+            <span>Print logins</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                elevation="0"
+                class="mr-2 mb-2 mb-sm-0"
+                :class="xsBtns"
+                :block="$vuetify.breakpoint.name === 'xs'"
+                rounded
+                text
+                @click="exportTableToCSV()"
+                v-on="on"
+              >
+                Csv
+                <font-awesome-icon
+                  icon="fa-light fa-arrow-down-to-line"
+                  class="ml-2"
+                />
+              </v-btn>
+            </template>
+            <span>Download csv</span>
+          </v-tooltip>
+          <v-btn
             elevation="0"
             :block="$vuetify.breakpoint.name === 'xs'"
+            :class="xsBtns"
             rounded
-            v-on="on"
+            text
+            @click="$fetch()"
           >
-            Actions
-            <font-awesome-icon icon="fa-light fa-angle-down" class="ml-2" />
+            Refresh
           </v-btn>
-        </template>
-        <v-list>
-          <v-list-item :disabled="selected.length === 0" @click="reset()">
-            <v-list-item-title>
-              Reset password{{ selected.length | pluralize }}
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="$nuxt.$emit('open-add')">
-            <v-list-item-title>Add students</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            :disabled="selected.length === 0"
-            @click="$nuxt.$emit('open-remove')"
-          >
-            <v-list-item-title>
-              Remove student{{ selected.length | pluralize }}
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            :disabled="selected.length === 0"
-            @click="$nuxt.$emit('open-copy')"
-          >
-            <v-list-item-title>
-              Copy student{{ selected.length | pluralize }}
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <div>
-        <v-btn
-          elevation="0"
-          rounded
-          :block="$vuetify.breakpoint.name === 'xs'"
-          class="mb-2 mb-sm-0 mr-2"
-          @click="$nuxt.$emit('show-invite')"
-        >
-          Invite Students
-        </v-btn>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn
-              :to="`/logins/${group.id}`"
-              class="mr-2 mb-2 mb-sm-0"
-              :class="xsBtns"
-              elevation="0"
-              rounded
-              :block="$vuetify.breakpoint.name === 'xs'"
-              v-on="on"
-            >
-              Logins
-            </v-btn>
-          </template>
-          <span>Print logins</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn
-              elevation="0"
-              class="mr-2 mb-2 mb-sm-0"
-              :class="xsBtns"
-              :block="$vuetify.breakpoint.name === 'xs'"
-              rounded
-              @click="exportTableToCSV()"
-              v-on="on"
-            >
-              Csv
-              <font-awesome-icon
-                icon="fa-light fa-arrow-down-to-line"
-                class="ml-2"
-              />
-            </v-btn>
-          </template>
-          <span>Download csv</span>
-        </v-tooltip>
-        <v-btn
-          elevation="0"
-          :block="$vuetify.breakpoint.name === 'xs'"
-          :class="xsBtns"
-          rounded
-          @click="$fetch()"
-        >
-          Refresh
-        </v-btn>
-      </div>
-    </div>
-    <v-data-table
-      v-model="selected"
-      :headers="headers"
-      :items="students"
-      checkbox-color="primary"
-      item-key="id"
-      hide-default-footer
-      disable-pagination
-      show-select
-      :loading="$fetchState.pending"
-      loading-text="Loading students..."
-    >
-      <template #no-data>
-        <!-- Empty state -->
-        <div style="height: 60vh" class="mt-10">
-          <v-img
-            src="/no-student.svg"
-            contain
-            max-width="200"
-            alt="Mortar board illustration"
-            class="mx-auto"
-          />
-          <p class="text-h6 mt-8">No students yet</p>
-          <p>
-            Click 'INVITE STUDENTS', or Actions → Add students to get started.
-          </p>
         </div>
-      </template>
-      <template #[`item.target`]="props">
-        <v-edit-dialog>
-          <!-- groupId is the key into target object -->
-          <!-- Different targets for each group -->
-          {{ props.item.target[`${group.id}`] }}
-          <template #input>
-            <div class="mt-4 text-h6">Target</div>
-            <v-text-field
-              :value="props.item.target[`${group.id}`]"
-              :rules="targetRules"
-              single-line
-              label="Target"
-              placeholder="5"
-              class="mb-4"
-              @keyup.enter="save(props.item.id, $event.target.value)"
-            ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-data-table
+          v-model="selected"
+          :headers="headers"
+          :items="students"
+          checkbox-color="primary"
+          item-key="id"
+          hide-default-footer
+          disable-pagination
+          show-select
+          :loading="$fetchState.pending"
+          loading-text="Loading students..."
+        >
+          <template #no-data>
+            <!-- Empty state -->
+            <div style="height: 60vh" class="mt-10">
+              <v-img
+                src="/no-student.svg"
+                contain
+                max-width="200"
+                alt="Mortar board illustration"
+                class="mx-auto"
+              />
+              <p class="text-h6 mt-8">No students yet</p>
+              <p>
+                Click 'INVITE STUDENTS', or Actions → Add students to get
+                started.
+              </p>
+            </div>
           </template>
-        </v-edit-dialog>
-      </template>
-    </v-data-table>
-    <v-chip v-if="students.length > 0" label outlined small class="ma-4">
-      {{ students.length }} Student{{ students.length | pluralize }}
-    </v-chip>
-    <!-- Action components -->
+          <template #[`item.target`]="props">
+            <v-edit-dialog>
+              <!-- groupId is the key into target object -->
+              <!-- Different targets for each group -->
+              {{ props.item.target[`${group.id}`] }}
+              <template #input>
+                <div class="mt-4 text-h6">Target</div>
+                <v-text-field
+                  :value="props.item.target[`${group.id}`]"
+                  :rules="targetRules"
+                  single-line
+                  label="Target"
+                  placeholder="5"
+                  class="mb-4"
+                  @keyup.enter="save(props.item.id, $event.target.value)"
+                ></v-text-field>
+              </template>
+            </v-edit-dialog>
+          </template>
+        </v-data-table>
+        <v-chip v-if="students.length > 0" label outlined small class="ma-4">
+          {{ students.length }} Student{{ students.length | pluralize }}
+        </v-chip>
+      </v-col>
+    </v-row>
     <the-add-students-dialog />
     <the-remove-dialog :selected="selected" />
     <the-copy-student-dialog :selected="selected" />

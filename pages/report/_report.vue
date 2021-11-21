@@ -31,9 +31,8 @@
                 v-if="!$fetchState.pending && group"
                 :assignment-id="assignment.id"
                 :group-id="group.id"
-                type="btn"
               />
-              <v-btn elevation="0" rounded class="ml-2" @click="refresh()">
+              <v-btn elevation="0" rounded text class="ml-2" @click="refresh()">
                 Refresh
               </v-btn>
             </div>
@@ -73,15 +72,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-skeleton-loader
-      v-if="$fetchState.pending"
-      :loading="true"
-      type="table"
-      :types="{ table: 'table-thead, table-tbody' }"
-      class="pa-4"
-    >
-    </v-skeleton-loader>
-    <table v-else id="table">
+    <table v-if="!$fetchState.pending" id="table">
       <thead>
         <tr v-if="!$fetchState.pending">
           <th
@@ -476,10 +467,11 @@ export default {
     }
   },
   async fetch() {
-    // Dispatch action to get data if not already in store
     const reportId = this.$store.state.assignment.assignment.id
     const paramId = this.$route.params.report
+    // Dispatch action to get data if not already in store
     if (this.forceRefresh || reportId !== paramId) {
+      this.$store.commit('app/setLoading', true)
       try {
         await this.$store.dispatch(
           'assignment/getReport',
@@ -491,6 +483,8 @@ export default {
           type: 'error',
           msg: 'Error fetching data',
         })
+      } finally {
+        this.$store.commit('app/setLoading', false)
       }
     }
     this.forceRefresh = false
@@ -865,7 +859,7 @@ div.v-list {
 }
 
 .date-wid {
-  width: 52px;
+  width: 72px;
 }
 
 /* Does not work external */

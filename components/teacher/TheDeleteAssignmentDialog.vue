@@ -1,14 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
     <template #activator="{ on }">
-      <v-list-item v-if="type === 'item'" v-on="on">
-        <v-list-item-content>
-          <v-list-item-title class="red--text"> Delete </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-btn v-else rounded text color="red" @click="dialog = true">
-        Delete
-      </v-btn>
+      <v-btn rounded text color="red" v-on="on"> Delete </v-btn>
     </template>
     <v-card>
       <v-card-title class="d-flex justify-center">
@@ -26,6 +19,8 @@
             <v-btn
               color="error"
               elevation="0"
+              :loading="loading"
+              :disabled="loading"
               rounded
               class="ml-2"
               type="submit"
@@ -42,13 +37,13 @@
 <script>
 export default {
   props: {
-    assignment: {
-      type: Object,
-      default: () => {},
-    },
-    type: {
+    assignmentId: {
       type: String,
-      default: 'item', // Show button or v-list-item?
+      default: '',
+    },
+    groupId: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -61,11 +56,12 @@ export default {
     async deleteAssignment() {
       try {
         this.loading = true
-        await this.$store.dispatch('user/deleteAssignment', this.assignment.id)
+        console.log('Deleting', this.assignmentId)
+        await this.$store.dispatch('user/deleteAssignment', this.assignmentId)
         // If on _report.vue, go back to _group.vue
         // Otherwise, stay put
-        if (this.$route.name !== 'report-report') {
-          this.$router.push(`/group/${this.assignment.group.id}`)
+        if (this.$route.name === 'report-report') {
+          this.$router.push(`/group/${this.groupId}`)
         }
         this.$snack.showMessage({
           type: 'success',

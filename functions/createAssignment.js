@@ -84,7 +84,7 @@ exports.handler = async (event) => {
       }
     )
     const response = await keyedClient.query(qry)
-    console.log(response.assignment)
+    // console.log(response.assignment)
     return {
       statusCode: 200,
       body: JSON.stringify(response.assignment),
