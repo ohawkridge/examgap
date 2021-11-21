@@ -13,136 +13,52 @@
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-list v-if="assignments.length > 0" class="py-0">
-          <v-list-item
-            v-for="(assignment, i) in assignments"
-            :key="i"
-            nuxt
-            :to="`/report/${assignment.id}`"
-            class="divide"
-          >
-            <v-list-item-content>
-              <v-row>
-                <v-col cols="12" sm="4" class="pb-0 pb-sm-3">
-                  <div class="text-subtitle-1 font-weight-medium">
-                    {{ assignment.name }}
-                  </div>
-                  <div class="text-body-2 grey--text text--darken-2">
-                    {{ assignment.num_questions }} Question{{
-                      assignment.num_questions | pluralize
-                    }}
-                  </div>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  class="
-                    d-flex
-                    flex-column flex-sm-row
-                    align-center
-                    text-body-2
-                  "
-                >
-                  <div class="justify-date left">
-                    <span class="font-weight-medium fix-date mr-1">Start:</span>
-                    {{ assignment.start | date }}
-                  </div>
-                  <div class="left">
-                    <span class="font-weight-medium fix-date mr-1">Due:</span>
-                    {{ assignment.dateDue | date }}
-                  </div>
-                </v-col>
-                <v-col
-                  v-if="$vuetify.breakpoint.name !== 'xs'"
-                  cols="2"
-                  sm="2"
-                  class="d-flex justify-center align-center"
-                >
-                  <v-chip
-                    v-if="isHidden(assignment.start)"
-                    color="orange"
-                    small
-                  >
-                    Scheduled
-                    <font-awesome-icon
-                      icon="fa-light fa-calendar-clock"
-                      class="ml-2"
-                    />
-                  </v-chip>
-                  <v-chip v-else-if="assignment.live" color="green" small>
-                    Open
-                    <font-awesome-icon
-                      icon="fa-light fa-hourglass"
-                      class="ml-2"
-                    />
-                  </v-chip>
-                  <v-chip v-else small>
-                    Past
-                    <font-awesome-icon
-                      icon="fa-light fa-hourglass-end"
-                      class="ml-2"
-                    />
-                  </v-chip>
-                </v-col>
-              </v-row>
-            </v-list-item-content>
-            <!-- item-action mobile only -->
-            <v-list-item-action v-if="$vuetify.breakpoint.name === 'xs'">
-              <v-list-item-action-text>
-                <template v-if="isHidden(assignment.start)">
-                  Scheduled
-                </template>
-                <template v-else-if="assignment.live"> Open </template>
-                <template v-else> Past </template>
-              </v-list-item-action-text>
-              <template v-if="isHidden(assignment.start)">
-                <font-awesome-icon
-                  icon="fa-light fa-calendar-clock"
-                  class="ico-orange fa-lg"
-                />
-              </template>
-              <template v-else-if="assignment.live">
-                <font-awesome-icon
-                  icon="fa-light fa-hourglass"
-                  class="ico-green fa-lg"
-                />
-              </template>
+        <!-- ASSIGNMENTS xx -->
+        <v-container>
+          <v-row class="justify-center">
+            <v-col
+              cols="12"
+              md="10"
+              class="d-flex justify-space-between align-center"
+            >
+              <the-restore-group-dialog
+                v-if="!group.active"
+                :group-id="group.id"
+              />
               <template v-else>
-                <font-awesome-icon
-                  icon="fa-light fa-hourglass-end"
-                  class="ico-grey fa-lg"
-                />
+                <v-btn-toggle v-model="upcoming" color="primary" mandatory>
+                  <v-btn outlined> Upcoming </v-btn>
+                  <v-btn outlined min-width="110"> Past </v-btn>
+                </v-btn-toggle>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      color="primary"
+                      elevation="0"
+                      rounded
+                      @click="addAssign()"
+                      v-on="on"
+                    >
+                      <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+                      Assignment
+                    </v-btn>
+                  </template>
+                  <span>Add assignment</span>
+                </v-tooltip>
               </template>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-        <!-- Empty state -->
-        <template v-if="assignments.length === 0">
-          <div class="pa-3">
-            <v-img
-              src="/no-assign.svg"
-              contain
-              :max-width="$vuetify.breakpoint.name === 'xs' ? '50%' : '20%'"
-              alt="Books and pens illustrations"
-              class="mx-auto"
-            />
-            <p class="text-center mt-2 black--text">No assignments yet</p>
-            <div class="d-flex justify-center">
-              <v-btn
-                elevation="0"
-                rounded
-                color="primary"
-                @click="createAssignment()"
-              >
-                <font-awesome-icon
-                  icon="fa-light fa-plus"
-                  class="mr-2 ico-heading"
-                />
-                Assignment
-              </v-btn>
-            </div>
-          </div>
-        </template>
+            </v-col>
+          </v-row>
+          <the-empty-assignments-state v-if="assignments.length === 0" />
+          <v-row v-else class="justify-center">
+            <v-col cols="12" md="10">
+              <teacher-assignment-card
+                v-for="assignment in assignments"
+                :key="assignment.id"
+                :assignment="assignment"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
       </v-tab-item>
       <v-tab-item>
         <the-students-table />
@@ -164,6 +80,9 @@ import TheStudentsTable from '@/components/teacher/TheStudentsTable'
 import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
+import TheEmptyAssignmentsState from '@/components/teacher/TheEmptyAssignmentsState'
+import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
+import TheRestoreGroupDialog from '~/components/teacher/TheRestoreGroupDialog.vue'
 
 export default {
   components: {
@@ -171,6 +90,9 @@ export default {
     TheGradesTable,
     TheGroupSettings,
     TheInviteDialog,
+    TheEmptyAssignmentsState,
+    TeacherAssignmentCard,
+    TheRestoreGroupDialog,
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
@@ -178,12 +100,23 @@ export default {
     next()
   },
   layout: 'app',
+  data() {
+    return {
+      upcoming: 0,
+    }
+  },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
+    // Show all assignments for archived groups
+    // Otherwise, show assignments based on toggle
     assignments() {
-      return this.group.assignments
+      if (!this.group.active) {
+        return this.group.assignments
+      } else {
+        return this.group.assignments.filter((a) => a.live === !this.upcoming)
+      }
     },
-    // Store tab state so we can access it in app.vue
+    // Remember tab state
     tab: {
       get() {
         return this.$store.state.app.groupTab
@@ -200,12 +133,20 @@ export default {
     }
     // Pre-fetch most recent assignment
     try {
-      console.time('Fetch last assignment')
+      console.log(
+        '%c' + 'Prefetch',
+        'color:#001f2a;background-color:#f4d06f;padding:4px;'
+      )
+      console.time('_report (latest)')
       await this.$store.dispatch('assignment/getReport', -1)
-      console.timeEnd('Fetch last assignment')
-      console.time('Fetch topics')
+      console.timeEnd('_report (latest)')
+      console.log(
+        '%c' + 'Prefetch',
+        'color:#001f2a;background-color:#f4d06f;padding:4px;'
+      )
+      console.time('_course')
       await this.$store.dispatch('topics/getTopics')
-      console.timeEnd('Fetch topics')
+      console.timeEnd('_course')
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -221,18 +162,9 @@ export default {
     this.$store.commit('assignment/setMarking', false)
   },
   methods: {
-    createAssignment() {
-      // Clear any previous selections
+    addAssign() {
       this.$store.commit('topics/clearSelectedQuestions')
-      // Continue onboarding if user hasn't set assignments
-      this.$store.commit(
-        'app/setOnboardStep',
-        this.assignments.length < 3 ? 4 : 0
-      )
       this.$router.push(`/course/${this.group.course.id}`)
-    },
-    isHidden(startDate) {
-      return new Date(startDate) > new Date()
     },
   },
 }

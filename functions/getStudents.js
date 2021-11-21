@@ -6,6 +6,7 @@ exports.handler = async (event) => {
   const groupId = data.groupId
   const namesOnly = data.namesOnly
   const secret = data.secret
+  console.log(`data for group`, groupId)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
@@ -59,8 +60,8 @@ exports.handler = async (event) => {
                 [],
                 q.Let(
                   {
-                    // Get all responses by this student
-                    // (Whole doc so we can filter assignments/revision)
+                    // Get all responses by this student in this group
+                    // (Whole doc so we can filter revision later)
                     responses: q.Select(
                       'data',
                       q.Map(
@@ -68,7 +69,7 @@ exports.handler = async (event) => {
                           q.Match(
                             q.Index('student_responses_by_group'),
                             q.Select('ref', q.Var('instance')), // Student
-                            q.Ref(q.Collection('Group'), groupId)
+                            q.Ref(q.Collection('Group'), groupId) // Group
                           ),
                           { size: 999 }
                         ),
@@ -88,7 +89,8 @@ exports.handler = async (event) => {
                         )
                       )
                     ),
-                    // Need later
+                    // Need later as average is calculated
+                    // based on marked responses only
                     markedResponses: q.Filter(
                       q.Var('responses'),
                       q.Lambda(
@@ -101,7 +103,30 @@ exports.handler = async (event) => {
                     ),
                   },
                   {
-                    assignment: q.Subtract(
+                    assignment: q.Select(
+                      ['data', 0],
+                      q.Sum(
+                        q.Map(
+                          q.Paginate(
+                            q.Match(
+                              q.Index('group_assignments'),
+                              q.Ref(q.Collection('Group'), groupId)
+                            ),
+                            { size: 999 }
+                          ),
+                          q.Lambda(
+                            'ref',
+                            q.Count(
+                              q.Select(
+                                ['data', 'questions'],
+                                q.Get(q.Var('ref'))
+                              )
+                            )
+                          )
+                        )
+                      )
+                    ),
+                    completed: q.Subtract(
                       q.Count(q.Var('responses')),
                       q.Var('rev_count')
                     ),
@@ -194,6 +219,7 @@ exports.handler = async (event) => {
     )
     const data = await keyedClient.query(qry)
     data.sort(compare)
+    // console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-row class="pa-3">
+  <v-container>
+    <v-row class="mb-4">
       <v-col cols="12">
         <div class="d-flex justify-space-between">
           <div class="d-flex align-center">
@@ -15,7 +15,7 @@
                 >
                   <font-awesome-icon
                     icon="fa-light fa-arrow-left"
-                    class="fa-lg"
+                    class="ico-btn"
                   />
                 </v-btn>
               </template>
@@ -33,7 +33,7 @@
                 :group-id="group.id"
                 type="btn"
               />
-              <v-btn elevation="0" text rounded class="ml-2" @click="refresh()">
+              <v-btn elevation="0" rounded class="ml-2" @click="refresh()">
                 Refresh
               </v-btn>
             </div>
@@ -62,12 +62,12 @@
           </div>
         </div>
         <div class="mt-4 ml-11">
-          <div class="d-flex mb-2">
-            <span class="font-weight-medium fix-date-always">Start:</span>
+          <div class="d-flex align-center mb-3">
+            <span class="font-weight-medium date-wid">Start:</span>
             {{ assignment.start | date }}
           </div>
-          <div class="d-flex">
-            <span class="font-weight-medium fix-date-always">Due:</span>
+          <div class="d-flex align-center">
+            <span class="font-weight-medium date-wid">Due:</span>
             {{ assignment.dateDue | date }}
           </div>
         </div>
@@ -114,18 +114,18 @@
           <td v-for="(data, j) in student.data" :key="j" class="text-center">
             <!-- Formerly MarkChip.vue components -->
             <!-- Nested values as props not working reliably -->
-            <div :class="flex(data)">
+            <div
+              v-if="data[Object.keys(data)[0]].length > 0"
+              :class="flex(data)"
+            >
               <!-- *** NOT ANSWERED *** -->
-              <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div>
+              <!-- <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div> -->
               <!-- Loop through responses (see note below) -->
-              <template
-                v-for="(response, k) in data[Object.keys(data)[0]]"
-                v-else
-              >
+              <template v-for="(response, k) in data[Object.keys(data)[0]]">
                 <!-- *** SELF MARKED *** -->
                 <v-tooltip v-if="!response.marked" :key="k" bottom>
                   <template #activator="{ on }">
-                    <v-chip outlined @click="mark(i, j, k)" v-on="on">
+                    <v-chip @click="mark(i, j, k)" v-on="on">
                       {{ response.sm.length }}
                       <font-awesome-icon
                         icon="fa-light fa-check"
@@ -186,7 +186,7 @@
       </tbody>
     </table>
     <div class="d-flex justify-end align-center pa-4 text-caption">
-      N/A Not answered&nbsp;&nbsp;
+      <!-- N/A Not answered&nbsp;&nbsp; -->
       <font-awesome-icon icon="fa-light fa-check" class="fa-sm mr-1" />
       Self mark&nbsp;&nbsp;
       <font-awesome-icon icon="fa-light fa-check-double" class="fa-sm mr-1" />
@@ -446,7 +446,7 @@
         </v-container>
       </v-card>
     </v-dialog>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -581,7 +581,7 @@ export default {
   },
   mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)
-    if (this.group.assignments.length < 3) {
+    if (this.group.assignments.length === 1) {
       this.$store.commit('app/setOnboardStep', 6)
     }
     document.addEventListener(
@@ -862,5 +862,15 @@ div.v-list {
   top: 4px;
   margin-left: 8px;
   margin-right: -30px;
+}
+
+.date-wid {
+  width: 52px;
+}
+
+/* Does not work external */
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>

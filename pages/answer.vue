@@ -42,7 +42,7 @@
                     >
                       <font-awesome-icon
                         icon="fa-light fa-ear-listen"
-                        class="fa-lg"
+                        class="fa-lg ico-btn"
                       />
                     </v-btn>
                   </template>
@@ -428,5 +428,10 @@ div.v-card__text >>> .command:hover:before {
 
 .clear-right {
   clear: right;
+}
+
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>

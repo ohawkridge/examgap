@@ -25,11 +25,10 @@
         >{{ username | name }}</nuxt-link
       >
     </template>
-    <div class="d-flex justify-space-between align-center">
+    <div class="d-flex justify-space-between align-center mt-2">
       <v-chip x-small label>
         {{ teacher ? 'Teacher' : 'Student' }}
       </v-chip>
-      <div id="headway" style="height: 32px"></div>
     </div>
   </div>
 </template>

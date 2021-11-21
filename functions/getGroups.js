@@ -5,6 +5,7 @@ exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const secret = data.secret
   const teacher = data.teacher
+  const active = data.active
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
@@ -16,7 +17,19 @@ exports.handler = async (event) => {
       q.Select(
         'data',
         q.Map(
-          q.Paginate(q.Match(q.Index('teacher_groups_2'), q.CurrentIdentity())),
+          // Active or archived groups?
+          q.Filter(
+            q.Paginate(
+              q.Match(q.Index('teacher_groups_2'), q.CurrentIdentity())
+            ),
+            q.Lambda(
+              'ref',
+              q.Equals(
+                q.Select(['data', 'active'], q.Get(q.Var('ref'))),
+                active
+              )
+            )
+          ),
           q.Lambda(
             'ref',
             q.Let(
@@ -73,9 +86,6 @@ exports.handler = async (event) => {
                               ['data', 'dateDue'],
                               q.Var('instance')
                             ),
-                            num_questions: q.Count(
-                              q.Select(['data', 'questions'], q.Var('instance'))
-                            ),
                             live: q.If(
                               q.LT(
                                 q.ToDate(
@@ -94,6 +104,29 @@ exports.handler = async (event) => {
                               ),
                               false,
                               true
+                            ),
+                            group: q.Let(
+                              {
+                                instance: q.Get(
+                                  q.Select(['data', 'group'], q.Var('instance'))
+                                ),
+                              },
+                              {
+                                id: q.Select(['ref', 'id'], q.Var('instance')),
+                                name: q.Select(
+                                  ['data', 'name'],
+                                  q.Var('instance')
+                                ),
+                              }
+                            ),
+                            numStudents: q.Count(
+                              q.Match(
+                                q.Index('assignment_students'),
+                                q.Select('ref', q.Var('instance'))
+                              )
+                            ),
+                            numQuestions: q.Count(
+                              q.Select(['data', 'questions'], q.Var('instance'))
                             ),
                           }
                         )
@@ -138,7 +171,7 @@ exports.handler = async (event) => {
                         ),
                         // Need group to filter assignments later
                         group: q.Select(['data', 'group'], q.Var('instance')),
-                        num_questions: q.Count(
+                        numQuestions: q.Count(
                           q.Select(['data', 'questions'], q.Var('instance'))
                         ),
                         live: q.If(

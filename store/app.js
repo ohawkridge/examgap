@@ -1,9 +1,9 @@
 const getDefaultState = () => ({
-  tab: null, // Home or Archive tab? (teacher only)
+  tab: null,
   groupTab: null, // Tab on _group.vue
   onboardStep: 0, // Don't onboard
   loading: false, // Global loading state
-  pageTitle: 'Classes', // Global page title
+  pageTitle: 'Welcome back', // Global page title
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -16,11 +16,11 @@ const actions = {
 }
 
 const mutations = {
-  setTab(state, val) {
-    state.tab = val
-  },
   setGroupTab(state, val) {
     state.groupTab = val
+  },
+  setTab(state, val) {
+    state.tab = val
   },
   setOnboardStep(state, step) {
     state.onboardStep = step

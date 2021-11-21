@@ -7,18 +7,21 @@
         </nuxt-link>
         <the-greeting />
       </div>
-      <div v-if="teacher" class="pa-2 d-flex justify-center">
-        <v-btn nuxt to="/author" elevation="0" color="primary" rounded outlined>
-          <font-awesome-icon icon="fa-light fa-plus" class="ico-blue mr-2" />
-          Question
-        </v-btn>
-      </div>
       <v-list dense nav>
+        <v-list-item v-if="teacher" @click="$nuxt.$emit('show-create')">
+          <v-list-item-icon class="d-flex justify-center align-center">
+            <font-awesome-icon icon="fa-light fa-plus fa-lg" />
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title> Create class </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item-group v-model="nav" color="primary">
           <!-- No classes -->
-          <v-list-item v-if="groups.length === 0" @click="navHome()">
+          <!-- TODO Test -->
+          <v-list-item v-if="groups.length === 0">
             <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-users fa-lg" />
+              <font-awesome-icon icon="fa-light fa-user-group fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Classes </v-list-item-title>
@@ -34,18 +37,30 @@
               </v-list-item-content>
             </template>
             <template v-for="(group, i) in groups">
-              <v-list-item
-                v-if="!teacher || (teacher && group.active)"
-                :key="i"
-                @click="navTo(group.id)"
-              >
+              <v-list-item :key="i" @click="navTo(group.id)">
                 <v-list-item-content>
                   <v-list-item-title> {{ group.name }} </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </template>
           </v-list-group>
+          <v-list-item v-if="teacher" nuxt :to="`/archive`">
+            <v-list-item-icon class="d-flex justify-center align-center">
+              <font-awesome-icon icon="fa-light fa-box-archive fa-lg" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Archive </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-divider class="my-4 mx-2" />
+          <v-list-item v-if="teacher" nuxt to="/author">
+            <v-list-item-icon class="d-flex justify-center align-center">
+              <font-awesome-icon icon="fa-light fa-pen-line fa-lg" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Create question </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item nuxt to="/feedback">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-comment-exclamation fa-lg" />
@@ -76,84 +91,16 @@
       flat
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-app-bar-nav-icon @click="drawer = !drawer"> </v-app-bar-nav-icon>
-      <v-container class="d-flex justify-space-between align-center mob-right">
+      <v-tooltip bottom>
+        <template #activator="{ on }">
+          <v-app-bar-nav-icon @click="drawer = !drawer" v-on="on">
+          </v-app-bar-nav-icon>
+        </template>
+        <span>{{ drawer ? 'Hide menu' : 'Show menu' }}</span>
+      </v-tooltip>
+      <v-container class="d-flex justify-space-between align-center">
         <span class="font-weight-medium"> {{ pageTitle }} </span>
-        <span
-          v-if="!teacher && $vuetify.breakpoint.name !== 'xs'"
-          class="text-caption grey--text text--darken-1"
-        >
-          {{ $store.state.user.quote.quote }}—{{
-            $store.state.user.quote.author
-          }}
-        </span>
-        <!-- **ACTIONS** -->
-        <!-- Create assignment -->
-        <v-btn
-          v-if="createAss && $vuetify.breakpoint.name === 'xs'"
-          elevation="0"
-          icon
-          color="primary"
-          @click="createAssignment()"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
-        </v-btn>
-        <v-btn
-          v-if="createAss && $vuetify.breakpoint.name !== 'xs'"
-          elevation="0"
-          text
-          color="primary"
-          rounded
-          @click="createAssignment()"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
-          Assignment
-        </v-btn>
-        <!-- Create class -->
-        <v-btn
-          v-if="createClass && $vuetify.breakpoint.name === 'xs'"
-          elevation="0"
-          icon
-          color="primary"
-          rounded
-          @click="$nuxt.$emit('show-create')"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
-        </v-btn>
-        <v-btn
-          v-if="createClass && $vuetify.breakpoint.name !== 'xs'"
-          elevation="0"
-          text
-          color="primary"
-          rounded
-          @click="$nuxt.$emit('show-create')"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
-          Class
-        </v-btn>
-        <!-- Create question -->
-        <v-btn
-          v-if="createQ && $vuetify.breakpoint.name === 'xs'"
-          color="primary"
-          icon
-          nuxt
-          to="/author"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg" />
-        </v-btn>
-        <v-btn
-          v-if="createQ && $vuetify.breakpoint.name !== 'xs'"
-          color="primary"
-          rounded
-          text
-          nuxt
-          to="/author"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
-          Question
-        </v-btn>
-        <!-- TODO -->
-        <!-- <v-btn elevation="0" text rounded> Join Class </v-btn> -->
+        <div id="headway"></div>
       </v-container>
     </v-app-bar>
     <v-main>
@@ -162,7 +109,6 @@
       <the-onboarding-snackbar v-if="teacher" />
       <the-create-class-dialog v-if="teacher" />
       <the-join-dialog v-if="!teacher" />
-      <the-loading-overlay />
     </v-main>
     <the-footer />
   </v-app>
@@ -176,7 +122,6 @@ import TheFooter from '@/components/common/TheFooter'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
-import TheLoadingOverlay from '@/components/common/TheLoadingOverlay'
 import TheGreeting from '@/components/common/TheGreeting'
 
 export default {
@@ -187,7 +132,6 @@ export default {
     TheJoinDialog,
     TheCreateClassDialog,
     TheOnboardingSnackbar,
-    TheLoadingOverlay,
     TheGreeting,
     TheFooter,
   },
@@ -203,9 +147,9 @@ export default {
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
       pageTitle: (state) => state.app.pageTitle,
+      selected: (state) => state.topics.selected,
     }),
     ...mapGetters({
-      activeGroupCount: 'user/activeGroupCount',
       group: 'user/activeGroup',
     }),
     // Page title action logic
@@ -224,22 +168,6 @@ export default {
       this.$store.commit('user/setActiveGroupId', groupId)
       this.$router.push(this.teacher ? `/group/${groupId}` : '/home')
     },
-    navHome() {
-      // Make 'Classes' a link to home in empty state
-      this.$store.commit('app/setTab', 0)
-      this.$router.push('/home')
-    },
-    createAssignment() {
-      // Clear any previous selections
-      this.$store.commit('topics/clearSelectedQuestions')
-      // Continue onboarding if user hasn't set assignments
-      this.$store.commit(
-        'app/setOnboardStep',
-        this.group.assignments.length < 3 ? 4 : 0
-      )
-      this.$router.push(`/course/${this.group.course.id}`)
-    },
-
     logout() {
       // Clear all stores
       this.$store.dispatch('snackbar/resetState')
@@ -255,11 +183,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-@media only screen and (max-width: 600px) {
-  .mob-right {
-    padding-right: 0px;
-  }
-}
-</style>

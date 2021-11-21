@@ -2,7 +2,7 @@
   <div>
     <!-- Skeletons -->
     <template v-if="$fetchState.pending">
-      <div class="pa-4">
+      <div class="px-4 py-8">
         <v-skeleton-loader
           type="text@3"
           :loading="true"
@@ -24,7 +24,7 @@
       </div>
     </template>
     <template v-else>
-      <div class="pa-4 d-flex justify-space-between">
+      <div class="px-4 py-8 d-flex justify-space-between">
         <div style="width: 60%">
           <div class="text-h6">
             <v-tooltip bottom>
@@ -32,7 +32,7 @@
                 <v-btn nuxt to="/home" icon class="mr-2" v-on="on">
                   <font-awesome-icon
                     icon="fa-light fa-arrow-left"
-                    class="fa-lg"
+                    class="fa-lg ico-btn"
                   />
                 </v-btn>
               </template>
@@ -138,6 +138,11 @@ export default {
 /* Align start/due dates */
 .fix-width {
   display: inline-block;
-  width: 60px;
+  width: 72px;
+}
+
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>

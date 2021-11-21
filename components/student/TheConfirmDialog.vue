@@ -7,8 +7,8 @@
         <div class="d-flex justify-end">
           <v-btn text rounded class="mr-2" @click="dialog = false">Back</v-btn>
           <v-btn color="primary" rounded elevation="0" @click="selfMark()">
-            Mark</v-btn
-          >
+            Mark
+          </v-btn>
         </div>
       </v-card-text>
     </v-card>

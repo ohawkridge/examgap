@@ -66,9 +66,6 @@ span.v-chip.theme--light.green {
     width: 44px;
   }
 }
-.fix-date-always {
-  width: 48px;
-}
 
 /* pretty pseudocode in questions */
 .code {
@@ -118,6 +115,7 @@ span.v-chip.theme--light.green {
 }
 
 /* align assignment Start: + Due: */
+/* TODO Move to scope */
 .align-date {
   display: inline-block;
   width: 128px;
@@ -167,5 +165,5 @@ span.v-chip.theme--light.green {
 
 #HW_badge {
   background: #ef7a85 !important;
-  color: #001f2a;
+  color: #ffffff;
 }

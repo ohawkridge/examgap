@@ -1,31 +1,41 @@
 <template>
   <v-dialog v-model="dialog" width="440">
-    <template #activator="{ on }">
-      <v-btn elevation="0" text rounded color="red" v-on="on">
-        Archive class
-      </v-btn>
+    <template #activator="{ on: dial }">
+      <v-tooltip bottom>
+        <template #activator="{ on: tool }">
+          <v-chip color="error" label class="mr-2" v-on="{ ...tool, ...dial }">
+            <font-awesome-icon
+              icon="fa-light fa-circle-check"
+              class="mr-2 fa-lg"
+            />
+            Archived
+            <font-awesome-icon
+              icon="fa-light fa-box-archive"
+              class="ml-2 fa-lg"
+            />
+          </v-chip>
+        </template>
+        <span>Restore class</span>
+      </v-tooltip>
     </template>
     <v-card>
       <v-card-title class="d-flex justify-center">
-        Archive class?
+        Restore class?
       </v-card-title>
       <v-card-text>
-        <p>
-          Archived classes are moved to the 'Archive' section of the sidebar.
-        </p>
+        <p>Restore this class from the archive?</p>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
           <v-btn
-            color="red"
+            color="primary"
             :loading="loading"
             :disabled="loading"
-            dark
             elevation="0"
             rounded
             class="ml-2"
-            @click="archiveGroup()"
+            @click="restore()"
           >
-            Archive Class
+            Restore Class
           </v-btn>
         </div>
       </v-card-text>
@@ -48,17 +58,17 @@ export default {
     }
   },
   methods: {
-    async archiveGroup() {
+    async restore() {
       try {
         this.loading = true
-        await this.$store.dispatch('user/archiveGroup')
+        await this.$store.dispatch('user/restoreGroup', this.groupId)
         this.$snack.showMessage({
           type: 'success',
-          msg: 'Class archived',
+          msg: 'Class restored',
         })
         this.$router.push('/home')
-      } catch (err) {
-        console.error(err)
+      } catch (e) {
+        console.error(e)
         this.$snack.showMessage({
           type: 'error',
           msg: `Error archiving class`,

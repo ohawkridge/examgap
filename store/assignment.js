@@ -11,6 +11,7 @@ const getDefaultState = () => ({
   // Indecies ^^^ into _report.vue data structure
   marking: false,
   question: {}, // The question to answer
+  recentAssignments: [],
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -315,6 +316,9 @@ const mutations = {
   },
   setMarked(state, response) {
     response.marked = true
+  },
+  setRecentAssignments(state, assignments) {
+    state.recentAssignments = assignments
   },
   // Navigate to next (1)/previous (-1) response
   // (loop around if nec.)

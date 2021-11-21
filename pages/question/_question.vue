@@ -1,28 +1,30 @@
 <template>
-  <div>
-    <v-row class="pt-3 justify-center">
-      <v-col
-        cols="12"
-        md="10"
-        class="d-flex justify-space-between align-center"
-      >
-        <v-btn text rounded @click="$router.go(-1)">
+  <v-container>
+    <v-row class="justify-center">
+      <v-col cols="12" md="10" class="d-flex justify-space-between">
+        <!-- TODO If coming from /author don't want to go back? -->
+        <v-btn elevation="0" rounded @click="$router.go(-1)">
           <font-awesome-icon icon="fa-light fa-arrow-left" class="mr-2" />
           Back
         </v-btn>
         <div>
-          <v-btn
-            elevation="0"
-            rounded
-            text
-            nuxt
-            :to="`/map/${question.id}`"
-            class="mr-2"
-          >
-            Topics
-          </v-btn>
-          <v-btn elevation="0" rounded text nuxt :to="`/author/${question.id}`">
-            Edit
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                elevation="0"
+                rounded
+                nuxt
+                :to="`/map/${question.id}`"
+                class="mr-2"
+                v-on="on"
+              >
+                Topics
+              </v-btn>
+            </template>
+            <span>Question topics</span>
+          </v-tooltip>
+          <v-btn elevation="0" rounded nuxt :to="`/author/${question.id}`">
+            Edit Question
           </v-btn>
         </div>
       </v-col>
@@ -106,9 +108,9 @@
           </v-skeleton-loader>
         </template>
         <template v-else>
-          <div class="mt-4" v-html="question.text"></div>
+          <div v-html="question.text"></div>
           <div class="d-flex justify-end">
-            <v-chip outlined small
+            <v-chip outlined label
               >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-chip>
           </div>
@@ -129,7 +131,7 @@
         </template>
       </v-col>
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script>

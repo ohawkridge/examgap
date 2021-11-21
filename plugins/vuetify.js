@@ -25,6 +25,12 @@ const CUSTOM_ICONS = {
       icon: ['fal', 'bars'],
     },
   },
+  complete: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'check'],
+    },
+  },
   checkboxOff: {
     component: FontAwesomeIcon,
     props: {
@@ -52,7 +58,7 @@ const CUSTOM_ICONS = {
   expand: {
     component: FontAwesomeIcon,
     props: {
-      icon: ['fal', 'angle-down'],
+      icon: ['fal', 'caret-down'],
     },
   },
   dropdown: {

@@ -1,69 +1,63 @@
 <template>
-  <div>
-    <div
-      class="flex-xs-column d-sm-flex justify-space-between align-center pa-4"
-    >
-      <v-btn
-        elevation="0"
-        rounded
-        outlined
-        :block="$vuetify.breakpoint.name === 'xs'"
-        color="primary"
-        class="mb-2 mb-sm-0"
-        @click="$nuxt.$emit('show-invite')"
-      >
-        Invite Students
-      </v-btn>
+  <v-container>
+    <div class="flex-xs-column d-sm-flex justify-space-between align-center">
+      <v-menu offset-y open-on-hover>
+        <template #activator="{ on }">
+          <v-btn
+            class="mr-2 mb-2 mb-sm-0"
+            elevation="0"
+            :block="$vuetify.breakpoint.name === 'xs'"
+            rounded
+            v-on="on"
+          >
+            Actions
+            <font-awesome-icon icon="fa-light fa-angle-down" class="ml-2" />
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item :disabled="selected.length === 0" @click="reset()">
+            <v-list-item-title>
+              Reset password{{ selected.length | pluralize }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="$nuxt.$emit('open-add')">
+            <v-list-item-title>Add students</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            :disabled="selected.length === 0"
+            @click="$nuxt.$emit('open-remove')"
+          >
+            <v-list-item-title>
+              Remove student{{ selected.length | pluralize }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            :disabled="selected.length === 0"
+            @click="$nuxt.$emit('open-copy')"
+          >
+            <v-list-item-title>
+              Copy student{{ selected.length | pluralize }}
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <div>
-        <v-menu offset-y open-on-hover>
-          <template #activator="{ on }">
-            <v-btn
-              class="mr-2 mb-2 mb-sm-0"
-              elevation="0"
-              :block="$vuetify.breakpoint.name === 'xs'"
-              text
-              rounded
-              v-on="on"
-              >Students
-              <font-awesome-icon icon="fa-light fa-chevron-down" class="ml-2" />
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item :disabled="selected.length === 0" @click="reset()">
-              <v-list-item-title>
-                Reset password{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="$nuxt.$emit('open-add')">
-              <v-list-item-title>Add students</v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="$nuxt.$emit('open-remove')"
-            >
-              <v-list-item-title>
-                Remove student{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="$nuxt.$emit('open-copy')"
-            >
-              <v-list-item-title>
-                Copy student{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <v-btn
+          elevation="0"
+          rounded
+          :block="$vuetify.breakpoint.name === 'xs'"
+          class="mb-2 mb-sm-0 mr-2"
+          @click="$nuxt.$emit('show-invite')"
+        >
+          Invite Students
+        </v-btn>
         <v-tooltip bottom>
           <template #activator="{ on }">
             <v-btn
-              nuxt
               :to="`/logins/${group.id}`"
               class="mr-2 mb-2 mb-sm-0"
               :class="xsBtns"
               elevation="0"
-              text
               rounded
               :block="$vuetify.breakpoint.name === 'xs'"
               v-on="on"
@@ -80,7 +74,6 @@
               class="mr-2 mb-2 mb-sm-0"
               :class="xsBtns"
               :block="$vuetify.breakpoint.name === 'xs'"
-              text
               rounded
               @click="exportTableToCSV()"
               v-on="on"
@@ -98,7 +91,6 @@
           elevation="0"
           :block="$vuetify.breakpoint.name === 'xs'"
           :class="xsBtns"
-          text
           rounded
           @click="$fetch()"
         >
@@ -120,25 +112,18 @@
     >
       <template #no-data>
         <!-- Empty state -->
-        <div class="pa-3">
+        <div style="height: 60vh" class="mt-10">
           <v-img
             src="/no-student.svg"
             contain
-            :max-width="$vuetify.breakpoint.name === 'xs' ? '50%' : '20%'"
-            alt="Graduation gap illustration"
+            max-width="200"
+            alt="Mortar board illustration"
             class="mx-auto"
           />
-          <p class="text-center mt-2 black--text">No students yet</p>
-          <div class="d-flex justify-center">
-            <v-btn
-              elevation="0"
-              rounded
-              color="primary"
-              @click="$nuxt.$emit('show-invite')"
-            >
-              Invite students
-            </v-btn>
-          </div>
+          <p class="text-h6 mt-8">No students yet</p>
+          <p>
+            Click 'INVITE STUDENTS', or Actions → Add students to get started.
+          </p>
         </div>
       </template>
       <template #[`item.target`]="props">
@@ -168,7 +153,7 @@
     <the-add-students-dialog />
     <the-remove-dialog :selected="selected" />
     <the-copy-student-dialog :selected="selected" />
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -195,11 +180,20 @@ export default {
           value: 'username',
         },
         {
-          text: 'Assignment Questions',
+          text: 'Questions Assigned',
           align: 'center',
           value: 'data.assignment',
         },
-        { text: 'Revision Questions', align: 'center', value: 'data.revision' },
+        {
+          text: 'Questions Completed',
+          align: 'center',
+          value: 'data.completed',
+        },
+        {
+          text: 'Independent Questions',
+          align: 'center',
+          value: 'data.revision',
+        },
         {
           text: 'Study Duration',
           align: 'center',
