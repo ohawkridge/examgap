@@ -13,7 +13,7 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item @click="dialog = true">
+          <v-list-item @click="showDelete()">
             <v-list-item-title class="red--text"> Delete </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -86,34 +86,13 @@ export default {
     }
   },
   methods: {
+    showDelete() {
+      this.$store.commit('assignment/setDelId', this.assignment.id)
+      this.$nuxt.$emit('show-delete')
+    },
     nav() {
       this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
       this.$router.push(`/report/${this.assignment.id}`)
-    },
-    async deleteAssignment() {
-      try {
-        this.loading = true
-        console.log('Deleting', this.assignment.id)
-        await this.$store.dispatch('user/deleteAssignment', this.assignment.id)
-        // If on _report.vue, go back to _group.vue
-        // Otherwise, stay put
-        if (this.$route.name !== 'report-report') {
-          this.$router.push(`/group/${this.assignment.group.id}`)
-        }
-        this.$snack.showMessage({
-          type: 'success',
-          msg: 'Assignment deleted',
-        })
-      } catch (err) {
-        console.warn(err)
-        this.$snack.showMessage({
-          msg: 'Error deleting assignment',
-          type: 'error',
-        })
-      } finally {
-        this.dialog = false
-        this.loading = false
-      }
     },
   },
 }

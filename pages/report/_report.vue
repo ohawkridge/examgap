@@ -27,11 +27,9 @@
           </div>
           <div>
             <div v-if="$vuetify.breakpoint.name !== 'xs'">
-              <the-delete-assignment-dialog
-                v-if="!$fetchState.pending && group"
-                :assignment-id="assignment.id"
-                :group-id="group.id"
-              />
+              <v-btn rounded text color="red" @click="showDelete()">
+                Delete
+              </v-btn>
               <v-btn elevation="0" rounded text class="ml-2" @click="refresh()">
                 Refresh
               </v-btn>
@@ -278,6 +276,7 @@
                       />
                       {{ marks.length }}
                       <font-awesome-icon
+                        v-if="$vuetify.breakpoint.name !== 'xs'"
                         icon="fa-light fa-check"
                         class="ml-2"
                       />
@@ -295,6 +294,7 @@
                       <font-awesome-icon icon="fa-light fa-user" class="mr-2" />
                       {{ response.sm.length }}
                       <font-awesome-icon
+                        v-if="$vuetify.breakpoint.name !== 'xs'"
                         icon="fa-light fa-check"
                         class="ml-2"
                       />
@@ -552,6 +552,10 @@ export default {
     )
   },
   methods: {
+    showDelete() {
+      this.$store.commit('assignment/setDelId', this.assignment.group.id)
+      this.$nuxt.$emit('show-delete')
+    },
     swipeStart(e) {
       if (e !== undefined) {
         if (typeof e.targetTouches !== 'undefined') {

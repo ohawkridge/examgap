@@ -23,7 +23,8 @@
                     outlined
                     :block="$vuetify.breakpoint.name === 'xs'"
                     color="primary darken-1"
-                    :class="$vuetify.breakpoint.name !== 'xs' ? 'mr-4' : 'mb-3'"
+                    class="mb-4"
+                    :class="$vuetify.breakpoint.name !== 'xs' ? 'mr-4' : ''"
                     @click="addAssign(group)"
                     v-on="on"
                   >

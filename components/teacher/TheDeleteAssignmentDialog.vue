@@ -1,8 +1,5 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <template #activator="{ on }">
-      <v-btn rounded text color="red" v-on="on"> Delete </v-btn>
-    </template>
     <v-card>
       <v-card-title class="d-flex justify-center">
         Delete assignment?
@@ -35,22 +32,27 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  props: {
-    assignmentId: {
-      type: String,
-      default: '',
-    },
-    groupId: {
-      type: String,
-      default: '',
-    },
-  },
   data() {
     return {
       dialog: false,
       loading: false,
     }
+  },
+  computed: {
+    ...mapGetters({
+      groups: 'user/activeGroup',
+    }),
+  },
+  beforeDestroy() {
+    this.$nuxt.$off('show-delete')
+  },
+  mounted() {
+    this.$nuxt.$on('show-delete', () => {
+      this.dialog = true
+    })
   },
   methods: {
     async deleteAssignment() {
@@ -58,10 +60,9 @@ export default {
         this.loading = true
         console.log('Deleting', this.assignmentId)
         await this.$store.dispatch('user/deleteAssignment', this.assignmentId)
-        // If on _report.vue, go back to _group.vue
-        // Otherwise, stay put
+        // For _report.vue only, go back to _group.vue
         if (this.$route.name === 'report-report') {
-          this.$router.push(`/group/${this.groupId}`)
+          this.$router.push(`/group/${this.group.id}`)
         }
         this.$snack.showMessage({
           type: 'success',
