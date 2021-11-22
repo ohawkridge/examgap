@@ -57,23 +57,10 @@
                 class="fix-width2 font-weight-medium"
                 >Score:</span
               >
-              {{ `${s.total}/${s.max}` }}
-              <v-chip label :color="s.color" class="ml-2 font-weight-bold">
-                {{ s.ave }}%
+              {{ `${score.marks}/${score.max}` }}
+              <v-chip label :color="rag" class="ml-2 font-weight-bold">
+                {{ ave }}
               </v-chip>
-            </div>
-            <div>
-              <span
-                v-if="$vuetify.breakpoint.name !== 'xs'"
-                class="fix-width2 font-weight-medium"
-                >Accuracy:
-              </span>
-              <font-awesome-icon
-                v-else
-                icon="fa-light fa-bullseye-arrow"
-                class="fa-lg mr-2"
-              />
-              <!-- XX% -->
             </div>
           </v-col>
         </v-row>
@@ -87,7 +74,7 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-list id="q-list">
+      <v-list id="q-list" class="py-0">
         <assignment-question
           v-for="(question, i) in assignment.questions"
           :key="i"
@@ -117,41 +104,30 @@ export default {
   },
   computed: {
     ...mapState({
-      // Render page from store data
       assignment: (state) => state.assignment.assignment,
     }),
-    // Create an object containing overall score
-    // (including RAG colour-code)
-    s() {
-      let total = 0
+    // TODO rag against target?
+    rag() {
+      if (this.ave <= 33) return 'red'
+      if (this.ave > 66) return 'green'
+      else return 'orange'
+    },
+    ave() {
+      return String(Math.round((this.score.marks / this.score.max) * 100)) + '%'
+    },
+    // Count teacher marks for each response
+    // for each question to find x/y score
+    score() {
+      let marks = 0
       let max = 0
-      let ave = 0
-      let color = ''
       // Each question contains an array of responses
       for (const q of this.assignment.questions) {
-        const mm = parseInt(q.maxMark)
         for (const r of q.responses) {
-          // Only count teacher marked responses
-          if (r.marked) {
-            total += r.tm
-            max += mm
-          }
+          marks += r.tm
+          max += parseInt(q.maxMark)
         }
       }
-      // If max is 0, student probably hasn't answered any questions
-      // Use questions to find max instead and avoid DIV0 in ave.
-      if (max === 0) {
-        ave = '-'
-        const x = this.assignment.questions.map((q) => parseInt(q.maxMark))
-        max = x.reduce((a, b) => a + b, 0)
-      } else {
-        ave = Math.round((total / max) * 100)
-        // Add RAG color class
-        if (ave <= 33) color = 'red'
-        else if (ave > 66) color = 'green'
-        else color = 'orange'
-      }
-      return { total, max, ave, color }
+      return { marks, max }
     },
   },
 }

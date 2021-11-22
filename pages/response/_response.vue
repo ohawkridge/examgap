@@ -62,22 +62,13 @@
     <template v-else>
       <v-row>
         <v-col class="d-flex justify-space-between align-center">
-          <v-btn rounded text nuxt :to="`/assignment/${response.assignmentId}`">
-            <font-awesome-icon
-              icon="fa-light fa-arrow-left"
-              class="mr-2 fa-lg"
-            />
-            Back
+          <v-btn icon nuxt :to="`/assignment/${response.assignmentId}`">
+            <font-awesome-icon icon="fa-light fa-arrow-left" class="ico-btn" />
           </v-btn>
           <div>
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-chip
-                  :color="color(response.tm.length, response.question.maxMark)"
-                  class="mr-4"
-                  label
-                  v-on="on"
-                >
+                <v-chip :color="color()" class="mr-2" label v-on="on">
                   <font-awesome-icon
                     icon="fa-light fa-user-graduate"
                     class="mr-2"
@@ -90,17 +81,25 @@
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-chip
-                  :color="color(response.sm.length, response.question.maxMark)"
-                  label
-                  v-on="on"
-                >
+                <v-chip :color="color()" label class="mr-2" v-on="on">
                   <font-awesome-icon icon="fa-light fa-user" class="mr-2" />
                   {{ response.sm.length }}
                   <font-awesome-icon icon="fa-light fa-check" class="ml-2" />
                 </v-chip>
               </template>
               <span>You</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on }">
+                <v-chip label :color="color()" v-on="on">
+                  <font-awesome-icon
+                    icon="fa-light fa-bullseye-arrow"
+                    class="fa-lg mr-2"
+                  />
+                  {{ accuracy }}%
+                </v-chip>
+              </template>
+              <span>Marking accuracy</span>
             </v-tooltip>
           </div>
         </v-col>
@@ -138,7 +137,7 @@
                       <template #activator="{ on }">
                         <font-awesome-icon
                           icon="fa-light fa-user-graduate"
-                          class="fa-lg"
+                          class="ico-btn"
                           v-on="on"
                         />
                       </template>
@@ -150,7 +149,7 @@
                       <template #activator="{ on }">
                         <font-awesome-icon
                           icon="fa-light fa-user"
-                          class="fa-lg"
+                          class="ico-btn"
                           v-on="on"
                         />
                       </template>
@@ -201,18 +200,35 @@ import { mapState } from 'vuex'
 export default {
   layout: 'app',
   async fetch() {
-    await this.$store.dispatch(
-      'assignment/getResponse',
-      this.$route.params.response
-    )
+    try {
+      await this.$store.dispatch(
+        'assignment/getResponse',
+        this.$route.params.response
+      )
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching response',
+      })
+    }
   },
   computed: {
     ...mapState({
       response: (state) => state.assignment.response,
     }),
+    // Self marking accuracy. Assume 100% accuracy
+    // Subtract self marks not given by teacher
+    accuracy() {
+      const max = this.response.question.maxMark
+      const num = this.response.sm.filter((x) => !this.response.tm.includes(x))
+      return Math.round(((max - num.length) / max) * 100)
+    },
   },
   methods: {
-    color(n, max) {
+    color() {
+      const n = this.response.tm.length
+      const max = this.response.question.maxMark
       if (n / max <= 1 / 3) return 'red'
       if (n / max > 2 / 3) return 'green'
       return 'orange'
@@ -220,3 +236,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.ico-btn {
+  height: 24px;
+  width: 24px;
+}
+</style>
