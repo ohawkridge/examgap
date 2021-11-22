@@ -110,7 +110,7 @@
         <template v-else>
           <div v-html="question.text"></div>
           <div class="d-flex justify-end">
-            <v-chip outlined label
+            <v-chip outlined label small
               >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-chip>
           </div>
