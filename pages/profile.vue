@@ -37,13 +37,18 @@
         >
           <template #append>
             <div id="fix-chip">
-              <v-chip v-if="subscribed" color="green" outlined>
-                Subscribed
-                <font-awesome-icon
-                  icon="fa-light fa-badge-check"
-                  class="ml-2 fa-lg"
-                />
-              </v-chip>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-chip v-if="subscribed" color="yell" v-on="on">
+                    Subscribed
+                    <font-awesome-icon
+                      icon="fa-light fa-bolt"
+                      class="ml-2 fa-lg"
+                    />
+                  </v-chip>
+                </template>
+                <span>Thank you</span>
+              </v-tooltip>
             </div>
           </template>
         </v-text-field>

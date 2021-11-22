@@ -128,7 +128,7 @@
               <v-img
                 src="/no-student.svg"
                 contain
-                max-width="200"
+                max-width="180"
                 alt="Mortar board illustration"
                 class="mx-auto"
               />

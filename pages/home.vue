@@ -54,14 +54,15 @@
             </template>
           </v-col>
         </v-row>
-        <v-row class="justify-center">
+        <!-- TODO -->
+        <!-- <v-row class="justify-center">
           <v-col cols="12" md="10">
             <p class="text-h5">
               <font-awesome-icon icon="fa-light fa-chart-line" class="mr-2" />
               Stats
             </p>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-container>
     </template>
     <!-- Student xx -->
@@ -104,7 +105,7 @@
                 />
               </v-col>
             </v-row>
-            <the-empty-assignment-state v-else />
+            <the-empty-assignments-state v-else />
           </v-container>
         </v-tab-item>
         <!-- Revision xx -->
@@ -130,7 +131,7 @@ import { mapState, mapGetters } from 'vuex'
 import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
-import TheEmptyAssignmentState from '~/components/student/TheEmptyAssignmentState.vue'
+import TheEmptyAssignmentsState from '~/components/common/TheEmptyAssignmentsState.vue'
 import RevisionTopicCard from '~/components/student/RevisionTopicCard.vue'
 
 export default {
@@ -138,7 +139,7 @@ export default {
     TheRevisionModeDialog,
     TeacherAssignmentCard,
     StudentAssignmentCard,
-    TheEmptyAssignmentState,
+    TheEmptyAssignmentsState,
     RevisionTopicCard,
   },
   layout: 'app',

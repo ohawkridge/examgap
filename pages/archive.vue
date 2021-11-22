@@ -9,12 +9,12 @@
         <div class="text-center">
           <v-img
             src="/no-class.svg"
-            max-width="200"
+            max-width="180"
             contain
             class="mx-auto"
             alt="Mortar board illustrations"
           />
-          <p class="text-h6 mt-8">No archived classes</p>
+          <p class="mt-4">No archived classes</p>
           <p>
             Choose an active class from the sidebar or
             <nuxt-link to="/home">go home</nuxt-link>.

@@ -2,9 +2,15 @@
   <v-row style="height: 50vh">
     <v-col cols="12" class="d-flex justify-center align-center">
       <div class="text-center">
-        <v-img src="/no-task.svg" contain alt="Books and pens illustrations" />
-        <p class="text-center">No upcoming assignments</p>
-        <v-tooltip bottom>
+        <v-img
+          src="/no-task.svg"
+          max-width="180"
+          contain
+          class="mx-auto"
+          alt="Books and pens illustrations"
+        />
+        <p class="text-center mt-4">No upcoming assignments</p>
+        <v-tooltip v-if="teacher" bottom>
           <template #activator="{ on }">
             <v-btn
               elevation="0"
@@ -26,11 +32,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapState({
+      teacher: (state) => state.user.teacher,
+    }),
   },
   methods: {
     addAssignment() {

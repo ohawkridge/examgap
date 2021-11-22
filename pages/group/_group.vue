@@ -87,7 +87,7 @@ import TheStudentsTable from '@/components/teacher/TheStudentsTable'
 import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
-import TheEmptyAssignmentsState from '@/components/teacher/TheEmptyAssignmentsState'
+import TheEmptyAssignmentsState from '@/components/common/TheEmptyAssignmentsState'
 import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 import TheRestoreGroupDialog from '~/components/teacher/TheRestoreGroupDialog.vue'
 
