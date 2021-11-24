@@ -59,7 +59,7 @@
               >
               {{ `${score.marks}/${score.max}` }}
               <v-chip label :color="rag" class="ml-2 font-weight-bold">
-                {{ ave }}
+                {{ ave }}%
               </v-chip>
             </div>
           </v-col>
@@ -108,12 +108,14 @@ export default {
     }),
     // TODO rag against target?
     rag() {
+      if (!this.started) return ''
       if (this.ave <= 33) return 'red'
       if (this.ave > 66) return 'green'
       else return 'orange'
     },
     ave() {
-      return String(Math.round((this.score.marks / this.score.max) * 100)) + '%'
+      if (!this.started) return '-'
+      return Math.round((this.score.marks / this.score.max) * 100)
     },
     // Count teacher marks for each response
     // for each question to find x/y score
@@ -124,10 +126,22 @@ export default {
       for (const q of this.assignment.questions) {
         for (const r of q.responses) {
           marks += r.tm
-          max += parseInt(q.maxMark)
         }
+        max += parseInt(q.maxMark)
       }
       return { marks, max }
+    },
+    // Has the student started the assignment?
+    // If not, we don't calculate the ave.
+    started() {
+      for (const q of this.assignment.questions) {
+        for (const r of q.responses) {
+          if (r.marked === true) {
+            return true
+          }
+        }
+      }
+      return false
     },
   },
 }

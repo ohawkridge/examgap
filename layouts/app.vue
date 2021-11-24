@@ -99,7 +99,7 @@
         <span>{{ drawer ? 'Hide menu' : 'Show menu' }}</span>
       </v-tooltip>
       <div
-        class="d-flex justify-space-between align-center"
+        class="d-flex justify-space-between align-center pl-1"
         style="width: 100%"
       >
         <span class="text-subtitle-1 font-weight-medium">

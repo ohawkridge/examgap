@@ -171,7 +171,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', 'Question')
+    this.$store.commit('app/setPageTitle', this.$store.state.topics.topicName)
   },
 }
 </script>

@@ -43,6 +43,12 @@ const CUSTOM_ICONS = {
       icon: ['fal', 'square-check'],
     },
   },
+  checkboxIndeterminate: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'square-minus'],
+    },
+  },
   next: {
     component: FontAwesomeIcon,
     props: {

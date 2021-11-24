@@ -114,13 +114,12 @@
               v-if="question !== undefined && Object.keys(question).length > 0"
             >
               <v-btn
-                nuxt
-                :to="`/question/${question.id}`"
                 rounded
                 text
                 elevation="0"
                 small
                 class="mr-2"
+                @click="showQuestion()"
               >
                 View question
               </v-btn>
@@ -186,7 +185,7 @@
               </v-tooltip>
             </div>
           </div>
-          <div v-html="question.text"></div>
+          <div v-if="question" v-html="question.text"></div>
           <div
             v-if="Object.keys(question).length > 0"
             class="d-flex justify-end mt-4"
@@ -297,6 +296,13 @@ export default {
     // Add/remove questions from assignment
     add() {
       this.$store.commit('topics/updateSelected', this.question.id)
+    },
+    // Show question detail
+    // (saving topic name to show in page title)
+    showQuestion() {
+      const name = this.topics[this.currentTopicIndex].name
+      this.$store.commit('topics/setTopicName', name)
+      this.$router.push(`/question/${this.question.id}`)
     },
   },
 }

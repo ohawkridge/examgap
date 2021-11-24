@@ -39,8 +39,9 @@ const actions = {
       throw new Error(`Error adding students ${response.status}`)
     }
     // Update count for group
-    const newCount = rootGetters['user/activeGroup'].count + usernames.length
-    commit('user/setCount', newCount, { root: true })
+    const group = rootGetters['user/activeGroup']
+    const n = group.count + usernames.length
+    commit('user/setCount', { group, n }, { root: true })
     // Refetch student data
     // (too complicated to insert new students)
     await dispatch('getStudents')
@@ -83,9 +84,10 @@ const actions = {
     response = await response.json()
     // Update group if nec.
     // (may have changed since login)
-    const count = response.length
-    if (count !== rootGetters['user/activeGroup'].count) {
-      commit('user/setCount', count, { root: true })
+    const n = response.length
+    if (n !== rootGetters['user/activeGroup'].count) {
+      const group = rootGetters['user/activeGroup']
+      commit('user/setCount', { group, n }, { root: true })
     }
     commit('setStudents', response)
   },
@@ -128,8 +130,9 @@ const actions = {
     }
     commit('removeStudents', studentIds)
     // Remove students from group count
-    const count = rootGetters['user/activeGroup'].count - studentIds.length
-    commit('user/setCount', count, { root: true })
+    const group = rootGetters['user/activeGroup']
+    const n = group.count - studentIds.length
+    commit('user/setCount', { group, n }, { root: true })
   },
 }
 

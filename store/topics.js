@@ -4,6 +4,7 @@ const getDefaultState = () => ({
   question: {}, // Question detail (not _course.vue preview)
   selected: [],
   topicId: '',
+  topicName: '',
   currentTopicIndex: 0,
   autoCompleteTopics: [],
 })
@@ -139,6 +140,9 @@ export const mutations = {
   },
   clearSelectedQuestions(state) {
     state.selected = []
+  },
+  setTopicName(state, name) {
+    state.topicName = name
   },
   resetState(state) {
     Object.assign(state, getDefaultState())

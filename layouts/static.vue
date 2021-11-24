@@ -22,7 +22,7 @@
               class="d-flex d-sm-none"
               @click="menu = !menu"
             >
-              <font-awesome-icon icon="fa-light fa-bars" class="fa-lg" />
+              <font-awesome-icon icon="fa-light fa-bars" class="ico-btn" />
             </v-btn>
           </div>
         </v-col>
@@ -38,7 +38,7 @@
         class="d-flex d-sm-none"
         @click="menu = false"
       >
-        <font-awesome-icon icon="fa-light fa-xmark" class="fa-lg" />
+        <font-awesome-icon icon="fa-light fa-xmark" class="ico-btn" />
       </v-btn>
       <div class="d-flex flex-column">
         <v-btn text large rounded class="mb-6" nuxt to="/pricing"
@@ -47,9 +47,7 @@
         <v-btn text large rounded class="mb-6" nuxt to="/signup"
           >Join class</v-btn
         >
-        <v-btn outlined large rounded class="mb-6" nuxt to="/signin"
-          >Sign in</v-btn
-        >
+        <v-btn text large rounded class="mb-6" nuxt to="/signin">Sign in</v-btn>
         <v-btn large rounded color="primary" elevation="0" nuxt to="/trial"
           >Free trial</v-btn
         >
@@ -87,5 +85,10 @@ export default {
   position: fixed;
   top: 12px;
   right: 12px;
+}
+
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>
