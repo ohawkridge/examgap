@@ -9,25 +9,28 @@
           :types="{ list: 'list-item-two-line@6' }"
         >
         </v-skeleton-loader>
-        <v-list v-else id="topics" nav>
-          <v-list-item-group v-model="currentTopicIndex" color="primary">
-            <v-list-item
-              v-for="(topic, i) in topics"
-              :key="i"
-              color="primary"
-              :title="`${topic.name} (${topic.count})`"
-            >
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ topic.name }}
-                  <span class="grey--text text--lighten-1">{{
-                    topic.count
-                  }}</span>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
+        <template v-else>
+          <p class="text-h6 mb-2">Topics ({{ topics.length }})</p>
+          <v-list id="topics" nav>
+            <v-list-item-group v-model="currentTopicIndex" color="primary">
+              <v-list-item
+                v-for="(topic, i) in topics"
+                :key="i"
+                color="primary"
+                :title="`${topic.name} (${topic.count})`"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ topic.name }}
+                    <span class="grey--text text--lighten-1">{{
+                      topic.count
+                    }}</span>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </template>
       </v-col>
       <v-col cols="12" md="4">
         <v-skeleton-loader
@@ -37,52 +40,63 @@
           :types="{ list: 'list-item-two-line@8' }"
         >
         </v-skeleton-loader>
-        <v-list v-else id="questions">
-          <v-list-item-group v-model="selectedQuestion">
-            <template v-for="(q, i) in questions">
-              <v-list-item :key="i" :value="i">
+        <template v-else>
+          <div class="d-flex justify-space-between">
+            <p class="text-h6 mb-2">Questions ({{ questions.length }})</p>
+            <v-btn elevation="0" rounded text small @click="createQuestion()">
+              Create question
+            </v-btn>
+          </div>
+          <v-list id="questions">
+            <v-list-item-group v-model="selectedQuestion">
+              <template v-for="(q, i) in questions">
+                <v-list-item :key="i" :value="i">
+                  <v-list-item-content>
+                    <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
+                      <v-chip
+                        v-for="(assignment, j) in q.previous"
+                        :key="j"
+                        small
+                        label
+                        outlined
+                        class="ml-2"
+                      >
+                        <v-tooltip bottom>
+                          <template #activator="{ on }">
+                            <span v-on="on"> {{ assignment.date | date }}</span>
+                          </template>
+                          <span>{{ assignment.name }}</span>
+                        </v-tooltip></v-chip
+                      >
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-scroll-x-transition>
+                      <font-awesome-icon
+                        v-if="selected.includes(q.id)"
+                        icon="fa-light fa-circle-check"
+                        class="fa-xl ico-green"
+                      />
+                    </v-scroll-x-transition>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+              <v-list-item v-if="noQuestions">
+                <v-list-item-icon>
+                  <font-awesome-icon
+                    icon="fa-light fa-circle-info"
+                    class="xx"
+                  />
+                </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
-                  <v-list-item-subtitle>
-                    {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
-                    <v-chip
-                      v-for="(assignment, j) in q.previous"
-                      :key="j"
-                      small
-                      label
-                      outlined
-                      class="ml-2"
-                    >
-                      <v-tooltip bottom>
-                        <template #activator="{ on }">
-                          <span v-on="on"> {{ assignment.date | date }}</span>
-                        </template>
-                        <span>{{ assignment.name }}</span>
-                      </v-tooltip></v-chip
-                    >
-                  </v-list-item-subtitle>
+                  <v-list-item-title> No questions yet </v-list-item-title>
                 </v-list-item-content>
-                <v-list-item-action>
-                  <v-scroll-x-transition>
-                    <font-awesome-icon
-                      v-if="selected.includes(q.id)"
-                      icon="fa-light fa-circle-check"
-                      class="fa-xl ico-green"
-                    />
-                  </v-scroll-x-transition>
-                </v-list-item-action>
               </v-list-item>
-            </template>
-            <v-list-item v-if="noQuestions">
-              <v-list-item-icon>
-                <font-awesome-icon icon="fa-light fa-circle-info" class="xx" />
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title> No questions yet </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
+            </v-list-item-group>
+          </v-list>
+        </template>
       </v-col>
       <v-col cols="12" md="5">
         <!-- Skeletons -->
@@ -108,21 +122,11 @@
           >
           </v-skeleton-loader>
         </template>
-        <div v-else class="pa-3">
-          <div class="d-flex justify-space-between mb-3">
+        <div v-else class="px-3">
+          <div class="d-flex justify-space-between mb-4">
             <div
               v-if="question !== undefined && Object.keys(question).length > 0"
             >
-              <v-btn
-                rounded
-                text
-                elevation="0"
-                small
-                class="mr-2"
-                @click="showQuestion()"
-              >
-                View question
-              </v-btn>
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-btn
@@ -143,6 +147,16 @@
                   {{ selected.includes(question.id) ? 'Remove' : 'Add' }}
                 </span>
               </v-tooltip>
+              <v-btn
+                rounded
+                text
+                elevation="0"
+                small
+                class="ml-2"
+                @click="showQuestion()"
+              >
+                View question
+              </v-btn>
             </div>
             <div>
               <v-tooltip bottom>
@@ -303,6 +317,14 @@ export default {
       const name = this.topics[this.currentTopicIndex].name
       this.$store.commit('topics/setTopicName', name)
       this.$router.push(`/question/${this.question.id}`)
+    },
+    // Links to /author and remembers the topic
+    createQuestion() {
+      this.$store.commit(
+        'topics/setTopicId',
+        this.topics[this.currentTopicIndex].id
+      )
+      this.$router.push(`/author`)
     },
   },
 }
