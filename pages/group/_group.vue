@@ -148,16 +148,10 @@ export default {
         '%c' + 'Prefetch',
         'color:#001f2a;background-color:#f4d06f;padding:4px;'
       )
-      console.time('_report (latest)')
+      console.time('_report in')
       await this.$store.dispatch('assignment/getReport', -1)
-      console.timeEnd('_report (latest)')
-      console.log(
-        '%c' + 'Prefetch',
-        'color:#001f2a;background-color:#f4d06f;padding:4px;'
-      )
-      console.time('_course')
-      await this.$store.dispatch('topics/getTopics')
-      console.timeEnd('_course')
+      console.timeEnd('_report in')
+      // DON'T Prefetch _course.vue
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({

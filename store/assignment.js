@@ -233,7 +233,6 @@ const actions = {
       // Replace with actual most recent id
       if (assignmentId === -1) {
         assignmentId = rootGetters['user/activeGroup'].assignments[0].id
-        console.log('%c' + `getReport (${assignmentId})`, 'color:purple')
       }
       const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
       const response = await fetch(url, {
