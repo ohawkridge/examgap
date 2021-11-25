@@ -49,6 +49,24 @@ const CUSTOM_ICONS = {
       icon: ['fal', 'square-minus'],
     },
   },
+  minus: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'minus'],
+    },
+  },
+  info: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'circle-info'],
+    },
+  },
+  error: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'circle-exclamation'],
+    },
+  },
   next: {
     component: FontAwesomeIcon,
     props: {

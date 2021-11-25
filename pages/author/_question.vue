@@ -3,125 +3,131 @@
     <v-container>
       <v-row class="d-flex justify-center">
         <v-col cols="12" md="10" lg="8" class="mt-sm-6">
-          <p class="text-subtitle-1 font-weight-medium">Question text</p>
-          <text-editor ref="question" :initial="question.text" class="mb-6" />
-          <v-text-field
-            v-if="question !== undefined"
-            v-model="question.maxMark"
-            :suffix="question.maxMark == 1 ? 'mark' : 'marks'"
-            type="number"
-            outlined
-            min="1"
-            :rules="maxMarkRules"
-            persistent-hint
-            hint="Maximum mark"
-            class="num-field mb-6"
-            required
-          ></v-text-field>
-          <p class="text-subtitle-1 font-weight-medium">Model answer</p>
-          <text-editor
-            ref="model"
-            :initial="question.modelAnswer"
-            class="mb-6"
-          />
-          <p class="text-subtitle-1 font-weight-medium">Keywords</p>
-          <v-text-field
-            v-model="question.keywords"
-            outlined
-            hint="Separate words with commas"
-            persistent-hint
-            placeholder="E.g. RAM, instructions, processor"
-          ></v-text-field>
-          <p
-            class="
-              text-subtitle-1
-              font-weight-medium
-              mt-3
-              d-flex
-              justify-space-between
-              align-end
-            "
-          >
-            Mark scheme
-            <v-btn v-if="question.marks.length < 24" color="primary" icon>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <font-awesome-icon
-                    icon="fa-light fa-plus"
-                    class="fa-lg"
-                    @click="add()"
-                    v-on="on"
-                  />
-                </template>
-                <span>Add mark</span>
-              </v-tooltip>
-            </v-btn>
-          </p>
-          <v-text-field
-            v-for="(mark, i) in question.marks"
-            :key="i"
-            v-model="mark.text"
-            outlined
-            placeholder="One mark for..."
-          >
-            <template #append>
-              <v-tooltip v-if="question.marks.length > 1" bottom>
-                <template #activator="{ on }">
-                  <font-awesome-icon
-                    icon="fa-light fa-minus"
-                    class="fa-lg"
-                    @click="remove(i)"
-                    v-on="on"
-                  />
-                </template>
-                <span>Remove mark</span>
-              </v-tooltip>
-            </template>
-          </v-text-field>
-          <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
-          <text-editor
-            ref="guidance"
-            :initial="question.guidance"
-            class="mb-6"
-          />
-          <p class="text-subtitle-1 font-weight-medium">Topics</p>
-          <v-autocomplete
-            v-model="question.selectedTopics"
-            :items="topics"
-            item-value="id"
-            item-text="name"
-            :loading="$fetchState.pending || ACLoading"
-            outlined
-            chips
-            small-chips
-            deletable-chips
-            hint="Select all that apply"
-            persistent-hint
-            multiple
-          >
-          </v-autocomplete>
-          <!-- <v-checkbox
+          <v-form ref="form">
+            <p class="text-subtitle-1 font-weight-medium">Question text</p>
+            <text-editor ref="question" :initial="question.text" class="mb-6" />
+            <v-text-field
+              v-if="question !== undefined"
+              v-model="question.maxMark"
+              :suffix="question.maxMark == 1 ? 'mark' : 'marks'"
+              type="number"
+              background-color="white"
+              outlined
+              min="1"
+              :rules="rules.max"
+              persistent-hint
+              hint="Max. mark"
+              class="num-field mb-6"
+              required
+            ></v-text-field>
+            <p class="text-subtitle-1 font-weight-medium">Model answer</p>
+            <text-editor
+              ref="model"
+              :initial="question.modelAnswer"
+              class="mb-6"
+            />
+            <p class="text-subtitle-1 font-weight-medium">Keywords</p>
+            <v-text-field
+              v-model="question.keywords"
+              outlined
+              background-color="white"
+              hint="Separate words with commas"
+              persistent-hint
+              placeholder="E.g. RAM, instructions, processor"
+            ></v-text-field>
+            <p
+              class="
+                text-subtitle-1
+                font-weight-medium
+                mt-3
+                d-flex
+                justify-space-between
+                align-end
+              "
+            >
+              Mark scheme
+            </p>
+            <v-text-field
+              v-for="(mark, i) in question.marks"
+              :key="i"
+              v-model="mark.text"
+              :append-icon="question.marks.length > 1 ? '$minus' : ''"
+              outlined
+              background-color="white"
+              hide-details
+              class="mb-3"
+              placeholder="One mark for..."
+              @click:append="remove(i)"
+            >
+            </v-text-field>
+            <div class="d-flex justify-end">
+              <v-btn
+                v-if="question.marks.length <= 25"
+                rounded
+                text
+                class="mt-2"
+                @click="add()"
+              >
+                <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
+                Add mark
+              </v-btn>
+            </div>
+            <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
+            <text-editor
+              ref="guidance"
+              :initial="question.guidance"
+              class="mb-6"
+            />
+            <p class="text-subtitle-1 font-weight-medium">Topics</p>
+            <v-autocomplete
+              v-model="question.selectedTopics"
+              :items="topics"
+              item-value="id"
+              item-text="name"
+              :loading="$fetchState.pending || ACLoading"
+              outlined
+              :rules="rules.topics"
+              chips
+              small-chips
+              deletable-chips
+              hint="Select all that apply"
+              background-color="white"
+              persistent-hint
+              multiple
+            >
+            </v-autocomplete>
+            <!-- <v-checkbox
             v-model="showAll"
             label="Show developing courses"
             class="mt-0"
             hide-details
           >
           </v-checkbox> -->
-          <div class="d-flex justify-end">
-            <v-btn text rounded class="mr-2" @click="$router.go(-1)">
-              Cancel
-            </v-btn>
-            <v-btn
-              color="primary"
-              :disabled="loading"
-              :loading="loading"
-              elevation="0"
-              rounded
-              @click="save()"
+            <v-alert
+              v-if="showAlert"
+              type="error"
+              text
+              border="left"
+              class="mt-3"
             >
-              Save
-            </v-btn>
-          </div>
+              Question text and model answer required
+            </v-alert>
+            <div class="d-flex justify-end">
+              <v-btn text rounded class="mr-2" @click="$router.go(-1)">
+                Cancel
+              </v-btn>
+              <v-btn
+                color="primary"
+                :disabled="loading"
+                :loading="loading"
+                elevation="0"
+                rounded
+                @click="save()"
+              >
+                {{ editing ? 'Save changes' : 'Create question' }}
+              </v-btn>
+            </div>
+          </v-form>
         </v-col>
       </v-row>
     </v-container>
@@ -141,7 +147,11 @@ export default {
     return {
       loading: false,
       ACLoading: false,
-      maxMarkRules: [(v) => (v && v < 13) || 'Max. 12 marks'],
+      rules: {
+        max: [(v) => (v && v < 13) || 'Max. 25 marks'],
+        topics: [(v) => v.length > 0 || 'Select at least one topic'],
+      },
+      showAlert: false,
       // showAll: false,
       question: {
         id: '',
@@ -227,42 +237,58 @@ export default {
     remove(i) {
       this.question.marks.splice(i, 1)
     },
-    async save() {
-      this.loading = true
+    // Make sure question text and model answer aren't blank
+    validateEditors() {
+      console.log(this.question.text)
+      console.log(this.question.modelAnswer)
+      // if (qt === undefined || ma === undefined) {
+      //   this.showAlert = true
+      // }
+      return true
+    },
+    save() {
+      const x = this.$refs.form.validate()
+      console.log(x)
+      this.validateEditors()
+    },
+    async save2() {
       // Get HTML from editors
-      this.question.text = this.$refs.question.content
-      this.question.modelAnswer = this.$refs.model.content
-      this.question.guidance = this.$refs.guidance.content
-      try {
-        const url = new URL(
-          '/.netlify/functions/saveQuestion',
-          this.$config.baseURL
-        )
-        let response = await fetch(url, {
-          body: JSON.stringify({
-            secret: this.secret,
-            edit: this.editing,
-            question: this.question,
-          }),
-          method: 'POST',
-        })
-        if (!response.ok) {
-          throw new Error(`Error saving question ${response.status}`)
+      this.question.text = this.$refs.question.content.trim()
+      this.question.modelAnswer = this.$refs.model.content.trim()
+      this.question.guidance = this.$refs.guidance.content.trim()
+      if (this.$refs.form.validate() && this.validateEditors()) {
+        this.loading = true
+        try {
+          const url = new URL(
+            '/.netlify/functions/saveQuestion',
+            this.$config.baseURL
+          )
+          let response = await fetch(url, {
+            body: JSON.stringify({
+              secret: this.secret,
+              edit: this.editing,
+              question: this.question,
+            }),
+            method: 'POST',
+          })
+          if (!response.ok) {
+            throw new Error(`Error saving question ${response.status}`)
+          }
+          response = await response.json()
+          this.$snack.showMessage({
+            type: 'success',
+            msg: `Question ${this.editing ? 'saved' : 'created'}`,
+          })
+          this.$router.push(`/question/${response.id}`)
+        } catch (err) {
+          console.error(err)
+          this.$snack.showMessage({
+            type: 'error',
+            msg: 'Error saving question',
+          })
+        } finally {
+          this.loading = false
         }
-        response = await response.json()
-        this.$snack.showMessage({
-          type: 'success',
-          msg: `Question ${this.editing ? 'saved' : 'created'}`,
-        })
-        this.$router.push(`/question/${response.id}`)
-      } catch (err) {
-        console.error(err)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error saving question',
-        })
-      } finally {
-        this.loading = false
       }
     },
   },
@@ -284,5 +310,10 @@ export default {
 .tiptap-vuetify-editor {
   border: 1px solid rgba(0, 0, 0, 0.42);
   border-radius: 4px !important;
+}
+
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>

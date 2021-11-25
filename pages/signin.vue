@@ -94,6 +94,7 @@ export default {
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 2) || 'Password must be at least 2 characters',
       ],
+      message: 'A new password has been sent to your email.',
     }
   },
   head() {

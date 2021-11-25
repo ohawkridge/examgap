@@ -16,7 +16,7 @@ exports.handler = async (event, context, callback) => {
         'obj',
         q.Update(q.Ref(q.Collection('User'), q.Select('id', q.Var('obj'))), {
           credentials: {
-            password: 'pw',
+            password: 'password',
           },
         })
       )

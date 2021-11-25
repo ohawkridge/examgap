@@ -16,30 +16,19 @@
             <v-text-field
               v-model="username"
               label="Username or email"
-              placeholder="joe.bloggs@yourschool.org.uk"
+              placeholder="jbloggs@school.org.uk"
               color="primary"
               type="email"
-              validate-on-blur
               required
               outlined
               :rules="userRules"
               autofocus
             ></v-text-field>
-            <v-alert border="top" text>
-              <font-awesome-icon
-                slot="prepend"
-                icon="fa-light fa-circle-info"
-                class="mr-2 fa-lg"
-              />
-              Student? Your teacher can reset your password.
+            <v-alert border="left" type="info" text>
+              Students—your teacher can reset your password
             </v-alert>
-            <v-alert v-if="failed" border="top" text type="error">
-              <font-awesome-icon
-                slot="prepend"
-                icon="fa-light fa-circle-exclamation"
-                class="mr-2 fa-lg"
-              />
-              Username not found. Please try again.
+            <v-alert v-if="failed" border="left" type="error" text>
+              Username not found
             </v-alert>
             <v-btn
               color="primary"
@@ -55,28 +44,50 @@
           </v-form>
         </v-col>
       </v-row>
-      <the-success-dialog
-        subtitle="A new password has been sent to your email."
-      />
     </v-container>
+    <!-- Success xx -->
+    <v-dialog v-model="dialog" max-width="440">
+      <v-card>
+        <v-card-title class="d-flex justify-center py-6">
+          <font-awesome-icon
+            icon="fa-light fa-circle-check"
+            class="fa-4x ico-green"
+          />
+        </v-card-title>
+        <v-card-text>
+          <p class="text-h5 text-center">Success</p>
+          <p class="text-center text-body-1">
+            You should receive a reset link via email shortly.
+          </p>
+          <div class="d-flex justify-end">
+            <v-btn
+              color="primary"
+              rounded
+              elevation="0"
+              @click="dialog = false"
+            >
+              Close
+            </v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
-import TheSuccessDialog from '@/components/common/TheSuccessDialog'
 
 export default {
   components: {
     TheLogo,
-    TheSuccessDialog,
   },
   data() {
     return {
+      dialog: false,
       loading: false,
       failed: false,
       username: '',
-      valid: null,
       userRules: [
         (v) => !!v || 'Email is required',
         (v) => {
@@ -89,7 +100,7 @@ export default {
   },
   head() {
     return {
-      title: 'Reset password',
+      title: 'Reset Password',
     }
   },
   methods: {
@@ -98,24 +109,24 @@ export default {
         try {
           this.loading = true
           const url = new URL(
-            '/.netlify/functions/resetPassword',
+            '/.netlify/functions/sendPasswordResetEmail',
             this.$config.baseURL
           )
-          const response = await fetch(url, {
+          let response = await fetch(url, {
             body: JSON.stringify({
               email: this.username,
             }),
             method: 'POST',
           })
-          if (response.status === 400) {
-            this.$rollbar.debug('Error resetting password')
+          response = await response.text()
+          if (response === 'Email not found') {
             this.failed = true
           } else {
-            this.$nuxt.$emit('show-success')
             this.failed = false
+            this.dialog = true
           }
-        } catch (e) {
-          console.error(e)
+        } catch (err) {
+          console.error(err)
           this.$snack.showMessage({
             type: 'error',
             msg: 'Error resetting password',
