@@ -107,11 +107,6 @@ export default {
     next()
   },
   layout: 'app',
-  data() {
-    return {
-      upcoming: 0,
-    }
-  },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
     // Show all assignments for archived groups
@@ -123,13 +118,22 @@ export default {
         return this.group.assignments.filter((a) => a.live === !this.upcoming)
       }
     },
-    // Remember tab state
+    // Remember tab state for group
     tab: {
       get() {
         return this.$store.state.app.groupTab
       },
       set(value) {
         this.$store.commit('app/setGroupTab', value)
+      },
+    },
+    // On 'ASSIGNMENTS' tab, remember upcoming/past
+    upcoming: {
+      get() {
+        return this.$store.state.app.upcoming
+      },
+      set(value) {
+        this.$store.commit('app/setUpcoming', value)
       },
     },
   },

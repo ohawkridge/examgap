@@ -143,11 +143,6 @@ export default {
     RevisionTopicCard,
   },
   layout: 'app',
-  data() {
-    return {
-      upcoming: 0,
-    }
-  },
   computed: {
     ...mapGetters({
       recent: 'user/recentAssignments',
@@ -162,13 +157,21 @@ export default {
       if (this.group === undefined) return []
       return this.group.assignments.filter((a) => a.live === !this.upcoming)
     },
-    // Remember active tab
+    // Assignments/revision tab
     tab: {
       get() {
         return this.$store.state.app.tab
       },
       set(value) {
         this.$store.commit('app/setTab', value)
+      },
+    },
+    upcoming: {
+      get() {
+        return this.$store.state.app.upcoming
+      },
+      set(value) {
+        this.$store.commit('app/setUpcoming', value)
       },
     },
   },

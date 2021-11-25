@@ -1,5 +1,6 @@
 const getDefaultState = () => ({
-  tab: null,
+  tab: null, // Assignments/revision on home.vue (student)
+  upcoming: 0,
   groupTab: null, // Tab on _group.vue
   onboardStep: 0, // Don't onboard
   loading: false, // Global loading state
@@ -21,6 +22,9 @@ const mutations = {
   },
   setTab(state, val) {
     state.tab = val
+  },
+  setUpcoming(state, val) {
+    state.upcoming = val
   },
   setOnboardStep(state, step) {
     state.onboardStep = step
