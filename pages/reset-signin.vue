@@ -10,7 +10,12 @@
     <v-container class="fill-height">
       <v-row class="d-flex justify-center">
         <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
-          <p class="text-h5 font-weight-bold text-center">Sign In</p>
+          <p class="text-h5 font-weight-bold text-center">
+            Sign in with your new password
+          </p>
+          <p class="class-h6 text-center">
+            Click the link in your email to reset your password.
+          </p>
           <v-form ref="form" @submit.prevent="login()">
             <v-text-field
               v-model="username"
@@ -44,8 +49,13 @@
                 class="fa-lg"
               />
             </v-text-field>
-            <v-alert v-if="failed" border="left" text type="error">
-              Username or password incorrect
+            <v-alert v-if="failed" border="top" text type="error">
+              <font-awesome-icon
+                slot="prepend"
+                icon="fa-light fa-circle-exclamation"
+                class="mr-2 fa-lg"
+              />
+              Username or password incorrect.
             </v-alert>
             <v-btn
               color="primary"
@@ -59,6 +69,12 @@
             >
               Sign In</v-btn
             >
+            <div class="d-flex justify-center mt-3">
+              <small>
+                No email yet? Check your spam folder or
+                <nuxt-link to="/reset">try again</nuxt-link>.
+              </small>
+            </div>
             <div class="mt-3 d-flex justify-space-between">
               <nuxt-link to="/reset">Reset password</nuxt-link>
               <nuxt-link to="/trial">Free trial</nuxt-link>
@@ -94,7 +110,7 @@ export default {
   },
   head() {
     return {
-      title: 'Sign In',
+      title: 'Sign in with your new password',
     }
   },
   methods: {

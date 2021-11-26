@@ -11,22 +11,28 @@
       <v-row class="d-flex justify-center">
         <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
           <p class="text-h5 font-weight-bold text-center">Reset Password</p>
+          <p class="class-h6 text-center">
+            Enter your email address to request a password reset link.
+            <strong>
+              Student? Your teacher can also reset your password.
+            </strong>
+          </p>
           <!-- Prevent submit btn posting form -->
           <v-form ref="form" @submit.prevent="reset()">
             <v-text-field
               v-model="username"
               label="Username or email"
+              :rules="rules"
               placeholder="jbloggs@school.org.uk"
               color="primary"
               type="email"
               required
               outlined
-              :rules="userRules"
               autofocus
             ></v-text-field>
-            <v-alert border="left" type="info" text>
+            <!-- <v-alert border="left" type="info" text>
               Students—your teacher can reset your password
-            </v-alert>
+            </v-alert> -->
             <v-alert v-if="failed" border="left" type="error" text>
               Username not found
             </v-alert>
@@ -45,33 +51,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <!-- Success xx -->
-    <v-dialog v-model="dialog" max-width="440">
-      <v-card>
-        <v-card-title class="d-flex justify-center py-6">
-          <font-awesome-icon
-            icon="fa-light fa-circle-check"
-            class="fa-4x ico-green"
-          />
-        </v-card-title>
-        <v-card-text>
-          <p class="text-h5 text-center">Success</p>
-          <p class="text-center text-body-1">
-            You should receive a reset link via email shortly.
-          </p>
-          <div class="d-flex justify-end">
-            <v-btn
-              color="primary"
-              rounded
-              elevation="0"
-              @click="dialog = false"
-            >
-              Close
-            </v-btn>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </v-app>
 </template>
 
@@ -84,11 +63,10 @@ export default {
   },
   data() {
     return {
-      dialog: false,
       loading: false,
       failed: false,
       username: '',
-      userRules: [
+      rules: [
         (v) => !!v || 'Email is required',
         (v) => {
           const pattern =
@@ -119,11 +97,11 @@ export default {
             method: 'POST',
           })
           response = await response.text()
+          if (response === 'ok') {
+            this.$router.push('/reset-signin')
+          }
           if (response === 'Email not found') {
             this.failed = true
-          } else {
-            this.failed = false
-            this.dialog = true
           }
         } catch (err) {
           console.error(err)

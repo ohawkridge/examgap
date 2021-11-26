@@ -8,24 +8,16 @@
     <v-container class="fill-height">
       <v-row class="d-flex justify-center">
         <v-col id="nav-fix" cols="12" sm="8" md="6" lg="5" xl="4">
-          <p class="text-h5 font-weight-bold text-center">Update Password</p>
+          <p class="text-h5 font-weight-bold text-center">
+            Choose a new password
+          </p>
           <v-form ref="form" @submit.prevent="updatePass()">
             <v-text-field
-              v-model="pass1"
+              v-model="password"
               type="password"
               :rules="passRules"
               label="New password* (min. 6 characters)"
               required
-              validate-on-blur
-              outlined
-            ></v-text-field>
-            <v-text-field
-              v-model="pass2"
-              type="password"
-              :rules="passRules"
-              label="New password again*"
-              required
-              validate-on-blur
               outlined
             ></v-text-field>
             <small>*Indicates required field</small>
@@ -41,6 +33,9 @@
               >Update Password</v-btn
             >
           </v-form>
+          <v-alert v-if="failed" border="left" text type="error">
+            {{ message }}
+          </v-alert>
         </v-col>
       </v-row>
     </v-container>
@@ -56,19 +51,19 @@ export default {
   },
   data() {
     return {
-      loading: false,
-      pass1: '',
-      pass2: '',
+      password: '',
       passRules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 6) || 'Password must be at least 6 characters',
-        (v) => this.pass1 === this.pass2 || 'Passwords must match',
       ],
+      loading: false,
+      failed: false,
+      message: '',
     }
   },
   head() {
     return {
-      title: 'Update Password',
+      title: 'Choose a new password',
     }
   },
   methods: {
@@ -82,25 +77,22 @@ export default {
           )
           let response = await fetch(url, {
             body: JSON.stringify({
-              password: this.pass1,
+              password: this.password,
               code: this.$route.query.c,
             }),
             method: 'POST',
           })
           response = await response.text()
-          console.debug(response)
-          // if (response === 'Email not found') {
-          //   this.failed = true
-          // } else {
-          //   this.failed = false
-          //   this.dialog = true
-          // }
-          // Log user in ?
-          // await this.$store.dispatch('user/getUser', {
-          //   username: this.username,
-          //   password: this.pw,
-          // })
-          this.$router.push('/home')
+          if (response === 'Invalid code') {
+            this.message = 'Reset link not valid. Please try again'
+            this.failed = true
+          }
+          if (response === 'Code expired') {
+            this.message = 'Reset link expired. Please try again'
+            this.failed = true
+          }
+          // Code is ok. Go to custom sign in page
+          this.$router.push('/reset-signin')
         } catch (err) {
           console.error(err)
           this.$snack.showMessage({
@@ -110,7 +102,6 @@ export default {
         } finally {
           this.loading = false
           this.username = ''
-          this.$refs.form.resetValidation()
         }
       }
     },

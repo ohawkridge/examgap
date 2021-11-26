@@ -1,6 +1,7 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
+// Actually reset a user's password
 exports.handler = async (event) => {
   const AWS = require('aws-sdk')
   const data = JSON.parse(event.body)
@@ -38,11 +39,9 @@ exports.handler = async (event) => {
         ),
       }
     ),
-    false
+    false // Cose not found
   )
   const res = await client.query(qry)
-  console.debug(res)
-  // Code not found
   if (!res) {
     return { statusCode: 403, body: 'Invalid code' }
   }
@@ -57,11 +56,12 @@ exports.handler = async (event) => {
     },
   })
   const data2 = await client.query(qry2)
-  console.debug(data2)
+  const email = data2.data.username
+  console.debug('Pw reset for', email)
   // Send password in email
   const params = {
     Destination: {
-      ToAddresses: [data2.data.username], // Must be array
+      ToAddresses: [email], // Must be array
     },
     // ConfigurationSetName: <<ConfigurationSetName>>,
     Message: {
@@ -95,7 +95,7 @@ exports.handler = async (event) => {
       console.log('email submitted to SES', data)
       return {
         statusCode: 200,
-        body: `${data2.data.username}`,
+        body: `ok`,
       }
     })
     .catch((error) => {

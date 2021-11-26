@@ -74,10 +74,12 @@ exports.handler = async (event) => {
               Charset: 'UTF-8',
               Data: `<html>
                   <body>
-                  <p>------------------------------------------</p>
-                  <a href='https://examgap.com/password?c=${code}'>Click here to reset your password</a><br />
-                  <p>------------------------------------------</p>
-                  <p>Link valid for 1 hour.</p><br />
+                  <p>Hello,</p>
+                  <p>Click the link below to reset your password for Examgap.</p>
+                  <p>----------------------------------------------------</p>
+                  <a href='https://examgap.com/new-pass?c=${code}'>https://examgap.com/new-pass?c=${code}</a><br />
+                  <p>----------------------------------------------------</p>
+                  <p>Link is valid for 1 hour. If you didn’t ask to reset your password, you can ignore this email.</p>
                   <p>Still having problems? Email <a href="mailto:support@examgap.com">support@examgap.com</a></p>
                 </body>
                 </html>`,
@@ -101,7 +103,7 @@ exports.handler = async (event) => {
           console.log('email submitted to SES', data)
           return {
             statusCode: 200,
-            body: `Message sent`,
+            body: `ok`,
           }
         })
         .catch((error) => {
