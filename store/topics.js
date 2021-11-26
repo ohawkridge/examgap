@@ -90,23 +90,26 @@ const actions = {
     }
   },
   async getQuestions({ commit, state, rootState, rootGetters }) {
-    const url = new URL(
-      '/.netlify/functions/getQuestions',
-      this.$config.baseURL
-    )
-    let response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        topicId: state.topics[state.currentTopicIndex].id,
-        groupId: rootGetters['user/activeGroup'].id, // To find past assignments
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error(`${response.statusText} ${response.status}`)
+    const topicId = state.topics[state.currentTopicIndex].id
+    if (topicId !== undefined) {
+      const url = new URL(
+        '/.netlify/functions/getQuestions',
+        this.$config.baseURL
+      )
+      let response = await fetch(url, {
+        body: JSON.stringify({
+          secret: rootState.user.secret,
+          topicId,
+          groupId: rootGetters['user/activeGroup'].id, // To find past assignments
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error(`${response.statusText} ${response.status}`)
+      }
+      response = await response.json()
+      commit('setQuestions', response)
     }
-    response = await response.json()
-    commit('setQuestions', response)
   },
 }
 

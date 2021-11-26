@@ -88,7 +88,7 @@
                 <v-list-item-icon>
                   <font-awesome-icon
                     icon="fa-light fa-circle-info"
-                    class="xx"
+                    class="ico-btn"
                   />
                 </v-list-item-icon>
                 <v-list-item-content>
@@ -170,7 +170,7 @@
                   >
                     <font-awesome-icon
                       icon="fa-light fa-trash-can-xmark"
-                      class="xx"
+                      class="ico-btn"
                     />
                   </v-btn>
                 </template>
@@ -230,17 +230,10 @@ export default {
     }
   },
   async fetch() {
-    // Dispatch store action to get topics
-    // N.B. This action dispatches topics/getQuestions
+    // Dispatch action to get topics
+    // (In turn dispatches topics/getQuestions)
     try {
-      // TODO Experiment with pre-fetching this
-      // Is too slow otherwise !
-      if (this.topics.length === 0) {
-        await this.$store.dispatch(
-          'topics/getTopics',
-          this.$route.params.course
-        )
-      }
+      await this.$store.dispatch('topics/getTopics', this.$route.params.course)
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -342,7 +335,7 @@ export default {
   overflow-y: scroll;
 }
 
-.xx {
+.ico-btn {
   height: 18px;
   width: 18px;
 }

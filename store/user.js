@@ -237,6 +237,8 @@ const actions = {
     newAssObj = await newAssObj.json()
     // Clear any previously selected questions
     commit('topics/clearSelectedQuestions', null, { root: true })
+    // Toggle upcoming to show new assignment
+    commit('app/setUpcoming', 0)
     commit('addAssignment', { newAssObj, group: getters.activeGroup })
   },
   async deleteAssignment({ commit, rootState, getters }, assignmentId) {
