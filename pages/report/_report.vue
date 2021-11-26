@@ -26,10 +26,13 @@
             }}</span>
           </div>
           <div>
+            <!-- TODO Mobile shit -->
             <div v-if="$vuetify.breakpoint.name !== 'xs'">
-              <v-btn rounded text color="red" @click="showDelete()">
-                Delete
-              </v-btn>
+              <the-delete-assignment-dialog
+                v-if="!$fetchState.pending"
+                :assignment-id="assignment.id"
+                :group-id="group.id"
+              />
               <v-btn elevation="0" rounded text class="ml-2" @click="refresh()">
                 Refresh
               </v-btn>
@@ -49,11 +52,6 @@
                     Refresh
                   </v-list-item-title>
                 </v-list-item>
-                <the-delete-assignment-dialog
-                  v-if="!$fetchState.pending && group"
-                  :assignment-id="assignment.id"
-                  :group-id="group.id"
-                />
               </v-list>
             </v-menu>
           </div>
@@ -544,10 +542,6 @@ export default {
     )
   },
   methods: {
-    showDelete() {
-      this.$store.commit('assignment/setDelId', this.assignment.group.id)
-      this.$nuxt.$emit('show-delete')
-    },
     swipeStart(e) {
       if (e !== undefined) {
         if (typeof e.targetTouches !== 'undefined') {

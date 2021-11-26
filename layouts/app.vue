@@ -114,7 +114,6 @@
       <the-loading-overlay />
       <the-onboarding-snackbar v-if="teacher" />
       <the-create-class-dialog v-if="teacher" />
-      <the-delete-assignment-dialog v-if="teacher" />
       <the-join-dialog v-else />
     </v-main>
     <the-footer />
@@ -131,7 +130,6 @@ import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheGreeting from '@/components/common/TheGreeting'
 import TheLoadingOverlay from '~/components/common/TheLoadingOverlay.vue'
-import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 
 export default {
   name: 'App',
@@ -143,7 +141,6 @@ export default {
     TheOnboardingSnackbar,
     TheGreeting,
     TheLoadingOverlay,
-    TheDeleteAssignmentDialog,
     TheFooter,
   },
   middleware: ['auth'],
