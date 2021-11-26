@@ -1,30 +1,31 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const students = data.students
-  console.log(`function received`, students)
+  const password = data.password
+  const secret = data.secret
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Map(
       students,
       q.Lambda(
-        'obj',
-        q.Update(q.Ref(q.Collection('User'), q.Select('id', q.Var('obj'))), {
+        'id',
+        q.Update(q.Ref(q.Collection('User'), q.Var('id')), {
           credentials: {
-            password: 'password',
+            password,
           },
         })
       )
     )
-    const data = await keyedClient.query(qry)
+    await keyedClient.query(qry)
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: 'ok',
     }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }

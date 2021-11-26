@@ -1,44 +1,36 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12">
-        <div class="d-flex justify-end">
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn
-                elevation="0"
-                rounded
-                text
-                @click="exportTableToCSV()"
-                v-on="on"
-              >
-                Csv
-                <font-awesome-icon
-                  icon="fa-light fa-arrow-down-to-line"
-                  class="ml-2"
-                />
-              </v-btn>
-            </template>
-            <span>Download csv</span>
-          </v-tooltip>
-          <v-btn
-            class="d-none d-sm-flex ml-2"
-            elevation="0"
-            rounded
-            text
-            @mouseover="scroll"
-            @mouseleave="stop"
-            @mouseup="stop"
-          >
-            Scroll
-            <font-awesome-icon icon="fa-light fa-arrow-right" class="ml-2" />
-          </v-btn>
-        </div>
+      <v-col cols="12" class="d-flex">
+        <v-tooltip bottom>
+          <template #activator="{ on }">
+            <v-btn elevation="0" rounded @click="exportTableToCSV()" v-on="on">
+              Csv
+              <font-awesome-icon
+                icon="fa-light fa-arrow-down-to-line"
+                class="ml-2"
+              />
+            </v-btn>
+          </template>
+          <span>Download csv</span>
+        </v-tooltip>
+        <v-btn
+          class="d-none d-sm-flex ml-2"
+          elevation="0"
+          rounded
+          @mouseover="scroll"
+          @mouseleave="stop"
+          @mouseup="stop"
+        >
+          Scroll
+          <font-awesome-icon icon="fa-light fa-arrow-right" class="ml-2" />
+        </v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
         <v-data-table
+          id="table"
           :headers="grades.headers"
           :items="grades.data"
           :loading="$fetchState.pending"
@@ -120,14 +112,9 @@ export default {
     },
     // Scroll right https://jsfiddle.net/Herteby/x53494ef/
     scroll() {
+      const el = document.getElementsByClassName('v-data-table__wrapper')[0]
       if (!this.interval) {
-        this.interval = setInterval(
-          () =>
-            (document.getElementsByClassName(
-              'v-data-table__wrapper'
-            )[0].scrollLeft += 8),
-          30
-        )
+        this.interval = setInterval(() => (el.scrollLeft += 8), 30)
       }
     },
     // Stop scroll
@@ -192,5 +179,9 @@ export default {
 /* center all cells except username */
 td:not(:first-child) {
   text-align: center;
+}
+
+#table {
+  border: 1px solid #d2d2d2 !important;
 }
 </style>

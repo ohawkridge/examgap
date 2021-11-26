@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <v-card class="modal">
+    <v-card>
       <v-card-title class="d-flex justify-center"> Create class </v-card-title>
       <v-card-text>
         <v-form ref="form">

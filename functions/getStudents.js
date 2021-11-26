@@ -6,7 +6,6 @@ exports.handler = async (event) => {
   const groupId = data.groupId
   const namesOnly = data.namesOnly
   const secret = data.secret
-  console.log(`data for group`, groupId)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,

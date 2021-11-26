@@ -1,11 +1,6 @@
 <template>
   <div>
-    <v-tabs
-      v-model="tab"
-      centered
-      background-color="transparent"
-      style="border-bottom: 1px solid #d2d2d2 !important"
-    >
+    <v-tabs v-model="tab" centered fixed-tabs background-color="transparent">
       <v-tab> Assignments </v-tab>
       <v-tab> Students </v-tab>
       <v-tab> Grades </v-tab>

@@ -6,12 +6,8 @@
       </v-card-title>
       <v-card-text>
         <p>There are three ways to add students:</p>
-        <p class="text-subtitle-1 font-weight-medium mb-2">Manual creation</p>
-        <p>
-          On the
-          <span class="font-weight-medium">'STUDENTS'</span>
-          tab, click Students → Add students.
-        </p>
+        <p class="text-subtitle-1 font-weight-medium mb-2">Manually</p>
+        <p>Click 'ACTIONS' → Add students.</p>
         <p class="text-subtitle-1 font-weight-medium mb-2">Share invite link</p>
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>
@@ -32,7 +28,7 @@
             </v-btn>
           </template>
         </v-text-field>
-        <p class="mt-2">Students can go to examgap.com and click JOIN CLASS.</p>
+        <p class="mt-2">Students can go to examgap.com → JOIN CLASS.</p>
         <div class="d-flex justify-end">
           <v-btn color="primary" rounded elevation="0" @click="dialog = false">
             Close

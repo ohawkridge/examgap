@@ -44,6 +44,7 @@
           <div class="d-flex justify-space-between">
             <p class="text-h6 mb-2">Questions ({{ questions.length }})</p>
             <v-btn elevation="0" rounded text small @click="createQuestion()">
+              <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
               Create question
             </v-btn>
           </div>

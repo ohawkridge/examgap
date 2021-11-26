@@ -4,12 +4,15 @@
       <div class="text-center">
         <v-img
           src="/no-task.svg"
-          max-width="180"
+          width="180"
+          height="130"
           contain
           class="mx-auto"
           alt="Books and pens illustrations"
         />
-        <p class="text-center mt-4">No upcoming assignments</p>
+        <p class="text-center black--text mt-4">
+          No {{ !$store.state.app.upcoming ? 'upcoming' : 'past' }} assignments
+        </p>
         <v-tooltip v-if="teacher" bottom>
           <template #activator="{ on }">
             <v-btn
