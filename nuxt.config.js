@@ -45,7 +45,6 @@ export default {
     { src: '@/plugins/honeybadger.js', mode: 'client' },
     { src: '@/plugins/persistedState.js', mode: 'client' },
     { src: '@/plugins/vuetify.js' },
-    // { src: '@/plugins/fontawesome.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

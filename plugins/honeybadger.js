@@ -9,4 +9,4 @@ const config = {
 Vue.use(HoneybadgerVue, config)
 
 // This is handy for testing; remove it in production.
-// window.Honeybadger = Vue.$honeybadger
+window.Honeybadger = Vue.$honeybadger

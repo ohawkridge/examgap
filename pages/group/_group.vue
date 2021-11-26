@@ -22,7 +22,7 @@
               "
             >
               <the-restore-group-dialog
-                v-if="!group.active"
+                v-if="group && !group.active"
                 :group-id="group.id"
               />
               <template v-else>
