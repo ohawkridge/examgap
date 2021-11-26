@@ -3,11 +3,12 @@
     <v-select
       v-model="selectedCourse"
       :loading="$fetchState.pending"
-      :items="showAll ? courses : filteredCourses"
-      item-text="name"
-      item-value="id"
+      :items="courses"
       :rules="courseRules"
       label="Select course*"
+      item-text="name"
+      item-value="id"
+      hide-details
       outlined
       @change="$nuxt.$emit('select-course', selectedCourse)"
     >
@@ -18,17 +19,12 @@
       <!-- Display chips in list -->
       <template #item="data">
         {{ data.item.name }}
-        <v-chip small outlined color="black" class="ml-2">{{
+        <v-chip dark small :color="color(data.item.board)" class="ml-2">{{
           data.item.board
         }}</v-chip>
       </template>
     </v-select>
-    <v-checkbox
-      v-model="showAll"
-      label="Show developing courses"
-      class="mt-0"
-      hide-details
-    >
+    <v-checkbox v-model="showAll" label="Show all courses" hide-details>
     </v-checkbox>
   </div>
 </template>
@@ -36,7 +32,7 @@
 <script>
 export default {
   name: 'TheCourseSelect',
-  // Passed if an existing course has been selected
+  // Passed if an existing course is selected
   props: {
     courseId: {
       type: String,
@@ -60,6 +56,7 @@ export default {
       let response = await fetch(url, {
         body: JSON.stringify({
           secret: this.$store.state.user.secret,
+          showAll: this.showAll,
         }),
         method: 'POST',
       })
@@ -76,10 +73,27 @@ export default {
       })
     }
   },
-  computed: {
-    // Only show names of 'active' courses
-    filteredCourses() {
-      return this.courses.filter((c) => !('name' in c) || c.active)
+  watch: {
+    showAll() {
+      this.$fetch()
+    },
+  },
+  methods: {
+    color(board) {
+      switch (board) {
+        case 'AQA':
+          return '#3d2c74'
+        case 'OCR':
+          return '#0e2a5e'
+        case 'Pearson':
+          return '#007fa3'
+        case 'Eduqas':
+          return '#f1561a'
+        case 'Cambridge':
+          return '#862b2d'
+        default:
+          return ''
+      }
     },
   },
 }

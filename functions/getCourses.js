@@ -1,11 +1,13 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
+  const secret = data.secret
+  const showAll = data.showAll
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Select(
@@ -39,33 +41,35 @@ exports.handler = async (event, context, callback) => {
       }
     }
     // IGCSE
-    out.push({ header: 'IGCSE COURSES' }, { divider: true })
-    for (const course of data) {
-      if (course.cat === 'IGCSE') {
-        out.push(course)
+    if (showAll) {
+      out.push({ header: 'IGCSE COURSES' }, { divider: true })
+      for (const course of data) {
+        if (course.cat === 'IGCSE') {
+          out.push(course)
+        }
       }
-    }
-    // Not doing Scottish courses (yet)
-    // N5
-    // out.push({ header: 'N5 COURSES' }, { divider: true })
-    // for (const course of data) {
-    //   if (course.cat === 'N5') {
-    //     out.push(course)
-    //   }
-    // }
-    // A level
-    out.push({ header: 'A LEVEL COURSES' }, { divider: true })
-    for (const course of data) {
-      if (course.cat === 'A2') {
-        out.push(course)
+      // Not doing Scottish courses (yet)
+      // N5
+      // out.push({ header: 'N5 COURSES' }, { divider: true })
+      // for (const course of data) {
+      //   if (course.cat === 'N5') {
+      //     out.push(course)
+      //   }
+      // }
+      // A level
+      out.push({ header: 'A LEVEL COURSES' }, { divider: true })
+      for (const course of data) {
+        if (course.cat === 'A2') {
+          out.push(course)
+        }
       }
-    }
-    // Nov 2021. Got rid of IT and added 'Other'
-    // This was to add Andy's GCSE Business
-    out.push({ header: 'OTHER COURSES' }, { divider: true })
-    for (const course of data) {
-      if (course.cat === 'Other') {
-        out.push(course)
+      // Nov 2021. Got rid of IT and added 'Other'
+      // This was to add Andy's GCSE Business
+      out.push({ header: 'OTHER COURSES' }, { divider: true })
+      for (const course of data) {
+        if (course.cat === 'Other') {
+          out.push(course)
+        }
       }
     }
     return {
