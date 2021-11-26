@@ -20,13 +20,9 @@
               required
               outlined
               :rules="userRules"
+              prepend-inner-icon="$user"
               autofocus
             >
-              <font-awesome-icon
-                slot="prepend-inner"
-                icon="fa-light fa-user"
-                class="fa-lg"
-              />
             </v-text-field>
             <v-text-field
               v-model="pw"
@@ -36,13 +32,10 @@
               required
               outlined
               :rules="passRules"
+              :append-icon="show ? '$eyeSlash' : '$eye'"
+              prepend-inner-icon="$lock"
               @click:append="show = !show"
             >
-              <font-awesome-icon
-                slot="prepend-inner"
-                icon="fa-light fa-lock-keyhole"
-                class="fa-lg"
-              />
             </v-text-field>
             <v-alert v-if="failed" border="left" text type="error">
               Username or password incorrect

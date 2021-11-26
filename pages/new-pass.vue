@@ -14,12 +14,20 @@
           <v-form ref="form" @submit.prevent="updatePass()">
             <v-text-field
               v-model="password"
-              type="password"
               :rules="passRules"
+              :type="show ? 'text' : 'password'"
+              :append-icon="show ? '$eyeSlash' : '$eye'"
               label="New password* (min. 6 characters)"
               required
               outlined
-            ></v-text-field>
+              @click:append="show = !show"
+            >
+              <font-awesome-icon
+                slot="prepend-inner"
+                icon="fa-light fa-lock-keyhole"
+                class="fa-lg"
+              />
+            </v-text-field>
             <small>*Indicates required field</small>
             <v-btn
               color="primary"
@@ -29,7 +37,6 @@
               rounded
               :disabled="loading"
               :loading="loading"
-              @click="updatePass()"
               >Update Password</v-btn
             >
           </v-form>
@@ -52,6 +59,7 @@ export default {
   data() {
     return {
       password: '',
+      show: false,
       passRules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 6) || 'Password must be at least 6 characters',

@@ -26,6 +26,7 @@
               placeholder="jbloggs@school.org.uk"
               color="primary"
               type="email"
+              prepend-inner-icon="$user"
               required
               outlined
               autofocus

@@ -41,13 +41,10 @@
               required
               outlined
               :rules="passRules"
+              :append-icon="show ? '$eyeSlash' : '$eye'"
+              prepend-inner-icon="$lock"
               @click:append="show = !show"
             >
-              <font-awesome-icon
-                slot="prepend-inner"
-                icon="fa-light fa-lock-keyhole"
-                class="fa-lg"
-              />
             </v-text-field>
             <v-alert v-if="failed" border="top" text type="error">
               <font-awesome-icon
@@ -74,10 +71,6 @@
                 No email yet? Check your spam folder or
                 <nuxt-link to="/reset">try again</nuxt-link>.
               </small>
-            </div>
-            <div class="mt-3 d-flex justify-space-between">
-              <nuxt-link to="/reset">Reset password</nuxt-link>
-              <nuxt-link to="/trial">Free trial</nuxt-link>
             </div>
           </v-form>
         </v-col>

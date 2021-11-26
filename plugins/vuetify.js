@@ -103,6 +103,30 @@ const CUSTOM_ICONS = {
       icon: ['fal', 'xmark'],
     },
   },
+  eye: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'eye'],
+    },
+  },
+  eyeSlash: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'eye-slash'],
+    },
+  },
+  lock: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'lock-keyhole'],
+    },
+  },
+  user: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'user'],
+    },
+  },
 }
 
 export default new Vuetify({
