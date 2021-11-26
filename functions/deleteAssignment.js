@@ -5,8 +5,6 @@ exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const assignmentId = data.assignmentId
   const secret = data.secret
-  console.log(assignmentId)
-  console.log(secret)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
