@@ -46,7 +46,7 @@
               @click:append="show = !show"
             >
             </v-text-field>
-            <v-alert v-if="failed" border="top" text type="error">
+            <v-alert v-if="failed" border="top" text type="error" dense>
               <font-awesome-icon
                 slot="prepend"
                 icon="fa-light fa-circle-exclamation"

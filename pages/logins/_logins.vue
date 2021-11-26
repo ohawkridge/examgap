@@ -21,15 +21,10 @@
     </v-row>
     <v-row v-if="usernames.length > 0" class="justify-center">
       <v-col cols="12" md="10">
-        <v-alert border="top" type="info" text>
-          <font-awesome-icon
-            slot="prepend"
-            icon="fa-light fa-circle-info"
-            class="mr-2 fa-lg"
-          />
+        <v-alert border="left" type="info" text dense>
           If you created accounts by entering student's email addresses, the
-          password is '<b>password</b>'. Otherwise, students chose their own
-          passwords when they signed up. You can reset student passwords on the
+          password is 'password'. Otherwise, students chose their own passwords
+          when they signed up. You can reset student passwords on the
           <nuxt-link nuxt :to="`/group/${group.id}`">'STUDENTS'</nuxt-link>
           tab.
         </v-alert>

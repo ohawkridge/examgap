@@ -37,7 +37,7 @@
               @click:append="show = !show"
             >
             </v-text-field>
-            <v-alert v-if="failed" border="left" text type="error">
+            <v-alert v-if="failed" border="left" text type="error" dense>
               Username or password incorrect
             </v-alert>
             <v-btn

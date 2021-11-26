@@ -29,7 +29,7 @@
               />
             </v-text-field>
             <small>*Indicates required field</small>
-            <v-alert v-if="failed" border="left" text type="error">
+            <v-alert v-if="failed" border="left" text type="error" dense>
               {{ message }}
             </v-alert>
             <v-btn

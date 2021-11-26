@@ -61,13 +61,8 @@
                   </v-text-field>
                 </v-col>
               </v-row>
-              <v-alert v-if="emailInUse" border="top" text type="error">
-                <font-awesome-icon
-                  slot="prepend"
-                  icon="fa-light fa-circle-exclamation"
-                  class="mr-2 fa-lg"
-                />
-                Email is already registered.
+              <v-alert v-if="emailInUse" border="left" text type="error" dense>
+                Email already registered
               </v-alert>
               <small> *Indicates required field </small>
               <p class="mt-2">

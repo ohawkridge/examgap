@@ -31,10 +31,7 @@
               outlined
               autofocus
             ></v-text-field>
-            <!-- <v-alert border="left" type="info" text>
-              Students—your teacher can reset your password
-            </v-alert> -->
-            <v-alert v-if="failed" border="left" type="error" text>
+            <v-alert v-if="failed" border="left" type="error" text dense>
               Username not found
             </v-alert>
             <v-btn

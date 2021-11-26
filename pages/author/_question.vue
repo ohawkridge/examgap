@@ -98,6 +98,7 @@
               text
               border="left"
               class="mt-3"
+              dense
             >
               Question text and model answer required
             </v-alert>
@@ -226,6 +227,7 @@ export default {
     // Make sure question text and model answer aren't blank
     validateEditors() {
       if (this.question.text === '' || this.question.modelAnswer === '') {
+        this.showAlert = true
         return false
       }
       return true
@@ -282,6 +284,7 @@ export default {
           })
         } finally {
           this.loading = false
+          this.showAlert = false
         }
       }
     },

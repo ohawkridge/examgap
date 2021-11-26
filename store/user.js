@@ -98,6 +98,8 @@ const actions = {
     })
     // N.B. Must throw error in order to catch in component
     if (!response.ok) {
+      // console.debug(response.status) // 401
+      // console.debug(response.statusText) // Unauthorized
       throw new Error(
         `Error getting user data \n ${response.statusText} (${response.status})`
       )
