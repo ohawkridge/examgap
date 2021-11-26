@@ -1,7 +1,13 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
+    <!-- Show full button on desktop; v-menu on mobile -->
     <template #activator="{ on }">
-      <v-btn color="red" rounded text v-on="on"> Delete </v-btn>
+      <v-btn v-if="type === 'btn'" color="red" rounded text v-on="on">
+        Delete
+      </v-btn>
+      <v-list-item v-else v-on="on">
+        <v-list-item-title class="red--text"> Delete </v-list-item-title>
+      </v-list-item>
     </template>
     <v-card>
       <v-card-title class="d-flex justify-center">
@@ -36,7 +42,7 @@
 
 <script>
 export default {
-  name: 'TheDeleteAssignmentDialog',
+  name: 'DeleteAssignmentDialog',
   props: {
     assignmentId: {
       type: String,
@@ -45,6 +51,10 @@ export default {
     groupId: {
       type: String,
       default: '',
+    },
+    type: {
+      type: String,
+      default: 'btn',
     },
   },
   data() {

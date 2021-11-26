@@ -26,9 +26,8 @@
             }}</span>
           </div>
           <div>
-            <!-- TODO Mobile shit -->
             <div v-if="$vuetify.breakpoint.name !== 'xs'">
-              <the-delete-assignment-dialog
+              <delete-assignment-dialog
                 v-if="!$fetchState.pending"
                 :assignment-id="assignment.id"
                 :group-id="group.id"
@@ -52,6 +51,12 @@
                     Refresh
                   </v-list-item-title>
                 </v-list-item>
+                <delete-assignment-dialog
+                  v-if="!$fetchState.pending"
+                  :assignment-id="assignment.id"
+                  :group-id="group.id"
+                  type="list"
+                />
               </v-list>
             </v-menu>
           </div>
@@ -390,11 +395,11 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
-import TheDeleteAssignmentDialog from '@/components/teacher/TheDeleteAssignmentDialog'
+import DeleteAssignmentDialog from '@/components/teacher/DeleteAssignmentDialog'
 
 export default {
   components: {
-    TheDeleteAssignmentDialog,
+    DeleteAssignmentDialog,
     TheInfoDialog,
   },
   layout: 'app',

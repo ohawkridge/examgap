@@ -1,5 +1,7 @@
-// eslint-disable-next-line nuxt/no-cjs-in-config
-const HoneybadgerSourceMapPlugin = require('@honeybadger-io/webpack')
+import webpack from 'webpack'
+import HoneybadgerSourceMapPlugin from '@honeybadger-io/webpack'
+
+const { HONEYB_KEY } = process.env
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -105,6 +107,13 @@ export default {
           repository: 'https://github.com/ohawkridge/examgap',
         },
       }),
+      new webpack.EnvironmentPlugin(
+        JSON.parse(
+          JSON.stringify({
+            HONEYB_KEY,
+          })
+        )
+      ),
     ],
     extend(config) {},
     // https://github.com/iliyaZelenko/tiptap-vuetify-nuxt
