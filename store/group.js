@@ -27,7 +27,7 @@ const actions = {
   },
   async addStudents({ rootState, commit, rootGetters, dispatch }, usernames) {
     const url = new URL('/.netlify/functions/addStudents', this.$config.baseURL)
-    const response = await fetch(url, {
+    let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
         usernames,
@@ -35,17 +35,20 @@ const actions = {
       }),
       method: 'POST',
     })
-    if (!response.ok) {
-      throw new Error(`Error adding students ${response.status}`)
+    response = await response.json()
+    // Existing usernames appear as false in response array
+    const failedCount = response.filter((o) => o === false).length
+    if (failedCount > 0) {
+      this.$snack.showMessage({
+        msg: `${failedCount} users already have accounts`,
+      })
     }
-    // Update count for group
-    const group = rootGetters['user/activeGroup']
-    const n = group.count + usernames.length
-    commit('user/setCount', { group, n }, { root: true })
-    // Refetch student data
-    // (too complicated to insert new students)
+    if (!response.statusCode === '200') {
+      throw new Error(`Error adding students`)
+    }
+    // No need to user/setCount—data is refreshed
     await dispatch('getStudents')
-    // Send welcome email *only if* username looks like an email address
+    // Send welcome email if username is an email address
     const url2 = new URL(
       '/.netlify/functions/sendEmailWelcomeStudent',
       this.$config.baseURL

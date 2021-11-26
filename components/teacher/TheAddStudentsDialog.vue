@@ -113,10 +113,6 @@ export default {
         try {
           this.loading = true
           await this.$store.dispatch('group/addStudents', this.userNamesArray)
-          this.$snack.showMessage({
-            type: 'success',
-            msg: `Student${this.userNamesArray.length !== 1 ? 's' : ''} added`,
-          })
         } catch (err) {
           console.error(err)
           this.$snack.showMessage({

@@ -39,10 +39,16 @@
             <div id="fix-chip">
               <v-tooltip bottom>
                 <template #activator="{ on }">
-                  <v-chip v-if="subscribed" color="yell" v-on="on">
+                  <v-chip
+                    v-if="subscribed"
+                    outlined
+                    label
+                    color="accent"
+                    v-on="on"
+                  >
                     Subscribed
                     <font-awesome-icon
-                      icon="fa-light fa-bolt"
+                      icon="fa-light fa-check"
                       class="ml-2 fa-lg"
                     />
                   </v-chip>
