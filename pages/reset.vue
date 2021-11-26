@@ -21,7 +21,7 @@
           <v-form ref="form" @submit.prevent="reset()">
             <v-text-field
               v-model="username"
-              label="Username or email"
+              label="Email"
               :rules="rules"
               placeholder="jbloggs@school.org.uk"
               color="primary"

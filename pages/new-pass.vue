@@ -29,6 +29,9 @@
               />
             </v-text-field>
             <small>*Indicates required field</small>
+            <v-alert v-if="failed" border="left" text type="error">
+              {{ message }}
+            </v-alert>
             <v-btn
               color="primary"
               block
@@ -40,9 +43,6 @@
               >Update Password</v-btn
             >
           </v-form>
-          <v-alert v-if="failed" border="left" text type="error">
-            {{ message }}
-          </v-alert>
         </v-col>
       </v-row>
     </v-container>
@@ -94,13 +94,13 @@ export default {
           if (response === 'Invalid code') {
             this.message = 'Reset link not valid. Please try again'
             this.failed = true
-          }
-          if (response === 'Code expired') {
+          } else if (response === 'Code expired') {
             this.message = 'Reset link expired. Please try again'
             this.failed = true
+          } else {
+            // Code is ok. Go to custom sign in page
+            this.$router.push('/reset-signin')
           }
-          // Code is ok. Go to custom sign in page
-          this.$router.push('/reset-signin')
         } catch (err) {
           console.error(err)
           this.$snack.showMessage({
