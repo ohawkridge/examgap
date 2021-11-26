@@ -58,7 +58,6 @@ export default {
     async deleteAssignment() {
       try {
         this.loading = true
-        console.log('Deleting', this.assignmentId)
         await this.$store.dispatch('user/deleteAssignment', this.assignmentId)
         // For _report.vue only, go back to _group.vue
         if (this.$route.name === 'report-report') {

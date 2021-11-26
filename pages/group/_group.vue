@@ -15,11 +15,7 @@
               cols="12"
               md="10"
               class="d-flex justify-space-between align-center"
-              :class="
-                $vuetify.breakpoint.name === 'xs'
-                  ? 'flex-column flex-column-reverse'
-                  : ''
-              "
+              :class="assBtnFirst"
             >
               <the-restore-group-dialog
                 v-if="group && !group.active"
@@ -112,6 +108,11 @@ export default {
       } else {
         return this.group.assignments.filter((a) => a.live === !this.upcoming)
       }
+    },
+    assBtnFirst() {
+      return this.$vuetify.breakpoint.name === 'xs'
+        ? 'flex-column flex-column-reverse'
+        : ''
     },
     // Remember tab state for group
     tab: {

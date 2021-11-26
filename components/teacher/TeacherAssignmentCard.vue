@@ -13,7 +13,7 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item @click="showDelete()">
+          <v-list-item @click="dialog = true">
             <v-list-item-title class="red--text"> Delete </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -44,7 +44,7 @@
           Delete assignment?
         </v-card-title>
         <v-card-text>
-          <!-- TODO Does not work -->
+          <!-- TODO Make enter button work -->
           <v-form @submit.prevent="deleteAssignment()">
             <p>
               This assignment and all the responses that go with it will be
@@ -86,13 +86,28 @@ export default {
     }
   },
   methods: {
-    showDelete() {
-      this.$store.commit('assignment/setDelId', this.assignment.id)
-      this.$nuxt.$emit('show-delete')
-    },
     nav() {
       this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
       this.$router.push(`/report/${this.assignment.id}`)
+    },
+    async deleteAssignment() {
+      try {
+        this.loading = true
+        await this.$store.dispatch('user/deleteAssignment', this.assignment.id)
+        this.$snack.showMessage({
+          type: 'success',
+          msg: 'Assignment deleted',
+        })
+      } catch (err) {
+        console.warn(err)
+        this.$snack.showMessage({
+          msg: 'Error deleting assignment',
+          type: 'error',
+        })
+      } finally {
+        this.dialog = false
+        this.loading = false
+      }
     },
   },
 }

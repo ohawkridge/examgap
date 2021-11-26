@@ -324,16 +324,7 @@
                 class="breaks text-body-2"
                 v-text="response.text"
               ></p>
-              <p
-                class="
-                  text-subtitle-1
-                  d-flex
-                  justify-space-between
-                  align-center
-                "
-              >
-                Feedback
-              </p>
+              <p class="text-subtitle-1">Feedback</p>
               <!-- N.B. update is debounced method -->
               <v-textarea
                 id="feedback"
@@ -528,6 +519,7 @@ export default {
     },
   },
   beforeDestroy() {
+    clearTimeout(this.timeout) // Just in case
     document.removeEventListener('touchstart', this.swipeStart())
     document.removeEventListener('touchend', this.swipeEnd())
   },
