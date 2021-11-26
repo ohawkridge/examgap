@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" width="440">
-    <v-card>
+    <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Are you sure? </v-card-title>
       <v-card-text>
         <p>Once you've seen the mark scheme, you can't go back.</p>

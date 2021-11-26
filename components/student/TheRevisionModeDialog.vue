@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <v-card>
+    <v-card class="modal">
       <v-card-title class="d-flex justify-center"> Revision mode </v-card-title>
       <v-card-text class="text-body-1">
         <p>You will now see a practise exam question.</p>

@@ -18,7 +18,7 @@
         <span>Restore class</span>
       </v-tooltip>
     </template>
-    <v-card>
+    <v-card class="modal">
       <v-card-title class="d-flex justify-center">
         Restore class?
       </v-card-title>

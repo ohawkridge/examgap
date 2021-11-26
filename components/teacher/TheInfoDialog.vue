@@ -10,7 +10,7 @@
         <span>More information</span>
       </v-tooltip>
     </template>
-    <v-card>
+    <v-card class="modal">
       <v-card-title class="d-flex justify-center">
         More information
       </v-card-title>

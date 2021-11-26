@@ -5,7 +5,7 @@
         {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
       </v-btn>
     </template>
-    <v-card>
+    <v-card class="modal">
       <v-card-title class="d-flex justify-center"
         >Subscribe to Examgap</v-card-title
       >

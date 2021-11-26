@@ -173,7 +173,7 @@
     </v-row>
     <!-- Reset Pw xx -->
     <v-dialog v-model="dialog" max-width="440">
-      <v-card>
+      <v-card class="modal">
         <v-card-title class="d-flex justify-center">
           Reset Password
         </v-card-title>

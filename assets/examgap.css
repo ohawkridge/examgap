@@ -11,7 +11,6 @@ pre {
 }
 
 blockquote {
-  /* border-left: 4px solid rgb(224, 224, 224); */
   border-left: 0.25em solid #dfe2e5;
   color: #6a737d;
   padding-left: 1em;
@@ -95,6 +94,20 @@ span.v-chip.theme--light.green {
     margin-top: 0;
     margin-bottom: 3em;
   }
+}
+
+.modal::before {
+  content: '';
+  display: block;
+  height: 4px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background: rgb(0, 153, 204);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 153, 204, 1) 20%,
+    rgba(249, 185, 183, 1) 100%
+  );
 }
 
 /* adjust for navbar height */
