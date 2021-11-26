@@ -22,6 +22,10 @@ const getDefaultState = () => ({
 const state = getDefaultState()
 
 const getters = {
+  expires: (state) => {
+    const d = new Date(state.subscriptionExpires['@ts'].substring(0, 10))
+    return d.toString().substring(0, 15)
+  },
   activeGroup: (state) => {
     const found = state.groups.find((g) => g.id === state.activeGroupId)
     // Group must be archived

@@ -29,7 +29,7 @@
         ></v-text-field>
         <v-text-field
           v-if="teacher"
-          :value="`${expires} (${subscriptionDays} days)`"
+          :value="`${expires} (${subscriptionDays})`"
           :label="subscribed ? 'Subscription expires' : 'Trial expires'"
           :error="subscriptionDays < 1"
           outlined
@@ -62,44 +62,44 @@
         <v-divider class="my-10" />
         <div class="text-h5 d-flex justify-space-between">Password</div>
         <p class="font-weight-light mb-9">Update your password.</p>
-        <v-text-field
-          v-model="pass1"
-          type="password"
-          :rules="passwordRules"
-          label="New password* (min. 6 characters)"
-          required
-          validate-on-blur
-          outlined
-        ></v-text-field>
-        <v-text-field
-          v-model="pass2"
-          type="password"
-          :rules="passwordRules"
-          label="New password again*"
-          required
-          validate-on-blur
-          outlined
-          :error-messages="match"
-        ></v-text-field>
-        <small>*Indicates required field</small>
-        <v-btn
-          color="primary"
-          block
-          type="submit"
-          elevation="0"
-          rounded
-          :disabled="typeof match == 'string' || loading"
-          :loading="loading"
-          @click="updatePass()"
-          >Update Password</v-btn
-        >
+        <v-form ref="form">
+          <v-text-field
+            v-model="pass1"
+            type="password"
+            :rules="rules"
+            label="New password* (min. 6 characters)"
+            required
+            validate-on-blur
+            outlined
+          ></v-text-field>
+          <v-text-field
+            v-model="pass2"
+            type="password"
+            :rules="rules"
+            label="New password again*"
+            required
+            validate-on-blur
+            outlined
+          ></v-text-field>
+          <small>*Indicates required field</small>
+          <v-btn
+            color="primary"
+            block
+            elevation="0"
+            rounded
+            :disabled="loading"
+            :loading="loading"
+            @click="updatePass()"
+            >Update Password</v-btn
+          >
+        </v-form>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import TheSubscribeDialog from '@/components/teacher/TheSubscribeDialog'
 
 export default {
@@ -112,11 +112,12 @@ export default {
     return {
       pass1: '',
       pass2: '',
-      passwordRules: [
+      loading: false,
+      rules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 6) || 'Password must be at least 6 characters',
+        (v) => this.pass1 === this.pass2 || 'Passwords must match',
       ],
-      loading: false,
     }
   },
   head() {
@@ -128,20 +129,16 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
       subscribed: (state) => state.user.subscribed,
-      expires: (state) =>
-        state.user.subscriptionExpires['@ts'].substring(0, 10),
       subscriptionDays: (state) => state.user.subscriptionDays,
     }),
-    match() {
-      return this.pass1 === this.pass2 ? [] : 'Passwords do not match'
-    },
+    ...mapGetters({ expires: 'user/expires' }),
   },
   mounted() {
     this.$store.commit('app/setPageTitle', 'Profile')
   },
   methods: {
     async updatePass() {
-      if (this.pass1 === this.pass2) {
+      if (this.$refs.form.validate()) {
         this.loading = true
         try {
           const url = new URL(
@@ -163,14 +160,15 @@ export default {
             type: 'success',
             msg: 'Password updated',
           })
-        } catch (e) {
-          console.error(e)
+        } catch (err) {
+          console.error(err)
           this.$snack.showMessage({
             msg: 'Error updating password',
             type: 'error',
           })
         } finally {
           this.loading = false
+          this.$refs.form.resetValidation()
         }
       }
     },
