@@ -18,7 +18,7 @@
           ></v-textarea>
         </v-form>
         <small>*Indicates required field</small>
-        <div>
+        <div class="d-flex justify-end">
           <v-btn
             color="primary"
             elevation="0"
@@ -28,7 +28,7 @@
             class="mt-2"
             @click="send()"
           >
-            Send
+            Send Feedback
           </v-btn>
         </div>
       </v-col>

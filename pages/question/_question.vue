@@ -1,12 +1,25 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="12" md="10" class="d-flex justify-space-between">
+      <v-col cols="12" md="10" class="d-flex">
         <!-- TODO If coming from /author don't want to go back? -->
-        <v-btn elevation="0" rounded @click="$router.go(-1)">
-          <font-awesome-icon icon="fa-light fa-arrow-left" class="mr-2" />
-          Back
-        </v-btn>
+        <v-tooltip bottom>
+          <template #activator="{ on }">
+            <v-btn
+              elevation="0"
+              icon
+              class="mr-2"
+              @click="$router.go(-1)"
+              v-on="on"
+            >
+              <font-awesome-icon
+                icon="fa-light fa-arrow-left"
+                class="ico-btn"
+              />
+            </v-btn>
+          </template>
+          <span>Back</span>
+        </v-tooltip>
         <div>
           <v-tooltip bottom>
             <template #activator="{ on }">
@@ -175,3 +188,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.ico-btn {
+  height: 24px;
+  width: 24px;
+}
+</style>

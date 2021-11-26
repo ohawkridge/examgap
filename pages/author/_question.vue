@@ -35,18 +35,7 @@
               persistent-hint
               placeholder="E.g. RAM, instructions, processor"
             ></v-text-field>
-            <p
-              class="
-                text-subtitle-1
-                font-weight-medium
-                mt-3
-                d-flex
-                justify-space-between
-                align-end
-              "
-            >
-              Mark scheme
-            </p>
+            <p class="text-subtitle-1 font-weight-medium mt-3">Mark scheme</p>
             <v-text-field
               v-for="(mark, i) in question.marks"
               :key="i"
@@ -57,7 +46,7 @@
               hide-details
               class="mb-3"
               placeholder="One mark for..."
-              @click:append="remove(i)"
+              @click:append="question.marks.splice(i, 1)"
             >
             </v-text-field>
             <div class="d-flex justify-end">
@@ -66,7 +55,7 @@
                 rounded
                 text
                 class="mt-2"
-                @click="add()"
+                @click="question.marks.push({ id: '', text: '' })"
               >
                 <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
                 Add mark
@@ -149,7 +138,7 @@ export default {
       ACLoading: false,
       rules: {
         max: [(v) => (v && v < 13) || 'Max. 25 marks'],
-        topics: [(v) => v.length > 0 || 'Select at least one topic'],
+        topics: [(v) => v.length > 0 || 'At least one topic required'],
       },
       showAlert: false,
       // showAll: false,
@@ -229,34 +218,39 @@ export default {
     }
   },
   methods: {
-    // Add point to mark scheme
-    add() {
-      this.question.marks.push({ id: '', text: '' })
-    },
-    // Remove point from mark scheme
-    remove(i) {
-      this.question.marks.splice(i, 1)
-    },
-    // Make sure question text and model answer aren't blank
-    validateEditors() {
-      console.log(this.question.text)
-      console.log(this.question.modelAnswer)
-      // if (qt === undefined || ma === undefined) {
-      //   this.showAlert = true
-      // }
-      return true
-    },
-    save() {
-      const x = this.$refs.form.validate()
-      console.log(x)
-      this.validateEditors()
-    },
-    async save2() {
-      // Get HTML from editors
+    getEditorText() {
       this.question.text = this.$refs.question.content.trim()
       this.question.modelAnswer = this.$refs.model.content.trim()
       this.question.guidance = this.$refs.guidance.content.trim()
-      if (this.$refs.form.validate() && this.validateEditors()) {
+    },
+    // Make sure question text and model answer aren't blank
+    validateEditors() {
+      if (this.question.text === '' || this.question.modelAnswer === '') {
+        return false
+      }
+      return true
+    },
+    // Mark scheme must contain at least one point
+    validateMarks() {
+      if (this.question.marks.length >= 1) {
+        if (this.question.marks[0].text !== '') {
+          return true
+        }
+      }
+      return false
+    },
+    async save() {
+      // Get HTML from editors
+      this.getEditorText()
+      // Validate as much of the form as possible
+      console.debug(this.$refs.form.validate())
+      console.debug(this.validateEditors())
+      console.debug(this.validateMarks())
+      if (
+        this.$refs.form.validate() &&
+        this.validateEditors() &&
+        this.validateMarks()
+      ) {
         this.loading = true
         try {
           const url = new URL(
