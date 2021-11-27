@@ -3,7 +3,7 @@ import HoneybadgerVue from '@honeybadger-io/vue'
 
 const config = {
   apiKey: process.env.HONEYB_KEY,
-  environment: 'production',
+  environment: process.env.NODE_ENV,
 }
 
 Vue.use(HoneybadgerVue, config)
