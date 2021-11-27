@@ -7,7 +7,7 @@
       <v-card-text>
         <p>There are three ways to add students:</p>
         <p class="text-subtitle-1 font-weight-medium mb-2">Manually</p>
-        <p>Click 'ACTIONS' → Add students.</p>
+        <p>Click 'MANAGE STUDENTS' → Add students.</p>
         <p class="text-subtitle-1 font-weight-medium mb-2">Share invite link</p>
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>

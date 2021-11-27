@@ -37,7 +37,11 @@ exports.handler = async (event) => {
     const out = [{ header: 'GCSE COURSES' }, { divider: true }]
     for (const course of data) {
       if (course.cat === 'GCSE') {
-        out.push(course)
+        if (showAll) {
+          out.push(course)
+        } else if (course.active) {
+          out.push(course)
+        }
       }
     }
     // IGCSE

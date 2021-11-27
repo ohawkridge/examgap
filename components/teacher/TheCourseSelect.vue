@@ -3,7 +3,7 @@
     <v-select
       v-model="selectedCourse"
       :loading="$fetchState.pending"
-      :items="courses"
+      :items="$store.state.group.courses"
       :rules="courseRules"
       label="Select course*"
       item-text="name"
@@ -24,15 +24,15 @@
         }}</v-chip>
       </template>
     </v-select>
-    <v-checkbox v-model="showAll" label="Show all courses" hide-details>
-    </v-checkbox>
+    <v-checkbox v-model="showAll" label="Show all courses" hide-details />
   </div>
 </template>
 
 <script>
+// N.B mapState not reactive for courses for some reason?
+
 export default {
   name: 'TheCourseSelect',
-  // Passed if an existing course is selected
   props: {
     courseId: {
       type: String,
@@ -41,7 +41,6 @@ export default {
   },
   data() {
     return {
-      courses: [],
       selectedCourse: this.courseId, // Copy to avoid mutating prop
       courseRules: [(v) => !!v || 'Course is required'],
       showAll: false,
@@ -49,22 +48,9 @@ export default {
   },
   async fetch() {
     try {
-      const url = new URL(
-        '/.netlify/functions/getCourses',
-        this.$config.baseURL
-      )
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          secret: this.$store.state.user.secret,
-          showAll: this.showAll,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Error fetching courses ${response.status}`)
-      }
-      response = await response.json()
-      this.courses = response
+      // N.B. fetch() occurs before mounted()
+      this.initShowAll()
+      await this.$store.dispatch('group/getCourses', this.showAll)
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -73,12 +59,18 @@ export default {
       })
     }
   },
-  watch: {
-    showAll() {
-      this.$fetch()
-    },
-  },
   methods: {
+    // If the current course is not active on the site
+    // yet default to show all courses in v-select
+    initShowAll() {
+      const active = [
+        '262684008356250123',
+        '263317250988048898',
+        '300746340204282369',
+        '300748140525388289',
+      ]
+      this.showAll = !active.includes(this.courseId)
+    },
     color(board) {
       switch (board) {
         case 'AQA':

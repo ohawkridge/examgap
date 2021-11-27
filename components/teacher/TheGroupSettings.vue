@@ -14,7 +14,6 @@
         ></v-text-field>
         <the-course-select :course-id="group.course.id" />
         <div class="d-flex justify-space-between mt-4">
-          <the-archive-group-dialog />
           <v-btn
             color="primary"
             elevation="0"
@@ -25,6 +24,7 @@
           >
             Save
           </v-btn>
+          <the-archive-group-dialog />
         </div>
       </v-col>
     </v-row>

@@ -1,6 +1,7 @@
 const getDefaultState = () => ({
   students: [],
   grades: [],
+  courses: [],
 })
 
 // Initial state
@@ -8,8 +9,19 @@ const getDefaultState = () => ({
 const state = getDefaultState()
 
 const actions = {
-  resetState({ commit }) {
-    commit('resetState')
+  async getCourses({ commit, rootState }, showAll) {
+    const url = new URL('/.netlify/functions/getCourses', this.$config.baseURL)
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        showAll,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error fetching courses ${response.status}`)
+    }
+    commit('setCourses', await response.json())
   },
   async getGrades({ commit, rootState, rootGetters }) {
     const url = new URL('/.netlify/functions/getGrades', this.$config.baseURL)
@@ -137,6 +149,9 @@ const actions = {
     const n = group.count - studentIds.length
     commit('user/setCount', { group, n }, { root: true })
   },
+  resetState({ commit }) {
+    commit('resetState')
+  },
 }
 
 const mutations = {
@@ -152,6 +167,9 @@ const mutations = {
   },
   setGrades(state, grades) {
     state.grades = grades
+  },
+  setCourses(state, courses) {
+    state.courses = courses
   },
   resetState(state) {
     Object.assign(state, getDefaultState())

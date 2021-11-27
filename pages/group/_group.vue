@@ -135,9 +135,6 @@ export default {
   },
   async mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)
-    if (this.group.count === 0) {
-      this.tab = 1
-    }
     // Pre-fetch most recent assignment
     try {
       console.log(
