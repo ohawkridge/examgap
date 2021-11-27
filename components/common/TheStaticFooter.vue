@@ -1,5 +1,5 @@
 <template>
-  <v-footer padless>
+  <v-footer padless class="padb">
     <v-card id="foot-card" flat tile color="#292f36">
       <v-container>
         <v-row>
@@ -207,5 +207,9 @@ li {
 #twit {
   position: relative;
   top: 4px;
+}
+
+.padb {
+  margin-top: 3em;
 }
 </style>

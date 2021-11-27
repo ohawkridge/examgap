@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <v-container class="static-page-container">
+    <v-container>
       <v-row class="d-flex justify-center">
         <v-col cols="12" md="10">
           <p class="text-h4">GDPR Compliance</p>

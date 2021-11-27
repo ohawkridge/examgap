@@ -10,7 +10,7 @@
           @click="revise()"
           v-on="on"
         >
-          <v-card-title class="text-subtitle-1 font-weight-bold">
+          <v-card-title class="text-subtitle-1 font-weight-bold no-wrap">
             {{ topic.name }}
           </v-card-title>
           <v-card-text>
@@ -44,3 +44,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* don't wrap words in card titles */
+.no-wrap {
+  word-break: normal !important;
+}
+</style>

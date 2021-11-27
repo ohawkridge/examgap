@@ -6,7 +6,7 @@
         :key="i"
         nuxt
         :to="`/response/${response.id}`"
-        class="divide"
+        class="divider-bottom"
       >
         <v-list-item-content class="d-flex align-start">
           <v-col cols="12" md="9" class="pa-0 pa-md-3">
@@ -72,7 +72,7 @@
           i == question.responses.length - 1 && question.responses[i].repeat
         "
         :key="i + 1"
-        class="divide"
+        class="divider-bottom"
         @click="answer(question.id)"
       >
         <v-list-item-content>
@@ -93,7 +93,7 @@
     <!-- If no responses, question is unanswered -->
     <v-list-item
       v-if="question.responses.length === 0"
-      class="divide"
+      class="divider-bottom"
       @click="answer(question.id)"
     >
       <v-list-item-content>
@@ -149,3 +149,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.divider-bottom {
+  border-bottom: 1px solid #d2d2d2 !important;
+}
+</style>
