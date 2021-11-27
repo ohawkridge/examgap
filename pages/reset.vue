@@ -32,7 +32,7 @@
               autofocus
             ></v-text-field>
             <v-alert v-if="failed" border="left" type="error" text dense>
-              Username not found
+              Email not found. Please try again.
             </v-alert>
             <v-btn
               color="primary"

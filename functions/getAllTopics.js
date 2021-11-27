@@ -42,17 +42,21 @@ exports.handler = async (event) => {
             q.Lambda(
               'ref',
               q.Prepend(
-                {
-                  // TODO Could be more efficient
-                  header: q.UpperCase(
-                    q.Concat([
-                      q.Select(['data', 'board'], q.Get(q.Var('ref'))),
-                      ' ',
-                      q.Select(['data', 'shortName'], q.Get(q.Var('ref'))),
-                    ])
-                  ),
-                  active: q.Select(['data', 'active'], q.Get(q.Var('ref'))),
-                },
+                q.Let(
+                  {
+                    instance: q.Get(q.Var('ref')),
+                  },
+                  {
+                    header: q.UpperCase(
+                      q.Concat([
+                        q.Select(['data', 'board'], q.Var('ref')),
+                        ' ',
+                        q.Select(['data', 'shortName'], q.Var('ref')),
+                      ])
+                    ),
+                    active: q.Select(['data', 'active'], q.Var('instance')),
+                  }
+                ),
                 q.Select(
                   ['data'],
                   q.Map(

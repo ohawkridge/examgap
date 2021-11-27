@@ -45,21 +45,27 @@ exports.handler = async (event) => {
   const ses = new AWS.SES({ apiVersion: '2010-12-01' })
   const code = guid()
   try {
-    // Save password reset id and time in database
-    // TODO Check username exists
-    const qry = q.Update(
-      q.Select('ref', q.Get(q.Match(q.Index('user_by_username'), email))),
-      {
-        data: {
-          reset: {
-            code,
-            time: q.Now(),
+    // If user exists, save pw reset code and time
+    const qry = q.If(
+      q.Exists(q.Match(q.Index('user_by_username'), email)),
+      q.Update(
+        q.Select('ref', q.Get(q.Match(q.Index('user_by_username'), email))),
+        {
+          data: {
+            reset: {
+              code,
+              time: q.Now(),
+            },
           },
-        },
-      }
+        }
+      ),
+      false
     )
     // Execute query
     const data = await client.query(qry)
+    if (!data) {
+      return { statusCode: 404, body: 'Email not found' }
+    }
     if (data) {
       // Send password in email
       const params = {

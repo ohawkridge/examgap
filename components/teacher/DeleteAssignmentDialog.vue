@@ -14,7 +14,6 @@
         Delete assignment?
       </v-card-title>
       <v-card-text>
-        <!-- TODO Does not work -->
         <v-form @submit.prevent="deleteAssignment()">
           <p>
             This assignment and all the responses that go with it will be
