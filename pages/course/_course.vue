@@ -18,6 +18,7 @@
                 :key="i"
                 color="primary"
                 :title="`${topic.name} (${topic.count})`"
+                @click="getQuestions()"
               >
                 <v-list-item-content>
                   <v-list-item-title>
@@ -252,7 +253,12 @@ export default {
     ...mapGetters({ group: 'user/activeGroup' }),
     currentTopicIndex: {
       get() {
-        return this.$store.state.topics.currentTopicIndex
+        // Don't let currentTopicIndex exceed topics length
+        const i = this.$store.state.topics.currentTopicIndex
+        if (i > this.topics.length - 1) {
+          return this.topics.length - 1
+        }
+        return i
       },
       set(i) {
         this.$store.commit('topics/setCurrentTopicIndex', i)
@@ -273,20 +279,20 @@ export default {
   },
   watch: {
     // Load questions when topic changes
-    async currentTopicIndex() {
-      try {
-        this.loading = true
-        this.selectedQuestion = 0
-        await this.$store.dispatch('topics/getQuestions')
-      } catch (err) {
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error loading questions',
-        })
-      } finally {
-        this.loading = false
-      }
-    },
+    // async currentTopicIndex() {
+    //   try {
+    //     this.loading = true
+    //     this.selectedQuestion = 0
+    //     await this.$store.dispatch('topics/getQuestions')
+    //   } catch (err) {
+    //     this.$snack.showMessage({
+    //       type: 'error',
+    //       msg: 'Error loading questions',
+    //     })
+    //   } finally {
+    //     this.loading = false
+    //   }
+    // },
     selected() {
       if (this.onboardStep !== 0 && this.selected.length > 0) {
         this.$store.commit('app/setOnboardStep', 5)
@@ -301,6 +307,21 @@ export default {
     this.$store.commit('app/setOnboardStep', step)
   },
   methods: {
+    // Load questions when topic changes
+    async getQuestions() {
+      try {
+        this.loading = true
+        this.selectedQuestion = 0
+        await this.$store.dispatch('topics/getQuestions')
+      } catch (err) {
+        this.$snack.showMessage({
+          type: 'error',
+          msg: 'Error loading questions',
+        })
+      } finally {
+        this.loading = false
+      }
+    },
     // Add/remove questions from assignment
     add() {
       this.$store.commit('topics/updateSelected', this.question.id)

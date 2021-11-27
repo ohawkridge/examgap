@@ -90,6 +90,12 @@ const actions = {
     }
   },
   async getQuestions({ commit, state, rootState, rootGetters }) {
+    // When changing courses currentTopicIndex
+    // could exceed total number of topics
+    const max = state.topics.length - 1
+    if (state.currentTopicIndex > max) {
+      commit('setCurrentTopicIndex', max)
+    }
     const topicId = state.topics[state.currentTopicIndex].id
     if (topicId !== undefined) {
       const url = new URL(
