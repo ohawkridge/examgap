@@ -18,7 +18,6 @@
         </v-list-item>
         <v-list-item-group v-model="nav" color="primary">
           <!-- No classes -->
-          <!-- TODO Test -->
           <v-list-item v-if="groups.length === 0">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-user-group fa-lg" />

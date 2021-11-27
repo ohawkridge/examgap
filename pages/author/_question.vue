@@ -201,7 +201,6 @@ export default {
       topicId: (state) => state.topics.topicId,
     }),
   },
-  // TODO
   // watch: {
   //   async showAll() {
   //     this.ACLoading = true
@@ -245,9 +244,6 @@ export default {
       // Get HTML from editors
       this.getEditorText()
       // Validate as much of the form as possible
-      console.debug(this.$refs.form.validate())
-      console.debug(this.validateEditors())
-      console.debug(this.validateMarks())
       if (
         this.$refs.form.validate() &&
         this.validateEditors() &&

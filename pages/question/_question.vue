@@ -2,16 +2,9 @@
   <v-container>
     <v-row class="justify-center">
       <v-col cols="12" md="10" class="d-flex">
-        <!-- TODO If coming from /author don't want to go back? -->
         <v-tooltip bottom>
           <template #activator="{ on }">
-            <v-btn
-              elevation="0"
-              icon
-              class="mr-2"
-              @click="$router.go(-1)"
-              v-on="on"
-            >
+            <v-btn elevation="0" icon class="mr-2" @click="back()" v-on="on">
               <font-awesome-icon
                 icon="fa-light fa-arrow-left"
                 class="ico-btn"
@@ -149,10 +142,17 @@
 
 <script>
 export default {
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.referrer = from.name // 'course-course'?
+    })
+    next()
+  },
   layout: 'app',
   data() {
     return {
       question: {},
+      referrer: '',
       attrs: {
         class: 'mb-4',
       },
@@ -185,6 +185,16 @@ export default {
   },
   mounted() {
     this.$store.commit('app/setPageTitle', this.$store.state.topics.topicName)
+  },
+  methods: {
+    back() {
+      if (this.referrer === 'course-course') {
+        this.$router.go(-1)
+      } else {
+        const id = this.$route.params.question
+        this.$router.push(`/author/${id}`)
+      }
+    },
   },
 }
 </script>

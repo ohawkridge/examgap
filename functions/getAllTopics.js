@@ -49,9 +49,9 @@ exports.handler = async (event) => {
                   {
                     header: q.UpperCase(
                       q.Concat([
-                        q.Select(['data', 'board'], q.Var('ref')),
+                        q.Select(['data', 'board'], q.Var('instance')),
                         ' ',
-                        q.Select(['data', 'shortName'], q.Var('ref')),
+                        q.Select(['data', 'shortName'], q.Var('instance')),
                       ])
                     ),
                     active: q.Select(['data', 'active'], q.Var('instance')),

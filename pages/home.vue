@@ -54,15 +54,6 @@
             </template>
           </v-col>
         </v-row>
-        <!-- TODO -->
-        <!-- <v-row class="justify-center">
-          <v-col cols="12" md="10">
-            <p class="text-h5">
-              <font-awesome-icon icon="fa-light fa-chart-line" class="mr-2" />
-              Stats
-            </p>
-          </v-col>
-        </v-row> -->
       </v-container>
     </template>
     <!-- Student xx -->

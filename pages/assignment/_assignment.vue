@@ -106,7 +106,6 @@ export default {
     ...mapState({
       assignment: (state) => state.assignment.assignment,
     }),
-    // TODO rag against target?
     rag() {
       if (!this.started) return ''
       if (this.ave <= 33) return 'red'

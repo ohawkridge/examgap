@@ -57,7 +57,6 @@ exports.handler = async (event) => {
   })
   const data2 = await client.query(qry2)
   const email = data2.data.username
-  console.debug('Pw reset for', email)
   // Send password in email
   const params = {
     Destination: {

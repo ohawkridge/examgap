@@ -18,7 +18,6 @@
                 :key="i"
                 color="primary"
                 :title="`${topic.name} (${topic.count})`"
-                @click="getQuestions()"
               >
                 <v-list-item-content>
                   <v-list-item-title>
@@ -189,7 +188,6 @@
                     v-on="on"
                     @click="$nuxt.$emit('create-ass')"
                   >
-                    <!-- <font-awesome-icon icon="fa-light fa-plus" class="mr-2" /> -->
                     Assign ({{ selected.length }})
                   </v-btn>
                 </template>
@@ -244,13 +242,13 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({
       topics: (state) => state.topics.topics,
       questions: (state) => state.topics.questions,
       selected: (state) => state.topics.selected,
       onboardStep: (state) => state.app.onboardStep,
     }),
-    ...mapGetters({ group: 'user/activeGroup' }),
     currentTopicIndex: {
       get() {
         // Don't let currentTopicIndex exceed topics length
@@ -278,37 +276,12 @@ export default {
     },
   },
   watch: {
-    // Load questions when topic changes
-    // async currentTopicIndex() {
-    //   try {
-    //     this.loading = true
-    //     this.selectedQuestion = 0
-    //     await this.$store.dispatch('topics/getQuestions')
-    //   } catch (err) {
-    //     this.$snack.showMessage({
-    //       type: 'error',
-    //       msg: 'Error loading questions',
-    //     })
-    //   } finally {
-    //     this.loading = false
-    //   }
-    // },
     selected() {
       if (this.onboardStep !== 0 && this.selected.length > 0) {
         this.$store.commit('app/setOnboardStep', 5)
       }
     },
-  },
-  mounted() {
-    const title = `${this.group.course.name} (${this.group.course.board})`
-    this.$store.commit('app/setPageTitle', title)
-    // Onboard if never set an assignment
-    const step = this.group.assignments.length === 0 ? 4 : 0
-    this.$store.commit('app/setOnboardStep', step)
-  },
-  methods: {
-    // Load questions when topic changes
-    async getQuestions() {
+    async currentTopicIndex() {
       try {
         this.loading = true
         this.selectedQuestion = 0
@@ -322,6 +295,15 @@ export default {
         this.loading = false
       }
     },
+  },
+  mounted() {
+    const title = `${this.group.course.name} (${this.group.course.board})`
+    this.$store.commit('app/setPageTitle', title)
+    // Onboard if never set an assignment
+    const step = this.group.assignments.length === 0 ? 4 : 0
+    this.$store.commit('app/setOnboardStep', step)
+  },
+  methods: {
     // Add/remove questions from assignment
     add() {
       this.$store.commit('topics/updateSelected', this.question.id)
