@@ -51,7 +51,7 @@
             </div>
           </v-col>
           <v-col cols="4">
-            <div class="mb-2 d-flex align-center">
+            <div v-if="score" class="mb-2 d-flex align-center">
               <span
                 v-if="$vuetify.breakpoint.name !== 'xs'"
                 class="fix-width2 font-weight-medium"

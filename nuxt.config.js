@@ -98,6 +98,7 @@ export default {
   build: {
     plugins: [
       new HoneybadgerSourceMapPlugin({
+        // apiKey: 'hbp_xaKmNAUS8NVp6kBJfKcCMEYe8iCCi30wuKXo', // WORKS
         apiKey: process.env.HONEYB_KEY,
         assetsUrl: 'https://www.examgap.com',
         revision: 'master',

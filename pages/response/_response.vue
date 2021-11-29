@@ -109,7 +109,7 @@
           <p class="text-subtitle-1 font-weight-medium">Question</p>
           <div v-html="response.question.text"></div>
           <div class="d-flex justify-end">
-            <v-chip outlined small
+            <v-chip outlined small label
               >{{ response.question.maxMark }} mark{{
                 response.question.maxMark | pluralize
               }}
