@@ -116,14 +116,14 @@
             </v-chip>
           </div>
           <p class="text-subtitle-1 font-weight-medium">Your answer</p>
-          <p class="pa-4 breaks mb-0" v-text="response.text"></p>
+          <p class="breaks" v-text="response.text"></p>
           <div
             v-if="response.feedback"
             id="fb"
             class="pa-4 mb-4 font-italic"
             v-text="response.feedback"
           ></div>
-          <p class="text-subtitle-1 font-weight-medium mt-4">Model answer</p>
+          <p class="text-subtitle-1 font-weight-medium">Model answer</p>
           <p v-html="response.question.modelAnswer">Model answer</p>
         </v-col>
         <v-col cols="12" md="6">

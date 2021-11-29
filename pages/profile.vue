@@ -29,7 +29,7 @@
         ></v-text-field>
         <v-text-field
           v-if="teacher"
-          :value="`${expires} (${subscriptionDays})`"
+          :value="subMsg"
           :label="subscribed ? 'Subscription expires' : 'Trial expires'"
           :error="subscriptionDays < 1"
           outlined
@@ -132,6 +132,11 @@ export default {
       subscriptionDays: (state) => state.user.subscriptionDays,
     }),
     ...mapGetters({ expires: 'user/expires' }),
+    subMsg() {
+      return this.subscriptionDays < 0
+        ? `${this.expires} (${Math.abs(this.subscriptionDays)} days ago)`
+        : `${this.expires} (${this.subscriptionDays} days`
+    },
   },
   mounted() {
     this.$store.commit('app/setPageTitle', 'Profile')
