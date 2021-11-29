@@ -52,7 +52,7 @@ const CUSTOM_ICONS = {
   minus: {
     component: FontAwesomeIcon,
     props: {
-      icon: ['fal', 'minus'],
+      icon: ['fal', 'circle-minus'],
     },
   },
   info: {

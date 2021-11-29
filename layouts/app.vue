@@ -60,7 +60,7 @@
               <v-list-item-title> Create question </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item nuxt to="/feedback">
+          <v-list-item v-if="teacher" nuxt to="/feedback">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-comment-exclamation fa-lg" />
             </v-list-item-icon>

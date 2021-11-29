@@ -48,7 +48,7 @@
                   </template>
                   <span>Hear question</span>
                 </v-tooltip>
-                <v-chip small outlined>
+                <v-chip small outlined label>
                   {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
@@ -123,7 +123,6 @@
               hide-details
               :label="m.text"
               :value="m.id"
-              @change="checkMax()"
             >
             </v-checkbox>
             <p class="mt-2 red--text">
@@ -150,7 +149,30 @@
               </v-btn>
             </div>
           </div>
-          <the-confirm-dialog />
+          <!-- Confirm XX -->
+          <v-dialog v-model="dialog" width="440">
+            <v-card class="modal">
+              <v-card-title class="d-flex justify-center">
+                Are you sure?
+              </v-card-title>
+              <v-card-text>
+                <p>Once you've seen the mark scheme, you can't go back.</p>
+                <div class="d-flex justify-end">
+                  <v-btn text rounded class="mr-2" @click="dialog = false"
+                    >Back</v-btn
+                  >
+                  <v-btn
+                    color="primary"
+                    rounded
+                    elevation="0"
+                    @click="selfMark(true)"
+                  >
+                    Mark
+                  </v-btn>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
     </v-container>
@@ -159,12 +181,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import TheConfirmDialog from '@/components/student/TheConfirmDialog.vue'
 
 export default {
-  components: {
-    TheConfirmDialog,
-  },
   async beforeRouteLeave(to, from, next) {
     // Cancel speaking
     this.speaking = undefined
@@ -195,6 +213,8 @@ export default {
       prefVoice: false,
       saving: false,
       loading: false,
+      dialog: false,
+      marking: false,
     }
   },
   async fetch() {
@@ -215,7 +235,6 @@ export default {
       responseId: (state) => state.assignment.responseId,
       reviseExamMode: (state) => state.user.reviseExamMode,
       examMode: (state) => state.user.examMode,
-      marking: (state) => state.assignment.marking,
     }),
     // Debouce saving icon
     icon() {
@@ -271,6 +290,18 @@ export default {
       return this.question.keywords.split(',').map((kw) => kw.trim())
     },
   },
+  watch: {
+    marks() {
+      // Don't exceed max. mark
+      if (this.marks.length > this.question.maxMark) {
+        this.$snack.showMessage({
+          type: 'error',
+          msg: `Max. mark is ${this.question.maxMark}`,
+        })
+        this.marks.splice(-1, 1) // Uncheck box
+      }
+    },
+  },
   mounted() {
     this.$store.commit('app/setPageTitle', 'Question')
     this.synth = window.speechSynthesis
@@ -294,12 +325,19 @@ export default {
     }
   },
   methods: {
-    // Ask for confirmation if answer is blank or very short
-    selfMark() {
+    noAttempt() {
       if (this.wordCount === 0 || this.wordCount < this.question.minWords / 3) {
-        this.$nuxt.$emit('show-confirm')
+        return true
+      }
+      return false
+    },
+    selfMark(force = false) {
+      // Ask for confirmation if answer blank or very short
+      if (this.noAttempt() && !force) {
+        this.dialog = true
       } else {
-        this.$store.commit('assignment/setMarking', true)
+        this.dialog = false
+        this.marking = true
         this.$store.commit('app/setPageTitle', 'Marking')
       }
     },
@@ -342,15 +380,6 @@ export default {
       const route = this.revising ? `/home` : `/assignment/${this.assignmentId}`
       this.$router.push(route)
     },
-    // Don't exceed max. mark
-    checkMax() {
-      if (this.marks.length > this.question.maxMark) {
-        this.$snack.showMessage({
-          msg: `Max. mark is ${this.question.maxMark}`,
-        })
-        this.marks.splice(-1, 1) // Uncheck box
-      }
-    },
     // Save response
     async save() {
       try {
@@ -384,24 +413,15 @@ export default {
 </script>
 
 <style scoped>
-span.v-chip.theme--light.red {
-  background-color: rgb(254, 216, 216) !important;
-  color: rgb(95, 28, 30) !important;
-}
-
-span.v-chip.theme--light.green {
-  background-color: rgb(201, 237, 194) !important;
-  color: rgb(18, 39, 14) !important;
-}
-
-/* Needs 'deep' selecting */
-/* https://stackoverflow.com/questions/52310060/how-to-override-vuetify-styles */
+/* Command word tooltips */
 .command {
   border-bottom: 1px dashed #0078a0;
   cursor: pointer !important;
   position: relative;
 }
 
+/* 'deep' select */
+/* https://stackoverflow.com/questions/52310060/how-to-override-vuetify-styles */
 div.v-card__text >>> .command:before {
   content: attr(data-text);
   position: absolute;
@@ -420,7 +440,6 @@ div.v-card__text >>> .command:before {
   display: none;
 }
 
-/* show on hover */
 div.v-card__text >>> .command:hover:before {
   display: block;
   font-weight: normal;
