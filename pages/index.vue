@@ -161,14 +161,7 @@
         <v-col
           cols="12"
           md="6"
-          class="
-            testamonial
-            d-flex
-            justify-center
-            align-center
-            justify-center
-            pa-md-10
-          "
+          class="testamonial d-flex align-center justify-center pa-md-10"
         >
           <div class="text-center">
             <p class="text-h6">
@@ -211,7 +204,7 @@
       <v-container>
         <v-row>
           <v-col cols="12" class="d-flex align-center justify-center pb-0">
-            <p id="how-text" class="text-h4 text-md-h2 heading--text">
+            <p id="how-text" class="text-h4 text-md-h2 white--text">
               <span class="illum">H</span>ow does it work?
             </p>
           </v-col>
@@ -447,17 +440,9 @@
       </v-row>
     </v-container>
     <v-container id="try" fluid>
-      <v-row class="d-flex justify-center text-center">
-        <v-col class="12" md="8">
-          <p
-            class="
-              text-h5 text-md-h4
-              font-weight-bold
-              heading--text
-              text-center
-              mb-8
-            "
-          >
+      <v-row class="d-flex justify-center">
+        <v-col cols="12" md="8" class="text-center">
+          <p class="text-h5 text-md-h4 font-weight-bold white--text mb-8">
             Try Examgap free in your department
           </p>
           <v-btn x-large color="yell" rounded elevation="0" nuxt to="/trial">
@@ -833,8 +818,8 @@ export default { layout: 'static' }
   background-color: #0099cc;
   margin-top: 4em;
   margin-bottom: 4em;
-  padding-top: 4em;
-  padding-bottom: 4em;
+  padding-top: 5em;
+  padding-bottom: 5em;
 }
 
 /* ####### Research ####### */

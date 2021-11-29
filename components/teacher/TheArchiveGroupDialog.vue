@@ -35,12 +35,6 @@
 
 <script>
 export default {
-  props: {
-    groupId: {
-      type: String,
-      default: '',
-    },
-  },
   data() {
     return {
       dialog: false,

@@ -16,7 +16,7 @@
           label="Append domain"
           placeholder="@school.org.uk"
           outlined
-          :rules="[domainRules]"
+          :rules="domainRules"
           @input="append()"
         >
           <template #append>
@@ -63,7 +63,7 @@ export default {
       loading: false,
       usernames: '',
       domain: '',
-      domainRules: (v) => !!(v[0] === '@') || "'@' sign is required.",
+      domainRules: [(v) => !!(v[0] === '@') || "'@' sign is required."],
     }
   },
   computed: {
@@ -113,6 +113,10 @@ export default {
         try {
           this.loading = true
           await this.$store.dispatch('group/addStudents', this.userNamesArray)
+          this.$snack.showMessage({
+            type: 'success',
+            msg: 'Students added',
+          })
         } catch (err) {
           console.error(err)
           this.$snack.showMessage({

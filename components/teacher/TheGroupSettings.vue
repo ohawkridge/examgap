@@ -24,7 +24,8 @@
           >
             Save
           </v-btn>
-          <the-archive-group-dialog />
+          <the-archive-group-dialog v-if="group.active" />
+          <the-restore-group-dialog v-else />
         </div>
       </v-col>
     </v-row>
@@ -35,11 +36,13 @@
 import { mapGetters } from 'vuex'
 import TheArchiveGroupDialog from '@/components/teacher/TheArchiveGroupDialog'
 import TheCourseSelect from '@/components/teacher/TheCourseSelect'
+import TheRestoreGroupDialog from '~/components/teacher/TheRestoreGroupDialog.vue'
 
 export default {
   components: {
     TheArchiveGroupDialog,
     TheCourseSelect,
+    TheRestoreGroupDialog,
   },
   data() {
     return {

@@ -150,8 +150,23 @@ const actions = {
     commit('app/setLoading', false, { root: true })
   },
   async archiveGroup({ commit, rootState, getters }) {
+    const group = getters.activeGroup
     const url = new URL(
       '/.netlify/functions/archiveClass',
+      this.$config.baseURL
+    )
+    await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        groupId: group.id,
+      }),
+      method: 'POST',
+    })
+    commit('setArchived', group)
+  },
+  async restoreGroup({ commit, rootState, getters }) {
+    const url = new URL(
+      '/.netlify/functions/restoreClass',
       this.$config.baseURL
     )
     await fetch(url, {
@@ -161,22 +176,7 @@ const actions = {
       }),
       method: 'POST',
     })
-    commit('setArchived')
-  },
-  async restoreGroup({ commit, rootState }, groupId) {
-    console.log('Restoring', groupId)
-    const url = new URL(
-      '/.netlify/functions/restoreClass',
-      this.$config.baseURL
-    )
-    await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        groupId,
-      }),
-      method: 'POST',
-    })
-    commit('setRestored', groupId)
+    commit('setRestored')
   },
   async createGroup({ commit, rootState }, { courseId, groupName }) {
     const url = new URL('/.netlify/functions/createGroup', this.$config.baseURL)
@@ -358,13 +358,20 @@ const mutations = {
     group.course = { ...course }
   },
   setArchived(state) {
-    // Splice it out of active array
+    // Find group in groups array
     const i = state.groups.findIndex((g) => g.id === state.activeGroupId)
+    // Add a copy to archive
+    const temp = Object.assign({}, state.groups[i])
+    temp.active = false
+    state.archivedGroups.push(temp)
+    // Now we can safely remove from groups
     state.groups.splice(i, 1)
   },
-  setRestored(state, groupId) {
+  setRestored(state) {
     // Find group in archive
-    const i = state.archivedGroups.findIndex((g) => g.id === groupId)
+    const i = state.archivedGroups.findIndex(
+      (g) => g.id === state.activeGroupId
+    )
     // Add a copy to current active array
     const temp = Object.assign({}, state.archivedGroups[i])
     temp.active = true

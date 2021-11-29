@@ -117,7 +117,13 @@
           loading-text="Loading students..."
         >
           <template #[`item.password`]="props">
-            <v-btn rounded small text @click="showReset(props.item.id)">
+            <v-btn
+              rounded
+              small
+              color="accent"
+              text
+              @click="showReset(props.item.id)"
+            >
               Reset
             </v-btn>
           </template>
@@ -178,15 +184,13 @@
           Reset Password
         </v-card-title>
         <v-card-text>
-          <v-form ref="form">
-            <v-text-field
-              v-model="password"
-              :rules="rules"
-              label="New password*"
-              outlined
-              autofocus
-            ></v-text-field>
-          </v-form>
+          <v-text-field
+            v-model="password"
+            :rules="rules"
+            label="New password*"
+            outlined
+            autofocus
+          ></v-text-field>
           <small>*Indicates required field</small>
           <div class="d-flex justify-end">
             <v-btn text rounded @click="dialog = false">Cancel</v-btn>

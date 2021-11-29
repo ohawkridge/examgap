@@ -3,19 +3,22 @@
     <template #activator="{ on: dial }">
       <v-tooltip bottom>
         <template #activator="{ on: tool }">
-          <v-chip color="error" label class="mr-2" v-on="{ ...tool, ...dial }">
+          <v-btn
+            text
+            rounded
+            color="error"
+            class="mr-2"
+            v-on="{ ...tool, ...dial }"
+          >
             <font-awesome-icon
               icon="fa-light fa-box-archive"
               class="mr-2 fa-lg"
             />
             Archived
-            <font-awesome-icon
-              icon="fa-light fa-circle-check"
-              class="ml-2 fa-lg"
-            />
-          </v-chip>
+            <font-awesome-icon icon="fa-light fa-check" class="ml-2 fa-lg" />
+          </v-btn>
         </template>
-        <span>Restore class</span>
+        <span>Restore</span>
       </v-tooltip>
     </template>
     <v-card class="modal">
@@ -48,12 +51,6 @@
 
 <script>
 export default {
-  props: {
-    groupId: {
-      type: String,
-      default: '',
-    },
-  },
   data() {
     return {
       dialog: false,
@@ -64,7 +61,7 @@ export default {
     async restore() {
       try {
         this.loading = true
-        await this.$store.dispatch('user/restoreGroup', this.groupId)
+        await this.$store.dispatch('user/restoreGroup')
         this.$snack.showMessage({
           type: 'success',
           msg: 'Class restored',

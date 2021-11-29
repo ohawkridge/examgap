@@ -15,35 +15,29 @@
               cols="12"
               md="10"
               class="d-flex justify-space-between align-center"
-              :class="assBtnFirst"
+              :class="revOnMob"
             >
-              <the-restore-group-dialog
-                v-if="group && !group.active"
-                :group-id="group.id"
-              />
-              <template v-else>
-                <v-btn-toggle v-model="upcoming" color="primary" mandatory>
-                  <v-btn outlined> Upcoming </v-btn>
-                  <v-btn outlined min-width="110"> Past </v-btn>
-                </v-btn-toggle>
-                <v-tooltip bottom>
-                  <template #activator="{ on }">
-                    <v-btn
-                      color="primary"
-                      elevation="0"
-                      rounded
-                      :block="$vuetify.breakpoint.name === 'xs'"
-                      :class="$vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''"
-                      @click="addAssign()"
-                      v-on="on"
-                    >
-                      <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
-                      Assignment
-                    </v-btn>
-                  </template>
-                  <span>Add assignment</span>
-                </v-tooltip>
-              </template>
+              <v-btn-toggle v-model="upcoming" color="primary" mandatory>
+                <v-btn outlined> Upcoming </v-btn>
+                <v-btn outlined min-width="110"> Past </v-btn>
+              </v-btn-toggle>
+              <v-tooltip v-if="group.active" bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    color="primary"
+                    elevation="0"
+                    rounded
+                    :block="$vuetify.breakpoint.name === 'xs'"
+                    :class="$vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''"
+                    @click="addAssign()"
+                    v-on="on"
+                  >
+                    <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+                    Assignment
+                  </v-btn>
+                </template>
+                <span>Add assignment</span>
+              </v-tooltip>
             </v-col>
           </v-row>
           <the-empty-assignments-state v-if="assignments.length === 0" />
@@ -80,7 +74,6 @@ import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
 import TheEmptyAssignmentsState from '@/components/common/TheEmptyAssignmentsState'
 import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
-import TheRestoreGroupDialog from '~/components/teacher/TheRestoreGroupDialog.vue'
 
 export default {
   components: {
@@ -90,7 +83,6 @@ export default {
     TheInviteDialog,
     TheEmptyAssignmentsState,
     TeacherAssignmentCard,
-    TheRestoreGroupDialog,
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
@@ -100,16 +92,11 @@ export default {
   layout: 'app',
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-    // Show all assignments for archived groups
-    // Otherwise, show assignments based on toggle
+    // Show assignments based on toggle
     assignments() {
-      if (!this.group.active) {
-        return this.group.assignments
-      } else {
-        return this.group.assignments.filter((a) => a.live === !this.upcoming)
-      }
+      return this.group.assignments.filter((a) => a.live === !this.upcoming)
     },
-    assBtnFirst() {
+    revOnMob() {
       return this.$vuetify.breakpoint.name === 'xs'
         ? 'flex-column flex-column-reverse'
         : ''
