@@ -293,12 +293,14 @@ export default {
   watch: {
     marks() {
       // Don't exceed max. mark
-      if (this.marks.length > this.question.maxMark) {
-        this.$snack.showMessage({
-          type: 'error',
-          msg: `Max. mark is ${this.question.maxMark}`,
-        })
-        this.marks.splice(-1, 1) // Uncheck box
+      if (this.marks !== null) {
+        if (this.marks.length > this.question.maxMark) {
+          this.$snack.showMessage({
+            type: 'error',
+            msg: `Max. mark is ${this.question.maxMark}`,
+          })
+          this.marks.splice(-1, 1) // Uncheck box
+        }
       }
     },
   },
