@@ -14,8 +14,7 @@
           <the-course-select />
           <!-- ^^^ Emits an event containing selected course id -->
         </v-form>
-        <small>*Indicates required field</small>
-        <div class="d-flex justify-end">
+        <div class="d-flex justify-end mt-3">
           <v-btn text rounded @click="dialog = false">Cancel</v-btn>
           <v-btn
             color="primary"

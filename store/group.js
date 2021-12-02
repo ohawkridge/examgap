@@ -8,13 +8,40 @@ const getDefaultState = () => ({
 // eslint-disable-next-line no-unused-vars
 const state = getDefaultState()
 
+const getters = {
+  showCourses: (state) => (showAll) => {
+    // Filter out inactive courses
+    // (leave headers and dividers)
+    const temp = state.courses.filter((o) => {
+      if ('divider' in o || 'header' in o) return true
+      return showAll || o.active === !showAll
+    })
+    // Clean up empty sections
+    if (!showAll) {
+      const toSplice = []
+      temp.push({ header: '' })
+      // Find indexes of empty sections
+      for (let i = 0; i < temp.length - 2; i++) {
+        if ('header' in temp[i] && 'header' in temp[i + 2]) {
+          toSplice.unshift(i)
+        }
+      }
+      temp.pop()
+      // Splice empty sections starting from the end
+      for (const x of toSplice) {
+        temp.splice(x, 2)
+      }
+    }
+    return temp
+  },
+}
+
 const actions = {
-  async getCourses({ commit, rootState }, showAll) {
+  async getCourses({ commit, rootState }) {
     const url = new URL('/.netlify/functions/getCourses', this.$config.baseURL)
     const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
-        showAll,
       }),
       method: 'POST',
     })
@@ -178,6 +205,7 @@ const mutations = {
 
 export default {
   state: getDefaultState,
+  getters,
   actions,
   mutations,
 }

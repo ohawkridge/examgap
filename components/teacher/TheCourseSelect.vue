@@ -3,7 +3,7 @@
     <v-select
       v-model="selectedCourse"
       :loading="$fetchState.pending"
-      :items="$store.state.group.courses"
+      :items="courses"
       :rules="courseRules"
       label="Select course*"
       item-text="name"
@@ -24,12 +24,30 @@
         }}</v-chip>
       </template>
     </v-select>
-    <v-checkbox v-model="showAll" label="Show all courses" hide-details />
+    <v-checkbox v-model="showAll" hide-details
+      ><template #label>
+        Show all courses
+        <v-menu v-if="!teacher" offset-y open-on-hover>
+          <template #activator="{ on }">
+            <font-awesome-icon
+              icon="fa-light fa-circle-info"
+              class="ml-2 fa-lg"
+              v-on="on"
+            />
+          </template>
+          <v-card max-width="200">
+            <v-card-text>
+              'Stub' courses that don't have questions yet.
+            </v-card-text>
+          </v-card>
+        </v-menu>
+      </template>
+    </v-checkbox>
   </div>
 </template>
 
 <script>
-// N.B mapState not reactive for courses for some reason?
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'TheCourseSelect',
@@ -49,8 +67,9 @@ export default {
   async fetch() {
     try {
       // N.B. fetch() occurs before mounted()
-      this.initShowAll()
-      await this.$store.dispatch('group/getCourses', this.showAll)
+      // Get all courses by default and use
+      // store getter to filter results
+      await this.$store.dispatch('group/getCourses')
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -59,18 +78,13 @@ export default {
       })
     }
   },
-  methods: {
-    // If the current course is not active on the site
-    // yet default to show all courses in v-select
-    initShowAll() {
-      const active = [
-        '262684008356250123',
-        '263317250988048898',
-        '300746340204282369',
-        '300748140525388289',
-      ]
-      this.showAll = !active.includes(this.courseId)
+  computed: {
+    ...mapGetters({ showCourses: 'group/showCourses' }),
+    courses() {
+      return this.showCourses(this.showAll)
     },
+  },
+  methods: {
     color(board) {
       switch (board) {
         case 'AQA':

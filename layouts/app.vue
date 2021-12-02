@@ -176,16 +176,16 @@ export default {
       this.$router.push(this.teacher ? `/group/${groupId}` : '/home')
     },
     logout() {
+      this.$router.push('/signin')
       // Clear all stores
       this.$store.dispatch('snackbar/resetState')
       this.$store.dispatch('topics/resetState')
       this.$store.dispatch('assignment/resetState')
-      this.$store.dispatch('app/resetState')
       this.$store.dispatch('group/resetState')
+      this.$store.dispatch('app/resetState')
       this.$store.dispatch('user/resetState')
       // Clear local storage
       localStorage.clear()
-      this.$router.push('/signin')
     },
   },
 }
