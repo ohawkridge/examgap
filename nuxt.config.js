@@ -1,7 +1,7 @@
-import webpack from 'webpack'
+// import webpack from 'webpack'
 import HoneybadgerSourceMapPlugin from '@honeybadger-io/webpack'
 
-const { HONEYB_KEY } = process.env
+// const { HONEYB_KEY } = process.env
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -93,28 +93,22 @@ export default {
         ? 'https://www.examgap.com'
         : 'http://localhost:8888',
   },
+  privateRuntimeConfig: {
+    apiKey: process.env.HONEYB_KEY,
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     plugins: [
       new HoneybadgerSourceMapPlugin({
-        // apiKey: 'hbp_xaKmNAUS8NVp6kBJfKcCMEYe8iCCi30wuKXo', // WORKS
         apiKey: process.env.HONEYB_KEY,
-        assetsUrl: 'https://www.examgap.com',
-        revision: 'master',
-        // You can also enable deployment notifications:
+        assetsUrl: 'https://www.examgap.com/',
+        revision: process.env.COMMIT_REF,
         deploy: {
           environment: 'production',
           repository: 'https://github.com/ohawkridge/examgap',
         },
       }),
-      new webpack.EnvironmentPlugin(
-        JSON.parse(
-          JSON.stringify({
-            HONEYB_KEY,
-          })
-        )
-      ),
     ],
     // https://stackoverflow.com/questions/69206509/nuxt-how-can-i-get-sourcemap-files-and-where-can-i-find-them-in-production
     extend(config, { isClient }) {

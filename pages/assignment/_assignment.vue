@@ -113,7 +113,7 @@ export default {
       else return 'orange'
     },
     ave() {
-      if (!this.started) return '-'
+      if (!this.started || this.score.max === 0) return '-'
       return Math.round((this.score.marks / this.score.max) * 100)
     },
     // Count teacher marks for each response
@@ -122,11 +122,14 @@ export default {
       let marks = 0
       let max = 0
       // Each question contains an array of responses
-      for (const q of this.assignment.questions) {
-        for (const r of q.responses) {
-          marks += r.tm
+      // Logout defense
+      if ('questions' in this.assignment) {
+        for (const q of this.assignment.questions) {
+          for (const r of q.responses) {
+            marks += r.tm
+          }
+          max += parseInt(q.maxMark)
         }
-        max += parseInt(q.maxMark)
       }
       return { marks, max }
     },
