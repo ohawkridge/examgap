@@ -116,7 +116,12 @@ export default {
         )
       ),
     ],
-    extend(config) {},
+    // https://stackoverflow.com/questions/69206509/nuxt-how-can-i-get-sourcemap-files-and-where-can-i-find-them-in-production
+    extend(config, { isClient }) {
+      if (isClient) {
+        config.devtool = 'source-map'
+      }
+    },
     // https://github.com/iliyaZelenko/tiptap-vuetify-nuxt
     transpile: ['vuetify/lib', 'tiptap-vuetify'],
   },
