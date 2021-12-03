@@ -22,9 +22,9 @@
         </div>
       </v-col>
     </v-row>
-    <v-row v-else class="justify-center mt-2">
+    <v-row v-else class="mt-1">
       <v-col v-for="(group, i) in groups" :key="i" cols="12" md="4">
-        <v-card hover outlined @click="nav(group.id)">
+        <v-card class="archived" hover outlined @click="nav(group.id)">
           <v-card-title>
             {{ group.name }}
           </v-card-title>
@@ -32,7 +32,7 @@
             {{ group.course.name }}
           </v-card-subtitle>
           <v-card-text class="d-flex justify-end">
-            <v-chip label outlined small>
+            <v-chip label small class="wht-bg">
               {{ group.count }} Student{{ group.count | pluralize }}
             </v-chip>
           </v-card-text>
@@ -80,3 +80,20 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* stripes */
+.archived {
+  background-image: repeating-linear-gradient(
+    55deg,
+    transparent 0 8px,
+    #f5f5f5 8px 10px
+  );
+}
+
+/* no stripes on chips */
+span.wht-bg.v-chip.v-chip--no-color {
+  background-color: #fff !important;
+  border: 1px solid #bebebe !important;
+}
+</style>

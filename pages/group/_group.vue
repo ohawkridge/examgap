@@ -145,6 +145,12 @@ export default {
     }
     // (In case _report.vue crashes deactivate marking)
     this.$store.commit('assignment/setMarking', false)
+    // If archived
+    if (!this.group.active) {
+      this.$snack.showMessage({
+        msg: `Class archived. Click 'SETTINGS' to restore.`,
+      })
+    }
   },
   methods: {
     addAssign() {

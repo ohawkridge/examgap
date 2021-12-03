@@ -13,7 +13,7 @@
         <p class="text-center black--text mt-4">
           No {{ !$store.state.app.upcoming ? 'upcoming' : 'past' }} assignments
         </p>
-        <v-tooltip v-if="teacher" bottom>
+        <v-tooltip v-if="teacher && group.active" bottom>
           <template #activator="{ on }">
             <v-btn
               elevation="0"
