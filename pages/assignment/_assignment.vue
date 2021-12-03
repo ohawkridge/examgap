@@ -1,88 +1,108 @@
 <template>
   <div>
     <!-- Skeletons -->
-    <template v-if="$fetchState.pending">
-      <div class="px-4 py-8">
-        <v-skeleton-loader
-          type="text@3"
-          :loading="true"
-          width="16%"
-          class="float-right mt-4"
-          style="margin-right: 22%"
-        ></v-skeleton-loader>
-        <v-skeleton-loader
-          type="list-item-avatar"
-          :loading="true"
-          width="40%"
-        ></v-skeleton-loader>
-        <v-skeleton-loader
-          type="image"
-          :loading="true"
-          width="100%"
-          class="pt-8 pa-4"
-        ></v-skeleton-loader>
-      </div>
-    </template>
-    <template v-else>
-      <v-container>
-        <v-row>
-          <v-col cols="12" class="d-flex align-center">
-            <v-tooltip bottom>
-              <template #activator="{ on }">
-                <v-btn icon class="mr-2" @click="$router.go(-1)" v-on="on">
-                  <font-awesome-icon
-                    icon="fa-light fa-arrow-left"
-                    class="ico-btn"
-                  />
-                </v-btn>
-              </template>
-              <span>Back</span>
-            </v-tooltip>
-            <span class="text-h6">{{ assignment.name }}</span>
-          </v-col>
-          <v-col cols="8">
-            <div class="d-flex align-center mb-2" style="height: 32px">
-              <span class="fix-width font-weight-medium">Start:</span>
-              {{ assignment.start | date }}
-            </div>
-            <div class="d-flex align-center mb-2">
-              <span class="fix-width font-weight-medium">Due:</span>
-              {{ assignment.dateDue | date }}
-            </div>
-          </v-col>
-          <v-col cols="4">
-            <div v-if="score" class="mb-2 d-flex align-center">
-              <span
-                v-if="$vuetify.breakpoint.name !== 'xs'"
-                class="fix-width2 font-weight-medium"
-                >Score:</span
-              >
-              {{ `${score.marks}/${score.max}` }}
-              <v-chip label :color="rag" class="ml-2 font-weight-bold">
-                {{ ave }}%
-              </v-chip>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <p class="text-subtitle-1 font-weight-bold">
-              Question{{ assignment.questions.length | pluralize }} ({{
-                assignment.questions.length
-              }})
-            </p>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-list id="q-list" class="py-0">
-        <assignment-question
-          v-for="(question, i) in assignment.questions"
-          :key="i"
-          :assignment-id="assignment.id"
-          :question="question"
-        />
-      </v-list>
-    </template>
+    <v-container v-if="$fetchState.pending">
+      <v-row class="justify-center">
+        <v-col cols="12" md="10">
+          <v-skeleton-loader
+            type="list-item-avatar"
+            :loading="true"
+            class="mt-3"
+            width="40%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="text"
+            :loading="true"
+            class="mt-8"
+            width="15%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="text"
+            :loading="true"
+            class="mt-8"
+            width="15%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="text"
+            :loading="true"
+            class="my-8"
+            width="10%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="image"
+            :loading="true"
+            height="14%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="image"
+            :loading="true"
+            height="14%"
+            class="pt-1"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="image"
+            :loading="true"
+            height="14%"
+            class="pt-1"
+          ></v-skeleton-loader>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container v-else>
+      <v-row class="justify-center">
+        <v-col cols="12" md="10" class="d-flex align-center">
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn icon class="mr-2" @click="$router.go(-1)" v-on="on">
+                <font-awesome-icon
+                  icon="fa-light fa-arrow-left"
+                  class="ico-btn"
+                />
+              </v-btn>
+            </template>
+            <span>Back</span>
+          </v-tooltip>
+          <span class="text-h6">{{ assignment.name }}</span>
+        </v-col>
+      </v-row>
+      <v-row class="justify-center">
+        <v-col cols="12" md="7">
+          <div class="d-flex align-center mb-2" style="height: 32px">
+            <span class="fix-width font-weight-medium">Start:</span>
+            {{ assignment.start | date }}
+          </div>
+          <div class="d-flex align-center mb-2">
+            <span class="fix-width font-weight-medium">Due:</span>
+            {{ assignment.dateDue | date }}
+          </div>
+        </v-col>
+        <v-col cols="12" md="3" class="d-flex justify-md-end">
+          <!-- Hide label on mobile -->
+          <span class="fix-width font-weight-medium"> Score: </span>
+          {{ `${score.marks}/${score.max}` }}
+          <v-chip label :color="rag" class="font-weight-bold adj ml-2">
+            {{ ave }}%
+          </v-chip>
+        </v-col>
+      </v-row>
+      <v-row class="justify-center">
+        <v-col cols="12" md="10">
+          <p class="text-subtitle-1 font-weight-bold">
+            Question{{ assignment.questions.length | pluralize }} ({{
+              assignment.questions.length
+            }})
+          </p>
+          <v-list id="questions" class="py-0">
+            <assignment-question
+              v-for="(question, i) in assignment.questions"
+              :key="i"
+              :assignment-id="assignment.id"
+              :question="question"
+            />
+          </v-list>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -96,11 +116,8 @@ export default {
   },
   layout: 'app',
   async fetch() {
-    // Dispatch action to get assignment
-    await this.$store.dispatch(
-      'assignment/getAssignment',
-      this.$route.params.assignment
-    )
+    const id = this.$route.params.assignment
+    await this.$store.dispatch('assignment/getAssignment', id)
   },
   computed: {
     ...mapState({
@@ -150,15 +167,10 @@ export default {
 </script>
 
 <style scoped>
-/* Align start/due dates */
+/* align labels */
 .fix-width {
   display: inline-block;
   width: 56px;
-}
-
-.fix-width2 {
-  display: inline-block;
-  width: 80px;
 }
 
 .ico-btn {
@@ -166,8 +178,13 @@ export default {
   width: 24px;
 }
 
-#q-list {
-  border-top: 1px solid #d2d2d2 !important;
-  background-color: #fafafa;
+/* align chip with score */
+.adj {
+  position: relative;
+  top: -4px;
+}
+
+#questions {
+  border: 1px solid #d2d2d2 !important;
 }
 </style>

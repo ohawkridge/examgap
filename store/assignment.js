@@ -211,6 +211,7 @@ const actions = {
   },
   // For students (_assignment.vue)
   async getAssignment({ commit, rootState }, assignmentId) {
+    commit('app/setLoading', true, { root: true })
     const url = new URL(
       '/.netlify/functions/getAssignment',
       this.$config.baseURL
@@ -226,6 +227,7 @@ const actions = {
       throw new Error(`Error fetching assignment ${response.status}`)
     }
     commit('setAssignment', await response.json())
+    commit('app/setLoading', false, { root: true })
   },
   async getReport({ commit, rootState, rootGetters }, assignmentId) {
     const numAssignments = rootGetters['user/activeGroup'].assignments.length

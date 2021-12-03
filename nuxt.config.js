@@ -111,6 +111,7 @@ export default {
       }),
     ],
     // https://stackoverflow.com/questions/69206509/nuxt-how-can-i-get-sourcemap-files-and-where-can-i-find-them-in-production
+    // https://github.com/honeybadger-io/honeybadger-webpack/issues/325
     extend(config, { isClient }) {
       if (isClient && process.env.NODE_ENV === 'production') {
         config.devtool = 'source-map'
