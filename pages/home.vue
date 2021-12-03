@@ -72,15 +72,7 @@
         <v-tab-item style="background-color: #fafafa">
           <v-container>
             <v-row class="justify-center">
-              <v-col
-                cols="12"
-                md="10"
-                :class="
-                  $vuetify.breakpoint.name === 'xs'
-                    ? 'd-flex justify-center'
-                    : ''
-                "
-              >
+              <v-col cols="12" md="10" :class="mobCenter">
                 <v-btn-toggle v-model="upcoming" color="primary" mandatory>
                   <v-btn outlined> Upcoming </v-btn>
                   <v-btn outlined min-width="110"> Past </v-btn>
@@ -164,6 +156,11 @@ export default {
       set(value) {
         this.$store.commit('app/setUpcoming', value)
       },
+    },
+    mobCenter() {
+      return this.$vuetify.breakpoint.name === 'xs'
+        ? 'd-flex justify-center'
+        : ''
     },
   },
   mounted() {

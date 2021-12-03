@@ -175,7 +175,7 @@ exports.handler = async (event) => {
                           q.Select(['data', 'questions'], q.Var('instance'))
                         ),
                         live: q.If(
-                          q.LTE(
+                          q.LT(
                             q.ToDate(
                               q.SubString(
                                 q.Select(
