@@ -522,71 +522,15 @@ export default {
     },
   },
   beforeDestroy() {
-    clearTimeout(this.timeout) // Just in case
-    document.removeEventListener('touchstart', this.swipeStart())
-    document.removeEventListener('touchend', this.swipeEnd())
+    clearTimeout(this.timeout)
   },
   mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)
     if (this.group.assignments.length === 1) {
       this.$store.commit('app/setOnboardStep', 6)
     }
-    document.addEventListener(
-      'touchstart',
-      (e) => {
-        this.swipeStart(e)
-      },
-      false
-    )
-    document.addEventListener(
-      'touchend',
-      (e) => {
-        this.swipeEnd(e)
-      },
-      false
-    )
   },
   methods: {
-    swipeStart(e) {
-      if (e !== undefined) {
-        if (typeof e.targetTouches !== 'undefined') {
-          const touch = e.targetTouches[0]
-          this.pStart.x = touch.screenX
-          this.pStart.y = touch.screenY
-        } else {
-          this.pStart.x = e.screenX
-          this.pStart.y = e.screenY
-        }
-      }
-    },
-    swipeEnd(e) {
-      if (e !== undefined) {
-        if (typeof e.changedTouches !== 'undefined') {
-          const touch = e.changedTouches[0]
-          this.pStop.x = touch.screenX
-          this.pStop.y = touch.screenY
-        } else {
-          this.pStop.x = e.screenX
-          this.pStop.y = e.screenY
-        }
-        this.swipeCheck()
-      }
-    },
-    swipeCheck() {
-      const changeY = this.pStart.y - this.pStop.y
-      const changeX = this.pStart.x - this.pStop.x
-      if (this.isPullDown(changeY, changeX)) {
-        this.refresh()
-      }
-    },
-    isPullDown(dY, dX) {
-      // methods of checking slope, length, direction of line created by swipe action
-      return (
-        dY < 0 &&
-        ((Math.abs(dX) <= 100 && Math.abs(dY) >= 300) ||
-          (Math.abs(dX) / Math.abs(dY) <= 0.3 && dY >= 60))
-      )
-    },
     color(n, max) {
       if (n / max <= 1 / 3) return 'red'
       if (n / max > 2 / 3) return 'green'
