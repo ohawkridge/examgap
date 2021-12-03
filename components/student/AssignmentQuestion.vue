@@ -13,16 +13,16 @@
             </v-list-item-subtitle>
             <div
               v-if="response.feedback !== ''"
-              class="mt-3 green--text text--darken-3 d-flex align-center"
+              class="my-3 green--text text--darken-3 d-flex align-center"
             >
-              <font-awesome-icon icon="fa-light fa-pen-clip" class="mr-1" />
+              <font-awesome-icon icon="fa-light fa-pen-clip" class="mr-2" />
               {{ response.feedback }}
             </div>
           </v-col>
           <v-col
             cols="12"
             md="3"
-            class="pa-0 pa-md-3 d-flex justify-space-around"
+            class="pa-1 pa-md-3 d-flex justify-space-around"
           >
             <!-- Teacher mark -->
             <v-tooltip v-if="response.marked" bottom>

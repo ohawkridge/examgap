@@ -8,7 +8,7 @@
             type="list-item-avatar"
             :loading="true"
             class="mt-3"
-            width="40%"
+            width="16%"
           ></v-skeleton-loader>
           <v-skeleton-loader
             type="text"
@@ -51,23 +51,18 @@
     <v-container v-else>
       <v-row class="justify-center">
         <v-col cols="12" md="10" class="d-flex align-center">
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn icon class="mr-2" @click="$router.go(-1)" v-on="on">
-                <font-awesome-icon
-                  icon="fa-light fa-arrow-left"
-                  class="ico-btn"
-                />
-              </v-btn>
-            </template>
-            <span>Back</span>
-          </v-tooltip>
-          <span class="text-h6">{{ assignment.name }}</span>
+          <v-btn text rounded class="mr-2" @click="$router.go(-1)">
+            <font-awesome-icon
+              icon="fa-light fa-arrow-left"
+              class="mr-2 ico-btn"
+            />
+            Back
+          </v-btn>
         </v-col>
       </v-row>
       <v-row class="justify-center">
         <v-col cols="12" md="7">
-          <div class="d-flex align-center mb-2" style="height: 32px">
+          <div class="d-flex align-center mb-2">
             <span class="fix-width font-weight-medium">Start:</span>
             {{ assignment.start | date }}
           </div>
@@ -163,6 +158,9 @@ export default {
       return false
     },
   },
+  mounted() {
+    this.$store.commit('app/setPageTitle', this.assignment.name)
+  },
 }
 </script>
 
@@ -174,8 +172,8 @@ export default {
 }
 
 .ico-btn {
-  height: 24px;
-  width: 24px;
+  height: 18px;
+  width: 18px;
 }
 
 /* align chip with score */

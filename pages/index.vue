@@ -589,7 +589,7 @@
             class="d-flex justify-center flex-column align-center"
           >
             <font-awesome-icon
-              icon="fa-light fa-bullseye-arrow"
+              icon="fa-light fa-bullseye-pointer"
               class="fa-3x mb-4"
             />
             <p class="font-weight-bold">Target setting</p>

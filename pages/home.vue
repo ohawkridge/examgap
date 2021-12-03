@@ -164,10 +164,9 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit(
-      'app/setPageTitle',
-      this.teacher ? 'Home' : this.group.name
-    )
+    this.$store.commit('app/setLoading', false)
+    const title = this.teacher ? 'Home' : this.group.name
+    this.$store.commit('app/setPageTitle', title)
   },
   methods: {
     addAssign(group) {

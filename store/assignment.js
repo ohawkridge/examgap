@@ -253,6 +253,7 @@ const actions = {
     }
   },
   async getResponse({ commit, rootState }, responseId) {
+    commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
     const response = await fetch(url, {
       body: JSON.stringify({
@@ -265,6 +266,7 @@ const actions = {
       throw new Error(`Error fetching response ${responseId}`, response.status)
     }
     commit('setResponse', await response.json())
+    commit('app/setLoading', false, { root: true })
   },
 }
 

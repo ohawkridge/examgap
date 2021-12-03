@@ -11,7 +11,7 @@
           </li>
           <li>
             <font-awesome-icon
-              icon="fa-light fa-bullseye-arrow"
+              icon="fa-light fa-bullseye-pointer"
               class="fa-lg mr-2"
             />
             Mark yourself accurately
