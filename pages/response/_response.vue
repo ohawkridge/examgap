@@ -52,9 +52,9 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-container>
+    <v-container v-else>
       <v-row class="justify-center">
-        <v-col cols="12" md="10" class="d-flex justify-space-between">
+        <v-col cols="12" md="10">
           <v-btn text rounded nuxt :to="`/assignment/${response.assignmentId}`">
             <font-awesome-icon
               icon="fa-light fa-arrow-left"
@@ -62,18 +62,6 @@
             />
             Back
           </v-btn>
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-chip label :color="color()" v-on="on">
-                <font-awesome-icon
-                  icon="fa-light fa-bullseye-pointer"
-                  class="fa-lg mr-2"
-                />
-                {{ accuracy }}%
-              </v-chip>
-            </template>
-            <span>Marking accuracy</span>
-          </v-tooltip>
         </v-col>
       </v-row>
       <v-row class="justify-center">
@@ -126,7 +114,20 @@
                       <span>You</span>
                     </v-tooltip>
                   </th>
-                  <th></th>
+                  <th>
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <v-chip :color="color(accuracy)" label v-on="on">
+                          <font-awesome-icon
+                            icon="fa-light fa-bullseye-pointer"
+                            class="fa-lg mr-2"
+                          />
+                          {{ accuracy }}%
+                        </v-chip>
+                      </template>
+                      <span>Marking accuracy</span>
+                    </v-tooltip>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -151,12 +152,12 @@
               <tfoot>
                 <tr>
                   <td class="text-center">
-                    <v-chip :color="color()">
+                    <v-chip :color="color(response.tm.length)">
                       {{ response.tm.length }}
                     </v-chip>
                   </td>
                   <td class="text-center">
-                    <v-chip :color="color()">
+                    <v-chip :color="color(response.sm.length)">
                       {{ response.sm.length }}
                     </v-chip>
                   </td>
@@ -199,16 +200,16 @@ export default {
     max() {
       return this.response.question.maxMark
     },
-    // Self marking accuracy. Assume 100% accuracy
-    // Subtract self marks not given by teacher
+    // Use size of symmetric difference to calculate accuracy
     accuracy() {
-      const num = this.response.sm.filter((x) => !this.response.tm.includes(x))
-      return Math.round(((this.max - num.length) / this.max) * 100)
+      const x = this.response.tm.filter((x) => !this.response.sm.includes(x))
+      const y = this.response.sm.filter((x) => !this.response.tm.includes(x))
+      const max = this.response.question.maxMark
+      return Math.round(((max - x.concat(y).length) / max) * 100)
     },
   },
   methods: {
-    color() {
-      const n = this.response.tm.length
+    color(n) {
       if (n / this.max <= 1 / 3) return 'red'
       if (n / this.max > 2 / 3) return 'green'
       return 'orange'

@@ -11,11 +11,11 @@
       <v-container class="fill-height">
         <v-row class="d-flex justify-center">
           <v-col id="nav-fix" cols="12" md="7" lg="6" class="text-center">
+            <font-awesome-icon
+              icon="fa-light fa-car-crash"
+              class="ico-red fa-2x"
+            />
             <p class="text-h6 error--text">
-              <font-awesome-icon
-                icon="fa-light fa-bug"
-                class="mr-2 ico-red fa-xl"
-              />
               {{ error.statusCode === 404 ? pageNotFound : otherError }}
             </p>
             <p>This will automatically be reported.</p>
