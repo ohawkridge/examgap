@@ -5,7 +5,7 @@
         <div class="d-flex justify-space-between">
           <v-tooltip bottom>
             <template #activator="{ on }">
-              <v-btn text nuxt rounded :to="`/group/${group.id}`" v-on="on">
+              <v-btn text rounded @click="$router.go(-1)" v-on="on">
                 <font-awesome-icon
                   icon="fa-light fa-arrow-left"
                   class="ico-btn mr-2"
@@ -22,7 +22,7 @@
                 :assignment-id="assignment.id"
                 :group-id="group.id"
               />
-              <v-btn elevation="0" rounded text class="ml-2" @click="refresh()">
+              <v-btn elevation="0" rounded text class="ml-2" @click="$fetch()">
                 Refresh
               </v-btn>
             </div>
@@ -37,7 +37,7 @@
               </template>
               <v-list>
                 <v-list-item>
-                  <v-list-item-title @click="refresh()">
+                  <v-list-item-title @click="$fetch()">
                     Refresh
                   </v-list-item-title>
                 </v-list-item>
@@ -67,9 +67,15 @@
     </v-row>
     <v-row class="justify-center">
       <v-col cols="12" md="10">
-        <table v-if="!$fetchState.pending" id="table">
+        <v-skeleton-loader
+          v-if="$fetchState.pending"
+          :types="{ table: 'table-thead, table-tbody@2' }"
+          type="table"
+          class="outlined"
+        ></v-skeleton-loader>
+        <table v-else id="table" class="outlined">
           <thead>
-            <tr v-if="!$fetchState.pending">
+            <tr>
               <th
                 v-for="(q, i) in assignment.headers"
                 :key="i"
@@ -92,7 +98,7 @@
               </th>
             </tr>
           </thead>
-          <tbody v-if="!$fetchState.pending">
+          <tbody>
             <tr
               v-for="(student, i) in assignment.students"
               :key="i"
@@ -180,7 +186,6 @@
           </tbody>
         </table>
         <div class="d-flex justify-end align-center pa-4 text-caption">
-          <!-- N/A Not answered&nbsp;&nbsp; -->
           <font-awesome-icon icon="fa-light fa-check" class="fa-sm mr-1" />
           Self mark&nbsp;&nbsp;
           <font-awesome-icon
@@ -377,7 +382,7 @@
                   </span>
                 </template>
               </v-checkbox>
-              <v-switch v-model="smartSort" dense inset>
+              <v-switch v-model="smartSort" dense inset @change="sort()">
                 <template #label> Self marks first </template>
               </v-switch>
               <p class="text-subtitle-1 font-weight-bold">Guidance</p>
@@ -413,25 +418,18 @@ export default {
       markScheme: [],
       marks: [], // v-model for checkboxes
       infoDialog: false,
-      force: false,
     }
   },
   async fetch() {
-    const storedAssId = this.$store.state.assignment.assignment.id
-    const assId = this.$route.params.report
-    // Fetch data if not pre-fetched to store
-    if (this.force || storedAssId !== assId) {
-      try {
-        await this.$store.dispatch('assignment/getReport', assId)
-      } catch (err) {
-        console.error(err)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error fetching data',
-        })
-      } finally {
-        this.force = false
-      }
+    try {
+      const assId = this.$route.params.report
+      await this.$store.dispatch('assignment/getReport', assId)
+    } catch (err) {
+      console.error(err)
+      this.$snack.showMessage({
+        type: 'error',
+        msg: 'Error fetching data',
+      })
     }
   },
   head() {
@@ -472,11 +470,13 @@ export default {
   },
   watch: {
     response() {
-      // Set response as marked
-      // N.B. watch fires on close()—at which
-      // point response is a 'prototype' object
-      if ('id' in this.response && !this.response.marked) {
-        this.$store.dispatch('assignment/setMarked')
+      // N.B. watch fires on open and close
+      // On close, it's just a 'prototype' object
+      if ('id' in this.response) {
+        // Set response as marked if not already
+        if (!this.response.marked) {
+          this.$store.dispatch('assignment/setMarked')
+        }
         // *ES6 copy* teacher marks
         // These become the v-model for checkboxes
         this.marks = [...this.response.tm]
@@ -484,17 +484,10 @@ export default {
       // Update feedback for current response
       this.feedback = this.response.feedback
       this.updateBank()
-      // If smartSort is on, re-sort when response changes
+      // If smartSort on, re-sort new responses
       if (this.smartSort) {
         this.markScheme.sort(this.selfMarksFirst)
       }
-    },
-    smartSort() {
-      // Call sorting function when smart sort on
-      // Otherwise, copy 'fresh' mark scheme
-      this.marking && this.smartSort
-        ? this.markScheme.sort(this.selfMarksFirst)
-        : this.copyMarkScheme()
     },
     marks() {
       const max = this.question.maxMark
@@ -509,12 +502,23 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', this.assignment.name)
     if (this.group.assignments.length === 1) {
       this.$store.commit('app/setOnboardStep', 6)
     }
   },
   methods: {
+    sort() {
+      if (this.smartSort) {
+        this.markScheme.sort(this.selfMarksFirst)
+      } else {
+        this.copyMarkScheme()
+      }
+      // Call sorting function when smart sort on
+      // Otherwise, copy 'fresh' mark scheme
+      // this.marking && this.smartSort
+      //   ? this.markScheme.sort(this.selfMarksFirst)
+      //   : this.copyMarkScheme()
+    },
     color(n, max) {
       if (n / max <= 1 / 3) return 'red'
       if (n / max > 2 / 3) return 'green'
@@ -544,11 +548,6 @@ export default {
           })
         }
       }
-    },
-    // Fetch fresh data
-    refresh() {
-      this.force = true
-      this.$fetch()
     },
     // Build comment bank from feedback on existing responses
     updateBank() {
@@ -626,17 +625,13 @@ export default {
     },
     // Comparison function so student self marks are first
     selfMarksFirst(m1, m2) {
-      // Watch out nexting over empty responses
+      // Guard against empty responses
       if (!this.response || !('sm' in this.response)) return 0
-      if (
-        this.response.sm.includes(m1.id) === this.response.sm.includes(m2.id)
-      ) {
-        return 0
-      } else if (this.response.sm.includes(m1.id)) {
-        return -1
-      } else {
-        return 1
-      }
+      const c1 = this.response.sm.includes(m1.id)
+      const c2 = this.response.sm.includes(m2.id)
+      if (c1 === c2) return 0
+      if (this.response.sm.includes(m1.id)) return -1
+      return 1
     },
     startMarking(i, j, k) {
       // Commit mutations setting indices into big data structure
@@ -670,6 +665,10 @@ table {
   border-collapse: collapse;
   overflow-x: scroll;
   width: 100%;
+}
+
+.outlined {
+  border: 1px solid #d2d2d2 !important;
 }
 
 td,

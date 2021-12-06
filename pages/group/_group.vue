@@ -128,26 +128,10 @@ export default {
       }
     },
   },
-  async mounted() {
+  mounted() {
+    // N.B. Don't pre-fetch. Not worth it.
     this.$store.commit('app/setPageTitle', this.group.name)
-    // Pre-fetch most recent assignment
-    try {
-      console.log(
-        '%c' + 'Prefetch',
-        'color:#001f2a;background-color:#f4d06f;padding:4px;'
-      )
-      console.time('_report in')
-      await this.$store.dispatch('assignment/getReport', -1)
-      console.timeEnd('_report in')
-      // DON'T Prefetch _course.vue
-    } catch (err) {
-      console.error(err)
-      this.$snack.showMessage({
-        type: 'error',
-        msg: 'Error pre-fetching data',
-      })
-    }
-    // (In case _report.vue crashes deactivate marking)
+    // In case _report.vue crashes deactivate marking
     this.$store.commit('assignment/setMarking', false)
     // If archived
     if (!this.group.active) {

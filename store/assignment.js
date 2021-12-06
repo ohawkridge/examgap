@@ -241,7 +241,7 @@ const actions = {
         assignmentId = rootGetters['user/activeGroup'].assignments[0].id
       }
       const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
-      const response = await fetch(url, {
+      let response = await fetch(url, {
         body: JSON.stringify({
           secret: rootState.user.secret,
           assignmentId,
@@ -251,7 +251,9 @@ const actions = {
       if (!response.ok) {
         throw new Error(`Error fetching data ${response.status}`)
       }
-      commit('setAssignment', await response.json())
+      response = await response.json()
+      commit('app/setPageTitle', response.name, { root: true })
+      commit('setAssignment', response)
     }
     commit('app/setLoading', false, { root: true })
   },
