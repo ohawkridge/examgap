@@ -27,7 +27,7 @@
     <v-checkbox v-model="showAll" hide-details
       ><template #label>
         Show all courses
-        <v-menu v-if="!teacher" offset-y open-on-hover>
+        <v-menu offset-y open-on-hover>
           <template #activator="{ on }">
             <font-awesome-icon
               icon="fa-light fa-circle-info"
@@ -61,15 +61,16 @@ export default {
     return {
       selectedCourse: this.courseId, // Copy to avoid mutating prop
       courseRules: [(v) => !!v || 'Course is required'],
-      showAll: false,
+      showAll: null,
     }
   },
   async fetch() {
     try {
       // N.B. fetch() occurs before mounted()
-      // Get all courses by default and use
-      // store getter to filter results
+      // Get all courses by default
+      // Use store getter to filter results
       await this.$store.dispatch('group/getCourses')
+      this.showAll = this.findCourseId() === undefined
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -85,6 +86,9 @@ export default {
     },
   },
   methods: {
+    findCourseId() {
+      return this.courses.find((o) => 'id' in o && o.id === this.courseId)
+    },
     color(board) {
       switch (board) {
         case 'AQA':

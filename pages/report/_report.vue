@@ -1,30 +1,20 @@
 <template>
   <v-container>
-    <v-row class="mb-4">
-      <v-col cols="12">
+    <v-row class="justify-center">
+      <v-col cols="12" md="10">
         <div class="d-flex justify-space-between">
-          <div class="d-flex align-center">
-            <v-tooltip bottom>
-              <template #activator="{ on }">
-                <v-btn
-                  icon
-                  class="mr-2"
-                  nuxt
-                  :to="`/group/${group.id}`"
-                  v-on="on"
-                >
-                  <font-awesome-icon
-                    icon="fa-light fa-arrow-left"
-                    class="ico-btn"
-                  />
-                </v-btn>
-              </template>
-              <span>Back</span>
-            </v-tooltip>
-            <span class="text-h6">{{
-              $fetchState.pending ? 'Loading...' : assignment.name
-            }}</span>
-          </div>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn text nuxt rounded :to="`/group/${group.id}`" v-on="on">
+                <font-awesome-icon
+                  icon="fa-light fa-arrow-left"
+                  class="ico-btn mr-2"
+                />
+                Back
+              </v-btn>
+            </template>
+            <span>Back</span>
+          </v-tooltip>
           <div>
             <div v-if="$vuetify.breakpoint.name !== 'xs'">
               <delete-assignment-dialog
@@ -61,129 +51,151 @@
             </v-menu>
           </div>
         </div>
-        <div class="mt-4 ml-11">
-          <div class="d-flex align-center mb-1">
-            <span class="font-weight-medium date-wid">Start:</span>
-            {{ assignment.start | date }}
-          </div>
-          <div class="d-flex align-center">
-            <span class="font-weight-medium date-wid">Due:</span>
-            {{ assignment.dateDue | date }}
-          </div>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
+      <v-col cols="12" md="10">
+        <div class="d-flex align-center">
+          <span class="font-weight-medium fix-width">Start:</span>
+          {{ assignment.start | date }}
+        </div>
+        <div class="d-flex align-center">
+          <span class="font-weight-medium fix-width">Due:</span>
+          {{ assignment.dateDue | date }}
         </div>
       </v-col>
     </v-row>
-    <table v-if="!$fetchState.pending" id="table">
-      <thead>
-        <tr v-if="!$fetchState.pending">
-          <th
-            v-for="(q, i) in assignment.headers"
-            :key="i"
-            :class="i === 0 ? 'text-left' : ''"
-          >
-            <span v-if="i === 0">Username</span>
-            <v-menu v-else offset-x open-on-hover>
-              <template #activator="{ on }">
-                <span v-on="on">{{ `Q${i} [${q.maxMark}]` }}</span>
-              </template>
-              <v-card max-width="440">
-                <v-card-text class="text-body-2">
-                  <div v-html="assignment.headers[i].text"></div>
-                  <div class="font-weight-bold text-right">
-                    [{{ q.maxMark }}]
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-menu>
-          </th>
-        </tr>
-      </thead>
-      <tbody v-if="!$fetchState.pending">
-        <tr v-for="(student, i) in assignment.students" :key="i">
-          <td>
-            {{ student.name }}
-          </td>
-          <td v-for="(data, j) in student.data" :key="j" class="text-center">
-            <!-- Formerly MarkChip.vue components -->
-            <!-- Nested values as props not working reliably -->
-            <div
-              v-if="data[Object.keys(data)[0]].length > 0"
-              :class="flex(data)"
+    <v-row class="justify-center">
+      <v-col cols="12" md="10">
+        <table v-if="!$fetchState.pending" id="table">
+          <thead>
+            <tr v-if="!$fetchState.pending">
+              <th
+                v-for="(q, i) in assignment.headers"
+                :key="i"
+                :class="i === 0 ? 'text-left' : ''"
+              >
+                <span v-if="i === 0">Username</span>
+                <v-menu v-else offset-x open-on-hover>
+                  <template #activator="{ on }">
+                    <span v-on="on">{{ `Q${i} [${q.maxMark}]` }}</span>
+                  </template>
+                  <v-card max-width="440">
+                    <v-card-text class="text-body-2">
+                      <div v-html="assignment.headers[i].text"></div>
+                      <div class="font-weight-bold text-right">
+                        [{{ q.maxMark }}]
+                      </div>
+                    </v-card-text>
+                  </v-card>
+                </v-menu>
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="!$fetchState.pending">
+            <tr
+              v-for="(student, i) in assignment.students"
+              :key="i"
+              height="57px"
             >
-              <!-- *** NOT ANSWERED *** -->
-              <!-- <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div> -->
-              <!-- Loop through responses (see note below) -->
-              <template v-for="(response, k) in data[Object.keys(data)[0]]">
-                <!-- *** SELF MARKED *** -->
-                <v-tooltip v-if="!response.marked" :key="k" bottom>
-                  <template #activator="{ on }">
-                    <v-chip @click="mark(i, j, k)" v-on="on">
-                      {{ response.sm.length }}
-                      <font-awesome-icon
-                        icon="fa-light fa-check"
-                        class="ml-2"
-                      />
-                    </v-chip>
-                  </template>
-                  <span>Mark</span>
-                </v-tooltip>
-                <!-- *** TEACHER MARKED *** -->
-                <v-tooltip v-else :key="k" bottom>
-                  <template #activator="{ on }">
-                    <v-chip
-                      :class="marginBottom(data[Object.keys(data)[0]], k)"
-                      class="green"
-                      @click="mark(i, j, k)"
-                      v-on="on"
-                    >
-                      {{ response.tm.length }}
-                      <font-awesome-icon
-                        v-if="response.repeat"
-                        icon="fa-light fa-repeat"
-                        class="ml-2"
-                      />
-                      <font-awesome-icon
-                        v-else
-                        icon="fa-light fa-check-double"
-                        class="ml-2"
-                      />
-                    </v-chip>
-                    <font-awesome-icon
-                      v-if="response.flagged"
-                      icon="fa-light fa-flag"
-                      class="ico-red fix-flag fa-lg"
-                    />
-                  </template>
-                  <span>Mark</span>
-                </v-tooltip>
-              </template>
-            </div>
-          </td>
-        </tr>
-        <tr v-if="assignment.students.length === 0">
-          <td class="text-center" :colspan="assignment.headers.length">
-            <p class="text-body-2 mt-4">No students yet</p>
-            <p>
-              <v-btn
-                color="primary"
-                rounded
-                elevation="0"
-                @click="$nuxt.$emit('show-invite')"
+              <td>
+                {{ student.name }}
+              </td>
+              <td
+                v-for="(data, j) in student.data"
+                :key="j"
+                class="text-center"
               >
-                Invite students</v-btn
-              >
-            </p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="d-flex justify-end align-center pa-4 text-caption">
-      <!-- N/A Not answered&nbsp;&nbsp; -->
-      <font-awesome-icon icon="fa-light fa-check" class="fa-sm mr-1" />
-      Self mark&nbsp;&nbsp;
-      <font-awesome-icon icon="fa-light fa-check-double" class="fa-sm mr-1" />
-      Teacher mark
-    </div>
+                <!-- Formerly MarkChip.vue components -->
+                <!-- Nested values as props not working reliably -->
+                <div
+                  v-if="data[Object.keys(data)[0]].length > 0"
+                  :class="flex(data)"
+                >
+                  <!-- *** NOT ANSWERED *** -->
+                  <!-- <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div> -->
+                  <!-- Loop through responses (see note below) -->
+                  <template v-for="(response, k) in data[Object.keys(data)[0]]">
+                    <!-- *** SELF MARKED *** -->
+                    <v-tooltip v-if="!response.marked" :key="k" bottom>
+                      <template #activator="{ on }">
+                        <v-chip @click="startMarking(i, j, k)" v-on="on">
+                          {{ response.sm.length }}
+                          <font-awesome-icon
+                            icon="fa-light fa-check"
+                            class="ml-2"
+                          />
+                        </v-chip>
+                      </template>
+                      <span>Mark</span>
+                    </v-tooltip>
+                    <!-- *** TEACHER MARKED *** -->
+                    <v-tooltip v-else :key="k" bottom>
+                      <template #activator="{ on }">
+                        <v-chip
+                          :class="marginBottom(data[Object.keys(data)[0]], k)"
+                          class="green"
+                          @click="startMarking(i, j, k)"
+                          v-on="on"
+                        >
+                          {{ response.tm.length }}
+                          <font-awesome-icon
+                            v-if="response.repeat"
+                            icon="fa-light fa-repeat"
+                            class="ml-2"
+                          />
+                          <font-awesome-icon
+                            v-else
+                            icon="fa-light fa-check-double"
+                            class="ml-2"
+                          />
+                        </v-chip>
+                        <font-awesome-icon
+                          v-if="response.flagged"
+                          icon="fa-light fa-flag"
+                          class="ico-red fix-flag fa-lg"
+                        />
+                      </template>
+                      <span>Mark</span>
+                    </v-tooltip>
+                  </template>
+                </div>
+              </td>
+            </tr>
+            <tr v-if="assignment.students.length === 0">
+              <td class="text-center" :colspan="assignment.headers.length">
+                <p class="text-body-2 mt-4">No students yet</p>
+                <p>
+                  <v-btn
+                    color="primary"
+                    rounded
+                    elevation="0"
+                    @click="$nuxt.$emit('show-invite')"
+                  >
+                    Invite students</v-btn
+                  >
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-end align-center pa-4 text-caption">
+          <!-- N/A Not answered&nbsp;&nbsp; -->
+          <font-awesome-icon icon="fa-light fa-check" class="fa-sm mr-1" />
+          Self mark&nbsp;&nbsp;
+          <font-awesome-icon
+            icon="fa-light fa-check-double"
+            class="fa-sm mr-1"
+          />
+          Teacher mark&nbsp;&nbsp;
+          <font-awesome-icon
+            icon="fa-light fa-arrows-repeat"
+            class="fa-sm mr-1"
+          />
+          Reassigned
+        </div>
+      </v-col>
+    </v-row>
     <!-- Marking dialog xx -->
     <v-dialog
       v-model="marking"
@@ -310,7 +322,7 @@
           </v-row>
           <v-row>
             <v-col cols="12" md="4">
-              <p class="text-subtitle-1">Question</p>
+              <p class="text-subtitle-1 font-weight-bold">Question</p>
               <p v-if="marking" class="text-body-2" v-html="question.text"></p>
               <div class="d-flex justify-end">
                 <v-chip v-if="marking" outlined
@@ -319,7 +331,7 @@
               </div>
             </v-col>
             <v-col cols="12" md="4">
-              <p v-if="marking" class="text-subtitle-1">
+              <p v-if="marking" class="text-subtitle-1 font-weight-bold">
                 {{ response.username }}
               </p>
               <p
@@ -327,25 +339,22 @@
                 class="breaks text-body-2"
                 v-text="response.text"
               ></p>
-              <p class="text-subtitle-1">Feedback</p>
-              <!-- N.B. update is debounced method -->
               <v-textarea
+                v-if="marking"
                 id="feedback"
-                ref="fbArea"
                 v-model="feedback"
                 outlined
                 rows="4"
                 hide-details
                 auto-grow
               >
-                <font-awesome-icon slot="append" :icon="icon" class="fa-lg" />
               </v-textarea>
               <v-list dense>
                 <v-list-item
-                  v-for="(comment, i) in commentBank"
+                  v-for="(comment, i) in bank"
                   :key="i"
                   title="Click to reuse"
-                  @click="reuse(comment)"
+                  @click="feedback = comment"
                 >
                   <v-list-item-content>
                     <v-list-item-subtitle>{{ comment }}</v-list-item-subtitle>
@@ -354,30 +363,24 @@
               </v-list>
             </v-col>
             <v-col v-if="marking" cols="12" md="4">
-              <p class="text-subtitle-1">Mark Scheme</p>
+              <p class="text-subtitle-1 font-weight-bold">Mark scheme</p>
               <v-checkbox
-                v-for="mp in markScheme"
-                :key="mp.id"
+                v-for="(mark, i) in markScheme"
+                :key="i"
                 v-model="marks"
-                :value="mp.id"
+                :value="mark.id"
                 hide-details
-                @change="checkMax(mp.id)"
               >
                 <template #label>
-                  <span
-                    class="text-body-2"
-                    :class="
-                      response.sm.includes(mp.id) ? 'font-weight-bold' : ''
-                    "
-                  >
-                    {{ mp.text }}
+                  <span class="text-body-2" :class="awardSm(mark.id)">
+                    {{ mark.text }}
                   </span>
                 </template>
               </v-checkbox>
-              <v-switch v-model="smartSort" inset>
+              <v-switch v-model="smartSort" dense inset>
                 <template #label> Self marks first </template>
               </v-switch>
-              <p class="text-subtitle-1">Guidance</p>
+              <p class="text-subtitle-1 font-weight-bold">Guidance</p>
               <p
                 v-if="question.guidance"
                 class="text-body-2"
@@ -405,30 +408,21 @@ export default {
   layout: 'app',
   data() {
     return {
-      commentBank: [],
-      debouncedFeedback: '',
-      timeout: null,
-      savingFeedback: false,
+      bank: [],
       smartSort: false,
-      markScheme: [], // Copied via question.markScheme
+      markScheme: [],
       marks: [], // v-model for checkboxes
       infoDialog: false,
-      forceRefresh: false,
-      pStart: { x: 0, y: 0 }, // Pull to refresh
-      pStop: { x: 0, y: 0 },
+      force: false,
     }
   },
   async fetch() {
-    const reportId = this.$store.state.assignment.assignment.id
-    const paramId = this.$route.params.report
-    // Dispatch action to get data if not already in store
-    if (this.forceRefresh || reportId !== paramId) {
-      this.$store.commit('app/setLoading', true)
+    const storedAssId = this.$store.state.assignment.assignment.id
+    const assId = this.$route.params.report
+    // Fetch data if not pre-fetched to store
+    if (this.force || storedAssId !== assId) {
       try {
-        await this.$store.dispatch(
-          'assignment/getReport',
-          this.$route.params.report
-        )
+        await this.$store.dispatch('assignment/getReport', assId)
       } catch (err) {
         console.error(err)
         this.$snack.showMessage({
@@ -436,10 +430,9 @@ export default {
           msg: 'Error fetching data',
         })
       } finally {
-        this.$store.commit('app/setLoading', false)
+        this.force = false
       }
     }
-    this.forceRefresh = false
   },
   head() {
     return {
@@ -459,43 +452,35 @@ export default {
       responseIndex: (state) => state.assignment.responseIndex,
       marking: (state) => state.assignment.marking,
     }),
-    icon() {
-      return this.savingFeedback
-        ? 'fa-light fa-cloud-arrow-up'
-        : 'fa-light fa-cloud-check'
-    },
     feedback: {
       get() {
-        return this.debouncedFeedback
+        if (this.response.feedback === undefined) return ''
+        return this.response.feedback
       },
       set(val) {
-        if (this.timeout) clearTimeout(this.timeout)
-        this.timeout = setTimeout(() => {
-          this.debouncedFeedback = val
-          this.saveFeedback()
-        }, 1500)
+        this.$store.commit('assignment/setFeedback', {
+          response: this.response,
+          feedback: val,
+        })
       },
     },
-    // Questions included in assignment headers (for hover preview)
-    // +1 because index 0 contains Vuetify table metadata
+    // Get question from assignment header (hover preview)
+    // +1 because index 0 contains v-table metadata
     question() {
       return this.assignment.headers[this.questionIndex + 1]
-    },
-    // Current question id as a String
-    qIdStr() {
-      return this.assignment.headers[this.questionIndex + 1].value
     },
   },
   watch: {
     response() {
       // Set response as marked
-      // N.B. This watch fires on close. At that point response
-      // exists, but only as a 'prototype' object
+      // N.B. watch fires on close()—at which
+      // point response is a 'prototype' object
       if ('id' in this.response && !this.response.marked) {
         this.$store.dispatch('assignment/setMarked')
+        // *ES6 copy* teacher marks
+        // These become the v-model for checkboxes
+        this.marks = [...this.response.tm]
       }
-      // Copy existing teacher marks to be v-model
-      this.marks = this.response.tm
       // Update feedback for current response
       this.feedback = this.response.feedback
       this.updateBank()
@@ -504,28 +489,27 @@ export default {
         this.markScheme.sort(this.selfMarksFirst)
       }
     },
-    marking() {
-      // Copy original mark scheme from question object
-      // (This becomes v-for for checkboxes)
-      if (this.marking) {
-        this.copyMarkScheme()
-      }
-    },
     smartSort() {
-      if (this.marking && this.smartSort) {
-        // Turn on smart sort by calling sorting function
-        this.markScheme.sort(this.selfMarksFirst)
-      } else {
-        // Turn off smart sort by re-copying original
-        this.copyMarkScheme()
+      // Call sorting function when smart sort on
+      // Otherwise, copy 'fresh' mark scheme
+      this.marking && this.smartSort
+        ? this.markScheme.sort(this.selfMarksFirst)
+        : this.copyMarkScheme()
+    },
+    marks() {
+      const max = this.question.maxMark
+      // Don't exceed max. mark
+      if (this.marks.length > max) {
+        this.$snack.showMessage({
+          msg: `Max. ${max} mark${max !== '1' ? 's' : ''}`,
+        })
+        // Uncheck box
+        this.marks.splice(-1, 1)
       }
     },
-  },
-  beforeDestroy() {
-    clearTimeout(this.timeout)
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', this.group.name)
+    this.$store.commit('app/setPageTitle', this.assignment.name)
     if (this.group.assignments.length === 1) {
       this.$store.commit('app/setOnboardStep', 6)
     }
@@ -539,52 +523,49 @@ export default {
     copyMarkScheme() {
       this.markScheme = [...this.question.markScheme]
     },
-    // Don't exceed max. mark
-    checkMax(markId) {
-      if (this.marks.length > this.question.maxMark) {
-        this.$snack.showMessage({
-          msg: `Max. ${this.question.maxMark} mark${
-            this.question.maxMark !== '1' ? 's' : ''
-          }`,
-        })
-        // Untick checkbox by splicing id out of v-model
-        for (let i = 0; i < this.marks.length; i++) {
-          if (this.marks[i] === markId) {
-            this.marks.splice(i, 1)
-          }
-        }
-      }
+    // CSS class for self marks awarded
+    awardSm(markId) {
+      return this.response.sm.includes(markId) ? 'font-weight-bold' : ''
     },
     close() {
       this.saveMarks()
+      this.saveFeedback()
       this.$store.commit('assignment/setMarking', false)
     },
     async saveMarks() {
       if (this.marks.length > 0) {
-        await this.$store.dispatch('assignment/saveMarks', this.marks)
+        try {
+          await this.$store.dispatch('assignment/saveMarks', this.marks)
+        } catch (err) {
+          console.error(err)
+          this.$snack.showMessage({
+            type: 'error',
+            msg: 'Error saving marks',
+          })
+        }
       }
     },
     // Fetch fresh data
     refresh() {
-      this.forceRefresh = true
+      this.force = true
       this.$fetch()
     },
     // Build comment bank from feedback on existing responses
     updateBank() {
-      const commentBank = []
-      if (this.marking && !this.$fetchState.pending) {
+      const bank = []
+      if (this.marking) {
         for (const stuRespObj of this.assignment.students) {
           // Array of response objects for this question
-          const rs = stuRespObj.data[this.questionIndex][this.qIdStr]
+          const rs = stuRespObj.data[this.questionIndex][this.question.value]
           for (const response of rs) {
             if (response.feedback !== '') {
-              commentBank.push(response.feedback)
+              bank.push(response.feedback)
             }
           }
         }
       }
       // Remove duplicate comments
-      this.commentBank = [...new Set(commentBank)]
+      this.bank = [...new Set(bank)]
     },
     // Navigate forwards (1) or backwards (-1) through responses
     next(n) {
@@ -634,7 +615,6 @@ export default {
     },
     async saveFeedback() {
       try {
-        this.savingFeedback = true
         await this.$store.dispatch('assignment/saveFeedback', this.feedback)
       } catch (err) {
         console.error(err)
@@ -642,14 +622,7 @@ export default {
           type: 'error',
           msg: 'Error saving feedback',
         })
-      } finally {
-        this.savingFeedback = false
       }
-    },
-    // Reuse an existing comment
-    reuse(text) {
-      this.feedback = text
-      this.saveFeedback() // Trigger save
     },
     // Comparison function so student self marks are first
     selfMarksFirst(m1, m2) {
@@ -665,22 +638,22 @@ export default {
         return 1
       }
     },
-    // Commit mutations setting indices
-    // into _report.vue data structure
-    mark(i, j, k) {
+    startMarking(i, j, k) {
+      // Commit mutations setting indices into big data structure
       this.$store.commit('assignment/setStudentIndex', i)
       this.$store.commit('assignment/setQuestionIndex', j)
       this.$store.commit('assignment/setResponseIndex', k)
+      // Copy original mark scheme from question object
+      this.copyMarkScheme()
       this.$store.commit('assignment/setMarking', true)
-      // Onboarding complete ✓
+      // Onboarding complete✓
       this.$store.commit('app/setOnboardStep', 0)
     },
-    // Add margin bottom to reassigned responses
-    // (except for last one)
+    // Add margin bottom to reassigned responses (except last)
     marginBottom(responses, i) {
       return responses.length > 1 && i < responses.length - 1 ? 'mb-2' : ''
     },
-    // Use flex columns if >1 response
+    // Use flex columns if >1 response for question
     flex(data) {
       return data[Object.keys(data)[0]].length > 1
         ? 'd-flex flex-column align-center'
@@ -691,13 +664,11 @@ export default {
 </script>
 
 <style scoped>
-/* hey dipshit, you showing scrollbars? */
-#table {
-  overflow-x: scroll;
-}
-
 table {
+  background-color: #fff;
+  border: 1px solid #d2d2d2 !important;
   border-collapse: collapse;
+  overflow-x: scroll;
   width: 100%;
 }
 
@@ -729,7 +700,7 @@ div.v-list {
   line-height: 1.25rem !important;
 }
 
-/* Adjust flags to keep chips aligned */
+/* adjust flags to keep chips aligned */
 .fix-flag {
   position: relative;
   top: 4px;
@@ -737,11 +708,10 @@ div.v-list {
   margin-right: -30px;
 }
 
-.date-wid {
-  width: 72px;
+.fix-width {
+  width: 56px;
 }
 
-/* Does not work external */
 .ico-btn {
   height: 24px;
   width: 24px;

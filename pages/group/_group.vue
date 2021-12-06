@@ -120,6 +120,14 @@ export default {
       },
     },
   },
+  watch: {
+    tab() {
+      // Show student onboarding message
+      if (this.group.count === 0 && this.tab === 1) {
+        this.$store.commit('app/setOnboardStep', 2)
+      }
+    },
+  },
   async mounted() {
     this.$store.commit('app/setPageTitle', this.group.name)
     // Pre-fetch most recent assignment
@@ -138,10 +146,6 @@ export default {
         type: 'error',
         msg: 'Error pre-fetching data',
       })
-    }
-    // Onboard if nec.
-    if (this.group.count === 0) {
-      this.$store.commit('app/setOnboardStep', 2)
     }
     // (In case _report.vue crashes deactivate marking)
     this.$store.commit('assignment/setMarking', false)

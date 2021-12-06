@@ -127,6 +127,7 @@ const actions = {
   },
   async saveMarks({ commit, getters, rootState }, markIds) {
     const response = getters.response
+    console.debug('%c' + `saveTeacherMarks ${response.id}`, 'color:darkblue')
     const url = new URL(
       '/.netlify/functions/saveTeacherMarks',
       this.$config.baseURL
@@ -141,9 +142,10 @@ const actions = {
     })
     commit('setTeacherMarks', { response, markIds })
   },
-  async saveFeedback({ commit, getters, rootState }, feedback) {
+  async saveFeedback({ getters, rootState }, feedback) {
     if (feedback !== undefined) {
       const response = getters.response
+      console.debug('%c' + `saveFeedback ${response.id}`, 'color:darkgreen')
       const url = new URL(
         '/.netlify/functions/saveFeedback',
         this.$config.baseURL
@@ -156,7 +158,6 @@ const actions = {
         }),
         method: 'POST',
       })
-      commit('setFeedback', { response, feedback })
     }
   },
   async reassign({ commit, getters, rootState }) {
@@ -230,6 +231,7 @@ const actions = {
     commit('app/setLoading', false, { root: true })
   },
   async getReport({ commit, rootState, rootGetters }, assignmentId) {
+    commit('app/setLoading', true, { root: true })
     const numAssignments = rootGetters['user/activeGroup'].assignments.length
     if (numAssignments > 0) {
       // _group.vue sends -1 if attempting to
@@ -251,6 +253,7 @@ const actions = {
       }
       commit('setAssignment', await response.json())
     }
+    commit('app/setLoading', false, { root: true })
   },
   async getResponse({ commit, rootState }, responseId) {
     commit('app/setLoading', true, { root: true })

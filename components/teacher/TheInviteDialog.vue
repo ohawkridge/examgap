@@ -12,7 +12,7 @@
         <v-text-field ref="link" :value="link" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text rounded @click="copy()">
-              <font-awesome-icon icon="fa-light fa-copy" class="mr-2" />
+              <font-awesome-icon icon="fa-light fa-copy" class="mr-2 ico-btn" />
               {{ copyBtn }}
             </v-btn>
           </template>
@@ -23,7 +23,10 @@
         <v-text-field :value="formattedLink" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text rounded @click="overlay = true">
-              <font-awesome-icon icon="fa-light fa-maximize" class="mr-2" />
+              <font-awesome-icon
+                icon="fa-light fa-maximize"
+                class="mr-2 ico-btn"
+              />
               Show
             </v-btn>
           </template>
@@ -118,5 +121,10 @@ export default {
   .big {
     font-size: 14vw;
   }
+}
+
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>

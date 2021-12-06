@@ -20,9 +20,12 @@
       </v-menu>
     </v-card-title>
     <v-card-subtitle>
-      {{ assignment.group.name }}
+      {{ assignment.numQuestions }} Question{{
+        assignment.numQuestions | pluralize
+      }}
+      → {{ assignment.group.name }}
     </v-card-subtitle>
-    <v-card-text class="text-body-1">
+    <v-card-text>
       <div>
         <span class="align-date font-weight-bold">Start:</span
         >{{ assignment.start | date }}
@@ -115,7 +118,7 @@ export default {
 <style scoped>
 .align-date {
   display: inline-block;
-  width: 72px;
+  width: 56px;
 }
 @media only screen and (max-width: 600px) {
   .align-date {
