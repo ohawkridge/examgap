@@ -158,9 +158,6 @@ export default {
       return false
     },
   },
-  mounted() {
-    this.$store.commit('app/setPageTitle', this.assignment.name)
-  },
 }
 </script>
 

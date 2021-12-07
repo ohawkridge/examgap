@@ -337,7 +337,7 @@
             </v-col>
             <v-col cols="12" md="4">
               <p v-if="marking" class="text-subtitle-1 font-weight-bold">
-                {{ response.username }}
+                {{ response.username | name }}
               </p>
               <p
                 v-if="marking"

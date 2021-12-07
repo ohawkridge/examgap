@@ -217,7 +217,7 @@ const actions = {
       '/.netlify/functions/getAssignment',
       this.$config.baseURL
     )
-    const response = await fetch(url, {
+    let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
         assignmentId,
@@ -227,7 +227,9 @@ const actions = {
     if (!response.ok) {
       throw new Error(`Error fetching assignment ${response.status}`)
     }
-    commit('setAssignment', await response.json())
+    response = await response.json()
+    commit('setAssignment', response)
+    commit('app/setPageTitle', response.name, { root: true })
     commit('app/setLoading', false, { root: true })
   },
   async getReport({ commit, rootState, rootGetters }, assignmentId) {
