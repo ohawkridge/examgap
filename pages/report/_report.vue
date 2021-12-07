@@ -382,20 +382,13 @@
                   </span>
                 </template>
               </v-checkbox>
-              <p class="text-subtitle-1 font-weight-bold">Guidance</p>
+              <p class="text-subtitle-1 font-weight-bold mt-3">Guidance</p>
               <p
                 v-if="question.guidance"
                 class="text-body-2"
                 v-html="question.guidance"
               ></p>
               <p v-else class="text-body-2">None</p>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <p class="red--text">sm: {{ response.sm }}</p>
-              <p class="red--text">{{ marks }}</p>
-              <p class="red--text">checkboxes: {{ markScheme }}</p>
             </v-col>
           </v-row>
         </v-container>

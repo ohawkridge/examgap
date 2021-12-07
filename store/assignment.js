@@ -127,7 +127,7 @@ const actions = {
   },
   async saveMarks({ commit, getters, rootState }, markIds) {
     const response = getters.response
-    console.debug('%c' + `saveTeacherMarks ${response.id}`, 'color:darkblue')
+    // console.debug('%c' + `saveTeacherMarks ${response.id}`, 'color:darkblue')
     const url = new URL(
       '/.netlify/functions/saveTeacherMarks',
       this.$config.baseURL
@@ -145,7 +145,7 @@ const actions = {
   async saveFeedback({ getters, rootState }, feedback) {
     if (feedback !== undefined) {
       const response = getters.response
-      console.debug('%c' + `saveFeedback ${response.id}`, 'color:darkgreen')
+      // console.debug('%c' + `saveFeedback ${response.id}`, 'color:darkgreen')
       const url = new URL(
         '/.netlify/functions/saveFeedback',
         this.$config.baseURL

@@ -135,7 +135,7 @@ export default {
     subMsg() {
       return this.subscriptionDays < 0
         ? `${this.expires} (${Math.abs(this.subscriptionDays)} days ago)`
-        : `${this.expires} (${this.subscriptionDays} days`
+        : `${this.expires} (${this.subscriptionDays}) days`
     },
   },
   mounted() {
