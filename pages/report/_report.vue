@@ -382,9 +382,6 @@
                   </span>
                 </template>
               </v-checkbox>
-              <v-switch v-model="smartSort" dense inset @change="sort()">
-                <template #label> Self marks first </template>
-              </v-switch>
               <p class="text-subtitle-1 font-weight-bold">Guidance</p>
               <p
                 v-if="question.guidance"
@@ -392,6 +389,13 @@
                 v-html="question.guidance"
               ></p>
               <p v-else class="text-body-2">None</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <p class="red--text">sm: {{ response.sm }}</p>
+              <p class="red--text">{{ marks }}</p>
+              <p class="red--text">checkboxes: {{ markScheme }}</p>
             </v-col>
           </v-row>
         </v-container>
@@ -414,7 +418,6 @@ export default {
   data() {
     return {
       bank: [],
-      smartSort: false,
       markScheme: [],
       marks: [], // v-model for checkboxes
       infoDialog: false,
@@ -484,10 +487,6 @@ export default {
       // Update feedback for current response
       this.feedback = this.response.feedback
       this.updateBank()
-      // If smartSort on, re-sort new responses
-      if (this.smartSort) {
-        this.markScheme.sort(this.selfMarksFirst)
-      }
     },
     marks() {
       const max = this.question.maxMark
@@ -507,18 +506,6 @@ export default {
     }
   },
   methods: {
-    sort() {
-      if (this.smartSort) {
-        this.markScheme.sort(this.selfMarksFirst)
-      } else {
-        this.copyMarkScheme()
-      }
-      // Call sorting function when smart sort on
-      // Otherwise, copy 'fresh' mark scheme
-      // this.marking && this.smartSort
-      //   ? this.markScheme.sort(this.selfMarksFirst)
-      //   : this.copyMarkScheme()
-    },
     color(n, max) {
       if (n / max <= 1 / 3) return 'red'
       if (n / max > 2 / 3) return 'green'
@@ -622,16 +609,6 @@ export default {
           msg: 'Error saving feedback',
         })
       }
-    },
-    // Comparison function so student self marks are first
-    selfMarksFirst(m1, m2) {
-      // Guard against empty responses
-      if (!this.response || !('sm' in this.response)) return 0
-      const c1 = this.response.sm.includes(m1.id)
-      const c2 = this.response.sm.includes(m2.id)
-      if (c1 === c2) return 0
-      if (this.response.sm.includes(m1.id)) return -1
-      return 1
     },
     startMarking(i, j, k) {
       // Commit mutations setting indices into big data structure
