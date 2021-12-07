@@ -67,10 +67,10 @@ export default {
   async fetch() {
     try {
       // N.B. fetch() occurs before mounted()
-      // Get all courses by default
-      // Use store getter to filter results
+      // Get all courses by default and use
+      // a store getter to filter results
       await this.$store.dispatch('group/getCourses')
-      this.showAll = this.findCourseId() === undefined
+      this.showAll = this.findCourseId()
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -87,7 +87,12 @@ export default {
   },
   methods: {
     findCourseId() {
-      return this.courses.find((o) => 'id' in o && o.id === this.courseId)
+      // For CreateClassDialog.vue, coureId will be empty
+      // (Don't show all courses by default)
+      if (this.courseId === '') return false
+      // Only show all courses if current course is not active
+      const f = this.courses.find((o) => 'id' in o && o.id === this.courseId)
+      return f === undefined
     },
     color(board) {
       switch (board) {
