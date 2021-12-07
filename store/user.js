@@ -41,6 +41,8 @@ const getters = {
     for (const group of state.groups) {
       allAssignments = allAssignments.concat(group.assignments)
     }
+    // Some old assignments don't have a start date
+    allAssignments = allAssignments.filter((a) => a.start !== 'N/A')
     allAssignments.sort(function (a, b) {
       return a.start < b.start
     })
