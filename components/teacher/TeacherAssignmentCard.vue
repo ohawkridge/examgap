@@ -134,6 +134,7 @@ export default {
 }
 
 .ass-card {
-  border-left: 3px solid #0099cc;
+  /* border-left: 3px solid #0099cc; */
+  border-left: 3px solid #9c9c9c;
 }
 </style>

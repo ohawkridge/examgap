@@ -1,217 +1,237 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12" class="flex-xs-column d-sm-flex align-center">
-        <v-menu offset-y open-on-hover>
-          <template #activator="{ on }">
-            <v-btn
-              class="mr-2 mb-2 mb-sm-0 mr-2"
-              elevation="0"
-              :block="$vuetify.breakpoint.name === 'xs'"
-              rounded
-              v-on="on"
-            >
-              Manage Students
-              <font-awesome-icon icon="fa-light fa-angle-down" class="ml-2" />
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="showReset('')"
-            >
-              <v-list-item-title>
-                Reset password{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="$nuxt.$emit('open-add')">
-              <v-list-item-title>Add students</v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="$nuxt.$emit('open-remove')"
-            >
-              <v-list-item-title>
-                Remove student{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="$nuxt.$emit('open-copy')"
-            >
-              <v-list-item-title>
-                Copy student{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-btn
-          elevation="0"
-          rounded
-          :block="$vuetify.breakpoint.name === 'xs'"
-          class="mb-2 mb-sm-0 mr-2"
-          @click="$nuxt.$emit('show-invite')"
-        >
-          Invite Students
-        </v-btn>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn
-              :to="`/logins/${group.id}`"
-              class="mr-2 mb-2 mb-sm-0"
-              :class="xsBtns"
-              elevation="0"
-              rounded
-              :block="$vuetify.breakpoint.name === 'xs'"
-              v-on="on"
-            >
-              Logins
-            </v-btn>
-          </template>
-          <span>Print logins</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn
-              elevation="0"
-              class="mr-2 mb-2 mb-sm-0"
-              :class="xsBtns"
-              :block="$vuetify.breakpoint.name === 'xs'"
-              rounded
-              @click="exportTableToCSV()"
-              v-on="on"
-            >
-              Csv
-              <font-awesome-icon
-                icon="fa-light fa-arrow-down-to-line"
-                class="ml-2"
-              />
-            </v-btn>
-          </template>
-          <span>Download csv</span>
-        </v-tooltip>
-        <v-btn
-          elevation="0"
-          :block="$vuetify.breakpoint.name === 'xs'"
-          :class="xsBtns"
-          rounded
-          @click="$fetch()"
-        >
-          Refresh
-        </v-btn>
+    <v-row class="justify-center">
+      <v-col class="12">
+        <v-card outlined class="pa-4">
+          <v-container>
+            <v-row>
+              <v-col cols="12" class="flex-xs-column d-sm-flex align-center">
+                <v-menu offset-y open-on-hover>
+                  <template #activator="{ on }">
+                    <v-btn
+                      class="mr-2 mb-2 mb-sm-0 mr-2"
+                      elevation="0"
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      rounded
+                      v-on="on"
+                    >
+                      Manage Students
+                      <font-awesome-icon
+                        icon="fa-light fa-angle-down"
+                        class="ml-2"
+                      />
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="showReset('')"
+                    >
+                      <v-list-item-title>
+                        Reset password{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="$nuxt.$emit('open-add')">
+                      <v-list-item-title>Add students</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="$nuxt.$emit('open-remove')"
+                    >
+                      <v-list-item-title>
+                        Remove student{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="$nuxt.$emit('open-copy')"
+                    >
+                      <v-list-item-title>
+                        Copy student{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+                <v-btn
+                  elevation="0"
+                  rounded
+                  :block="$vuetify.breakpoint.name === 'xs'"
+                  class="mb-2 mb-sm-0 mr-2"
+                  @click="$nuxt.$emit('show-invite')"
+                >
+                  Invite Students
+                </v-btn>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      :to="`/logins/${group.id}`"
+                      class="mr-2 mb-2 mb-sm-0"
+                      :class="xsBtns"
+                      elevation="0"
+                      rounded
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      v-on="on"
+                    >
+                      Logins
+                    </v-btn>
+                  </template>
+                  <span>Print logins</span>
+                </v-tooltip>
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      elevation="0"
+                      class="mr-2 mb-2 mb-sm-0"
+                      :class="xsBtns"
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      rounded
+                      @click="exportTableToCSV()"
+                      v-on="on"
+                    >
+                      Csv
+                      <font-awesome-icon
+                        icon="fa-light fa-arrow-down-to-line"
+                        class="ml-2"
+                      />
+                    </v-btn>
+                  </template>
+                  <span>Download csv</span>
+                </v-tooltip>
+                <v-btn
+                  elevation="0"
+                  :block="$vuetify.breakpoint.name === 'xs'"
+                  :class="xsBtns"
+                  rounded
+                  @click="$fetch()"
+                >
+                  Refresh
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-data-table
+                  v-model="selected"
+                  :headers="headers"
+                  :items="students"
+                  checkbox-color="primary"
+                  item-key="id"
+                  hide-default-footer
+                  disable-pagination
+                  show-select
+                  :loading="$fetchState.pending"
+                  loading-text="Loading students..."
+                >
+                  <template #[`item.password`]="props">
+                    <v-btn
+                      rounded
+                      small
+                      color="primary"
+                      text
+                      @click="showReset(props.item.id)"
+                    >
+                      Reset
+                    </v-btn>
+                  </template>
+                  <template #no-data>
+                    <!-- Empty state -->
+                    <div style="height: 60vh" class="mt-10">
+                      <v-img
+                        src="/no-student.svg"
+                        contain
+                        height="180"
+                        width="180"
+                        alt="Mortar board illustration"
+                        class="mx-auto"
+                      />
+                      <p class="text-body-1 black--text mt-4">
+                        No students yet
+                      </p>
+                      <v-btn
+                        elevation="0"
+                        rounded
+                        outlined
+                        color="primary"
+                        :block="$vuetify.breakpoint.name === 'xs'"
+                        class="mb-2 mb-sm-0 mr-2"
+                        @click="$nuxt.$emit('show-invite')"
+                      >
+                        Invite Students
+                      </v-btn>
+                    </div>
+                  </template>
+                  <template #[`item.target`]="props">
+                    <v-edit-dialog>
+                      <!-- groupId is the key into target object -->
+                      <!-- Different targets for each group -->
+                      {{ props.item.target[`${group.id}`] }}
+                      <template #input>
+                        <div class="mt-4 text-h6">Target</div>
+                        <v-text-field
+                          :value="props.item.target[`${group.id}`]"
+                          :rules="targetRules"
+                          single-line
+                          label="Target"
+                          placeholder="5"
+                          class="mb-4"
+                          @keyup.enter="
+                            save(props.item.id, $event.target.value)
+                          "
+                        ></v-text-field>
+                      </template>
+                    </v-edit-dialog>
+                  </template>
+                </v-data-table>
+                <v-chip
+                  v-if="students.length > 0"
+                  label
+                  outlined
+                  small
+                  class="ma-4"
+                >
+                  {{ students.length }} Student{{ students.length | pluralize }}
+                </v-chip>
+              </v-col>
+            </v-row>
+            <!-- Reset Pw xx -->
+            <v-dialog v-model="dialog" max-width="440">
+              <v-card class="modal">
+                <v-card-title class="d-flex justify-center">
+                  Reset Password
+                </v-card-title>
+                <v-card-text>
+                  <v-text-field
+                    v-model="password"
+                    :rules="rules"
+                    label="New password*"
+                    outlined
+                    autofocus
+                  ></v-text-field>
+                  <small>*Indicates required field</small>
+                  <div class="d-flex justify-end">
+                    <v-btn text rounded @click="dialog = false">Cancel</v-btn>
+                    <v-btn
+                      color="primary"
+                      elevation="0"
+                      :loading="loading"
+                      :disabled="loading"
+                      rounded
+                      class="ml-2"
+                      @click="reset()"
+                    >
+                      Reset password
+                    </v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+            <the-add-students-dialog />
+            <the-remove-dialog :selected="selected" />
+            <the-copy-student-dialog :selected="selected" />
+          </v-container>
+        </v-card>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-data-table
-          id="table"
-          v-model="selected"
-          :headers="headers"
-          :items="students"
-          checkbox-color="primary"
-          item-key="id"
-          hide-default-footer
-          disable-pagination
-          show-select
-          :loading="$fetchState.pending"
-          loading-text="Loading students..."
-        >
-          <template #[`item.password`]="props">
-            <v-btn
-              rounded
-              small
-              color="accent"
-              text
-              @click="showReset(props.item.id)"
-            >
-              Reset
-            </v-btn>
-          </template>
-          <template #no-data>
-            <!-- Empty state -->
-            <div style="height: 60vh" class="mt-10">
-              <v-img
-                src="/no-student.svg"
-                contain
-                height="180"
-                width="180"
-                alt="Mortar board illustration"
-                class="mx-auto"
-              />
-              <p class="text-body-1 black--text mt-4">No students yet</p>
-              <v-btn
-                elevation="0"
-                rounded
-                outlined
-                color="primary"
-                :block="$vuetify.breakpoint.name === 'xs'"
-                class="mb-2 mb-sm-0 mr-2"
-                @click="$nuxt.$emit('show-invite')"
-              >
-                Invite Students
-              </v-btn>
-            </div>
-          </template>
-          <template #[`item.target`]="props">
-            <v-edit-dialog>
-              <!-- groupId is the key into target object -->
-              <!-- Different targets for each group -->
-              {{ props.item.target[`${group.id}`] }}
-              <template #input>
-                <div class="mt-4 text-h6">Target</div>
-                <v-text-field
-                  :value="props.item.target[`${group.id}`]"
-                  :rules="targetRules"
-                  single-line
-                  label="Target"
-                  placeholder="5"
-                  class="mb-4"
-                  @keyup.enter="save(props.item.id, $event.target.value)"
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
-          </template>
-        </v-data-table>
-        <v-chip v-if="students.length > 0" label outlined small class="ma-4">
-          {{ students.length }} Student{{ students.length | pluralize }}
-        </v-chip>
-      </v-col>
-    </v-row>
-    <!-- Reset Pw xx -->
-    <v-dialog v-model="dialog" max-width="440">
-      <v-card class="modal">
-        <v-card-title class="d-flex justify-center">
-          Reset Password
-        </v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="password"
-            :rules="rules"
-            label="New password*"
-            outlined
-            autofocus
-          ></v-text-field>
-          <small>*Indicates required field</small>
-          <div class="d-flex justify-end">
-            <v-btn text rounded @click="dialog = false">Cancel</v-btn>
-            <v-btn
-              color="primary"
-              elevation="0"
-              :loading="loading"
-              :disabled="loading"
-              rounded
-              class="ml-2"
-              @click="reset()"
-            >
-              Reset password
-            </v-btn>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <the-add-students-dialog />
-    <the-remove-dialog :selected="selected" />
-    <the-copy-student-dialog :selected="selected" />
   </v-container>
 </template>
 
@@ -404,9 +424,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-#table {
-  border: 1px solid #d2d2d2 !important;
-}
-</style>

@@ -18,6 +18,8 @@ a:link {
   text-decoration: none;
 }
 
+$btn-text-transform: 'capitalize';
+
 // Stop svg icons appearing massive until svg-core css is loaded
 .svg-inline--fa {
   display: inline-block;

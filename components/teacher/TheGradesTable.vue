@@ -1,56 +1,73 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12" class="d-flex">
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn elevation="0" rounded @click="exportTableToCSV()" v-on="on">
-              Csv
-              <font-awesome-icon
-                icon="fa-light fa-arrow-down-to-line"
-                class="ml-2"
-              />
-            </v-btn>
-          </template>
-          <span>Download csv</span>
-        </v-tooltip>
-        <v-btn
-          class="d-none d-sm-flex ml-2"
-          elevation="0"
-          rounded
-          @mouseover="scroll"
-          @mouseleave="stop"
-          @mouseup="stop"
-        >
-          Scroll
-          <font-awesome-icon icon="fa-light fa-arrow-right" class="ml-2" />
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-data-table
-          id="table"
-          :headers="grades.headers"
-          :items="grades.data"
-          :loading="$fetchState.pending"
-          loading-text="Loading grades..."
-          no-data-text="No data yet"
-          hide-default-footer
-          disable-pagination
-          sort-by="username"
-        >
-          <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
-            <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
-            <v-chip
-              v-else
-              :key="i"
-              :color="ragX(item[obj], grades.headers[i + 2].max, item.target)"
-            >
-              {{ item[obj] }}
-            </v-chip>
-          </template>
-        </v-data-table>
+    <v-row class="justify-center">
+      <v-col class="12">
+        <v-card outlined class="pa-4">
+          <v-container>
+            <v-row>
+              <v-col cols="12" class="d-flex">
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      elevation="0"
+                      rounded
+                      @click="exportTableToCSV()"
+                      v-on="on"
+                    >
+                      Csv
+                      <font-awesome-icon
+                        icon="fa-light fa-arrow-down-to-line"
+                        class="ml-2"
+                      />
+                    </v-btn>
+                  </template>
+                  <span>Download csv</span>
+                </v-tooltip>
+                <v-btn
+                  class="d-none d-sm-flex ml-2"
+                  elevation="0"
+                  rounded
+                  @mouseover="scroll"
+                  @mouseleave="stop"
+                  @mouseup="stop"
+                >
+                  Scroll
+                  <font-awesome-icon
+                    icon="fa-light fa-arrow-right"
+                    class="ml-2"
+                  />
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-data-table
+                  :headers="grades.headers"
+                  :items="grades.data"
+                  :loading="$fetchState.pending"
+                  loading-text="Loading grades..."
+                  no-data-text="No data yet"
+                  hide-default-footer
+                  disable-pagination
+                  sort-by="username"
+                >
+                  <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
+                    <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
+                    <v-chip
+                      v-else
+                      :key="i"
+                      :color="
+                        ragX(item[obj], grades.headers[i + 2].max, item.target)
+                      "
+                    >
+                      {{ item[obj] }}
+                    </v-chip>
+                  </template>
+                </v-data-table>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -179,9 +196,5 @@ export default {
 /* center all cells except username */
 td:not(:first-child) {
   text-align: center;
-}
-
-#table {
-  border: 1px solid #d2d2d2 !important;
 }
 </style>

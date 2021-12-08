@@ -1,53 +1,77 @@
 <template>
   <div>
-    <v-tabs v-model="tab" centered fixed-tabs background-color="transparent">
-      <v-tab> Assignments </v-tab>
-      <v-tab> Students </v-tab>
-      <v-tab> Grades </v-tab>
-      <v-tab> Settings </v-tab>
+    <v-tabs
+      v-model="tab"
+      centered
+      fixed-tabs
+      background-color="transparent"
+      slider-size="3"
+    >
+      <v-tab style="text-transform: capitalize"> Assignments </v-tab>
+      <v-tab style="text-transform: capitalize"> Students </v-tab>
+      <v-tab style="text-transform: capitalize"> Grades </v-tab>
+      <v-tab style="text-transform: capitalize"> Settings </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab" style="background-color: #fafafa">
       <v-tab-item>
         <!-- ASSIGNMENTS xx -->
         <v-container>
           <v-row class="justify-center">
-            <v-col
-              cols="12"
-              md="10"
-              class="d-flex justify-space-between align-center"
-              :class="revOnMob"
-            >
-              <v-btn-toggle v-model="upcoming" color="primary" mandatory>
-                <v-btn outlined> Upcoming </v-btn>
-                <v-btn outlined min-width="110"> Past </v-btn>
-              </v-btn-toggle>
-              <v-tooltip v-if="group.active" bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    color="primary"
-                    elevation="0"
-                    rounded
-                    :block="$vuetify.breakpoint.name === 'xs'"
-                    :class="$vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''"
-                    @click="addAssign()"
-                    v-on="on"
-                  >
-                    <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
-                    Assignment
-                  </v-btn>
-                </template>
-                <span>Add assignment</span>
-              </v-tooltip>
-            </v-col>
-          </v-row>
-          <the-empty-assignments-state v-if="assignments.length === 0" />
-          <v-row v-else class="justify-center">
-            <v-col cols="12" md="10">
-              <teacher-assignment-card
-                v-for="assignment in assignments"
-                :key="assignment.id"
-                :assignment="assignment"
-              />
+            <v-col class="12" md="10">
+              <v-card outlined class="pa-4">
+                <v-container>
+                  <v-row class="justify-center">
+                    <v-col
+                      cols="12"
+                      class="d-flex justify-space-between align-center"
+                      :class="revOnMob"
+                    >
+                      <v-btn-toggle
+                        v-model="upcoming"
+                        color="primary"
+                        mandatory
+                      >
+                        <v-btn> Upcoming </v-btn>
+                        <v-btn min-width="110"> Past </v-btn>
+                      </v-btn-toggle>
+                      <v-tooltip v-if="group.active" bottom>
+                        <template #activator="{ on }">
+                          <v-btn
+                            color="primary"
+                            elevation="0"
+                            rounded
+                            :block="$vuetify.breakpoint.name === 'xs'"
+                            :class="
+                              $vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''
+                            "
+                            @click="addAssign()"
+                            v-on="on"
+                          >
+                            <font-awesome-icon
+                              icon="fa-light fa-plus"
+                              class="mr-2"
+                            />
+                            Assignment
+                          </v-btn>
+                        </template>
+                        <span>Add assignment</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row>
+                  <the-empty-assignments-state
+                    v-if="assignments.length === 0"
+                  />
+                  <v-row v-else class="justify-center">
+                    <v-col cols="12">
+                      <teacher-assignment-card
+                        v-for="assignment in assignments"
+                        :key="assignment.id"
+                        :assignment="assignment"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card>
             </v-col>
           </v-row>
         </v-container>
