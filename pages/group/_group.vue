@@ -4,15 +4,15 @@
       v-model="tab"
       centered
       fixed-tabs
-      background-color="transparent"
+      background-color=""
       style="border-bottom: 1px solid #d2d2d2 !important"
     >
-      <v-tab style="text-transform: capitalize"> Assignments </v-tab>
-      <v-tab style="text-transform: capitalize"> Students </v-tab>
-      <v-tab style="text-transform: capitalize"> Grades </v-tab>
-      <v-tab style="text-transform: capitalize"> Settings </v-tab>
+      <v-tab> Assignments </v-tab>
+      <v-tab> Students </v-tab>
+      <v-tab> Grades </v-tab>
+      <v-tab> Settings </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tab" style="background-color: #fafafa">
+    <v-tabs-items v-model="tab">
       <v-tab-item>
         <!-- ASSIGNMENTS xx -->
         <v-container>

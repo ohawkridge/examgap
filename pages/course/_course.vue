@@ -1,17 +1,19 @@
 <template>
-  <v-container fluid>
+  <v-container class="fill-height debug">
     <v-row>
       <v-col cols="12" md="3">
-        <v-skeleton-loader
-          v-if="$fetchState.pending"
-          :loading="true"
-          type="list"
-          :types="{ list: 'list-item-two-line@6' }"
-        >
-        </v-skeleton-loader>
+        <v-sheet v-if="$fetchState.pending" class="pa-4">
+          <v-skeleton-loader
+            v-for="i in 10"
+            :key="i"
+            :loading="true"
+            width="200%"
+            type="heading"
+            class="mb-6"
+          />
+        </v-sheet>
         <template v-else>
-          <p class="text-h6 mb-2">Topics ({{ topics.length }})</p>
-          <v-list id="topics" nav>
+          <v-list nav dense class="bordered">
             <v-list-item-group v-model="currentTopicIndex" color="primary">
               <v-list-item
                 v-for="(topic, i) in topics"
@@ -34,7 +36,7 @@
       </v-col>
       <v-col cols="12" md="4">
         <v-skeleton-loader
-          v-if="$fetchState.pending || loading"
+          v-if="true"
           :loading="true"
           type="list"
           :types="{ list: 'list-item-two-line@8' }"
@@ -84,12 +86,9 @@
                   </v-list-item-action>
                 </v-list-item>
               </template>
-              <v-list-item v-if="noQuestions">
+              <v-list-item v-if="questions.length === 0">
                 <v-list-item-icon>
-                  <font-awesome-icon
-                    icon="fa-light fa-circle-info"
-                    class="ico-btn"
-                  />
+                  <font-awesome-icon icon="fa-light fa-circle-info" />
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title> No questions yet </v-list-item-title>
@@ -100,8 +99,10 @@
         </template>
       </v-col>
       <v-col cols="12" md="5">
+        PREVIEW HOVER
         <!-- Skeletons -->
-        <template v-if="$fetchState.pending || loading">
+        <!-- <template v-if="$fetchState.pending || loading"> -->
+        <!-- <template v-if="true">
           <v-skeleton-loader
             :loading="true"
             type="question"
@@ -122,8 +123,8 @@
             class="px-5 d-flex justify-end"
           >
           </v-skeleton-loader>
-        </template>
-        <div v-else class="px-3">
+        </template> -->
+        <!-- <div v-else class="px-3">
           <div class="d-flex justify-space-between mb-4">
             <div
               v-if="question !== undefined && Object.keys(question).length > 0"
@@ -208,7 +209,7 @@
               >{{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-chip>
           </div>
-        </div>
+        </div> -->
       </v-col>
     </v-row>
     <the-create-assignment-dialog />
@@ -267,13 +268,6 @@ export default {
         ? {}
         : this.questions[this.selectedQuestion]
     },
-    noQuestions() {
-      return (
-        !this.$fetchState.pending &&
-        this.questions.length === 0 &&
-        !this.$fetchState.error
-      )
-    },
   },
   watch: {
     selected() {
@@ -328,8 +322,8 @@ export default {
 </script>
 
 <style scoped>
-#topics {
-  background-color: #fafafa;
+.bordered {
+  border: 1px solid #d2d2d2;
 }
 
 #questions {

@@ -63,6 +63,7 @@ const actions = {
   // For teachers, get _course topics to browse questions
   // For students, get revision topic data
   async getTopics({ dispatch, commit, rootGetters, rootState }, courseId) {
+    commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
     // For students, courseId is not passed in
     // so get it from the current active group
@@ -88,6 +89,7 @@ const actions = {
     if (rootState.user.teacher) {
       await dispatch('getQuestions')
     }
+    commit('app/setLoading', false, { root: true })
   },
   async getQuestions({ commit, state, rootState, rootGetters }) {
     // When changing courses currentTopicIndex
