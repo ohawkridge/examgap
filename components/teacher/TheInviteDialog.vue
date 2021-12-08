@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="440">
+  <v-dialog v-model="dialog" width="500">
     <v-card>
       <v-card-title class="d-flex justify-center">
         Invite students

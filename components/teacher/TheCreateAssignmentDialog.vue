@@ -42,10 +42,7 @@
                           >EXAM</a
                         >
                       </template>
-                      <span v-if="student.examMode"
-                        >Exam mode OFF (show keywords)
-                      </span>
-                      <span v-else>Exam mode ON (hide keywords) </span>
+                      <span>Exam mode</span>
                     </v-tooltip>
                   </template>
                 </v-checkbox>

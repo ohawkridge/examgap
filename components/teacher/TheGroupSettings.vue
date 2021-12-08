@@ -1,32 +1,42 @@
 <template>
   <v-container>
-    <v-row class="d-flex justify-center">
-      <v-col cols="12" sm="10" md="6" lg="4" class="mt-sm-6">
-        <div class="text-h5">Class details</div>
-        <p class="font-weight-light mb-9">Choose class name and course.</p>
-        <v-text-field
-          v-model="name"
-          :rules="nameRules"
-          label="Class name*"
-          value="Test"
-          outlined
-          autofocus
-        ></v-text-field>
-        <the-course-select :course-id="group.course.id" />
-        <div class="d-flex justify-space-between mt-4">
-          <v-btn
-            color="primary"
-            elevation="0"
-            rounded
-            :loading="loading"
-            :disabled="loading"
-            @click="save"
-          >
-            Save
-          </v-btn>
-          <the-archive-group-dialog v-if="group.active" />
-          <the-restore-group-dialog v-else />
-        </div>
+    <v-row class="justify-center">
+      <v-col class="12" md="6">
+        <v-card outlined class="pa-4">
+          <v-container>
+            <v-row class="d-flex justify-center">
+              <v-col cols="12">
+                <div class="text-h5">Class details</div>
+                <p class="font-weight-light mb-9">
+                  Choose class name and course
+                </p>
+                <v-text-field
+                  v-model="name"
+                  :rules="nameRules"
+                  label="Class name*"
+                  value="Test"
+                  outlined
+                  autofocus
+                ></v-text-field>
+                <the-course-select :course-id="group.course.id" />
+                <div class="d-flex justify-space-between mt-4">
+                  <v-btn
+                    color="primary"
+                    elevation="0"
+                    rounded
+                    :loading="loading"
+                    :disabled="loading"
+                    @click="save"
+                  >
+                    Save
+                  </v-btn>
+                  <the-archive-group-dialog v-if="group.active" />
+                  <the-restore-group-dialog v-else />
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
