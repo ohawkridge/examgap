@@ -333,9 +333,6 @@ export default {
             students: this.selectedStudents,
             questions: this.selected,
           })
-          // Redirect to _group.vue, making
-          // sure to show 'ASSIGNMENTS' tab
-          this.$store.dispatch('app/setGroupTab', 0)
           this.$router.push(`/group/${this.group.id}`)
           this.$snack.showMessage({
             type: 'success',

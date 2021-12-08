@@ -12,7 +12,6 @@ const getDefaultState = () => ({
   marking: false,
   question: {}, // The question to answer
   recentAssignments: [],
-  delId: '',
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -280,10 +279,6 @@ const actions = {
 const mutations = {
   setAssignment(state, data) {
     state.assignment = data
-  },
-  // TheDeleteAssignmentDialog
-  setDelId(state, assignmentId) {
-    state.delId = assignmentId
   },
   setQuestion(state, question) {
     state.question = question

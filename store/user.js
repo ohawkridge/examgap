@@ -243,8 +243,10 @@ const actions = {
     newAssObj = await newAssObj.json()
     // Clear any previously selected questions
     commit('topics/clearSelectedQuestions', null, { root: true })
-    // Toggle upcoming to show new assignment
-    commit('app/setUpcoming', 0)
+    // Make 'ASSIGNMENTS' 'UPCOMING' active so new
+    // assignment is visible when we direct to _group.vue
+    commit('app/setUpcoming', 0, { root: true })
+    commit('app/setGroupTab', 0, { root: true })
     commit('addAssignment', { newAssObj, group: getters.activeGroup })
   },
   async deleteAssignment({ commit, rootState, getters }, assignmentId) {
@@ -350,7 +352,6 @@ const mutations = {
     group.assignments.unshift({ ...newAssObj })
   },
   deleteAssignment(state, { group, assignmentId }) {
-    // group = current active group passed by action
     const i = group.assignments.findIndex((a) => a.id === assignmentId)
     group.assignments.splice(i, 1)
   },

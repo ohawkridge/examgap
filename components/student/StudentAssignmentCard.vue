@@ -40,7 +40,7 @@ export default {
 <style scoped>
 .align-date {
   display: inline-block;
-  width: 72px;
+  width: 56px;
 }
 @media only screen and (max-width: 600px) {
   .align-date {

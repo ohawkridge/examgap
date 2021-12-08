@@ -6,7 +6,11 @@
         <v-row class="justify-center">
           <v-col cols="12" md="10" class="pt-10">
             <p class="text-h5">
-              <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+              <font-awesome-icon
+                icon="fa-light fa-plus"
+                class="mr-2"
+                style="width: 24px"
+              />
               Add assignment for&hellip;
             </p>
           </v-col>
@@ -61,6 +65,7 @@
       <v-tabs
         v-model="tab"
         centered
+        fixed-tabs
         background-color="transparent"
         style="border-bottom: 1px solid #d2d2d2 !important"
       >

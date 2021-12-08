@@ -16,16 +16,21 @@
             <span>Back</span>
           </v-tooltip>
           <div>
+            <!-- Full buttons on desktop -->
             <div v-if="$vuetify.breakpoint.name !== 'xs'">
-              <delete-assignment-dialog
-                v-if="!$fetchState.pending"
-                :assignment-id="assignment.id"
-                :group-id="group.id"
-              />
-              <v-btn elevation="0" rounded text class="ml-2" @click="$fetch()">
+              <v-btn
+                rounded
+                text
+                color="red"
+                @click="$nuxt.$emit('show-delete', assignment.id, group.id)"
+              >
+                Delete
+              </v-btn>
+              <v-btn rounded text class="ml-2" @click="$fetch()">
                 Refresh
               </v-btn>
             </div>
+            <!-- Ellipsis on mobile -->
             <v-menu v-else>
               <template #activator="{ on }">
                 <v-btn icon v-on="on">
@@ -400,11 +405,9 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import TheInfoDialog from '@/components/teacher/TheInfoDialog'
-import DeleteAssignmentDialog from '@/components/teacher/DeleteAssignmentDialog'
 
 export default {
   components: {
-    DeleteAssignmentDialog,
     TheInfoDialog,
   },
   layout: 'app',
