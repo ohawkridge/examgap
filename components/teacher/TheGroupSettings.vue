@@ -3,12 +3,10 @@
     <v-row class="d-flex justify-center">
       <v-col cols="12" md="5">
         <p class="text-h6" style="margin-top: 40px">Class details</p>
-        <!-- <p class="text-caption">Choose class name and course</p> -->
         <v-text-field
           v-model="name"
           :rules="nameRules"
           label="Class name*"
-          value="Test"
           outlined
           autofocus
         ></v-text-field>
@@ -27,6 +25,23 @@
           <the-archive-group-dialog v-if="group.active" />
           <the-restore-group-dialog v-else />
         </div>
+      </v-col>
+    </v-row>
+    <v-row class="d-flex justify-center">
+      <v-col cols="12" md="5">
+        <p class="text-h6" style="margin-top: 40px">General</p>
+        <v-text-field
+          label="Join code"
+          readonly
+          :value="code"
+          outlined
+        ></v-text-field>
+        <v-text-field
+          label="Link"
+          readonly
+          value="TODO"
+          outlined
+        ></v-text-field>
       </v-col>
     </v-row>
   </v-container>
@@ -63,6 +78,11 @@ export default {
         this.$store.commit('user/setGroupName', { group: this.group, name })
         this.$store.commit('app/setPageTitle', name)
       },
+    },
+    code() {
+      const l = this.group.code.substring(0, 3)
+      const r = this.group.code.substring(3, 7)
+      return `${l}-${r}`
     },
   },
   beforeDestroy() {

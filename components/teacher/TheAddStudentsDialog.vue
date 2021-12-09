@@ -1,7 +1,9 @@
 <template>
   <v-dialog v-model="dialog" max-width="480px">
-    <v-card class="modal">
-      <v-card-title class="d-flex justify-center"> Add students </v-card-title>
+    <v-card class="rounded-xl">
+      <v-card-title class="text-h5 pt-6 mb-4 font-weight-regular"
+        >Add students</v-card-title
+      >
       <v-card-text>
         <v-textarea
           v-model="usernames"
@@ -28,7 +30,7 @@
                   v-on="on"
                 />
               </template>
-              <v-card max-width="260">
+              <v-card max-width="260" class="rounded-lg">
                 <v-card-text class="text-body-2">
                   Enter your school's email domain to append to all students.
                 </v-card-text>
@@ -40,14 +42,14 @@
           <v-btn text rounded @click="dialog = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            elevation="0"
             class="ml-2"
             rounded
+            text
             :loading="loading"
             :disabled="loading || userNamesArray.length === 0"
             @click="addStudents()"
-            >Add Students</v-btn
-          >
+            >Add
+          </v-btn>
         </div>
       </v-card-text>
     </v-card>

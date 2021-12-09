@@ -51,7 +51,7 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="12" md="9">
+          <v-col cols="12" md="8">
             <template v-for="(assignment, i) in recent">
               <teacher-assignment-card :key="i" :assignment="assignment" />
             </template>

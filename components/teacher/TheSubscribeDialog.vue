@@ -1,53 +1,41 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440">
+  <v-dialog v-model="dialog" max-width="440" class="fix-overlay">
     <template #activator="{ on }">
       <v-btn color="primary" block rounded elevation="0" v-on="on">
         {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
       </v-btn>
     </template>
-    <v-card class="modal">
-      <v-card-title class="d-flex justify-center"
-        >Subscribe to Examgap</v-card-title
+    <v-card class="rounded-xl">
+      <v-card-title
+        class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
       >
-      <v-card-text>
+        <font-awesome-icon icon="fa-light fa-receipt" class="fa-sm" />
+      </v-card-title>
+      <p class="text-h5 text-center">Request Invoice</p>
+      <v-card-text class="modal-text">
         <p>
           Request an email invoice you can pay online or forward to your bursar.
         </p>
-        <!-- <v-checkbox v-model="selectedPackage" value="both">
-          <template #label>
-            <div>
-              Complete Computer Science—<strong>£199</strong>
-              <v-chip color="accent" outlined class="ml-2 mb-1" small
-                >Save £59</v-chip
-              >
-            </div>
-          </template>
-        </v-checkbox> -->
         <v-checkbox v-model="selectedPackage" value="gcse" readonly>
           <template #label>
             <div>
-              GCSE Computer Science—<strong>£84</strong>
+              GCSE Computer Science—£84
               <span class="text-caption">(VAT included)</span>
             </div>
           </template>
         </v-checkbox>
-        <!-- <v-checkbox v-model="selectedPackage" value="alevel">
-          <template #label>
-            <div>A Level Computer Science—<strong>£79</strong></div>
-          </template>
-        </v-checkbox> -->
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            elevation="0"
             :loading="loading"
             :disabled="loading"
             rounded
+            text
             class="ml-2"
             @click="request()"
           >
-            Request invoice
+            Request
           </v-btn>
         </div>
       </v-card-text>

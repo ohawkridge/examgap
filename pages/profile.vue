@@ -41,9 +41,10 @@
                 <template #activator="{ on }">
                   <v-chip
                     v-if="subscribed"
-                    outlined
                     label
-                    color="accent"
+                    dark
+                    color="secondary"
+                    outlined
                     v-on="on"
                   >
                     Subscribed
