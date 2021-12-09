@@ -55,7 +55,6 @@ import {
   faTrafficLight,
   faAngleDown,
   faPenClip,
-  faBell,
   faHouse,
   faUsers,
   faTrashCanXmark,
@@ -117,7 +116,6 @@ library.add(
   faTrafficLight,
   faAngleDown,
   faPenClip,
-  faBell,
   faHouse,
   faUsers,
   faTrashCanXmark

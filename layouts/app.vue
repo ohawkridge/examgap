@@ -79,26 +79,27 @@
         <span class="text-subtitle-1 font-weight-medium">
           {{ pageTitle }}
         </span>
-        <!-- TODO -->
-        <!-- <div id="headway"></div> -->
-        <v-menu offset-y open-on-hover rounded="lg">
-          <template #activator="{ on }">
-            <v-btn icon color="primary" v-on="on">
-              <font-awesome-icon icon="fa-light fa-plus" class="ico-btn" />
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item @click="$nuxt.$emit('show-create')">
-              <v-list-item-title> New class </v-list-item-title>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-title> New assignment </v-list-item-title>
-            </v-list-item>
-            <v-list-item nuxt to="/author">
-              <v-list-item-title> New question </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <div class="d-flex align-center">
+          <div id="headway" class="pr-2"></div>
+          <v-menu offset-y open-on-hover rounded="lg">
+            <template #activator="{ on }">
+              <v-btn icon color="primary" v-on="on">
+                <font-awesome-icon icon="fa-light fa-plus" class="ico-btn" />
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="$nuxt.$emit('show-create')">
+                <v-list-item-title> New class </v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title> New assignment </v-list-item-title>
+              </v-list-item>
+              <v-list-item nuxt to="/author">
+                <v-list-item-title> New question </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
       </div>
     </v-app-bar>
     <v-main style="background-color: #fbfcff">
@@ -167,6 +168,14 @@ export default {
       return this.$route.name === 'question-question'
     },
   },
+  mounted() {
+    const config = {
+      selector: '#headway',
+      account: 'yE6G2x',
+    }
+    // eslint-disable-next-line no-undef
+    Headway.init(config)
+  },
   methods: {
     nav(groupId) {
       this.$store.commit('user/setActiveGroupId', groupId)
@@ -192,5 +201,10 @@ export default {
 .bold-nav {
   outline: 2px solid #000000 !important;
   outline-offset: 2px;
+}
+
+.ico-btn {
+  height: 24px;
+  width: 24px;
 }
 </style>

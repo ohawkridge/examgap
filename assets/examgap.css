@@ -17,7 +17,7 @@ blockquote {
 }
 
 /* accessible RAG chips */
-span.v-chip.theme--light.red {
+/* span.v-chip.theme--light.red {
   background-color: rgb(254, 216, 216) !important;
   color: rgb(95, 28, 30) !important;
 }
@@ -29,9 +29,8 @@ span.v-chip.theme--light.orange {
 
 span.v-chip.theme--light.green {
   background-color: rgb(201, 237, 194) !important;
-  /* color: rgb(18, 39, 14) !important; */
   color: hsl(110, 54%, 18) !important;
-}
+} */
 
 /* --------- Misc. classes -------- */
 
@@ -39,7 +38,6 @@ span.v-chip.theme--light.green {
   border: 1px dashed yellowgreen;
 }
 
-/* turn off bullets */
 .no-bullet {
   list-style-type: none !important;
 }
@@ -75,37 +73,4 @@ span.v-chip.theme--light.green {
 #nav-fix {
   position: relative;
   top: -58px !important;
-}
-
-/* --------- Icon colours --------- */
-.ico-blue {
-  color: #0099cc;
-}
-
-.ico-light-pink {
-  color: #f9b9b7;
-}
-
-.ico-red {
-  color: #f44336;
-}
-
-.ico-green {
-  color: #4caf50;
-}
-
-.ico-grey {
-  color: #bdbdbd;
-}
-
-/* -------- Headway widget -------- */
-
-#HW_badge {
-  background: #ef7a85 !important;
-  color: #ffffff;
-}
-
-.ico-btn {
-  height: 24px !important;
-  width: 24px !important;
 }

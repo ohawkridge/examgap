@@ -27,16 +27,16 @@
             >
           </v-tooltip>
         </div>
-        <v-btn
-          elevation="0"
-          rounded
-          text
-          color="primary"
-          @click="newQuestion()"
-        >
-          <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
-          New Question
-        </v-btn>
+        <div>
+          <the-question-detail-modal
+            v-if="question"
+            :question-id="question.id"
+          />
+          <v-btn rounded text color="primary" @click="newQuestion()">
+            <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+            New Question
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -131,10 +131,12 @@
 import { mapState, mapGetters } from 'vuex'
 import debounce from 'lodash.debounce'
 import TheCreateAssignmentDialog from '@/components/teacher/TheCreateAssignmentDialog'
+import TheQuestionDetailModal from '~/components/teacher/TheQuestionDetailModal.vue'
 
 export default {
   components: {
     TheCreateAssignmentDialog,
+    TheQuestionDetailModal,
   },
   layout: 'app',
   data() {
