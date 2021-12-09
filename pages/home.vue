@@ -176,7 +176,7 @@ export default {
     addAssign(group) {
       this.$store.commit('user/setActiveGroupId', group.id)
       this.$store.commit('topics/clearSelectedQuestions')
-      this.$router.push(`/course/${group.course.id}`)
+      this.$router.push(`/browse/${group.course.id}`)
     },
     revise(topicId) {
       this.$store.commit('topics/setTopicId', topicId)

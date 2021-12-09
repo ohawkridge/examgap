@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" max-width="440">
     <v-card class="rounded-xl">
       <v-card-title class="text-h5 pt-6 mb-4 font-weight-regular"
-        >Create class</v-card-title
+        >New class</v-card-title
       >
       <v-card-text>
         <v-text-field

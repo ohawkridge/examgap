@@ -53,11 +53,12 @@ import {
   faCircle2,
   faCircle3,
   faTrafficLight,
-  faTrashCanXmark,
   faAngleDown,
   faPenClip,
   faBell,
   faHouse,
+  faUsers,
+  faTrashCanXmark,
 } from '@fortawesome/pro-light-svg-icons'
 
 // Register component globally
@@ -114,11 +115,12 @@ library.add(
   faCircle2,
   faCircle3,
   faTrafficLight,
-  faTrashCanXmark,
   faAngleDown,
   faPenClip,
   faBell,
-  faHouse
+  faHouse,
+  faUsers,
+  faTrashCanXmark
 )
 
 Vue.use(Vuetify)

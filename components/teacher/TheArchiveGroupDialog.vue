@@ -14,7 +14,7 @@
       </v-card-title>
       <v-card-text>
         <p class="text-h5 text-center">Archive class?</p>
-        <p class="#41484d--text">
+        <p class="modal-text">
           This will move {{ group.name }} into the 'Archive'. Archived classes
           can be retored at any time.
         </p>

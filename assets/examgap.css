@@ -67,6 +67,10 @@ span.v-chip.theme--light.green {
   word-wrap: break-word;
 }
 
+.modal-text {
+  color: #41484d;
+}
+
 /* subtract navbar height from fill-height containers */
 #nav-fix {
   position: relative;

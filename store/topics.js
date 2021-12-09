@@ -62,7 +62,7 @@ const actions = {
   },
   // For teachers, get _course topics to browse questions
   // For students, get revision topic data
-  async getTopics({ dispatch, commit, rootGetters, rootState }, courseId) {
+  async getTopics({ commit, rootGetters, rootState }, courseId) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
     // For students, courseId is not passed in
@@ -84,40 +84,26 @@ const actions = {
     }
     response = await response.json()
     commit('setTopics', response)
-    // For teachers only, dispatch a second action to get questions
-    // (uses state.currentTopicIndex)
-    if (rootState.user.teacher) {
-      await dispatch('getQuestions')
-    }
     commit('app/setLoading', false, { root: true })
   },
-  async getQuestions({ commit, state, rootState, rootGetters }) {
-    // When changing courses currentTopicIndex
-    // could exceed total number of topics
-    const max = state.topics.length - 1
-    if (state.currentTopicIndex > max) {
-      commit('setCurrentTopicIndex', max)
+  async getQuestions({ commit, state, rootState, rootGetters }, topicId) {
+    const url = new URL(
+      '/.netlify/functions/getQuestions',
+      this.$config.baseURL
+    )
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        topicId,
+        groupId: rootGetters['user/activeGroup'].id, // To find past assignments
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`${response.statusText} ${response.status}`)
     }
-    const topicId = state.topics[state.currentTopicIndex].id
-    if (topicId !== undefined) {
-      const url = new URL(
-        '/.netlify/functions/getQuestions',
-        this.$config.baseURL
-      )
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          secret: rootState.user.secret,
-          topicId,
-          groupId: rootGetters['user/activeGroup'].id, // To find past assignments
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`${response.statusText} ${response.status}`)
-      }
-      response = await response.json()
-      commit('setQuestions', response)
-    }
+    response = await response.json()
+    commit('setQuestions', response)
   },
 }
 

@@ -13,67 +13,40 @@
       <v-tab style="text-transform: capitalize"> Settings </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
-      <v-tab-item>
+      <v-tab-item style="background-color: #fbfcff">
         <!-- ASSIGNMENTS xx -->
         <v-container>
           <v-row class="justify-center">
+            <v-col cols="12" md="10" class="d-flex justify-end">
+              <v-tooltip v-if="group.active" bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    color="primary"
+                    elevation="0"
+                    rounded
+                    :block="$vuetify.breakpoint.name === 'xs'"
+                    :class="$vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''"
+                    @click="addAssign()"
+                    v-on="on"
+                  >
+                    <font-awesome-icon
+                      icon="fa-light fa-plus"
+                      class="mr-2 fa-lg"
+                    />
+                    Assignment
+                  </v-btn>
+                </template>
+                <span>New assignment</span>
+              </v-tooltip>
+            </v-col>
+          </v-row>
+          <v-row class="justify-center">
             <v-col class="12" md="10">
-              <!-- <v-card outlined class="pa-4">
-                <v-container>
-                  <v-row class="justify-center">
-                    <v-col
-                      cols="12"
-                      class="d-flex justify-space-between align-center"
-                      :class="revOnMob"
-                    >
-                      <v-switch v-model="darkMode" label="Dark mode"></v-switch>
-                      <p class="red--text">vm: {{ darkMode }}</p>
-                      <v-btn-toggle
-                        v-model="upcoming"
-                        color="primary"
-                        mandatory
-                      >
-                        <v-btn> Upcoming </v-btn>
-                        <v-btn min-width="110"> Past </v-btn>
-                      </v-btn-toggle>
-                      <v-tooltip v-if="group.active" bottom>
-                        <template #activator="{ on }">
-                          <v-btn
-                            color="primary"
-                            elevation="0"
-                            rounded
-                            :block="$vuetify.breakpoint.name === 'xs'"
-                            :class="
-                              $vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''
-                            "
-                            @click="addAssign()"
-                            v-on="on"
-                          >
-                            <font-awesome-icon
-                              icon="fa-light fa-plus"
-                              class="mr-2"
-                            />
-                            Assignment
-                          </v-btn>
-                        </template>
-                        <span>Add assignment</span>
-                      </v-tooltip>
-                    </v-col>
-                  </v-row>
-                  <the-empty-assignments-state
-                    v-if="assignments.length === 0"
-                  />
-                  <v-row v-else class="justify-center">
-                    <v-col cols="12">
-                      <teacher-assignment-card
-                        v-for="assignment in assignments"
-                        :key="assignment.id"
-                        :assignment="assignment"
-                      />
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card> -->
+              <teacher-assignment-card
+                v-for="(assignment, i) in group.assignments"
+                :key="i"
+                :assignment="assignment"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -99,7 +72,7 @@ import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
 // import TheEmptyAssignmentsState from '@/components/common/TheEmptyAssignmentsState'
-// import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
+import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 
 export default {
   components: {
@@ -108,7 +81,7 @@ export default {
     TheGroupSettings,
     TheInviteDialog,
     // TheEmptyAssignmentsState,
-    // TeacherAssignmentCard,
+    TeacherAssignmentCard,
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
@@ -118,10 +91,6 @@ export default {
   layout: 'app',
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-    // Show assignments based on toggle
-    assignments() {
-      return this.group.assignments.filter((a) => a.live === !this.upcoming)
-    },
     revOnMob() {
       return this.$vuetify.breakpoint.name === 'xs'
         ? 'flex-column flex-column-reverse'
@@ -134,15 +103,6 @@ export default {
       },
       set(value) {
         this.$store.commit('app/setTab', value)
-      },
-    },
-    darkMode: {
-      get() {
-        return this.$store.state.app.darkMode
-      },
-      set(val) {
-        this.$store.commit('app/setDarkMode', val)
-        this.$vuetify.theme.dark = val
       },
     },
     // On 'ASSIGNMENTS' tab, remember upcoming/past
@@ -178,7 +138,7 @@ export default {
   methods: {
     addAssign() {
       this.$store.commit('topics/clearSelectedQuestions')
-      this.$router.push(`/course/${this.group.course.id}`)
+      this.$router.push(`/browse/${this.group.course.id}`)
     },
   },
 }

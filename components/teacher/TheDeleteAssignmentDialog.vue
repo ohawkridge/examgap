@@ -1,27 +1,30 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <v-card>
-      <v-card-title class="d-flex justify-center">
-        Delete assignment?
+    <v-card class="rounded-xl" color="#fbfcff">
+      <v-card-title
+        class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
+      >
+        <font-awesome-icon icon="fa-light fa-trash-can-xmark" class="fa-sm" />
       </v-card-title>
       <v-card-text>
-        <p>
+        <p class="text-h5 text-center">Delete assignment?</p>
+        <p class="modal-text">
           This assignment and all the responses that go with it will be deleted.
-          This action <em>cannot</em> be undone.
+          This action <strong>cannot</strong> be undone.
         </p>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false">Cancel</v-btn>
           <v-btn
             color="error"
-            elevation="0"
             :loading="loading"
             :disabled="loading"
+            text
             rounded
             class="ml-2"
             @click="deleteAssignment"
           >
-            Delete Assignment</v-btn
-          >
+            Delete
+          </v-btn>
         </div>
       </v-card-text>
     </v-card>

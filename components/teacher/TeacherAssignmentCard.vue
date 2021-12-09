@@ -1,8 +1,8 @@
 <template>
-  <!-- <v-hover v-slot="{ hover }"> -->
   <v-card
-    class="mb-4 rounded-lg eg-outline"
+    class="mb-4 rounded-lg outlined"
     outlined
+    hover
     color="#ffffff"
     @click="nav()"
   >
@@ -48,15 +48,15 @@
         </div>
       </div>
       <div class="d-flex align-end">
-        <span class="tertiary--text text-subtitle-2 font-weight-bold">
+        <span class="tertiary--text text-subtitle-2 font-weight-medium">
           {{ assignment.numStudents }} Student{{
             assignment.numStudents | pluralize
           }}
+          <font-awesome-icon icon="fa-light fa-users" class="ml-1" />
         </span>
       </div>
     </v-card-text>
   </v-card>
-  <!-- </v-hover> -->
 </template>
 
 <script>
@@ -94,8 +94,9 @@ export default {
   }
 }
 
-.eg-outline {
-  border-color: #000000 !important;
+.outlined {
+  /* border-color: #000000 !important; */
+  border-color: #d2d2d2 !important;
 }
 
 /* Does not work external */
@@ -104,11 +105,7 @@ export default {
   width: 24px;
 }
 
-.ass-card {
-  border-left: 2px solid #b3b3b3;
-}
-
-.ass-card2 {
-  border-left: 3px solid #0099cc;
-}
+/* .modal {
+  background-color: red !important;
+} */
 </style>

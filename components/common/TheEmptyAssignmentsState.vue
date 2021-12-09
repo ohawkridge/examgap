@@ -48,7 +48,7 @@ export default {
     addAssignment() {
       // Clear previous selections (shouldn't be any)
       this.$store.commit('topics/clearSelectedQuestions')
-      this.$router.push(`/course/${this.group.course.id}`)
+      this.$router.push(`/brwose/${this.group.course.id}`)
     },
   },
 }
