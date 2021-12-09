@@ -9,10 +9,10 @@
           <template #activator="{ on }">
             <v-btn
               class="mr-2 mb-2 mb-sm-0 mr-2"
-              elevation="0"
               :block="$vuetify.breakpoint.name === 'xs'"
+              color="primary"
               rounded
-              color="#c1e8ff"
+              outlined
               v-on="on"
             >
               Actions
@@ -52,31 +52,6 @@
             </v-list-item>
           </v-list>
         </v-menu>
-        <!-- <v-btn
-          elevation="0"
-          rounded
-          :block="$vuetify.breakpoint.name === 'xs'"
-          class="mb-2 mb-sm-0 mr-2"
-          @click="$nuxt.$emit('show-invite')"
-        >
-          Invite Students
-        </v-btn> -->
-        <!-- <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn
-              :to="`/logins/${group.id}`"
-              class="mr-2 mb-2 mb-sm-0"
-              :class="xsBtns"
-              elevation="0"
-              rounded
-              :block="$vuetify.breakpoint.name === 'xs'"
-              v-on="on"
-            >
-              Logins
-            </v-btn>
-          </template>
-          <span>Print logins</span>
-        </v-tooltip> -->
         <div>
           <span class="tertiary--text text-subtitle-2 font-weight-bold">
             {{ students.length }} Student{{ students.length | pluralize }}
@@ -172,12 +147,15 @@
       </v-col>
     </v-row>
     <!-- Reset Pw xx -->
-    <v-dialog v-model="dialog" max-width="440">
-      <v-card class="modal">
-        <v-card-title class="d-flex justify-center">
-          Reset Password
+    <v-dialog v-model="dialog" max-width="440" class="rounded-xl">
+      <v-card class="rounded-xl" color="#fbfcff">
+        <v-card-title
+          class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
+        >
+          <font-awesome-icon icon="fa-light fa-lock-keyhole" class="fa-sm" />
         </v-card-title>
         <v-card-text>
+          <p class="text-h5 text-center">Reset password</p>
           <v-text-field
             v-model="password"
             :rules="rules"
@@ -185,19 +163,18 @@
             outlined
             autofocus
           ></v-text-field>
-          <small>*Indicates required field</small>
           <div class="d-flex justify-end">
             <v-btn text rounded @click="dialog = false">Cancel</v-btn>
             <v-btn
               color="primary"
-              elevation="0"
               :loading="loading"
               :disabled="loading"
               rounded
+              text
               class="ml-2"
               @click="reset()"
             >
-              Reset password
+              Reset
             </v-btn>
           </div>
         </v-card-text>

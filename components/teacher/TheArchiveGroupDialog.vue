@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="440">
+  <v-dialog v-model="dialog" width="440" class="rounded-xl">
     <template #activator="{ on }">
       <v-btn elevation="0" text rounded color="red" v-on="on">
         <font-awesome-icon icon="fa-light fa-box-archive" class="mr-2" />

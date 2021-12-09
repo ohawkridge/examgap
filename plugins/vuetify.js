@@ -56,7 +56,6 @@ import {
   faAngleDown,
   faPenClip,
   faHouse,
-  faUsers,
   faTrashCanXmark,
 } from '@fortawesome/pro-light-svg-icons'
 
@@ -117,7 +116,6 @@ library.add(
   faAngleDown,
   faPenClip,
   faHouse,
-  faUsers,
   faTrashCanXmark
 )
 

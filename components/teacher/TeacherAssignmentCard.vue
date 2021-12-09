@@ -52,7 +52,6 @@
           {{ assignment.numStudents }} Student{{
             assignment.numStudents | pluralize
           }}
-          <font-awesome-icon icon="fa-light fa-users" class="ml-1" />
         </span>
       </div>
     </v-card-text>

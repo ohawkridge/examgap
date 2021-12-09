@@ -17,20 +17,20 @@ blockquote {
 }
 
 /* accessible RAG chips */
-/* span.v-chip.theme--light.red {
-  background-color: rgb(254, 216, 216) !important;
-  color: rgb(95, 28, 30) !important;
+span.v-chip.theme--light.red {
+  background-color: #ffd9dc !important;
+  color: #40000c !important;
 }
 
 span.v-chip.theme--light.orange {
-  background-color: rgb(247, 234, 187) !important;
-  color: rgb(80, 37, 22) !important;
+  background-color: #ffe089 !important;
+  color: #765b00 !important;
 }
 
 span.v-chip.theme--light.green {
   background-color: rgb(201, 237, 194) !important;
   color: hsl(110, 54%, 18) !important;
-} */
+}
 
 /* --------- Misc. classes -------- */
 

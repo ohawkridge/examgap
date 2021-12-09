@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440">
+  <v-dialog v-model="dialog" max-width="440" class="rounded-xl">
     <v-card class="rounded-xl">
       <v-card-title class="text-h5 pt-6 mb-4 font-weight-regular"
         >New class</v-card-title

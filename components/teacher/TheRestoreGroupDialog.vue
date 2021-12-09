@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="440">
+  <v-dialog v-model="dialog" width="440" class="rounded-xl">
     <template #activator="{ on: dial }">
       <v-tooltip bottom>
         <template #activator="{ on: tool }">
@@ -21,14 +21,13 @@
         <span>Restore</span>
       </v-tooltip>
     </template>
-    <v-card class="modal">
-      <v-card-title class="d-flex justify-center">
-        Restore class?
-      </v-card-title>
+    <v-card class="rounded-xl" color="#fbfcff">
+      <v-card-title> </v-card-title>
       <v-card-text>
+        <p class="text-h5 text-center">Restore class?</p>
         <p>
           Restored classes can get new assignments and appear in the 'Classes'
-          sidebar.
+          menu.
         </p>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
@@ -36,12 +35,12 @@
             color="primary"
             :loading="loading"
             :disabled="loading"
-            elevation="0"
+            text
             rounded
             class="ml-2"
             @click="restore()"
           >
-            Restore Class
+            Restore
           </v-btn>
         </div>
       </v-card-text>

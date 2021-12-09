@@ -41,7 +41,7 @@
             </v-col>
           </v-row>
           <v-row class="justify-center">
-            <v-col class="12" md="10">
+            <v-col class="12" md="8">
               <teacher-assignment-card
                 v-for="(assignment, i) in group.assignments"
                 :key="i"
