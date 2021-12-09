@@ -1,31 +1,31 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
-    <v-card class="modal">
-      <v-card-title class="d-flex justify-center"> Create class </v-card-title>
+    <v-card class="rounded-xl">
+      <v-card-title class="text-h5 pt-6 mb-4 font-weight-regular"
+        >Create class</v-card-title
+      >
       <v-card-text>
-        <v-form ref="form">
-          <v-text-field
-            v-model="groupName"
-            :rules="nameRules"
-            label="Class name*"
-            outlined
-            autofocus
-          ></v-text-field>
-          <the-course-select />
-          <!-- ^^^ Emits an event containing selected course id -->
-        </v-form>
+        <v-text-field
+          v-model="groupName"
+          :rules="nameRules"
+          label="Class name*"
+          outlined
+          autofocus
+        ></v-text-field>
+        <the-course-select />
+        <!-- ^^^ Emits an event containing selected course id -->
         <div class="d-flex justify-end mt-3">
           <v-btn text rounded @click="dialog = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            elevation="0"
             :loading="loading"
             :disabled="loading"
+            text
             rounded
             class="ml-2"
             @click="createGroup()"
           >
-            Create class
+            Create
           </v-btn>
         </div>
       </v-card-text>

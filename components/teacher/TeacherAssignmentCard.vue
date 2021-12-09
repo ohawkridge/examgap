@@ -1,57 +1,62 @@
 <template>
-  <v-hover v-slot="{ hover }">
-    <v-card
-      class="mb-4"
-      :class="hover ? 'ass-card2' : 'ass-card'"
-      hover
-      @click="nav()"
-    >
-      <v-card-title class="d-flex justify-space-between">
-        {{ assignment.name }}
-        <v-menu offset-y>
-          <template #activator="{ on }">
-            <v-btn icon @click.stop="">
-              <font-awesome-icon
-                icon="fa-light fa-ellipsis-vertical"
-                class="ico-btn"
-                v-on="on"
-              />
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              @click="
-                $nuxt.$emit('show-delete', assignment.id, assignment.group.id)
-              "
-            >
-              <v-list-item-title class="red--text"> Delete </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-card-title>
-      <v-card-subtitle>
-        {{ assignment.numQuestions }} Question{{
-          assignment.numQuestions | pluralize
-        }}
-        → {{ assignment.group.name }}
-      </v-card-subtitle>
-      <v-card-text>
+  <!-- <v-hover v-slot="{ hover }"> -->
+  <v-card
+    class="mb-4 rounded-lg eg-outline"
+    outlined
+    color="#ffffff"
+    @click="nav()"
+  >
+    <v-card-title class="d-flex text-h6 justify-space-between">
+      {{ assignment.name }}
+      <v-menu offset-y>
+        <template #activator="{ on }">
+          <v-btn icon @click.stop="">
+            <font-awesome-icon
+              icon="fa-light fa-ellipsis-vertical"
+              class="ico-btn"
+              v-on="on"
+            />
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            @click="
+              $nuxt.$emit('show-delete', assignment.id, assignment.group.id)
+            "
+          >
+            <v-list-item-title class="red--text"> Delete </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-card-title>
+    <v-card-subtitle>
+      {{ assignment.numQuestions }} Question{{
+        assignment.numQuestions | pluralize
+      }}
+      →
+      {{ assignment.group.name }}
+    </v-card-subtitle>
+    <v-card-text class="d-flex justify-space-between">
+      <div>
         <div>
           <span class="align-date font-weight-bold">Start:</span
           >{{ assignment.start | date }}
         </div>
-        <v-chip label outlined small class="float-right">
-          {{ assignment.numStudents }} Student{{
-            assignment.numStudents | pluralize
-          }}
-        </v-chip>
         <div>
           <span class="align-date font-weight-bold">Due:</span
           >{{ assignment.dateDue | date }}
         </div>
-      </v-card-text>
-    </v-card>
-  </v-hover>
+      </div>
+      <div class="d-flex align-end">
+        <span class="tertiary--text text-subtitle-2 font-weight-bold">
+          {{ assignment.numStudents }} Student{{
+            assignment.numStudents | pluralize
+          }}
+        </span>
+      </div>
+    </v-card-text>
+  </v-card>
+  <!-- </v-hover> -->
 </template>
 
 <script>
@@ -87,6 +92,10 @@ export default {
     display: inline-block;
     width: 60px;
   }
+}
+
+.eg-outline {
+  border-color: #000000 !important;
 }
 
 /* Does not work external */

@@ -1,76 +1,56 @@
 <template>
-  <v-app>
-    <v-navigation-drawer v-model="drawer" width="232" app>
+  <v-app :dark="$store.state.app.darkMode">
+    <v-navigation-drawer
+      v-model="drawer"
+      :color="$vuetify.theme.themes.light.background"
+      app
+      floating
+    >
       <div class="pa-2">
         <nuxt-link to="/home">
           <the-logo />
         </nuxt-link>
-        <the-greeting />
+        <!-- <the-greeting /> -->
       </div>
-      <v-list dense nav>
-        <v-list-item v-if="teacher" @click="$nuxt.$emit('show-create')">
-          <v-list-item-icon class="d-flex justify-center align-center">
-            <font-awesome-icon icon="fa-light fa-plus fa-lg" />
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title> Create class </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item-group v-model="nav" color="primary">
-          <!-- No classes -->
-          <v-list-item v-if="groups.length === 0">
+      <v-list rounded dense>
+        <v-list-item-group
+          v-model="navbar"
+          active-class="bold-nav"
+          color="primary"
+        >
+          <v-list-item v-if="teacher" nuxt to="/home">
             <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-user-group fa-lg" />
+              <font-awesome-icon icon="fa-light fa-house" class="fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title> Classes </v-list-item-title>
+              <v-list-item-title> Home </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-group v-else :value="true">
-            <template #activator>
-              <v-list-item-icon class="d-flex justify-center align-center">
-                <font-awesome-icon icon="fa-light fa-user-group fa-lg" />
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Classes</v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <template v-for="(group, i) in groups">
-              <v-list-item :key="i" @click="navTo(group.id)">
-                <v-list-item-content>
-                  <v-list-item-title> {{ group.name }} </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-list-group>
-          <v-list-item v-if="teacher" nuxt :to="`/archive`">
+          <v-subheader> Classes </v-subheader>
+          <v-list-item
+            v-for="(group, i) in groups"
+            :key="i"
+            @click="nav(group.id)"
+          >
+            <v-list-item-content>
+              <v-list-item-title> {{ group.name }} </v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-action-text>
+              {{ group.count }}
+            </v-list-item-action-text>
+          </v-list-item>
+          <v-divider class="my-4 mx-2" />
+          <v-list-item v-if="teacher" nuxt to="/archive">
             <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-box-archive fa-lg" />
+              <font-awesome-icon icon="fa-light fa-box-archive" class="fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Archive </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-divider class="my-4 mx-2" />
-          <v-list-item v-if="teacher" nuxt to="/author">
-            <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-plus fa-lg" />
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Create question </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item v-if="teacher" nuxt to="/feedback">
-            <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-comment-exclamation fa-lg" />
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Send feedback </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
           <v-list-item nuxt to="/profile">
             <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-circle-user fa-lg" />
+              <font-awesome-icon icon="fa-light fa-circle-user" class="fa-lg" />
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title> Profile </v-list-item-title>
@@ -84,12 +64,7 @@
         </div>
       </template>
     </v-navigation-drawer>
-    <v-app-bar
-      app
-      flat
-      color="white"
-      style="border-bottom: 1px solid #d2d2d2 !important"
-    >
+    <v-app-bar app flat :color="$vuetify.theme.themes.light.background">
       <v-tooltip bottom>
         <template #activator="{ on }">
           <v-app-bar-nav-icon @click="drawer = !drawer" v-on="on">
@@ -104,10 +79,29 @@
         <span class="text-subtitle-1 font-weight-medium">
           {{ pageTitle }}
         </span>
-        <div id="headway"></div>
+        <!-- TODO -->
+        <!-- <div id="headway"></div> -->
+        <v-menu offset-y open-on-hover rounded="lg">
+          <template #activator="{ on }">
+            <v-btn icon color="primary" v-on="on">
+              <font-awesome-icon icon="fa-light fa-plus" class="ico-btn" />
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="$nuxt.$emit('show-create')">
+              <v-list-item-title> New class </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title> New assignment </v-list-item-title>
+            </v-list-item>
+            <v-list-item nuxt to="/author">
+              <v-list-item-title> New question </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </div>
     </v-app-bar>
-    <v-main style="background-color: #fafafa">
+    <v-main style="background-color: #fbfcff">
       <nuxt />
       <the-snackbar />
       <the-loading-overlay />
@@ -128,7 +122,7 @@ import TheFooter from '@/components/common/TheFooter'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
-import TheGreeting from '@/components/common/TheGreeting'
+// import TheGreeting from '@/components/common/TheGreeting'
 import TheLoadingOverlay from '~/components/common/TheLoadingOverlay.vue'
 import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 
@@ -140,7 +134,7 @@ export default {
     TheJoinDialog,
     TheCreateClassDialog,
     TheOnboardingSnackbar,
-    TheGreeting,
+    // TheGreeting,
     TheLoadingOverlay,
     TheFooter,
     TheDeleteAssignmentDialog,
@@ -149,7 +143,7 @@ export default {
   data() {
     return {
       drawer: null,
-      nav: null,
+      navbar: null,
     }
   },
   computed: {
@@ -174,7 +168,7 @@ export default {
     },
   },
   methods: {
-    navTo(groupId) {
+    nav(groupId) {
       this.$store.commit('user/setActiveGroupId', groupId)
       this.$router.push(this.teacher ? `/group/${groupId}` : '/home')
     },
@@ -193,3 +187,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.bold-nav {
+  outline: 2px solid #000000 !important;
+  outline-offset: 2px;
+}
+</style>

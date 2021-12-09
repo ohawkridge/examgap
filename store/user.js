@@ -246,7 +246,7 @@ const actions = {
     // Make 'ASSIGNMENTS' 'UPCOMING' active so new
     // assignment is visible when we direct to _group.vue
     commit('app/setUpcoming', 0, { root: true })
-    commit('app/setGroupTab', 0, { root: true })
+    commit('app/setTab', 0, { root: true })
     commit('addAssignment', { newAssObj, group: getters.activeGroup })
   },
   async deleteAssignment({ commit, rootState, getters }, assignmentId) {

@@ -16,7 +16,7 @@
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="12" md="10">
+          <v-col cols="12" md="9">
             <template v-for="(group, i) in groups">
               <v-tooltip :key="i" bottom>
                 <template #activator="{ on }">
@@ -24,9 +24,8 @@
                     elevation="0"
                     large
                     rounded
-                    outlined
                     :block="$vuetify.breakpoint.name === 'xs'"
-                    color="primary darken-1"
+                    color="#c1e8ff"
                     class="mb-4"
                     :class="$vuetify.breakpoint.name !== 'xs' ? 'mr-4' : ''"
                     @click="addAssign(group)"

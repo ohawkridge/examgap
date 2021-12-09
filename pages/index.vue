@@ -601,7 +601,7 @@
             class="d-flex justify-center flex-column align-center"
           >
             <font-awesome-icon
-              icon="fa-light fa-arrow-down-to-line"
+              icon="fa-light fa-arrow-down-to-bracket"
               class="fa-3x mb-4"
             />
             <p class="font-weight-bold">Export data</p>

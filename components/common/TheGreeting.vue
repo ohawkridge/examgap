@@ -26,8 +26,8 @@
       >
     </template>
     <div class="d-flex justify-space-between align-center mt-2">
-      <v-chip x-small label>
-        {{ teacher ? 'Teacher' : 'Student' }}
+      <v-chip small color="tertiary">
+        <span :class="color">{{ teacher ? 'Teacher' : 'Student' }}</span>
       </v-chip>
     </div>
   </div>
@@ -42,7 +42,11 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
       username: (state) => state.user.username,
+      darkMode: (state) => state.app.darkMode,
     }),
+    color() {
+      return this.darkMode ? '#3d2e00--text' : 'white--text'
+    },
     greeting() {
       const greetings = [
         { country: 'Arabic', text: 'Asalaam alaikum' },

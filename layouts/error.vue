@@ -13,7 +13,7 @@
           <v-col id="nav-fix" cols="12" md="7" lg="6" class="text-center">
             <font-awesome-icon
               icon="fa-light fa-car-crash"
-              class="ico-red fa-2x"
+              class="fa-2x error--text"
             />
             <p class="text-h6 error--text">
               {{ error.statusCode === 404 ? pageNotFound : otherError }}

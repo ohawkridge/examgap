@@ -21,7 +21,7 @@ import {
   faChevronLeft,
   faCaretDown,
   faSortUp,
-  faArrowDownToLine,
+  faArrowDownToBracket,
   faUser,
   faUserGroup,
   faLockKeyhole,
@@ -56,6 +56,8 @@ import {
   faTrashCanXmark,
   faAngleDown,
   faPenClip,
+  faBell,
+  faHouse,
 } from '@fortawesome/pro-light-svg-icons'
 
 // Register component globally
@@ -80,7 +82,7 @@ library.add(
   faChevronLeft,
   faCaretDown,
   faSortUp,
-  faArrowDownToLine,
+  faArrowDownToBracket,
   faUser,
   faUserGroup,
   faLockKeyhole,
@@ -114,7 +116,9 @@ library.add(
   faTrafficLight,
   faTrashCanXmark,
   faAngleDown,
-  faPenClip
+  faPenClip,
+  faBell,
+  faHouse
 )
 
 Vue.use(Vuetify)

@@ -74,11 +74,18 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: '#0099cc', // Washed azure
-          accent: '#ef7a85', // Pink
-          pink: '#f9b9b7', // Light pink
-          yell: '#f4d06f', // Yellow
-          heading: '#001f2a', // Text headings
+          primary: '#00668b',
+          secondary: '#a03c49',
+          tertiary: '#755b00',
+          error: '#ba1b1b',
+          background: '#fbfcff',
+        },
+        dark: {
+          primary: '#74d1ff',
+          secondary: '#ffb2b9',
+          tertiary: '#ebc248',
+          error: '#ffb4a9',
+          background: '#191c1e',
         },
       },
     },

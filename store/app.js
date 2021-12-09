@@ -1,10 +1,10 @@
 const getDefaultState = () => ({
-  tab: null, // Assignments/revision on home.vue (student)
+  tab: null,
   upcoming: 0,
-  groupTab: null, // Tab on _group.vue
-  onboardStep: 0, // Don't onboard
-  loading: false, // Global loading state
-  pageTitle: 'Welcome back', // Global page title
+  onboardStep: 0,
+  loading: false,
+  pageTitle: '',
+  darkMode: false,
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -17,9 +17,6 @@ const actions = {
 }
 
 const mutations = {
-  setGroupTab(state, val) {
-    state.groupTab = val
-  },
   setTab(state, val) {
     state.tab = val
   },
@@ -34,6 +31,9 @@ const mutations = {
   },
   setPageTitle(state, title) {
     state.pageTitle = title
+  },
+  setDarkMode(state, mode) {
+    state.darkMode = mode
   },
   resetState(state) {
     Object.assign(state, getDefaultState())

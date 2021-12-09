@@ -2,15 +2,15 @@
   <div>
     <v-tabs
       v-model="tab"
-      centered
-      fixed-tabs
-      background-color=""
+      align-with-title
+      :background-color="$vuetify.theme.themes.light.background"
       style="border-bottom: 1px solid #d2d2d2 !important"
+      color="secondary"
     >
-      <v-tab> Assignments </v-tab>
-      <v-tab> Students </v-tab>
-      <v-tab> Grades </v-tab>
-      <v-tab> Settings </v-tab>
+      <v-tab style="text-transform: capitalize"> Assignments </v-tab>
+      <v-tab style="text-transform: capitalize"> Students </v-tab>
+      <v-tab style="text-transform: capitalize"> Grades </v-tab>
+      <v-tab style="text-transform: capitalize"> Settings </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
       <v-tab-item>
@@ -18,7 +18,7 @@
         <v-container>
           <v-row class="justify-center">
             <v-col class="12" md="10">
-              <v-card outlined class="pa-4">
+              <!-- <v-card outlined class="pa-4">
                 <v-container>
                   <v-row class="justify-center">
                     <v-col
@@ -26,6 +26,8 @@
                       class="d-flex justify-space-between align-center"
                       :class="revOnMob"
                     >
+                      <v-switch v-model="darkMode" label="Dark mode"></v-switch>
+                      <p class="red--text">vm: {{ darkMode }}</p>
                       <v-btn-toggle
                         v-model="upcoming"
                         color="primary"
@@ -71,18 +73,18 @@
                     </v-col>
                   </v-row>
                 </v-container>
-              </v-card>
+              </v-card> -->
             </v-col>
           </v-row>
         </v-container>
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item style="background-color: #fbfcff">
         <the-students-table />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item style="background-color: #fbfcff">
         <the-grades-table />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item style="background-color: #fbfcff">
         <the-group-settings />
       </v-tab-item>
     </v-tabs-items>
@@ -96,8 +98,8 @@ import TheStudentsTable from '@/components/teacher/TheStudentsTable'
 import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
-import TheEmptyAssignmentsState from '@/components/common/TheEmptyAssignmentsState'
-import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
+// import TheEmptyAssignmentsState from '@/components/common/TheEmptyAssignmentsState'
+// import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 
 export default {
   components: {
@@ -105,8 +107,8 @@ export default {
     TheGradesTable,
     TheGroupSettings,
     TheInviteDialog,
-    TheEmptyAssignmentsState,
-    TeacherAssignmentCard,
+    // TheEmptyAssignmentsState,
+    // TeacherAssignmentCard,
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
@@ -128,10 +130,19 @@ export default {
     // Remember tab state for group
     tab: {
       get() {
-        return this.$store.state.app.groupTab
+        return this.$store.state.app.tab
       },
       set(value) {
-        this.$store.commit('app/setGroupTab', value)
+        this.$store.commit('app/setTab', value)
+      },
+    },
+    darkMode: {
+      get() {
+        return this.$store.state.app.darkMode
+      },
+      set(val) {
+        this.$store.commit('app/setDarkMode', val)
+        this.$vuetify.theme.dark = val
       },
     },
     // On 'ASSIGNMENTS' tab, remember upcoming/past

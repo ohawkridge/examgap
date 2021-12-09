@@ -1,127 +1,125 @@
 <template>
-  <div>
-    <v-container>
-      <v-row class="d-flex justify-center">
-        <v-col cols="12" md="10" lg="8" class="mt-sm-6">
-          <v-form ref="form">
-            <p class="text-subtitle-1 font-weight-medium">Question text</p>
-            <text-editor ref="question" :initial="question.text" class="mb-6" />
-            <v-text-field
-              v-if="question !== undefined"
-              v-model="question.maxMark"
-              :suffix="question.maxMark == 1 ? 'mark' : 'marks'"
-              type="number"
-              background-color="white"
-              outlined
-              min="1"
-              :rules="rules.max"
-              persistent-hint
-              hint="Max. mark"
-              class="num-field mb-6"
-              required
-            ></v-text-field>
-            <p class="text-subtitle-1 font-weight-medium">Model answer</p>
-            <text-editor
-              ref="model"
-              :initial="question.modelAnswer"
-              class="mb-6"
-            />
-            <p class="text-subtitle-1 font-weight-medium">Keywords</p>
-            <v-text-field
-              v-model="question.keywords"
-              outlined
-              background-color="white"
-              hint="Separate words with commas"
-              persistent-hint
-              placeholder="E.g. RAM, instructions, processor"
-            ></v-text-field>
-            <p class="text-subtitle-1 font-weight-medium mt-3">Mark scheme</p>
-            <v-text-field
-              v-for="(mark, i) in question.marks"
-              :key="i"
-              v-model="mark.text"
-              :append-icon="question.marks.length > 1 ? '$minus' : ''"
-              outlined
-              background-color="white"
-              hide-details
-              class="mb-3"
-              placeholder="One mark for..."
-              @click:append="question.marks.splice(i, 1)"
+  <v-container>
+    <v-row class="d-flex justify-center">
+      <v-col cols="12" md="10" lg="8" class="mt-sm-6">
+        <v-form ref="form">
+          <p class="text-subtitle-1 font-weight-medium">Question text</p>
+          <text-editor ref="question" :initial="question.text" class="mb-6" />
+          <v-text-field
+            v-if="question !== undefined"
+            v-model="question.maxMark"
+            :suffix="question.maxMark == 1 ? 'mark' : 'marks'"
+            type="number"
+            background-color="white"
+            outlined
+            min="1"
+            :rules="rules.max"
+            persistent-hint
+            hint="Max. mark"
+            class="num-field mb-6"
+            required
+          ></v-text-field>
+          <p class="text-subtitle-1 font-weight-medium">Model answer</p>
+          <text-editor
+            ref="model"
+            :initial="question.modelAnswer"
+            class="mb-6"
+          />
+          <p class="text-subtitle-1 font-weight-medium">Keywords</p>
+          <v-text-field
+            v-model="question.keywords"
+            outlined
+            background-color="white"
+            hint="Separate words with commas"
+            persistent-hint
+            placeholder="E.g. RAM, instructions, processor"
+          ></v-text-field>
+          <p class="text-subtitle-1 font-weight-medium mt-3">Mark scheme</p>
+          <v-text-field
+            v-for="(mark, i) in question.marks"
+            :key="i"
+            v-model="mark.text"
+            :append-icon="question.marks.length > 1 ? '$minus' : ''"
+            outlined
+            background-color="white"
+            hide-details
+            class="mb-3"
+            placeholder="One mark for..."
+            @click:append="question.marks.splice(i, 1)"
+          >
+          </v-text-field>
+          <div class="d-flex justify-end">
+            <v-btn
+              v-if="question.marks.length <= 25"
+              rounded
+              text
+              class="mt-2"
+              @click="question.marks.push({ id: '', text: '' })"
             >
-            </v-text-field>
-            <div class="d-flex justify-end">
-              <v-btn
-                v-if="question.marks.length <= 25"
-                rounded
-                text
-                class="mt-2"
-                @click="question.marks.push({ id: '', text: '' })"
-              >
-                <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
-                Add mark
-              </v-btn>
-            </div>
-            <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
-            <text-editor
-              ref="guidance"
-              :initial="question.guidance"
-              class="mb-6"
-            />
-            <p class="text-subtitle-1 font-weight-medium">Topics</p>
-            <v-autocomplete
-              v-model="question.selectedTopics"
-              :items="topics"
-              item-value="id"
-              item-text="name"
-              :loading="$fetchState.pending || ACLoading"
-              outlined
-              :rules="rules.topics"
-              chips
-              small-chips
-              deletable-chips
-              hint="Select all that apply"
-              background-color="white"
-              persistent-hint
-              multiple
-            >
-            </v-autocomplete>
-            <!-- <v-checkbox
+              <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
+              Add mark
+            </v-btn>
+          </div>
+          <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
+          <text-editor
+            ref="guidance"
+            :initial="question.guidance"
+            class="mb-6"
+          />
+          <p class="text-subtitle-1 font-weight-medium">Topics</p>
+          <v-autocomplete
+            v-model="question.selectedTopics"
+            :items="topics"
+            item-value="id"
+            item-text="name"
+            :loading="$fetchState.pending || ACLoading"
+            outlined
+            :rules="rules.topics"
+            chips
+            small-chips
+            deletable-chips
+            hint="Select all that apply"
+            background-color="white"
+            persistent-hint
+            multiple
+          >
+          </v-autocomplete>
+          <!-- <v-checkbox
             v-model="showAll"
             label="Show developing courses"
             class="mt-0"
             hide-details
           >
           </v-checkbox> -->
-            <v-alert
-              v-if="showAlert"
-              type="error"
-              text
-              border="left"
-              class="mt-3"
-              dense
+          <v-alert
+            v-if="showAlert"
+            type="error"
+            text
+            border="left"
+            class="mt-3"
+            dense
+          >
+            Question text and model answer required
+          </v-alert>
+          <div class="d-flex justify-end">
+            <v-btn text rounded class="mr-2" @click="$router.go(-1)">
+              Cancel
+            </v-btn>
+            <v-btn
+              color="primary"
+              :disabled="loading"
+              :loading="loading"
+              elevation="0"
+              rounded
+              @click="save()"
             >
-              Question text and model answer required
-            </v-alert>
-            <div class="d-flex justify-end">
-              <v-btn text rounded class="mr-2" @click="$router.go(-1)">
-                Cancel
-              </v-btn>
-              <v-btn
-                color="primary"
-                :disabled="loading"
-                :loading="loading"
-                elevation="0"
-                rounded
-                @click="save()"
-              >
-                {{ editing ? 'Save changes' : 'Create question' }}
-              </v-btn>
-            </div>
-          </v-form>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+              {{ editing ? 'Save Changes' : 'Create Question' }}
+            </v-btn>
+          </div>
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -210,7 +208,7 @@ export default {
   // },
   mounted() {
     const EC = this.$route.params.question ? 'Edit' : 'Create'
-    this.$store.commit('app/setPageTitle', `${EC} question`)
+    this.$store.commit('app/setPageTitle', `${EC} Question`)
     // Are we coming from _course.vue?
     // Was a topicId already set?
     if (this.topicId !== '') {
