@@ -10,7 +10,6 @@
         <nuxt-link to="/home">
           <the-logo />
         </nuxt-link>
-        <!-- <the-greeting /> -->
       </div>
       <v-list rounded dense>
         <v-list-item-group
@@ -59,8 +58,24 @@
         </v-list-item-group>
       </v-list>
       <template #append>
-        <div class="pa-2">
+        <!-- <div class="pa-2">
           <v-btn block elevation="0" plain @click="logout()"> Sign out </v-btn>
+        </div> -->
+        <div v-if="teacher" class="pa-6">
+          <nuxt-link
+            to="/profile"
+            class="text-subtitle-1 font-weight-medium name primary--text"
+            >{{ username | name }}</nuxt-link
+          >
+          <div class="mt-1">
+            <v-chip small>
+              <font-awesome-icon
+                icon="fa-light fa-user-graduate"
+                class="mr-2"
+              />
+              Teacher
+            </v-chip>
+          </div>
         </div>
       </template>
     </v-navigation-drawer>
@@ -91,7 +106,7 @@
               <v-list-item @click="$nuxt.$emit('show-create')">
                 <v-list-item-title> New class </v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item @click="$nuxt.$emit('show-new')">
                 <v-list-item-title> New assignment </v-list-item-title>
               </v-list-item>
               <v-list-item nuxt to="/author">
@@ -106,9 +121,12 @@
       <nuxt />
       <the-snackbar />
       <the-loading-overlay />
-      <the-onboarding-snackbar v-if="teacher" />
-      <the-create-class-dialog v-if="teacher" />
-      <the-delete-assignment-dialog v-if="teacher" />
+      <template v-if="teacher">
+        <the-onboarding-snackbar />
+        <the-create-class-dialog />
+        <the-delete-assignment-dialog />
+        <the-new-assignment-dialog />
+      </template>
       <the-join-dialog v-else />
     </v-main>
     <the-footer />
@@ -123,9 +141,9 @@ import TheFooter from '@/components/common/TheFooter'
 import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
-// import TheGreeting from '@/components/common/TheGreeting'
 import TheLoadingOverlay from '~/components/common/TheLoadingOverlay.vue'
 import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
+import TheNewAssignmentDialog from '~/components/teacher/TheNewAssignmentDialog.vue'
 
 export default {
   name: 'App',
@@ -135,10 +153,10 @@ export default {
     TheJoinDialog,
     TheCreateClassDialog,
     TheOnboardingSnackbar,
-    // TheGreeting,
     TheLoadingOverlay,
     TheFooter,
     TheDeleteAssignmentDialog,
+    TheNewAssignmentDialog,
   },
   middleware: ['auth'],
   data() {
@@ -151,6 +169,7 @@ export default {
     ...mapState({
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
+      username: (state) => state.user.username,
       pageTitle: (state) => state.app.pageTitle,
       selected: (state) => state.topics.selected,
     }),

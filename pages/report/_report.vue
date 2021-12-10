@@ -635,6 +635,7 @@ export default {
 table {
   background-color: #fff;
   border: 1px solid #d2d2d2 !important;
+  border-radius: 4px;
   border-collapse: collapse;
   overflow-x: scroll;
   width: 100%;

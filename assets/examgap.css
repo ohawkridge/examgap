@@ -16,7 +16,8 @@ blockquote {
   padding-left: 1em;
 }
 
-/* accessible RAG chips */
+/* ------- Accessible chips ------- */
+
 span.v-chip.theme--light.red {
   background-color: #ffd9dc !important;
   color: #40000c !important;
@@ -42,12 +43,12 @@ span.v-chip.theme--light.green {
   list-style-type: none !important;
 }
 
-/* preserve line-breaks */
+/* preserve line-breaks in answers */
 .breaks {
   white-space: pre-wrap;
 }
 
-/* pretty pseudocode in questions */
+/* pretty pseudocode */
 .code {
   background: #f4f4f4;
   border: 1px solid #ddd;
@@ -65,9 +66,7 @@ span.v-chip.theme--light.green {
   word-wrap: break-word;
 }
 
-.modal-text {
-  color: #41484d;
-}
+/* ---------- Misc. fixes --------- */
 
 /* subtract navbar height from fill-height containers */
 #nav-fix {
@@ -75,7 +74,7 @@ span.v-chip.theme--light.green {
   top: -58px !important;
 }
 
-/* fix issue with overlay not rounded enough */
-.v-dialog {
+/* round dialogs lg */
+.v-dialog:not(.v-dialog--fullscreen) {
   border-radius: 24px !important;
 }

@@ -2,7 +2,8 @@
   <v-container>
     <v-row class="justify-center">
       <v-col
-        cols="12"
+        cols="10"
+        md="10"
         class="flex-xs-column d-sm-flex justify-space-between align-center"
       >
         <v-menu offset-y open-on-hover>
@@ -53,9 +54,6 @@
           </v-list>
         </v-menu>
         <div>
-          <span class="tertiary--text text-subtitle-2 font-weight-bold">
-            {{ students.length }} Student{{ students.length | pluralize }}
-          </span>
           <v-btn
             class="ml-3"
             rounded
@@ -74,17 +72,17 @@
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="12">
+      <v-col cols="12" md="10">
         <v-data-table
           v-model="selected"
           :headers="headers"
           :items="students"
           checkbox-color="primary"
           item-key="id"
-          hide-default-footer
           style="border: 1px solid #d2d2d2"
-          disable-pagination
           show-select
+          hide-default-footer
+          disable-pagination
           :loading="$fetchState.pending"
           loading-text="Loading students..."
         >
@@ -143,6 +141,11 @@
               </template>
             </v-edit-dialog>
           </template>
+          <!-- <template #[`footer.prepend`]>
+            <span class="tertiary--text text-subtitle-2 ml-2">
+              {{ students.length }} Student{{ students.length | pluralize }}
+            </span>
+          </template> -->
         </v-data-table>
       </v-col>
     </v-row>

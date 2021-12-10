@@ -25,7 +25,7 @@
                     large
                     rounded
                     :block="$vuetify.breakpoint.name === 'xs'"
-                    color="#c1e8ff"
+                    color="#ffd9dc"
                     class="mb-4"
                     :class="$vuetify.breakpoint.name !== 'xs' ? 'mr-4' : ''"
                     @click="addAssign(group)"

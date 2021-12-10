@@ -79,6 +79,7 @@ export default {
           tertiary: '#755b00',
           error: '#ba1b1b',
           background: '#fbfcff',
+          surface: '#41484d',
         },
         dark: {
           primary: '#74d1ff',

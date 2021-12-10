@@ -4,23 +4,29 @@
       <v-tooltip bottom>
         <template #activator="{ on: tool }">
           <v-btn class="ml-2" icon v-on="{ ...tool, ...dial }">
-            <font-awesome-icon icon="fa-light fa-circle-info" class="ico-btn" />
+            <font-awesome-icon
+              icon="fa-light fa-circle-info"
+              class="ico-btn-lg"
+            />
           </v-btn>
         </template>
         <span>More information</span>
       </v-tooltip>
     </template>
-    <v-card class="modal">
-      <v-card-title class="d-flex justify-center">
-        More information
+    <v-card>
+      <v-card-title
+        class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
+      >
+        <font-awesome-icon icon="fa-light fa-circle-info" class="fa-sm" />
       </v-card-title>
       <v-card-text>
+        <p class="text-h5 text-center">More information</p>
         <ul>
           <li>
             Response id:
             <code>{{ response.id }}</code>
             <v-btn icon small @click="copyId()">
-              <font-awesome-icon icon="fa-light fa-copy" class="xx" />
+              <font-awesome-icon icon="fa-light fa-copy" class="ico-btn-sm" />
             </v-btn>
           </li>
           <li>
@@ -28,7 +34,7 @@
           </li>
         </ul>
         <div class="d-flex justify-end">
-          <v-btn color="primary" rounded elevation="0" @click="dialog = false">
+          <v-btn color="primary" rounded text @click="dialog = false">
             Close
           </v-btn>
         </div>
@@ -73,12 +79,12 @@ export default {
 </script>
 
 <style scoped>
-.ico-btn {
+.ico-btn-lg {
   height: 24px;
   width: 24px;
 }
 
-.xx {
+.ico-btn-sm {
   height: 18px;
   width: 18px;
 }
