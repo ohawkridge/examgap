@@ -27,12 +27,12 @@
     "@nuxtjs/eslint-config": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/vuetify": "1.12.1",
-    "aws-sdk": "^2.1042.0",
-    "eslint": "^8.3.0",
+    "aws-sdk": "^2.1046.0",
+    "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^3.1.0",
     "eslint-plugin-prettier": "^4.0",
-    "eslint-plugin-vue": "^8.1.1",
-    "prettier": "^2.5.0"
+    "eslint-plugin-vue": "^8.2.0",
+    "prettier": "^2.5.1"
   }
 }

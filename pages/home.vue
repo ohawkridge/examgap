@@ -11,12 +11,12 @@
                 class="mr-2"
                 style="width: 24px"
               />
-              Add assignment for&hellip;
+              New assignment for&hellip;
             </p>
           </v-col>
         </v-row>
         <v-row class="justify-center">
-          <v-col cols="12" md="9">
+          <v-col cols="12" md="9" class="d-flex justify-space-around">
             <template v-for="(group, i) in groups">
               <v-tooltip :key="i" bottom>
                 <template #activator="{ on }">

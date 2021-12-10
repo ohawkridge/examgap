@@ -1,171 +1,189 @@
 <template>
-  <v-dialog v-model="dialog" width="660">
-    <v-stepper v-model="step">
-      <v-stepper-header>
-        <v-stepper-step :complete="step > 1" step="1">
-          Select students
-        </v-stepper-step>
-        <v-divider></v-divider>
-        <v-stepper-step :complete="step > 2" step="2">
-          Choose name and due date
-        </v-stepper-step>
-      </v-stepper-header>
-      <v-stepper-items>
-        <v-stepper-content step="1">
-          <v-card>
-            <v-card-text>
-              <v-checkbox v-model="allSelected" class="mt-0">
-                <template #label>
+  <v-dialog v-model="dialog" max-width="700">
+    <v-window v-model="step">
+      <v-window-item :value="1">
+        <v-card class="rounded-xl pa-4" color="#fbfcff">
+          <v-card-text>
+            <p class="text-h5 mb-0">Create assignment</p>
+            <p class="text-subtitle-1">Choose students for this assignment.</p>
+            <v-checkbox v-model="allSelected">
+              <template #label>
+                <div class="mr-6">
                   <strong>Select all</strong>
+                </div>
+                <v-menu offset-y open-on-hover class="ml-2">
+                  <template #activator="{ on }">
+                    <div class="primary--text text-body-2" v-on="on">
+                      Exam
+                      <font-awesome-icon
+                        icon="fa-light fa-circle-info"
+                        class="fa-lg ml-1"
+                      />
+                    </div>
+                  </template>
+                  <v-card max-width="280">
+                    <v-card-text>
+                      In exam mode, keywords and minimum word count are hidden
+                      when answering questions.
+                    </v-card-text>
+                  </v-card>
+                </v-menu>
+              </template>
+            </v-checkbox>
+            <div id="students" class="mb-4">
+              <v-checkbox
+                v-for="(student, i) in students"
+                :key="i"
+                v-model="selectedStudents"
+                :value="student.id"
+                hide-details
+                multiple
+                class="mt-0 mb-6"
+              >
+                <template #label>
+                  {{ student.username | name }}
+                  <v-chip
+                    :color="student.examMode ? 'green' : ''"
+                    :outlined="!student.examMode"
+                    small
+                    class="ml-3"
+                  >
+                    <v-avatar left>
+                      <font-awesome-icon
+                        v-if="student.examMode"
+                        icon="fa-light fa-check"
+                        class="chip-icon"
+                      />
+                      <font-awesome-icon
+                        v-else
+                        icon="fa-light fa-xmark"
+                        class="chip-icon"
+                      />
+                    </v-avatar>
+                    <a
+                      href="#"
+                      :class="student.examMode ? 'xx' : ''"
+                      @click.stop="toggleMode(student)"
+                      >Exam</a
+                    >
+                  </v-chip>
                 </template>
               </v-checkbox>
-              <div id="students" class="mb-4">
-                <v-checkbox
-                  v-for="(student, i) in students"
-                  :key="i"
-                  v-model="selectedStudents"
-                  :value="student.id"
-                  hide-details
-                  multiple
-                  class="mt-0 mb-6"
+            </div>
+            <div class="d-flex justify-end">
+              <v-btn text rounded class="mr-2" @click="dialog = false">
+                Cancel
+              </v-btn>
+              <v-btn text rounded color="primary" @click="step++"> Next </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-window-item>
+      <v-window-item :value="2">
+        <v-card class="rounded-xl pa-4" color="#fbfcff">
+          <v-card-text>
+            <p class="text-h5 mb-0">Create assignment</p>
+            <p class="text-subtitle-1">
+              Name your assignment and set start/due dates.
+            </p>
+            <v-form ref="form" class="mt-6">
+              <v-text-field
+                v-model="name"
+                label="Assignment name*"
+                required
+                :rules="nameRules"
+                outlined
+                @focus="$event.target.select()"
+              ></v-text-field>
+              <div class="d-flex justify-space-between">
+                <v-menu
+                  v-model="menu"
+                  min-width="290px"
+                  offset-y
+                  transition="scale-transition"
                 >
-                  <template #label>
-                    {{ student.username | name }}
-                    <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <a
-                          class="ml-2"
-                          :class="`on ${student.examMode ? '' : 'off'}`"
-                          href="#"
-                          v-on="on"
-                          @click.stop="toggleMode(student)"
-                          >EXAM</a
-                        >
-                      </template>
-                      <span>Exam mode</span>
-                    </v-tooltip>
+                  <template #activator="{ on }">
+                    <v-text-field
+                      v-model="startDate"
+                      label="Start date*"
+                      placeholder="YYYY-MM-DD"
+                      :rules="startDateRules"
+                      outlined
+                      readonly
+                      class="mr-2"
+                      v-on="on"
+                    >
+                      <font-awesome-icon
+                        slot="append"
+                        icon="fa-light fa-calendar"
+                        class="fa-lg"
+                      />
+                    </v-text-field>
                   </template>
-                </v-checkbox>
+                  <v-date-picker
+                    v-model="startDate"
+                    color="primary"
+                    :min="new Date().toISOString().substr(0, 10)"
+                    no-title
+                  ></v-date-picker>
+                </v-menu>
+                <v-menu
+                  v-model="menu2"
+                  min-width="290px"
+                  offset-y
+                  transition="scale-transition"
+                >
+                  <template #activator="{ on }">
+                    <v-text-field
+                      v-model="endDate"
+                      label="Due date*"
+                      outlined
+                      placeholder="YYYY-MM-DD"
+                      :rules="endDateRules"
+                      class="ml-2"
+                      readonly
+                      v-on="on"
+                    >
+                      <font-awesome-icon
+                        slot="append"
+                        icon="fa-light fa-calendar"
+                        class="fa-lg"
+                      />
+                    </v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="endDate"
+                    color="primary"
+                    :min="startDate"
+                    no-title
+                  ></v-date-picker>
+                </v-menu>
               </div>
               <div class="d-flex justify-end">
-                <v-btn text rounded class="mr-2" @click="dialog = false">
-                  Cancel
-                </v-btn>
-                <v-btn elevation="0" rounded color="primary" @click="step++">
-                  Next
+                <v-chip-group active-class="secondary--text">
+                  <v-chip @click="setStart(0)"> Today </v-chip>
+                  <v-chip @click="setStart(7)"> 1 Week </v-chip>
+                  <v-chip @click="setStart(14)"> 2 Weeks </v-chip>
+                </v-chip-group>
+              </div>
+              <div class="d-flex justify-end mt-4">
+                <v-btn text rounded class="mr-2" @click="step--"> Back </v-btn>
+                <v-btn
+                  rounded
+                  text
+                  :loading="loading"
+                  :disabled="loading"
+                  color="primary"
+                  @click="create()"
+                >
+                  Create
                 </v-btn>
               </div>
-            </v-card-text>
-          </v-card>
-        </v-stepper-content>
-        <v-stepper-content step="2">
-          <v-card>
-            <v-card-text>
-              <v-form ref="form">
-                <v-text-field
-                  v-model="name"
-                  label="Assignment name*"
-                  required
-                  :rules="nameRules"
-                  outlined
-                  @focus="$event.target.select()"
-                ></v-text-field>
-                <div class="d-flex justify-space-between">
-                  <v-menu
-                    v-model="menu"
-                    min-width="290px"
-                    offset-y
-                    transition="scale-transition"
-                  >
-                    <template #activator="{ on }">
-                      <v-text-field
-                        v-model="startDate"
-                        label="Start date*"
-                        placeholder="YYYY-MM-DD"
-                        :rules="startDateRules"
-                        outlined
-                        readonly
-                        class="mr-2"
-                        v-on="on"
-                      >
-                        <font-awesome-icon
-                          slot="append"
-                          icon="fa-light fa-calendar-days"
-                          class="fa-lg"
-                        />
-                      </v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="startDate"
-                      color="primary"
-                      :min="new Date().toISOString().substr(0, 10)"
-                      no-title
-                    ></v-date-picker>
-                  </v-menu>
-                  <v-menu
-                    v-model="menu2"
-                    min-width="290px"
-                    offset-y
-                    transition="scale-transition"
-                  >
-                    <template #activator="{ on }">
-                      <v-text-field
-                        v-model="endDate"
-                        label="Due date*"
-                        outlined
-                        placeholder="YYYY-MM-DD"
-                        :rules="endDateRules"
-                        class="ml-2"
-                        readonly
-                        v-on="on"
-                      >
-                        <font-awesome-icon
-                          slot="append"
-                          icon="fa-light fa-calendar-days"
-                          class="fa-lg"
-                        />
-                      </v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="endDate"
-                      color="primary"
-                      :min="startDate"
-                      no-title
-                    ></v-date-picker>
-                  </v-menu>
-                </div>
-                <div class="d-flex justify-end">
-                  <v-btn text rounded small class="mr-1" @click="setStart(0)">
-                    Today
-                  </v-btn>
-                  <v-btn text rounded small class="mr-1" @click="setStart(7)">
-                    1 week
-                  </v-btn>
-                  <v-btn text rounded small @click="setStart(14)">
-                    2 weeks
-                  </v-btn>
-                </div>
-                <div class="d-flex justify-end mt-4">
-                  <v-btn text rounded class="mr-2" @click="step--">
-                    Back
-                  </v-btn>
-                  <v-btn
-                    elevation="0"
-                    rounded
-                    :loading="loading"
-                    :disabled="loading"
-                    color="primary"
-                    @click="create()"
-                  >
-                    Create assignment
-                  </v-btn>
-                </div>
-              </v-form>
-            </v-card-text>
-          </v-card>
-        </v-stepper-content>
-      </v-stepper-items>
-    </v-stepper>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-window-item>
+    </v-window>
   </v-dialog>
 </template>
 
@@ -351,37 +369,18 @@ export default {
 </script>
 
 <style scoped>
-.on {
+/* Expand clickable area of 'Exam' */
+a {
+  color: #424242;
+  display: inline-block;
   position: relative;
-  background-color: #e0e0e0;
-  border-radius: 4px !important;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  font-size: 12px;
-  text-decoration: none;
-  color: #000000de;
+  padding: 2em;
+  margin: -2em;
 }
 
-.off {
-  opacity: 0.4;
-}
-
-.off:before {
-  position: absolute;
-  content: '';
-  left: 0;
-  top: 50%;
-  right: 0;
-  border-top: 2px solid;
-  border-color: #f44336;
-
-  -webkit-transform: rotate(-15deg);
-  -moz-transform: rotate(-15deg);
-  -ms-transform: rotate(-15deg);
-  -o-transform: rotate(-15deg);
-  transform: rotate(-15deg);
+/* Change link color */
+a.xx {
+  color: #1d4715;
 }
 
 /* Arrange checkboxes into columns */
@@ -396,5 +395,10 @@ export default {
     -moz-column-count: 1;
     column-count: 1;
   }
+}
+
+.chip-icon {
+  height: 14px;
+  width: 14px;
 }
 </style>
