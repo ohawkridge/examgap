@@ -58,6 +58,9 @@ import {
   faHouse,
   faTrashCanXmark,
   faReceipt,
+  faCalendarStar,
+  faHeadSideBrain,
+  faQuoteLeft,
 } from '@fortawesome/pro-light-svg-icons'
 
 // Register component globally
@@ -118,7 +121,10 @@ library.add(
   faPenClip,
   faHouse,
   faTrashCanXmark,
-  faReceipt
+  faReceipt,
+  faCalendarStar,
+  faHeadSideBrain,
+  faQuoteLeft
 )
 
 Vue.use(Vuetify)

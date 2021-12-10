@@ -3,8 +3,9 @@ const getDefaultState = () => ({
   upcoming: 0,
   onboardStep: 0,
   loading: false,
-  pageTitle: '',
+  pageTitle: 'Home',
   darkMode: false,
+  navbar: null,
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -34,6 +35,9 @@ const mutations = {
   },
   setDarkMode(state, mode) {
     state.darkMode = mode
+  },
+  setNav(state, val) {
+    state.navbar = val
   },
   resetState(state) {
     Object.assign(state, getDefaultState())

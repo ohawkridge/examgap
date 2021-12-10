@@ -34,6 +34,10 @@ const getters = {
     }
     return found
   },
+  // Build an array of unique courses
+  courses: (state) => {
+    return [...new Set(state.groups.map((g) => g.course))]
+  },
   // From all group assignments, find the most
   // recent in reverse chronological order
   recentAssignments: (state) => {
@@ -74,25 +78,20 @@ const getters = {
 }
 
 const actions = {
-  resetState({ commit }) {
-    commit('resetState')
-  },
   async getQuote({ commit, rootState }) {
     const url = new URL('/.netlify/functions/getQuote', this.$config.baseURL)
-    let response = await fetch(url, {
+    const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
       }),
       method: 'POST',
     })
     if (!response.ok) {
-      throw new Error(`getQuote\n ${response.statusText} (${response.status})`)
+      throw new Error('Error getting quote')
     }
-    response = await response.json()
-    commit('setQuote', response)
+    commit('setQuote', await response.json())
   },
-  // Try to obtain user document with credentials
-  async getUser({ state, getters, dispatch, commit }, { username, password }) {
+  async getUser({ dispatch, commit }, { username, password }) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
     let response = await fetch(url, {
@@ -102,31 +101,22 @@ const actions = {
       }),
       method: 'POST',
     })
-    // N.B. Must throw error in order to catch in component
     if (!response.ok) {
-      // console.debug(response.status) // 401
-      // console.debug(response.statusText) // Unauthorized
-      throw new Error(
-        `Error getting user data \n ${response.statusText} (${response.status})`
-      )
+      throw new Error('Error getting user')
     }
     response = await response.json()
     commit('setUser', response)
+    // For students, getUser returns recent assignments
+    commit('assignment/setRecent', response.recent, {
+      root: true,
+    })
     await dispatch('getGroups')
-    // For students only, get revision topics and Quote of the Day
-    if (!state.teacher) {
-      const courseId = getters.activeGroup.course.id
-      await dispatch('topics/getTopics', courseId, { root: true })
-      // await dispatch('getQuote')
-    }
     commit('app/setLoading', false, { root: true })
   },
-  // Get groups and assignments
-  // If !active, get archived groups
   async getGroups({ rootState, commit }, active = true) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getGroups', this.$config.baseURL)
-    let response = await fetch(url, {
+    const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
         teacher: rootState.user.teacher,
@@ -135,20 +125,10 @@ const actions = {
       method: 'POST',
     })
     if (!response.ok) {
-      throw new Error(`getGroups\n ${response.statusText} (${response.status})`)
+      throw new Error('Error getting groups')
     }
-    response = await response.json()
     // Active or archived groups?
-    active ? commit('setGroups', response) : commit('setArchive', response)
-    // By default, make student's first class active
-    if (!rootState.user.teacher) {
-      const id = rootState.user.groups[0].id
-      commit('setActiveGroupId', id)
-    }
-    // Onboard if no active groups
-    if (rootState.user.groups.length === 0) {
-      commit('app/setOnboardStep', 1, { root: true })
-    }
+    commit(active ? 'setGroups' : 'setArchive', await response.json())
     commit('app/setLoading', false, { root: true })
   },
   async archiveGroup({ commit, rootState, getters }) {
@@ -241,8 +221,6 @@ const actions = {
       throw new Error(`Error creating assignment ${newAssObj.status}`)
     }
     newAssObj = await newAssObj.json()
-    // Clear any previously selected questions
-    commit('topics/clearSelectedQuestions', null, { root: true })
     // Make 'ASSIGNMENTS' 'UPCOMING' active so new
     // assignment is visible when we direct to _group.vue
     commit('app/setUpcoming', 0, { root: true })
@@ -294,6 +272,9 @@ const actions = {
       n: studentIds.length,
     })
   },
+  resetState({ commit }) {
+    commit('resetState')
+  },
 }
 
 const mutations = {
@@ -303,13 +284,14 @@ const mutations = {
     state.username = data.username
     state.secret = data.secret
     state.teacher = data.teacher
-    // Teacher/student properties
+    // Teacher properties
     if (data.teacher) {
       state.subscriptionDays = data.subscriptionDays
       state.school = data.school
       state.subscribed = data.subscribed
       state.subscriptionExpires = data.subscriptionExpires
     } else {
+      // Student properties
       state.examMode = data.examMode
     }
   },

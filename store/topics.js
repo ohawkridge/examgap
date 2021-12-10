@@ -1,6 +1,5 @@
 const getDefaultState = () => ({
   topics: [],
-  questions: [],
   question: {}, // Question detail (not _course.vue preview)
   selected: [],
   topicId: '',
@@ -134,9 +133,6 @@ export const mutations = {
     state.selected.includes(questionId)
       ? (state.selected = state.selected.filter((id) => id !== questionId))
       : state.selected.push(questionId)
-  },
-  clearSelectedQuestions(state) {
-    state.selected = []
   },
   setTopicName(state, name) {
     state.topicName = name

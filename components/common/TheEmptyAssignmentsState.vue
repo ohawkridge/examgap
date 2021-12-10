@@ -46,8 +46,6 @@ export default {
   },
   methods: {
     addAssignment() {
-      // Clear previous selections (shouldn't be any)
-      this.$store.commit('topics/clearSelectedQuestions')
       this.$router.push(`/brwose/${this.group.course.id}`)
     },
   },

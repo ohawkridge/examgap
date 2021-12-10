@@ -94,7 +94,6 @@ export default {
 }
 
 .outlined {
-  /* border-color: #000000 !important; */
   border-color: #d2d2d2 !important;
 }
 
@@ -103,8 +102,4 @@ export default {
   height: 24px;
   width: 24px;
 }
-
-/* .modal {
-  background-color: red !important;
-} */
 </style>

@@ -1,12 +1,18 @@
 <template>
-  <v-card outlined class="mb-4 ass-card" hover @click="nav()">
+  <v-card
+    class="mb-4 rounded-lg outlined"
+    outlined
+    hover
+    color="#ffffff"
+    @click="nav()"
+  >
     <v-card-title class="d-flex justify-space-between">
       {{ assignment.name }}
     </v-card-title>
     <v-card-subtitle>
-      {{ assignment.numQuestions }} question{{
+      <!-- {{ assignment.numQuestions }} question{{
         assignment.numQuestions | pluralize
-      }}
+      }} -->
     </v-card-subtitle>
     <v-card-text class="text-body-1">
       <div>
@@ -49,7 +55,7 @@ export default {
   }
 }
 
-.ass-card {
-  border-left: 3px solid #0099cc;
+.outlined {
+  border-color: #d2d2d2 !important;
 }
 </style>

@@ -137,7 +137,6 @@ export default {
   },
   methods: {
     addAssign() {
-      this.$store.commit('topics/clearSelectedQuestions')
       this.$router.push(`/browse/${this.group.course.id}`)
     },
   },

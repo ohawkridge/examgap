@@ -17,7 +17,7 @@
           active-class="bold-nav"
           color="primary"
         >
-          <v-list-item v-if="teacher" nuxt to="/home">
+          <v-list-item nuxt to="/home">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-house" class="fa-lg" />
             </v-list-item-icon>
@@ -34,7 +34,7 @@
             <v-list-item-content>
               <v-list-item-title> {{ group.name }} </v-list-item-title>
             </v-list-item-content>
-            <v-list-item-action-text>
+            <v-list-item-action-text v-if="!teacher">
               {{ group.count }}
             </v-list-item-action-text>
           </v-list-item>
@@ -58,10 +58,7 @@
         </v-list-item-group>
       </v-list>
       <template #append>
-        <!-- <div class="pa-2">
-          <v-btn block elevation="0" plain @click="logout()"> Sign out </v-btn>
-        </div> -->
-        <div v-if="teacher" class="pa-6">
+        <div class="pa-6">
           <nuxt-link
             to="/profile"
             class="text-subtitle-1 font-weight-medium name primary--text"
@@ -69,11 +66,7 @@
           >
           <div class="mt-1">
             <v-chip small>
-              <font-awesome-icon
-                icon="fa-light fa-user-graduate"
-                class="mr-2"
-              />
-              Teacher
+              {{ teacher ? 'Teacher' : 'Student' }}
             </v-chip>
           </div>
         </div>
@@ -88,7 +81,7 @@
         <span>{{ drawer ? 'Hide menu' : 'Show menu' }}</span>
       </v-tooltip>
       <div
-        class="d-flex justify-space-between align-center pl-1"
+        class="d-flex justify-space-between align-center pl-2"
         style="width: 100%"
       >
         <span class="text-subtitle-1 font-weight-medium">
@@ -117,7 +110,7 @@
         </div>
       </div>
     </v-app-bar>
-    <v-main style="background-color: #fbfcff">
+    <v-main :style="`background-color: ${color}`">
       <nuxt />
       <the-snackbar />
       <the-loading-overlay />
@@ -134,7 +127,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
@@ -162,29 +155,26 @@ export default {
   data() {
     return {
       drawer: null,
-      navbar: null,
     }
   },
   computed: {
     ...mapState({
+      username: (state) => state.user.username,
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
-      username: (state) => state.user.username,
       pageTitle: (state) => state.app.pageTitle,
-      selected: (state) => state.topics.selected,
+      darkMode: (state) => state.app.darkMode,
     }),
-    ...mapGetters({
-      group: 'user/activeGroup',
-    }),
-    // Page title action logic
-    createClass() {
-      return this.teacher && this.$route.name === 'home'
+    color() {
+      return this.darkMode ? '#191c1e' : '#fbfcff'
     },
-    createAss() {
-      return this.teacher && this.$route.name === 'group-group'
-    },
-    createQ() {
-      return this.$route.name === 'question-question'
+    navbar: {
+      get() {
+        return this.$store.state.app.navbar
+      },
+      set(val) {
+        this.$store.commit('app/setNav', val)
+      },
     },
   },
   mounted() {

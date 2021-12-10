@@ -329,7 +329,7 @@ const mutations = {
   setMarked(state, response) {
     response.marked = true
   },
-  setRecentAssignments(state, assignments) {
+  setRecent(state, assignments) {
     state.recentAssignments = assignments
   },
   // Navigate to next (1)/previous (-1) response
