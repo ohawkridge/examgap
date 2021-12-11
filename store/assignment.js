@@ -11,7 +11,7 @@ const getDefaultState = () => ({
   // Indecies ^^^ into _report.vue data structure
   marking: false,
   question: {}, // The question to answer
-  recentAssignments: [],
+  assignments: [], // Upcoming/recent assignments
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -39,8 +39,22 @@ const getters = {
 }
 
 const actions = {
-  resetState({ commit }) {
-    commit('resetState')
+  async getUpcoming({ commit, rootState }) {
+    const path = rootState.user.teacher
+      ? '/.netlify/functions/getRecentAssignments'
+      : '/.netlify/functions/getUpcomingAssignments'
+    const url = new URL(path, this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error getting assignments')
+    }
+    response = await response.json()
+    commit('setAssignments', response)
   },
   async getQuestion({ state, commit, rootState }) {
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
@@ -274,6 +288,9 @@ const actions = {
     commit('setResponse', await response.json())
     commit('app/setLoading', false, { root: true })
   },
+  resetState({ commit }) {
+    commit('resetState')
+  },
 }
 
 const mutations = {
@@ -329,8 +346,8 @@ const mutations = {
   setMarked(state, response) {
     response.marked = true
   },
-  setRecent(state, assignments) {
-    state.recentAssignments = assignments
+  setAssignments(state, assignments) {
+    state.assignments = assignments
   },
   // Navigate to next (1)/previous (-1) response
   // (loop around if nec.)

@@ -80,26 +80,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.align-date {
-  display: inline-block;
-  width: 56px;
-}
-@media only screen and (max-width: 600px) {
-  .align-date {
-    display: inline-block;
-    width: 60px;
-  }
-}
-
-.outlined {
-  border-color: #d2d2d2 !important;
-}
-
-/* Does not work external */
-.ico-btn {
-  height: 24px;
-  width: 24px;
-}
-</style>

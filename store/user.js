@@ -15,7 +15,7 @@ const getDefaultState = () => ({
   // Student properties
   examMode: false,
   reviseExamMode: false,
-  quote: 'Experiment, fail, learn, repeat.—Anonymous',
+  quote: '',
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -37,20 +37,6 @@ const getters = {
   // Build an array of unique courses
   courses: (state) => {
     return [...new Set(state.groups.map((g) => g.course))]
-  },
-  // From all group assignments, find the most
-  // recent in reverse chronological order
-  recentAssignments: (state) => {
-    let allAssignments = []
-    for (const group of state.groups) {
-      allAssignments = allAssignments.concat(group.assignments)
-    }
-    // Some old assignments don't have a start date
-    allAssignments = allAssignments.filter((a) => a.start !== 'N/A')
-    allAssignments.sort(function (a, b) {
-      return a.start < b.start
-    })
-    return allAssignments.slice(0, 5)
   },
   // Filter out post-dated assignments
   assignments: (state, getters) => {
@@ -78,20 +64,22 @@ const getters = {
 }
 
 const actions = {
-  async getQuote({ commit, rootState }) {
-    const url = new URL('/.netlify/functions/getQuote', this.$config.baseURL)
-    const response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error('Error getting quote')
+  async getQuote({ state, commit, rootState }) {
+    if (!state.teacher && state.quote !== '') {
+      const url = new URL('/.netlify/functions/getQuote', this.$config.baseURL)
+      const response = await fetch(url, {
+        body: JSON.stringify({
+          secret: rootState.user.secret,
+        }),
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error('Error getting quote')
+      }
+      commit('setQuote', await response.json())
     }
-    commit('setQuote', await response.json())
   },
-  async getUser({ dispatch, commit }, { username, password }) {
+  async getUser({ commit }, { username, password }) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
     let response = await fetch(url, {
@@ -106,29 +94,6 @@ const actions = {
     }
     response = await response.json()
     commit('setUser', response)
-    // For students, getUser returns recent assignments
-    commit('assignment/setRecent', response.recent, {
-      root: true,
-    })
-    await dispatch('getGroups')
-    commit('app/setLoading', false, { root: true })
-  },
-  async getGroups({ rootState, commit }, active = true) {
-    commit('app/setLoading', true, { root: true })
-    const url = new URL('/.netlify/functions/getGroups', this.$config.baseURL)
-    const response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        teacher: rootState.user.teacher,
-        active,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error('Error getting groups')
-    }
-    // Active or archived groups?
-    commit(active ? 'setGroups' : 'setArchive', await response.json())
     commit('app/setLoading', false, { root: true })
   },
   async archiveGroup({ commit, rootState, getters }) {
@@ -284,6 +249,7 @@ const mutations = {
     state.username = data.username
     state.secret = data.secret
     state.teacher = data.teacher
+    state.groups = data.groups
     // Teacher properties
     if (data.teacher) {
       state.subscriptionDays = data.subscriptionDays
@@ -294,9 +260,6 @@ const mutations = {
       // Student properties
       state.examMode = data.examMode
     }
-  },
-  setGroups(state, groups) {
-    state.groups = groups
   },
   setArchive(state, groups) {
     state.archivedGroups = groups

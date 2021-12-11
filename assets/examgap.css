@@ -43,6 +43,25 @@ span.v-chip.theme--light.green {
   list-style-type: none !important;
 }
 
+/* ------ Assignment cards  ------- */
+
+/* align dates on assignment cards */
+.align-date {
+  display: inline-block;
+  width: 64px;
+}
+@media only screen and (max-width: 600px) {
+  .align-date {
+    display: inline-block;
+    width: 56px;
+  }
+}
+
+/* outlined card */
+.outlined {
+  border-color: #757575 !important;
+}
+
 /* preserve line-breaks in answers */
 .breaks {
   white-space: pre-wrap;
@@ -77,4 +96,10 @@ span.v-chip.theme--light.green {
 /* round dialogs lg */
 .v-dialog:not(.v-dialog--fullscreen) {
   border-radius: 24px !important;
+}
+
+/*  */
+.ico-btn {
+  height: 24px !important;
+  width: 24px !important;
 }

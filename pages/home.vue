@@ -1,9 +1,9 @@
 <template>
-  <v-container>
+  <v-container class="pt-10">
     <!-- Teacher xx -->
     <template v-if="teacher">
       <v-row class="justify-center">
-        <v-col cols="12" md="10" class="pt-10">
+        <v-col cols="12" md="10">
           <p class="text-h5">
             <font-awesome-icon
               icon="fa-light fa-plus"
@@ -51,7 +51,7 @@
       </v-row>
       <v-row class="justify-center">
         <v-col cols="12" md="8">
-          <template v-for="(assignment, i) in recent">
+          <template v-for="(assignment, i) in assignments">
             <teacher-assignment-card :key="i" :assignment="assignment" />
           </template>
         </v-col>
@@ -60,10 +60,12 @@
     <!-- Student xx -->
     <template v-else>
       <v-row class="justify-center">
-        <v-col cols="12" md="8" class="pt-10">
+        <v-col cols="12" md="8">
           <p class="text-h5">
             <font-awesome-icon icon="fa-light fa-quote-left" class="fw" />
-            {{ quote.quote }}&mdash;{{ quote.author }}
+            {{ quote.quote }}&mdash;<span class="font-weight-light">{{
+              quote.author
+            }}</span>
           </p>
         </v-col>
       </v-row>
@@ -101,14 +103,13 @@
           </p>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="justify-center">
         <v-col cols="12" md="8">
-          <p class="red--text">{{ recent }}</p>
-          <!-- <student-assignment-card
-                  v-for="(assignment, i) in group.assignments"
-                  :key="i"
-                  :assignment="assignment"
-                /> -->
+          <student-assignment-card
+            v-for="(assignment, i) in assignments"
+            :key="i"
+            :assignment="assignment"
+          />
         </v-col>
       </v-row>
     </template>
@@ -118,26 +119,26 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 // import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
-import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
-// import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
+// import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
+import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
 // import TheEmptyAssignmentsState from '~/components/common/TheEmptyAssignmentsState.vue'
 // import RevisionTopicCard from '~/components/student/RevisionTopicCard.vue'
 
 export default {
   components: {
     // TheRevisionModeDialog,
-    TeacherAssignmentCard,
-    // StudentAssignmentCard,
+    // TeacherAssignmentCard,
+    StudentAssignmentCard,
     // TheEmptyAssignmentsState,
     // RevisionTopicCard,
   },
   layout: 'app',
   async fetch() {
     await this.$store.dispatch('user/getQuote')
+    await this.$store.dispatch('assignment/getUpcoming')
   },
   computed: {
     ...mapGetters({
-      recent: 'user/recentAssignments',
       group: 'user/activeGroup',
       courses: 'user/courses',
     }),
@@ -145,6 +146,7 @@ export default {
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
       quote: (state) => state.user.quote,
+      assignments: (state) => state.assignment.assignments,
     }),
   },
   mounted() {
@@ -160,6 +162,7 @@ export default {
 </script>
 
 <style scoped>
+/* align section icons */
 .fw {
   width: 24px;
   margin-right: 16px;

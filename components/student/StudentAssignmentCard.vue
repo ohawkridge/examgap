@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mb-4 rounded-lg outlined"
+    class="mb-6 rounded-lg outlined"
     outlined
     hover
     color="#ffffff"
@@ -10,19 +10,24 @@
       {{ assignment.name }}
     </v-card-title>
     <v-card-subtitle>
-      <!-- {{ assignment.numQuestions }} question{{
-        assignment.numQuestions | pluralize
-      }} -->
+      {{ assignment.group.name }}
     </v-card-subtitle>
-    <v-card-text class="text-body-1">
+    <v-card-text class="d-flex justify-space-between align-end">
       <div>
-        <span class="align-date font-weight-bold">Start:</span
-        >{{ assignment.start | date }}
+        <div>
+          <span class="align-date font-weight-bold">Start:</span
+          >{{ assignment.start | date }}
+        </div>
+        <div>
+          <span class="align-date font-weight-bold">Due:</span
+          >{{ assignment.dateDue | date }}
+        </div>
       </div>
-      <div>
-        <span class="align-date font-weight-bold">Due:</span
-        >{{ assignment.dateDue | date }}
-      </div>
+      <v-chip color="primary" outlined label small>
+        {{ assignment.numQuestions }} question{{
+          assignment.numQuestions | pluralize
+        }}
+      </v-chip>
     </v-card-text>
   </v-card>
 </template>
@@ -42,20 +47,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.align-date {
-  display: inline-block;
-  width: 56px;
-}
-@media only screen and (max-width: 600px) {
-  .align-date {
-    display: inline-block;
-    width: 60px;
-  }
-}
-
-.outlined {
-  border-color: #d2d2d2 !important;
-}
-</style>

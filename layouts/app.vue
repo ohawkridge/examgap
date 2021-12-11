@@ -58,17 +58,8 @@
         </v-list-item-group>
       </v-list>
       <template #append>
-        <div class="pa-6">
-          <nuxt-link
-            to="/profile"
-            class="text-subtitle-1 font-weight-medium name primary--text"
-            >{{ username | name }}</nuxt-link
-          >
-          <div class="mt-1">
-            <v-chip small>
-              {{ teacher ? 'Teacher' : 'Student' }}
-            </v-chip>
-          </div>
+        <div class="pa-2">
+          <v-btn block elevation="0" plain @click="logout()"> Sign out </v-btn>
         </div>
       </template>
     </v-navigation-drawer>
