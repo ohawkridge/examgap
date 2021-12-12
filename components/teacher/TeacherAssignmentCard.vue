@@ -19,22 +19,14 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item
-            @click="
-              $nuxt.$emit('show-delete', assignment.id, assignment.group.id)
-            "
-          >
+          <v-list-item disabled>
             <v-list-item-title class="red--text"> Delete </v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-card-title>
     <v-card-subtitle>
-      {{ assignment.numQuestions }} Question{{
-        assignment.numQuestions | pluralize
-      }}
-      →
-      {{ assignment.group.name }}
+      {{ subtitle }}
     </v-card-subtitle>
     <v-card-text class="d-flex justify-space-between">
       <div>
@@ -48,11 +40,20 @@
         </div>
       </div>
       <div class="d-flex align-end">
-        <span class="tertiary--text text-subtitle-2 font-weight-medium">
-          {{ assignment.numStudents }} Student{{
-            assignment.numStudents | pluralize
-          }}
-        </span>
+        <v-chip label color="#c1e8ff" small class="mr-3">
+          <span class="xy">
+            {{ assignment.numQuestions }} question{{
+              assignment.numQuestions | pluralize
+            }}
+          </span>
+        </v-chip>
+        <v-chip label color="#c1e8ff" small>
+          <span class="xy"
+            >{{ assignment.numStudents }} student{{
+              assignment.numStudents | pluralize
+            }}</span
+          >
+        </v-chip>
       </div>
     </v-card-text>
   </v-card>
@@ -65,12 +66,25 @@ export default {
       type: Object,
       default: () => {},
     },
+    courseName: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       dialog: false,
       loading: false,
     }
+  },
+  computed: {
+    // On /home, show group name
+    // On /class, show course name
+    subtitle() {
+      return this.$route.name === 'home'
+        ? this.assignment.group.name
+        : this.courseName
+    },
   },
   methods: {
     nav() {
@@ -80,3 +94,13 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.xx {
+  color: #40000c;
+}
+
+.xy {
+  color: #001e2c;
+}
+</style>

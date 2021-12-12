@@ -54,10 +54,11 @@ const actions = {
     commit('setRevision', await response.json())
   },
   async getAssignments({ commit, rootState, rootGetters }) {
-    const url = new URL(
-      '/.netlify/functions/getAssignments',
-      this.$config.baseURL
-    )
+    commit('app/setLoading', true, { root: true })
+    const s = rootState.user.teacher
+      ? 'getAssignmentsTeacher'
+      : 'getAssignmentsStudent'
+    const url = new URL(`/.netlify/functions/${s}`, this.$config.baseURL)
     const response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
@@ -69,6 +70,7 @@ const actions = {
       throw new Error('Error getting assignments')
     }
     commit('setAssignments', await response.json())
+    commit('app/setLoading', false, { root: true })
   },
   async getCourses({ commit, rootState }) {
     const url = new URL('/.netlify/functions/getCourses', this.$config.baseURL)

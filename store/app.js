@@ -1,6 +1,5 @@
 const getDefaultState = () => ({
   tab: null,
-  upcoming: 0,
   onboardStep: 0,
   loading: false,
   pageTitle: 'Home',
@@ -20,9 +19,6 @@ const actions = {
 const mutations = {
   setTab(state, val) {
     state.tab = val
-  },
-  setUpcoming(state, val) {
-    state.upcoming = val
   },
   setOnboardStep(state, step) {
     state.onboardStep = step

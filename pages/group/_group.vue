@@ -26,7 +26,8 @@
                     rounded
                     :block="$vuetify.breakpoint.name === 'xs'"
                     :class="$vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''"
-                    @click="addAssign()"
+                    nuxt
+                    :to="`/browse/${group.course.id}`"
                     v-on="on"
                   >
                     <font-awesome-icon
@@ -43,9 +44,10 @@
           <v-row class="justify-center">
             <v-col class="12" md="8">
               <teacher-assignment-card
-                v-for="(assignment, i) in group.assignments"
+                v-for="(assignment, i) in assignments"
                 :key="i"
                 :assignment="assignment"
+                :course-name="group.course.name"
               />
             </v-col>
           </v-row>
@@ -66,12 +68,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import TheStudentsTable from '@/components/teacher/TheStudentsTable'
 import TheGradesTable from '@/components/teacher/TheGradesTable'
 import TheGroupSettings from '@/components/teacher/TheGroupSettings'
 import TheInviteDialog from '@/components/teacher/TheInviteDialog'
-// import TheEmptyAssignmentsState from '@/components/common/TheEmptyAssignmentsState'
 import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 
 export default {
@@ -80,23 +81,28 @@ export default {
     TheGradesTable,
     TheGroupSettings,
     TheInviteDialog,
-    // TheEmptyAssignmentsState,
     TeacherAssignmentCard,
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
     this.$store.commit('group/setStudents', [])
+    this.$store.commit('group/setGrades', [])
     next()
   },
   layout: 'app',
+  async fetch() {
+    console.log(
+      '%c' + 'Fetch',
+      'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
+    )
+    await this.$store.dispatch('group/getAssignments')
+  },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
-    revOnMob() {
-      return this.$vuetify.breakpoint.name === 'xs'
-        ? 'flex-column flex-column-reverse'
-        : ''
-    },
-    // Remember tab state for group
+    ...mapState({
+      assignments: (state) => state.group.assignments,
+    }),
+    // Remember tab
     tab: {
       get() {
         return this.$store.state.app.tab
@@ -105,55 +111,25 @@ export default {
         this.$store.commit('app/setTab', value)
       },
     },
-    // On 'ASSIGNMENTS' tab, remember upcoming/past
-    upcoming: {
-      get() {
-        return this.$store.state.app.upcoming
-      },
-      set(value) {
-        this.$store.commit('app/setUpcoming', value)
-      },
-    },
   },
   watch: {
     tab() {
-      // Show student onboarding message
-      if (this.group.count === 0 && this.tab === 1) {
+      // Onboarding if nec.
+      if (this.group.numStudents === 0 && this.tab === 1) {
         this.$store.commit('app/setOnboardStep', 2)
       }
     },
   },
   mounted() {
-    // N.B. Don't pre-fetch. Not worth it.
     this.$store.commit('app/setPageTitle', this.group.name)
-    // In case _report.vue crashes deactivate marking
+    // In case _report.vue crashes, stop marking
     this.$store.commit('assignment/setMarking', false)
-    // If archived
+    // Group is archived
     if (!this.group.active) {
       this.$snack.showMessage({
-        msg: `Class archived. Click 'SETTINGS' to restore.`,
+        msg: `Class archived. Click 'Settings' to restore.`,
       })
     }
   },
-  methods: {
-    addAssign() {
-      this.$router.push(`/browse/${this.group.course.id}`)
-    },
-  },
 }
 </script>
-
-<style scoped>
-@media only screen and (min-width: 600px) {
-  .justify-date {
-    width: 190px;
-  }
-}
-
-/* Align Start/Due left in flex-columns */
-@media only screen and (max-width: 600px) {
-  .left {
-    margin-right: auto;
-  }
-}
-</style>

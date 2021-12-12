@@ -2,8 +2,7 @@
   <v-container>
     <v-row class="justify-center">
       <v-col
-        cols="10"
-        md="10"
+        cols="12"
         class="flex-xs-column d-sm-flex justify-space-between align-center"
       >
         <v-menu offset-y open-on-hover>
@@ -72,7 +71,7 @@
       </v-col>
     </v-row>
     <v-row class="justify-center">
-      <v-col cols="12" md="10">
+      <v-col cols="12">
         <v-data-table
           v-model="selected"
           :headers="headers"
