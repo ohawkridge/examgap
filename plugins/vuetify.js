@@ -62,6 +62,7 @@ import {
   faHeadSideBrain,
   faQuoteLeft,
 } from '@fortawesome/pro-light-svg-icons'
+import { faCircleCheck as fasCircleCheck } from '@fortawesome/free-solid-svg-icons'
 
 // Register component globally
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
@@ -124,7 +125,8 @@ library.add(
   faReceipt,
   faCalendarStar,
   faHeadSideBrain,
-  faQuoteLeft
+  faQuoteLeft,
+  fasCircleCheck
 )
 
 Vue.use(Vuetify)

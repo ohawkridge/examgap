@@ -2,6 +2,8 @@ const getDefaultState = () => ({
   students: [],
   grades: [],
   courses: [],
+  assignments: [],
+  revisionTopics: [],
 })
 
 // Initial state
@@ -37,6 +39,37 @@ const getters = {
 }
 
 const actions = {
+  async getRevision({ commit, rootGetters, rootState }) {
+    const url = new URL('/.netlify/functions/getRevision', this.$config.baseURL)
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        courseId: rootGetters['user/activeGroup'].course.id,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error getting revision')
+    }
+    commit('setRevision', await response.json())
+  },
+  async getAssignments({ commit, rootState, rootGetters }) {
+    const url = new URL(
+      '/.netlify/functions/getAssignments',
+      this.$config.baseURL
+    )
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        groupId: rootGetters['user/activeGroup'].id,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error getting assignments')
+    }
+    commit('setAssignments', await response.json())
+  },
   async getCourses({ commit, rootState }) {
     const url = new URL('/.netlify/functions/getCourses', this.$config.baseURL)
     const response = await fetch(url, {
@@ -191,6 +224,12 @@ const mutations = {
   },
   setStudents(state, students) {
     state.students = students
+  },
+  setRevision(state, topics) {
+    state.revisionTopics = topics
+  },
+  setAssignments(state, assignments) {
+    state.assignments = assignments
   },
   setGrades(state, grades) {
     state.grades = grades

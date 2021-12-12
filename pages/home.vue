@@ -79,7 +79,7 @@
       </v-row>
       <v-row class="justify-center">
         <v-col cols="12" md="8">
-          <template v-for="(course, i) in courses">
+          <template v-for="(group, i) in groups">
             <v-btn
               :key="i"
               elevation="0"
@@ -89,8 +89,9 @@
               color="#ffd9dc"
               class="mb-4"
               :class="$vuetify.breakpoint.name !== 'xs' ? 'mr-4' : ''"
+              @click="revise(group.id)"
             >
-              {{ course.name }}
+              {{ group.course.name }}
             </v-btn>
           </template>
         </v-col>
@@ -105,8 +106,20 @@
       </v-row>
       <v-row class="justify-center">
         <v-col cols="12" md="8">
+          <template v-if="assignments.length === 0">
+            <v-img
+              src="/no-task.svg"
+              width="180"
+              height="130"
+              contain
+              class="mx-auto"
+              alt="Books and pens illustrations"
+            />
+            <p class="text-center mt-4">No upcoming assignments</p>
+          </template>
           <student-assignment-card
             v-for="(assignment, i) in assignments"
+            v-else
             :key="i"
             :assignment="assignment"
           />
@@ -118,19 +131,13 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-// import TheRevisionModeDialog from '@/components/student/TheRevisionModeDialog'
 // import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
-// import TheEmptyAssignmentsState from '~/components/common/TheEmptyAssignmentsState.vue'
-// import RevisionTopicCard from '~/components/student/RevisionTopicCard.vue'
 
 export default {
   components: {
-    // TheRevisionModeDialog,
     // TeacherAssignmentCard,
     StudentAssignmentCard,
-    // TheEmptyAssignmentsState,
-    // RevisionTopicCard,
   },
   layout: 'app',
   async fetch() {
@@ -156,6 +163,10 @@ export default {
     newAssignment(group) {
       this.$store.commit('user/setActiveGroupId', group.id)
       this.$router.push(`/browse/${group.course.id}`)
+    },
+    revise(groupId) {
+      this.$store.commit('app/setTab', 1)
+      this.$router.push(`/class/${groupId}`)
     },
   },
 }

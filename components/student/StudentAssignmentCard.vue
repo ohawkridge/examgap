@@ -10,7 +10,7 @@
       {{ assignment.name }}
     </v-card-title>
     <v-card-subtitle>
-      {{ assignment.group.name }}
+      {{ subtitle }}
     </v-card-subtitle>
     <v-card-text class="d-flex justify-space-between align-end">
       <div>
@@ -35,9 +35,22 @@
 <script>
 export default {
   props: {
+    courseName: {
+      type: String,
+      default: '',
+    },
     assignment: {
       type: Object,
       default: () => {},
+    },
+  },
+  computed: {
+    // On /home, show group name
+    // On /class, show course name
+    subtitle() {
+      return this.$route.name === 'home'
+        ? this.assignment.group.name
+        : this.courseName
     },
   },
   methods: {

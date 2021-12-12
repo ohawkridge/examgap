@@ -87,14 +87,17 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="$nuxt.$emit('show-create')">
+              <v-list-item v-if="teacher" @click="$nuxt.$emit('show-create')">
                 <v-list-item-title> New class </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="$nuxt.$emit('show-new')">
+              <v-list-item v-if="teacher" @click="$nuxt.$emit('show-new')">
                 <v-list-item-title> New assignment </v-list-item-title>
               </v-list-item>
-              <v-list-item nuxt to="/author">
+              <v-list-item v-if="teacher" nuxt to="/author">
                 <v-list-item-title> New question </v-list-item-title>
+              </v-list-item>
+              <v-list-item v-if="!teacher">
+                <v-list-item-title> Join class </v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -179,7 +182,7 @@ export default {
   methods: {
     nav(groupId) {
       this.$store.commit('user/setActiveGroupId', groupId)
-      this.$router.push(this.teacher ? `/group/${groupId}` : '/home')
+      this.$router.push(`/${this.teacher ? 'group' : 'class'}/${groupId}`)
     },
     logout() {
       this.$router.push('/signin')

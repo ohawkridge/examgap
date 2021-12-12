@@ -34,10 +34,6 @@ const getters = {
     }
     return found
   },
-  // Build an array of unique courses
-  courses: (state) => {
-    return [...new Set(state.groups.map((g) => g.course))]
-  },
   // Filter out post-dated assignments
   assignments: (state, getters) => {
     if (getters.activeGroup === undefined) return []
@@ -65,7 +61,7 @@ const getters = {
 
 const actions = {
   async getQuote({ state, commit, rootState }) {
-    if (!state.teacher && state.quote !== '') {
+    if (!state.teacher && state.quote === '') {
       const url = new URL('/.netlify/functions/getQuote', this.$config.baseURL)
       const response = await fetch(url, {
         body: JSON.stringify({

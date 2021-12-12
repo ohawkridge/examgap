@@ -1,31 +1,29 @@
 <template>
-  <v-col cols="12" md="4">
-    <v-tooltip bottom>
-      <template #activator="{ on }">
-        <v-card
-          outlined
-          :class="$vuetify.breakpoint.name === 'xs' ? '' : 'mb-4'"
-          hover
-          height="100"
-          @click="revise()"
-          v-on="on"
-        >
-          <v-card-title class="text-subtitle-1 font-weight-bold no-wrap">
-            {{ topic.name }}
-          </v-card-title>
-          <v-card-text>
-            <font-awesome-icon
-              v-for="(n, i) in topic.answered"
-              :key="i"
-              icon="fa-light fa-circle-check"
-              class="mr-3 fa-xl ico-green"
-            />
-          </v-card-text>
-        </v-card>
-      </template>
-      <span>Revise {{ topic.name }}</span>
-    </v-tooltip>
-  </v-col>
+  <v-hover v-slot="{ hover }">
+    <v-card outlined class="rounded-lg outlined" hover @click="revise()">
+      <v-img
+        src="/t/263858534213485067.jpeg"
+        height="120px"
+        :class="hover ? '' : 'xx'"
+      />
+      <div class="ml-2 chip-row">
+        <v-chip label color="tertiary" small dark>
+          {{ topic.numQuestions }} Q{{ topic.numQuestions | pluralize }}
+        </v-chip>
+      </div>
+      <v-card-title class="no-wrap text-subtitle-1 font-weight-medium">
+        {{ topic.name }}
+      </v-card-title>
+      <v-card-text class="green--text">
+        <font-awesome-icon
+          v-for="(n, i) in topic.numAnswered"
+          :key="i"
+          :icon="['fas', 'circle-check']"
+          class="mr-3 fa-xl"
+        />
+      </v-card-text>
+    </v-card>
+  </v-hover>
 </template>
 
 <script>
@@ -46,8 +44,19 @@ export default {
 </script>
 
 <style scoped>
-/* don't wrap words in card titles */
+/* don't wrap card titles */
 .no-wrap {
   word-break: normal !important;
+}
+
+.chip-row {
+  position: relative;
+  top: -30px;
+  margin-bottom: -30px;
+}
+
+.xx {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
 }
 </style>
