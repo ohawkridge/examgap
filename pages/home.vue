@@ -158,6 +158,7 @@ export default {
   },
   mounted() {
     this.$store.commit('app/setPageTitle', 'Home')
+    this.$store.commit('app/setLoading', false)
   },
   methods: {
     newAssignment(group) {

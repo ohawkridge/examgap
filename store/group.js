@@ -3,10 +3,8 @@ const getDefaultState = () => ({
   grades: [],
   courses: [],
   assignments: [],
-  revisionTopics: [],
 })
 
-// Initial state
 // eslint-disable-next-line no-unused-vars
 const state = getDefaultState()
 
@@ -39,22 +37,7 @@ const getters = {
 }
 
 const actions = {
-  async getRevision({ commit, rootGetters, rootState }) {
-    const url = new URL('/.netlify/functions/getRevision', this.$config.baseURL)
-    const response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        courseId: rootGetters['user/activeGroup'].course.id,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error('Error getting revision')
-    }
-    commit('setRevision', await response.json())
-  },
   async getAssignments({ commit, rootState, rootGetters }) {
-    commit('app/setLoading', true, { root: true })
     const s = rootState.user.teacher
       ? 'getAssignmentsTeacher'
       : 'getAssignmentsStudent'
@@ -70,7 +53,6 @@ const actions = {
       throw new Error('Error getting assignments')
     }
     commit('setAssignments', await response.json())
-    commit('app/setLoading', false, { root: true })
   },
   async getCourses({ commit, rootState }) {
     const url = new URL('/.netlify/functions/getCourses', this.$config.baseURL)
@@ -226,9 +208,6 @@ const mutations = {
   },
   setStudents(state, students) {
     state.students = students
-  },
-  setRevision(state, topics) {
-    state.revisionTopics = topics
   },
   setAssignments(state, assignments) {
     state.assignments = assignments

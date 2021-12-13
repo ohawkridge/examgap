@@ -1,51 +1,32 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440">
-    <v-card class="modal">
-      <v-card-title class="d-flex justify-center"> Revision mode </v-card-title>
-      <v-card-text class="text-body-1">
-        <p>You will now see a practise exam question.</p>
-        <ul class="no-bullet">
-          <li class="mb-2">
-            <font-awesome-icon icon="fa-light fa-timer" class="fa-lg mr-2" />
-            Take your time
-          </li>
-          <li>
-            <font-awesome-icon
-              icon="fa-light fa-bullseye-pointer"
-              class="fa-lg mr-2"
-            />
-            Mark yourself accurately
-          </li>
-        </ul>
-        <div class="d-flex justify-space-between align-center mt-4">
-          <v-switch
-            v-model="revisionExamMode"
+  <v-dialog v-model="dialog" max-width="440" class="rounded-xl">
+    <v-card class="rounded-xl" color="#fbfcff">
+      <v-card-title> </v-card-title>
+      <v-card-text>
+        <p class="text-h5 text-center">Revision mode</p>
+        <p>
+          You will now see a practise
+          <strong>{{ $store.state.topics.topicName }}</strong> question. Take
+          your time and try to mark yourself accurately.
+        </p>
+        <div class="d-flex align-center">
+          <v-checkbox v-model="examMode" color="primary" label="Show keywords">
+          </v-checkbox>
+        </div>
+        <div class="d-flex justify-end">
+          <v-btn text rounded class="mr-2" @click="dialog = false">
+            Cancel
+          </v-btn>
+          <v-btn
             color="primary"
-            hide-details
-            inset
-            class="mt-0"
+            text
+            rounded
+            :disabled="loading"
+            :loading="loading"
+            @click="start()"
           >
-            <template #label>
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <span v-on="on">Exam mode</span>
-                </template>
-                <span>Hide keywords and word count</span>
-              </v-tooltip>
-            </template>
-          </v-switch>
-          <div>
-            <v-btn
-              color="primary"
-              elevation="0"
-              rounded
-              :disabled="loading"
-              :loading="loading"
-              @click="start()"
-            >
-              Start
-            </v-btn>
-          </div>
+            Revise
+          </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -63,15 +44,12 @@ export default {
   },
   computed: {
     // Computed setter for store
-    revisionExamMode: {
+    examMode: {
       get() {
         return this.$store.state.user.reviseExamMode
       },
       set(val) {
-        this.$store.commit('user/setRevisionExamMode', val)
-        this.$snack.showMessage({
-          msg: `Exam mode ${val ? 'ON' : 'OFF'}`,
-        })
+        this.$store.commit('user/setexamMode', val)
       },
     },
   },
@@ -87,7 +65,7 @@ export default {
     async start() {
       try {
         this.loading = true
-        await this.$store.dispatch('assignment/revise')
+        await this.$store.dispatch('assignment/getRevisionQuestion')
         this.$router.push(`/answer`)
       } catch (err) {
         console.error(err)

@@ -65,11 +65,12 @@
               </v-textarea>
               <div v-if="showHelp" class="d-flex justify-space-between">
                 <div>
+                  <span class="text-subtitle-1">Keywords:&nbsp;</span>
                   <v-chip
                     v-for="(word, i) in keywords"
                     :key="i"
-                    class="mr-2 mb-2"
-                    :color="used(word) ? 'green' : 'red'"
+                    class="mr-2"
+                    :color="used(word) ? 'green' : ''"
                     small
                   >
                     {{ word }}

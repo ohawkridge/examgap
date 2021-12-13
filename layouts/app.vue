@@ -6,10 +6,22 @@
       app
       floating
     >
-      <div class="pa-2">
+      <div class="pa-3">
         <nuxt-link to="/home">
           <the-logo />
         </nuxt-link>
+      </div>
+      <div class="pa-3">
+        <div>
+          <nuxt-link to="/profile" class="text-subtitle-1 font-weight-bold">
+            {{ username | name }}
+          </nuxt-link>
+        </div>
+        <div>
+          <v-chip x-small label>
+            {{ teacher ? 'Teacher' : 'Student' }}
+          </v-chip>
+        </div>
       </div>
       <v-list rounded dense>
         <v-list-item-group
@@ -17,14 +29,6 @@
           active-class="bold-nav"
           color="primary"
         >
-          <v-list-item nuxt to="/home">
-            <v-list-item-icon class="d-flex justify-center align-center">
-              <font-awesome-icon icon="fa-light fa-house" class="fa-lg" />
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title> Home </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
           <v-subheader> Classes </v-subheader>
           <v-list-item
             v-for="(group, i) in groups"
@@ -38,7 +42,7 @@
               {{ group.count }}
             </v-list-item-action-text>
           </v-list-item>
-          <v-divider class="my-4 mx-2" />
+          <v-divider class="mt-6 mb-5 mx-2" />
           <v-list-item v-if="teacher" nuxt to="/archive">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-box-archive" class="fa-lg" />
@@ -96,7 +100,7 @@
               <v-list-item v-if="teacher" nuxt to="/author">
                 <v-list-item-title> New question </v-list-item-title>
               </v-list-item>
-              <v-list-item v-if="!teacher">
+              <v-list-item v-if="!teacher" @click="$nuxt.$emit('show-join')">
                 <v-list-item-title> Join class </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -114,7 +118,7 @@
         <the-delete-assignment-dialog />
         <the-new-assignment-dialog />
       </template>
-      <the-join-dialog v-else />
+      <the-join-class-dialog v-else />
     </v-main>
     <the-footer />
   </v-app>
@@ -125,25 +129,25 @@ import { mapState } from 'vuex'
 import TheLogo from '@/components/common/TheLogo'
 import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
-import TheJoinDialog from '@/components/student/TheJoinDialog'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
 import TheLoadingOverlay from '~/components/common/TheLoadingOverlay.vue'
 import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 import TheNewAssignmentDialog from '~/components/teacher/TheNewAssignmentDialog.vue'
+import TheJoinClassDialog from '~/components/student/TheJoinClassDialog.vue'
 
 export default {
   name: 'App',
   components: {
     TheLogo,
     TheSnackbar,
-    TheJoinDialog,
     TheCreateClassDialog,
     TheOnboardingSnackbar,
     TheLoadingOverlay,
     TheFooter,
     TheDeleteAssignmentDialog,
     TheNewAssignmentDialog,
+    TheJoinClassDialog,
   },
   middleware: ['auth'],
   data() {

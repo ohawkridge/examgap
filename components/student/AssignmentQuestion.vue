@@ -29,7 +29,6 @@
               <template #activator="{ on }">
                 <v-chip
                   :color="color(response.tm / question.maxMark)"
-                  label
                   v-on="on"
                 >
                   <font-awesome-icon
@@ -48,7 +47,6 @@
               <template #activator="{ on }">
                 <v-chip
                   :color="color(response.sm / question.maxMark)"
-                  label
                   v-on="on"
                 >
                   <font-awesome-icon icon="fa-light fa-user" class="mr-2" />

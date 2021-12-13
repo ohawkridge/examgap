@@ -121,6 +121,22 @@ const actions = {
     })
     commit('setRestored')
   },
+  async joinClass({ commit, rootState }, code) {
+    const url = new URL('/.netlify/functions/joinClass', this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        code,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error joining  class')
+    }
+    response = await response.json()
+    // Add the returned group to groups array
+    console.debug(response)
+  },
   async createGroup({ commit, rootState }, { courseId, groupName }) {
     const url = new URL('/.netlify/functions/createGroup', this.$config.baseURL)
     let response = await fetch(url, {

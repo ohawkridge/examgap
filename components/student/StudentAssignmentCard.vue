@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mb-6 rounded-lg outlined"
+    class="mb-6 rounded-lg outline"
     outlined
     hover
     color="#ffffff"

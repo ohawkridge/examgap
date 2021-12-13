@@ -16,7 +16,6 @@
             <span>Back</span>
           </v-tooltip>
           <div>
-            <!-- Full buttons on desktop -->
             <div v-if="$vuetify.breakpoint.name !== 'xs'">
               <v-btn
                 rounded
@@ -30,7 +29,6 @@
                 Refresh
               </v-btn>
             </div>
-            <!-- Ellipsis on mobile -->
             <v-menu v-else>
               <template #activator="{ on }">
                 <v-btn icon v-on="on">
@@ -421,8 +419,8 @@ export default {
   },
   async fetch() {
     try {
-      const assId = this.$route.params.report
-      await this.$store.dispatch('assignment/getReport', assId)
+      const assignmentId = this.$route.params.report
+      await this.$store.dispatch('assignment/getReport', assignmentId)
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -497,9 +495,11 @@ export default {
     },
   },
   mounted() {
-    if (this.group.assignments.length === 1) {
-      this.$store.commit('app/setOnboardStep', 6)
-    }
+    this.$store.commit('app/setPageTitle', this.assignment.name)
+    // TODO Onboard if nec.
+    // if (this.group.assignments.length === 1) {
+    //   this.$store.commit('app/setOnboardStep', 6)
+    // }
   },
   methods: {
     color(n, max) {

@@ -37,6 +37,7 @@ export default {
   methods: {
     revise() {
       this.$store.commit('topics/setTopicId', this.topic.id)
+      this.$store.commit('topics/setTopicName', this.topic.name)
       this.$nuxt.$emit('show-revise')
     },
   },

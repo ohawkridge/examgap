@@ -1,42 +1,37 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" class="d-flex justify-space-between">
-        <div>
-          <v-btn text color="tertiary" rounded @click="selection = []">
-            Clear
-          </v-btn>
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn
-                color="primary"
-                :disabled="selection.length == 0"
-                elevation="0"
-                rounded
-                class="ml-2"
-                v-on="on"
-                @click="$nuxt.$emit('create-ass')"
-              >
-                Assign ({{ selection.length }})
-              </v-btn>
-            </template>
-            <span
-              >Assign {{ selection.length }} question{{
-                selection.length | pluralize
-              }}</span
+      <v-col cols="12" md="3" class="d-flex justify-space-between"> </v-col>
+      <v-col cols="12" md="4" class="d-flex justify-end">
+        <v-btn rounded text color="primary" @click="newQuestion()">
+          <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
+          New Question
+        </v-btn>
+      </v-col>
+      <v-col cols="12" md="5" class="d-flex justify-end">
+        <v-btn text color="tertiary" rounded @click="selection = []">
+          Clear
+        </v-btn>
+        <v-tooltip bottom>
+          <template #activator="{ on }">
+            <v-btn
+              color="primary"
+              :disabled="selection.length == 0"
+              elevation="0"
+              rounded
+              class="ml-2"
+              v-on="on"
+              @click="$nuxt.$emit('create-ass')"
             >
-          </v-tooltip>
-        </div>
-        <div>
-          <the-question-detail-modal
-            v-if="question"
-            :question-id="question.id"
-          />
-          <v-btn rounded text color="primary" @click="newQuestion()">
-            <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
-            New Question
-          </v-btn>
-        </div>
+              Assign ({{ selection.length }})
+            </v-btn>
+          </template>
+          <span
+            >Assign {{ selection.length }} question{{
+              selection.length | pluralize
+            }}</span
+          >
+        </v-tooltip>
       </v-col>
     </v-row>
     <v-row>
@@ -113,6 +108,10 @@
               {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-chip>
           </div>
+          <the-question-detail-modal
+            v-if="question"
+            :question-id="question.id"
+          />
         </template>
         <div
           v-else
@@ -148,12 +147,16 @@ export default {
     }
   },
   async fetch() {
-    // Dispatch action to get topics
-    // (In turn dispatches topics/getQuestions)
     try {
-      await this.$store.dispatch('topics/getTopics', this.$route.params.course)
+      console.debug(
+        '%c' + 'Fetch',
+        'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
+      )
+      await this.$store.dispatch('topics/getTopics', this.$route.params.browse)
       // Select first topic by default
       this.topicId = this.topics[0].id
+      // Fetch questions
+      await this.$store.dispatch('topics/getQuestions', this.topicId)
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
@@ -175,6 +178,7 @@ export default {
     async topicId() {
       try {
         this.loading = true
+        this.$nuxt.$loading.start()
         await this.$store.dispatch('topics/getQuestions', this.topicId)
       } catch (err) {
         this.$snack.showMessage({
@@ -184,6 +188,7 @@ export default {
       } finally {
         this.loading = false
         this.question = null
+        this.$nuxt.$loading.finish()
       }
     },
     selection() {
@@ -196,9 +201,6 @@ export default {
     // Set page title
     const title = `${this.group.course.name} (${this.group.course.board})`
     this.$store.commit('app/setPageTitle', title)
-    // Onboard if nec.
-    const step = this.group.assignments.length === 0 ? 4 : 0
-    this.$store.commit('app/setOnboardStep', step)
   },
   methods: {
     // Debounce mouseover events

@@ -16,8 +16,40 @@
         <v-container class="pt-10">
           <v-row class="justify-center">
             <v-col class="12" md="8">
+              <!-- Skeletons -->
+              <template v-if="$fetchState.pending">
+                <v-card
+                  v-for="i in 3"
+                  :key="i"
+                  elevation="0"
+                  class="rounded-lg pa-4 mb-6"
+                >
+                  <v-skeleton-loader
+                    :loading="true"
+                    type="heading"
+                    class="my-3"
+                  ></v-skeleton-loader>
+                  <v-skeleton-loader
+                    :loading="true"
+                    type="text"
+                    width="34%"
+                  ></v-skeleton-loader>
+                  <v-skeleton-loader
+                    :loading="true"
+                    type="text"
+                    width="35%"
+                    class="mt-4"
+                  ></v-skeleton-loader>
+                  <v-skeleton-loader
+                    :loading="true"
+                    type="text"
+                    width="35%"
+                  ></v-skeleton-loader>
+                </v-card>
+              </template>
               <student-assignment-card
                 v-for="(assignment, i) in assignments"
+                v-else
                 :key="i"
                 :assignment="assignment"
                 :course-name="group.course.name"
@@ -38,6 +70,7 @@
             </v-col>
           </v-row>
         </v-container>
+        <the-revision-mode-dialog />
       </v-tab-item>
     </v-tabs-items>
   </div>
@@ -47,11 +80,13 @@
 import { mapState, mapGetters } from 'vuex'
 import RevisionTopicCard from '~/components/student/RevisionTopicCard.vue'
 import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
+import TheRevisionModeDialog from '~/components/student/TheRevisionModeDialog.vue'
 
 export default {
   components: {
     StudentAssignmentCard,
     RevisionTopicCard,
+    TheRevisionModeDialog,
   },
   layout: 'app',
   async fetch() {
@@ -60,7 +95,7 @@ export default {
       'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
     )
     await this.$store.dispatch('group/getAssignments')
-    await this.$store.dispatch('group/getRevision')
+    await this.$store.dispatch('topics/getRevision')
   },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),

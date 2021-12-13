@@ -3,7 +3,7 @@
     <v-row class="d-flex justify-center">
       <v-col cols="12" md="5" class="mt-sm-6">
         <div class="text-h5">Account</div>
-        <p class="font-weight-light mb-9">Manage your account details.</p>
+        <p class="font-weight-light mb-9">Manage your account details</p>
         <v-text-field
           :value="$store.state.user.username"
           label="Username"
@@ -62,7 +62,7 @@
         <the-subscribe-dialog v-if="teacher" />
         <v-divider class="my-10" />
         <div class="text-h5 d-flex justify-space-between">Password</div>
-        <p class="font-weight-light mb-9">Update your password.</p>
+        <p class="font-weight-light mb-9">Update your password</p>
         <v-form ref="form">
           <v-text-field
             v-model="pass1"

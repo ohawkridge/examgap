@@ -71,8 +71,7 @@ const actions = {
     response = await response.json()
     commit('setQuestion', response)
   },
-  // Get next revision question for selected topic
-  async revise({ commit, rootState, rootGetters }) {
+  async getRevisionQuestion({ commit, rootState, rootGetters }) {
     const url = new URL(
       '/.netlify/functions/getRevisionQuestionId',
       this.$config.baseURL
@@ -223,9 +222,7 @@ const actions = {
     })
     commit('setMarked', response)
   },
-  // For students (_assignment.vue)
   async getAssignment({ commit, rootState }, assignmentId) {
-    commit('app/setLoading', true, { root: true })
     const url = new URL(
       '/.netlify/functions/getAssignment',
       this.$config.baseURL
@@ -238,42 +235,29 @@ const actions = {
       method: 'POST',
     })
     if (!response.ok) {
-      throw new Error(`Error fetching assignment ${response.status}`)
+      throw new Error('Error fetching assignment')
     }
     response = await response.json()
     commit('setAssignment', response)
-    commit('app/setPageTitle', response.name, { root: true })
-    commit('app/setLoading', false, { root: true })
   },
   async getReport({ commit, rootState, rootGetters }, assignmentId) {
     commit('app/setLoading', true, { root: true })
-    const numAssignments = rootGetters['user/activeGroup'].assignments.length
-    if (numAssignments > 0) {
-      // _group.vue sends -1 if attempting to
-      // pre-fetch most-recent assignment.
-      // Replace with actual most recent id
-      if (assignmentId === -1) {
-        assignmentId = rootGetters['user/activeGroup'].assignments[0].id
-      }
-      const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
-      let response = await fetch(url, {
-        body: JSON.stringify({
-          secret: rootState.user.secret,
-          assignmentId,
-        }),
-        method: 'POST',
-      })
-      if (!response.ok) {
-        throw new Error(`Error fetching data ${response.status}`)
-      }
-      response = await response.json()
-      commit('app/setPageTitle', response.name, { root: true })
-      commit('setAssignment', response)
+    const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        assignmentId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error getting report')
     }
+    response = await response.json()
+    commit('setAssignment', response)
     commit('app/setLoading', false, { root: true })
   },
   async getResponse({ commit, rootState }, responseId) {
-    commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
     const response = await fetch(url, {
       body: JSON.stringify({
@@ -283,10 +267,9 @@ const actions = {
       method: 'POST',
     })
     if (!response.ok) {
-      throw new Error(`Error fetching response ${responseId}`, response.status)
+      throw new Error('Error fetching response')
     }
     commit('setResponse', await response.json())
-    commit('app/setLoading', false, { root: true })
   },
   resetState({ commit }) {
     commit('resetState')

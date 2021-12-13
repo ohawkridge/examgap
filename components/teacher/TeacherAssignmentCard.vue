@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mb-4 rounded-lg outlined"
+    class="mb-6 rounded-lg outlined"
     outlined
     hover
     color="#ffffff"
@@ -41,8 +41,9 @@
       </div>
       <div class="d-flex align-end">
         <v-chip label color="#c1e8ff" small class="mr-3">
+          <!-- TODO Qs on mobile -->
           <span class="xy">
-            {{ assignment.numQuestions }} question{{
+            {{ assignment.numQuestions }} Q{{
               assignment.numQuestions | pluralize
             }}
           </span>
@@ -88,8 +89,9 @@ export default {
   },
   methods: {
     nav() {
-      this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
-      this.$router.push(`/report/${this.assignment.id}`)
+      console.debug('Debug', this.assignment.group.id, this.assignment.id)
+      // this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
+      // this.$router.push(`/report/${this.assignment.id}`)
     },
   },
 }

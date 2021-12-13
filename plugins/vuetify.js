@@ -55,12 +55,12 @@ import {
   faTrafficLight,
   faAngleDown,
   faPenClip,
-  faHouse,
   faTrashCanXmark,
   faReceipt,
   faCalendarStar,
   faHeadSideBrain,
   faQuoteLeft,
+  faUsers,
 } from '@fortawesome/pro-light-svg-icons'
 import { faCircleCheck as fasCircleCheck } from '@fortawesome/free-solid-svg-icons'
 
@@ -120,13 +120,13 @@ library.add(
   faTrafficLight,
   faAngleDown,
   faPenClip,
-  faHouse,
   faTrashCanXmark,
   faReceipt,
   faCalendarStar,
   faHeadSideBrain,
   faQuoteLeft,
-  fasCircleCheck
+  fasCircleCheck,
+  faUsers
 )
 
 Vue.use(Vuetify)

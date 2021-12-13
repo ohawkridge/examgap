@@ -1,7 +1,8 @@
 const getDefaultState = () => ({
   topics: [],
-  question: {}, // Question detail (not _course.vue preview)
+  question: {},
   selected: [],
+  questions: [],
   topicId: '',
   topicName: '',
   currentTopicIndex: 0,
@@ -13,16 +14,26 @@ const state = getDefaultState()
 
 const getters = {
   // Get count of revision questions answered for a topic
-  // topicId = '' until a revision topic is chosen
   topicCount: (state, getters, rootState) => {
     if (state.topicId === '' || rootState.user.teacher) return 0
-    return state.topics.find(({ id }) => id === state.topicId).answered
+    return state.topics.find(({ id }) => id === state.topicId).numAnswered
   },
 }
 
 const actions = {
-  resetState({ commit }) {
-    commit('resetState')
+  async getRevision({ commit, rootGetters, rootState }) {
+    const url = new URL('/.netlify/functions/getRevision', this.$config.baseURL)
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        courseId: rootGetters['user/activeGroup'].course.id,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error getting revision')
+    }
+    commit('setTopics', await response.json())
   },
   async getACTopics({ commit, rootState }, allCourses) {
     const url = new URL(
@@ -59,16 +70,9 @@ const actions = {
     response = await response.json()
     commit('setQuestion', response)
   },
-  // For teachers, get _course topics to browse questions
-  // For students, get revision topic data
-  async getTopics({ commit, rootGetters, rootState }, courseId) {
+  async getTopics({ commit, rootState }, courseId) {
     commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
-    // For students, courseId is not passed in
-    // so get it from the current active group
-    if (courseId === undefined) {
-      courseId = rootGetters['user/activeGroup'].course.id
-    }
     let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
@@ -77,15 +81,14 @@ const actions = {
       }),
       method: 'POST',
     })
-    // Throw error we can catch in the component
     if (!response.ok) {
-      throw new Error(`${response.statusText} (${response.status})`)
+      throw new Error('Error getting topics')
     }
     response = await response.json()
     commit('setTopics', response)
     commit('app/setLoading', false, { root: true })
   },
-  async getQuestions({ commit, state, rootState, rootGetters }, topicId) {
+  async getQuestions({ commit, rootState, rootGetters }, topicId) {
     const url = new URL(
       '/.netlify/functions/getQuestions',
       this.$config.baseURL
@@ -99,10 +102,13 @@ const actions = {
       method: 'POST',
     })
     if (!response.ok) {
-      throw new Error(`${response.statusText} ${response.status}`)
+      throw new Error('Error getting questions')
     }
     response = await response.json()
     commit('setQuestions', response)
+  },
+  resetState({ commit }) {
+    commit('resetState')
   },
 }
 
