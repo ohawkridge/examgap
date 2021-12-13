@@ -29,8 +29,8 @@ const mutations = {
   setPageTitle(state, title) {
     state.pageTitle = title
   },
-  setDarkMode(state, mode) {
-    state.darkMode = mode
+  setDarkMode(state, val) {
+    state.darkMode = val
   },
   setNav(state, val) {
     state.navbar = val

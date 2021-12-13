@@ -62,7 +62,10 @@
       <v-row class="justify-center">
         <v-col cols="12" md="8">
           <p class="text-h5">
-            <font-awesome-icon icon="fa-light fa-quote-left" class="fw" />
+            <font-awesome-icon
+              icon="fa-light fa-quote-left"
+              class="section-icon"
+            />
             {{ quote.quote }}&mdash;<span class="font-weight-light">{{
               quote.author
             }}</span>
@@ -72,7 +75,10 @@
       <v-row class="justify-center">
         <v-col cols="12" md="8">
           <p class="text-h5">
-            <font-awesome-icon icon="fa-light fa-head-side-brain" class="fw" />
+            <font-awesome-icon
+              icon="fa-light fa-head-side-brain"
+              class="section-icon"
+            />
             Revise
           </p>
         </v-col>
@@ -99,7 +105,10 @@
       <v-row class="justify-center">
         <v-col cols="12" md="8">
           <p class="text-h5">
-            <font-awesome-icon icon="fa-light fa-calendar-star" class="fw" />
+            <font-awesome-icon
+              icon="fa-light fa-calendar-star"
+              class="section-icon"
+            />
             Upcoming assignments
           </p>
         </v-col>
@@ -131,12 +140,12 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-// import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
+import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
 
 export default {
   components: {
-    // TeacherAssignmentCard,
+    TeacherAssignmentCard,
     StudentAssignmentCard,
   },
   layout: 'app',
@@ -147,7 +156,6 @@ export default {
   computed: {
     ...mapGetters({
       group: 'user/activeGroup',
-      courses: 'user/courses',
     }),
     ...mapState({
       teacher: (state) => state.user.teacher,
@@ -175,7 +183,7 @@ export default {
 
 <style scoped>
 /* align section icons */
-.fw {
+.section-icon {
   width: 24px;
   margin-right: 16px;
 }

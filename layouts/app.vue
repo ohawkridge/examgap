@@ -84,6 +84,17 @@
         </span>
         <div class="d-flex align-center">
           <div id="headway" class="pr-2"></div>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn icon class="mr-2" @click="darkMode = !darkMode" v-on="on">
+                <font-awesome-icon
+                  :icon="`fa-light ${darkMode ? 'fa-sun' : 'fa-moon'}`"
+                  class="ico-btn"
+                />
+              </v-btn>
+            </template>
+            <span>Dark mode</span>
+          </v-tooltip>
           <v-menu offset-y open-on-hover rounded="lg">
             <template #activator="{ on }">
               <v-btn icon color="primary" v-on="on">
@@ -161,7 +172,6 @@ export default {
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
       pageTitle: (state) => state.app.pageTitle,
-      darkMode: (state) => state.app.darkMode,
     }),
     color() {
       return this.darkMode ? '#191c1e' : '#fbfcff'
@@ -172,6 +182,14 @@ export default {
       },
       set(val) {
         this.$store.commit('app/setNav', val)
+      },
+    },
+    darkMode: {
+      get() {
+        return this.$store.state.app.darkMode
+      },
+      set(val) {
+        this.$store.commit('app/setDarkMode', val)
       },
     },
   },

@@ -61,6 +61,8 @@ import {
   faHeadSideBrain,
   faQuoteLeft,
   faUsers,
+  faSun,
+  faMoon,
 } from '@fortawesome/pro-light-svg-icons'
 import { faCircleCheck as fasCircleCheck } from '@fortawesome/free-solid-svg-icons'
 
@@ -126,7 +128,9 @@ library.add(
   faHeadSideBrain,
   faQuoteLeft,
   fasCircleCheck,
-  faUsers
+  faUsers,
+  faSun,
+  faMoon
 )
 
 Vue.use(Vuetify)
