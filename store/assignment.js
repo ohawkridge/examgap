@@ -1,17 +1,14 @@
 const getDefaultState = () => ({
+  assignment: {},
+  question: {},
+  response: {},
   assignmentId: '',
   questionId: '',
-  responseId: '', // debounced saved answer
-  // Info ^^^ for answer.vue
-  response: {}, // _response.vue
-  assignment: {}, // _report.vue data structure + _assignment.vue
+  responseId: '',
   studentIndex: '',
   questionIndex: '',
   responseIndex: '',
-  // Indecies ^^^ into _report.vue data structure
   marking: false,
-  question: {}, // The question to answer
-  assignments: [], // Upcoming/recent assignments
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -39,23 +36,6 @@ const getters = {
 }
 
 const actions = {
-  async getUpcoming({ commit, rootState }) {
-    const path = rootState.user.teacher
-      ? '/.netlify/functions/getRecentAssignments'
-      : '/.netlify/functions/getUpcomingAssignments'
-    const url = new URL(path, this.$config.baseURL)
-    let response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error('Error getting assignments')
-    }
-    response = await response.json()
-    commit('setAssignments', response)
-  },
   async getQuestion({ state, commit, rootState }) {
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
     let response = await fetch(url, {
@@ -240,8 +220,7 @@ const actions = {
     response = await response.json()
     commit('setAssignment', response)
   },
-  async getReport({ commit, rootState, rootGetters }, assignmentId) {
-    commit('app/setLoading', true, { root: true })
+  async getReport({ commit, rootState }, assignmentId) {
     const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -255,7 +234,6 @@ const actions = {
     }
     response = await response.json()
     commit('setAssignment', response)
-    commit('app/setLoading', false, { root: true })
   },
   async getResponse({ commit, rootState }, responseId) {
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
@@ -277,37 +255,36 @@ const actions = {
 }
 
 const mutations = {
+  // State mutations xx
   setAssignment(state, data) {
     state.assignment = data
   },
   setQuestion(state, question) {
     state.question = question
   },
+  setResponse(state, response) {
+    state.response = response
+  },
   setAnswerData(state, { assignmentId, questionId }) {
     state.assignmentId = assignmentId
     state.questionId = questionId
   },
-  setCurrentTopicId(state, topicId) {
-    state.topicId = topicId
-  },
-  setResponse(state, response) {
-    state.response = response
-  },
   setResponseId(state, responseId) {
     state.responseId = responseId
-  },
-  setMarking(state, marking) {
-    state.marking = marking
   },
   setStudentIndex(state, i) {
     state.studentIndex = i
   },
-  setResponseIndex(state, i) {
-    state.responseIndex = i
-  },
   setQuestionIndex(state, i) {
     state.questionIndex = i
   },
+  setResponseIndex(state, i) {
+    state.responseIndex = i
+  },
+  setMarking(state, marking) {
+    state.marking = marking
+  },
+  // Response mutations xx
   setFlag(state, { response, flagged }) {
     response.flagged = flagged
   },
@@ -318,21 +295,12 @@ const mutations = {
     response.feedback = feedback
   },
   setTeacherMarks(state, { response, markIds }) {
-    // Reactivity issue?
-    // Mutation operates on object passed in
-    response.tm = []
-    for (const t of markIds) {
-      response.tm.push(t)
-    }
-    // response.tm = markIds
+    response.tm = markIds
   },
   setMarked(state, response) {
     response.marked = true
   },
-  setAssignments(state, assignments) {
-    state.assignments = assignments
-  },
-  // Navigate to next (1)/previous (-1) response
+  // Navigate to next(1)/previous(-1) response
   // (loop around if nec.)
   next(state, n) {
     if (n === 1) {

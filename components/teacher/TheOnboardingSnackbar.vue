@@ -21,7 +21,7 @@ export default {
         3: `Click '+ ASSIGNMENT' to browse questions.`,
         4: `Select questions for this assignment.`,
         5: `When you're ready, click '+ ASSIGN'.`,
-        6: `Click on self marks to open marking view.`,
+        6: `Click self marks to open teacher marking view.`,
       },
     }
   },

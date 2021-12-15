@@ -87,6 +87,8 @@ export default {
     // Clear store to avoid flash of old data next time
     this.$store.commit('group/setStudents', [])
     this.$store.commit('group/setGrades', [])
+    // Stop highlighting navbar
+    this.$store.commit('app/setNav', null)
     next()
   },
   layout: 'app',

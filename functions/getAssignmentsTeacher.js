@@ -39,6 +39,9 @@ exports.handler = async (event) => {
                   q.Select('ref', q.Var('instance'))
                 )
               ),
+              group: {
+                id: groupId,
+              },
               live: q.LT(
                 q.ToDate(
                   q.SubString(

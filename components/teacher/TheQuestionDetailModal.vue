@@ -1,7 +1,14 @@
 <template>
   <v-dialog v-model="dialog" scrollable max-width="740">
     <template #activator="{ on }">
-      <v-btn rounded text color="primary" class="mr-2" v-on="on">
+      <v-btn
+        rounded
+        text
+        :disabled="questionId === ''"
+        color="primary"
+        class="mr-2"
+        v-on="on"
+      >
         View Question
       </v-btn>
     </template>

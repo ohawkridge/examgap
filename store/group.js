@@ -1,8 +1,8 @@
 const getDefaultState = () => ({
+  assignments: [],
   students: [],
   grades: [],
   courses: [],
-  assignments: [],
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -37,6 +37,23 @@ const getters = {
 }
 
 const actions = {
+  async getUpcoming({ commit, rootState }) {
+    const path = rootState.user.teacher
+      ? '/.netlify/functions/getRecentAssignments'
+      : '/.netlify/functions/getUpcomingAssignments'
+    const url = new URL(path, this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error getting assignments')
+    }
+    response = await response.json()
+    commit('setAssignments', response)
+  },
   async getAssignments({ commit, rootState, rootGetters }) {
     const s = rootState.user.teacher
       ? 'getAssignmentsTeacher'
@@ -199,24 +216,24 @@ const actions = {
 }
 
 const mutations = {
-  setTarget(state, { target, groupId, studentId }) {
-    const i = state.students.findIndex((s) => s.id === studentId)
-    state.students[i].target[groupId] = target
-  },
-  removeStudents(state, studentIds) {
-    state.students = state.students.filter((o) => !studentIds.includes(o.id))
+  setAssignments(state, assignments) {
+    state.assignments = assignments
   },
   setStudents(state, students) {
     state.students = students
-  },
-  setAssignments(state, assignments) {
-    state.assignments = assignments
   },
   setGrades(state, grades) {
     state.grades = grades
   },
   setCourses(state, courses) {
     state.courses = courses
+  },
+  setTarget(state, { target, groupId, studentId }) {
+    const i = state.students.findIndex((s) => s.id === studentId)
+    state.students[i].target[groupId] = target
+  },
+  removeStudents(state, studentIds) {
+    state.students = state.students.filter((o) => !studentIds.includes(o.id))
   },
   resetState(state) {
     Object.assign(state, getDefaultState())

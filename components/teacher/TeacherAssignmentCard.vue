@@ -89,9 +89,8 @@ export default {
   },
   methods: {
     nav() {
-      console.debug('Debug', this.assignment.group.id, this.assignment.id)
-      // this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
-      // this.$router.push(`/report/${this.assignment.id}`)
+      this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
+      this.$router.push(`/report/${this.assignment.id}`)
     },
   },
 }

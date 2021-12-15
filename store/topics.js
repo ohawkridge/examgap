@@ -1,12 +1,9 @@
 const getDefaultState = () => ({
   topics: [],
-  question: {},
-  selected: [],
   questions: [],
+  question: {},
   topicId: '',
   topicName: '',
-  currentTopicIndex: 0,
-  autoCompleteTopics: [],
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -116,32 +113,21 @@ export const mutations = {
   setTopics(state, topics) {
     state.topics = topics
   },
-  setTopicId(state, topicId) {
-    state.topicId = topicId
-  },
-  incrementTopicCount(state) {
-    const topicIndex = state.topics.findIndex((x) => x.id === state.topicId)
-    state.topics[topicIndex].answered++
-  },
-  setCurrentTopicIndex(state, i) {
-    state.currentTopicIndex = i
+  setQuestions(state, questions) {
+    state.questions = questions
   },
   setQuestion(state, question) {
     state.question = question
   },
-  setQuestions(state, questions) {
-    state.questions = questions
-  },
-  setACTopics(state, topics) {
-    state.autoCompleteTopics = topics
-  },
-  updateSelected(state, questionId) {
-    state.selected.includes(questionId)
-      ? (state.selected = state.selected.filter((id) => id !== questionId))
-      : state.selected.push(questionId)
+  setTopicId(state, topicId) {
+    state.topicId = topicId
   },
   setTopicName(state, name) {
     state.topicName = name
+  },
+  incrementTopicCount(state) {
+    const topicIndex = state.topics.findIndex((x) => x.id === state.topicId)
+    state.topics[topicIndex].answered++
   },
   resetState(state) {
     Object.assign(state, getDefaultState())

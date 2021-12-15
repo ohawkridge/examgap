@@ -1,35 +1,51 @@
 <template>
-  <v-container>
+  <v-container class="pt-10">
     <v-row class="justify-center">
       <v-col cols="12" md="10">
-        <div class="d-flex justify-space-between">
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn text rounded @click="$router.go(-1)" v-on="on">
-                <font-awesome-icon
-                  icon="fa-light fa-arrow-left"
-                  class="ico-btn mr-2"
-                />
-                Back
-              </v-btn>
-            </template>
-            <span>Back</span>
-          </v-tooltip>
-          <div>
-            <div v-if="$vuetify.breakpoint.name !== 'xs'">
-              <v-btn
-                rounded
-                text
-                color="red"
-                @click="$nuxt.$emit('show-delete', assignment.id, group.id)"
-              >
-                Delete
-              </v-btn>
-              <v-btn rounded text class="ml-2" @click="$fetch()">
-                Refresh
-              </v-btn>
+        <v-card v-if="$fetchState.pending" class="rounded-lg pa-4">
+          <!-- Skeletons -->
+          <v-skeleton-loader
+            type="list-item-avatar"
+            :loading="true"
+            class="mt-3"
+            width="48%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="text"
+            :loading="true"
+            class="mt-8 ml-6"
+            width="22%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="text"
+            :loading="true"
+            class="my-2 ml-6"
+            width="22%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            v-if="true"
+            :types="{ table: 'table-thead, table-tbody@2' }"
+            type="table"
+            class="mt-8 px-6"
+          ></v-skeleton-loader>
+        </v-card>
+        <v-card v-else class="rounded-lg pa-4">
+          <v-card-title class="d-flex justify-space-between">
+            <div>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn icon class="mr-2" @click="$router.go(-1)" v-on="on">
+                    <font-awesome-icon
+                      icon="fa-light fa-arrow-left"
+                      class="ico-btn"
+                    />
+                  </v-btn>
+                </template>
+                <span>Back</span>
+              </v-tooltip>
+              {{ assignment.name }}
             </div>
-            <v-menu v-else>
+            <v-menu>
               <template #activator="{ on }">
                 <v-btn icon v-on="on">
                   <font-awesome-icon
@@ -44,164 +60,191 @@
                     Refresh
                   </v-list-item-title>
                 </v-list-item>
-                <delete-assignment-dialog
-                  v-if="!$fetchState.pending"
-                  :assignment-id="assignment.id"
-                  :group-id="group.id"
-                  type="list"
-                />
+                <v-list-item class="error--text">
+                  <v-list-item-title
+                    @click="$nuxt.$emit('show-delete', assignment.id, group.id)"
+                  >
+                    Delete
+                  </v-list-item-title>
+                </v-list-item>
               </v-list>
             </v-menu>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row class="justify-center">
-      <v-col cols="12" md="10">
-        <div class="d-flex align-center">
-          <span class="font-weight-medium fix-width">Start:</span>
-          {{ assignment.start | date }}
-        </div>
-        <div class="d-flex align-center">
-          <span class="font-weight-medium fix-width">Due:</span>
-          {{ assignment.dateDue | date }}
-        </div>
-      </v-col>
-    </v-row>
-    <v-row class="justify-center">
-      <v-col cols="12" md="10">
-        <v-skeleton-loader
-          v-if="$fetchState.pending"
-          :types="{ table: 'table-thead, table-tbody@2' }"
-          type="table"
-          class="outlined"
-        ></v-skeleton-loader>
-        <table v-else id="table" class="outlined">
-          <thead>
-            <tr>
-              <th
-                v-for="(q, i) in assignment.headers"
-                :key="i"
-                :class="i === 0 ? 'text-left' : ''"
-              >
-                <span v-if="i === 0">Username</span>
-                <v-menu v-else offset-x open-on-hover>
-                  <template #activator="{ on }">
-                    <span v-on="on">{{ `Q${i} [${q.maxMark}]` }}</span>
-                  </template>
-                  <v-card max-width="440">
-                    <v-card-text class="text-body-2">
-                      <div v-html="assignment.headers[i].text"></div>
-                      <div class="font-weight-bold text-right">
-                        [{{ q.maxMark }}]
-                      </div>
-                    </v-card-text>
-                  </v-card>
-                </v-menu>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(student, i) in assignment.students"
-              :key="i"
-              height="57px"
-            >
-              <td>
-                {{ student.name }}
-              </td>
-              <td
-                v-for="(data, j) in student.data"
-                :key="j"
-                class="text-center"
-              >
-                <!-- Formerly MarkChip.vue components -->
-                <!-- Nested values as props not working reliably -->
-                <div
-                  v-if="data[Object.keys(data)[0]].length > 0"
-                  :class="flex(data)"
-                >
-                  <!-- *** NOT ANSWERED *** -->
-                  <!-- <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div> -->
-                  <!-- Loop through responses (see note below) -->
-                  <template v-for="(response, k) in data[Object.keys(data)[0]]">
-                    <!-- *** SELF MARKED *** -->
-                    <v-tooltip v-if="!response.marked" :key="k" bottom>
-                      <template #activator="{ on }">
-                        <v-chip @click="startMarking(i, j, k)" v-on="on">
-                          {{ response.sm.length }}
-                          <font-awesome-icon
-                            icon="fa-light fa-check"
-                            class="ml-2"
-                          />
-                        </v-chip>
-                      </template>
-                      <span>Mark</span>
-                    </v-tooltip>
-                    <!-- *** TEACHER MARKED *** -->
-                    <v-tooltip v-else :key="k" bottom>
-                      <template #activator="{ on }">
-                        <v-chip
-                          :class="marginBottom(data[Object.keys(data)[0]], k)"
-                          class="green"
-                          @click="startMarking(i, j, k)"
-                          v-on="on"
+          </v-card-title>
+          <v-card-text class="text-body-1">
+            <v-container>
+              <v-row class="justify-center">
+                <v-col cols="12">
+                  <div class="d-flex align-center">
+                    <span class="font-weight-medium align-date">Start:</span>
+                    {{ assignment.start | date }}
+                  </div>
+                  <div class="d-flex align-center">
+                    <span class="font-weight-medium align-date">Due:</span>
+                    {{ assignment.dateDue | date }}
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row class="justify-center">
+                <v-col cols="12">
+                  <table id="table">
+                    <thead>
+                      <tr>
+                        <th
+                          v-for="(q, i) in assignment.headers"
+                          :key="i"
+                          :class="i === 0 ? 'text-left' : ''"
                         >
-                          {{ response.tm.length }}
-                          <font-awesome-icon
-                            v-if="response.repeat"
-                            icon="fa-light fa-repeat"
-                            class="ml-2"
-                          />
-                          <font-awesome-icon
-                            v-else
-                            icon="fa-light fa-check-double"
-                            class="ml-2"
-                          />
-                        </v-chip>
-                        <font-awesome-icon
-                          v-if="response.flagged"
-                          icon="fa-light fa-flag"
-                          class="ico-red fix-flag fa-lg"
-                        />
-                      </template>
-                      <span>Mark</span>
-                    </v-tooltip>
-                  </template>
-                </div>
-              </td>
-            </tr>
-            <tr v-if="assignment.students.length === 0">
-              <td class="text-center" :colspan="assignment.headers.length">
-                <p class="text-body-2 mt-4">No students yet</p>
-                <p>
-                  <v-btn
-                    color="primary"
-                    rounded
-                    elevation="0"
-                    @click="$nuxt.$emit('show-invite')"
+                          <span v-if="i === 0">Username</span>
+                          <v-menu v-else offset-x open-on-hover>
+                            <template #activator="{ on }">
+                              <span v-on="on">{{
+                                `Q${i} [${q.maxMark}]`
+                              }}</span>
+                            </template>
+                            <v-card max-width="440">
+                              <v-card-text class="text-body-2">
+                                <div v-html="assignment.headers[i].text"></div>
+                                <div class="font-weight-bold text-right">
+                                  [{{ q.maxMark }}]
+                                </div>
+                              </v-card-text>
+                            </v-card>
+                          </v-menu>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="(student, i) in assignment.students"
+                        :key="i"
+                        height="57px"
+                      >
+                        <td>
+                          {{ student.name }}
+                        </td>
+                        <td
+                          v-for="(data, j) in student.data"
+                          :key="j"
+                          class="text-center"
+                        >
+                          <!-- Formerly MarkChip.vue components -->
+                          <!-- Nested values as props not working reliably -->
+                          <div
+                            v-if="data[Object.keys(data)[0]].length > 0"
+                            :class="flex(data)"
+                          >
+                            <!-- *** NOT ANSWERED *** -->
+                            <!-- <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div> -->
+                            <!-- Loop through responses (see note below) -->
+                            <template
+                              v-for="(response, k) in data[
+                                Object.keys(data)[0]
+                              ]"
+                            >
+                              <!-- *** SELF MARKED *** -->
+                              <v-tooltip
+                                v-if="!response.marked"
+                                :key="k"
+                                bottom
+                              >
+                                <template #activator="{ on }">
+                                  <v-chip
+                                    @click="startMarking(i, j, k)"
+                                    v-on="on"
+                                  >
+                                    {{ response.sm.length }}
+                                    <font-awesome-icon
+                                      icon="fa-light fa-check"
+                                      class="ml-2"
+                                    />
+                                  </v-chip>
+                                </template>
+                                <span>Mark</span>
+                              </v-tooltip>
+                              <!-- *** TEACHER MARKED *** -->
+                              <v-tooltip v-else :key="k" bottom>
+                                <template #activator="{ on }">
+                                  <v-chip
+                                    :class="
+                                      marginBottom(
+                                        data[Object.keys(data)[0]],
+                                        k
+                                      )
+                                    "
+                                    class="green"
+                                    @click="startMarking(i, j, k)"
+                                    v-on="on"
+                                  >
+                                    {{ response.tm.length }}
+                                    <font-awesome-icon
+                                      v-if="response.repeat"
+                                      icon="fa-light fa-repeat"
+                                      class="ml-2"
+                                    />
+                                    <font-awesome-icon
+                                      v-else
+                                      icon="fa-light fa-check-double"
+                                      class="ml-2"
+                                    />
+                                  </v-chip>
+                                  <span class="error--text">
+                                    <font-awesome-icon
+                                      v-if="response.flagged"
+                                      icon="fa-light fa-flag"
+                                      class="fix-flag"
+                                    />
+                                  </span>
+                                </template>
+                                <span>Mark</span>
+                              </v-tooltip>
+                            </template>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr v-if="assignment.students.length === 0">
+                        <td
+                          class="text-center"
+                          :colspan="assignment.headers.length"
+                        >
+                          <p class="text-body-2 mt-4">No students yet</p>
+                          <p>
+                            <v-btn
+                              color="primary"
+                              rounded
+                              elevation="0"
+                              @click="$nuxt.$emit('show-invite')"
+                            >
+                              Invite students</v-btn
+                            >
+                          </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    class="d-flex justify-end align-center pa-4 text-caption"
                   >
-                    Invite students</v-btn
-                  >
-                </p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="d-flex justify-end align-center pa-4 text-caption">
-          <font-awesome-icon icon="fa-light fa-check" class="fa-sm mr-1" />
-          Self mark&nbsp;&nbsp;
-          <font-awesome-icon
-            icon="fa-light fa-check-double"
-            class="fa-sm mr-1"
-          />
-          Teacher mark&nbsp;&nbsp;
-          <font-awesome-icon
-            icon="fa-light fa-arrows-repeat"
-            class="fa-sm mr-1"
-          />
-          Reassigned
-        </div>
+                    <font-awesome-icon
+                      icon="fa-light fa-check"
+                      class="fa-sm mr-1"
+                    />
+                    Self mark&nbsp;&nbsp;
+                    <font-awesome-icon
+                      icon="fa-light fa-check-double"
+                      class="fa-sm mr-1"
+                    />
+                    Teacher mark&nbsp;&nbsp;
+                    <font-awesome-icon
+                      icon="fa-light fa-arrows-repeat"
+                      class="fa-sm mr-1"
+                    />
+                    Reassigned
+                  </div>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
     <!-- Marking dialog xx -->
@@ -442,6 +485,7 @@ export default {
     ...mapState({
       onboardStep: (state) => state.app.onboardStep,
       assignment: (state) => state.assignment.assignment,
+      assignments: (state) => state.group.assignments,
       studentIndex: (state) => state.assignment.studentIndex,
       questionIndex: (state) => state.assignment.questionIndex,
       responseIndex: (state) => state.assignment.responseIndex,
@@ -495,11 +539,10 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', this.assignment.name)
-    // TODO Onboard if nec.
-    // if (this.group.assignments.length === 1) {
-    //   this.$store.commit('app/setOnboardStep', 6)
-    // }
+    // Onboard if nec.
+    if (this.assignments.length === 1) {
+      this.$store.commit('app/setOnboardStep', 6)
+    }
   },
   methods: {
     color(n, max) {
@@ -633,16 +676,9 @@ export default {
 
 <style scoped>
 table {
-  background-color: #fff;
-  border: 1px solid #d2d2d2 !important;
-  border-radius: 4px;
   border-collapse: collapse;
   overflow-x: scroll;
   width: 100%;
-}
-
-.outlined {
-  border: 1px solid #d2d2d2 !important;
 }
 
 td,
@@ -679,14 +715,5 @@ div.v-list {
   top: 4px;
   margin-left: 8px;
   margin-right: -30px;
-}
-
-.fix-width {
-  width: 56px;
-}
-
-.ico-btn {
-  height: 24px;
-  width: 24px;
 }
 </style>

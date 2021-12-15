@@ -34,13 +34,6 @@ const getters = {
     }
     return found
   },
-  // Filter out post-dated assignments
-  assignments: (state, getters) => {
-    if (getters.activeGroup === undefined) return []
-    return getters.activeGroup.assignments.filter(
-      (a) => a.start === 'N/A' || new Date(a.start) <= new Date()
-    )
-  },
   // TheCopyStudentDialog.vue
   // Return a list of the user's groups formatted for v-select
   selectGroups: (state, getters) => {
@@ -74,6 +67,23 @@ const actions = {
       }
       commit('setQuote', await response.json())
     }
+  },
+  async getArchived({ commit, rootState }) {
+    const url = new URL(
+      '/.netlify/functions/getArchivedClasses',
+      this.$config.baseURL
+    )
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error getting archived classes')
+    }
+    response = await response.json()
+    commit('setArchivedGroups', response)
   },
   async getUser({ commit }, { username, password }) {
     commit('app/setLoading', true, { root: true })
@@ -159,8 +169,6 @@ const actions = {
     commit('setActiveGroupId', -1)
     // Progress onboarding
     commit('app/setOnboardStep', 2, { root: true })
-    // If on Archive, set back to Home
-    commit('app/setTab', true, { root: true })
   },
   async updateGroup({ commit, rootState, getters }, { courseId, groupName }) {
     const url = new URL('/.netlify/functions/updateGroup', this.$config.baseURL)
@@ -182,8 +190,6 @@ const actions = {
     commit('setNameAndCourse', { group, groupName, course })
     // Update page title
     commit('app/setPageTitle', groupName, { root: true })
-    // Clear pre-fetched topic data
-    commit('topics/resetState', null, { root: true })
   },
   async createAssignment({ commit, getters }, obj) {
     const url = new URL(
@@ -198,10 +204,6 @@ const actions = {
       throw new Error(`Error creating assignment ${newAssObj.status}`)
     }
     newAssObj = await newAssObj.json()
-    // Make 'ASSIGNMENTS' 'UPCOMING' active so new
-    // assignment is visible when we direct to _group.vue
-    commit('app/setUpcoming', 0, { root: true })
-    commit('app/setTab', 0, { root: true })
     commit('addAssignment', { newAssObj, group: getters.activeGroup })
   },
   async deleteAssignment({ commit, rootState, getters }, assignmentId) {
@@ -316,6 +318,9 @@ const mutations = {
     // Update active group's properties
     group.name = groupName
     group.course = { ...course }
+  },
+  setArchivedGroups(state, groups) {
+    state.archivedGroups = groups
   },
   setArchived(state) {
     // Find group in groups array

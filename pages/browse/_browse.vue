@@ -1,37 +1,37 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="3" class="d-flex justify-space-between"> </v-col>
-      <v-col cols="12" md="4" class="d-flex justify-end">
-        <v-btn rounded text color="primary" @click="newQuestion()">
+      <v-col cols="12" class="d-flex justify-space-between">
+        <v-btn rounded outlined color="primary" @click="newQuestion()">
           <font-awesome-icon icon="fa-light fa-plus" class="mr-2" />
           New Question
         </v-btn>
-      </v-col>
-      <v-col cols="12" md="5" class="d-flex justify-end">
-        <v-btn text color="tertiary" rounded @click="selection = []">
-          Clear
-        </v-btn>
-        <v-tooltip bottom>
-          <template #activator="{ on }">
-            <v-btn
-              color="primary"
-              :disabled="selection.length == 0"
-              elevation="0"
-              rounded
-              class="ml-2"
-              v-on="on"
-              @click="$nuxt.$emit('create-ass')"
+        <div>
+          <the-question-detail-modal :question="question" />
+          <v-btn text rounded color="primary" @click="selection = []">
+            Clear
+          </v-btn>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                color="primary"
+                :disabled="selection.length == 0"
+                elevation="0"
+                rounded
+                class="ml-2"
+                v-on="on"
+                @click="$nuxt.$emit('create-ass')"
+              >
+                Assign ({{ selection.length }})
+              </v-btn>
+            </template>
+            <span
+              >Assign {{ selection.length }} question{{
+                selection.length | pluralize
+              }}</span
             >
-              Assign ({{ selection.length }})
-            </v-btn>
-          </template>
-          <span
-            >Assign {{ selection.length }} question{{
-              selection.length | pluralize
-            }}</span
-          >
-        </v-tooltip>
+          </v-tooltip>
+        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -100,18 +100,14 @@
         </v-list>
       </v-col>
       <!-- Preview xx -->
-      <v-col cols="12" md="5" class="pt-5">
+      <v-col cols="12" md="5">
         <template v-if="question">
           <div class="text-body-2" v-html="question.text"></div>
-          <div class="d-flex justify-end mt-4">
+          <div class="d-flex justify-end">
             <v-chip outlined color="tertiary" small label>
               {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
             </v-chip>
           </div>
-          <the-question-detail-modal
-            v-if="question"
-            :question-id="question.id"
-          />
         </template>
         <div
           v-else

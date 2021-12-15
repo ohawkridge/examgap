@@ -1,15 +1,16 @@
 <template>
-  <v-container>
-    <!-- Empty state xx -->
-    <v-row
-      v-if="groups.length === 0 && !$fetchState.pending"
-      style="height: 60vh"
-    >
+  <v-container
+    v-if="!$fetchState.pending && groups.length === 0"
+    id="nav-fix"
+    class="fill-height"
+  >
+    <!-- Empty state -->
+    <v-row>
       <v-col cols="12" class="d-flex justify-center align-center">
         <div class="text-center">
           <v-img
             src="/no-class.svg"
-            max-width="180"
+            width="180"
             contain
             class="mx-auto"
             alt="Mortar board illustrations"
@@ -22,7 +23,9 @@
         </div>
       </v-col>
     </v-row>
-    <v-row v-else class="mt-1">
+  </v-container>
+  <v-container v-else class="pt-10">
+    <v-row>
       <v-col v-for="(group, i) in groups" :key="i" cols="12" md="4">
         <v-card class="archived" hover outlined @click="nav(group.id)">
           <v-card-title>
@@ -46,11 +49,10 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'Archive',
   layout: 'app',
   async fetch() {
     try {
-      await this.$store.dispatch('user/getGroups', false)
+      await this.$store.dispatch('user/getArchived')
     } catch (err) {
       console.error(err)
       this.$snack.showMessage({
