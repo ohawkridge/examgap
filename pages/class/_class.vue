@@ -11,7 +11,8 @@
       <v-tab style="text-transform: capitalize"> Revision </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
-      <v-tab-item style="background-color: #fbfcff">
+      <!-- <v-tab-item style="background-color: #fbfcff"> -->
+      <v-tab-item>
         <!-- Assignments xx -->
         <v-container class="pt-10">
           <v-row class="justify-center">
@@ -90,7 +91,7 @@ export default {
   },
   layout: 'app',
   async fetch() {
-    console.log(
+    console.debug(
       '%c' + 'Fetch',
       'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
     )
@@ -101,7 +102,7 @@ export default {
     ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({
       assignments: (state) => state.group.assignments,
-      topics: (state) => state.group.revisionTopics,
+      topics: (state) => state.topics.topics,
     }),
     // Remember tab
     tab: {

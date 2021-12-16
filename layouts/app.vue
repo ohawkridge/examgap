@@ -1,5 +1,5 @@
 <template>
-  <v-app :dark="$store.state.app.darkMode">
+  <v-app :dark="$vuetify.theme.dark">
     <v-navigation-drawer
       v-model="drawer"
       :color="$vuetify.theme.themes.light.background"
@@ -29,6 +29,14 @@
           active-class="bold-nav"
           color="primary"
         >
+          <v-list-item v-if="!teacher" nuxt to="/home">
+            <v-list-item-icon class="d-flex justify-center align-center">
+              <font-awesome-icon icon="fa-light fa-house" class="fa-lg" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> Home </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-subheader> Classes </v-subheader>
           <v-list-item
             v-for="(group, i) in groups"
@@ -86,9 +94,16 @@
           <div id="headway" class="pr-2"></div>
           <v-tooltip bottom>
             <template #activator="{ on }">
-              <v-btn icon class="mr-2" @click="darkMode = !darkMode" v-on="on">
+              <v-btn
+                icon
+                class="mr-2"
+                @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+                v-on="on"
+              >
                 <font-awesome-icon
-                  :icon="`fa-light ${darkMode ? 'fa-sun' : 'fa-moon'}`"
+                  :icon="`fa-light ${
+                    $vuetify.theme.dark ? 'fa-sun' : 'fa-moon'
+                  }`"
                   class="ico-btn"
                 />
               </v-btn>
@@ -119,10 +134,9 @@
         </div>
       </div>
     </v-app-bar>
-    <v-main :style="`background-color: ${color}`">
+    <v-main>
       <nuxt />
       <the-snackbar />
-      <the-loading-overlay />
       <template v-if="teacher">
         <the-onboarding-snackbar />
         <the-create-class-dialog />
@@ -142,7 +156,6 @@ import TheSnackbar from '@/components/common/TheSnackbar'
 import TheFooter from '@/components/common/TheFooter'
 import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
 import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
-import TheLoadingOverlay from '~/components/common/TheLoadingOverlay.vue'
 import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 import TheNewAssignmentDialog from '~/components/teacher/TheNewAssignmentDialog.vue'
 import TheJoinClassDialog from '~/components/student/TheJoinClassDialog.vue'
@@ -154,7 +167,6 @@ export default {
     TheSnackbar,
     TheCreateClassDialog,
     TheOnboardingSnackbar,
-    TheLoadingOverlay,
     TheFooter,
     TheDeleteAssignmentDialog,
     TheNewAssignmentDialog,
@@ -173,23 +185,12 @@ export default {
       groups: (state) => state.user.groups,
       pageTitle: (state) => state.app.pageTitle,
     }),
-    color() {
-      return this.darkMode ? '#191c1e' : '#fbfcff'
-    },
     navbar: {
       get() {
         return this.$store.state.app.navbar
       },
       set(val) {
         this.$store.commit('app/setNav', val)
-      },
-    },
-    darkMode: {
-      get() {
-        return this.$store.state.app.darkMode
-      },
-      set(val) {
-        this.$store.commit('app/setDarkMode', val)
       },
     },
   },

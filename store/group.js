@@ -38,10 +38,12 @@ const getters = {
 
 const actions = {
   async getUpcoming({ commit, rootState }) {
+    // For teachers, get recent assignments across all groups
+    // For students, only get upcoming assignments
     const path = rootState.user.teacher
-      ? '/.netlify/functions/getRecentAssignments'
-      : '/.netlify/functions/getUpcomingAssignments'
-    const url = new URL(path, this.$config.baseURL)
+      ? 'RecentAssignments'
+      : 'UpcomingAssignments'
+    const url = new URL(`/.netlify/functions/get${path}`, this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,

@@ -26,7 +26,6 @@
                   :block="$vuetify.breakpoint.name === 'xs'"
                   color="#ffd9dc"
                   class="mb-4"
-                  :class="$vuetify.breakpoint.name !== 'xs' ? 'mr-4' : ''"
                   @click="newAssignment(group)"
                   v-on="on"
                 >
@@ -93,11 +92,10 @@
               rounded
               :block="$vuetify.breakpoint.name === 'xs'"
               color="#ffd9dc"
-              class="mb-4"
-              :class="$vuetify.breakpoint.name !== 'xs' ? 'mr-4' : ''"
               @click="revise(group.id)"
             >
-              {{ group.course.name }}
+              <!-- {{ group.course.name }} -->
+              COURSE
             </v-btn>
           </template>
         </v-col>
@@ -151,7 +149,7 @@ export default {
   layout: 'app',
   async fetch() {
     await this.$store.dispatch('user/getQuote')
-    await this.$store.dispatch('assignment/getUpcoming')
+    await this.$store.dispatch('group/getUpcoming')
   },
   computed: {
     ...mapGetters({
@@ -161,12 +159,11 @@ export default {
       teacher: (state) => state.user.teacher,
       groups: (state) => state.user.groups,
       quote: (state) => state.user.quote,
-      assignments: (state) => state.assignment.assignments,
+      assignments: (state) => state.group.assignments,
     }),
   },
   mounted() {
     this.$store.commit('app/setPageTitle', 'Home')
-    this.$store.commit('app/setLoading', false)
   },
   methods: {
     newAssignment(group) {

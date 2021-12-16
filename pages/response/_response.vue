@@ -3,7 +3,7 @@
     <v-row class="justify-center">
       <v-col cols="12" md="10">
         <!-- Skeletons -->
-        <v-card v-if="$fetchState.pending" class="rounded-lg pa-4">
+        <v-card v-if="$fetchState.pending" class="rounded-lg">
           <v-skeleton-loader
             type="image"
             class="float-right ma-4"
@@ -40,25 +40,7 @@
             width="50%"
           ></v-skeleton-loader>
         </v-card>
-        <v-card v-else class="rounded-lg pa-4">
-          <v-card-title>
-            <v-tooltip bottom>
-              <template #activator="{ on }">
-                <v-btn
-                  icon
-                  nuxt
-                  :to="`/assignment/${response.assignmentId}`"
-                  v-on="on"
-                >
-                  <font-awesome-icon
-                    icon="fa-light fa-arrow-left"
-                    class="ico-btn"
-                  />
-                </v-btn>
-              </template>
-              <span>Back</span>
-            </v-tooltip>
-          </v-card-title>
+        <v-card v-else class="rounded-lg">
           <v-card-text>
             <v-container>
               <v-row>
@@ -116,24 +98,7 @@
                               <span>You</span>
                             </v-tooltip>
                           </th>
-                          <th>
-                            <v-tooltip bottom>
-                              <template #activator="{ on }">
-                                <v-chip
-                                  :color="color(accuracy)"
-                                  label
-                                  v-on="on"
-                                >
-                                  <font-awesome-icon
-                                    icon="fa-light fa-bullseye-pointer"
-                                    class="fa-lg mr-2"
-                                  />
-                                  {{ accuracy }}%
-                                </v-chip>
-                              </template>
-                              <span>Marking accuracy</span>
-                            </v-tooltip>
-                          </th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -160,21 +125,51 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td class="text-center font-weight-bold">
+                          <td
+                            class="text-center"
+                            :class="
+                              color(
+                                response.tm.length,
+                                response.question.maxMark
+                              )
+                            "
+                          >
                             {{ response.tm.length }}
                           </td>
-                          <td class="text-center font-weight-bold">
+                          <td
+                            class="text-center"
+                            :class="
+                              color(
+                                response.sm.length,
+                                response.question.maxMark
+                              )
+                            "
+                          >
                             {{ response.sm.length }}
                           </td>
-                          <td
-                            v-if="response.question.guidance"
-                            v-html="response.question.guidance"
-                          ></td>
-                          <td v-else colspan="3">None</td>
+                          <td></td>
                         </tr>
                       </tfoot>
                     </template>
                   </v-simple-table>
+                  <div
+                    v-if="response.question.guidance"
+                    class="mt-3"
+                    v-html="response.question.guidance"
+                  ></div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" class="d-flex justify-end">
+                  <v-btn
+                    elevation="0"
+                    rounded
+                    color="primary"
+                    nuxt
+                    :to="`/assignment/${response.assignmentId}`"
+                  >
+                    Done
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -226,3 +221,17 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.red {
+  background-color: red;
+}
+
+.orange {
+  background-color: orange;
+}
+
+.green {
+  background-color: green;
+}
+</style>

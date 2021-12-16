@@ -45,10 +45,10 @@ const actions = {
       method: 'POST',
     })
     if (!topics.ok) {
-      throw new Error(`Error fetching topics ${topics.status}`)
+      throw new Error('Error fetching topics')
     }
     topics = await topics.json()
-    commit('setACTopics', topics)
+    commit('setTopics', topics)
   },
   async getQuestion({ commit, rootState }, questionId) {
     // Clear previous question
@@ -68,7 +68,6 @@ const actions = {
     commit('setQuestion', response)
   },
   async getTopics({ commit, rootState }, courseId) {
-    commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getTopics', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -83,7 +82,6 @@ const actions = {
     }
     response = await response.json()
     commit('setTopics', response)
-    commit('app/setLoading', false, { root: true })
   },
   async getQuestions({ commit, rootState, rootGetters }, topicId) {
     const url = new URL(

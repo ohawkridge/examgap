@@ -63,6 +63,7 @@ import {
   faUsers,
   faSun,
   faMoon,
+  faHouse,
 } from '@fortawesome/pro-light-svg-icons'
 import { faCircleCheck as fasCircleCheck } from '@fortawesome/free-solid-svg-icons'
 
@@ -130,7 +131,8 @@ library.add(
   fasCircleCheck,
   faUsers,
   faSun,
-  faMoon
+  faMoon,
+  faHouse
 )
 
 Vue.use(Vuetify)

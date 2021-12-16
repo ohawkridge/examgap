@@ -3,7 +3,6 @@ const getDefaultState = () => ({
   onboardStep: 0,
   loading: false,
   pageTitle: 'Home',
-  darkMode: false,
   navbar: null,
 })
 
@@ -23,14 +22,8 @@ const mutations = {
   setOnboardStep(state, step) {
     state.onboardStep = step
   },
-  setLoading(state, loading) {
-    state.loading = loading
-  },
   setPageTitle(state, title) {
     state.pageTitle = title
-  },
-  setDarkMode(state, val) {
-    state.darkMode = val
   },
   setNav(state, val) {
     state.navbar = val
