@@ -94,8 +94,7 @@
               color="#ffd9dc"
               @click="revise(group.id)"
             >
-              <!-- {{ group.course.name }} -->
-              COURSE
+              {{ group.course.name }}
             </v-btn>
           </template>
         </v-col>
@@ -113,7 +112,18 @@
       </v-row>
       <v-row class="justify-center">
         <v-col cols="12" md="8">
-          <template v-if="assignments.length === 0">
+          <!-- Skeletons xx -->
+          <template v-if="$fetchState.pending">
+            <assignment-card-loader v-for="i in 3" :key="i" />
+          </template>
+          <student-assignment-card
+            v-for="(assignment, i) in assignments"
+            v-else-if="!$fetchState.pending && assignments.length > 0"
+            :key="i"
+            :assignment="assignment"
+          />
+          <!-- Empty state xx -->
+          <template v-else>
             <v-img
               src="/no-task.svg"
               width="180"
@@ -124,12 +134,6 @@
             />
             <p class="text-center mt-4">No upcoming assignments</p>
           </template>
-          <student-assignment-card
-            v-for="(assignment, i) in assignments"
-            v-else
-            :key="i"
-            :assignment="assignment"
-          />
         </v-col>
       </v-row>
     </template>
@@ -140,14 +144,20 @@
 import { mapState, mapGetters } from 'vuex'
 import TeacherAssignmentCard from '~/components/teacher/TeacherAssignmentCard.vue'
 import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
+import AssignmentCardLoader from '~/components/student/AssignmentCardLoader.vue'
 
 export default {
   components: {
     TeacherAssignmentCard,
     StudentAssignmentCard,
+    AssignmentCardLoader,
   },
   layout: 'app',
   async fetch() {
+    console.debug(
+      '%c' + 'Fetch',
+      'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
+    )
     await this.$store.dispatch('user/getQuote')
     await this.$store.dispatch('group/getUpcoming')
   },
@@ -171,6 +181,7 @@ export default {
       this.$router.push(`/browse/${group.course.id}`)
     },
     revise(groupId) {
+      this.$store.commit('user/setActiveGroupId', groupId)
       this.$store.commit('app/setTab', 1)
       this.$router.push(`/class/${groupId}`)
     },
@@ -183,5 +194,11 @@ export default {
 .section-icon {
   width: 24px;
   margin-right: 16px;
+}
+
+/* align right-floated skeleton */
+.chip-fix {
+  position: relative;
+  top: -12px;
 }
 </style>

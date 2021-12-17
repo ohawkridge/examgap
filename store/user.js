@@ -11,7 +11,7 @@ const getDefaultState = () => ({
   // Teacher properties
   school: 'N/A',
   subscribed: false,
-  subscriptionExpires: '',
+  subscriptionExpires: 'N/A',
   // Student properties
   examMode: false,
   reviseExamMode: false,
@@ -23,6 +23,9 @@ const state = getDefaultState()
 
 const getters = {
   expires: (state) => {
+    if (!state.teacher) {
+      return 'N/A'
+    }
     const d = new Date(state.subscriptionExpires['@ts'].substring(0, 10))
     return d.toString().substring(0, 15)
   },
@@ -86,7 +89,6 @@ const actions = {
     commit('setArchivedGroups', response)
   },
   async getUser({ commit }, { username, password }) {
-    commit('app/setLoading', true, { root: true })
     const url = new URL('/.netlify/functions/getUser', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -100,7 +102,6 @@ const actions = {
     }
     response = await response.json()
     commit('setUser', response)
-    commit('app/setLoading', false, { root: true })
   },
   async archiveGroup({ commit, rootState, getters }) {
     const group = getters.activeGroup
@@ -266,10 +267,10 @@ const mutations = {
     state.groups = data.groups
     // Teacher properties
     if (data.teacher) {
-      state.subscriptionDays = data.subscriptionDays
       state.school = data.school
-      state.subscribed = data.subscribed
       state.subscriptionExpires = data.subscriptionExpires
+      state.subscriptionDays = data.subscriptionDays
+      state.subscribed = data.subscribed
     } else {
       // Student properties
       state.examMode = data.examMode

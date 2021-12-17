@@ -45,6 +45,10 @@ exports.handler = async (event) => {
                   ),
                   q.Select('school', q.Var('usr'))
                 ),
+                subscriptionExpires: q.Select(
+                  'subscriptionExpires',
+                  q.Var('usr')
+                ),
                 subscriptionDays: q.TimeDiff(
                   q.Now(),
                   q.Select('subscriptionExpires', q.Var('usr')),

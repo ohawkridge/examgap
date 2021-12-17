@@ -3,7 +3,7 @@
     <v-tabs
       v-model="tab"
       align-with-title
-      :background-color="$vuetify.theme.themes.light.background"
+      background-color="transparent"
       style="border-bottom: 1px solid #d2d2d2 !important"
       color="secondary"
     >
@@ -11,42 +11,14 @@
       <v-tab style="text-transform: capitalize"> Revision </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
-      <!-- <v-tab-item style="background-color: #fbfcff"> -->
-      <v-tab-item>
+      <v-tab-item :style="`background-color: ${bgColor}`">
         <!-- Assignments xx -->
         <v-container class="pt-10">
           <v-row class="justify-center">
             <v-col class="12" md="8">
-              <!-- Skeletons -->
+              <!-- Skeletons xx -->
               <template v-if="$fetchState.pending">
-                <v-card
-                  v-for="i in 3"
-                  :key="i"
-                  elevation="0"
-                  class="rounded-lg pa-4 mb-6"
-                >
-                  <v-skeleton-loader
-                    :loading="true"
-                    type="heading"
-                    class="my-3"
-                  ></v-skeleton-loader>
-                  <v-skeleton-loader
-                    :loading="true"
-                    type="text"
-                    width="34%"
-                  ></v-skeleton-loader>
-                  <v-skeleton-loader
-                    :loading="true"
-                    type="text"
-                    width="35%"
-                    class="mt-4"
-                  ></v-skeleton-loader>
-                  <v-skeleton-loader
-                    :loading="true"
-                    type="text"
-                    width="35%"
-                  ></v-skeleton-loader>
-                </v-card>
+                <assignment-card-loader v-for="i in 4" :key="i" />
               </template>
               <student-assignment-card
                 v-for="(assignment, i) in assignments"
@@ -59,7 +31,7 @@
           </v-row>
         </v-container>
       </v-tab-item>
-      <v-tab-item style="background-color: #fbfcff">
+      <v-tab-item :style="`background-color: ${bgColor}`">
         <v-container class="pt-10">
           <v-row class="justify-center">
             <v-col cols="12" md="10">
@@ -82,12 +54,14 @@ import { mapState, mapGetters } from 'vuex'
 import RevisionTopicCard from '~/components/student/RevisionTopicCard.vue'
 import StudentAssignmentCard from '~/components/student/StudentAssignmentCard.vue'
 import TheRevisionModeDialog from '~/components/student/TheRevisionModeDialog.vue'
+import AssignmentCardLoader from '~/components/student/AssignmentCardLoader.vue'
 
 export default {
   components: {
     StudentAssignmentCard,
     RevisionTopicCard,
     TheRevisionModeDialog,
+    AssignmentCardLoader,
   },
   layout: 'app',
   async fetch() {
@@ -104,6 +78,11 @@ export default {
       assignments: (state) => state.group.assignments,
       topics: (state) => state.topics.topics,
     }),
+    bgColor() {
+      return this.$vuetify.theme.dark
+        ? this.$vuetify.theme.themes.dark.background
+        : this.$vuetify.theme.themes.light.background
+    },
     // Remember tab
     tab: {
       get() {

@@ -134,7 +134,7 @@
         </div>
       </div>
     </v-app-bar>
-    <v-main>
+    <v-main :style="`background-color: ${bgColor}`">
       <nuxt />
       <the-snackbar />
       <template v-if="teacher">
@@ -185,6 +185,11 @@ export default {
       groups: (state) => state.user.groups,
       pageTitle: (state) => state.app.pageTitle,
     }),
+    bgColor() {
+      return this.$vuetify.theme.dark
+        ? this.$vuetify.theme.themes.dark.background
+        : this.$vuetify.theme.themes.light.background
+    },
     navbar: {
       get() {
         return this.$store.state.app.navbar
