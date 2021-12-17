@@ -195,10 +195,4 @@ export default {
   width: 24px;
   margin-right: 16px;
 }
-
-/* align right-floated skeleton */
-.chip-fix {
-  position: relative;
-  top: -12px;
-}
 </style>

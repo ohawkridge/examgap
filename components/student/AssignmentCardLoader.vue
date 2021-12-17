@@ -20,7 +20,7 @@
     <v-skeleton-loader
       :loading="true"
       type="chip"
-      class="float-right chip-fix"
+      class="float-right fc"
     ></v-skeleton-loader>
     <v-skeleton-loader
       :loading="true"
@@ -31,4 +31,10 @@
   </v-sheet>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* align right-floated skeleton */
+.fc {
+  position: relative;
+  top: -12px;
+}
+</style>
