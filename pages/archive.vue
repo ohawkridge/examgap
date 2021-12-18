@@ -17,7 +17,7 @@
           />
           <p class="mt-4">No archived classes</p>
           <p>
-            Choose an active class from the sidebar or
+            Choose an active class from the menu or
             <nuxt-link to="/home">go home</nuxt-link>.
           </p>
         </div>

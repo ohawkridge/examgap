@@ -1,11 +1,5 @@
 <template>
-  <v-card
-    class="mb-6 rounded-lg outline"
-    outlined
-    hover
-    color="#ffffff"
-    @click="nav()"
-  >
+  <v-card class="mb-6 rounded-lg" hover @click="nav()">
     <v-card-title class="d-flex justify-space-between">
       {{ assignment.name }}
     </v-card-title>
@@ -23,7 +17,7 @@
           >{{ assignment.dateDue | date }}
         </div>
       </div>
-      <v-chip color="primary" outlined label small>
+      <v-chip color="tertiary" outlined label small>
         {{ assignment.numQuestions }} question{{
           assignment.numQuestions | pluralize
         }}

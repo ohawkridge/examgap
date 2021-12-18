@@ -57,11 +57,6 @@ span.v-chip.theme--light.green {
   }
 }
 
-/* outlined card */
-.outline {
-  border-color: #71787d !important;
-}
-
 /* preserve line-breaks in answers */
 .breaks {
   white-space: pre-wrap;

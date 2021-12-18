@@ -3,21 +3,15 @@
 // The variables you want to modify
 // $font-size-root: 20px;
 
-// https://colourcontrast.cc/0099cc/18191a
-.v-application .text-h1,
-.text-h2,
-.text-h3,
-.text-h4,
-.text-h5,
-.text-h6 {
-  color: #191c1e;
-}
+// N.B. Don't override text heading colours
+// (this will break light/dark mode
 
 // Don't underline links
 a:link {
   text-decoration: none;
 }
 
+// Don't capitalise buttons
 $btn-text-transform: 'capitalize';
 
 // Stop svg icons appearing massive until svg-core css is loaded

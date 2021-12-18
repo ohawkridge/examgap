@@ -60,7 +60,7 @@
           </template>
         </v-text-field>
         <the-subscribe-dialog v-if="teacher" />
-        <v-divider class="my-10" />
+        <v-divider class="mt-7 mb-12" />
         <div class="text-h5 d-flex justify-space-between">Password</div>
         <p class="font-weight-light mb-9">Update your password</p>
         <v-form ref="form">
@@ -82,7 +82,6 @@
             validate-on-blur
             outlined
           ></v-text-field>
-          <small>*Indicates required field</small>
           <v-btn
             color="primary"
             block
@@ -94,6 +93,40 @@
             >Update Password</v-btn
           >
         </v-form>
+        <v-divider class="mt-14 mb-12" />
+        <div class="text-h5 d-flex justify-space-between">Appearance</div>
+        <p class="font-weight-light mb-9">Choose how Examgap looks</p>
+        <div>
+          <v-radio-group v-model="mode" mandatory>
+            <v-radio
+              value="light"
+              class="mb-4"
+              @click="$vuetify.theme.dark = false"
+            >
+              <template #label>
+                <div class="ml-2">
+                  <font-awesome-icon
+                    icon="fa-light fa-sun"
+                    class="mr-2 fa-lg"
+                  />
+                  Day theme
+                </div>
+              </template>
+            </v-radio>
+            <v-radio value="dark" @click="$vuetify.theme.dark = true">
+              <template #label>
+                <div class="ml-2">
+                  <font-awesome-icon
+                    icon="fa-light fa-moon"
+                    class="mr-2 fa-lg"
+                  />
+
+                  Night theme
+                </div>
+              </template>
+            </v-radio>
+          </v-radio-group>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -114,6 +147,7 @@ export default {
       pass1: '',
       pass2: '',
       loading: false,
+      mode: 'light',
       rules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 6) || 'Password must be at least 6 characters',

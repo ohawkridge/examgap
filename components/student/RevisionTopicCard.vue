@@ -1,6 +1,9 @@
 <template>
   <v-hover v-slot="{ hover }">
     <v-card outlined class="rounded-lg outlined" hover @click="revise()">
+      <v-overlay absolute :value="true">
+        <font-awesome-icon icon="fa-light fa-lock-keyhole" class="fa-3x" />
+      </v-overlay>
       <v-img
         src="/t/263858534213485067.jpeg"
         height="120px"

@@ -1,11 +1,5 @@
 <template>
-  <v-card
-    class="mb-6 rounded-lg outline"
-    outlined
-    hover
-    color="#ffffff"
-    @click="nav()"
-  >
+  <v-card class="mb-6 rounded-lg" hover @click="nav()">
     <v-card-title class="d-flex text-h6 justify-space-between">
       {{ assignment.name }}
       <v-menu offset-y>
@@ -40,20 +34,15 @@
         </div>
       </div>
       <div class="d-flex align-end">
-        <v-chip label color="#c1e8ff" small class="mr-3">
-          <!-- TODO Qs on mobile -->
-          <span class="xy">
-            {{ assignment.numQuestions }} Q{{
-              assignment.numQuestions | pluralize
-            }}
-          </span>
+        <v-chip label color="tertiary" outlined small class="mr-3">
+          {{ assignment.numQuestions }} Q{{
+            assignment.numQuestions | pluralize
+          }}
         </v-chip>
-        <v-chip label color="#c1e8ff" small>
-          <span class="xy"
-            >{{ assignment.numStudents }} student{{
-              assignment.numStudents | pluralize
-            }}</span
-          >
+        <v-chip label color="tertiary" outlined small>
+          {{ assignment.numStudents }} student{{
+            assignment.numStudents | pluralize
+          }}
         </v-chip>
       </div>
     </v-card-text>
@@ -95,13 +84,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.xx {
-  color: #40000c;
-}
-
-.xy {
-  color: #001e2c;
-}
-</style>

@@ -64,6 +64,8 @@ import {
   faSun,
   faMoon,
   faHouse,
+  faCircle,
+  faCircleDot,
 } from '@fortawesome/pro-light-svg-icons'
 import { faCircleCheck as fasCircleCheck } from '@fortawesome/free-solid-svg-icons'
 
@@ -132,7 +134,9 @@ library.add(
   faUsers,
   faSun,
   faMoon,
-  faHouse
+  faHouse,
+  faCircle,
+  faCircleDot
 )
 
 Vue.use(Vuetify)
@@ -251,6 +255,18 @@ const CUSTOM_ICONS = {
     component: FontAwesomeIcon,
     props: {
       icon: ['fal', 'user'],
+    },
+  },
+  radioOff: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'circle'],
+    },
+  },
+  radioOn: {
+    component: FontAwesomeIcon,
+    props: {
+      icon: ['fal', 'circle-dot'],
     },
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pt-10">
+  <v-container class="pt-3 pt-md-10">
     <!-- Teacher xx -->
     <template v-if="teacher">
       <v-row class="justify-center">
@@ -24,7 +24,7 @@
                   large
                   rounded
                   :block="$vuetify.breakpoint.name === 'xs'"
-                  color="#ffd9dc"
+                  :color="$vuetify.theme.dark ? '#620d1e' : '#ffd9dc'"
                   class="mb-4"
                   @click="newAssignment(group)"
                   v-on="on"

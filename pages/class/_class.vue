@@ -13,7 +13,7 @@
     <v-tabs-items v-model="tab">
       <v-tab-item :style="`background-color: ${bgColor}`">
         <!-- Assignments xx -->
-        <v-container class="pt-10">
+        <v-container class="pt-6 pt-md-10">
           <v-row class="justify-center">
             <v-col class="12" md="8">
               <!-- Skeletons xx -->

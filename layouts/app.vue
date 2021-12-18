@@ -1,14 +1,10 @@
 <template>
   <v-app :dark="$vuetify.theme.dark">
-    <v-navigation-drawer
-      v-model="drawer"
-      :color="$vuetify.theme.themes.light.background"
-      app
-      floating
-    >
+    <v-navigation-drawer v-model="drawer" :color="bgColor" app floating>
       <div class="pa-3">
         <nuxt-link to="/home">
-          <the-logo />
+          <the-logo-dark v-if="$vuetify.theme.dark" />
+          <the-logo v-else />
         </nuxt-link>
       </div>
       <div class="pa-3">
@@ -17,19 +13,16 @@
             {{ username | name }}
           </nuxt-link>
         </div>
-        <div>
+        <div class="d-flex justify-space-between align-center">
           <v-chip x-small label>
             {{ teacher ? 'Teacher' : 'Student' }}
           </v-chip>
+          <div id="headway"></div>
         </div>
       </div>
       <v-list rounded dense>
-        <v-list-item-group
-          v-model="navbar"
-          active-class="bold-nav"
-          color="primary"
-        >
-          <v-list-item v-if="!teacher" nuxt to="/home">
+        <v-list-item-group v-model="navbar" :active-class="ac" color="primary">
+          <v-list-item nuxt to="/home">
             <v-list-item-icon class="d-flex justify-center align-center">
               <font-awesome-icon icon="fa-light fa-house" class="fa-lg" />
             </v-list-item-icon>
@@ -75,7 +68,7 @@
         </div>
       </template>
     </v-navigation-drawer>
-    <v-app-bar app flat :color="$vuetify.theme.themes.light.background">
+    <v-app-bar app flat :color="bgColor">
       <v-tooltip bottom>
         <template #activator="{ on }">
           <v-app-bar-nav-icon @click="drawer = !drawer" v-on="on">
@@ -91,25 +84,6 @@
           {{ pageTitle }}
         </span>
         <div class="d-flex align-center">
-          <div id="headway" class="pr-2"></div>
-          <v-tooltip bottom>
-            <template #activator="{ on }">
-              <v-btn
-                icon
-                class="mr-2"
-                @click="$vuetify.theme.dark = !$vuetify.theme.dark"
-                v-on="on"
-              >
-                <font-awesome-icon
-                  :icon="`fa-light ${
-                    $vuetify.theme.dark ? 'fa-sun' : 'fa-moon'
-                  }`"
-                  class="ico-btn"
-                />
-              </v-btn>
-            </template>
-            <span>Dark mode</span>
-          </v-tooltip>
           <v-menu offset-y open-on-hover rounded="lg">
             <template #activator="{ on }">
               <v-btn icon color="primary" v-on="on">
@@ -151,11 +125,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import TheLogo from '@/components/common/TheLogo'
-import TheSnackbar from '@/components/common/TheSnackbar'
-import TheFooter from '@/components/common/TheFooter'
-import TheOnboardingSnackbar from '@/components/teacher/TheOnboardingSnackbar'
-import TheCreateClassDialog from '@/components/teacher/TheCreateClassDialog'
+import TheLogo from '~/components/common/TheLogo.vue'
+import TheLogoDark from '~/components/common/TheLogoDark.vue'
+import TheSnackbar from '~/components/common/TheSnackbar.vue'
+import TheFooter from '~/components/common/TheFooter.vue'
+import TheOnboardingSnackbar from '~/components/teacher/TheOnboardingSnackbar.vue'
+import TheCreateClassDialog from '~/components/teacher/TheCreateClassDialog.vue'
 import TheDeleteAssignmentDialog from '~/components/teacher/TheDeleteAssignmentDialog.vue'
 import TheNewAssignmentDialog from '~/components/teacher/TheNewAssignmentDialog.vue'
 import TheJoinClassDialog from '~/components/student/TheJoinClassDialog.vue'
@@ -164,10 +139,11 @@ export default {
   name: 'App',
   components: {
     TheLogo,
+    TheLogoDark,
     TheSnackbar,
-    TheCreateClassDialog,
-    TheOnboardingSnackbar,
     TheFooter,
+    TheOnboardingSnackbar,
+    TheCreateClassDialog,
     TheDeleteAssignmentDialog,
     TheNewAssignmentDialog,
     TheJoinClassDialog,
@@ -189,6 +165,11 @@ export default {
       return this.$vuetify.theme.dark
         ? this.$vuetify.theme.themes.dark.background
         : this.$vuetify.theme.themes.light.background
+    },
+    ac() {
+      return this.$vuetify.theme.dark
+        ? 'offset-outline dark'
+        : 'offset-outline light'
     },
     navbar: {
       get() {
@@ -229,13 +210,20 @@ export default {
 </script>
 
 <style scoped>
-.bold-nav {
-  outline: 2px solid #000000 !important;
+.offset-outline {
   outline-offset: 2px;
 }
 
-.ico-btn {
-  height: 24px;
-  width: 24px;
+.light {
+  outline: 2px solid #191c1e !important;
+}
+
+.dark {
+  outline: 2px solid #e1e2e5 !important;
+}
+
+.HW_badge {
+  background: #594400 !important;
+  color: #e1e2e5 !important;
 }
 </style>
