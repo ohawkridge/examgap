@@ -1,43 +1,43 @@
 <template>
-  <v-container class="pt-10">
+  <v-container class="pt-6 pt-md-10">
     <v-row class="justify-center">
       <v-col cols="12" md="10">
         <!-- Skeletons -->
-        <v-card v-if="$fetchState.pending" class="rounded-lg">
+        <v-card v-if="$fetchState.pending" class="rounded-lg pa-md-3">
           <v-skeleton-loader
             type="image"
-            class="float-right ma-4"
+            class="float-right ma-3"
+            width="46%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="heading"
+            :loading="true"
+            class="pa-3 mb-6"
+            width="26%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="paragraph@2"
+            :loading="true"
+            class="ma-4 mb-8"
+            width="40%"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            type="paragraph"
+            :loading="true"
+            class="ma-4 mb-8"
             width="40%"
           ></v-skeleton-loader>
           <v-skeleton-loader
             type="heading"
             :loading="true"
             class="ma-4 mb-8"
-            width="20%"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            type="paragraph@2"
-            :loading="true"
-            class="ma-4 mb-8"
-            width="50%"
+            width="26%"
           ></v-skeleton-loader>
           <v-skeleton-loader
             type="paragraph"
             :loading="true"
             class="ma-4 mb-8"
-            width="50%"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            type="heading"
-            :loading="true"
-            class="ma-4 mb-8"
-            width="20%"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            type="paragraph"
-            :loading="true"
-            class="ma-4 mb-8"
-            width="50%"
+            width="40%"
           ></v-skeleton-loader>
         </v-card>
         <v-card v-else class="rounded-lg">
@@ -125,27 +125,15 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td
-                            class="text-center"
-                            :class="
-                              color(
-                                response.tm.length,
-                                response.question.maxMark
-                              )
-                            "
-                          >
-                            {{ response.tm.length }}
+                          <td class="text-center">
+                            <v-chip :color="tRag">
+                              {{ response.tm.length }}
+                            </v-chip>
                           </td>
-                          <td
-                            class="text-center"
-                            :class="
-                              color(
-                                response.sm.length,
-                                response.question.maxMark
-                              )
-                            "
-                          >
-                            {{ response.sm.length }}
+                          <td class="text-center">
+                            <v-chip :color="sRag">
+                              {{ response.sm.length }}
+                            </v-chip>
                           </td>
                           <td></td>
                         </tr>
@@ -208,8 +196,13 @@ export default {
     accuracy() {
       const x = this.response.tm.filter((x) => !this.response.sm.includes(x))
       const y = this.response.sm.filter((x) => !this.response.tm.includes(x))
-      const max = this.response.question.maxMark
-      return Math.round(((max - x.concat(y).length) / max) * 100)
+      return Math.round(((this.max - x.concat(y).length) / this.max) * 100)
+    },
+    sRag() {
+      return this.color(this.response.sm.length)
+    },
+    tRag() {
+      return this.color(this.response.tm.length)
     },
   },
   methods: {
@@ -221,17 +214,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.red {
-  background-color: red;
-}
-
-.orange {
-  background-color: orange;
-}
-
-.green {
-  background-color: green;
-}
-</style>

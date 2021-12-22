@@ -613,10 +613,10 @@
             class="d-flex justify-center flex-column align-center"
           >
             <font-awesome-icon
-              icon="fa-light fa-arrows-repeat"
+              icon="fa-light fa-user-check"
               class="fa-3x mb-4"
             />
-            <p class="font-weight-bold">Reassign questions</p>
+            <p class="font-weight-bold">Self marking</p>
           </v-col>
         </v-row>
       </v-container>

@@ -210,6 +210,7 @@ export default {
 </script>
 
 <style scoped>
+/* Nav active styles */
 .offset-outline {
   outline-offset: 2px;
 }
@@ -220,10 +221,5 @@ export default {
 
 .dark {
   outline: 2px solid #e1e2e5 !important;
-}
-
-.HW_badge {
-  background: #594400 !important;
-  color: #e1e2e5 !important;
 }
 </style>

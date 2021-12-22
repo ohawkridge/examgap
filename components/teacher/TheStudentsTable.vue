@@ -5,7 +5,7 @@
         cols="12"
         class="flex-xs-column d-sm-flex justify-space-between align-center"
       >
-        <v-menu offset-y open-on-hover>
+        <v-menu offset-y open-on-hover rounded="lg">
           <template #activator="{ on }">
             <v-btn
               class="mr-2 mb-2 mb-sm-0 mr-2"

@@ -11,7 +11,7 @@
                 <div class="mr-6">
                   <strong>Select all</strong>
                 </div>
-                <v-menu offset-y open-on-hover class="ml-2">
+                <v-menu offset-y open-on-hover class="ml-2" rounded="lg">
                   <template #activator="{ on }">
                     <div class="primary--text text-body-2" v-on="on">
                       Exam
@@ -101,6 +101,7 @@
                   min-width="290px"
                   offset-y
                   transition="scale-transition"
+                  rounded="lg"
                 >
                   <template #activator="{ on }">
                     <v-text-field
@@ -132,6 +133,7 @@
                   min-width="290px"
                   offset-y
                   transition="scale-transition"
+                  rounded="lg"
                 >
                   <template #activator="{ on }">
                     <v-text-field

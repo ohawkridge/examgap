@@ -45,7 +45,7 @@
               </v-tooltip>
               {{ assignment.name }}
             </div>
-            <v-menu>
+            <v-menu open-on-hover rounded="lg">
               <template #activator="{ on }">
                 <v-btn icon v-on="on">
                   <font-awesome-icon
@@ -55,29 +55,23 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item>
-                  <v-list-item-title @click="$fetch()">
-                    Refresh
-                  </v-list-item-title>
+                <v-list-item @click="$fetch()">
+                  <v-list-item-title> Refresh </v-list-item-title>
                 </v-list-item>
-                <v-list-item class="error--text">
-                  <v-list-item-title
-                    @click="$nuxt.$emit('show-delete', assignment.id, group.id)"
-                  >
-                    Delete
-                  </v-list-item-title>
+                <v-list-item class="error--text" @click="delAss()">
+                  <v-list-item-title> Delete </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
           </v-card-title>
-          <v-card-text class="text-body-1">
+          <v-card-text>
             <v-container>
               <v-row class="justify-center">
                 <v-col cols="12">
-                  <div class="d-flex align-center">
+                  <p class="d-flex align-center">
                     <span class="font-weight-medium align-date">Start:</span>
                     {{ assignment.start | date }}
-                  </div>
+                  </p>
                   <div class="d-flex align-center">
                     <span class="font-weight-medium align-date">Due:</span>
                     {{ assignment.dateDue | date }}
@@ -95,17 +89,21 @@
                           :class="i === 0 ? 'text-left' : ''"
                         >
                           <span v-if="i === 0">Username</span>
-                          <v-menu v-else offset-x open-on-hover>
+                          <v-menu v-else offset-x open-on-hover rounded="lg">
                             <template #activator="{ on }">
                               <span v-on="on">{{
                                 `Q${i} [${q.maxMark}]`
                               }}</span>
                             </template>
-                            <v-card max-width="440">
+                            <v-card max-width="440" class="rounded-lg">
                               <v-card-text class="text-body-2">
                                 <div v-html="assignment.headers[i].text"></div>
-                                <div class="font-weight-bold text-right">
-                                  [{{ q.maxMark }}]
+                                <div class="d-flex justify-end">
+                                  <v-chip outlined small label>
+                                    {{ q.maxMark }} mark{{
+                                      q.maxMark | pluralize
+                                    }}
+                                  </v-chip>
                                 </div>
                               </v-card-text>
                             </v-card>
@@ -123,26 +121,42 @@
                           {{ student.name }}
                         </td>
                         <td
-                          v-for="(data, j) in student.data"
+                          v-for="(resp, j) in student.responses"
                           :key="j"
                           class="text-center"
                         >
-                          <!-- Formerly MarkChip.vue components -->
-                          <!-- Nested values as props not working reliably -->
-                          <div
-                            v-if="data[Object.keys(data)[0]].length > 0"
-                            :class="flex(data)"
-                          >
-                            <!-- *** NOT ANSWERED *** -->
-                            <!-- <div v-if="data[Object.keys(data)[0]].length === 0">N/A</div> -->
-                            <!-- Loop through responses (see note below) -->
-                            <template
-                              v-for="(response, k) in data[
-                                Object.keys(data)[0]
-                              ]"
-                            >
-                              <!-- *** SELF MARKED *** -->
-                              <v-tooltip
+                          <!-- Self marked xx -->
+                          <!-- Teacher marked xx -->
+                          <v-tooltip v-if="resp.marked" bottom>
+                            <template #activator="{ on }">
+                              <v-chip
+                                class="green"
+                                @click="startMarking(i, j)"
+                                v-on="on"
+                              >
+                                {{ resp.tm.length }}
+                                <font-awesome-icon
+                                  icon="fa-light fa-check-double"
+                                  class="ml-2"
+                                />
+                              </v-chip>
+                              <span v-if="resp.flagged" class="error--text">
+                                <font-awesome-icon
+                                  icon="fa-light fa-flag"
+                                  class="fix-flag"
+                                />
+                              </span>
+                            </template>
+                            <span>Mark</span>
+                          </v-tooltip>
+                          <!-- Not Answered xx -->
+                          <!-- {{ resp.id }} -->
+                          <!-- <div v-if="resp[Object.keys(resp)[0]].length > 0"> -->
+                          <!-- *** NOT ANSWERED *** -->
+                          <!-- <div v-if="resp[Object.keys(resp)[0]].length === 0">N/A</div> -->
+
+                          <!-- *** SELF MARKED *** -->
+                          <!-- <v-tooltip
                                 v-if="!response.marked"
                                 :key="k"
                                 bottom
@@ -160,45 +174,8 @@
                                   </v-chip>
                                 </template>
                                 <span>Mark</span>
-                              </v-tooltip>
-                              <!-- *** TEACHER MARKED *** -->
-                              <v-tooltip v-else :key="k" bottom>
-                                <template #activator="{ on }">
-                                  <v-chip
-                                    :class="
-                                      marginBottom(
-                                        data[Object.keys(data)[0]],
-                                        k
-                                      )
-                                    "
-                                    class="green"
-                                    @click="startMarking(i, j, k)"
-                                    v-on="on"
-                                  >
-                                    {{ response.tm.length }}
-                                    <font-awesome-icon
-                                      v-if="response.repeat"
-                                      icon="fa-light fa-repeat"
-                                      class="ml-2"
-                                    />
-                                    <font-awesome-icon
-                                      v-else
-                                      icon="fa-light fa-check-double"
-                                      class="ml-2"
-                                    />
-                                  </v-chip>
-                                  <span class="error--text">
-                                    <font-awesome-icon
-                                      v-if="response.flagged"
-                                      icon="fa-light fa-flag"
-                                      class="fix-flag"
-                                    />
-                                  </span>
-                                </template>
-                                <span>Mark</span>
-                              </v-tooltip>
-                            </template>
-                          </div>
+                              </v-tooltip> -->
+                          <!-- </div> -->
                         </td>
                       </tr>
                       <tr v-if="assignment.students.length === 0">
@@ -233,13 +210,19 @@
                       icon="fa-light fa-check-double"
                       class="fa-sm mr-1"
                     />
-                    Teacher mark&nbsp;&nbsp;
-                    <font-awesome-icon
-                      icon="fa-light fa-arrows-repeat"
-                      class="fa-sm mr-1"
-                    />
-                    Reassigned
+                    Teacher mark
                   </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <p
+                    v-for="(obj, i) in assignment.students"
+                    :key="i"
+                    class="red--text"
+                  >
+                    {{ obj }}
+                  </p>
                 </v-col>
               </v-row>
             </v-container>
@@ -307,23 +290,6 @@
                     </v-btn>
                   </template>
                   <span>{{ response.flagged ? 'Remove flag' : 'Flag' }}</span>
-                </v-tooltip>
-                <v-tooltip bottom>
-                  <template #activator="{ on }">
-                    <v-btn
-                      icon
-                      class="ml-2"
-                      :color="response.repeat ? 'red' : ''"
-                      @click="reassign()"
-                      v-on="on"
-                    >
-                      <font-awesome-icon
-                        icon="fa-light fa-repeat"
-                        class="ico-btn"
-                      />
-                    </v-btn>
-                  </template>
-                  <span>Reassign</span>
                 </v-tooltip>
                 <the-info-dialog :response="response" />
               </div>
@@ -479,7 +445,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      group: 'user/activeGroup',
       response: 'assignment/response',
     }),
     ...mapState({
@@ -488,7 +453,6 @@ export default {
       assignments: (state) => state.group.assignments,
       studentIndex: (state) => state.assignment.studentIndex,
       questionIndex: (state) => state.assignment.questionIndex,
-      responseIndex: (state) => state.assignment.responseIndex,
       marking: (state) => state.assignment.marking,
     }),
     feedback: {
@@ -545,6 +509,9 @@ export default {
     }
   },
   methods: {
+    delAss() {
+      $nuxt.$emit('show-delete', this.assignment.id, this.assignment.group.id)
+    },
     color(n, max) {
       if (n / max <= 1 / 3) return 'red'
       if (n / max > 2 / 3) return 'green'
@@ -622,22 +589,6 @@ export default {
         })
       }
     },
-    async reassign() {
-      try {
-        await this.$store.dispatch('assignment/reassign')
-        this.$snack.showMessage({
-          msg: this.response.repeat
-            ? 'Question reassigned'
-            : 'Reassignment cancelled',
-        })
-      } catch (err) {
-        console.error(err)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: 'Error reassigning question',
-        })
-      }
-    },
     async saveFeedback() {
       try {
         await this.$store.dispatch('assignment/saveFeedback', this.feedback)
@@ -649,26 +600,15 @@ export default {
         })
       }
     },
-    startMarking(i, j, k) {
+    startMarking(i, j) {
       // Commit mutations setting indices into big data structure
       this.$store.commit('assignment/setStudentIndex', i)
       this.$store.commit('assignment/setQuestionIndex', j)
-      this.$store.commit('assignment/setResponseIndex', k)
       // Copy original mark scheme from question object
       this.copyMarkScheme()
       this.$store.commit('assignment/setMarking', true)
-      // Onboarding complete✓
+      // Onboarding complete
       this.$store.commit('app/setOnboardStep', 0)
-    },
-    // Add margin bottom to reassigned responses (except last)
-    marginBottom(responses, i) {
-      return responses.length > 1 && i < responses.length - 1 ? 'mb-2' : ''
-    },
-    // Use flex columns if >1 response for question
-    flex(data) {
-      return data[Object.keys(data)[0]].length > 1
-        ? 'd-flex flex-column align-center'
-        : ''
     },
   },
 }
@@ -709,7 +649,7 @@ div.v-list {
   line-height: 1.25rem !important;
 }
 
-/* adjust flags to keep chips aligned */
+/* adjust flag to keep chips aligned */
 .fix-flag {
   position: relative;
   top: 4px;

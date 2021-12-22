@@ -27,7 +27,7 @@
     <v-checkbox v-model="showAll" hide-details
       ><template #label>
         Show all courses
-        <v-menu offset-y open-on-hover>
+        <v-menu offset-y open-on-hover rounded="lg">
           <template #activator="{ on }">
             <font-awesome-icon
               icon="fa-light fa-circle-info"

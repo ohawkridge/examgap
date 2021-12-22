@@ -7,7 +7,6 @@ const getDefaultState = () => ({
   responseId: '',
   studentIndex: '',
   questionIndex: '',
-  responseIndex: '',
   marking: false,
 })
 
@@ -29,9 +28,7 @@ const getters = {
     if (!state.marking) return {}
     return state.assignment.students[state.studentIndex].data[
       state.questionIndex
-    ][state.assignment.headers[state.questionIndex + 1].value][
-      state.responseIndex
-    ]
+    ][state.assignment.headers[state.questionIndex + 1].value]
   },
 }
 
@@ -92,9 +89,9 @@ const actions = {
       throw new Error(`Error saving answer ${response.status}`)
     }
     response = await response.json()
-    console.log(
+    console.debug(
       '%c' + 'Response',
-      'padding:2px 4px;background-color:#0078a0;color:white;border-radius:3px'
+      'padding:2px 4px;background-color:#00668b;color:white;border-radius:3px'
     )
     console.log(response)
     // Set responseId (all saveAnswer returns) for
@@ -119,7 +116,6 @@ const actions = {
   },
   async saveMarks({ commit, getters, rootState }, markIds) {
     const response = getters.response
-    // console.debug('%c' + `saveTeacherMarks ${response.id}`, 'color:darkblue')
     const url = new URL(
       '/.netlify/functions/saveTeacherMarks',
       this.$config.baseURL
@@ -137,7 +133,6 @@ const actions = {
   async saveFeedback({ getters, rootState }, feedback) {
     if (feedback !== undefined) {
       const response = getters.response
-      // console.debug('%c' + `saveFeedback ${response.id}`, 'color:darkgreen')
       const url = new URL(
         '/.netlify/functions/saveFeedback',
         this.$config.baseURL
@@ -151,23 +146,6 @@ const actions = {
         method: 'POST',
       })
     }
-  },
-  async reassign({ commit, getters, rootState }) {
-    const response = getters.response
-    const repeat = !response.repeat
-    const url = new URL(
-      '/.netlify/functions/reassignQuestion',
-      this.$config.baseURL
-    )
-    await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        responseId: response.id,
-        repeat,
-      }),
-      method: 'POST',
-    })
-    commit('setReassign', { response, repeat })
   },
   // (Dispatched from _report.vue)
   // Sets flag property of response in database
@@ -221,6 +199,10 @@ const actions = {
     commit('setAssignment', response)
   },
   async getReport({ commit, rootState }, assignmentId) {
+    console.debug(
+      '%c' + 'Fetch',
+      'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
+    )
     const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -278,18 +260,12 @@ const mutations = {
   setQuestionIndex(state, i) {
     state.questionIndex = i
   },
-  setResponseIndex(state, i) {
-    state.responseIndex = i
-  },
   setMarking(state, marking) {
     state.marking = marking
   },
   // Response mutations xx
   setFlag(state, { response, flagged }) {
     response.flagged = flagged
-  },
-  setReassign(state, { response, repeat }) {
-    response.repeat = repeat
   },
   setFeedback(state, { response, feedback }) {
     response.feedback = feedback

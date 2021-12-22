@@ -1,9 +1,9 @@
 <template>
-  <v-container class="pt-10">
+  <v-container class="pt-6 pt-md-10">
     <v-row class="justify-center">
       <v-col cols="12" md="10">
+        <!-- Skeletons -->
         <v-card v-if="$fetchState.pending" class="rounded-lg pa-4">
-          <!-- Skeletons -->
           <v-skeleton-loader
             type="list-item-avatar"
             :loading="true"
@@ -34,11 +34,17 @@
             class="px-5 pb-6"
           ></v-skeleton-loader>
         </v-card>
-        <v-card v-else class="rounded-lg pa-4">
+        <v-card v-else class="rounded-lg">
           <v-card-title>
             <v-tooltip bottom>
               <template #activator="{ on }">
-                <v-btn icon class="mr-2" @click="$router.go(-1)" v-on="on">
+                <v-btn
+                  icon
+                  class="mr-2"
+                  nuxt
+                  :to="`/class/${group.id}`"
+                  v-on="on"
+                >
                   <font-awesome-icon
                     icon="fa-light fa-arrow-left"
                     class="ico-btn"
@@ -64,12 +70,10 @@
                 </v-col>
                 <v-col cols="12" md="6">
                   <span class="align-date font-weight-bold"> Score: </span>
-                  {{ `${score.marks}/${score.max}` }}
-                  <span
-                    :class="rag"
-                    class="font-weight-bold text--darken-2 ml-1"
-                    >({{ ave }}%)</span
-                  >
+                  <strong>{{ `${score.marks}/${score.max}` }}</strong>
+                  <v-chip :color="rag" class="ml-1 ave" label>
+                    {{ ave }}%
+                  </v-chip>
                 </v-col>
               </v-row>
               <v-row class="justify-center">
@@ -81,12 +85,91 @@
                   </p>
                   <v-divider />
                   <v-list>
-                    <assignment-question
-                      v-for="(question, i) in assignment.questions"
+                    <v-list-item
+                      v-for="(q, i) in assignment.questions"
                       :key="i"
-                      :assignment-id="assignment.id"
-                      :question="question"
-                    />
+                      @click="action(q)"
+                    >
+                      <v-list-item-content>
+                        <v-col cols="12" md="9">
+                          <v-list-item-title>
+                            {{ q.text | strip }}
+                          </v-list-item-title>
+                          <v-list-item-subtitle>
+                            {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
+                          </v-list-item-subtitle>
+                          <!-- If not answered yet, feedback won't exist -->
+                          <!-- Alternatively, could be marked and blank -->
+                          <div
+                            v-if="
+                              q.response.feedback !== undefined &&
+                              q.response.feedback !== ''
+                            "
+                            class="my-3 green--text text--darken-3 d-flex align-center"
+                          >
+                            <font-awesome-icon
+                              icon="fa-light fa-pen-clip"
+                              class="mr-2"
+                            />
+                            {{ q.response.feedback }}
+                          </div>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          md="3"
+                          class="d-flex justify-space-around"
+                        >
+                          <!-- Not answered yet xx -->
+                          <v-btn
+                            v-if="q.response === ''"
+                            rounded
+                            elevation="0"
+                            :color="$vuetify.theme.dark ? '#620d1e' : '#ffd9dc'"
+                          >
+                            Answer
+                          </v-btn>
+                          <template v-else>
+                            <!-- Self mark xx -->
+                            <v-tooltip bottom>
+                              <template #activator="{ on }">
+                                <span v-on="on">
+                                  <font-awesome-icon
+                                    icon="fa-light fa-user"
+                                    class="mr-2"
+                                  />
+                                  {{ q.response.sm }}
+                                  <span class="green--text">
+                                    <font-awesome-icon
+                                      icon="fa-light fa-check"
+                                      class="ml-2"
+                                  /></span>
+                                </span>
+                              </template>
+                              <span>You</span>
+                            </v-tooltip>
+                            <!-- Teacher mark xx -->
+                            <v-tooltip v-if="q.response.marked" bottom>
+                              <template #activator="{ on }">
+                                <span v-on="on">
+                                  <font-awesome-icon
+                                    icon="fa-light fa-user-graduate"
+                                    class="mr-2"
+                                  />
+                                  {{ q.response.tm }}
+                                  <span class="green--text">
+                                    <font-awesome-icon
+                                      icon="fa-light fa-check-double"
+                                      class="ml-2"
+                                  /></span>
+                                </span>
+                              </template>
+                              <span>Your teacher</span>
+                            </v-tooltip>
+                            <div v-else class="blank"></div>
+                          </template>
+                        </v-col>
+                      </v-list-item-content>
+                    </v-list-item>
                   </v-list>
                 </v-col>
               </v-row>
@@ -99,61 +182,80 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import AssignmentQuestion from '@/components/student/AssignmentQuestion'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  components: {
-    AssignmentQuestion,
-  },
   layout: 'app',
   async fetch() {
     const id = this.$route.params.assignment
     await this.$store.dispatch('assignment/getAssignment', id)
   },
   computed: {
+    ...mapGetters({
+      group: 'user/activeGroup',
+    }),
     ...mapState({
       assignment: (state) => state.assignment.assignment,
     }),
     rag() {
-      if (!this.started) return ''
-      if (this.ave <= 33) return 'red--text'
-      if (this.ave > 66) return 'green--text'
-      else return 'orange--text'
+      if (!this.teachHasMarked) return ''
+      if (this.ave <= 33) return 'red'
+      if (this.ave > 66) return 'green'
+      else return 'orange'
     },
     ave() {
-      if (!this.started || this.score.max === 0) return '-'
+      if (!this.teachHasMarked) return '- '
       return Math.round((this.score.marks / this.score.max) * 100)
     },
-    // Count teacher marks for each response
-    // for each question to find x/y score
+    // Count teacher marks and max.
+    // possible mark across questions
     score() {
       let marks = 0
       let max = 0
-      // Each question contains an array of responses
-      // Logout defense
-      if ('questions' in this.assignment) {
-        for (const q of this.assignment.questions) {
-          for (const r of q.responses) {
-            marks += r.tm
-          }
-          max += parseInt(q.maxMark)
+      for (const q of this.assignment.questions) {
+        if (q.response !== '') {
+          marks += q.response.tm
         }
+        max += parseInt(q.maxMark)
       }
       return { marks, max }
     },
-    // Has the student started the assignment?
-    // If not, we don't calculate the ave.
-    started() {
+    // Has teacher started marking assignment?
+    teachHasMarked() {
       for (const q of this.assignment.questions) {
-        for (const r of q.responses) {
-          if (r.marked === true) {
-            return true
-          }
+        if (q.response !== '' && q.response.marked) {
+          return true
         }
       }
       return false
     },
   },
+  methods: {
+    action(question) {
+      // Answer question
+      if (question.response === '') {
+        // Store data needed to save response later
+        this.$store.commit(`assignment/setAnswerData`, {
+          assignmentId: this.assignment.id,
+          questionId: question.id,
+        })
+        this.$router.push(`/answer`)
+      } else {
+        this.$router.push(`/response/${question.response.id}`)
+      }
+    },
+  },
 }
 </script>
+
+<style scoped>
+/* align chip with score */
+.ave {
+  position: relative;
+  top: -2px;
+}
+
+.blank {
+  width: 76px;
+}
+</style>

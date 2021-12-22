@@ -98,3 +98,9 @@ span.v-chip.theme--light.green {
   height: 24px !important;
   width: 24px !important;
 }
+
+/* fxx */
+#HW_badge {
+  background-color: #9f3d49 !important;
+  color: #e1e2e5 !important;
+}

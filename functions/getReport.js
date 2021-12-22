@@ -5,7 +5,6 @@ exports.handler = async (event) => {
   const data = JSON.parse(event.body)
   const assignmentId = data.assignmentId
   const secret = data.secret
-  // console.time(`_report_${assignmentId}`)
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
     secret,
@@ -20,6 +19,17 @@ exports.handler = async (event) => {
         name: q.Select(['data', 'name'], q.Var('instance')),
         start: q.Select(['data', 'start'], q.Var('instance'), 'N/A'),
         dateDue: q.Select(['data', 'dateDue'], q.Var('instance')),
+        group: q.Let(
+          {
+            instance: q.Get(
+              q.Select(['data', 'group'], q.Var('instance')) // Group
+            ),
+          },
+          {
+            id: q.Select(['ref', 'id'], q.Var('instance')),
+            name: q.Select(['data', 'name'], q.Var('instance')),
+          }
+        ),
         headers: q.Prepend(
           { text: 'Username', align: 'start', value: 'name', tip: 'Username' },
           q.Map(
@@ -36,11 +46,7 @@ exports.handler = async (event) => {
                   value: q.ToString(q.Var('ref')),
                   text: q.Select(['data', 'text'], q.Var('instance')),
                   maxMark: q.Select(['data', 'maxMark'], q.Var('instance')),
-                  guidance: q.Select(
-                    ['data', 'guidance'],
-                    q.Var('instance'),
-                    ''
-                  ),
+                  guidance: q.Select(['data', 'guidance'], q.Var('instance')),
                   markScheme: q.Map(
                     q.Select(
                       'data',
@@ -87,131 +93,83 @@ exports.handler = async (event) => {
               'sRef',
               q.Let(
                 {
-                  instance: q.Get(q.Var('sRef')), // User (student)
+                  instancex: q.Get(q.Var('sRef')), // User (student)
+                  // Pull in assignment from outer scope
+                  assignment: q.Var('instance'),
                 },
-                // Data structure we need to build for each student
-                // An object where each key is the question id
-                // and its value is the count of self marks
+                // New data structure for each student
+                // *single responses for questions only*
                 {
-                  name: q.Select(['data', 'username'], q.Var('instance')),
-                  // Map over assignment questions and
-                  // get student's self-mark total
-                  data: q.Map(
-                    q.Select(
-                      ['data', 'questions'],
-                      q.Get(q.Ref(q.Collection('Assignment'), assignmentId))
-                    ),
-                    q.Lambda(
-                      'qRef',
-                      // Student's response*s* for question
-                      q.ToObject([
-                        [
-                          q.Var('qRef'),
+                  name: q.Select(['data', 'username'], q.Var('instancex')),
+                  responses: q.Map(
+                    q.Union(
+                      q.Map(
+                        q.Select(['data', 'questions'], q.Var('instance')),
+                        q.Lambda(
+                          'ref',
                           q.Select(
                             'data',
-                            q.Map(
+                            // Some old questions have multiple
+                            q.Take(
+                              1,
                               q.Paginate(
                                 q.Match(
                                   q.Index(
                                     'responses_by_student_question_assignment'
                                   ),
-                                  q.Select('ref', q.Var('instance')), // Student
-                                  q.Ref(
-                                    q.Collection('Question'),
-                                    q.Var('qRef')
-                                  ), // Question
-                                  q.Ref(
-                                    q.Collection('Assignment'),
-                                    assignmentId
-                                  ) // Assignment
-                                )
-                              ),
-                              q.Lambda(
-                                'rRef',
-                                q.Let(
-                                  {
-                                    instance: q.Get(q.Var('rRef')), // Response
-                                  },
-                                  {
-                                    id: q.Select(
-                                      ['ref', 'id'],
-                                      q.Var('instance')
-                                    ),
-                                    text: q.Select(
-                                      ['data', 'text'],
-                                      q.Var('instance')
-                                    ),
-                                    time: q.Select(
-                                      ['data', 'timeTaken'],
-                                      q.Var('instance'),
-                                      0 // Old responses don't have time taken !!
-                                    ),
-                                    // Grab username again here so it's
-                                    // visible in EgMarking interface
-                                    username: q.Select(
-                                      ['data', 'username'],
-                                      q.Get(
-                                        q.Select(
-                                          ['data', 'student'],
-                                          q.Var('instance')
-                                        )
-                                      )
-                                    ),
-                                    feedback: q.Select(
-                                      ['data', 'feedback'],
-                                      q.Var('instance')
-                                    ),
-                                    marked: q.Select(
-                                      ['data', 'marked'],
-                                      q.Var('instance')
-                                    ),
-                                    repeat: q.Select(
-                                      ['data', 'repeat'],
-                                      q.Var('instance')
-                                    ),
-                                    flagged: q.Select(
-                                      ['data', 'flagged'],
-                                      q.Var('instance')
-                                    ),
-                                    tm: q.Select(
-                                      ['data'],
-                                      q.Map(
-                                        q.Paginate(
-                                          q.Match(
-                                            q.Index(
-                                              'teacher_marks_by_response'
-                                            ),
-                                            q.Select(['ref'], q.Var('instance'))
-                                          )
-                                        ),
-                                        q.Lambda(
-                                          'tmRef',
-                                          q.Select('id', q.Var('tmRef'))
-                                        )
-                                      )
-                                    ),
-                                    sm: q.Select(
-                                      ['data'],
-                                      q.Map(
-                                        q.Paginate(
-                                          q.Match(
-                                            q.Index('self_marks_by_response'),
-                                            q.Select('ref', q.Var('instance'))
-                                          )
-                                        ),
-                                        q.Lambda(
-                                          'smRef',
-                                          q.Select('id', q.Var('smRef'))
-                                        )
-                                      )
-                                    ),
-                                  }
+                                  q.Select('ref', q.Var('instancex')), // Student
+                                  q.Ref(q.Collection('Question'), q.Var('ref')), // Question
+                                  q.Select('ref', q.Var('assignment')) // Assignment
                                 )
                               )
                             )
+                          )
+                        )
+                      )
+                    ),
+                    q.Lambda(
+                      'ref',
+                      q.Let(
+                        {
+                          instance: q.Get(q.Var('ref')), // Response
+                          // Pull in student from outer scope to get username
+                          student: q.Var('instancex'),
+                        },
+                        {
+                          id: q.Select(['ref', 'id'], q.Var('instance')),
+                          // TODO Can _report get this from outer key?
+                          username: q.Select(
+                            ['data', 'username'],
+                            q.Var('student')
                           ),
-                        ],
-                      ])
+                          text: q.Select(['data', 'text'], q.Var('instance')),
+                          time: q.Select(
+                            ['data', 'timeTaken'],
+                            q.Var('instance'),
+                            0 // Old responses don't have timeTaken
+                          ),
+                          feedback: q.Select(
+                            ['data', 'feedback'],
+                            q.Var('instance')
+                          ),
+                          marked: q.Select(
+                            ['data', 'marked'],
+                            q.Var('instance')
+                          ),
+                          flagged: q.Select(
+                            ['data', 'flagged'],
+                            q.Var('instance')
+                          ),
+                          sm: q.Call(
+                            q.Function('StudentMarkIds'),
+                            q.Select('ref', q.Var('instance'))
+                          ),
+                          tm: q.Call(
+                            q.Function('TeacherMarkIds'),
+                            q.Select('ref', q.Var('instance'))
+                          ),
+                        }
+                      )
                     )
                   ),
                 }
@@ -223,7 +181,6 @@ exports.handler = async (event) => {
     )
     const data = await keyedClient.query(qry)
     data.students.sort(compare)
-    // console.timeEnd(`_report_${assignmentId}`)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

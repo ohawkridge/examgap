@@ -98,12 +98,11 @@
                 </v-tooltip>
               </div>
               <div class="d-flex justify-end mt-4">
-                <v-btn
-                  color="primary"
-                  rounded
-                  elevation="0"
-                  @click="selfMark()"
-                >
+                <v-btn color="primary" rounded @click="selfMark()">
+                  <font-awesome-icon
+                    icon="fa-light fa-square-check"
+                    class="fa-lg mr-2"
+                  />
                   Mark
                 </v-btn>
               </div>
@@ -152,22 +151,18 @@
           </div>
           <!-- Confirm XX -->
           <v-dialog v-model="dialog" width="440">
-            <v-card class="modal">
-              <v-card-title class="d-flex justify-center">
-                Are you sure?
-              </v-card-title>
+            <v-card>
+              <v-card-title> Start marking? </v-card-title>
               <v-card-text>
-                <p>Once you've seen the mark scheme, you can't go back.</p>
+                <p>
+                  Your answer might not score well. Once you've seen the mark
+                  scheme, you can't go back.
+                </p>
                 <div class="d-flex justify-end">
-                  <v-btn text rounded class="mr-2" @click="dialog = false"
-                    >Back</v-btn
-                  >
-                  <v-btn
-                    color="primary"
-                    rounded
-                    elevation="0"
-                    @click="selfMark(true)"
-                  >
+                  <v-btn text rounded class="mr-2" @click="dialog = false">
+                    Go Back
+                  </v-btn>
+                  <v-btn color="primary" rounded text @click="selfMark(true)">
                     Mark
                   </v-btn>
                 </div>
