@@ -83,7 +83,7 @@
         </v-col>
       </v-row>
       <v-row class="justify-center">
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="8" class="d-flex justify-space-around">
           <template v-for="(group, i) in groups">
             <v-btn
               :key="i"
@@ -91,7 +91,8 @@
               large
               rounded
               :block="$vuetify.breakpoint.name === 'xs'"
-              color="#ffd9dc"
+              :color="$vuetify.theme.dark ? '#620d1e' : '#ffd9dc'"
+              class="mb-4"
               @click="revise(group.id)"
             >
               {{ group.course.name }}

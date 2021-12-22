@@ -1,9 +1,5 @@
 <template>
-  <v-sheet
-    elevation="0"
-    class="rounded-lg pa-4 mb-6"
-    style="border: 1px solid rgb(220, 221, 224)"
-  >
+  <v-sheet elevation="2" class="rounded-lg pa-4 mb-6">
     <v-skeleton-loader :loading="true" type="heading"></v-skeleton-loader>
     <v-skeleton-loader
       :loading="true"

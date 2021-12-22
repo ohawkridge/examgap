@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pt-6 pt-md-10">
+  <v-container>
     <v-row class="justify-center">
       <v-col cols="12" md="10">
         <!-- Skeletons -->
@@ -191,9 +191,7 @@ export default {
     await this.$store.dispatch('assignment/getAssignment', id)
   },
   computed: {
-    ...mapGetters({
-      group: 'user/activeGroup',
-    }),
+    ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({
       assignment: (state) => state.assignment.assignment,
     }),
@@ -230,6 +228,9 @@ export default {
       return false
     },
   },
+  mounted() {
+    this.$store.commit('app/setPageTitle', this.group.name)
+  },
   methods: {
     action(question) {
       // Answer question
@@ -255,6 +256,7 @@ export default {
   top: -2px;
 }
 
+/* spacer if teacher not marked yet */
 .blank {
   width: 76px;
 }

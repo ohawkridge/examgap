@@ -90,19 +90,18 @@
             :disabled="loading"
             :loading="loading"
             @click="updatePass()"
-            >Update Password</v-btn
           >
+            <span :class="$vuetify.theme.dark ? 'pb-text' : ''">
+              Update Password</span
+            >
+          </v-btn>
         </v-form>
         <v-divider class="mt-14 mb-12" />
         <div class="text-h5 d-flex justify-space-between">Appearance</div>
         <p class="font-weight-light mb-9">Choose how Examgap looks</p>
         <div>
           <v-radio-group v-model="mode" mandatory>
-            <v-radio
-              value="light"
-              class="mb-4"
-              @click="$vuetify.theme.dark = false"
-            >
+            <v-radio value="light" class="mb-4">
               <template #label>
                 <div class="ml-2">
                   <font-awesome-icon
@@ -113,7 +112,7 @@
                 </div>
               </template>
             </v-radio>
-            <v-radio value="dark" @click="$vuetify.theme.dark = true">
+            <v-radio value="dark">
               <template #label>
                 <div class="ml-2">
                   <font-awesome-icon
@@ -147,7 +146,6 @@ export default {
       pass1: '',
       pass2: '',
       loading: false,
-      mode: 'light',
       rules: [
         (v) => !!v || 'Password is required',
         (v) => (v && v.length >= 6) || 'Password must be at least 6 characters',
@@ -167,6 +165,14 @@ export default {
       subscriptionDays: (state) => state.user.subscriptionDays,
     }),
     ...mapGetters({ expires: 'user/expires' }),
+    mode: {
+      get() {
+        return this.$vuetify.theme.dark ? 'dark' : 'light'
+      },
+      set(val) {
+        this.$vuetify.theme.dark = val === 'dark'
+      },
+    },
     subMsg() {
       return this.subscriptionDays < 0
         ? `${this.expires} (${Math.abs(this.subscriptionDays)} days ago)`

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pt-6 pt-md-10">
+  <v-container>
     <v-row class="justify-center">
       <v-col cols="12" md="10">
         <!-- Skeletons -->
@@ -48,7 +48,7 @@
                   <p class="text-subtitle-1 font-weight-bold">Question</p>
                   <div v-html="response.question.text"></div>
                   <div class="d-flex justify-end">
-                    <v-chip outlined small label>
+                    <v-chip color="tertiary" outlined small label>
                       {{ max }} mark{{ max | pluralize }}
                     </v-chip>
                   </div>
@@ -98,7 +98,24 @@
                               <span>You</span>
                             </v-tooltip>
                           </th>
-                          <th></th>
+                          <th>
+                            <v-tooltip bottom>
+                              <template #activator="{ on }">
+                                <v-chip
+                                  :color="color(accuracy)"
+                                  label
+                                  v-on="on"
+                                >
+                                  <font-awesome-icon
+                                    icon="fa-light fa-bullseye-pointer"
+                                    class="fa-lg mr-2"
+                                  />
+                                  {{ accuracy }}%
+                                </v-chip>
+                              </template>
+                              <span>Marking accuracy</span>
+                            </v-tooltip>
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -150,7 +167,6 @@
               <v-row>
                 <v-col cols="12" class="d-flex justify-end">
                   <v-btn
-                    elevation="0"
                     rounded
                     color="primary"
                     nuxt

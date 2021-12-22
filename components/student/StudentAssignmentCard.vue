@@ -39,8 +39,8 @@ export default {
     },
   },
   computed: {
-    // On /home, show group name
-    // On /class, show course name
+    // On home page, show the group name
+    // On /class, show the course
     subtitle() {
       return this.$route.name === 'home'
         ? this.assignment.group.name
@@ -49,6 +49,7 @@ export default {
   },
   methods: {
     nav() {
+      this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
       this.$router.push(`/assignment/${this.assignment.id}`)
     },
   },

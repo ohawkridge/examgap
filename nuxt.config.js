@@ -76,7 +76,7 @@ export default {
         light: {
           primary: '#00668b',
           secondary: '#a03c49',
-          tertiary: '#755b00',
+          tertiary: '#765b00',
           error: '#ba1b1b',
           background: '#fbfcff',
           surface: '#41484d',
@@ -84,7 +84,7 @@ export default {
         dark: {
           primary: '#74d1ff',
           secondary: '#ffb2b9',
-          tertiary: '#ebc248',
+          tertiary: '#ecc248',
           error: '#ffb4a9',
           background: '#191c1e',
         },

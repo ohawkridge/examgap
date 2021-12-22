@@ -2,7 +2,8 @@
   <v-app>
     <v-container class="d-flex align-center">
       <nuxt-link to="/">
-        <the-logo />
+        <the-logo-dark v-if="$vuetify.theme.dark" />
+        <the-logo v-else />
       </nuxt-link>
       <v-spacer />
       <nuxt-link to="/">Back home</nuxt-link>
@@ -49,9 +50,10 @@
               :loading="loading"
               :disabled="loading"
               type="submit"
-            >
-              Sign In</v-btn
-            >
+              ><span :class="$vuetify.theme.dark ? 'pb-text' : ''">
+                Sign In
+              </span>
+            </v-btn>
             <div class="mt-3 d-flex justify-space-between">
               <nuxt-link to="/reset">Reset password</nuxt-link>
               <nuxt-link to="/trial">Free trial</nuxt-link>
@@ -65,10 +67,12 @@
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
+import TheLogoDark from '@/components/common/TheLogoDark'
 
 export default {
   components: {
     TheLogo,
+    TheLogoDark,
   },
   data() {
     return {

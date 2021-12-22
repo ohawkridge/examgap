@@ -17,7 +17,10 @@
           <v-chip x-small label>
             {{ teacher ? 'Teacher' : 'Student' }}
           </v-chip>
-          <div id="headway"></div>
+          <div
+            id="headway"
+            :class="$vuetify.theme.dark ? 'dark2' : 'light2'"
+          ></div>
         </div>
       </div>
       <v-list rounded dense>
