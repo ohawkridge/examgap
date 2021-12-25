@@ -33,6 +33,9 @@ exports.handler = async (event) => {
               numQuestions: q.Count(
                 q.Select(['data', 'questions'], q.Var('instance'))
               ),
+              group: {
+                id: groupId,
+              },
               live: q.LT(
                 q.ToDate(
                   q.SubString(

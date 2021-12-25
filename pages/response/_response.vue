@@ -45,7 +45,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6">
-                  <p class="text-subtitle-1 font-weight-bold">Question</p>
+                  <p class="text-subtitle-2 font-weight-bold">Question</p>
                   <div v-html="response.question.text"></div>
                   <div class="d-flex justify-end">
                     <v-chip color="tertiary" outlined small label>
@@ -63,13 +63,11 @@
                     />
                     <p v-text="response.feedback"></p>
                   </div>
-                  <p class="text-subtitle-1 font-weight-bold mt-4">
-                    Model answer
-                  </p>
+                  <p class="text-subtitle-2 mt-4">Model answer</p>
                   <p v-html="response.question.modelAnswer">Model answer</p>
                 </v-col>
                 <v-col cols="12" md="6">
-                  <p class="text-subtitle-1 font-weight-bold">Mark scheme</p>
+                  <p class="text-subtitle-2">Mark scheme</p>
                   <v-simple-table>
                     <template #default>
                       <thead>
@@ -101,20 +99,21 @@
                           <th>
                             <v-tooltip bottom>
                               <template #activator="{ on }">
-                                <v-chip
-                                  :color="color(accuracy)"
-                                  label
+                                <font-awesome-icon
+                                  icon="fa-light fa-bullseye-pointer"
+                                  class="mr-2 fa-xl"
                                   v-on="on"
-                                >
-                                  <font-awesome-icon
-                                    icon="fa-light fa-bullseye-pointer"
-                                    class="fa-lg mr-2"
-                                  />
-                                  {{ accuracy }}%
-                                </v-chip>
+                                />
                               </template>
                               <span>Marking accuracy</span>
                             </v-tooltip>
+                            <span
+                              :class="
+                                $root.$options.filters.ragText(accuracy, max)
+                              "
+                            >
+                              {{ accuracy }}%
+                            </span>
                           </th>
                         </tr>
                       </thead>
@@ -143,12 +142,12 @@
                       <tfoot>
                         <tr>
                           <td class="text-center">
-                            <v-chip :color="tRag">
+                            <v-chip :color="tRag" label>
                               {{ response.tm.length }}
                             </v-chip>
                           </td>
                           <td class="text-center">
-                            <v-chip :color="sRag">
+                            <v-chip :color="sRag" label>
                               {{ response.sm.length }}
                             </v-chip>
                           </td>

@@ -140,7 +140,9 @@ library.add(
   faCircleDot,
   faUserCheck,
   faHourglass,
-  faSquareCheck
+  faSquareCheck,
+  faChevronLeft,
+  faChevronRight
 )
 
 Vue.use(Vuetify)

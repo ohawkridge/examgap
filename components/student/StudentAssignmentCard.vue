@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-6 rounded-lg" hover @click="nav()">
+  <v-card class="mb-4 mb-md-6 rounded-lg" hover @click="nav()">
     <v-card-title class="d-flex justify-space-between">
       {{ assignment.name }}
     </v-card-title>
@@ -49,6 +49,7 @@ export default {
   },
   methods: {
     nav() {
+      // console.debug(`nav(${this.assignment.group.id}, ${this.assignment.id})`)
       this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
       this.$router.push(`/assignment/${this.assignment.id}`)
     },

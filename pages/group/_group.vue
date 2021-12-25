@@ -3,7 +3,7 @@
     <v-tabs
       v-model="tab"
       align-with-title
-      :background-color="$vuetify.theme.themes.light.background"
+      background-color="transparent"
       style="border-bottom: 1px solid #d2d2d2 !important"
       color="secondary"
     >
@@ -13,34 +13,9 @@
       <v-tab style="text-transform: capitalize"> Settings </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
-      <v-tab-item style="background-color: #fbfcff">
-        <!-- ASSIGNMENTS xx -->
+      <v-tab-item :style="`background-color: ${bgColor}`">
+        <!-- Assignments xx -->
         <v-container>
-          <v-row class="justify-center">
-            <v-col cols="12" md="10" class="d-flex justify-end">
-              <v-tooltip v-if="group.active" bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    color="primary"
-                    elevation="0"
-                    rounded
-                    :block="$vuetify.breakpoint.name === 'xs'"
-                    :class="$vuetify.breakpoint.name === 'xs' ? 'mb-3' : ''"
-                    nuxt
-                    :to="`/browse/${group.course.id}`"
-                    v-on="on"
-                  >
-                    <font-awesome-icon
-                      icon="fa-light fa-plus"
-                      class="mr-2 fa-lg"
-                    />
-                    Assignment
-                  </v-btn>
-                </template>
-                <span>New assignment</span>
-              </v-tooltip>
-            </v-col>
-          </v-row>
           <v-row class="justify-center">
             <v-col class="12" md="8">
               <teacher-assignment-card
@@ -53,13 +28,13 @@
           </v-row>
         </v-container>
       </v-tab-item>
-      <v-tab-item style="background-color: #fbfcff">
+      <v-tab-item :style="`background-color: ${bgColor}`">
         <the-students-table />
       </v-tab-item>
-      <v-tab-item style="background-color: #fbfcff">
+      <v-tab-item :style="`background-color: ${bgColor}`">
         <the-grades-table />
       </v-tab-item>
-      <v-tab-item style="background-color: #fbfcff">
+      <v-tab-item :style="`background-color: ${bgColor}`">
         <the-group-settings />
       </v-tab-item>
     </v-tabs-items>
@@ -112,6 +87,11 @@ export default {
       set(value) {
         this.$store.commit('app/setTab', value)
       },
+    },
+    bgColor() {
+      return this.$vuetify.theme.dark
+        ? this.$vuetify.theme.themes.dark.background
+        : this.$vuetify.theme.themes.light.background
     },
   },
   watch: {

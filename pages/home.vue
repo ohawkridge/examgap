@@ -59,45 +59,16 @@
     <!-- Student xx -->
     <template v-else>
       <v-row class="justify-center">
-        <v-col cols="12" md="8">
-          <p class="text-h5">
-            <font-awesome-icon
-              icon="fa-light fa-quote-left"
-              class="section-icon"
-            />
+        <v-col cols="12" md="8" class="d-flex">
+          <font-awesome-icon
+            icon="fa-light fa-quote-left"
+            class="section-icon"
+          />
+          <p class="text-subtitle-1 pl-2">
             {{ quote.quote }}&mdash;<span class="font-weight-light">{{
               quote.author
             }}</span>
           </p>
-        </v-col>
-      </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="8">
-          <p class="text-h5">
-            <font-awesome-icon
-              icon="fa-light fa-head-side-brain"
-              class="section-icon"
-            />
-            Revise
-          </p>
-        </v-col>
-      </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="8" class="d-flex justify-space-around">
-          <template v-for="(group, i) in groups">
-            <v-btn
-              :key="i"
-              elevation="0"
-              large
-              rounded
-              :block="$vuetify.breakpoint.name === 'xs'"
-              :color="$vuetify.theme.dark ? '#620d1e' : '#ffd9dc'"
-              class="mb-4"
-              @click="revise(group.id)"
-            >
-              {{ group.course.name }}
-            </v-btn>
-          </template>
         </v-col>
       </v-row>
       <v-row class="justify-center">
@@ -113,9 +84,8 @@
       </v-row>
       <v-row class="justify-center">
         <v-col cols="12" md="8">
-          <!-- Skeletons xx -->
           <template v-if="$fetchState.pending">
-            <assignment-card-loader v-for="i in 3" :key="i" />
+            <assignment-card-loader v-for="i in 1" :key="i" />
           </template>
           <student-assignment-card
             v-for="(assignment, i) in assignments"
@@ -134,6 +104,35 @@
               alt="Books and pens illustrations"
             />
             <p class="text-center mt-4">No upcoming assignments</p>
+          </template>
+        </v-col>
+      </v-row>
+      <v-row class="justify-center">
+        <v-col cols="12" md="8">
+          <p class="text-h5">
+            <font-awesome-icon
+              icon="fa-light fa-head-side-brain"
+              class="section-icon"
+            />
+            Revise
+          </p>
+        </v-col>
+      </v-row>
+      <v-row class="justify-center">
+        <v-col cols="12" md="8">
+          <template v-for="(group, i) in groups">
+            <v-btn
+              :key="i"
+              elevation="0"
+              large
+              rounded
+              :block="$vuetify.breakpoint.name === 'xs'"
+              :color="$vuetify.theme.dark ? '#620d1e' : '#ffd9dc'"
+              class="mb-4 mr-4"
+              @click="revise(group.id)"
+            >
+              {{ group.course.name }}
+            </v-btn>
           </template>
         </v-col>
       </v-row>
@@ -194,6 +193,7 @@ export default {
 /* align section icons */
 .section-icon {
   width: 24px;
+  height: 24px;
   margin-right: 16px;
 }
 </style>

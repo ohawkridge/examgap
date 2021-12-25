@@ -19,6 +19,9 @@ exports.handler = async (event) => {
         name: q.Select(['data', 'name'], q.Var('instance')),
         start: q.Select(['data', 'start'], q.Var('instance'), 'N/A'),
         dateDue: q.Select(['data', 'dateDue'], q.Var('instance')),
+        numQuestions: q.Count(
+          q.Select(['data', 'questions'], q.Var('instance'))
+        ),
         group: q.Let(
           {
             instance: q.Get(
@@ -109,7 +112,7 @@ exports.handler = async (event) => {
                           'ref',
                           q.Select(
                             'data',
-                            // Some old questions have multiple
+                            // Some old questions have multiple responses
                             q.Take(
                               1,
                               q.Paginate(
@@ -142,6 +145,10 @@ exports.handler = async (event) => {
                             ['data', 'username'],
                             q.Var('student')
                           ),
+                          qId: q.Select(
+                            'id',
+                            q.Select(['data', 'question'], q.Var('instance'))
+                          ),
                           text: q.Select(['data', 'text'], q.Var('instance')),
                           time: q.Select(
                             ['data', 'timeTaken'],
@@ -150,7 +157,8 @@ exports.handler = async (event) => {
                           ),
                           feedback: q.Select(
                             ['data', 'feedback'],
-                            q.Var('instance')
+                            q.Var('instance'),
+                            ''
                           ),
                           marked: q.Select(
                             ['data', 'marked'],
@@ -180,6 +188,7 @@ exports.handler = async (event) => {
       }
     )
     const data = await keyedClient.query(qry)
+    console.log(data)
     data.students.sort(compare)
     return {
       statusCode: 200,

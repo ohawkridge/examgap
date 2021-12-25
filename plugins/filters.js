@@ -33,3 +33,10 @@ Vue.filter('name', function (username) {
     ? username.substring(0, username.indexOf('@'))
     : username
 })
+
+// Return css class to RAG text elements
+Vue.filter('ragText', function (n, max) {
+  if (n / max <= 1 / 3) return 'red--text'
+  if (n / max > 2 / 3) return 'green--text'
+  return 'orange--text'
+})

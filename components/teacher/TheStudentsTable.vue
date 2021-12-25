@@ -1,156 +1,187 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col
-        cols="12"
-        class="flex-xs-column d-sm-flex justify-space-between align-center"
-      >
-        <v-menu offset-y open-on-hover rounded="lg">
-          <template #activator="{ on }">
-            <v-btn
-              class="mr-2 mb-2 mb-sm-0 mr-2"
-              :block="$vuetify.breakpoint.name === 'xs'"
-              color="primary"
-              rounded
-              outlined
-              v-on="on"
-            >
-              Actions
-              <font-awesome-icon icon="fa-light fa-angle-down" class="ml-2" />
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="showReset('')"
-            >
-              <v-list-item-title>
-                Reset password{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="$nuxt.$emit('open-add')">
-              <v-list-item-title>Add students</v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="$nuxt.$emit('open-remove')"
-            >
-              <v-list-item-title>
-                Remove student{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item
-              :disabled="selected.length === 0"
-              @click="$nuxt.$emit('open-copy')"
-            >
-              <v-list-item-title>
-                Copy student{{ selected.length | pluralize }}
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="$nuxt.$emit('open-copy')">
-              <v-list-item-title> Print logins </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <div>
-          <v-btn
-            class="ml-3"
-            rounded
-            text
-            color="primary"
-            :block="$vuetify.breakpoint.name === 'xs'"
-            @click="exportTableToCSV()"
-          >
-            <font-awesome-icon
-              icon="fa-light fa-arrow-down-to-bracket"
-              class="mr-2"
-            />
-            Download
-          </v-btn>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row class="justify-center">
-      <v-col cols="12">
-        <v-data-table
-          v-model="selected"
-          :headers="headers"
-          :items="students"
-          checkbox-color="primary"
-          item-key="id"
-          style="border: 1px solid #d2d2d2"
-          show-select
-          hide-default-footer
-          disable-pagination
-          :loading="$fetchState.pending"
-          loading-text="Loading students..."
-        >
-          <template #[`item.password`]="props">
-            <v-btn
-              rounded
-              outlined
-              small
-              color="primary"
-              @click="showReset(props.item.id)"
-            >
-              Reset
-            </v-btn>
-          </template>
-          <template #no-data>
-            <!-- Empty state -->
-            <div style="height: 60vh" class="mt-10">
-              <v-img
-                src="/no-student.svg"
-                contain
-                height="180"
-                width="180"
-                alt="Mortar board illustration"
-                class="mx-auto"
-              />
-              <p class="text-body-1 black--text mt-4">No students yet</p>
-              <v-btn
-                elevation="0"
-                rounded
-                outlined
-                color="primary"
-                :block="$vuetify.breakpoint.name === 'xs'"
-                class="mb-2 mb-sm-0 mr-2"
-                @click="$nuxt.$emit('show-invite')"
+      <v-col cols="12" md="11">
+        <v-card class="rounded-lg">
+          <v-card-text>
+            <v-row class="justify-center">
+              <v-col
+                cols="12"
+                class="flex-xs-column d-sm-flex justify-space-between align-center"
               >
-                Invite Students
-              </v-btn>
-            </div>
-          </template>
-          <template #[`item.target`]="props">
-            <v-edit-dialog>
-              <!-- groupId is the key into target object -->
-              <!-- Different targets for each group -->
-              {{ props.item.target[`${group.id}`] }}
-              <template #input>
-                <div class="mt-4 text-h6">Target</div>
-                <v-text-field
-                  :value="props.item.target[`${group.id}`]"
-                  :rules="targetRules"
-                  single-line
-                  label="Target"
-                  placeholder="5"
-                  class="mb-4"
-                  @keyup.enter="save(props.item.id, $event.target.value)"
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
-          </template>
-          <!-- <template #[`footer.prepend`]>
+                <v-menu offset-y open-on-hover rounded="lg">
+                  <template #activator="{ on }">
+                    <v-btn
+                      class="mr-2 mb-2 mb-sm-0 mr-2"
+                      :block="$vuetify.breakpoint.name === 'xs'"
+                      color="primary"
+                      rounded
+                      outlined
+                      v-on="on"
+                    >
+                      Manage students
+                      <font-awesome-icon
+                        icon="fa-light fa-angle-down"
+                        class="ml-2"
+                      />
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="showReset('')"
+                    >
+                      <v-list-item-title>
+                        Reset password{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="$nuxt.$emit('open-add')">
+                      <v-list-item-title>Add students</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="$nuxt.$emit('open-remove')"
+                    >
+                      <v-list-item-title>
+                        Remove student{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item
+                      :disabled="selected.length === 0"
+                      @click="$nuxt.$emit('open-copy')"
+                    >
+                      <v-list-item-title>
+                        Copy student{{ selected.length | pluralize }}
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+                <div>
+                  <v-tooltip bottom>
+                    <template #activator="{ on }">
+                      <v-btn
+                        :to="`/logins/${group.id}`"
+                        class="mr-2"
+                        color="primary"
+                        rounded
+                        outlined
+                        v-on="on"
+                      >
+                        Logins
+                      </v-btn>
+                    </template>
+                    <span>Print logins</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template #activator="{ on }">
+                      <v-btn
+                        rounded
+                        outlined
+                        color="primary"
+                        :block="$vuetify.breakpoint.name === 'xs'"
+                        v-on="on"
+                        @click="exportTableToCSV()"
+                      >
+                        <font-awesome-icon
+                          icon="fa-light fa-arrow-down-to-bracket"
+                          class="mr-2"
+                        />
+                        Csv
+                      </v-btn>
+                    </template>
+                    <span>Download csv</span>
+                  </v-tooltip>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-data-table
+                  v-model="selected"
+                  :headers="headers"
+                  :items="students"
+                  checkbox-color="primary"
+                  item-key="id"
+                  show-select
+                  hide-default-footer
+                  disable-pagination
+                  :loading="$fetchState.pending"
+                  loading-text="Loading students..."
+                >
+                  <template #[`item.password`]="props">
+                    <v-btn
+                      rounded
+                      text
+                      small
+                      color="primary"
+                      @click="showReset(props.item)"
+                    >
+                      Reset
+                    </v-btn>
+                  </template>
+                  <template #no-data>
+                    <!-- Empty state -->
+                    <div style="height: 60vh" class="mt-10">
+                      <v-img
+                        src="/no-student.svg"
+                        contain
+                        height="180"
+                        width="180"
+                        alt="Mortar board illustration"
+                        class="mx-auto"
+                      />
+                      <p class="text-body-1 black--text mt-4">
+                        No students yet
+                      </p>
+                      <v-btn
+                        elevation="0"
+                        rounded
+                        outlined
+                        color="primary"
+                        :block="$vuetify.breakpoint.name === 'xs'"
+                        class="mb-2 mb-sm-0 mr-2"
+                        @click="$nuxt.$emit('show-invite')"
+                      >
+                        Invite Students
+                      </v-btn>
+                    </div>
+                  </template>
+                  <template #[`item.target`]="props">
+                    <v-edit-dialog>
+                      <!-- groupId is the key into target object -->
+                      <!-- Different targets for each group -->
+                      {{ props.item.target[`${group.id}`] }}
+                      <template #input>
+                        <div class="mt-4 text-h6">Target</div>
+                        <v-text-field
+                          :value="props.item.target[`${group.id}`]"
+                          :rules="targetRules"
+                          single-line
+                          label="Target"
+                          placeholder="5"
+                          class="mb-4"
+                          @keyup.enter="
+                            save(props.item.id, $event.target.value)
+                          "
+                        ></v-text-field>
+                      </template>
+                    </v-edit-dialog>
+                  </template>
+                  <!-- <template #[`footer.prepend`]>
             <span class="tertiary--text text-subtitle-2 ml-2">
               {{ students.length }} Student{{ students.length | pluralize }}
             </span>
           </template> -->
-        </v-data-table>
+                </v-data-table>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
-    <!-- Reset Pw xx -->
-    <v-dialog v-model="dialog" max-width="440" class="rounded-xl">
-      <v-card class="rounded-xl" color="#fbfcff">
+    <!-- Reset password xx -->
+    <v-dialog v-model="dialog" max-width="440">
+      <v-card class="rounded-xl">
         <v-card-title
           class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
         >
@@ -278,8 +309,9 @@ export default {
   methods: {
     // Show password reset dialog (in table btn click)
     // Save id of student clicked
-    showReset(id) {
-      this.idToReset = id
+    showReset(item) {
+      console.debug({ item })
+      // this.idToReset = id
       this.dialog = true
     },
     async save(studentId, target) {

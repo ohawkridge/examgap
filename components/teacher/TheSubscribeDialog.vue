@@ -1,8 +1,10 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440" class="fix-overlay">
+  <v-dialog v-model="dialog" max-width="440">
     <template #activator="{ on }">
       <v-btn color="primary" block rounded elevation="0" v-on="on">
-        {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
+        <span :class="$vuetify.theme.dark ? 'pb-text' : ''">
+          {{ subscribed ? 'Renew Subscription' : 'Subscribe' }}
+        </span>
       </v-btn>
     </template>
     <v-card class="rounded-xl">

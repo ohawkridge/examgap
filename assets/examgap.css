@@ -102,16 +102,48 @@ span.v-chip.theme--light.green {
 /* headway widget */
 /* (doesn't work scoped) */
 .dark2 #HW_badge {
-  background-color: #ecc248 !important;
-  color: #241a00 !important;
+  background-color: #822533 !important;
+  color: #ffd9dc !important;
 }
 
 .light2 #HW_badge {
-  background-color: #765b00 !important;
-  color: #fbfcff !important;
+  background-color: #ffd9dc !important;
+  color: #40000c !important;
 }
 
 /* fix primary button text colour */
 .pb-text {
   color: #003549 !important;
+}
+
+/* feedback autocomplete styles */
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 8px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #dedede;
+}
+.autocomplete-items div:hover {
+  background-color: #eeeeee;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
 }

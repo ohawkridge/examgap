@@ -34,7 +34,7 @@
             class="px-5 pb-6"
           ></v-skeleton-loader>
         </v-card>
-        <v-card v-else class="rounded-lg">
+        <v-card v-else class="rounded-xl">
           <v-card-title>
             <v-tooltip bottom>
               <template #activator="{ on }">
@@ -88,6 +88,7 @@
                     <v-list-item
                       v-for="(q, i) in assignment.questions"
                       :key="i"
+                      :class="$vuetify.breakpoint.name === 'xs' ? 'px-0' : ''"
                       @click="action(q)"
                     >
                       <v-list-item-content>

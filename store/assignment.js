@@ -13,22 +13,22 @@ const getDefaultState = () => ({
 // eslint-disable-next-line no-unused-vars
 const state = getDefaultState()
 
-// getAssignment() returns a massive data structure
-// (see file in Examgap/json). Its two main keys are:
-// headers and students. studentIndex gets us
-// horizontally into the student array. Each student
-// object has two main keys: name and data. data is an
-// array of objects (one for each question). Within
-// these objects is an array of the student's answers.
-// If the question has been reassigned, they could have more
-// than one response. This getter returns a single
-// response object.
 const getters = {
+  // getReport returns a big data structure containing
+  // all the assignment info (including group), headers
+  // (containing question), and students (each with an
+  // array of responses). studentIndex gets us into the
+  // students array. Each student object has a key
+  // 'responses' containing an array of responses
+  // (*one per question*).
   response: (state) => {
     if (!state.marking) return {}
-    return state.assignment.students[state.studentIndex].data[
-      state.questionIndex
-    ][state.assignment.headers[state.questionIndex + 1].value]
+    const student = state.assignment.students[state.studentIndex]
+    return student.responses[state.questionIndex - 1]
+  },
+  question: (state) => {
+    if (!state.marking) return {}
+    return state.assignment.headers[state.questionIndex]
   },
 }
 

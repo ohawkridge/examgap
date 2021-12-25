@@ -36,27 +36,16 @@
           readonly
         >
           <template #append>
-            <div id="fix-chip">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-chip
-                    v-if="subscribed"
-                    label
-                    dark
-                    color="secondary"
-                    outlined
-                    v-on="on"
-                  >
-                    Subscribed
-                    <font-awesome-icon
-                      icon="fa-light fa-check"
-                      class="ml-2 fa-lg"
-                    />
-                  </v-chip>
-                </template>
-                <span>Thank you</span>
-              </v-tooltip>
-            </div>
+            <v-chip
+              v-if="subscribed"
+              id="fix-chip"
+              label
+              color="secondary"
+              outlined
+            >
+              Subscribed
+              <font-awesome-icon icon="fa-light fa-check" class="ml-2 fa-lg" />
+            </v-chip>
           </template>
         </v-text-field>
         <the-subscribe-dialog v-if="teacher" />
