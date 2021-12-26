@@ -10,10 +10,14 @@ const getDefaultState = () => ({
 const state = getDefaultState()
 
 const getters = {
-  // Get count of revision questions answered for a topic
+  // Get count of revision questions answered for topic
   topicCount: (state, getters, rootState) => {
     if (state.topicId === '' || rootState.user.teacher) return 0
     return state.topics.find(({ id }) => id === state.topicId).numAnswered
+  },
+  // Get topic name based on current topic id
+  currentTopicName: (state) => {
+    return state.topics.find((t) => t.id === state.topicId).name
   },
 }
 
@@ -51,7 +55,7 @@ const actions = {
     commit('setTopics', topics)
   },
   async getQuestion({ commit, rootState }, questionId) {
-    // Clear previous question
+    // Clear previous question to avoid flash of old
     commit('setQuestion', {})
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
     let response = await fetch(url, {

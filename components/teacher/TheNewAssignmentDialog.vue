@@ -1,21 +1,20 @@
 <template>
-  <v-dialog v-model="dialog" max-width="360" class="rounded-xl">
-    <v-card class="rounded-xl" color="#fbfcff">
-      <v-card-title></v-card-title>
+  <v-dialog v-model="dialog" max-width="360">
+    <v-card class="rounded-xl">
+      <v-card-title>Choose class</v-card-title>
       <v-card-text>
-        <p class="text-h5 text-center">Choose class</p>
         <v-btn
           v-for="(group, i) in groups"
           :key="i"
           elevation="0"
           block
           large
-          color="#ffd9dc"
+          :color="$vuetify.theme.dark ? '#620d1e' : '#ffd9dc'"
           rounded
-          class="mb-4"
+          class="mb-6"
           @click="nav(group)"
         >
-          <span style="color: 40000c">{{ group.name }}</span>
+          {{ group.name }}
         </v-btn>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false"> Cancel </v-btn>
@@ -48,7 +47,7 @@ export default {
     nav(group) {
       this.$store.commit('user/setActiveGroupId', group.id)
       this.dialog = false
-      this.$router.push(`/browse/${group.course.id}`)
+      this.$router.push(`/questions/${group.course.id}`)
     },
   },
 }

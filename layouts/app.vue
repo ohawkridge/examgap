@@ -33,7 +33,7 @@
               <v-list-item-title> Home </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-subheader> Classes </v-subheader>
+          <v-subheader> CLASSES </v-subheader>
           <v-list-item
             v-for="(group, i) in groups"
             :key="i"

@@ -178,7 +178,7 @@ export default {
   methods: {
     newAssignment(group) {
       this.$store.commit('user/setActiveGroupId', group.id)
-      this.$router.push(`/browse/${group.course.id}`)
+      this.$router.push(`/questions/${group.course.id}`)
     },
     revise(groupId) {
       this.$store.commit('user/setActiveGroupId', groupId)

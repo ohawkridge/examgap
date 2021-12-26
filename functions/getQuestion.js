@@ -18,8 +18,6 @@ exports.handler = async (event) => {
         id: q.Select(['ref', 'id'], q.Var('instance')),
         text: q.Select(['data', 'text'], q.Var('instance')),
         maxMark: q.Select(['data', 'maxMark'], q.Var('instance')),
-        keywords: q.Select(['data', 'keywords'], q.Var('instance')),
-        minWords: q.Select(['data', 'minWords'], q.Var('instance')),
         guidance: q.Select(['data', 'guidance'], q.Var('instance')),
         modelAnswer: q.Select(['data', 'modelAnswer'], q.Var('instance')),
         marks: q.Select(
@@ -60,16 +58,25 @@ exports.handler = async (event) => {
           // Whole doc only contains max. 3 fields so no point customising
           q.Lambda('tRef', q.Select(['ref', 'id'], q.Get(q.Var('tRef'))))
         ),
+        // Get mean timeTaken across all responses for this question
+        meanTime: q.Select(
+          0,
+          q.Select(
+            'data',
+            q.Mean(
+              q.Paginate(
+                q.Match(
+                  q.Index('question_times'),
+                  q.Select('ref', q.Var('instance'))
+                )
+              )
+            )
+          )
+        ),
       }
     )
     const data = await keyedClient.query(qry)
-    // Alphabetise keywords
-    data.keywords = data.keywords
-      .split(', ')
-      .sort(function (a, b) {
-        return a.toLowerCase().localeCompare(b.toLowerCase())
-      })
-      .join(', ')
+    console.log(data)
     return {
       statusCode: 200,
       body: JSON.stringify(data),

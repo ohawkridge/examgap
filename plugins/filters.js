@@ -40,3 +40,10 @@ Vue.filter('ragText', function (n, max) {
   if (n / max > 2 / 3) return 'green--text'
   return 'orange--text'
 })
+
+Vue.filter('time', function (sec) {
+  if (sec === 0) return 'N/A'
+  return `${Math.floor(
+    sec / 60
+  )}:${String(sec - Math.floor(sec / 60) * 60).padStart(2, '0')}`
+})

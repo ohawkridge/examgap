@@ -57,6 +57,12 @@
                   </v-list>
                 </v-menu>
                 <div>
+                  <span class="tertiary--text text-subtitle-2 mr-2">
+                    {{ students.length }} Student{{
+                      students.length | pluralize
+                    }}
+                    <font-awesome-icon icon="fa-light fa-users" class="ml-2" />
+                  </span>
                   <v-tooltip bottom>
                     <template #activator="{ on }">
                       <v-btn
@@ -167,11 +173,6 @@
                       </template>
                     </v-edit-dialog>
                   </template>
-                  <!-- <template #[`footer.prepend`]>
-            <span class="tertiary--text text-subtitle-2 ml-2">
-              {{ students.length }} Student{{ students.length | pluralize }}
-            </span>
-          </template> -->
                 </v-data-table>
               </v-col>
             </v-row>
@@ -188,11 +189,13 @@
           <font-awesome-icon icon="fa-light fa-lock-keyhole" class="fa-sm" />
         </v-card-title>
         <v-card-text>
-          <p class="text-h5 text-center">Reset password</p>
+          <p class="text-h5 text-center">
+            Reset password{{ selected.length !== 1 ? 's' : '' }}
+          </p>
           <v-text-field
             v-model="password"
             :rules="rules"
-            label="New password*"
+            :label="niceLabel"
             outlined
             autofocus
           ></v-text-field>
@@ -235,7 +238,8 @@ export default {
   data() {
     return {
       selected: [],
-      idToReset: '',
+      userToReset: {},
+      niceLabel: '',
       targetRules: [(v) => v.length === 1 || 'Max. one character'],
       rules: [(v) => !!v || 'Password is required'],
       headers: [
@@ -302,16 +306,14 @@ export default {
     ...mapState({
       students: (state) => state.group.students,
     }),
-    // xsBtns() {
-    //   return this.$vuetify.breakpoint.name === 'xs' ? 'mt-2' : ''
-    // },
   },
   methods: {
-    // Show password reset dialog (in table btn click)
-    // Save id of student clicked
     showReset(item) {
-      console.debug({ item })
-      // this.idToReset = id
+      // item is user data object passed to v-data-table
+      // (empty string if called from v-menu)
+      this.userToReset = item
+      this.niceLabel =
+        item === '' ? 'New password*' : `New password for ${item.username}*`
       this.dialog = true
     },
     async save(studentId, target) {
@@ -342,12 +344,11 @@ export default {
           '/.netlify/functions/resetStudentPass',
           this.$config.baseURL
         )
-        // Reset single student or bulk selection?
-        // Transform 'selected' array of objects → array of ids
+        // If individual 'Reset' button clicked—ignore selected []
         const students =
-          this.idToReset === ''
-            ? this.selected.map((s) => s.id)
-            : [this.idToReset]
+          this.userToReset.length === 1
+            ? [this.userToReset] // Array of one
+            : this.selected.map((s) => s.id) // Extract ids from objects
         const response = await fetch(url, {
           body: JSON.stringify({
             secret: this.$store.state.user.secret,
@@ -357,15 +358,12 @@ export default {
           method: 'POST',
         })
         if (!response.ok) {
-          throw new Error(`Error resetting password ${response.status}`)
+          throw new Error('Error resetting password(s)')
         }
+        const one = this.selected.length === 1 || this.userToReset !== ''
         this.$snack.showMessage({
           type: 'success',
-          msg: `${
-            this.selected.length === 1 || this.idToReset !== ''
-              ? 'Password'
-              : 'Passwords'
-          } reset`,
+          msg: `Password${one ? '' : 's'} reset`,
         })
       } catch (err) {
         console.error(err)
@@ -375,7 +373,7 @@ export default {
         })
       } finally {
         this.selected = []
-        this.idToReset = ''
+        this.userToReset = ''
         this.password = ''
         this.dialog = false
         this.loading = false

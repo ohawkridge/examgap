@@ -198,13 +198,7 @@
         <v-row class="d-flex justify-center text-center">
           <v-col class="12" md="8">
             <p
-              class="
-                text-h5 text-md-h4
-                font-weight-bold
-                white--text
-                text-center
-                mb-8
-              "
+              class="text-h5 text-md-h4 font-weight-bold white--text text-center mb-8"
             >
               Try Examgap for free
             </p>

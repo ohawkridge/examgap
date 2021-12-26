@@ -219,7 +219,7 @@ const actions = {
   },
   async getResponse({ commit, rootState }, responseId) {
     const url = new URL('/.netlify/functions/getResponse', this.$config.baseURL)
-    const response = await fetch(url, {
+    let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
         responseId,
@@ -229,7 +229,9 @@ const actions = {
     if (!response.ok) {
       throw new Error('Error fetching response')
     }
-    commit('setResponse', await response.json())
+    response = await response.json()
+    console.debug('%c' + `Response ${response.id}`, 'color:orange')
+    commit('setResponse', response)
   },
   resetState({ commit }) {
     commit('resetState')

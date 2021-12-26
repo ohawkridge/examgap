@@ -1,13 +1,9 @@
-// import webpack from 'webpack'
 import HoneybadgerSourceMapPlugin from '@honeybadger-io/webpack'
-
-// const { HONEYB_KEY } = process.env
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
-  // Exclude most pages
   // https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-generate#exclude
   generate: {
     exclude: [],

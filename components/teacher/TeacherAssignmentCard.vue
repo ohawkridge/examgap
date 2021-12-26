@@ -2,7 +2,7 @@
   <v-card class="mb-6 rounded-lg" hover @click="nav()">
     <v-card-title class="d-flex text-h6 justify-space-between">
       {{ assignment.name }}
-      <v-menu offset-y rounded="lg">
+      <v-menu offset-y rounded="lg" open-on-hover>
         <template #activator="{ on }">
           <v-btn icon @click.stop="">
             <font-awesome-icon
@@ -13,7 +13,7 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item disabled>
+          <v-list-item @click="delAss()">
             <v-list-item-title class="red--text"> Delete </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -80,6 +80,9 @@ export default {
     nav() {
       this.$store.commit('user/setActiveGroupId', this.assignment.group.id)
       this.$router.push(`/report/${this.assignment.id}`)
+    },
+    delAss() {
+      $nuxt.$emit('show-delete', this.assignment.id, this.assignment.group.id)
     },
   },
 }

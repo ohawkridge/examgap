@@ -23,10 +23,7 @@ exports.handler = async (event) => {
       )
     )
     await keyedClient.query(qry)
-    return {
-      statusCode: 200,
-      body: 'ok',
-    }
+    return { statusCode: 200 }
   } catch (err) {
     return { statusCode: 500, body: err.toString() }
   }

@@ -3,7 +3,8 @@
     <v-app-bar elevation="0" color="transparent" app>
       <v-container class="d-flex align-center px-0">
         <nuxt-link to="/home">
-          <the-logo />
+          <the-logo-dark v-if="$vuetify.theme.dark" />
+          <the-logo v-else />
         </nuxt-link>
       </v-container>
     </v-app-bar>
@@ -30,7 +31,9 @@
                 color="primary"
                 @click="$router.go(-1)"
               >
-                Go back
+                <span :class="$vuetify.theme.dark ? 'pb-text' : ''">
+                  Go back
+                </span>
               </v-btn>
             </p>
           </v-col>
@@ -42,11 +45,13 @@
 
 <script>
 import TheLogo from '@/components/common/TheLogo'
+import TheLogoDark from '@/components/common/TheLogoDark'
 
 export default {
   name: 'Error',
   components: {
     TheLogo,
+    TheLogoDark,
   },
   props: {
     error: {
