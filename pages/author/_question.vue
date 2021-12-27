@@ -133,7 +133,24 @@
             multiple
           >
           </v-autocomplete>
-          <v-checkbox v-model="showAll" label="Show developing courses">
+          <v-checkbox v-model="showAll">
+            <template #label>
+              Show all courses
+              <v-menu offset-y open-on-hover rounded="lg">
+                <template #activator="{ on }">
+                  <font-awesome-icon
+                    icon="fa-light fa-circle-info"
+                    class="ml-2 fa-lg"
+                    v-on="on"
+                  />
+                </template>
+                <v-card max-width="200">
+                  <v-card-text>
+                    'Stub' courses that don't have questions yet.
+                  </v-card-text>
+                </v-card>
+              </v-menu>
+            </template>
           </v-checkbox>
           <v-alert
             v-if="showAlert"
