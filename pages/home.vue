@@ -2,8 +2,8 @@
   <v-container class="pt-3 pt-md-10">
     <!-- Teacher xx -->
     <template v-if="teacher">
-      <v-row class="justify-center">
-        <v-col cols="12" md="10">
+      <v-row>
+        <v-col cols="12" offset-md="1" md="10">
           <p class="text-h5">
             <font-awesome-icon
               icon="fa-light fa-plus"
@@ -14,8 +14,8 @@
           </p>
         </v-col>
       </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="9" class="d-flex justify-space-around">
+      <v-row>
+        <v-col cols="12" offset-md="1" md="10">
           <template v-for="(group, i) in groups">
             <v-tooltip :key="i" bottom>
               <template #activator="{ on }">
@@ -25,7 +25,7 @@
                   rounded
                   :block="$vuetify.breakpoint.name === 'xs'"
                   :color="$vuetify.theme.dark ? '#620d1e' : '#ffd9dc'"
-                  class="mb-4"
+                  class="mb-4 mr-3"
                   @click="newAssignment(group)"
                   v-on="on"
                 >
@@ -37,8 +37,8 @@
           </template>
         </v-col>
       </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="10">
+      <v-row>
+        <v-col cols="12" offset-md="1" md="10">
           <p class="text-h5">
             <font-awesome-icon
               icon="fa-light fa-clock-rotate-left"
@@ -48,8 +48,8 @@
           </p>
         </v-col>
       </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="8">
+      <v-row>
+        <v-col cols="12" offset-md="1" md="8">
           <template v-for="(assignment, i) in assignments">
             <teacher-assignment-card :key="i" :assignment="assignment" />
           </template>

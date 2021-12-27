@@ -6,17 +6,12 @@
         Archive
       </v-btn>
     </template>
-    <v-card class="rounded-xl" color="#fbfcff">
-      <v-card-title
-        class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
-      >
-        <font-awesome-icon icon="fa-light fa-box-archive" class="fa-sm" />
-      </v-card-title>
+    <v-card class="rounded-xl">
+      <v-card-title class="text-h5"> Archive class? </v-card-title>
       <v-card-text>
-        <p class="text-h5 text-center">Archive class?</p>
         <p class="modal-text">
           This will move {{ group.name }} into the 'Archive'. Archived classes
-          can be retored at any time.
+          can be restored at any time.
         </p>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false"> Cancel </v-btn>

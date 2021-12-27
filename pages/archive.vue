@@ -24,10 +24,16 @@
       </v-col>
     </v-row>
   </v-container>
-  <v-container v-else class="pt-10">
+  <v-container v-else>
     <v-row>
       <v-col v-for="(group, i) in groups" :key="i" cols="12" md="4">
-        <v-card class="archived" hover outlined @click="nav(group.id)">
+        <v-card
+          class="rounded-lg"
+          :class="$vuetify.theme.dark ? 'light' : 'dark'"
+          hover
+          outlined
+          @click="nav(group.id)"
+        >
           <v-card-title>
             {{ group.name }}
           </v-card-title>
@@ -35,8 +41,12 @@
             {{ group.course.name }}
           </v-card-subtitle>
           <v-card-text class="d-flex justify-end">
-            <v-chip label small class="wht-bg">
-              {{ group.count }} Student{{ group.count | pluralize }}
+            <v-chip
+              label
+              small
+              :class="$vuetify.theme.dark ? 'blk-bg' : 'wht-bg'"
+            >
+              {{ group.numStudents }} Student{{ group.numStudents | pluralize }}
             </v-chip>
           </v-card-text>
         </v-card>
@@ -85,7 +95,7 @@ export default {
 
 <style scoped>
 /* stripes */
-.archived {
+.dark {
   background-image: repeating-linear-gradient(
     55deg,
     transparent 0 8px,
@@ -93,9 +103,22 @@ export default {
   );
 }
 
+.light {
+  background-image: repeating-linear-gradient(
+    55deg,
+    transparent 0 8px,
+    rgb(52, 56, 67) 8px 10px
+  );
+}
+
 /* no stripes on chips */
 span.wht-bg.v-chip.v-chip--no-color {
   background-color: #fff !important;
   border: 1px solid #bebebe !important;
+}
+
+span.blk-bg.v-chip.v-chip--no-color {
+  background-color: #191c1e !important;
+  border: 1px solid rgb(52, 56, 67) !important;
 }
 </style>

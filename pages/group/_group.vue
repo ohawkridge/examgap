@@ -68,10 +68,6 @@ export default {
   },
   layout: 'app',
   async fetch() {
-    console.log(
-      '%c' + 'Fetch',
-      'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
-    )
     await this.$store.dispatch('group/getAssignments')
   },
   computed: {
@@ -103,7 +99,8 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', this.group.name)
+    const title = `${this.group.name}${this.group.active ? '' : '(Archived)'}`
+    this.$store.commit('app/setPageTitle', title)
     // In case _report.vue crashes, stop marking
     this.$store.commit('assignment/setMarking', false)
     // Group is archived

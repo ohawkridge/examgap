@@ -71,7 +71,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      link: 'user/joinLink',
+      code: 'user/activeGroupCode',
+      link: 'user/activeGroupLink',
     }),
   },
   watch: {
