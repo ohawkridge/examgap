@@ -22,6 +22,25 @@ const getters = {
 }
 
 const actions = {
+  async saveQuestion({ rootState }, { edit, question }) {
+    const url = new URL(
+      '/.netlify/functions/saveQuestion',
+      this.$config.baseURL
+    )
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        edit,
+        question,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error saving question')
+    }
+    response = await response.json()
+    return response
+  },
   async getRevision({ commit, rootGetters, rootState }) {
     const url = new URL('/.netlify/functions/getRevision', this.$config.baseURL)
     const response = await fetch(url, {
@@ -36,7 +55,7 @@ const actions = {
     }
     commit('setTopics', await response.json())
   },
-  async getACTopics({ commit, rootState }, allCourses) {
+  async getAllTopics({ commit, rootState }, allCourses) {
     const url = new URL(
       '/.netlify/functions/getAllTopics',
       this.$config.baseURL

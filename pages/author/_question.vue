@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <v-row class="d-flex justify-center">
-      <v-col cols="12" md="10" lg="8" class="mt-sm-6">
+    <v-row>
+      <v-col cols="12" md="10" lg="8" offset-md="1">
         <v-form ref="form">
-          <p class="text-subtitle-1 font-weight-medium">Question text</p>
+          <p class="text-subtitle-2">Question text</p>
           <text-editor ref="question" :initial="question.text" class="mb-6" />
           <v-text-field
             v-if="question !== undefined"
@@ -19,13 +19,29 @@
             class="num-field mb-6"
             required
           ></v-text-field>
-          <p class="text-subtitle-1 font-weight-medium">Model answer</p>
+          <p class="text-subtitle-2">Model answer</p>
           <text-editor
             ref="model"
             :initial="question.modelAnswer"
             class="mb-6"
           />
-          <p class="text-subtitle-1 font-weight-medium">Keywords</p>
+          <p class="text-subtitle-2">
+            Keywords
+            <v-menu offset-y open-on-hover rounded="lg">
+              <template #activator="{ on }">
+                <font-awesome-icon
+                  icon="fa-light fa-circle-info"
+                  class="ml-2 fa-lg"
+                  v-on="on"
+                />
+              </template>
+              <v-card max-width="280">
+                <v-card-text>
+                  Shown to students when <b>not</b> in exam mode.
+                </v-card-text>
+              </v-card>
+            </v-menu>
+          </p>
           <v-text-field
             v-model="question.keywords"
             outlined
@@ -34,7 +50,24 @@
             persistent-hint
             placeholder="E.g. RAM, instructions, processor"
           ></v-text-field>
-          <p class="text-subtitle-1 font-weight-medium mt-3">Mark scheme</p>
+          <p class="text-subtitle-2 mt-3">
+            Mark scheme
+            <v-menu offset-y open-on-hover rounded="lg">
+              <template #activator="{ on }">
+                <font-awesome-icon
+                  icon="fa-light fa-circle-info"
+                  class="ml-2 fa-lg"
+                  v-on="on"
+                />
+              </template>
+              <v-card max-width="280">
+                <v-card-text>
+                  Add each mark scheme point in a new field. These will become
+                  checkboxes when students answer the question.
+                </v-card-text>
+              </v-card>
+            </v-menu>
+          </p>
           <v-text-field
             v-for="(mark, i) in question.marks"
             :key="i"
@@ -50,29 +83,45 @@
           </v-text-field>
           <div class="d-flex justify-end">
             <v-btn
-              v-if="question.marks.length <= 25"
+              v-if="question.marks.length <= 20"
               rounded
-              text
+              outlined
+              color="primary"
               class="mt-2"
               @click="question.marks.push({ id: '', text: '' })"
             >
-              <font-awesome-icon icon="fa-light fa-plus" class="fa-lg mr-2" />
               Add mark
             </v-btn>
           </div>
-          <p class="text-subtitle-1 font-weight-medium">Marking guidance</p>
+          <p class="text-subtitle-2">Marking guidance</p>
           <text-editor
             ref="guidance"
             :initial="question.guidance"
             class="mb-6"
           />
-          <p class="text-subtitle-1 font-weight-medium">Topics</p>
+          <p class="text-subtitle-2">
+            Topics
+            <v-menu offset-y open-on-hover rounded="lg">
+              <template #activator="{ on }">
+                <font-awesome-icon
+                  icon="fa-light fa-circle-info"
+                  class="ml-2 fa-lg"
+                  v-on="on"
+                />
+              </template>
+              <v-card max-width="280">
+                <v-card-text>
+                  (Optional) Map this question to topics in other courses.
+                </v-card-text>
+              </v-card>
+            </v-menu>
+          </p>
           <v-autocomplete
             v-model="question.selectedTopics"
             :items="topics"
             item-value="id"
             item-text="name"
-            :loading="$fetchState.pending || ACLoading"
+            :loading="$fetchState.pending || loading"
             outlined
             :rules="rules.topics"
             chips
@@ -84,13 +133,8 @@
             multiple
           >
           </v-autocomplete>
-          <!-- <v-checkbox
-            v-model="showAll"
-            label="Show developing courses"
-            class="mt-0"
-            hide-details
-          >
-          </v-checkbox> -->
+          <v-checkbox v-model="showAll" label="Show developing courses">
+          </v-checkbox>
           <v-alert
             v-if="showAlert"
             type="error"
@@ -109,11 +153,10 @@
               color="primary"
               :disabled="loading"
               :loading="loading"
-              elevation="0"
               rounded
               @click="save()"
             >
-              {{ editing ? 'Save Changes' : 'Create Question' }}
+              {{ editing ? 'Save' : 'Create' }} question
             </v-btn>
           </div>
         </v-form>
@@ -134,13 +177,12 @@ export default {
   data() {
     return {
       loading: false,
-      ACLoading: false,
       rules: {
-        max: [(v) => (v && v < 13) || 'Max. 25 marks'],
+        max: [(v) => (v && v < 13) || 'Max. 20 marks'],
         topics: [(v) => v.length > 0 || 'At least one topic required'],
       },
       showAlert: false,
-      // showAll: false,
+      showAll: false,
       question: {
         id: '',
         text: '',
@@ -155,8 +197,8 @@ export default {
   },
   async fetch() {
     try {
-      // Get course topics for autocomplete
-      await this.$store.dispatch('topics/getACTopics', true)
+      // Get topics for autocomplete
+      await this.$store.dispatch('topics/getAllTopics', this.showAll)
       // Get existing question if editing
       if (this.editing) {
         const url = new URL(
@@ -165,7 +207,7 @@ export default {
         )
         let question = await fetch(url, {
           body: JSON.stringify({
-            secret: this.secret,
+            secret: this.$store.state.user.secret,
             questionId: this.$route.params.question,
           }),
           method: 'POST',
@@ -186,7 +228,7 @@ export default {
   },
   head() {
     return {
-      title: this.editing ? 'Edit Question' : 'Create Question',
+      title: `${this.editing ? 'Edit' : 'Create'} Question`,
     }
   },
   computed: {
@@ -194,23 +236,26 @@ export default {
       return this.$route.params.question !== undefined
     },
     ...mapState({
-      secret: (state) => state.user.secret,
-      topics: (state) => state.topics.autoCompleteTopics,
+      topics: (state) => state.topics.topics,
       topicId: (state) => state.topics.topicId,
     }),
   },
-  // watch: {
-  //   async showAll() {
-  //     this.ACLoading = true
-  //     await this.$store.dispatch('topics/getACTopics', this.showAll)
-  //     this.ACLoading = false
-  //   },
-  // },
+  watch: {
+    async showAll() {
+      try {
+        this.loading = true
+        await this.$store.dispatch('topics/getAllTopics', this.showAll)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        this.loading = false
+      }
+    },
+  },
   mounted() {
-    const EC = this.$route.params.question ? 'Edit' : 'Create'
-    this.$store.commit('app/setPageTitle', `${EC} Question`)
-    // Are we coming from _course.vue?
-    // Was a topicId already set?
+    const x = this.editing ? 'Edit' : 'Create'
+    this.$store.commit('app/setPageTitle', `${x} Question`)
+    // On _course.vue, if 'New question' was clicked—prepoplate topic
     if (this.topicId !== '') {
       this.question.selectedTopics.push(this.topicId)
     }
@@ -229,9 +274,10 @@ export default {
       }
       return true
     },
-    // Mark scheme must contain at least one point
+    // Mark scheme must contain at least as many points max. mark
     validateMarks() {
-      if (this.question.marks.length >= 1) {
+      if (this.question.marks.length >= this.question.maxMark) {
+        // TODO Check all marks aren't empty
         if (this.question.marks[0].text !== '') {
           return true
         }
@@ -247,29 +293,19 @@ export default {
         this.validateEditors() &&
         this.validateMarks()
       ) {
-        this.loading = true
         try {
-          const url = new URL(
-            '/.netlify/functions/saveQuestion',
-            this.$config.baseURL
-          )
-          let response = await fetch(url, {
-            body: JSON.stringify({
-              secret: this.secret,
-              edit: this.editing,
-              question: this.question,
-            }),
-            method: 'POST',
-          })
-          if (!response.ok) {
-            throw new Error(`Error saving question ${response.status}`)
+          this.loading = true
+          const payload = {
+            edit: this.editing,
+            question: this.question,
           }
-          response = await response.json()
+          const res = await this.$store.dispatch('topics/saveQuestion', payload)
+          console.debug(res)
           this.$snack.showMessage({
             type: 'success',
             msg: `Question ${this.editing ? 'saved' : 'created'}`,
           })
-          this.$router.push(`/question/${response.id}`)
+          // this.$router.push(`/question/${response.id}`) WHERE?
         } catch (err) {
           console.error(err)
           this.$snack.showMessage({
@@ -301,10 +337,5 @@ export default {
 .tiptap-vuetify-editor {
   border: 1px solid rgba(0, 0, 0, 0.42);
   border-radius: 4px !important;
-}
-
-.ico-btn {
-  height: 24px;
-  width: 24px;
 }
 </style>

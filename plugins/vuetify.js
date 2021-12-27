@@ -6,7 +6,7 @@ import {
   faCheck,
   faCircleCheck,
   faCircleUser,
-  faCircleMinus,
+  faMinus,
   faCircleInfo,
   faCircleExclamation,
   faCommentLines,
@@ -78,7 +78,7 @@ library.add(
   faCheck,
   faCircleCheck,
   faCircleUser,
-  faCircleMinus,
+  faMinus,
   faCircleInfo,
   faCircleExclamation,
   faCommentLines,
@@ -188,7 +188,7 @@ const CUSTOM_ICONS = {
   minus: {
     component: FontAwesomeIcon,
     props: {
-      icon: ['fal', 'circle-minus'],
+      icon: ['fal', 'minus'],
     },
   },
   info: {

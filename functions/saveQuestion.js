@@ -1,9 +1,9 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   const data = JSON.parse(event.body)
-
+  const secret = data.secret
   // Build the object here so we can reuse it
   const questionObj = {
     text: data.question.text,
@@ -16,7 +16,7 @@ exports.handler = async (event, context, callback) => {
 
   // Configure client using user's secret token
   const keyedClient = new faunadb.Client({
-    secret: data.secret,
+    secret,
   })
   try {
     const qry = q.Let(
@@ -92,7 +92,7 @@ exports.handler = async (event, context, callback) => {
       )
       await keyedClient.query(qry2)
     }
-
+    console.log(res)
     return {
       statusCode: 200,
       body: JSON.stringify(res),
@@ -102,9 +102,9 @@ exports.handler = async (event, context, callback) => {
   }
 }
 
-// Calculate 10% less than the word count of model answer
+// Calculate 12% less than the word count of model answer
 function minWords(text) {
   return String(
-    Math.round(text.trim().replace(/\s+/gi, ' ').split(' ').length * 0.9)
+    Math.round(text.trim().replace(/\s+/gi, ' ').split(' ').length * 0.88)
   )
 }
