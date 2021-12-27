@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-row class="d-flex justify-center">
-      <v-col cols="12" md="5">
-        <p class="text-h6" style="margin-top: 40px">Class details</p>
+    <v-row>
+      <v-col cols="12" offset="1" md="5">
+        <p class="text-subtitle-2 mt-4">Class details</p>
         <v-text-field
           v-model="name"
           :rules="nameRules"
@@ -20,28 +20,29 @@
             :disabled="loading"
             @click="save"
           >
-            Save
+            <span :class="$vuetify.theme.dark ? 'pb-text' : ''"> Save </span>
           </v-btn>
           <the-archive-group-dialog v-if="group.active" />
           <the-restore-group-dialog v-else />
         </div>
       </v-col>
     </v-row>
-    <v-row class="d-flex justify-center">
-      <v-col cols="12" md="5">
-        <p class="text-h6" style="margin-top: 40px">General</p>
+    <v-row>
+      <v-col cols="12" offset="1" md="5">
+        <p class="text-subtitle-2 pt-8">General</p>
         <v-text-field
           label="Join code"
           readonly
           :value="code"
           outlined
         ></v-text-field>
-        <v-text-field
-          label="Link"
-          readonly
-          value="TODO"
-          outlined
-        ></v-text-field>
+        <v-text-field label="Link" readonly :value="link" outlined>
+          <template #append>
+            <v-btn icon class="fix-btn" @click="copy()">
+              <font-awesome-icon icon="fa-light fa-copy" class="fa-lg" />
+            </v-btn>
+          </template>
+        </v-text-field>
       </v-col>
     </v-row>
   </v-container>
@@ -69,6 +70,8 @@ export default {
   computed: {
     ...mapGetters({
       group: 'user/activeGroup',
+      code: 'user/activeGroupCode',
+      link: 'user/activeGroupLink',
     }),
     name: {
       get() {
@@ -78,11 +81,6 @@ export default {
         this.$store.commit('user/setGroupName', { group: this.group, name })
         this.$store.commit('app/setPageTitle', name)
       },
-    },
-    code() {
-      const l = this.group.code.substring(0, 3)
-      const r = this.group.code.substring(3, 7)
-      return `${l}-${r}`
     },
   },
   beforeDestroy() {
@@ -119,6 +117,12 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+    async copy() {
+      await navigator.clipboard.writeText(this.link)
+      this.$snack.showMessage({
+        msg: 'Link copied',
+      })
     },
   },
 }

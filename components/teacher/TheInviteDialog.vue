@@ -9,7 +9,7 @@
         <p class="text-subtitle-1 font-weight-medium mb-2">Manually</p>
         <p>Click 'MANAGE STUDENTS' → Add students.</p>
         <p class="text-subtitle-1 font-weight-medium mb-2">Share invite link</p>
-        <v-text-field ref="link" :value="link" readonly outlined hide-details>
+        <v-text-field ref="link" :value="code" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text rounded @click="copy()">
               <font-awesome-icon icon="fa-light fa-copy" class="mr-2 ico-btn" />
@@ -20,7 +20,7 @@
         <p class="text-subtitle-1 font-weight-medium mb-2 mt-6">
           Share join code
         </p>
-        <v-text-field :value="formattedLink" readonly outlined hide-details>
+        <v-text-field :value="link" readonly outlined hide-details>
           <template #append>
             <v-btn class="fix-btn" text rounded @click="overlay = true">
               <font-awesome-icon
@@ -47,12 +47,14 @@
       @click.native="overlay = !overlay"
     >
       <div>Join Class</div>
-      <div>{{ formattedLink }}</div>
+      <div>{{ link }}</div>
     </v-overlay>
   </v-dialog>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     group: {
@@ -68,15 +70,9 @@ export default {
     }
   },
   computed: {
-    link() {
-      return `https://examgap.com/signup?code=${this.formattedLink}`
-    },
-    formattedLink() {
-      return `${this.group.code.substring(0, 3)}-${this.group.code.substring(
-        3,
-        6
-      )}`
-    },
+    ...mapGetters({
+      link: 'user/joinLink',
+    }),
   },
   watch: {
     // Reset text on Copy button
@@ -107,12 +103,6 @@ export default {
 </script>
 
 <style scoped>
-/* Align buttons in inputs */
-.fix-btn {
-  margin-top: -7px;
-  margin-right: -2px;
-}
-
 /* Big class code */
 .big {
   font-size: 10vw;

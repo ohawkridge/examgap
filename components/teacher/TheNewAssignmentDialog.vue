@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="360">
     <v-card class="rounded-xl">
-      <v-card-title>Choose class</v-card-title>
+      <v-card-title class="d-flex justify-center">Choose class</v-card-title>
       <v-card-text>
         <v-btn
           v-for="(group, i) in groups"

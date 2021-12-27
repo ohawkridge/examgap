@@ -1,10 +1,10 @@
 <template>
   <v-container>
-    <v-row class="justify-center">
-      <v-col cols="12" md="11">
+    <v-row>
+      <v-col cols="12">
         <v-card class="rounded-lg">
           <v-card-text>
-            <v-row class="justify-center">
+            <v-row>
               <v-col
                 cols="12"
                 class="flex-xs-column d-sm-flex justify-space-between align-center"
@@ -190,7 +190,9 @@
         </v-card-title>
         <v-card-text>
           <p class="text-h5 text-center">
-            Reset password{{ selected.length !== 1 ? 's' : '' }}
+            Reset password{{
+              selected.length !== 1 && userToReset === {} ? 's' : ''
+            }}
           </p>
           <v-text-field
             v-model="password"
@@ -306,6 +308,14 @@ export default {
     ...mapState({
       students: (state) => state.group.students,
     }),
+  },
+  watch: {
+    // Clear userToReset on modal close
+    dialog() {
+      if (!this.dialog) {
+        this.userToReset = {}
+      }
+    },
   },
   methods: {
     showReset(item) {

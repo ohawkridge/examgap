@@ -1,53 +1,70 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" class="d-flex justify-space-between">
-        <v-btn
-          class="d-none d-sm-flex"
-          elevation="0"
-          outlined
-          color="primary"
-          rounded
-          @mouseover="scroll"
-          @mouseleave="stop"
-          @mouseup="stop"
-        >
-          Scroll
-          <font-awesome-icon icon="fa-light fa-arrow-right" class="ml-2" />
-        </v-btn>
-        <v-btn text rounded color="primary" @click="exportTableToCSV()">
-          <font-awesome-icon
-            icon="fa-light fa-arrow-down-to-bracket"
-            class="mr-2"
-          />
-          Download
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
       <v-col cols="12">
-        <v-data-table
-          :headers="grades.headers"
-          :items="grades.data"
-          :loading="$fetchState.pending"
-          loading-text="Loading grades..."
-          no-data-text="No data yet"
-          style="border: 1px solid #d2d2d2"
-          hide-default-footer
-          disable-pagination
-          sort-by="username"
-        >
-          <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
-            <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
-            <v-chip
-              v-else
-              :key="i"
-              :color="ragX(item[obj], grades.headers[i + 2].max, item.target)"
-            >
-              {{ item[obj] }}
-            </v-chip>
-          </template>
-        </v-data-table>
+        <v-card class="rounded-lg">
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" class="d-flex justify-end">
+                <v-btn
+                  class="d-none d-sm-flex"
+                  outlined
+                  color="primary"
+                  rounded
+                  @mouseover="scroll"
+                  @mouseleave="stop"
+                  @mouseup="stop"
+                >
+                  Scroll
+                  <font-awesome-icon
+                    icon="fa-light fa-arrow-right"
+                    class="ml-2"
+                  />
+                </v-btn>
+                <v-btn
+                  outlined
+                  rounded
+                  color="primary"
+                  class="ml-2"
+                  @click="exportTableToCSV()"
+                >
+                  <font-awesome-icon
+                    icon="fa-light fa-arrow-down-to-bracket"
+                    class="mr-2"
+                  />
+                  Csv
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-data-table
+                  :headers="grades.headers"
+                  :items="grades.data"
+                  :loading="$fetchState.pending"
+                  loading-text="Loading grades..."
+                  no-data-text="No data yet"
+                  hide-default-footer
+                  disable-pagination
+                  sort-by="username"
+                >
+                  <template v-for="(obj, i) in assIds" #[gk(obj)]="{ item }">
+                    <span v-if="item[obj] === 'N/A'" :key="i">N/A</span>
+                    <v-chip
+                      v-else
+                      :key="i"
+                      :color="
+                        ragX(item[obj], grades.headers[i + 2].max, item.target)
+                      "
+                    >
+                      {{ item[obj] }}
+                    </v-chip>
+                  </template>
+                </v-data-table>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>

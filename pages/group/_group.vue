@@ -16,8 +16,8 @@
       <v-tab-item :style="`background-color: ${bgColor}`">
         <!-- Assignments xx -->
         <v-container>
-          <v-row class="justify-center">
-            <v-col class="12" md="8">
+          <v-row>
+            <v-col class="12" offset-md="1" md="8">
               <teacher-assignment-card
                 v-for="(assignment, i) in assignments"
                 :key="i"

@@ -31,18 +31,24 @@ const getters = {
   },
   activeGroup: (state) => {
     const found = state.groups.find((g) => g.id === state.activeGroupId)
-    // Group must be archived
     if (!found) {
+      // Group must be archived
       return state.archivedGroups.find((g) => g.id === state.activeGroupId)
     }
     return found
   },
+  activeGroupCode: (state, getters) => {
+    const l = getters.activeGroup.code.substring(0, 3)
+    const r = getters.activeGroup.code.substring(3, 6)
+    return `${l}-${r}`
+  },
+  activeGroupLink: (state, getters) => {
+    return `https://examgap.com/signup?code=${getters.activeGroupCode}`
+  },
   // TheCopyStudentDialog.vue
   // Return a list of the user's groups formatted for v-select
   selectGroups: (state, getters) => {
-    if (getters.activeGroup === undefined) {
-      return []
-    }
+    if (!getters.activeGroup === undefined) return {}
     const groups = state.groups.map((group) => {
       const obj = {
         text: group.name,

@@ -99,6 +99,12 @@ span.v-chip.theme--light.green {
   width: 24px !important;
 }
 
+/* align buttons in input slots */
+.fix-btn {
+  margin-top: -7px;
+  margin-right: -2px;
+}
+
 /* headway widget */
 /* (doesn't work scoped) */
 .dark2 #HW_badge {

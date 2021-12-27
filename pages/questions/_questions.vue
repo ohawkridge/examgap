@@ -78,8 +78,8 @@
           v-if="!$fetchState.pending"
           id="questions"
           class="overflow-y-auto"
-          dense
           nav
+          dense
           color="transparent"
         >
           <v-subheader> QUESTIONS </v-subheader>
@@ -98,6 +98,23 @@
                 <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
                 <v-list-item-subtitle>
                   {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
+                  <v-chip
+                    v-for="(assignment, j) in q.previous"
+                    :key="j"
+                    x-small
+                    label
+                    color="tertiary"
+                    class="ml-2"
+                  >
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <span :class="$vuetify.theme.dark ? 'd' : ''" v-on="on">
+                          {{ assignment.date | date }}</span
+                        >
+                      </template>
+                      <span>{{ assignment.name }}</span>
+                    </v-tooltip>
+                  </v-chip>
                 </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
@@ -245,5 +262,9 @@ export default {
   height: 100px;
   border-radius: 4px;
   padding: 12px;
+}
+
+.d {
+  color: #241a00;
 }
 </style>
