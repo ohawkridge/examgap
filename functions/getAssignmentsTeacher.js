@@ -13,10 +13,12 @@ exports.handler = async (event) => {
     const qry = q.Select(
       'data',
       q.Map(
-        q.Paginate(
-          q.Match(
-            q.Index('group_assignments'),
-            q.Ref(q.Collection('Group'), groupId)
+        q.Reverse(
+          q.Paginate(
+            q.Match(
+              q.Index('group_assignments'),
+              q.Ref(q.Collection('Group'), groupId)
+            )
           )
         ),
         q.Lambda(

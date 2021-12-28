@@ -53,7 +53,7 @@
                     </v-tooltip>
                     {{ assignment.name }}
                   </div>
-                  <v-menu open-on-hover rounded="lg">
+                  <v-menu rounded="lg">
                     <template #activator="{ on }">
                       <v-btn icon v-on="on">
                         <font-awesome-icon

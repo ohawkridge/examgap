@@ -1,14 +1,12 @@
 <template>
   <v-dialog v-model="dialog" max-width="440">
     <v-card class="rounded-xl">
-      <v-card-title
-        class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
-      >
+      <v-card-title class="d-flex justify-center text-h5 secondary--text pt-5">
         <font-awesome-icon icon="fa-light fa-trash-can-xmark" class="fa-sm" />
       </v-card-title>
       <v-card-text>
         <p class="text-h5 text-center">Delete assignment?</p>
-        <p class="modal-text">
+        <p>
           This assignment and all the responses that go with it will be deleted.
           This action <strong>cannot</strong> be undone.
         </p>
@@ -53,7 +51,7 @@ export default {
     async deleteAssignment() {
       try {
         this.loading = true
-        await this.$store.dispatch('user/deleteAssignment', this.assignmentId)
+        await this.$store.dispatch('group/deleteAssignment', this.assignmentId)
         // If on /report/x, redirect to /group/x
         if (this.$route.name === 'report-report') {
           this.$router.push(`/group/${this.groupId}`)

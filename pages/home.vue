@@ -58,8 +58,8 @@
     </template>
     <!-- Student xx -->
     <template v-else>
-      <v-row class="justify-center">
-        <v-col cols="12" md="8" class="d-flex">
+      <v-row>
+        <v-col cols="12" md="9" offset-md="1" class="d-flex">
           <font-awesome-icon
             icon="fa-light fa-quote-left"
             class="section-icon"
@@ -71,8 +71,8 @@
           </p>
         </v-col>
       </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="8">
+      <v-row>
+        <v-col cols="12" md="9" offset-md="1">
           <p class="text-h5">
             <font-awesome-icon
               icon="fa-light fa-calendar-star"
@@ -82,8 +82,8 @@
           </p>
         </v-col>
       </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="8">
+      <v-row>
+        <v-col cols="12" md="8" offset-md="1">
           <template v-if="$fetchState.pending">
             <assignment-card-loader v-for="i in 1" :key="i" />
           </template>
@@ -107,8 +107,8 @@
           </template>
         </v-col>
       </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="8">
+      <v-row>
+        <v-col cols="12" md="9" offset-md="1">
           <p class="text-h5">
             <font-awesome-icon
               icon="fa-light fa-head-side-brain"
@@ -118,8 +118,8 @@
           </p>
         </v-col>
       </v-row>
-      <v-row class="justify-center">
-        <v-col cols="12" md="8">
+      <v-row>
+        <v-col cols="12" md="9" offset-md="1">
           <template v-for="(group, i) in groups">
             <v-btn
               :key="i"

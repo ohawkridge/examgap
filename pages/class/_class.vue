@@ -13,9 +13,9 @@
     <v-tabs-items v-model="tab">
       <v-tab-item :style="`background-color: ${bgColor}`">
         <!-- Assignments xx -->
-        <v-container class="pt-6 pt-md-10">
-          <v-row class="justify-center">
-            <v-col class="12" md="8">
+        <v-container>
+          <v-row>
+            <v-col class="12" offset-md="1" md="8">
               <!-- Skeletons xx -->
               <template v-if="$fetchState.pending">
                 <assignment-card-loader v-for="i in 4" :key="i" />

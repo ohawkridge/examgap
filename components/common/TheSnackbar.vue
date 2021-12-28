@@ -1,6 +1,8 @@
 <template>
   <v-snackbar v-model="show" bottom left :timeout="timeout" :color="color">
+    <!-- <span :class="$vuetify.theme.dark ? 'pb-text' : ''"> -->
     {{ message }}
+    <!-- </span> -->
   </v-snackbar>
 </template>
 

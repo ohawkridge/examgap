@@ -16,8 +16,8 @@ const actions = {
 }
 
 const mutations = {
-  setTab(state, val) {
-    state.tab = val
+  setTab(state, tab) {
+    state.tab = tab
   },
   setOnboardStep(state, step) {
     state.onboardStep = step

@@ -2,7 +2,7 @@
   <v-card class="mb-6 rounded-lg" hover @click="nav()">
     <v-card-title class="d-flex text-h6 justify-space-between">
       {{ assignment.name }}
-      <v-menu offset-y rounded="lg" open-on-hover>
+      <v-menu offset-y rounded="lg">
         <template #activator="{ on }">
           <v-btn icon @click.stop="">
             <font-awesome-icon

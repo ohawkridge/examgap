@@ -14,7 +14,7 @@
         <font-awesome-icon icon="fa-light fa-receipt" class="fa-sm" />
       </v-card-title>
       <p class="text-h5 text-center">Request Invoice</p>
-      <v-card-text class="modal-text">
+      <v-card-text>
         <p>
           Request an email invoice you can pay online or forward to your bursar.
         </p>

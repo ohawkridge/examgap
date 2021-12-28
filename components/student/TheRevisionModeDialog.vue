@@ -1,7 +1,9 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440" class="rounded-xl">
-    <v-card class="rounded-xl" color="#fbfcff">
-      <v-card-title> </v-card-title>
+  <v-dialog v-model="dialog" max-width="440">
+    <v-card class="rounded-xl">
+      <v-card-title class="d-flex justify-center text-h5 secondary--text pt-5">
+        <font-awesome-icon icon="fa-light fa-head-side-brain" class="fa-sm" />
+      </v-card-title>
       <v-card-text>
         <p class="text-h5 text-center">Revision mode</p>
         <p>
@@ -43,7 +45,7 @@ export default {
     }
   },
   computed: {
-    // Computed setter for store
+    // Computed setter for examMode while revising
     examMode: {
       get() {
         return this.$store.state.user.reviseExamMode

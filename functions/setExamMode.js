@@ -16,10 +16,9 @@ exports.handler = async (event) => {
         examMode,
       },
     })
-    const data = await keyedClient.query(qry)
+    await keyedClient.query(qry)
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
     }
   } catch (err) {
     console.error(err.description)

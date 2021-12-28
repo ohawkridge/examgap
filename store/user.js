@@ -198,40 +198,6 @@ const actions = {
     // Update page title
     commit('app/setPageTitle', groupName, { root: true })
   },
-  async createAssignment({ commit, getters }, obj) {
-    const url = new URL(
-      '/.netlify/functions/createAssignment',
-      this.$config.baseURL
-    )
-    let newAssObj = await fetch(url, {
-      body: JSON.stringify(obj),
-      method: 'POST',
-    })
-    if (!newAssObj.ok) {
-      throw new Error(`Error creating assignment ${newAssObj.status}`)
-    }
-    newAssObj = await newAssObj.json()
-    commit('addAssignment', { newAssObj, group: getters.activeGroup })
-  },
-  async deleteAssignment({ commit, rootState, getters }, assignmentId) {
-    const url = new URL(
-      '/.netlify/functions/deleteAssignment',
-      this.$config.baseURL
-    )
-    const response = await fetch(url, {
-      body: JSON.stringify({
-        secret: rootState.user.secret,
-        assignmentId,
-      }),
-      method: 'POST',
-    })
-    if (!response.ok) {
-      throw new Error(`Error deleting assignment ${response.status}`)
-    }
-    // Update local data
-    const obj = { group: getters.activeGroup, assignmentId }
-    commit('deleteAssignment', obj)
-  },
   // Copy student(s) into another group by
   // creating new mappings in GroupStudent
   async copyStudents({ commit, rootState, getters }, { studentIds, groupId }) {
@@ -312,14 +278,6 @@ const mutations = {
   },
   setRevisionExamMode(state, val) {
     state.reviseExamMode = val
-  },
-  addAssignment(state, { newAssObj, group }) {
-    // Add assignment to *front* of assignments array for group
-    group.assignments.unshift({ ...newAssObj })
-  },
-  deleteAssignment(state, { group, assignmentId }) {
-    const i = group.assignments.findIndex((a) => a.id === assignmentId)
-    group.assignments.splice(i, 1)
   },
   setNameAndCourse(state, { group, groupName, course }) {
     // Update active group's properties

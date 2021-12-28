@@ -446,9 +446,4 @@ div.v-card__text >>> .command:hover:before {
 .clear-right {
   clear: right;
 }
-
-.ico-btn {
-  height: 24px;
-  width: 24px;
-}
 </style>

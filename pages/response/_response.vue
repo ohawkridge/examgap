@@ -171,7 +171,9 @@
                     nuxt
                     :to="`/assignment/${response.assignmentId}`"
                   >
-                    Done
+                    <span :class="$vuetify.theme.dark ? 'pb-text' : ''">
+                      Done
+                    </span>
                   </v-btn>
                 </v-col>
               </v-row>

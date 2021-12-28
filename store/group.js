@@ -37,6 +37,23 @@ const getters = {
 }
 
 const actions = {
+  async deleteAssignment({ commit, rootState, getters }, assignmentId) {
+    const url = new URL(
+      '/.netlify/functions/deleteAssignment',
+      this.$config.baseURL
+    )
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        assignmentId,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error deleting assignment')
+    }
+    commit('deleteAssignment', assignmentId)
+  },
   async getUpcoming({ commit, rootState }) {
     // For teachers, get recent assignments across all groups
     // For students, only get upcoming assignments
@@ -236,6 +253,10 @@ const mutations = {
   },
   removeStudents(state, studentIds) {
     state.students = state.students.filter((o) => !studentIds.includes(o.id))
+  },
+  deleteAssignment(state, assignmentId) {
+    const i = state.assignments.findIndex((a) => a.id === assignmentId)
+    state.assignments.splice(i, 1)
   },
   resetState(state) {
     Object.assign(state, getDefaultState())

@@ -6,7 +6,7 @@ exports.handler = async (event) => {
   const name = data.name
   const start = data.start
   const dateDue = data.end
-  const group = data.group
+  const groupId = data.groupId
   const students = data.students
   const questions = data.questions
   const secret = data.secret
@@ -24,7 +24,7 @@ exports.handler = async (event) => {
             start,
             dateDue,
             questions,
-            group: q.Ref(q.Collection('Group'), group),
+            group: q.Ref(q.Collection('Group'), groupId),
             teacher: q.CurrentIdentity(),
           },
         }),
@@ -43,51 +43,12 @@ exports.handler = async (event) => {
             })
           )
         ),
-        // Merge assignment with additional needed fields for UI cards
-        assignment: q.Merge(q.Select('data', q.Var('assignment')), {
-          id: q.Select(['ref', 'id'], q.Var('assignment')),
-          numStudents: q.Count(
-            q.Match(
-              q.Index('assignment_students'),
-              q.Select('ref', q.Var('assignment'))
-            )
-          ),
-          numQuestions: q.Count(
-            q.Select(['data', 'questions'], q.Var('assignment'))
-          ),
-          live: q.If(
-            q.LT(
-              q.ToDate(
-                // Old assignments include a time which ToDate
-                // won't be able to parse so chop it off
-                q.SubString(
-                  q.Select(['data', 'dateDue'], q.Var('assignment')),
-                  0,
-                  10
-                )
-              ),
-              q.ToDate(q.Now())
-            ),
-            false,
-            true
-          ),
-          group: q.Let(
-            {
-              instance: q.Get(q.Select(['data', 'group'], q.Var('assignment'))),
-            },
-            {
-              id: q.Select(['ref', 'id'], q.Var('instance')),
-              name: q.Select(['data', 'name'], q.Var('instance')),
-            }
-          ),
-        }),
       }
     )
-    const response = await keyedClient.query(qry)
-    // console.log(response.assignment)
+    const data = await keyedClient.query(qry)
+    console.log(data)
     return {
       statusCode: 200,
-      body: JSON.stringify(response.assignment),
     }
   } catch (err) {
     console.error(err.description)

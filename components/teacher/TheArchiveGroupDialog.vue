@@ -9,7 +9,7 @@
     <v-card class="rounded-xl">
       <v-card-title class="text-h5"> Archive class? </v-card-title>
       <v-card-text>
-        <p class="modal-text">
+        <p>
           This will move {{ group.name }} into the 'Archive'. Archived classes
           can be restored at any time.
         </p>

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="10" lg="8" offset-md="1">
+      <v-col cols="12" md="9" lg="8" offset-md="1">
         <v-form ref="form">
           <p class="text-subtitle-2">Question text</p>
           <text-editor ref="question" :initial="question.text" class="mb-6" />
@@ -173,7 +173,9 @@
               rounded
               @click="save()"
             >
-              {{ editing ? 'Save' : 'Create' }} question
+              <span :class="$vuetify.theme.dark ? 'pb-text' : ''">
+                {{ editing ? 'Save' : 'Create' }} question
+              </span>
             </v-btn>
           </div>
         </v-form>

@@ -8,6 +8,7 @@ const getDefaultState = () => ({
   studentIndex: '',
   questionIndex: '',
   marking: false,
+  students: [],
 })
 
 // eslint-disable-next-line no-unused-vars
@@ -30,9 +31,63 @@ const getters = {
     if (!state.marking) return {}
     return state.assignment.headers[state.questionIndex]
   },
+  studentById: (state) => (id) => {
+    return state.students.find((s) => s.id === id)
+  },
 }
 
 const actions = {
+  async createAssignment({ commit, rootState }, assObj) {
+    const url = new URL(
+      '/.netlify/functions/createAssignment',
+      this.$config.baseURL
+    )
+    assObj.secret = rootState.user.secret
+    const assignment = await fetch(url, {
+      body: JSON.stringify(assObj),
+      method: 'POST',
+    })
+    if (!assignment.ok) {
+      throw new Error('Error creating assignment')
+    }
+    // Show 'Assignments' tab on _group.vue
+    commit('app/setTab', 0, { root: true })
+    // No need to update local data
+    // (Fetched again on _group.vue)
+  },
+  async getStudents({ commit, rootState, rootGetters }) {
+    const url = new URL('/.netlify/functions/getStudents', this.$config.baseURL)
+    let response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        groupId: rootGetters['user/activeGroup'].id,
+        namesOnly: true,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error(`Error fetching students ${response.status}`)
+    }
+    response = await response.json()
+    commit('setStudents', response)
+  },
+  async setExamMode({ commit, rootState, getters }, { studentId, mode }) {
+    const url = new URL('/.netlify/functions/setExamMode', this.$config.baseURL)
+    const response = await fetch(url, {
+      body: JSON.stringify({
+        secret: rootState.user.secret,
+        studentId,
+        examMode: mode,
+      }),
+      method: 'POST',
+    })
+    if (!response.ok) {
+      throw new Error('Error setting exam mode')
+    }
+    // Update local data
+    const student = getters.studentById(studentId)
+    commit('setExamMode', { student, mode })
+  },
   async getQuestion({ state, commit, rootState }) {
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
     let response = await fetch(url, {
@@ -199,10 +254,6 @@ const actions = {
     commit('setAssignment', response)
   },
   async getReport({ commit, rootState }, assignmentId) {
-    console.debug(
-      '%c' + 'Fetch',
-      'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
-    )
     const url = new URL('/.netlify/functions/getReport', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
@@ -256,6 +307,9 @@ const mutations = {
   setResponseId(state, responseId) {
     state.responseId = responseId
   },
+  addAssignment(state, { assignment, group }) {
+    group.assignments.unshift({ ...assignment })
+  },
   setStudentIndex(state, i) {
     state.studentIndex = i
   },
@@ -264,6 +318,12 @@ const mutations = {
   },
   setMarking(state, marking) {
     state.marking = marking
+  },
+  setStudents(state, students) {
+    state.students = students
+  },
+  setExamMode(state, { student, mode }) {
+    student.examMode = mode
   },
   // Response mutations xx
   setFlag(state, { response, flagged }) {

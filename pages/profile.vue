@@ -1,15 +1,13 @@
 <template>
   <v-container>
-    <v-row class="d-flex justify-center">
-      <v-col cols="12" md="5" class="mt-sm-6">
-        <div class="text-h5">Account</div>
-        <p class="font-weight-light mb-9">Manage your account details</p>
+    <v-row>
+      <v-col cols="12" md="5" offset-md="1">
+        <div class="text-subtitle-2">Account</div>
+        <p class="text-caption">View your account details.</p>
         <v-text-field
           :value="$store.state.user.username"
           label="Username"
           outlined
-          hide-details
-          :class="teacher ? 'mb-8' : ''"
           readonly
         ></v-text-field>
         <v-checkbox
@@ -17,7 +15,6 @@
           v-model="$store.state.user.examMode"
           label="Exam mode"
           disabled
-          hide-details
         >
         </v-checkbox>
         <p v-if="!teacher" class="text-caption mb-6">Set by your teacher</p>
@@ -49,9 +46,9 @@
           </template>
         </v-text-field>
         <the-subscribe-dialog v-if="teacher" />
-        <v-divider class="mt-7 mb-12" />
-        <div class="text-h5 d-flex justify-space-between">Password</div>
-        <p class="font-weight-light mb-9">Update your password</p>
+        <v-divider class="mt-10 mb-8" />
+        <div class="text-subtitle-2">Password</div>
+        <p class="text-caption">Update your password.</p>
         <v-form ref="form">
           <v-text-field
             v-model="pass1"
@@ -59,7 +56,6 @@
             :rules="rules"
             label="New password* (min. 6 characters)"
             required
-            validate-on-blur
             outlined
           ></v-text-field>
           <v-text-field
@@ -68,7 +64,6 @@
             :rules="rules"
             label="New password again*"
             required
-            validate-on-blur
             outlined
           ></v-text-field>
           <v-btn
@@ -85,36 +80,27 @@
             >
           </v-btn>
         </v-form>
-        <v-divider class="mt-14 mb-12" />
-        <div class="text-h5 d-flex justify-space-between">Appearance</div>
-        <p class="font-weight-light mb-9">Choose how Examgap looks</p>
-        <div>
-          <v-radio-group v-model="mode" mandatory>
-            <v-radio value="light" class="mb-4">
-              <template #label>
-                <div class="ml-2">
-                  <font-awesome-icon
-                    icon="fa-light fa-sun"
-                    class="mr-2 fa-lg"
-                  />
-                  Day theme
-                </div>
-              </template>
-            </v-radio>
-            <v-radio value="dark">
-              <template #label>
-                <div class="ml-2">
-                  <font-awesome-icon
-                    icon="fa-light fa-moon"
-                    class="mr-2 fa-lg"
-                  />
-
-                  Night theme
-                </div>
-              </template>
-            </v-radio>
-          </v-radio-group>
-        </div>
+        <v-divider class="mt-10 mb-8" />
+        <div class="text-subtitle-1">Appearance</div>
+        <p class="text-caption">Choose how Examgap looks.</p>
+        <v-radio-group v-model="mode" mandatory>
+          <v-radio value="light" class="mb-4">
+            <template #label>
+              <div class="ml-2">
+                <font-awesome-icon icon="fa-light fa-sun" class="mr-2 fa-lg" />
+                Day theme
+              </div>
+            </template>
+          </v-radio>
+          <v-radio value="dark">
+            <template #label>
+              <div class="ml-2">
+                <font-awesome-icon icon="fa-light fa-moon" class="mr-2 fa-lg" />
+                Night theme
+              </div>
+            </template>
+          </v-radio>
+        </v-radio-group>
       </v-col>
     </v-row>
   </v-container>

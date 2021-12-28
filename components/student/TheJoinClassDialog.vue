@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440" class="rounded-xl">
+  <v-dialog v-model="dialog" max-width="400" class="rounded-xl">
     <v-card class="rounded-xl">
       <v-card-title
         class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
