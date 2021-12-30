@@ -34,7 +34,7 @@
             class="px-5 pb-6"
           ></v-skeleton-loader>
         </v-card>
-        <v-card v-else class="rounded-xl">
+        <v-card v-else class="rounded-lg">
           <v-card-title>
             <v-tooltip bottom>
               <template #activator="{ on }">
@@ -88,11 +88,10 @@
                     <v-list-item
                       v-for="(q, i) in assignment.questions"
                       :key="i"
-                      :class="$vuetify.breakpoint.name === 'xs' ? 'px-0' : ''"
                       @click="action(q)"
                     >
                       <v-list-item-content>
-                        <v-col cols="12" md="9">
+                        <v-col cols="12" md="8">
                           <v-list-item-title>
                             {{ q.text | strip }}
                           </v-list-item-title>
@@ -117,7 +116,7 @@
                         </v-col>
                         <v-col
                           cols="12"
-                          md="3"
+                          md="4"
                           class="d-flex justify-space-around"
                         >
                           <!-- Not answered yet xx -->
@@ -259,6 +258,6 @@ export default {
 
 /* spacer if teacher not marked yet */
 .blank {
-  width: 76px;
+  width: 65px;
 }
 </style>

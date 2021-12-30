@@ -89,7 +89,10 @@ const actions = {
     commit('setExamMode', { student, mode })
   },
   async getQuestion({ state, commit, rootState }) {
-    const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)
+    // Separate functions for teachers and students
+    // (Student needs basic info. Teacher will grow)
+    const f = rootState.user.teacher ? 'getQuestion' : 'getQuestionStudent'
+    const url = new URL(`/.netlify/functions/${f}`, this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
@@ -145,14 +148,10 @@ const actions = {
     }
     response = await response.json()
     console.debug(
-      '%c' + 'Response',
+      `>> ${response} << ` + '%cResponse',
       'padding:2px 4px;background-color:#00668b;color:white;border-radius:3px'
     )
-    console.log(response)
-    // Set responseId (all saveAnswer returns) for
-    // use in subsequent saves to update answer text
-    // No need to store whole response locally as
-    // _assignment fetches new data each time
+    // Save responseId (all /saveAnswer returns) for subsequent saves
     commit('setResponseId', response)
   },
   async saveSelfMarks({ state, rootState }, markIds) {

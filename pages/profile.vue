@@ -8,6 +8,7 @@
           :value="$store.state.user.username"
           label="Username"
           outlined
+          hide-details
           readonly
         ></v-text-field>
         <v-checkbox
@@ -22,6 +23,7 @@
           :value="$store.state.user.school"
           label="School name"
           outlined
+          hide-details
           readonly
         ></v-text-field>
         <v-text-field

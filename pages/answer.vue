@@ -48,7 +48,7 @@
                   </template>
                   <span>Hear question</span>
                 </v-tooltip>
-                <v-chip small outlined label>
+                <v-chip small outlined label color="tertiary">
                   {{ question.maxMark }} mark{{ question.maxMark | pluralize }}
                 </v-chip>
               </div>
@@ -63,20 +63,23 @@
               >
                 <font-awesome-icon slot="append" :icon="icon" class="fa-lg" />
               </v-textarea>
-              <div v-if="showHelp" class="d-flex justify-space-between">
+              <div
+                v-if="showHelp"
+                class="d-flex justify-space-between align-center"
+              >
                 <div>
-                  <span class="text-subtitle-1">Keywords:&nbsp;</span>
+                  <span class="text-subtitle-2">Keywords:&nbsp;</span>
                   <v-chip
-                    v-for="(word, i) in keywords"
+                    v-for="(word, i) in keywordArray"
                     :key="i"
                     class="mr-2"
-                    :color="used(word) ? 'green' : ''"
+                    :color="isUsed(word) ? 'green' : ''"
                     small
                   >
                     {{ word }}
                     <v-scroll-x-transition>
                       <font-awesome-icon
-                        v-if="used(word)"
+                        v-if="isUsed(word)"
                         icon="fa-light fa-check"
                         class="ml-2"
                       />
@@ -98,12 +101,14 @@
                 </v-tooltip>
               </div>
               <div class="d-flex justify-end mt-4">
-                <v-btn color="primary" rounded @click="selfMark()">
-                  <font-awesome-icon
-                    icon="fa-light fa-square-check"
-                    class="fa-lg mr-2"
-                  />
-                  Mark
+                <v-btn color="primary" rounded @click="showMarking()">
+                  <span :class="$vuetify.theme.dark ? 'pb-text' : ''">
+                    <font-awesome-icon
+                      icon="fa-light fa-square-check"
+                      class="fa-lg mr-2"
+                    />
+                    Mark
+                  </span>
                 </v-btn>
               </div>
             </div>
@@ -152,17 +157,22 @@
           <!-- Confirm XX -->
           <v-dialog v-model="dialog" width="440">
             <v-card>
-              <v-card-title> Start marking? </v-card-title>
+              <v-card-title
+                class="d-flex justify-center text-h5 secondary--text pt-5"
+              >
+                <font-awesome-icon
+                  icon="fa-light fa-square-check"
+                  class="fa-sm"
+                />
+              </v-card-title>
               <v-card-text>
-                <p>
-                  Your answer might not score well. Once you've seen the mark
-                  scheme, you can't go back.
-                </p>
+                <p class="text-h5 text-center">Really mark?</p>
+                <p>Once you've seen the mark scheme, you can't go back.</p>
                 <div class="d-flex justify-end">
                   <v-btn text rounded class="mr-2" @click="dialog = false">
                     Go Back
                   </v-btn>
-                  <v-btn color="primary" rounded text @click="selfMark(true)">
+                  <v-btn color="primary" rounded text @click="selfMark()">
                     Mark
                   </v-btn>
                 </div>
@@ -177,6 +187,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import debounce from 'lodash.debounce'
 
 export default {
   async beforeRouteLeave(to, from, next) {
@@ -211,6 +222,7 @@ export default {
       loading: false,
       dialog: false,
       marking: false,
+      answer: '',
     }
   },
   async fetch() {
@@ -232,33 +244,19 @@ export default {
       reviseExamMode: (state) => state.user.reviseExamMode,
       examMode: (state) => state.user.examMode,
     }),
-    // Debouce saving icon
+    // Saving response icon
     icon() {
-      return this.saving
-        ? 'fa-light fa-cloud-arrow-up'
-        : 'fa-light fa-cloud-check'
-    },
-    answer: {
-      get() {
-        return this.debouncedAnswer
-      },
-      set(val) {
-        if (this.timeout) clearTimeout(this.timeout)
-        this.timeout = setTimeout(() => {
-          this.debouncedAnswer = val
-          this.save()
-        }, 1800)
-      },
+      return `fa-light fa-cloud-${this.saving ? 'arrow-up' : 'check'}`
     },
     ...mapGetters({ group: 'user/activeGroup' }),
     // Set assignment or independent revision?
     revising() {
       return this.assignmentId === ''
     },
+    // Get word count of student's answer
     wordCount() {
-      let words = this.parse(this.answer).split(' ')
-      words = words.filter((w) => w !== '')
-      return words.length
+      const words = this.parse(this.answer).split(' ')
+      return words.filter((w) => w !== '').length
     },
     // Show keywords & min. word count?
     showHelp() {
@@ -272,32 +270,31 @@ export default {
       return (this.wordCount / this.question.minWords) * 100
     },
     color() {
-      if (this.progress < 40) {
-        return 'red'
-      } else if (this.progress > 80) {
-        return 'green'
-      } else {
-        return 'orange'
-      }
+      if (this.progress < 40) return 'red'
+      if (this.progress > 80) return 'green'
+      return 'orange'
     },
-    // Separate keywords String into individual words
-    keywords() {
+    // In the db, keywords are stored as a comma separated string
+    keywordArray() {
       if (this.question.keywords === '') return ''
       return this.question.keywords.split(',').map((kw) => kw.trim())
     },
   },
   watch: {
+    // Don't exceed max. mark
     marks() {
-      // Don't exceed max. mark
-      if (this.marks !== null) {
-        if (this.marks.length > this.question.maxMark) {
-          this.$snack.showMessage({
-            type: 'error',
-            msg: `Max. mark is ${this.question.maxMark}`,
-          })
-          this.marks.splice(-1, 1) // Uncheck box
-        }
+      if (this.marks.length > this.question.maxMark) {
+        this.$snack.showMessage({
+          type: 'error',
+          msg: `Max. mark is ${this.question.maxMark}`,
+        })
+        this.marks.splice(-1, 1) // Uncheck box
       }
+    },
+    // Watch answer textarea in 'real time'
+    // (but debounce save function)
+    answer() {
+      this.save()
     },
   },
   mounted() {
@@ -323,21 +320,22 @@ export default {
     }
   },
   methods: {
+    // Has the student made little/no attempt?
     noAttempt() {
-      if (this.wordCount === 0 || this.wordCount < this.question.minWords / 3) {
-        return true
-      }
-      return false
+      return this.wordCount === 0 || this.wordCount < this.question.minWords / 3
     },
-    selfMark(force = false) {
+    showMarking() {
       // Ask for confirmation if answer blank or very short
-      if (this.noAttempt() && !force) {
+      if (this.noAttempt()) {
         this.dialog = true
       } else {
-        this.dialog = false
-        this.marking = true
-        this.$store.commit('app/setPageTitle', 'Marking')
+        this.selfMark()
       }
+    },
+    selfMark() {
+      this.dialog = false
+      this.marking = true
+      this.$store.commit('app/setPageTitle', 'Marking')
     },
     // Get SpeechSynthesisVoice objects if supported
     // https://wicg.github.io/speech-api/#utterance-attributes
@@ -374,37 +372,39 @@ export default {
     done() {
       // Just change the route
       // beforeRouteLeave handles saving marks etc.
-      this.loading = true
+      this.loading = true // Prevent double save
       const route = this.revising ? `/home` : `/assignment/${this.assignmentId}`
       this.$router.push(route)
     },
-    // Save response
-    async save() {
-      try {
-        this.saving = true
-        await this.$store.dispatch('assignment/saveAnswer', this.answer)
-      } catch (err) {
-        console.error(err)
-        this.$snack.showMessage({
-          msg: 'Error saving answer',
-          type: 'error',
-        })
-      } finally {
-        this.saving = false
+    // Debounce save function (rather than answer v-model)
+    // Otherwise, keywords and word count update on debounce
+    save: debounce(async function () {
+      // Don't attempt to save if another save is pending
+      // If latency to the db exceeds debounce interval
+      // then duplicate responses are possible
+      if (!this.saving) {
+        try {
+          this.saving = true
+          await this.$store.dispatch('assignment/saveAnswer', this.answer)
+        } catch (err) {
+          console.error(err)
+          this.$snack.showMessage({
+            msg: 'Error saving answer',
+            type: 'error',
+          })
+        } finally {
+          this.saving = false
+        }
       }
-    },
-    // Check if keyword used in answer
-    used(word) {
+    }, 1500),
+    // Check if keyword is used in answer
+    isUsed(word) {
       return this.parse(this.answer).split(' ').includes(word.toLowerCase())
     },
-    // Enforce spaces after fullstops; strip punctuation
+    // Prepare text for wordCount
+    // (remove extra spaces, add spaces after '.')
     parse(text) {
-      text = text.toLowerCase()
-      text = text.replace(/[.,/#!$%^&*;:{}=_`~()]/g, ' ')
-      text = text.replace(/\s{2,}/g, ' ')
-      text = text.replace(/\r?\n|\r/g, ' ')
-      text = text.trim()
-      return text
+      return text.replace(/\s{2,}|[\r\n]|[-.]/g, ' ').toLowerCase()
     },
   },
 }

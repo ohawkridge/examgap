@@ -65,10 +65,6 @@ export default {
   },
   layout: 'app',
   async fetch() {
-    console.debug(
-      '%c' + 'Fetch',
-      'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
-    )
     await this.$store.dispatch('group/getAssignments')
     await this.$store.dispatch('topics/getRevision')
   },
