@@ -71,6 +71,8 @@ export default {
   async fetch() {
     try {
       const id = this.$route.params.question
+      console.debug({ id })
+      console.debug(id)
       await this.$store.dispatch('topics/getQuestion', id)
     } catch (err) {
       console.error(err)

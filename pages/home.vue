@@ -152,12 +152,13 @@ export default {
     StudentAssignmentCard,
     AssignmentCardLoader,
   },
+  beforeRouteLeave(to, from, next) {
+    // Clear store to avoid flash of recents on _group.vue
+    this.$store.commit('group/setAssignments', [])
+    next()
+  },
   layout: 'app',
   async fetch() {
-    console.debug(
-      '%c' + 'Fetch',
-      'padding:2px 4px;background-color:#ffe089;color:#765b00;border-radius:3px'
-    )
     await this.$store.dispatch('user/getQuote')
     await this.$store.dispatch('group/getUpcoming')
   },

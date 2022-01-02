@@ -95,13 +95,13 @@
             </template>
             <v-list>
               <v-list-item v-if="teacher" @click="$nuxt.$emit('show-create')">
-                <v-list-item-title> New class </v-list-item-title>
+                <v-list-item-title> Add class </v-list-item-title>
               </v-list-item>
               <v-list-item v-if="teacher" @click="$nuxt.$emit('show-new')">
-                <v-list-item-title> New assignment </v-list-item-title>
+                <v-list-item-title> Add assignment </v-list-item-title>
               </v-list-item>
               <v-list-item v-if="teacher" nuxt to="/author">
-                <v-list-item-title> New question </v-list-item-title>
+                <v-list-item-title> Add question </v-list-item-title>
               </v-list-item>
               <v-list-item v-if="!teacher" @click="$nuxt.$emit('show-join')">
                 <v-list-item-title> Join class </v-list-item-title>

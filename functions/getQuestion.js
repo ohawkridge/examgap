@@ -13,6 +13,9 @@ exports.handler = async (event) => {
     const qry = q.Let(
       {
         instance: q.Get(q.Ref(q.Collection('Question'), questionId)), // Question
+        times: q.Paginate(
+          q.Match(q.Index('question_times'), q.Select('ref', q.Var('instance')))
+        ), // Array of times in sec
       },
       {
         id: q.Select(['ref', 'id'], q.Var('instance')),
@@ -59,19 +62,10 @@ exports.handler = async (event) => {
           q.Lambda('tRef', q.Select(['ref', 'id'], q.Get(q.Var('tRef'))))
         ),
         // Get mean timeTaken across all responses for this question
-        meanTime: q.Select(
-          0,
-          q.Select(
-            'data',
-            q.Mean(
-              q.Paginate(
-                q.Match(
-                  q.Index('question_times'),
-                  q.Select('ref', q.Var('instance'))
-                )
-              )
-            )
-          )
+        meanTime: q.If(
+          q.IsEmpty(q.Var('times')),
+          '',
+          q.Select(0, q.Select('data', q.Mean(q.Var('times'))))
         ),
       }
     )
@@ -82,7 +76,18 @@ exports.handler = async (event) => {
       body: JSON.stringify(data),
     }
   } catch (err) {
-    console.error(err.description)
+    const errs = err.requestResult.responseContent.errors
+    console.log()
+    console.group('Errors')
+    console.log(`⚠️ Errors found: ${errs.length}`)
+    console.log()
+    for (const e of errs) {
+      console.log(`Description : ${e.description}`)
+      console.log(`Code        : ${e.code}`)
+      console.log(`Position    : ${e.position}`)
+    }
+    console.groupEnd()
+    console.log()
     return { statusCode: 500, body: JSON.stringify(err) }
   }
 }

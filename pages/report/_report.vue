@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-window v-model="step">
           <v-window-item :value="1" class="pa-1">
-            <v-card class="rounded-xl">
+            <v-card class="rounded-lg">
               <!-- Skeletons -->
               <template v-if="$fetchState.pending">
                 <v-skeleton-loader
@@ -260,7 +260,7 @@
           </v-window-item>
           <!-- Marking xx -->
           <v-window-item :value="2" class="pa-1">
-            <v-card class="rounded-xl">
+            <v-card class="rounded-lg">
               <v-card-title class="d-flex justify-space-between">
                 <div>
                   <v-tooltip bottom>
@@ -350,17 +350,32 @@
                         rounded
                         small
                         color="primary"
-                        @click="xx()"
+                        @click="showMore = !showMore"
                       >
                         {{ showMore ? 'Hide question' : 'Show question' }}
                       </v-btn>
                     </div>
-                    <div
-                      id="answer"
-                      class="breaks text-body-2"
-                      v-text="response.text"
-                    ></div>
-                    <div id="xx" class="autocomplete">
+                    <div id="answer">
+                      <v-slide-x-transition>
+                        <p v-if="showName" class="text-subtitle-2">
+                          {{ response.username | name }}
+                        </p>
+                      </v-slide-x-transition>
+                      <v-slide-x-transition>
+                        <p
+                          v-show="!showName"
+                          class="text-subtitle-2"
+                          @mouseover="showName = true"
+                        >
+                          **** Reveal student ****
+                        </p>
+                      </v-slide-x-transition>
+                      <div
+                        class="breaks text-body-2"
+                        v-text="response.text"
+                      ></div>
+                    </div>
+                    <div id="wrapper">
                       <v-textarea
                         v-model="feedback"
                         auto-grow
@@ -370,7 +385,6 @@
                         dense
                         rows="1"
                         placeholder="Feedback"
-                        style="margin-bottom: 80px"
                         @mouseover="autocomplete()"
                       ></v-textarea>
                     </div>
@@ -427,6 +441,7 @@ export default {
       bank: [],
       marks: [],
       showMore: false,
+      showName: false,
     }
   },
   async fetch() {
@@ -495,6 +510,7 @@ export default {
         // Copy teacher marks into v-model for checkboxes
         this.marks = [...this.response.tm]
         this.updateCommentBank()
+        this.showName = false
       }
     },
     marking() {
@@ -517,6 +533,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.commit('app/setPageTitle', this.assignment.group.name)
     // Onboard if nec.
     if (this.assignments.length === 1) {
       this.$store.commit('app/setOnboardStep', 6)
@@ -621,14 +638,15 @@ export default {
         this.$store.commit('app/setOnboardStep', 0)
       }
       // N.B. Initialising autocomplete here doesn't work
-      // Nothing works to select textarea input
+      // Textarea does not exist due to v-if?
+      // Instead initalise on mouseover event
     },
     autocomplete() {
-      const arr = this.bank
-      const inp = document.getElementsByTagName('textarea')[0]
       // Autocomplete takes two arguments: the text field element
       // and an array of possible autocompleted values
       // https://www.w3schools.com/howto/howto_js_autocomplete.asp
+      const inp = document.getElementsByTagName('textarea')[0]
+      const arr = this.bank
       let currentFocus
       // Execute a function when someone writes in the text field:
       inp.addEventListener('input', function () {
@@ -642,10 +660,10 @@ export default {
         currentFocus = -1
         // Create a div that will contain the items
         a = document.createElement('DIV')
-        a.setAttribute('id', this.id + 'autocomplete-list')
+        // a.setAttribute('id', this.id + 'autocomplete-list')
         a.setAttribute('class', 'autocomplete-items')
         // Append the DIV element as a child of the autocomplete container
-        document.getElementById('xx').appendChild(a)
+        document.getElementById('wrapper').appendChild(a)
         // this.parentNode.appendChild(a)
         for (i = 0; i < arr.length; i++) {
           // Check if the item starts with the same letters as the text field value
@@ -663,6 +681,7 @@ export default {
             // Execute a function when someone clicks on the item value (DIV element)
             b.addEventListener('click', function (e) {
               // Insert the value for the autocomplete text field
+              // const text = this.getElementsByTagName('input')[0].value
               inp.value = this.getElementsByTagName('input')[0].value
               // Close the list of autocompleted values
               closeAllLists()
@@ -671,7 +690,7 @@ export default {
           }
         }
       })
-      // Cxecute a function presses a key on the keyboard
+      // Execute a function presses a key on the keyboard
       inp.addEventListener('keydown', function (e) {
         let x = document.getElementById(this.id + 'autocomplete-list')
         if (x) x = x.getElementsByTagName('div')
@@ -695,7 +714,6 @@ export default {
         removeActive(x)
         if (currentFocus >= x.length) currentFocus = 0
         if (currentFocus < 0) currentFocus = x.length - 1
-        // /*add class "autocomplete-active":*/
         x[currentFocus].classList.add('autocomplete-active')
       }
       function removeActive(x) {

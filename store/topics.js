@@ -74,6 +74,7 @@ const actions = {
     commit('setTopics', topics)
   },
   async getQuestion({ commit, rootState }, questionId) {
+    console.debug({ questionId })
     // Clear previous question to avoid flash of old
     commit('setQuestion', {})
     const url = new URL('/.netlify/functions/getQuestion', this.$config.baseURL)

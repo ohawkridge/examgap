@@ -123,8 +123,8 @@ span.v-chip.theme--light.green {
 }
 
 /* feedback autocomplete styles */
-.autocomplete {
-  /*the container must be positioned relative:*/
+/* wrapper must be positioned relative */
+#wrapper {
   position: relative;
 }
 

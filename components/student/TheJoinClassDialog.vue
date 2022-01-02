@@ -4,7 +4,7 @@
       <v-card-title
         class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
       >
-        <font-awesome-icon icon="fa-light fa-users" class="fa-sm" />
+        <font-awesome-icon icon="fa-light fa-user-group" class="fa-sm" />
       </v-card-title>
       <v-card-text>
         <p class="text-h5 text-center">Join class</p>

@@ -61,7 +61,10 @@
                     {{ students.length }} Student{{
                       students.length | pluralize
                     }}
-                    <font-awesome-icon icon="fa-light fa-users" class="ml-2" />
+                    <font-awesome-icon
+                      icon="fa-light fa-user-group"
+                      class="ml-2"
+                    />
                   </span>
                   <v-tooltip bottom>
                     <template #activator="{ on }">

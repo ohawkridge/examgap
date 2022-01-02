@@ -17,7 +17,26 @@
         <!-- Assignments xx -->
         <v-container>
           <v-row>
-            <v-col class="12" offset-md="1" md="8">
+            <v-col cols="12" md="10" class="d-flex justify-space-between">
+              <div>
+                Class code:
+                <span class="font-weight-bold">{{ code }}</span>
+              </div>
+              <v-btn
+                color="primary"
+                elevation="0"
+                rounded
+                nuxt
+                :to="`/questions/${group.course.id}`"
+              >
+                <span :class="$vuetify.theme.dark ? 'pb-text' : ''">
+                  Add assignment
+                </span>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" offset-md="1" md="8">
               <teacher-assignment-card
                 v-for="(assignment, i) in assignments"
                 :key="i"
@@ -60,6 +79,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     // Clear store to avoid flash of old data next time
+    this.$store.commit('group/setAssignments', [])
     this.$store.commit('group/setStudents', [])
     this.$store.commit('group/setGrades', [])
     // Stop highlighting navbar
@@ -71,7 +91,10 @@ export default {
     await this.$store.dispatch('group/getAssignments')
   },
   computed: {
-    ...mapGetters({ group: 'user/activeGroup' }),
+    ...mapGetters({
+      group: 'user/activeGroup',
+      code: 'user/activeGroupCode',
+    }),
     ...mapState({
       assignments: (state) => state.group.assignments,
     }),
