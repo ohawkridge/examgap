@@ -9,7 +9,7 @@
         <div>
           <v-btn
             rounded
-            text
+            outlined
             color="primary"
             :disabled="!hoverPreview"
             class="mr-2"
@@ -18,9 +18,20 @@
           >
             View question
           </v-btn>
-          <v-btn outlined rounded color="primary" @click="selection = []">
-            Clear
-          </v-btn>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                outlined
+                rounded
+                color="primary"
+                @click="selection = []"
+                v-on="on"
+              >
+                Clear
+              </v-btn>
+            </template>
+            <span>Clear selection</span>
+          </v-tooltip>
           <v-tooltip bottom>
             <template #activator="{ on }">
               <v-btn
@@ -75,7 +86,6 @@
       <!-- Questions xx -->
       <v-col cols="12" md="4">
         <v-list
-          v-if="!$fetchState.pending"
           id="questions"
           class="overflow-y-auto"
           nav
@@ -83,54 +93,71 @@
           color="transparent"
         >
           <v-subheader> QUESTIONS </v-subheader>
-          <v-list-item-group
-            v-model="selection"
-            multiple
-            active-class="green--text"
-          >
-            <v-list-item
-              v-for="(q, i) in questions"
-              :key="i"
-              :value="q.id"
-              @mouseover="preview(q.id)"
+          <div v-if="$fetchState.pending || loading" style="margin: 0 20%">
+            <p class="text-subtitle-1 text-center">Fetching&hellip;</p>
+            <v-progress-linear
+              color="secondary"
+              indeterminate
+              rounded
+              height="6"
+            ></v-progress-linear>
+          </div>
+          <template v-else>
+            <v-list-item-group
+              v-if="questions.length > 0"
+              v-model="selection"
+              multiple
+              active-class="green--text"
             >
+              <v-list-item
+                v-for="(q, i) in questions"
+                :key="i"
+                :value="q.id"
+                @mouseover="preview(q.id)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
+                    <v-chip
+                      v-for="(assignment, j) in q.previous"
+                      :key="j"
+                      x-small
+                      label
+                      color="tertiary"
+                      class="ml-2"
+                    >
+                      <v-tooltip bottom>
+                        <template #activator="{ on }">
+                          <span
+                            :class="$vuetify.theme.dark ? 'd' : 'l'"
+                            v-on="on"
+                          >
+                            {{ assignment.date | date2 }}</span
+                          >
+                        </template>
+                        <span>{{ assignment.name }}</span>
+                      </v-tooltip>
+                    </v-chip>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-scroll-x-transition>
+                    <font-awesome-icon
+                      v-if="selection.includes(q.id)"
+                      icon="fa-light fa-circle-check"
+                      class="fa-lg"
+                    />
+                  </v-scroll-x-transition>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list-item-group>
+            <v-list-item v-else>
               <v-list-item-content>
-                <v-list-item-title>{{ q.text | strip }}</v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ q.maxMark }} mark{{ q.maxMark | pluralize }}
-                  <v-chip
-                    v-for="(assignment, j) in q.previous"
-                    :key="j"
-                    x-small
-                    label
-                    color="tertiary"
-                    class="ml-2"
-                  >
-                    <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <span
-                          :class="$vuetify.theme.dark ? 'd' : 'l'"
-                          v-on="on"
-                        >
-                          {{ assignment.date | date }}</span
-                        >
-                      </template>
-                      <span>{{ assignment.name }}</span>
-                    </v-tooltip>
-                  </v-chip>
-                </v-list-item-subtitle>
+                <v-list-item-title> No questions yet </v-list-item-title>
               </v-list-item-content>
-              <v-list-item-action>
-                <v-scroll-x-transition>
-                  <font-awesome-icon
-                    v-if="selection.includes(q.id)"
-                    icon="fa-light fa-circle-check"
-                    class="fa-lg"
-                  />
-                </v-scroll-x-transition>
-              </v-list-item-action>
             </v-list-item>
-          </v-list-item-group>
+          </template>
         </v-list>
       </v-col>
       <!-- Preview xx -->

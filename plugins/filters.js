@@ -18,6 +18,17 @@ Vue.filter('date', function (dateStr) {
   return date.toString().substring(0, 15)
 })
 
+Vue.filter('date2', function (dateStr) {
+  // Some old due dates include timezone
+  if (dateStr.length > 10) {
+    dateStr = dateStr.substring(0, 10)
+  }
+  // Create a new date object using given string
+  const date = new Date(dateStr)
+  const options = { day: '2-digit', month: 'short' }
+  return date.toLocaleDateString('en-GB', options)
+})
+
 Vue.filter('strip', function (html) {
   // Supposedly safer than regex
   const div = document.createElement('div')
