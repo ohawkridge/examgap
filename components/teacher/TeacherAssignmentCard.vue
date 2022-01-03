@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-6 rounded-lg" hover @click="nav()">
+  <v-card class="mb-4 mb-md-6 rounded-lg" hover @click="nav()">
     <v-card-title class="d-flex text-h6 justify-space-between">
       {{ assignment.name }}
       <v-menu offset-y rounded="lg">

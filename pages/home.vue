@@ -59,12 +59,30 @@
     <!-- Student xx -->
     <template v-else>
       <v-row>
-        <v-col cols="12" md="9" offset-md="1" class="d-flex">
-          <font-awesome-icon
-            icon="fa-light fa-quote-left"
-            class="section-icon"
-          />
-          <p class="text-subtitle-1 pl-2">
+        <v-col cols="12" md="9" offset-md="1" class="text-h5">
+          <v-menu offset-y open-on-hover>
+            <template #activator="{ on }">
+              <span v-on="on">
+                <font-awesome-icon
+                  icon="fa-light fa-hand-wave"
+                  class="section-icon"
+                />
+                {{ greeting.text }},</span
+              >
+              {{ username | name }}
+            </template>
+            <v-card class="rounded-lg" max-width="220">
+              <v-card-text>
+                {{ greeting.text }} is how you say 'Hello' in
+                {{ greeting.country }}.
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" md="9" offset-md="1">
+          <p class="text-subtitle-1">
             {{ quote.quote }}&mdash;<span class="font-weight-light">{{
               quote.author
             }}</span>
@@ -83,7 +101,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="8" offset-md="1">
+        <v-col cols="12" md="7" offset-md="1">
           <template v-if="$fetchState.pending">
             <assignment-card-loader v-for="i in 1" :key="i" />
           </template>
@@ -168,10 +186,50 @@ export default {
     }),
     ...mapState({
       teacher: (state) => state.user.teacher,
+      username: (state) => state.user.username,
       groups: (state) => state.user.groups,
       quote: (state) => state.user.quote,
       assignments: (state) => state.group.assignments,
     }),
+    greeting() {
+      const greetings = [
+        { country: 'Arabic', text: 'Asalaam alaikum' },
+        { country: 'Bengali', text: 'Namaskar' },
+        { country: 'Bulgarian', text: 'Zdraveĭte' },
+        { country: 'Catalan', text: 'Hola' },
+        { country: 'Chinese', text: 'Nǐ hǎo' },
+        { country: 'Dutch', text: 'Goede dag' },
+        { country: 'English', text: 'Hi' },
+        { country: 'French', text: 'Bonjour' },
+        { country: 'German', text: 'Guten tag' },
+        { country: 'Greek', text: 'Kalimera' },
+        { country: 'Hebrew', text: 'Shalom aleichem' },
+        { country: 'Hindi', text: 'Namastē' },
+        { country: 'Hungarian', text: 'Jo napot' },
+        { country: 'Indonesian', text: 'Selamat siang' },
+        { country: 'Italian', text: 'Salve' },
+        { country: 'Japanese', text: 'Konnichiwa' },
+        { country: 'Korean', text: 'Anyoung haseyo' },
+        { country: 'Lithuanian', text: 'Sveiki' },
+        { country: 'Norwegian', text: 'God dag' },
+        { country: 'Polish', text: 'Dzień dobry' },
+        { country: 'Portuguese', text: 'Olá' },
+        { country: 'Romainian', text: 'Bună ziua' },
+        { country: 'Russian', text: 'Zdravstvuyte' },
+        { country: 'Serbian', text: 'Zdravo' },
+        { country: 'Spanish', text: 'Hola' },
+        { country: 'Swahili', text: 'Shikamoo' },
+        { country: 'Swedish', text: 'God dag' },
+        { country: 'Thai', text: 'Sawasdee' },
+        { country: 'Tahitian', text: 'Ia ora na' },
+        { country: 'Turkish', text: 'Merhaba' },
+        { country: 'Ukrainian', text: 'Zdravstvuyte' },
+        { country: 'Vietnamese', text: 'Xin chào' },
+        { country: 'Welsh', text: 'Shwmae' },
+        { country: 'Zulu', text: 'Ngiyakwemukela' },
+      ]
+      return greetings[Math.floor(Math.random() * greetings.length)]
+    },
   },
   mounted() {
     this.$store.commit('app/setPageTitle', 'Home')

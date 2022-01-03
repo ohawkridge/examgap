@@ -771,12 +771,4 @@ textarea {
   margin-left: 8px;
   margin-right: -30px;
 }
-
-#answer {
-  background-color: #fafafa;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  margin: 16px 0;
-  padding: 12px;
-}
 </style>

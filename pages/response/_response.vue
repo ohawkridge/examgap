@@ -1,8 +1,17 @@
 <template>
   <v-container>
-    <v-row class="justify-center">
+    <v-row>
       <v-col cols="12">
-        <v-breadcrumbs :items="items"></v-breadcrumbs>
+        <v-btn
+          rounded
+          text
+          color="primary"
+          nuxt
+          :to="`/assignment/${response.assignmentId}`"
+        >
+          <font-awesome-icon icon="fa-light fa-arrow-left" class="mr-2" />
+          Back
+        </v-btn>
       </v-col>
     </v-row>
     <v-row class="justify-center">
@@ -57,7 +66,11 @@
                       {{ max }} mark{{ max | pluralize }}
                     </v-chip>
                   </div>
-                  <p class="breaks mt-4" v-text="response.text"></p>
+                  <div
+                    id="answer"
+                    class="breaks mt-4"
+                    v-text="response.text"
+                  ></div>
                   <div
                     v-if="response.feedback"
                     class="mt-4 d-flex green--text text--darken-3"
@@ -161,25 +174,11 @@
                       </tfoot>
                     </template>
                   </v-simple-table>
+                  <p class="text-subtitle-2 mt-4">Guidance</p>
                   <div
                     v-if="response.question.guidance"
-                    class="mt-3"
                     v-html="response.question.guidance"
                   ></div>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" class="d-flex justify-end">
-                  <v-btn
-                    rounded
-                    color="primary"
-                    nuxt
-                    :to="`/assignment/${response.assignmentId}`"
-                  >
-                    <span :class="$vuetify.theme.dark ? 'pb-text' : ''">
-                      Done
-                    </span>
-                  </v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -230,28 +229,6 @@ export default {
     },
     tRag() {
       return this.color(this.response.tm.length)
-    },
-    items() {
-      return [
-        {
-          text: this.group.name,
-          disabled: false,
-          to: `/class/${this.group.id}`,
-          nuxt: true,
-        },
-        {
-          text: 'Assignment?',
-          disabled: false,
-          to: `/`,
-          nuxt: true,
-        },
-        {
-          text: 'Question',
-          disabled: true,
-          to: '',
-          nuxt: true,
-        },
-      ]
     },
   },
   methods: {

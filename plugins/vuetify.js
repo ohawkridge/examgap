@@ -69,6 +69,7 @@ import {
   faCircleDot,
   faUserCheck,
   faHourglass,
+  faHandWave,
 } from '@fortawesome/pro-light-svg-icons'
 import { faCircleCheck as fasCircleCheck } from '@fortawesome/free-solid-svg-icons'
 
@@ -144,7 +145,8 @@ library.add(
   faHourglass,
   faSquareCheck,
   faChevronLeft,
-  faChevronRight
+  faChevronRight,
+  faHandWave
 )
 
 Vue.use(Vuetify)

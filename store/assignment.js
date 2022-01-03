@@ -2,7 +2,6 @@ const getDefaultState = () => ({
   assignment: {},
   question: {},
   response: {},
-  assignmentId: '',
   questionId: '',
   responseId: '',
   studentIndex: '',
@@ -124,17 +123,14 @@ const actions = {
     }
     response = await response.json()
     // Store question info for later
-    commit('setAnswerData', {
-      assignmentId: '',
-      questionId: response,
-    })
+    commit('setQuestionId', response)
   },
   async saveAnswer({ commit, state, rootState, rootGetters }, text) {
     const url = new URL('/.netlify/functions/saveAnswer', this.$config.baseURL)
     let response = await fetch(url, {
       body: JSON.stringify({
         secret: rootState.user.secret,
-        assignmentId: state.assignmentId,
+        assignmentId: state.assignment.id,
         questionId: state.questionId,
         text,
         topicId: rootState.topics.topicId, // If revising
@@ -299,8 +295,7 @@ const mutations = {
   setResponse(state, response) {
     state.response = response
   },
-  setAnswerData(state, { assignmentId, questionId }) {
-    state.assignmentId = assignmentId
+  setQuestionId(state, questionId) {
     state.questionId = questionId
   },
   setResponseId(state, responseId) {

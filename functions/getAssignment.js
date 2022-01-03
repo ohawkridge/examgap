@@ -56,7 +56,11 @@ exports.handler = async (event) => {
                       text: q.Select(['data', 'text'], q.Var('instnc')),
                       marked: q.Select(['data', 'marked'], q.Var('instnc')),
                       repeat: q.Select(['data', 'repeat'], q.Var('instnc')),
-                      feedback: q.Select(['data', 'feedback'], q.Var('instnc')),
+                      feedback: q.Select(
+                        ['data', 'feedback'],
+                        q.Var('instnc'),
+                        ''
+                      ),
                       // Count marks
                       tm: q.Call(q.Function('TeacherMarks'), q.Var('instnc')),
                       sm: q.Call(q.Function('SelfMarks'), q.Var('instnc')),
