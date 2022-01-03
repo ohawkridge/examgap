@@ -1,8 +1,8 @@
 <template>
   <v-snackbar v-model="show" bottom left :timeout="timeout" :color="color">
-    <!-- <span :class="$vuetify.theme.dark ? 'pb-text' : ''"> -->
-    {{ message }}
-    <!-- </span> -->
+    <span :class="cssColor">
+      {{ message }}
+    </span>
   </v-snackbar>
 </template>
 
@@ -17,6 +17,16 @@ export default {
       timeout: 5000,
     }
   },
+  computed: {
+    // Css classes to handle dark mode
+    cssColor() {
+      if (this.$vuetify.theme.dark) {
+        if (this.color === 'error') return 'error-text'
+        // Can extend if success color is changed
+      }
+      return ''
+    },
+  },
   created() {
     this.$store.subscribe((mutation, state) => {
       if (mutation.type === 'snackbar/showSnack') {
@@ -28,3 +38,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.error-text {
+  color: #680003;
+}
+</style>
