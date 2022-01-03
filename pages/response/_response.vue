@@ -1,6 +1,11 @@
 <template>
   <v-container>
     <v-row class="justify-center">
+      <v-col cols="12">
+        <v-breadcrumbs :items="items"></v-breadcrumbs>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
       <v-col cols="12" md="10">
         <!-- Skeletons -->
         <v-card v-if="$fetchState.pending" class="rounded-lg pa-md-3">
@@ -186,7 +191,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   layout: 'app',
@@ -203,23 +208,50 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({
       response: (state) => state.assignment.response,
     }),
     max() {
       return this.response.question.maxMark
     },
-    // Use size of symmetric difference to calculate accuracy
     accuracy() {
+      // tm not in sm
       const x = this.response.tm.filter((x) => !this.response.sm.includes(x))
+      // sm not in tm
+      // (all other marks must match)
       const y = this.response.sm.filter((x) => !this.response.tm.includes(x))
-      return Math.round(((this.max - x.concat(y).length) / this.max) * 100)
+      // Max. possible matches (*not* max. mark)
+      const z = this.response.question.markScheme.length
+      return Math.round(((z - (x.length + y.length)) / z) * 100)
     },
     sRag() {
       return this.color(this.response.sm.length)
     },
     tRag() {
       return this.color(this.response.tm.length)
+    },
+    items() {
+      return [
+        {
+          text: this.group.name,
+          disabled: false,
+          to: `/class/${this.group.id}`,
+          nuxt: true,
+        },
+        {
+          text: 'Assignment?',
+          disabled: false,
+          to: `/`,
+          nuxt: true,
+        },
+        {
+          text: 'Question',
+          disabled: true,
+          to: '',
+          nuxt: true,
+        },
+      ]
     },
   },
   methods: {

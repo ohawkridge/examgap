@@ -1,22 +1,24 @@
 <template>
-  <v-dialog v-model="dialog" max-width="400" class="rounded-xl">
+  <v-dialog v-model="dialog" max-width="360" class="rounded-xl">
     <v-card class="rounded-xl">
-      <v-card-title
-        class="d-flex justify-center text-h5 secondary--text mb-1 pt-5"
-      >
-        <font-awesome-icon icon="fa-light fa-user-group" class="fa-sm" />
+      <v-card-title class="flex-column pt-5 pb-4">
+        <span class="secondary--text">
+          <font-awesome-icon icon="fa-light fa-user-group" />
+        </span>
+        <div class="text-h5">Join class</div>
       </v-card-title>
       <v-card-text>
-        <p class="text-h5 text-center">Join class</p>
-        <v-text-field
-          v-model="code"
-          :rules="codeRules"
-          label="Class code*"
-          placeholder="123-456"
-          outlined
-          autofocus
-          @input="formatCode"
-        ></v-text-field>
+        <v-form ref="form">
+          <v-text-field
+            v-model="code"
+            :rules="codeRules"
+            label="Class code*"
+            placeholder="123-456"
+            outlined
+            autofocus
+            @input="formatCode"
+          ></v-text-field>
+        </v-form>
         <div class="d-flex justify-end">
           <v-btn text rounded @click="dialog = false">Cancel</v-btn>
           <v-btn
@@ -66,22 +68,25 @@ export default {
       }
     },
     async join() {
-      try {
-        this.loading = true
-        await this.$store.dispatch('user/joinClass')
-        this.$snack.showMessage({
-          type: 'success',
-          msg: `Class joined`,
-        })
-      } catch (err) {
-        console.error(err)
-        this.$snack.showMessage({
-          type: 'error',
-          msg: `Error joining class`,
-        })
-      } finally {
-        this.dialog = false
-        this.loading = false
+      if (this.$refs.form.validate()) {
+        try {
+          this.loading = true
+          await this.$store.dispatch('user/joinClass')
+          this.$snack.showMessage({
+            type: 'success',
+            msg: `Class joined`,
+          })
+        } catch (err) {
+          console.error(err)
+          this.$snack.showMessage({
+            type: 'error',
+            msg: `Error joining class`,
+          })
+        } finally {
+          this.dialog = false
+          this.loading = false
+          this.$refs.form.reset()
+        }
       }
     },
   },

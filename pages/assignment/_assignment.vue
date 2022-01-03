@@ -1,6 +1,11 @@
 <template>
   <v-container>
     <v-row class="justify-center">
+      <v-col cols="12">
+        <v-breadcrumbs :items="items"></v-breadcrumbs>
+      </v-col>
+    </v-row>
+    <v-row class="justify-center">
       <v-col cols="12" md="10">
         <!-- Skeletons -->
         <v-card v-if="$fetchState.pending" class="rounded-lg pa-4">
@@ -190,6 +195,11 @@ export default {
     const id = this.$route.params.assignment
     await this.$store.dispatch('assignment/getAssignment', id)
   },
+  head() {
+    return {
+      title: this.assignment.name,
+    }
+  },
   computed: {
     ...mapGetters({ group: 'user/activeGroup' }),
     ...mapState({
@@ -227,9 +237,25 @@ export default {
       }
       return false
     },
+    items() {
+      return [
+        {
+          text: this.group.name,
+          disabled: false,
+          to: `/class/${this.group.id}`,
+          nuxt: true,
+        },
+        {
+          text: this.assignment.name,
+          disabled: true,
+          to: '',
+          nuxt: true,
+        },
+      ]
+    },
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', this.group.name)
+    this.$store.commit('app/setPageTitle', this.assignment.name)
   },
   methods: {
     action(question) {

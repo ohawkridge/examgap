@@ -235,6 +235,7 @@ const actions = {
     commit('setMarked', response)
   },
   async getAssignment({ commit, rootState }, assignmentId) {
+    commit('setAssignment', {})
     const url = new URL(
       '/.netlify/functions/getAssignment',
       this.$config.baseURL
@@ -280,7 +281,6 @@ const actions = {
       throw new Error('Error fetching response')
     }
     response = await response.json()
-    console.debug('%c' + `Response ${response.id}`, 'color:orange')
     commit('setResponse', response)
   },
   resetState({ commit }) {
