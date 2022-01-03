@@ -1,15 +1,17 @@
 <template>
-  <v-dialog v-model="dialog" max-width="440">
+  <v-dialog v-model="dialog" max-width="400">
     <v-card class="rounded-xl">
-      <v-card-title class="d-flex justify-center text-h5 secondary--text pt-5">
-        <font-awesome-icon icon="fa-light fa-head-side-brain" class="fa-sm" />
+      <v-card-title class="flex-column pt-5 pb-4">
+        <span class="secondary--text">
+          <font-awesome-icon icon="fa-light fa-head-side-brain" />
+        </span>
+        <p class="text-h5">Revision mode</p>
       </v-card-title>
       <v-card-text>
-        <p class="text-h5 text-center">Revision mode</p>
         <p>
           You will now see a practise
-          <strong>{{ $store.state.topics.topicName }}</strong> question. Take
-          your time and try to mark yourself accurately.
+          {{ $store.state.topics.topicName }} question. Take your time and try
+          to mark yourself accurately.
         </p>
         <div class="d-flex align-center">
           <v-checkbox v-model="examMode" color="primary" label="Show keywords">

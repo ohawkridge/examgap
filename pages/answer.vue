@@ -113,7 +113,7 @@
               </div>
             </div>
           </div>
-          <!-- **SELF MARKING** -->
+          <!-- Self marking xx -->
           <div v-else>
             <div>
               <p class="text-subtitle-1 font-weight-medium mb-4">Your answer</p>
@@ -155,18 +155,15 @@
             </div>
           </div>
           <!-- Confirm XX -->
-          <v-dialog v-model="dialog" width="440">
+          <v-dialog v-model="dialog" width="400">
             <v-card>
-              <v-card-title
-                class="d-flex justify-center text-h5 secondary--text pt-5"
-              >
-                <font-awesome-icon
-                  icon="fa-light fa-square-check"
-                  class="fa-sm"
-                />
+              <v-card-title class="flex-column pt-5 pb-4">
+                <span class="secondary--text">
+                  <font-awesome-icon icon="fa-light fa-square-check" />
+                </span>
+                <div class="text-h5 text-center">Really mark?</div>
               </v-card-title>
               <v-card-text>
-                <p class="text-h5 text-center">Really mark?</p>
                 <p>Once you've seen the mark scheme, you can't go back.</p>
                 <div class="d-flex justify-end">
                   <v-btn text rounded class="mr-2" @click="dialog = false">

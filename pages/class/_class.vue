@@ -32,7 +32,8 @@
         </v-container>
       </v-tab-item>
       <v-tab-item :style="`background-color: ${bgColor}`">
-        <v-container class="pt-10">
+        <v-container>
+          <!-- Revision xx -->
           <v-row class="justify-center">
             <v-col cols="12" md="10">
               <v-row>

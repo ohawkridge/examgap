@@ -1,17 +1,24 @@
 <template>
   <v-hover v-slot="{ hover }">
     <v-card outlined class="rounded-lg outlined" hover @click="revise()">
-      <v-overlay absolute :value="true">
+      <!-- Create lock effect -->
+      <!-- <v-overlay absolute :value="true">
         <font-awesome-icon icon="fa-light fa-lock-keyhole" class="fa-3x" />
-      </v-overlay>
+      </v-overlay> -->
       <v-img
         src="/t/263858534213485067.jpeg"
         height="120px"
-        :class="hover ? '' : 'xx'"
+        :class="hover ? '' : 'desat'"
       />
       <div class="ml-2 chip-row">
-        <v-chip label color="tertiary" small dark>
-          {{ topic.numQuestions }} Q{{ topic.numQuestions | pluralize }}
+        <v-chip
+          label
+          :color="$vuetify.theme.dark ? '#594400' : '#ffe089'"
+          small
+        >
+          <span :class="$vuetify.theme.dark ? 'tb-dark' : 'tb-text'">
+            {{ topic.numQuestions }} Q{{ topic.numQuestions | pluralize }}
+          </span>
         </v-chip>
       </div>
       <v-card-title class="no-wrap text-subtitle-1 font-weight-medium">
@@ -59,8 +66,16 @@ export default {
   margin-bottom: -30px;
 }
 
-.xx {
+.desat {
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
+}
+
+.tb-text {
+  color: #241a00;
+}
+
+.tb-dark {
+  color: #e1e2e5;
 }
 </style>
