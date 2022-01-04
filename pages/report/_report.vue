@@ -455,6 +455,8 @@ export default {
         msg: 'Error fetching data',
       })
     }
+    // N.B. Mounted hook fires *before* fetch
+    this.$store.commit('app/setPageTitle', this.assignment.group.name)
   },
   head() {
     return {
@@ -533,7 +535,6 @@ export default {
     },
   },
   mounted() {
-    this.$store.commit('app/setPageTitle', this.assignment.group.name)
     // Onboard if nec.
     if (this.assignments.length === 1) {
       this.$store.commit('app/setOnboardStep', 6)

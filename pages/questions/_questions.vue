@@ -124,17 +124,13 @@
                       :key="j"
                       x-small
                       label
+                      outlined
                       color="tertiary"
                       class="ml-2"
                     >
                       <v-tooltip bottom>
                         <template #activator="{ on }">
-                          <span
-                            :class="$vuetify.theme.dark ? 'd' : 'l'"
-                            v-on="on"
-                          >
-                            {{ assignment.date | date2 }}</span
-                          >
+                          <span v-on="on"> {{ assignment.date | date2 }}</span>
                         </template>
                         <span>{{ assignment.name }}</span>
                       </v-tooltip>
@@ -636,14 +632,7 @@ export default {
   padding: 12px;
 }
 
-.d {
-  color: #241a00;
-}
-
-.l {
-  color: #fbfcff;
-}
-
+/* don't round fullscreen toolbar */
 header {
   border-radius: 0 !important;
 }

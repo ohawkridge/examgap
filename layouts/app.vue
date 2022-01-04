@@ -179,7 +179,11 @@ export default {
         return this.$store.state.app.navbar
       },
       set(val) {
-        this.$store.commit('app/setNav', val)
+        // Wierd bug? When TeacherAssignmentCard is
+        // clicked on home page—val is undefined
+        if (val !== undefined) {
+          this.$store.commit('app/setNav', val)
+        }
       },
     },
   },
