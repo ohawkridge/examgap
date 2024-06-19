@@ -9,8 +9,6 @@ Multi-region serverless database by Fauna.
 
 ## Build Setup
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/11f26032-4930-4187-a880-6173c21bd509/deploy-status)](https://app.netlify.com/sites/examgap/deploys)
-
 ```bash
 # install dependencies
 $ yarn install
